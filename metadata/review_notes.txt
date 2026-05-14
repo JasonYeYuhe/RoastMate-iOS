@@ -1,0 +1,91 @@
+Reviewer notes for RoastMate v1.0:
+
+1. ON-DEVICE AI ONLY.
+   RoastMate runs ALL generation on-device using Apple's Foundation
+   Models framework (LanguageModelSession). The app uses NO third-party
+   AI service — no OpenAI, no Anthropic, no Google, no analytics SDK.
+   To verify: enable Airplane Mode and use the Roast Generator. It will
+   continue producing on-device output. Both the vent-draft pass and
+   the sendable-rewrite pass (see #2 below) run on-device.
+
+2. POSITIONING — VENT FIRST, SEND LATER.
+   RoastMate is a creative-writing + emotional-expression tool, not a
+   harassment tool. There is no field to enter a target person's name;
+   the Generator accepts only a description of a *situation*, never an
+   individual's identity. Safe Mode is on by default (Settings → AI &
+   Privacy).
+
+   The app exposes 4 intensity levels (Calm / Sharp / Savage / Vent).
+   The "Vent" intensity produces a PRIVATE draft that is clearly
+   labelled "for yourself only" in the UI and is NOT presented as a
+   message to send. A separate user-initiated "Rewrite as Sendable"
+   action runs a second on-device generation that strips profanity,
+   adds tone control, and produces an outward-facing reply that
+   respects all the safety rules (no slurs, threats, sexual content,
+   doxxing, or identity attacks).
+
+   REVIEWER TEST PATH for Vent Mode:
+   a. Open the Roast Generator. In the Intensity row pick "Vent".
+   b. Type any situation, e.g. "My boss took credit for my work".
+   c. Tap Generate. The output card is labelled "Vent draft · for
+      yourself only" with a disclosure banner that says not to send it.
+   d. Tap "Make it sendable". A second card appears below labelled
+      "Sendable reply" — this is the version the user is meant to
+      actually send. It will not contain profanity or threats.
+   Both the vent draft and sendable rewrite run on-device. The rewrite
+   starts from a fresh `LanguageModelSession` with stricter instructions;
+   nothing leaves the device.
+
+3. SAMPLE DATA FOR REVIEW.
+   On first launch the History tab is pre-seeded with 15 curated
+   sample situations clearly labeled "Sample". The reviewer can tap
+   any of them to see the full generation flow without typing.
+   Samples can be cleared via Settings → Clear sample data.
+
+4. ACCOUNTS / SHARING.
+   Sign in with Apple is OPTIONAL — used only to display the user's name
+   on the Settings → Account screen. The app is fully functional without
+   signing in; no feature is gated by sign-in. When the user signs in,
+   only the Apple-issued stable User ID (and the name they choose to
+   share, including email if provided) is stored locally in the device Keychain via App Group
+   ($(TeamIdentifierPrefix)group.yyh.roastmate.app). We never see a real
+   Apple ID; Private Relay emails are respected.
+
+   No user-generated content is shared between users. No social features.
+   No analytics. No advertising IDs.
+
+   iCloud sync (CloudKit Private Database) is planned for v1.x. The
+   current 1.0 release stores all data on-device only. Capabilities
+   (iCloud, CloudKit, Push Notifications, Sign in with Apple) are
+   pre-provisioned in the App ID so the v1.x update doesn't require new
+   capability approvals.
+
+5. SUBSCRIPTIONS.
+   - Monthly:  yyh.roastmate.app.pro.monthly  ($2.99 / month)
+   - Yearly:   yyh.roastmate.app.pro.yearly   ($19.99 / year, 7-day trial)
+   Sandbox tester credentials: not required. Any sandbox tester account
+   can be used to test the subscription flow; no pre-provisioned tester
+   has been set up for this review.
+
+6. APP GROUP.
+   group.yyh.roastmate.app is used as a local shared container for the
+   app family where supported (for example, the iOS app and iOS Share
+   Extension). It is not presented as cross-device cloud sync in v1.0;
+   CloudKit Private Database sync is planned for a later v1.x release.
+
+7. CAPABILITIES.
+   - iOS Share Extension (yyh.roastmate.app.share): receives text from
+     other apps via the system Share menu, generates one on-device
+     response, lets the user copy.
+   - watchOS app: quick roast from templates or dictation, with
+     NSUserActivity Handoff to the iPhone.
+   - macOS app: full feature set plus MenuBarExtra for one-click quick
+     roast.
+   - App Intents: GenerateRoastIntent registered for Siri, Spotlight,
+     and Shortcuts.
+
+8. AGE GATE.
+   17+ rating selected proactively for mature humor / sarcasm. First
+   launch shows an age confirmation screen the user must dismiss.
+
+Thank you for the review.

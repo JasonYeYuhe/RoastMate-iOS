@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+
+# Xcode — per-user state
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Xcode — build artifacts
+build/
+DerivedData/
+*.ipa
+*.dSYM
+*.dSYM.zip
+*.xcarchive
+
+# Swift Package Manager
+.build/
+.swiftpm/xcode/
+Package.resolved
+
+# CocoaPods (defensive — not currently used)
+Pods/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Local env / secrets (defensive)
+.env
+.env.*
+*.p12
+*.cer
+*.mobileprovision
+AuthKey_*.p8
+
+# Logs
+*.log

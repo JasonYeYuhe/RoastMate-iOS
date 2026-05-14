@@ -1,0 +1,163 @@
+name: RoastMate
+options:
+  bundleIdPrefix: yyh.roastmate
+  deploymentTarget:
+    iOS: "26.0"
+    macOS: "26.0"
+    watchOS: "26.0"
+  xcodeVersion: "26.0"
+  generateEmptyDirectories: true
+  developmentLanguage: en
+  knownRegions: [en, zh-Hans, zh-Hant, ja]
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: 1
+    DEVELOPMENT_TEAM: KHMK6Q3L3K
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_APPROACHABLE_CONCURRENCY: YES
+
+targets:
+  RoastMate:
+    type: application
+    platform: iOS
+    sources:
+      - RoastMate/Sources
+      - RoastMate/Assets.xcassets
+      - RoastMate/PrivacyInfo.xcprivacy
+      - path: RoastMate/Configuration.storekit
+        buildPhase: none
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app
+        PRODUCT_NAME: RoastMate
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_CFBundleDisplayName: RoastMate
+        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+        SUPPORTS_MACCATALYST: NO
+        CODE_SIGN_ENTITLEMENTS: RoastMate/RoastMate.entitlements
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+    dependencies:
+      - target: RoastMateShare
+        embed: true
+
+  RoastMateMac:
+    type: application
+    platform: macOS
+    sources:
+      - RoastMate/Sources
+      - RoastMateMac/Sources
+      - RoastMateMac/Assets.xcassets
+      - RoastMate/PrivacyInfo.xcprivacy
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app
+        PRODUCT_NAME: RoastMate
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.lifestyle"
+        INFOPLIST_KEY_LSUIElement: NO
+        INFOPLIST_KEY_CFBundleDisplayName: RoastMate
+        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: RoastMateMac/RoastMateMac.entitlements
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+  RoastMateWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - RoastMateWatch/Sources
+      - RoastMateWatch/Assets.xcassets
+      - Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.watchkitapp
+        PRODUCT_NAME: RoastMate
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: yyh.roastmate.app
+        INFOPLIST_KEY_CFBundleDisplayName: RoastMate
+        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: RoastMateWatch/RoastMateWatch.entitlements
+        WATCHOS_DEPLOYMENT_TARGET: "26.0"
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+  RoastMateShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - RoastMateShare/Sources
+      - path: RoastMateShare/Info.plist
+        buildPhase: none
+      - Shared
+      - path: Shared/Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.share
+        PRODUCT_NAME: RoastMateShare
+        INFOPLIST_FILE: RoastMateShare/Info.plist
+        CODE_SIGN_ENTITLEMENTS: RoastMateShare/RoastMateShare.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+  RoastMateTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - RoastMateTests
+      - Shared
+      - path: Shared/Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: ""
+        BUNDLE_LOADER: ""
+
+  RoastMateUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - RoastMateUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: RoastMate
+    dependencies:
+      - target: RoastMate

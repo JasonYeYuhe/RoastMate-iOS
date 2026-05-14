@@ -1,0 +1,40 @@
+Vent first. Then send the version that actually wins.
+
+RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, or full Vent — and the on-device AI gives you a response that helps you say what you actually mean. In Vent mode, you get a private draft that's just for you to release the feeling — then a single tap rewrites it into a sharp, safe-to-send reply that holds your ground without crossing any lines.
+
+Pick from 20+ writing styles — Polite, Passive-Aggressive, Japanese Keigo, Literary, Stand-up, MBA Buzzword, Shakespearean, Savage, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
+
+All AI generation runs on your device using Apple's Foundation Models framework. Your situations never leave your iPhone, iPad, Mac, or Apple Watch. No tracking, no analytics, no cloud, no third-party AI service.
+
+RoastMate is a creative writing and emotional expression tool. It is not designed to target or harass any individual — names, threats, and slurs are automatically removed by a built-in safety filter.
+
+FEATURES
+
+• Vent Mode: a private draft just for releasing the feeling — then one tap rewrites it into a sendable reply
+• 4 intensity levels: Composed, Sharp, Savage, Vent
+• 20+ writing styles, from Polite to Literary to Savage
+• Reply Helper: paste a message you received, get suggested replies
+• Argument Simulator (Pro): rehearse a tough conversation, AI plays the other side
+• Emotion Translator: turn raw frustration into the polished language you need
+• Social Roast: paste a tweet or post, get reaction replies ready to share
+• Situation Threads: pick up where you left off when the other person replies again
+• Sample Gallery: 15 curated examples so you can see RoastMate at work without typing
+• Apple Watch quick roast — vent on your wrist, hand off to iPhone
+• macOS menu bar quick access — one keyboard shortcut from any app
+• Siri & Shortcuts integration via App Intents
+• iOS Share Extension — roast text from Mail, Messages, Safari, anywhere
+• Available in English, 简体中文, 繁體中文, 日本語
+
+PRO
+
+• Unlimited generations
+• All 20+ styles unlocked
+• Generate three styles in parallel
+• Multi-turn Argument Simulator
+• Unlimited history
+
+Monthly $2.99 / Yearly $19.99 (7-day free trial)
+
+PRIVACY
+
+RoastMate uses Apple's on-device Foundation Models framework. No third-party AI service is contacted. Sign in with Apple is optional; when signed in, only an Apple-issued User ID is stored locally so we can show your name in Settings. We never operate a server that sees your content. You can verify by enabling Airplane Mode — the generator continues to work.

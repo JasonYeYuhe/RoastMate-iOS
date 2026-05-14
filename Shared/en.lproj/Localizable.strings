@@ -1,0 +1,359 @@
+// MARK: - App
+
+"app.title" = "RoastMate";
+"app.tagline" = "On-device AI for witty, safe self-expression.";
+"app.short_disclaimer" = "RoastMate is a creative writing tool for venting and emotional expression. It is not designed to target or harass any individual.";
+
+// MARK: - Tabs
+
+"tab.generator" = "Generator";
+"tab.library" = "Styles";
+"tab.history" = "History";
+"tab.settings" = "Settings";
+
+// MARK: - Onboarding
+
+"onboarding.welcome.title" = "Say what you really mean.";
+"onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression — through Apple's on-device AI. Nothing leaves your device.";
+
+"onboarding.privacy.title" = "Private by design.";
+"onboarding.privacy.body" = "All generation happens on-device using Apple's Foundation Models framework. Your situations are never sent to any server. You can verify this in airplane mode.";
+
+"onboarding.safety.title" = "For self-expression, not harassment.";
+"onboarding.safety.body" = "RoastMate is for venting your own feelings — not for targeting specific people. We strip names, threats, and slurs automatically.";
+"onboarding.safety.acknowledge" = "I understand";
+
+"ageGate.title" = "Mature humor ahead";
+"ageGate.body" = "This app contains mature, sarcastic, and satirical content. By continuing, you confirm you're 17 or older.";
+"ageGate.confirm" = "I'm 17+";
+
+// MARK: - Generator
+
+"generator.title" = "Roast Generator";
+"generator.placeholder" = "Describe what happened…";
+"generator.style_label" = "Style";
+"generator.intensity_label" = "Intensity";
+"generator.generate" = "Generate";
+"generator.regenerate" = "Try again";
+"generator.empty.title" = "What just happened?";
+"generator.empty.subtitle" = "Describe a situation — a frustrating message, a rude colleague, a missed deadline — and RoastMate will help you say it back.";
+"generator.loading" = "Composing…";
+"generator.sample_section" = "Try a sample";
+"generator.sample_remix" = "Remix this";
+
+// MARK: - Result
+
+"result.copy" = "Copy";
+"result.copied" = "Copied";
+"result.share" = "Share";
+"result.favorite" = "Save";
+"result.unfavorite" = "Saved";
+"result.regenerate" = "Generate again";
+
+// MARK: - History
+
+"history.title" = "History";
+"history.empty.title" = "Nothing here yet.";
+"history.empty.subtitle" = "Generated roasts will appear here, organized by day.";
+"history.delete" = "Delete";
+
+// MARK: - Settings
+
+"settings.title" = "Settings";
+"settings.section.appearance" = "Appearance";
+"settings.section.ai" = "AI & Privacy";
+"settings.section.subscription" = "Subscription";
+"settings.section.about" = "About";
+"settings.section.account" = "Account";
+"settings.about_ai.privacy_label" = "Apple User ID (when signed in) — App Functionality";
+
+"account.signed_in.anonymous" = "Signed in with Apple";
+"account.sign_in.button.a11y" = "Sign in with Apple";
+"account.sign_in.footer" = "Optional. Sign in lets us greet you by name and (in a future update) sync your roast history across your Apple devices via iCloud. The app works fully without it.";
+"account.sign_out" = "Sign Out";
+
+"settings.language" = "Language";
+"settings.language.system" = "System default";
+
+"settings.safe_mode" = "Safe Mode";
+"settings.safe_mode.footer" = "Safe Mode adds an extra layer of filtering on top of Apple's built-in safety. We recommend keeping it on.";
+
+"settings.about_ai.title" = "About the AI";
+"settings.about_ai.body" = "RoastMate uses Apple's on-device Foundation Models framework. Your situations and generated text never leave your device. We do not use OpenAI, Anthropic, Google, or any other third-party AI service.";
+
+"settings.subscription.upgrade" = "Upgrade to Pro";
+"settings.subscription.manage" = "Manage subscription";
+"settings.subscription.restore" = "Restore purchases";
+
+"settings.privacy_policy" = "Privacy Policy";
+"settings.terms" = "Terms of Use";
+"settings.support" = "Support";
+"settings.version" = "Version";
+
+"settings.clear_samples" = "Clear sample data";
+"settings.clear_samples.footer" = "Removes the bundled sample situations from your History.";
+
+// MARK: - Quota & Paywall
+
+"quota.remaining" = "%d free roasts left today";
+"quota.exhausted.title" = "Daily free limit reached";
+"quota.exhausted.body" = "You've used all 5 free generations today. Upgrade to Pro for unlimited generations and all styles.";
+
+"paywall.title" = "RoastMate Pro";
+"paywall.body" = "Vent Mode (private draft + rewrite) · Savage intensity · Unlimited generations · All 20+ styles · Argument simulator · Unlimited history";
+"paywall.feature.vent" = "Vent Mode";
+"paywall.feature.vent.detail" = "Get it out raw, then we rewrite it into something you can actually send.";
+"paywall.feature.savage" = "Savage intensity";
+"paywall.feature.savage.detail" = "No-prisoners take-downs for the styles that earn them.";
+"paywall.feature.unlimited" = "Unlimited generations";
+"paywall.feature.unlimited.detail" = "Skip the daily cap. Use it as often as you need.";
+
+"quota.remaining.lifetime" = "%d free to start";
+"quota.lifetime.hint" = "First 20 free, then 5 daily";
+"paywall.monthly" = "Monthly";
+"paywall.yearly" = "Yearly";
+"paywall.yearly.trial" = "7-day free trial · then %@";
+"paywall.restore" = "Restore Purchases";
+"paywall.subscribe" = "Subscribe";
+"paywall.continue_free" = "Continue with free";
+
+// MARK: - Errors
+
+"error.generic" = "Something went wrong. Try again?";
+"error.input_too_short" = "Add a few more words about what happened.";
+"error.input_too_long" = "Keep it under 1500 characters.";
+
+"safety.input_blocked" = "We can't process this — try describing the situation without names, threats, or self-harm language.";
+"safety.output_blocked" = "The AI produced something we couldn't accept. Trying again.";
+"roast.error.unavailable" = "On-device AI isn't available right now. Showing curated responses instead.";
+"roast.error.no_variants" = "No usable responses produced — please try again with more context.";
+
+// MARK: - Watch
+
+"watch.home.title" = "Quick Roast";
+"watch.template.late_excuse" = "Late excuse";
+"watch.template.refuse_overtime" = "Refuse overtime";
+"watch.template.ex_comeback" = "Ex comeback";
+"watch.template.noisy_roommate" = "Noisy roommate";
+"watch.template.family_marriage" = "Family pressure";
+"watch.template.tough_client" = "Tough client";
+"watch.dictate" = "Dictate";
+"watch.send_to_phone" = "Send to iPhone";
+"watch.opening_iphone" = "Opening iPhone…";
+
+// MARK: - macOS
+
+"mac.menubar.quick_roast" = "Quick Roast";
+"mac.menubar.open_window" = "Open RoastMate";
+"mac.menubar.quit" = "Quit";
+"mac.services.roast_selection" = "Roast with RoastMate";
+
+// MARK: - Share Extension
+
+"share.title" = "RoastMate";
+"share.mode" = "Mode";
+"share.shared_input" = "Shared text";
+"share.empty_input" = "(no text)";
+
+// MARK: - App Intents (Siri / Shortcuts)
+
+"intent.generate_roast.title" = "Generate Roast";
+"intent.generate_roast.description" = "Generate a witty on-device response for a situation.";
+"intent.param.situation" = "Situation";
+"intent.param.situation.description" = "Describe what happened.";
+"intent.param.style" = "Style";
+"intent.param.style.description" = "Which RoastMate writing style to use.";
+"intent.shortcut.short_title" = "Roast this";
+
+// MARK: - Common
+
+"common.cancel" = "Cancel";
+"common.done" = "Done";
+"common.close" = "Close";
+"common.copy" = "Copy";
+"common.share" = "Share";
+"common.dismiss" = "Dismiss";
+"common.ok" = "OK";
+"common.next" = "Next";
+"common.back" = "Back";
+
+// MARK: - Explore
+
+"explore.tools.section" = "Tools";
+"explore.samples.section" = "Sample gallery";
+"explore.samples.cta" = "Browse 17 sample situations";
+"sample.badge.standard" = "Sample";
+"sample.badge.vent_demo" = "Vent + Send";
+"explore.samples.footer" = "Tap a sample to see how RoastMate writes in that style. Samples can be cleared in Settings.";
+"explore.styles.section" = "Styles";
+
+// MARK: - Reply Helper
+
+"feature.reply.title" = "Reply Helper";
+"feature.reply.placeholder" = "Paste the message you received…";
+"feature.reply.empty_title" = "Don't know how to respond?";
+"feature.reply.empty_subtitle" = "Paste a message and RoastMate writes the reply you wish you'd thought of.";
+
+// MARK: - Emotion Translator
+
+"feature.translator.title" = "Emotion Translator";
+"feature.translator.placeholder" = "What you really want to say…";
+"feature.translator.empty_title" = "Translate honesty into politeness.";
+"feature.translator.empty_subtitle" = "Type the raw version. RoastMate rewrites it in the register you need.";
+
+// MARK: - Argument Simulator
+
+"feature.argument.title" = "Argument Simulator";
+"feature.argument.placeholder" = "Describe the disagreement and who you're with…";
+"feature.argument.empty_title" = "Rehearse the conversation.";
+"feature.argument.empty_subtitle" = "Practice your side of a tough talk. Pro feature.";
+"argument.start" = "Start the argument";
+"argument.live" = "Live argument";
+"argument.end" = "End";
+"argument.role.them" = "Them";
+"argument.role.you" = "You";
+"argument.input_placeholder" = "Your reply…";
+"argument.turn_limit_reached" = "(Argument limit reached. Tap End to start a new one.)";
+
+// MARK: - Social Roast
+
+"feature.social.title" = "Social Roast";
+"feature.social.placeholder" = "Paste the post or tweet…";
+"feature.social.empty_title" = "Reply-ready reactions.";
+"feature.social.empty_subtitle" = "Paste a post and get witty reactions ready to share.";
+
+// MARK: - Styles (20 free + pro)
+
+"style.high_eq.name" = "High EQ";
+"style.high_eq.blurb" = "Polite on the surface, sharp underneath.";
+
+"style.passive_aggressive.name" = "Passive Aggressive";
+"style.passive_aggressive.blurb" = "Calm voice, clear undertone.";
+
+"style.jp_keigo.name" = "Japanese Keigo";
+"style.jp_keigo.blurb" = "Extreme politeness as a weapon.";
+
+"style.literary.name" = "Literary";
+"style.literary.blurb" = "Essay-grade observation.";
+
+"style.philosopher.name" = "Philosopher";
+"style.philosopher.blurb" = "Detached, reflective, quietly devastating.";
+
+"style.grandma.name" = "Grandma Wisdom";
+"style.grandma.blurb" = "Warm voice, plain truth.";
+
+"style.tweet.name" = "One-Liner";
+"style.tweet.blurb" = "Punchy. Quotable. Done.";
+
+"style.xiaohongshu.name" = "Lifestyle Rant";
+"style.xiaohongshu.blurb" = "Dramatic first-person social post.";
+
+"style.shakespeare.name" = "Shakespearean";
+"style.shakespeare.blurb" = "Thou hast erred.";
+
+"style.mba_boss.name" = "MBA Buzzword";
+"style.mba_boss.blurb" = "Circle back. Loop in. Suffer.";
+
+"style.ancient.name" = "Classical Chinese";
+"style.ancient.blurb" = "Terse, parallel, ancient.";
+
+"style.lawyer.name" = "Demand Letter";
+"style.lawyer.blurb" = "Pursuant to the above…";
+
+"style.daoist.name" = "Daoist Calm";
+"style.daoist.blurb" = "Water finds its way.";
+
+"style.tokyo_ol.name" = "Tokyo Office Worker";
+"style.tokyo_ol.blurb" = "Izakaya-grade venting.";
+
+"style.douban.name" = "Douban Essay";
+"style.douban.blurb" = "Saturday afternoon journal entry.";
+
+"style.reddit_eli5.name" = "ELI5 Explainer";
+"style.reddit_eli5.blurb" = "Explain the absurdity, deadpan.";
+
+"style.standup.name" = "Stand-up Bit";
+"style.standup.blurb" = "Setup, escalate, callback.";
+
+"style.tw_drama.name" = "Taiwanese Drama";
+"style.tw_drama.blurb" = "Heightened. Theatrical. Tearful.";
+
+"style.cold.name" = "Cold Reply";
+"style.cold.blurb" = "Two sentences. Done.";
+
+"style.bjing.name" = "Beijing Colloquial";
+"style.bjing.blurb" = "Hutong-style banter.";
+
+"style.savage.name" = "Savage";
+"style.savage.blurb" = "No mercy. Still no slurs.";
+
+"style.dark_humor.name" = "Dark Humor";
+"style.dark_humor.blurb" = "Bleak, dry, oddly cheerful.";
+
+"style.killshot.name" = "Argument Killshot";
+"style.killshot.blurb" = "Names the flaw. Ends the thread.";
+
+"style.corporate.name" = "Corporate Passive Violence";
+"style.corporate.blurb" = "Per my last email — coldly.";
+
+/* === Intensity (v1.x — orthogonal to mode) === */
+"intensity.calm.name" = "Composed";
+"intensity.calm.blurb" = "Professional, de-escalates without conceding.";
+"intensity.sharp.name" = "Sharp";
+"intensity.sharp.blurb" = "Pointed but polished.";
+"intensity.savage.name" = "Savage";
+"intensity.savage.blurb" = "No mercy. Still safe to send.";
+"intensity.vent.name" = "Vent";
+"intensity.vent.blurb" = "Private vent draft — just for you. Rewrite later.";
+
+/* === Vent / Sendable output cards === */
+"output.kind.vent_draft.label" = "Vent draft · for yourself only";
+"output.kind.sendable_reply.label" = "Sendable reply";
+"output.vent.disclosure" = "Vent drafts are private. Don't send them — tap below for a version that actually wins.";
+"output.rewrite.button" = "Make it sendable";
+"output.rewrite.in_progress" = "Cooling it down…";
+
+/* === Situation Thread === */
+"thread.untitled" = "Untitled situation";
+"thread.continue.button" = "Continue this event";
+"thread.add_round.placeholder" = "They replied with…";
+"thread.section.recent" = "Recent";
+"thread.section.favorites" = "Favorites";
+"thread.section.unresolved" = "Unresolved";
+"thread.section.resolved" = "Already handled";
+"thread.mark_resolved" = "Mark resolved";
+"thread.mark_unresolved" = "Reopen";
+"thread.rename" = "Rename thread";
+"thread.favorite" = "Favorite";
+"thread.unfavorite" = "Unfavorite";
+"thread.badge.resolved" = "Handled";
+"thread.original_situation" = "Original situation";
+"thread.round.number" = "Round %d";
+"thread.round_count" = "%d rounds";
+"thread.promote.action" = "Group as event";
+
+"history.section.recent_rounds" = "Recent rounds";
+
+"generator.continuation.title" = "Continuing this event";
+"generator.continuation.hint" = "Type what happened next — we'll keep the prior rounds as context.";
+
+"common.save" = "Save";
+"common.cancel" = "Cancel";
+
+/* === Categories === */
+"category.work.name" = "Work";
+"category.relationship.name" = "Relationship";
+"category.family.name" = "Family";
+"category.friends.name" = "Friends";
+"category.internet.name" = "Internet";
+"category.other.name" = "Other";
+
+/* === Moods === */
+"mood.angry.name" = "Angry";
+"mood.wronged.name" = "Wronged";
+"mood.speechless.name" = "Speechless";
+"mood.anxious.name" = "Anxious";
+"mood.petty.name" = "Petty";
+"mood.amused.name" = "Amused";
+
+"rewrite.fallback.unavailable" = "Couldn't rewrite right now. The vent draft is yours to keep.";

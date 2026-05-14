@@ -1,0 +1,9 @@
+First release.
+
+• 20+ on-device writing styles
+• 5 generation modes: Roast, Reply, Translate, Argument, Social
+• Apple Watch quick roast with iPhone handoff
+• macOS menu bar quick access
+• iOS Share Extension
+• Siri & Shortcuts via App Intents
+• Available in English, 简体中文, 繁體中文, 日本語

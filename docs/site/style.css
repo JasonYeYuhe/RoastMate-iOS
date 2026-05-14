@@ -1,0 +1,134 @@
+:root {
+  --orange: #f48d4a;
+  --bg: #fffaf6;
+  --fg: #1a1a1a;
+  --muted: #6b6b6b;
+  --card: #fff;
+  --border: #ececec;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #181410;
+    --fg: #f5f0eb;
+    --muted: #a8a39e;
+    --card: #221d18;
+    --border: #2f2925;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+               "PingFang SC", "PingFang TC", "Hiragino Sans", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.55;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+
+header .badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 28px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+}
+
+header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 32px 0 12px;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 16px;
+  margin: 24px 0 8px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+p, li {
+  font-size: 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover { text-decoration: underline; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin: 20px 0;
+}
+
+nav {
+  display: flex;
+  gap: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+  font-size: 14px;
+}
+
+ul.checks {
+  padding-left: 0;
+  list-style: none;
+}
+
+ul.checks li::before {
+  content: "✓";
+  color: var(--orange);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+}

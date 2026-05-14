@@ -1,0 +1,419 @@
+import SwiftUI
+import SwiftData
+
+/// Drives the four secondary generator features (Reply Helper, Emotion
+/// Translator, Argument Simulator, Social Roast). They all share the
+/// same input → style → generate → results flow that the headline
+/// Roast Generator uses; only the prompt framing and copy differ.
+struct FeatureGeneratorConfig {
+    let mode: RoastMode
+    let titleKey: LocalizedStringResource
+    let promptPlaceholderKey: LocalizedStringResource
+    let emptyTitleKey: LocalizedStringResource
+    let emptySubtitleKey: LocalizedStringResource
+    let icon: String
+    let proGated: Bool
+    let defaultStyleId: String?
+}
+
+@MainActor
+@Observable
+final class FeatureGeneratorViewModel {
+    enum State: Equatable {
+        case idle
+        case loading
+        case results
+        case error(String)
+    }
+
+    let config: FeatureGeneratorConfig
+    var input: String = ""
+    var selectedStyleId: String
+    var selectedIntensity: Intensity = .sharp
+    var state: State = .idle
+    var currentSession: RoastSession?
+    var rewritingDraftId: UUID?
+    var rewriteError: String?
+
+    init(config: FeatureGeneratorConfig) {
+        self.config = config
+        self.selectedStyleId = config.defaultStyleId ?? StyleCatalog.shared.defaultStyleId
+    }
+
+    func style() -> StylePreset? {
+        StyleCatalog.shared.style(id: selectedStyleId)
+    }
+
+    func generate(context: ModelContext, locale: Locale) async {
+        let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        guard let style = style() else {
+            state = .error(String(localized: "error.generic"))
+            return
+        }
+
+        let settings = HistoryService.userSettings(context: context)
+        let isPro = StoreService.shared.isPro
+
+        if config.proGated && !isPro {
+            state = .error(String(localized: "quota.exhausted.body"))
+            return
+        }
+
+        guard isPro || style.tier != .pro else {
+            state = .error(String(localized: "quota.exhausted.body"))
+            return
+        }
+        guard isPro || !selectedIntensity.requiresPro else {
+            state = .error(String(localized: "quota.exhausted.body"))
+            return
+        }
+
+        if !isPro {
+            guard settings.consumeFreeQuotaIfAvailable() else {
+                state = .error(String(localized: "quota.exhausted.body"))
+                return
+            }
+            try? context.save()
+        }
+
+        state = .loading
+        currentSession = nil
+        rewriteError = nil
+        do {
+            let variants = try await RoastEngine.shared.generate(
+                situation: text,
+                style: style,
+                locale: locale,
+                variantCount: isPro ? 3 : 1,
+                mode: config.mode,
+                intensity: selectedIntensity,
+                safeMode: settings.safeModeEnabled
+            )
+            currentSession = HistoryService.saveSession(
+                situation: text,
+                mode: config.mode,
+                styleId: style.id,
+                locale: locale,
+                variants: variants,
+                context: context,
+                isPro: isPro,
+                intensity: selectedIntensity
+            )
+            state = .results
+            Haptics.play(.generated)
+        } catch let err as RoastError {
+            state = .error(err.localizedDescription)
+            Haptics.play(.error)
+        } catch {
+            state = .error(error.localizedDescription)
+            Haptics.play(.error)
+        }
+    }
+
+    func rewriteAsSendable(
+        draft: GeneratedRoast,
+        session: RoastSession,
+        context: ModelContext,
+        locale: Locale
+    ) async {
+        guard draft.kind == .ventDraft, rewritingDraftId == nil else { return }
+        guard let style = StyleCatalog.shared.style(id: draft.styleId) else {
+            rewriteError = String(localized: "error.generic")
+            return
+        }
+
+        rewritingDraftId = draft.id
+        rewriteError = nil
+        do {
+            let rewritten = try await RoastEngine.shared.rewriteAsSendable(
+                ventDraft: draft.text,
+                originalSituation: session.situation,
+                style: style,
+                locale: locale
+            )
+            HistoryService.appendSendableReply(
+                toSession: session,
+                sourceVentDraft: draft,
+                rewrittenText: rewritten,
+                context: context
+            )
+            currentSession = session
+            Haptics.play(.generated)
+        } catch let err as RoastError {
+            rewriteError = err.localizedDescription
+            Haptics.play(.error)
+        } catch {
+            rewriteError = error.localizedDescription
+            Haptics.play(.error)
+        }
+        rewritingDraftId = nil
+    }
+}
+
+struct FeatureGeneratorView: View {
+    @Environment(\.modelContext) private var context
+    @Environment(\.locale) private var locale
+    @State private var viewModel: FeatureGeneratorViewModel
+    @State private var showPaywall = false
+
+    private var styles: [StylePreset] {
+        if viewModel.config.proGated {
+            return StyleCatalog.shared.all
+        }
+        return StyleCatalog.shared.all
+    }
+    private var isPro: Bool { StoreService.shared.isPro }
+
+    init(config: FeatureGeneratorConfig) {
+        _viewModel = State(wrappedValue: FeatureGeneratorViewModel(config: config))
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                headerCard
+                inputCard
+                styleRow
+                intensityRow
+                generateButton
+                results
+            }
+            .padding()
+        }
+        .navigationTitle(Text(viewModel.config.titleKey))
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(isPresented: $showPaywall)
+        }
+        .onAppear {
+            if viewModel.config.proGated && !isPro {
+                showPaywall = true
+            }
+        }
+    }
+
+    private var headerCard: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: viewModel.config.icon)
+                .font(.title2)
+                .foregroundStyle(.orange)
+                .padding(.top, 2)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(viewModel.config.emptyTitleKey)
+                    .font(.headline)
+                Text(viewModel.config.emptySubtitleKey)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            if viewModel.config.proGated {
+                Text("Pro")
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Capsule().fill(Color.orange.opacity(0.18)))
+                    .foregroundStyle(.orange)
+            }
+        }
+    }
+
+    private var inputCard: some View {
+        TextEditor(text: $viewModel.input)
+            .frame(minHeight: 120)
+            .padding(8)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.secondary.opacity(0.08))
+            )
+            .overlay(alignment: .topLeading) {
+                if viewModel.input.isEmpty {
+                    Text(viewModel.config.promptPlaceholderKey)
+                        .foregroundStyle(.tertiary)
+                        .padding(14)
+                        .allowsHitTesting(false)
+                }
+            }
+    }
+
+    private var styleRow: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("generator.style_label").font(.subheadline.weight(.semibold))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(styles) { style in
+                        StyleChip(
+                            style: style,
+                            isSelected: viewModel.selectedStyleId == style.id,
+                            isLocked: !isPro && style.tier == .pro
+                        ) {
+                            if !isPro && style.tier == .pro {
+                                showPaywall = true
+                            } else {
+                                viewModel.selectedStyleId = style.id
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var generateButton: some View {
+        Button {
+            if !isPro && viewModel.selectedIntensity.requiresPro {
+                showPaywall = true
+            } else {
+                Task { await viewModel.generate(context: context, locale: locale) }
+            }
+        } label: {
+            HStack {
+                if case .loading = viewModel.state {
+                    ProgressView().controlSize(.small)
+                } else {
+                    Image(systemName: "flame.fill")
+                }
+                Text(viewModel.state == .idle ? "generator.generate" : "result.regenerate")
+                    .font(.headline)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 6)
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(viewModel.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                  || viewModel.state == .loading)
+    }
+
+    private var intensityRow: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("generator.intensity_label").font(.subheadline.weight(.semibold))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Intensity.allCases, id: \.self) { intensity in
+                        IntensityChip(
+                            intensity: intensity,
+                            isSelected: viewModel.selectedIntensity == intensity,
+                            isLocked: !isPro && intensity.requiresPro
+                        ) {
+                            if !isPro && intensity.requiresPro {
+                                showPaywall = true
+                            } else {
+                                viewModel.selectedIntensity = intensity
+                            }
+                        }
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var results: some View {
+        switch viewModel.state {
+        case .results:
+            VStack(alignment: .leading, spacing: 12) {
+                if let message = viewModel.rewriteError {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundStyle(.orange)
+                        Text(message).font(.callout)
+                    }
+                    .padding(12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.orange.opacity(0.12))
+                    )
+                }
+                if let session = viewModel.currentSession {
+                    ForEach(sortedResults(session), id: \.id) { result in
+                        GeneratedRoastCard(
+                            result: result,
+                            style: StyleCatalog.shared.style(id: result.styleId),
+                            isRewriting: viewModel.rewritingDraftId == result.id,
+                            hasSendableReply: hasSendableReply(for: result, in: session)
+                        ) {
+                            Task {
+                                await viewModel.rewriteAsSendable(
+                                    draft: result,
+                                    session: session,
+                                    context: context,
+                                    locale: locale
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        case .error(let message):
+            HStack(alignment: .top, spacing: 8) {
+                Image(systemName: "exclamationmark.triangle")
+                    .foregroundStyle(.orange)
+                Text(message).font(.callout)
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.orange.opacity(0.12))
+            )
+        case .idle, .loading:
+            EmptyView()
+        }
+    }
+
+    private func sortedResults(_ session: RoastSession) -> [GeneratedRoast] {
+        session.results.sorted { $0.generatedAt < $1.generatedAt }
+    }
+
+    private func hasSendableReply(for result: GeneratedRoast, in session: RoastSession) -> Bool {
+        guard result.kind == .ventDraft else { return false }
+        return session.results.contains {
+            $0.kind == .sendableReply && $0.sourceVentDraftId == result.id
+        }
+    }
+}
+
+enum FeatureGeneratorConfigs {
+    static let replyHelper = FeatureGeneratorConfig(
+        mode: .reply,
+        titleKey: "feature.reply.title",
+        promptPlaceholderKey: "feature.reply.placeholder",
+        emptyTitleKey: "feature.reply.empty_title",
+        emptySubtitleKey: "feature.reply.empty_subtitle",
+        icon: "arrowshape.turn.up.left",
+        proGated: false,
+        defaultStyleId: "high_eq"
+    )
+
+    static let emotionTranslator = FeatureGeneratorConfig(
+        mode: .translate,
+        titleKey: "feature.translator.title",
+        promptPlaceholderKey: "feature.translator.placeholder",
+        emptyTitleKey: "feature.translator.empty_title",
+        emptySubtitleKey: "feature.translator.empty_subtitle",
+        icon: "arrow.left.arrow.right",
+        proGated: false,
+        defaultStyleId: "high_eq"
+    )
+
+    static let argumentSimulator = FeatureGeneratorConfig(
+        mode: .argument,
+        titleKey: "feature.argument.title",
+        promptPlaceholderKey: "feature.argument.placeholder",
+        emptyTitleKey: "feature.argument.empty_title",
+        emptySubtitleKey: "feature.argument.empty_subtitle",
+        icon: "person.2.wave.2",
+        proGated: true,
+        defaultStyleId: "cold_violence"
+    )
+
+    static let socialRoast = FeatureGeneratorConfig(
+        mode: .social,
+        titleKey: "feature.social.title",
+        promptPlaceholderKey: "feature.social.placeholder",
+        emptyTitleKey: "feature.social.empty_title",
+        emptySubtitleKey: "feature.social.empty_subtitle",
+        icon: "bubble.left.and.bubble.right",
+        proGated: false,
+        defaultStyleId: "tweet_short"
+    )
+}

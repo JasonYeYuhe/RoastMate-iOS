@@ -1,0 +1,359 @@
+// MARK: - App
+
+"app.title" = "幫你罵";
+"app.tagline" = "本地 AI 幫你說出心裡話。";
+"app.short_disclaimer" = "「幫你罵」是創意寫作和情緒表達工具,不用於針對或騷擾任何具體的人。";
+
+// MARK: - Tabs
+
+"tab.generator" = "生成";
+"tab.library" = "風格";
+"tab.history" = "歷史";
+"tab.settings" = "設定";
+
+// MARK: - Onboarding
+
+"onboarding.welcome.title" = "把心裡那句話寫出來。";
+"onboarding.welcome.body" = "「幫你罵」用 Apple 本地 AI,把你的不爽變成俏皮、安全、可以發出去的話。全程不連網。";
+
+"onboarding.privacy.title" = "預設私密。";
+"onboarding.privacy.body" = "所有生成都在你的裝置本地完成,使用 Apple Foundation Models 框架。你的描述永遠不會上傳到任何伺服器。可以開飛航模式驗證。";
+
+"onboarding.safety.title" = "為自我表達,而非攻擊他人。";
+"onboarding.safety.body" = "「幫你罵」幫你說出自己的感受,不用於針對具體的人。我們會自動去掉姓名、威脅和侮辱性詞彙。";
+"onboarding.safety.acknowledge" = "我明白了";
+
+"ageGate.title" = "成人幽默內容";
+"ageGate.body" = "本 App 含有諷刺、陰陽、成熟幽默內容。繼續即代表你已滿 17 歲。";
+"ageGate.confirm" = "我已滿 17 歲";
+
+// MARK: - Generator
+
+"generator.title" = "回擊生成器";
+"generator.placeholder" = "說說發生了什麼……";
+"generator.style_label" = "風格";
+"generator.intensity_label" = "強度";
+"generator.generate" = "開始生成";
+"generator.regenerate" = "再來一次";
+"generator.empty.title" = "剛才發生什麼了?";
+"generator.empty.subtitle" = "描述一個讓你不爽的場景 ——一條令人窒息的訊息、一個奇葩同事、一次糟糕的對話 ——「幫你罵」會幫你說回去。";
+"generator.loading" = "正在組織語言……";
+"generator.sample_section" = "試試範例";
+"generator.sample_remix" = "用這個生成";
+
+// MARK: - Result
+
+"result.copy" = "複製";
+"result.copied" = "已複製";
+"result.share" = "分享";
+"result.favorite" = "收藏";
+"result.unfavorite" = "已收藏";
+"result.regenerate" = "再生成一條";
+
+// MARK: - History
+
+"history.title" = "歷史";
+"history.empty.title" = "暫時沒有記錄。";
+"history.empty.subtitle" = "你的生成結果會按日期保存在這裡。";
+"history.delete" = "刪除";
+
+// MARK: - Settings
+
+"settings.title" = "設定";
+"settings.section.appearance" = "外觀";
+"settings.section.ai" = "AI 與隱私";
+"settings.section.subscription" = "訂閱";
+"settings.section.about" = "關於";
+"settings.section.account" = "帳號";
+"settings.about_ai.privacy_label" = "Apple 使用者 ID(登入後)—— 僅供應用程式功能使用";
+
+"account.signed_in.anonymous" = "已透過 Apple 登入";
+"account.sign_in.button.a11y" = "使用 Apple 登入";
+"account.sign_in.footer" = "可選。登入後我們能用您的名字稱呼您,未來還能透過 iCloud 在您的 Apple 裝置之間同步歷史記錄。不登入,所有功能照常使用。";
+"account.sign_out" = "登出";
+
+"settings.language" = "語言";
+"settings.language.system" = "跟隨系統";
+
+"settings.safe_mode" = "安全模式";
+"settings.safe_mode.footer" = "安全模式在 Apple 內建的內容安全機制上再加一層過濾。建議保持開啟。";
+
+"settings.about_ai.title" = "關於 AI";
+"settings.about_ai.body" = "「幫你罵」使用 Apple 本地 Foundation Models 框架進行所有內容生成。你的輸入和生成的內容永遠不會離開這台裝置。我們不調用 OpenAI、Anthropic、Google 或任何其他第三方 AI 服務。";
+
+"settings.subscription.upgrade" = "升級到 Pro";
+"settings.subscription.manage" = "管理訂閱";
+"settings.subscription.restore" = "恢復購買";
+
+"settings.privacy_policy" = "隱私權政策";
+"settings.terms" = "使用條款";
+"settings.support" = "聯絡支援";
+"settings.version" = "版本";
+
+"settings.clear_samples" = "清除範例資料";
+"settings.clear_samples.footer" = "把內建的範例條目從歷史裡移除。";
+
+// MARK: - Quota & Paywall
+
+"quota.remaining" = "今日還剩 %d 次免費生成";
+"quota.exhausted.title" = "今日免費次數已用完";
+"quota.exhausted.body" = "今天的 5 次免費生成已經用完。升級 Pro 可以無限生成,並解鎖全部風格。";
+
+"paywall.title" = "RoastMate Pro";
+"paywall.body" = "發洩模式(私密草稿 + 改寫)· 狠話強度 · 無限生成 · 20+ 風格 · 吵架模擬器 · 無限歷史";
+"paywall.feature.vent" = "發洩模式";
+"paywall.feature.vent.detail" = "先把氣寫出來,再讓 AI 改成能發出去的版本。";
+"paywall.feature.savage" = "狠話強度";
+"paywall.feature.savage.detail" = "不留情面的尖銳回擊,僅在配得上的風格中開放。";
+"paywall.feature.unlimited" = "無限生成";
+"paywall.feature.unlimited.detail" = "跳過每日上限,想罵多少罵多少。";
+
+"quota.remaining.lifetime" = "新人額度還剩 %d 次";
+"quota.lifetime.hint" = "前 20 次免費,之後每日 5 次";
+"paywall.monthly" = "月度";
+"paywall.yearly" = "年度";
+"paywall.yearly.trial" = "7 天免費試用 · 之後 %@";
+"paywall.restore" = "恢復購買";
+"paywall.subscribe" = "立即訂閱";
+"paywall.continue_free" = "繼續免費使用";
+
+// MARK: - Errors
+
+"error.generic" = "出了點問題,再試一次?";
+"error.input_too_short" = "再多描述一點點來龍去脈。";
+"error.input_too_long" = "保持在 1500 字以內。";
+
+"safety.input_blocked" = "這段內容無法處理。試著用不帶姓名、威脅、自傷詞彙的方式描述。";
+"safety.output_blocked" = "AI 這次的輸出我們沒接受,正在重試。";
+"roast.error.unavailable" = "本地 AI 暫不可用,顯示的是預設範例。";
+"roast.error.no_variants" = "這次沒有產出可用的內容,換種說法試試?";
+
+// MARK: - Watch
+
+"watch.home.title" = "快速生成";
+"watch.template.late_excuse" = "遲到藉口";
+"watch.template.refuse_overtime" = "拒絕加班";
+"watch.template.ex_comeback" = "前任回擊";
+"watch.template.noisy_roommate" = "室友吵鬧";
+"watch.template.family_marriage" = "家人催婚";
+"watch.template.tough_client" = "難搞客戶";
+"watch.dictate" = "聽寫";
+"watch.send_to_phone" = "發到 iPhone";
+"watch.opening_iphone" = "正在打開 iPhone……";
+
+// MARK: - macOS
+
+"mac.menubar.quick_roast" = "快速生成";
+"mac.menubar.open_window" = "打開主視窗";
+"mac.menubar.quit" = "結束";
+"mac.services.roast_selection" = "用 RoastMate 回擊";
+
+// MARK: - Share Extension
+
+"share.title" = "幫你罵";
+"share.mode" = "模式";
+"share.shared_input" = "分享的內容";
+"share.empty_input" = "(沒有文字)";
+
+// MARK: - App Intents
+
+"intent.generate_roast.title" = "生成回擊";
+"intent.generate_roast.description" = "對一個情境生成一句本地 AI 回應。";
+"intent.param.situation" = "情境";
+"intent.param.situation.description" = "說說發生了什麼。";
+"intent.param.style" = "風格";
+"intent.param.style.description" = "用哪種「幫你罵」風格。";
+"intent.shortcut.short_title" = "幫我寫一句";
+
+// MARK: - Common
+
+"common.cancel" = "取消";
+"common.done" = "完成";
+"common.close" = "關閉";
+"common.copy" = "複製";
+"common.share" = "分享";
+"common.dismiss" = "知道了";
+"common.ok" = "好";
+"common.next" = "下一步";
+"common.back" = "上一步";
+
+// MARK: - Explore
+
+"explore.tools.section" = "工具";
+"explore.samples.section" = "範例集";
+"explore.samples.cta" = "瀏覽 17 個範例情境";
+"sample.badge.standard" = "範例";
+"sample.badge.vent_demo" = "先罵後發";
+"explore.samples.footer" = "點擊任意範例,看看「幫你罵」是怎麼寫這個風格的。可以在設定中清除範例。";
+"explore.styles.section" = "風格";
+
+// MARK: - Reply Helper
+
+"feature.reply.title" = "幫我回訊息";
+"feature.reply.placeholder" = "貼上你收到的那則訊息……";
+"feature.reply.empty_title" = "不知道怎麼回?";
+"feature.reply.empty_subtitle" = "把對方的訊息貼進來,「幫你罵」幫你寫一條你當時沒想到的回覆。";
+
+// MARK: - Emotion Translator
+
+"feature.translator.title" = "情緒翻譯器";
+"feature.translator.placeholder" = "你心裡真正想說的話……";
+"feature.translator.empty_title" = "把實話翻譯成場面話。";
+"feature.translator.empty_subtitle" = "把原始版打出來,「幫你罵」用你需要的語氣重寫一遍。";
+
+// MARK: - Argument Simulator
+
+"feature.argument.title" = "吵架模擬器";
+"feature.argument.placeholder" = "說說是和誰、為什麼事吵起來……";
+"feature.argument.empty_title" = "提前彩排一遍。";
+"feature.argument.empty_subtitle" = "在心裡先打過一遍這場架,Pro 功能。";
+"argument.start" = "開始彩排";
+"argument.live" = "彩排中";
+"argument.end" = "結束";
+"argument.role.them" = "對方";
+"argument.role.you" = "你";
+"argument.input_placeholder" = "你的回覆……";
+"argument.turn_limit_reached" = "(回合數已滿,點「結束」開新的一場。)";
+
+// MARK: - Social Roast
+
+"feature.social.title" = "社交吐槽";
+"feature.social.placeholder" = "把那則貼文 / 推文貼進來……";
+"feature.social.empty_title" = "隨手可發的回覆。";
+"feature.social.empty_subtitle" = "貼上一段內容,得到幾條可以直接發出去的回覆。";
+
+// MARK: - Styles
+
+"style.high_eq.name" = "高 EQ";
+"style.high_eq.blurb" = "表面客氣,內裡鋒利。";
+
+"style.passive_aggressive.name" = "陰陽怪氣";
+"style.passive_aggressive.blurb" = "語氣平靜,但話裡有刺。";
+
+"style.jp_keigo.name" = "日式敬語";
+"style.jp_keigo.blurb" = "用極致禮貌當武器。";
+
+"style.literary.name" = "文學體";
+"style.literary.blurb" = "民國散文級別的觀察。";
+
+"style.philosopher.name" = "哲學家";
+"style.philosopher.blurb" = "抽離、反思、不動聲色。";
+
+"style.grandma.name" = "奶奶智慧";
+"style.grandma.blurb" = "溫柔語氣,扎實道理。";
+
+"style.tweet.name" = "一句話";
+"style.tweet.blurb" = "短、狠、能截圖。";
+
+"style.xiaohongshu.name" = "小紅書吐槽";
+"style.xiaohongshu.blurb" = "戲劇化第一人稱。";
+
+"style.shakespeare.name" = "莎士比亞體";
+"style.shakespeare.blurb" = "Thou hast erred.";
+
+"style.mba_boss.name" = "MBA 黑話";
+"style.mba_boss.blurb" = "對齊、閉環、拉通。";
+
+"style.ancient.name" = "文言文";
+"style.ancient.blurb" = "言簡、意遠、對仗。";
+
+"style.lawyer.name" = "律師函體";
+"style.lawyer.blurb" = "茲通知如下……";
+
+"style.daoist.name" = "道家心境";
+"style.daoist.blurb" = "上善若水。";
+
+"style.tokyo_ol.name" = "東京上班族";
+"style.tokyo_ol.blurb" = "居酒屋級別的吐槽。";
+
+"style.douban.name" = "豆瓣短文";
+"style.douban.blurb" = "週六下午的日記體。";
+
+"style.reddit_eli5.name" = "Reddit 解釋";
+"style.reddit_eli5.blurb" = "面無表情地解釋荒謬。";
+
+"style.standup.name" = "脫口秀段子";
+"style.standup.blurb" = "鋪墊、升級、回扣。";
+
+"style.tw_drama.name" = "台劇腔";
+"style.tw_drama.blurb" = "戲劇、深情、有點淚。";
+
+"style.cold.name" = "冷處理";
+"style.cold.blurb" = "兩句話,結束。";
+
+"style.bjing.name" = "京片兒";
+"style.bjing.blurb" = "胡同口的調侃。";
+
+"style.savage.name" = "硬核回擊";
+"style.savage.blurb" = "不留情面,也不帶髒字。";
+
+"style.dark_humor.name" = "黑色幽默";
+"style.dark_humor.blurb" = "冷峻、乾燥、帶點苦笑。";
+
+"style.killshot.name" = "辯論收尾殺";
+"style.killshot.blurb" = "指出漏洞。結束對話。";
+
+"style.corporate.name" = "職場冷暴力";
+"style.corporate.blurb" = "如上封信所述 —— 冷冷地。";
+
+/* === 強度 === */
+"intensity.calm.name" = "得體";
+"intensity.calm.blurb" = "降溫但不退讓。";
+"intensity.sharp.name" = "銳利";
+"intensity.sharp.blurb" = "話不多,刀刀見血。";
+"intensity.savage.name" = "狠";
+"intensity.savage.blurb" = "毫不留情,但還能發。";
+"intensity.vent.name" = "發洩";
+"intensity.vent.blurb" = "只給自己看的發洩稿,稍後可改成能發的。";
+
+/* === 發洩 / 可發送 卡片 === */
+"output.kind.vent_draft.label" = "發洩稿 · 僅自己看";
+"output.kind.sendable_reply.label" = "可發送版";
+"output.vent.disclosure" = "發洩稿是私密的,不要直接發。需要真發,點下面讓 AI 改一版能發的。";
+"output.rewrite.button" = "改成能發的";
+"output.rewrite.in_progress" = "正在降溫…";
+
+/* === 事件線程 === */
+"thread.untitled" = "未命名的事件";
+"thread.continue.button" = "繼續這個事件";
+"thread.add_round.placeholder" = "對方又回覆了…";
+"thread.section.recent" = "最近";
+"thread.section.favorites" = "收藏";
+"thread.section.unresolved" = "未解決";
+"thread.section.resolved" = "已處理";
+"thread.mark_resolved" = "標記為已處理";
+"thread.mark_unresolved" = "重新開啟";
+"thread.rename" = "重新命名事件";
+"thread.favorite" = "收藏";
+"thread.unfavorite" = "取消收藏";
+"thread.badge.resolved" = "已處理";
+"thread.original_situation" = "最初的情況";
+"thread.round.number" = "第 %d 輪";
+"thread.round_count" = "%d 輪";
+"thread.promote.action" = "歸到一個事件";
+
+"history.section.recent_rounds" = "最近的回合";
+
+"generator.continuation.title" = "繼續這件事";
+"generator.continuation.hint" = "把後來又發生了什麼寫下來——先前的回合會自動作為背景。";
+
+"common.save" = "儲存";
+"common.cancel" = "取消";
+
+/* === 分類 === */
+"category.work.name" = "職場";
+"category.relationship.name" = "戀愛";
+"category.family.name" = "家人";
+"category.friends.name" = "朋友";
+"category.internet.name" = "網友";
+"category.other.name" = "其他";
+
+/* === 心情 === */
+"mood.angry.name" = "生氣";
+"mood.wronged.name" = "委屈";
+"mood.speechless.name" = "無言";
+"mood.anxious.name" = "焦慮";
+"mood.petty.name" = "斤斤計較";
+"mood.amused.name" = "想笑";
+
+"rewrite.fallback.unavailable" = "這次沒改出來。發洩稿留給你。";

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Privacy Policy — RoastMate</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">🔥</div>
+    <div>
+      <h1>Privacy Policy</h1>
+      <p>RoastMate · Effective 2026-05-14</p>
+    </div>
+  </header>
+
+  <p>
+    This policy describes how the RoastMate iOS, macOS, and watchOS
+    app handles your data. By installing or using the app, you agree to
+    the practices below.
+  </p>
+
+  <h2>TL;DR</h2>
+  <p>RoastMate is built so your drafts and history <strong>stay on your device</strong>.</p>
+  <ul class="checks">
+    <li>All AI generation runs on your device via Apple's Foundation Models framework</li>
+    <li>Your inputs and generated text are <strong>not</strong> transmitted to our servers, OpenAI, Anthropic, Google, or any third-party AI service</li>
+    <li>We do not collect usage analytics, advertising IDs, or device identifiers</li>
+    <li>You can verify this by enabling Airplane Mode — RoastMate's generator continues to work</li>
+  </ul>
+
+  <h2>Information we collect</h2>
+  <p><strong>None is collected by RoastMate servers.</strong> The app does not contact our servers for any feature. The App Store privacy nutrition label is "Data Not Collected".</p>
+  <p>The only network traffic the app initiates is:</p>
+  <ol>
+    <li><strong>App Store / StoreKit</strong> — when you open the paywall or make a subscription purchase, system frameworks talk to Apple. We do not see your purchase details directly; we only learn whether you have an active subscription via Apple's Transaction API.</li>
+    <li><strong>Sign in with Apple</strong> — if you choose to sign in, Apple's system sign-in flow talks to Apple. We store only the Apple-issued user identifier and any name/email you choose to share locally in Keychain, so Settings can show your account state.</li>
+    <li><strong>Crash reports</strong> — if you have iOS / macOS Diagnostics &amp; Usage sharing enabled, Apple may send crash reports to us. These contain no personal information.</li>
+  </ol>
+  <p>We do not use OpenAI, Anthropic, Google, Meta, Microsoft, or any other third-party AI service. We do not embed analytics SDKs (Firebase, Amplitude, Mixpanel, Sentry, etc.). We do not use advertising identifiers. We do not fingerprint your device.</p>
+
+  <h2>Information stored locally on your device</h2>
+  <p>The following is stored only on your device, inside the app's sandbox / App Group container:</p>
+  <ul>
+    <li><strong>Roast history.</strong> The situations you typed and the responses generated. Stored in SwiftData. You can delete individual entries or clear all sample data from Settings.</li>
+    <li><strong>Settings.</strong> Your language preference, Safe Mode toggle, daily quota counter, and onboarding state.</li>
+    <li><strong>Subscription state.</strong> Whether you have an active Pro subscription, derived from Apple's StoreKit framework.</li>
+    <li><strong>Optional account state.</strong> If you use Sign in with Apple, the Apple-issued user identifier and any shared name/email are stored locally in Keychain.</li>
+  </ul>
+  <p>On the same device, app-family targets can use the App Group <code>group.yyh.roastmate.app</code> as a local shared container where supported. Cross-device iCloud sync is not part of the current 1.0 release; if added later, it will be opt-in and clearly described.</p>
+
+  <h2>Children</h2>
+  <p>RoastMate is rated <strong>17+</strong> for mature humor and sarcasm. It is not intended for children under 17. We do not knowingly collect data from anyone — including children.</p>
+
+  <h2>Your rights</h2>
+  <p>Because we do not collect or store any data on our servers, there is nothing to access, export, correct, or delete from us. To remove all local data, uninstall the app or use the in-app <strong>Settings → Clear sample data</strong> and <strong>Settings → Manage subscription</strong>.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we ever change the policy (for example, when adding optional cloud features in a future version), we will update the "Effective" date and post a notice in the app. Any future cloud features will be opt-in and clearly described.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy? Email <a href="mailto:support@colorarchive.me">support@colorarchive.me</a>.</p>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="support.html">Support</a>
+  </nav>
+</div>
+</body>
+</html>

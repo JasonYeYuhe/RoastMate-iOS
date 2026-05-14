@@ -1,0 +1,359 @@
+// MARK: - App
+
+"app.title" = "RoastMate";
+"app.tagline" = "オンデバイスAIで、言いたいことを上品に。";
+"app.short_disclaimer" = "RoastMateは、ユーザー自身の感情表現を支援する創作ツールです。特定の個人を標的にしたり嫌がらせをするためのものではありません。";
+
+// MARK: - Tabs
+
+"tab.generator" = "生成";
+"tab.library" = "スタイル";
+"tab.history" = "履歴";
+"tab.settings" = "設定";
+
+// MARK: - Onboarding
+
+"onboarding.welcome.title" = "言いたかった一言を、形に。";
+"onboarding.welcome.body" = "RoastMateは、Appleのオンデバイス AI を使い、あなたのモヤモヤを上品で安全な言葉に変えます。データは端末から出ません。";
+
+"onboarding.privacy.title" = "プライバシー優先。";
+"onboarding.privacy.body" = "生成はすべてAppleのFoundation Modelsフレームワークによってオンデバイスで完結します。あなたの入力はサーバーに送信されません。機内モードで動作を確認できます。";
+
+"onboarding.safety.title" = "嫌がらせのためではなく、自己表現のために。";
+"onboarding.safety.body" = "RoastMateは自分の気持ちを言葉にするためのツールです。個人を標的にする目的ではありません。固有名、脅迫、差別的表現は自動的に除去されます。";
+"onboarding.safety.acknowledge" = "理解しました";
+
+"ageGate.title" = "成熟なユーモアを含みます";
+"ageGate.body" = "本アプリには皮肉や成熟したユーモアが含まれます。続行するには17歳以上である必要があります。";
+"ageGate.confirm" = "17歳以上です";
+
+// MARK: - Generator
+
+"generator.title" = "返し生成";
+"generator.placeholder" = "何があったか書いてください…";
+"generator.style_label" = "スタイル";
+"generator.intensity_label" = "強さ";
+"generator.generate" = "生成する";
+"generator.regenerate" = "もう一度";
+"generator.empty.title" = "何があったの?";
+"generator.empty.subtitle" = "イラっとした出来事を一行で書くと、RoastMateが上手な言い返しを考えます。";
+"generator.loading" = "考えています…";
+"generator.sample_section" = "サンプルを試す";
+"generator.sample_remix" = "これで生成";
+
+// MARK: - Result
+
+"result.copy" = "コピー";
+"result.copied" = "コピー済み";
+"result.share" = "共有";
+"result.favorite" = "保存";
+"result.unfavorite" = "保存済み";
+"result.regenerate" = "再生成";
+
+// MARK: - History
+
+"history.title" = "履歴";
+"history.empty.title" = "まだ何もありません。";
+"history.empty.subtitle" = "生成結果は日付ごとにここに保存されます。";
+"history.delete" = "削除";
+
+// MARK: - Settings
+
+"settings.title" = "設定";
+"settings.section.appearance" = "外観";
+"settings.section.ai" = "AIとプライバシー";
+"settings.section.subscription" = "サブスクリプション";
+"settings.section.about" = "アプリについて";
+"settings.section.account" = "アカウント";
+"settings.about_ai.privacy_label" = "Apple ユーザー ID(サインイン時)—— アプリ機能のみ";
+
+"account.signed_in.anonymous" = "Apple でサインイン済み";
+"account.sign_in.button.a11y" = "Apple でサインイン";
+"account.sign_in.footer" = "任意です。サインインするとお名前で呼びかけられ、将来のアップデートでは iCloud を通じて履歴を Apple デバイス間で同期できます。サインインしなくてもすべての機能が使えます。";
+"account.sign_out" = "サインアウト";
+
+"settings.language" = "言語";
+"settings.language.system" = "システムに従う";
+
+"settings.safe_mode" = "セーフモード";
+"settings.safe_mode.footer" = "セーフモードは、Apple標準の安全機構に加えて追加のフィルタを適用します。オンのままを推奨します。";
+
+"settings.about_ai.title" = "AIについて";
+"settings.about_ai.body" = "RoastMateは、AppleのオンデバイスFoundation Modelsフレームワークを使用します。入力内容や生成結果が端末外に送信されることはありません。OpenAI、Anthropic、Googleなどの第三者AIサービスは一切使用していません。";
+
+"settings.subscription.upgrade" = "Proにアップグレード";
+"settings.subscription.manage" = "サブスクリプションを管理";
+"settings.subscription.restore" = "購入を復元";
+
+"settings.privacy_policy" = "プライバシーポリシー";
+"settings.terms" = "利用規約";
+"settings.support" = "サポート";
+"settings.version" = "バージョン";
+
+"settings.clear_samples" = "サンプルを削除";
+"settings.clear_samples.footer" = "履歴から内蔵のサンプルを削除します。";
+
+// MARK: - Quota & Paywall
+
+"quota.remaining" = "今日の無料回数:残り%d回";
+"quota.exhausted.title" = "本日の無料回数を使い切りました";
+"quota.exhausted.body" = "本日5回の無料生成をご利用いただきました。Proにアップグレードすると、無制限の生成とすべてのスタイルが解放されます。";
+
+"paywall.title" = "RoastMate Pro";
+"paywall.body" = "吐き出しモード(プライベート下書き+書き直し)· 容赦なしモード · 無制限の生成 · 20+のスタイル · 議論シミュレーター · 無制限の履歴";
+"paywall.feature.vent" = "吐き出しモード";
+"paywall.feature.vent.detail" = "まず本音をそのまま書き出して、それから送れる形に書き直します。";
+"paywall.feature.savage" = "容赦なしモード";
+"paywall.feature.savage.detail" = "遠慮なしの切れ味。対応するスタイルでのみ利用可。";
+"paywall.feature.unlimited" = "無制限の生成";
+"paywall.feature.unlimited.detail" = "1日の上限を気にせず、何度でも。";
+
+"quota.remaining.lifetime" = "スターター枠 残り %d 回";
+"quota.lifetime.hint" = "最初の20回は無料、その後は1日5回";
+"paywall.monthly" = "月額";
+"paywall.yearly" = "年額";
+"paywall.yearly.trial" = "7日間無料体験 · その後 %@";
+"paywall.restore" = "購入を復元";
+"paywall.subscribe" = "登録する";
+"paywall.continue_free" = "無料のまま続ける";
+
+// MARK: - Errors
+
+"error.generic" = "問題が発生しました。もう一度お試しください。";
+"error.input_too_short" = "もう少し状況を書いてみてください。";
+"error.input_too_long" = "1500文字以内にしてください。";
+
+"safety.input_blocked" = "この内容は処理できません。固有名、脅迫、自傷的な表現を避けてください。";
+"safety.output_blocked" = "AIの出力に問題があったため、再生成しています。";
+"roast.error.unavailable" = "オンデバイスAIが現在利用できません。事前に用意した例を表示します。";
+"roast.error.no_variants" = "今回は適切な結果が得られませんでした。別の言い方で試してください。";
+
+// MARK: - Watch
+
+"watch.home.title" = "クイック生成";
+"watch.template.late_excuse" = "遅刻の言い訳";
+"watch.template.refuse_overtime" = "残業を断る";
+"watch.template.ex_comeback" = "元恋人への返し";
+"watch.template.noisy_roommate" = "うるさい同居人";
+"watch.template.family_marriage" = "家族からの結婚プレッシャー";
+"watch.template.tough_client" = "難しい顧客";
+"watch.dictate" = "音声入力";
+"watch.send_to_phone" = "iPhoneに送る";
+"watch.opening_iphone" = "iPhoneを開いています…";
+
+// MARK: - macOS
+
+"mac.menubar.quick_roast" = "クイック生成";
+"mac.menubar.open_window" = "RoastMateを開く";
+"mac.menubar.quit" = "終了";
+"mac.services.roast_selection" = "RoastMateで返す";
+
+// MARK: - Share Extension
+
+"share.title" = "RoastMate";
+"share.mode" = "モード";
+"share.shared_input" = "共有されたテキスト";
+"share.empty_input" = "(テキストなし)";
+
+// MARK: - App Intents
+
+"intent.generate_roast.title" = "返しを生成";
+"intent.generate_roast.description" = "状況を入力して、オンデバイスAIで返しを生成します。";
+"intent.param.situation" = "状況";
+"intent.param.situation.description" = "何があったか入力。";
+"intent.param.style" = "スタイル";
+"intent.param.style.description" = "どの「帮你骂」スタイルで書くか。";
+"intent.shortcut.short_title" = "一言ください";
+
+// MARK: - Common
+
+"common.cancel" = "キャンセル";
+"common.done" = "完了";
+"common.close" = "閉じる";
+"common.copy" = "コピー";
+"common.share" = "共有";
+"common.dismiss" = "了解";
+"common.ok" = "OK";
+"common.next" = "次へ";
+"common.back" = "戻る";
+
+// MARK: - Explore
+
+"explore.tools.section" = "ツール";
+"explore.samples.section" = "サンプル集";
+"explore.samples.cta" = "17のサンプル状況を見る";
+"sample.badge.standard" = "サンプル";
+"sample.badge.vent_demo" = "吐き出し→送信";
+"explore.samples.footer" = "サンプルをタップして、各スタイルの書き方を確認できます。設定からまとめて削除できます。";
+"explore.styles.section" = "スタイル";
+
+// MARK: - Reply Helper
+
+"feature.reply.title" = "返信ヘルパー";
+"feature.reply.placeholder" = "受け取ったメッセージを貼り付け…";
+"feature.reply.empty_title" = "どう返せばいい?";
+"feature.reply.empty_subtitle" = "相手のメッセージを貼ると、その場で思いつかなかった返しを書きます。";
+
+// MARK: - Emotion Translator
+
+"feature.translator.title" = "気持ち翻訳";
+"feature.translator.placeholder" = "本当に言いたかった一言…";
+"feature.translator.empty_title" = "本音を、ちょうどいい言葉に。";
+"feature.translator.empty_subtitle" = "本音をそのまま書いて。必要なトーンに書き直します。";
+
+// MARK: - Argument Simulator
+
+"feature.argument.title" = "口論シミュレーター";
+"feature.argument.placeholder" = "誰と、何で揉めているか…";
+"feature.argument.empty_title" = "事前にリハーサル。";
+"feature.argument.empty_subtitle" = "難しい会話を一度通して練習しましょう。Pro機能。";
+"argument.start" = "リハーサル開始";
+"argument.live" = "リハーサル中";
+"argument.end" = "終了";
+"argument.role.them" = "相手";
+"argument.role.you" = "あなた";
+"argument.input_placeholder" = "返答…";
+"argument.turn_limit_reached" = "(ターン上限に達しました。終了して新しいリハーサルを始めてください。)";
+
+// MARK: - Social Roast
+
+"feature.social.title" = "SNS返し";
+"feature.social.placeholder" = "投稿/ツイートを貼り付け…";
+"feature.social.empty_title" = "そのまま投稿できる返し。";
+"feature.social.empty_subtitle" = "投稿を貼ると、そのまま返信できる短文を提案します。";
+
+// MARK: - Styles
+
+"style.high_eq.name" = "高EQ";
+"style.high_eq.blurb" = "表面は丁寧、内には刃。";
+
+"style.passive_aggressive.name" = "パッシブ・アグレッシブ";
+"style.passive_aggressive.blurb" = "穏やかな口調に、含み。";
+
+"style.jp_keigo.name" = "敬語";
+"style.jp_keigo.blurb" = "極上の丁寧さを武器に。";
+
+"style.literary.name" = "文学風";
+"style.literary.blurb" = "随筆級の観察。";
+
+"style.philosopher.name" = "哲学者";
+"style.philosopher.blurb" = "距離を置いた静かな省察。";
+
+"style.grandma.name" = "おばあちゃんの知恵";
+"style.grandma.blurb" = "温かい声で、真実を。";
+
+"style.tweet.name" = "ワンライナー";
+"style.tweet.blurb" = "短く鋭く、スクショ用。";
+
+"style.xiaohongshu.name" = "SNS愚痴投稿";
+"style.xiaohongshu.blurb" = "ドラマチックな一人称。";
+
+"style.shakespeare.name" = "シェイクスピア風";
+"style.shakespeare.blurb" = "Thou hast erred.";
+
+"style.mba_boss.name" = "MBAバズワード";
+"style.mba_boss.blurb" = "Circle back. Loop in.";
+
+"style.ancient.name" = "漢文体";
+"style.ancient.blurb" = "簡潔・対句・古典。";
+
+"style.lawyer.name" = "通知書体";
+"style.lawyer.blurb" = "謹啓 …";
+
+"style.daoist.name" = "道家の境地";
+"style.daoist.blurb" = "上善は水のごとし。";
+
+"style.tokyo_ol.name" = "東京OL";
+"style.tokyo_ol.blurb" = "居酒屋の愚痴レベル。";
+
+"style.douban.name" = "豆瓣エッセイ";
+"style.douban.blurb" = "土曜午後の日記。";
+
+"style.reddit_eli5.name" = "ELI5解説";
+"style.reddit_eli5.blurb" = "淡々と不条理を解説。";
+
+"style.standup.name" = "スタンダップ風";
+"style.standup.blurb" = "フリ→展開→オチ。";
+
+"style.tw_drama.name" = "台湾ドラマ口調";
+"style.tw_drama.blurb" = "情熱的で芝居がかった。";
+
+"style.cold.name" = "冷たい返し";
+"style.cold.blurb" = "二文で終了。";
+
+"style.bjing.name" = "北京なまり";
+"style.bjing.blurb" = "下町の皮肉。";
+
+"style.savage.name" = "容赦なし";
+"style.savage.blurb" = "情けは無し。罵倒語も無し。";
+
+"style.dark_humor.name" = "ブラックユーモア";
+"style.dark_humor.blurb" = "乾いた絶望、軽やかに。";
+
+"style.killshot.name" = "ディベート終止符";
+"style.killshot.blurb" = "論点の穴を指摘して終了。";
+
+"style.corporate.name" = "ビジネス冷たい暴力";
+"style.corporate.blurb" = "前回のメールの通り —— 冷ややかに。";
+
+/* === 強度 === */
+"intensity.calm.name" = "穏やか";
+"intensity.calm.blurb" = "丁寧に、引かずに鎮める。";
+"intensity.sharp.name" = "鋭い";
+"intensity.sharp.blurb" = "短く、的確に。";
+"intensity.savage.name" = "容赦なし";
+"intensity.savage.blurb" = "それでも送れる範囲で。";
+"intensity.vent.name" = "吐き出し";
+"intensity.vent.blurb" = "自分だけの吐き出し草稿。後で送れる形にできます。";
+
+/* === 吐き出し / 送信可 カード === */
+"output.kind.vent_draft.label" = "吐き出し草稿 · 自分用";
+"output.kind.sendable_reply.label" = "送信可能な返し";
+"output.vent.disclosure" = "吐き出し草稿はプライベートです。そのままは送らず、下のボタンで送れる版に変えましょう。";
+"output.rewrite.button" = "送れる形にする";
+"output.rewrite.in_progress" = "温度を下げています…";
+
+/* === 出来事スレッド === */
+"thread.untitled" = "無題の出来事";
+"thread.continue.button" = "この出来事を続ける";
+"thread.add_round.placeholder" = "相手がさらにこう返してきた…";
+"thread.section.recent" = "最近";
+"thread.section.favorites" = "お気に入り";
+"thread.section.unresolved" = "未解決";
+"thread.section.resolved" = "もう片付いた";
+"thread.mark_resolved" = "解決にする";
+"thread.mark_unresolved" = "もう一度開く";
+"thread.rename" = "件名を変更";
+"thread.favorite" = "お気に入り";
+"thread.unfavorite" = "お気に入り解除";
+"thread.badge.resolved" = "解決済み";
+"thread.original_situation" = "最初の出来事";
+"thread.round.number" = "%d回目";
+"thread.round_count" = "%d回";
+"thread.promote.action" = "ひとつの出来事にまとめる";
+
+"history.section.recent_rounds" = "最近のラウンド";
+
+"generator.continuation.title" = "この出来事の続き";
+"generator.continuation.hint" = "そのあと何が起きたか書いてください。前のラウンドは背景として残ります。";
+
+"common.save" = "保存";
+"common.cancel" = "キャンセル";
+
+/* === カテゴリ === */
+"category.work.name" = "仕事";
+"category.relationship.name" = "恋愛";
+"category.family.name" = "家族";
+"category.friends.name" = "友人";
+"category.internet.name" = "ネット";
+"category.other.name" = "その他";
+
+/* === 気持ち === */
+"mood.angry.name" = "怒り";
+"mood.wronged.name" = "悔しい";
+"mood.speechless.name" = "言葉が出ない";
+"mood.anxious.name" = "不安";
+"mood.petty.name" = "ねちっこい";
+"mood.amused.name" = "あきれ笑い";
+
+"rewrite.fallback.unavailable" = "今回は書き換えられませんでした。吐き出し草稿はあなたのものです。";

@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "samples": [
+    {
+      "id": "sample_01",
+      "situation": {
+        "en": "My roommate plays loud games at 2 AM every night.",
+        "zh-Hans": "我室友每天凌晨两点打游戏,声音很大。",
+        "zh-Hant": "我室友每天凌晨兩點打遊戲,聲音很大。",
+        "ja": "ルームメイトが毎晩深夜2時に大音量でゲームをします。"
+      },
+      "styleId": "high_eq",
+      "responseLocale": "zh-Hans",
+      "response": "你真的很有活力。希望你的键盘也知道,现在是凌晨两点。我相信你下次会找到既能享受游戏、又能让我睡觉的好办法的。"
+    },
+    {
+      "id": "sample_02",
+      "situation": {
+        "en": "My manager keeps telling me to be more proactive.",
+        "zh-Hans": "领导总让我「更主动一点」。",
+        "zh-Hant": "主管總讓我「更主動一點」。",
+        "ja": "上司にいつも「もっと主体的に動いて」と言われます。"
+      },
+      "styleId": "mba_boss",
+      "responseLocale": "en",
+      "response": "Appreciate the feedback. To operationalize, I'll be drafting a personal proactivity OKR, syncing it to my Q-roadmap, and looping in stakeholders for a 360° readout. Suggest we set a recurring weekly to align on synergies."
+    },
+    {
+      "id": "sample_03",
+      "situation": {
+        "en": "My date cancelled last minute again.",
+        "zh-Hans": "约会又被临时放鸽子了。",
+        "zh-Hant": "約會又被臨時放鴿子了。",
+        "ja": "デートを直前にまたキャンセルされました。"
+      },
+      "styleId": "literary_lu_xun",
+      "responseLocale": "zh-Hans",
+      "response": "据说有一种人,只擅长在他人时间表上写名字,而从不出现。这并非懒,亦非健忘,而是一种古老的、隐秘的修养——名为「不必负责」。"
+    },
+    {
+      "id": "sample_04",
+      "situation": {
+        "en": "Customer service refuses to refund a broken product.",
+        "zh-Hans": "客服死活不给我退坏掉的产品。",
+        "zh-Hant": "客服死活不給我退壞掉的產品。",
+        "ja": "壊れた商品の返品を、カスタマーサポートに断られ続けています。"
+      },
+      "styleId": "jp_workplace_keigo",
+      "responseLocale": "ja",
+      "response": "お忙しいところ恐れ入ります。お送りいただいた商品に不具合がございましたため、改めてご対応のご検討をお願い申し上げます。ご返答いただけますと大変助かります。何卒よろしくお願いいたします。"
+    },
+    {
+      "id": "sample_05",
+      "situation": {
+        "en": "My message has been ignored in the group chat for 3 days.",
+        "zh-Hans": "群里发的消息被无视了三天。",
+        "zh-Hant": "群裡發的消息被無視了三天。",
+        "ja": "グループチャットでの私のメッセージが3日間スルーされています。"
+      },
+      "styleId": "passive_aggressive",
+      "responseLocale": "en",
+      "response": "No worries at all about the message. I'm sure everyone's busy. I'll just go ahead and assume the silence is the answer, which honestly saves us all some typing."
+    },
+    {
+      "id": "sample_06",
+      "situation": {
+        "en": "My parents keep asking when I'm going to get married.",
+        "zh-Hans": "家里人一直催我结婚。",
+        "zh-Hant": "家裡人一直催我結婚。",
+        "ja": "家族にいつ結婚するのかと聞かれ続けています。"
+      },
+      "styleId": "philosopher",
+      "responseLocale": "en",
+      "response": "Each generation believes the next has betrayed them by becoming themselves. I cannot answer your question — but I understand the fear beneath it, and I'm not in a hurry to translate that fear into someone else's life."
+    },
+    {
+      "id": "sample_07",
+      "situation": {
+        "en": "A coworker took credit for my project at the all-hands.",
+        "zh-Hans": "同事在全员会上把我的项目说成是他做的。",
+        "zh-Hant": "同事在全員會上把我的項目說成是他做的。",
+        "ja": "同僚が全社会議で、私のプロジェクトを自分の手柄として発表しました。"
+      },
+      "styleId": "shakespeare",
+      "responseLocale": "en",
+      "response": "What strange alchemy doth turn another's labour into thine own crown? Methinks the gold thou wearest at this morn's gathering was forged in a quieter forge — a forge thou didst not tend."
+    },
+    {
+      "id": "sample_08",
+      "situation": {
+        "en": "Someone I was dating disappeared after three months without a word.",
+        "zh-Hans": "约了三个月的人突然消失,一句话都没有。",
+        "zh-Hant": "約了三個月的人突然消失,一句話都沒有。",
+        "ja": "3か月付き合った相手が、一言もなく突然連絡を絶ちました。"
+      },
+      "styleId": "grandma_wisdom",
+      "responseLocale": "en",
+      "response": "Honey, when someone walks out without closing the door, it's because the door was never theirs to begin with. Make yourself some soup and put the kettle on. The good ones knock — they don't tiptoe out."
+    },
+    {
+      "id": "sample_09",
+      "situation": {
+        "en": "A friend has been promising to repay borrowed money for six months.",
+        "zh-Hans": "借给朋友的钱,他承诺了半年还没还。",
+        "zh-Hant": "借給朋友的錢,他承諾了半年還沒還。",
+        "ja": "友人に貸したお金が、半年経っても返ってきません。"
+      },
+      "styleId": "lawyer_letter",
+      "responseLocale": "en",
+      "response": "I write to gently bring to your attention that the sum we discussed in spring remains outstanding as of this writing. In the interest of resolving the matter amicably, a confirmation of timing by end of next week would be most appreciated."
+    },
+    {
+      "id": "sample_10",
+      "situation": {
+        "en": "The neighbor's dog has been barking all night again.",
+        "zh-Hans": "邻居家的狗又叫了一晚上。",
+        "zh-Hant": "鄰居家的狗又叫了一晚上。",
+        "ja": "隣の家の犬が、また一晩中吠えていました。"
+      },
+      "styleId": "literary_lu_xun",
+      "responseLocale": "zh-Hans",
+      "response": "夜深时分,邻人之犬必鸣不止。我想,这并非犬之过,而是它身后那位静卧不闻其声的主人,实在懂得了一种比清醒更深的安宁。"
+    },
+    {
+      "id": "sample_11",
+      "situation": {
+        "en": "Someone borrowed money long ago and never paid it back.",
+        "zh-Hans": "多年前借出去的钱,一直没要回来。",
+        "zh-Hant": "多年前借出去的錢,一直沒要回來。",
+        "ja": "ずっと前に貸したお金が、いまだに戻ってきません。"
+      },
+      "styleId": "ancient_chinese",
+      "responseLocale": "zh-Hans",
+      "response": "君借时如焚,还时如冰。所欠者非银两,乃情义也。然情义既损,银两亦无所归。今但记其名,不复念其人。"
+    },
+    {
+      "id": "sample_12",
+      "situation": {
+        "en": "My manager schedules a recurring meeting at 5 PM on Fridays.",
+        "zh-Hans": "经理把每周例会安排在周五下午五点。",
+        "zh-Hant": "經理把每週例會安排在週五下午五點。",
+        "ja": "上司が毎週金曜の17時に定例会議を設定しました。"
+      },
+      "styleId": "jp_workplace_keigo",
+      "responseLocale": "ja",
+      "response": "お忙しいところ恐れ入ります。金曜午後の定例につきまして、メンバーの稼働状況を踏まえ、開始時刻のご再検討をいただけますと大変ありがたく存じます。"
+    },
+    {
+      "id": "sample_13",
+      "situation": {
+        "en": "A stranger cut in front of me in line and pretended not to notice.",
+        "zh-Hans": "排队时被陌生人插队,他还装作没看见。",
+        "zh-Hant": "排隊時被陌生人插隊,他還裝作沒看見。",
+        "ja": "並んでいたら、知らない人に割り込まれ、しかも気付かないふりをされました。"
+      },
+      "styleId": "high_eq",
+      "responseLocale": "en",
+      "response": "Sorry — I think you might not have seen the line. Happy to clarify so we're both on the same page going forward."
+    },
+    {
+      "id": "sample_14",
+      "situation": {
+        "en": "The train was delayed and I was late to an important meeting.",
+        "zh-Hans": "火车晚点了,害我错过重要会议。",
+        "zh-Hant": "火車晚點了,害我錯過重要會議。",
+        "ja": "電車が遅延し、大事な会議に遅刻しました。"
+      },
+      "styleId": "philosopher",
+      "responseLocale": "en",
+      "response": "Civilizations agree on time the way they agree on borders — both are useful fictions until one of them moves. Today the train moved its border. I will, in turn, move my expectations."
+    },
+    {
+      "id": "sample_15",
+      "situation": {
+        "en": "A gym trainer keeps trying to sell me extra classes I don't want.",
+        "zh-Hans": "健身房教练一直推销我不想买的额外课程。",
+        "zh-Hant": "健身房教練一直推銷我不想買的額外課程。",
+        "ja": "ジムのトレーナーに、欲しくもない追加クラスを勧められ続けています。"
+      },
+      "styleId": "tweet_short",
+      "responseLocale": "en",
+      "response": "Look, I came here to lift weights, not contracts."
+    },
+    {
+      "id": "sample_16_vent",
+      "situation": {
+        "en": "I just found out my coworker has been quietly bad-mouthing me to our manager for months.",
+        "zh-Hans": "刚发现同事这几个月一直在背地里跟领导说我坏话。",
+        "zh-Hant": "剛發現同事這幾個月一直在背地裡跟主管說我壞話。",
+        "ja": "同僚がここ数ヶ月、こっそり上司に私の悪口を吹き込んでいたと知りました。"
+      },
+      "styleId": "high_eq",
+      "responseLocale": "zh-Hans",
+      "response": "想跟你聊一下,这两天有空吗?我从别处听到一些关于我的反馈,与其绕第三方,不如咱们直接聊清楚。",
+      "ventResponse": "真是两面派。当面跟我笑得跟开花似的,转身就跑去领导那儿打我小报告——你以为这样就能显出你能干?同事三年了,你这点小动作我看不出来?我做的项目你抢功,我犯的错你放大,合着我在你眼里就是个垫脚石。下次开会我就把这事当面摊开,看你那张脸往哪儿搁。",
+      "sendableResponse": "想找你聊一下,这两天什么时候方便?我从别处听到一些你对我工作的看法,我希望直接跟你确认——如果我有做得不到位的地方,我想从你这里听到,而不是绕一圈再传回来。咱们当面说,效率高,也不会有误会。你定个时间。"
+    },
+    {
+      "id": "sample_17_vent",
+      "situation": {
+        "en": "My partner forgot our anniversary again — and is now upset that I'M upset about it.",
+        "zh-Hans": "对象又忘了我们的纪念日,现在还反过来怪我「小题大做」。",
+        "zh-Hant": "對象又忘了我們的紀念日,現在還反過來怪我「小題大作」。",
+        "ja": "恋人がまた記念日を忘れたうえに、私が落ち込んでいることに逆ギレしてきました。"
+      },
+      "styleId": "high_eq",
+      "responseLocale": "en",
+      "response": "I want to talk about today, but not while we're both heated. The date matters to me — I'd like for it to matter to us.",
+      "ventResponse": "Five years. FIVE. You can't put one single date in a calendar app that lives in your pocket? And now I'm the bad guy for being upset about it? Don't you DARE tell me I'm 'making it a big deal' — it IS a big deal, and the only reason you get to call it small is because I'm the one who has to remember everything for both of us. I am exhausted. I am NOT crazy for caring. Stop making me apologize for being the only person in this relationship who pays attention.",
+      "sendableResponse": "Hey — can we talk later tonight, after we've both cooled off? I don't want to fight. I want you to know that the date hurt more than I let on, partly because it's not the first time, and partly because being told I'm 'making it a big deal' made me feel small for caring. I'm not trying to score points. I'd just like for us to figure out together how we mark the dates that matter, so I'm not the only one carrying that piece."
+    }
+  ]
+}
