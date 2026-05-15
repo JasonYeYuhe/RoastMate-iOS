@@ -5,6 +5,11 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>processing</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.apple.coredata.cloudkit.activity</string>
 	</array>
 	<key>CFBundleLocalizations</key>
 	<array>
