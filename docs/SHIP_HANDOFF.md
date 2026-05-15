@@ -29,7 +29,12 @@ App Store Connect (filled + saved by Claude via browser):
   was checked-with-no-credentials, which would have blocked review).
 - Privacy Policy URL already correct + its content now updated live.
 
-## 🔴 REMAINING — 3 things only you can do
+## 🟢 BUILD UPLOADED by Claude (Delivery UUID 532fd901-7d2a-4e3f-813b-139d85ab4c72)
+
+Archive + export + altool upload all done via the ASC API key
+(AuthKey_DMMFP6XTXX). ASC is now processing the binary (~10-15 min).
+
+## 🔴 REMAINING — only you can do
 
 1. **Upload screenshots** (Apple CSP blocks programmatic upload):
    - Go to ASC → RoastMate AI → iOS App 1.0 → Previews and
