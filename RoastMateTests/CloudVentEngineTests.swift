@@ -60,6 +60,28 @@ final class CloudVentEngineTests: XCTestCase {
                        "User opt-out (cloudVentEnabled=false) must prevent any cloud call.")
     }
 
+    func testCloudOutputThatTripsSafetyFilterIsNotReturnedRaw() async throws {
+        // Regression guard for the `(try? …) ?? cloudText` bug: if the
+        // cloud model emits hard-rail content (self-harm directed at the
+        // other party), the engine must NOT hand that raw text back. It
+        // discards it and falls through to the local path, so the result
+        // is anything EXCEPT the dangerous string.
+        let dangerous = "这种人真想让他去死。"
+        let recorder = RecordingCloudVentService(returning: dangerous)
+        let result = try await RoastEngine.shared.generate(
+            situation: "我室友每天凌晨两点打游戏。",
+            style: testStyle,
+            locale: Locale(identifier: "zh-Hans"),
+            variantCount: 1,
+            intensity: .vent,
+            cloudVentEnabled: true,
+            cloudClient: recorder
+        )
+        XCTAssertEqual(recorder.calls.count, 1, "Cloud should have been attempted.")
+        XCTAssertFalse(result.contains(dangerous),
+                       "Cloud output that fails the vent safety filter must never be returned to the user; engine should fall back to the local path instead.")
+    }
+
     private var testStyle: StylePreset {
         StylePreset(
             id: "test",

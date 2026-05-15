@@ -100,10 +100,20 @@ actor RoastEngine {
                     intensity: intensity,
                     locale: locale
                 )
-                let safe = (try? SafetyFilter.validateVentOutput(cloudText)) ?? cloudText
+                // Cloud output must clear the SAME vent safety bar as
+                // local output. Use `try` (not `try?`) so a hard-rail
+                // violation (slur / threat of violence / self-harm)
+                // throws and we fall through to the local path —
+                // never return raw unfiltered cloud text. The earlier
+                // `(try? …) ?? cloudText` form silently shipped
+                // disallowed content on a safety failure.
+                let safe = try SafetyFilter.validateVentOutput(cloudText)
                 return [safe]
             } catch let err as CloudVentError {
                 logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
+                // continue to local path below
+            } catch is SafetyError {
+                logger.notice("Cloud vent output tripped the safety filter — discarding it and falling back to local model.")
                 // continue to local path below
             } catch {
                 logger.notice("Cloud vent unexpected error — falling back to local model.")
