@@ -24,6 +24,12 @@ final class GeneratedRoast {
     /// liked rather than the whole session.
     var isFavorite: Bool = false
 
+    /// Back-pointer required by CloudKit-backed SwiftData: every to-many
+    /// relationship (`RoastSession.results`) must have an inverse on the
+    /// child side. Set automatically by SwiftData when the GeneratedRoast
+    /// is appended to a session's `results`.
+    var session: RoastSession?
+
     init(
         text: String,
         styleId: String,

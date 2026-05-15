@@ -33,7 +33,10 @@ final class RoastSession {
 
     /// Optional for CloudKit — required by SwiftData+CloudKit integration.
     /// Initialized to `[]` so callers can append without unwrapping first.
-    @Relationship(deleteRule: .cascade) var results: [GeneratedRoast]? = []
+    /// `inverse` points at `GeneratedRoast.session` (CloudKit also requires
+    /// every to-many relationship to have an inverse).
+    @Relationship(deleteRule: .cascade, inverse: \GeneratedRoast.session)
+    var results: [GeneratedRoast]? = []
 
     init(
         situation: String,

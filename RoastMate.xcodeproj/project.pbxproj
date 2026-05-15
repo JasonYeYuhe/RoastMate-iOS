@@ -1347,6 +1347,7 @@
 				CODE_SIGN_ENTITLEMENTS = RoastMate/RoastMate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
@@ -1414,6 +1415,7 @@
 				CODE_SIGN_ENTITLEMENTS = RoastMate/RoastMate.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
