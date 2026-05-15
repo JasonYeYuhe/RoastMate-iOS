@@ -122,7 +122,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .navigationTitle("settings.title")
+        .navigationTitle(AppLocalization.string("settings.title"))
         .sheet(isPresented: $showAbout) {
             AboutAIView(isPresented: $showAbout)
         }

@@ -167,7 +167,7 @@ struct HistoryView: View {
                 }
             }
         }
-        .navigationTitle("tab.history")
+        .navigationTitle(AppLocalization.string("tab.history"))
     }
 
     /// Tapping a saved reply navigates to whichever owner makes more

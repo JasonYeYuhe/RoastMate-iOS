@@ -22,6 +22,7 @@
 		064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE713D8BAF11D2A4B568BD /* ArgumentSimulatorViewModel.swift */; };
 		06A58104C1CF2AAD837148A3 /* HistorySessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */; };
 		0ACC5D32D45B9A258EC9614E /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
+		0ACFF8F674AC657C4A377ED8 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		0BDEA9E57B5C38451A22D87E /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		0D65509483B1CACE49477444 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		0D7BB757E872FBA18E8BE965 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
@@ -45,6 +46,7 @@
 		215A7CCFB30037B838B727E3 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		21AFC0AD60E17DD1BC537CE0 /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		21FF22DC79FE0A5105C8C9BF /* PromptBuilderModesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB98C56382D7CCB8FF1C26 /* PromptBuilderModesTests.swift */; };
+		24D9C3B0147763A3B6C4AD98 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		252B6511F524321110F035A0 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		25674AAD6016CACA65C0A670 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		25CEB630C856C53F9AC7C269 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8869CA8D12F9544EFD87DE /* SettingsView.swift */; };
@@ -78,6 +80,7 @@
 		496688BCEA684ED37D7B68D2 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		4A56B89B3E5D2C3ECB7D6BD7 /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		4D68ACDAAF6C7D1B4D76FDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 621D1F985587ABFC8E6A2F3C /* Assets.xcassets */; };
+		501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		510D0AF60C52E996A225EEA9 /* RoastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31277B6E9CF593725FAFC384 /* RoastCard.swift */; };
 		51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		52007EA29C96A1643AAE1DE8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D48610D69A6E0E7F65B31 /* ShareViewController.swift */; };
@@ -98,6 +101,7 @@
 		5F1D83BF1578093F81386156 /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		5F6F1EA9A4ED59FD3D8CB682 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		628C2305DDC97AA1A43500D5 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
+		62F534881B1C940003515A70 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		63144714DE37F54D46572391 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		6366BF9557A72422E74306E4 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
@@ -166,6 +170,7 @@
 		A75CE5E1A1EE82A462BD9B27 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		A7D0EA62E689636A866C0605 /* IntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B4101DE1A025BBCFB379 /* IntensityTests.swift */; };
 		A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
+		A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		AEEE917CEDEFE01516080296 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		AFBC63E7FFAF9695BDBFBFBC /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		B030C9FC8CA3BC861E4B4A7D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B74552485E60686386F9627C /* PrivacyInfo.xcprivacy */; };
@@ -357,6 +362,7 @@
 		B7C6C5BEEAFFFDB727D9CAC0 /* RoastMateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastMateApp.swift; sourceTree = "<group>"; };
 		B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModelContainer.swift; sourceTree = "<group>"; };
 		C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCatalog.swift; sourceTree = "<group>"; };
+		C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStore.swift; sourceTree = "<group>"; };
 		C994C838B393F986EB67EDCA /* DeviceID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceID.swift; sourceTree = "<group>"; };
 		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
@@ -543,6 +549,7 @@
 			isa = PBXGroup;
 			children = (
 				708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */,
+				C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */,
 				05F375B44B7ED51C03E8B6DA /* AuthService.swift */,
 				8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */,
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
@@ -990,6 +997,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */,
+				62F534881B1C940003515A70 /* AppLocalization.swift in Sources */,
 				287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */,
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
 				2D3C20D83FE907B6D2B1F0CD /* CloudVentClient.swift in Sources */,
@@ -1044,6 +1052,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */,
+				24D9C3B0147763A3B6C4AD98 /* AppLocalization.swift in Sources */,
 				BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
 				00FD06B70E90D21329E949C5 /* CloudVentClient.swift in Sources */,
@@ -1084,6 +1093,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFA5C5D6B7F99734125AAFF9 /* AppLaunchEnvironment.swift in Sources */,
+				501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */,
 				CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
 				708349AE97476576726DD82C /* CloudVentClient.swift in Sources */,
@@ -1124,6 +1134,7 @@
 			files = (
 				7EB0FE0706DCA7459668ABB3 /* AccountSection.swift in Sources */,
 				C8F4F165F8904B51E0D98DC1 /* AppLaunchEnvironment.swift in Sources */,
+				0ACFF8F674AC657C4A377ED8 /* AppLocalization.swift in Sources */,
 				9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */,
 				064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */,
 				8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */,
@@ -1181,6 +1192,7 @@
 			files = (
 				9CE91BCFCF3C1699753AD91F /* AccountSection.swift in Sources */,
 				1713A4CAC0A8813511767574 /* AppLaunchEnvironment.swift in Sources */,
+				A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */,
 				6D1291FA64EA414BB5DE4196 /* ArgumentSimulatorView.swift in Sources */,
 				7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */,
 				8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */,
@@ -1402,7 +1414,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
@@ -1624,7 +1636,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;

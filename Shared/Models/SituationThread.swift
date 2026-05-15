@@ -21,7 +21,7 @@ enum SituationCategory: String, Codable, CaseIterable, Sendable {
     case other
 
     var displayKey: String { "category.\(rawValue).name" }
-    var displayName: String { String(localized: String.LocalizationValue(displayKey)) }
+    var displayName: String { AppLocalization.string(displayKey) }
 }
 
 enum SituationMood: String, Codable, CaseIterable, Sendable {
@@ -33,7 +33,7 @@ enum SituationMood: String, Codable, CaseIterable, Sendable {
     case amused
 
     var displayKey: String { "mood.\(rawValue).name" }
-    var displayName: String { String(localized: String.LocalizationValue(displayKey)) }
+    var displayName: String { AppLocalization.string(displayKey) }
 }
 
 @Model

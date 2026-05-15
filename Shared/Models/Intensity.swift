@@ -64,13 +64,13 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    /// Localized name resolved via Localizable.strings.
+    /// Localized name resolved against the in-app selected language.
     var displayName: String {
-        String(localized: String.LocalizationValue(displayKey))
+        AppLocalization.string(displayKey)
     }
 
     var blurb: String {
-        String(localized: String.LocalizationValue(blurbKey))
+        AppLocalization.string(blurbKey)
     }
 }
 

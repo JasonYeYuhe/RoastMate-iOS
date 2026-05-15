@@ -89,7 +89,7 @@ struct ExploreView: View {
             }
             .padding(.vertical)
         }
-        .navigationTitle("tab.library")
+        .navigationTitle(AppLocalization.string("tab.library"))
         .searchable(text: $search)
     }
 

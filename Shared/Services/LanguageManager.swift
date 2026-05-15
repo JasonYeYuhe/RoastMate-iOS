@@ -25,11 +25,13 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
 final class LanguageManager {
     static let shared = LanguageManager()
 
-    private let key = "roastmate_app_language"
+    /// UserDefaults key for the persisted in-app language code. `nonisolated`
+    /// so `AppLocalization` can read it off the main actor.
+    nonisolated static let storageKey = "roastmate_app_language"
 
     var selectedLanguage: AppLanguage {
         didSet {
-            UserDefaults.standard.set(selectedLanguage.rawValue, forKey: key)
+            UserDefaults.standard.set(selectedLanguage.rawValue, forKey: Self.storageKey)
         }
     }
 
@@ -47,7 +49,7 @@ final class LanguageManager {
             self.selectedLanguage = forced
             return
         }
-        let stored = UserDefaults.standard.string(forKey: key) ?? ""
+        let stored = UserDefaults.standard.string(forKey: Self.storageKey) ?? ""
         self.selectedLanguage = AppLanguage(rawValue: stored) ?? .system
     }
 }

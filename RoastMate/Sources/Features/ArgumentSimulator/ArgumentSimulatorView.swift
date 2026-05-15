@@ -23,7 +23,7 @@ struct ArgumentSimulatorView: View {
                 inputBar
             }
         }
-        .navigationTitle("feature.argument.title")
+        .navigationTitle(AppLocalization.string("feature.argument.title"))
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
         }

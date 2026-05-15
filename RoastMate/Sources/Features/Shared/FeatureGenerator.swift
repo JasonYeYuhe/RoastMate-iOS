@@ -181,7 +181,7 @@ struct FeatureGeneratorView: View {
             }
             .padding()
         }
-        .navigationTitle(Text(viewModel.config.titleKey))
+        .navigationTitle(AppLocalization.string(viewModel.config.titleKey.key))
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
         }

@@ -50,7 +50,7 @@ struct RoastGeneratorView: View {
                 threadContinuationBanner = nil
             }
         }
-        .navigationTitle("generator.title")
+        .navigationTitle(AppLocalization.string("generator.title"))
         .onAppear {
             if let payload = HandoffStore.shared.consume() {
                 viewModel.situation = payload.situation

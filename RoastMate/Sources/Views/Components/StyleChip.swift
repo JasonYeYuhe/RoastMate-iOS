@@ -44,14 +44,14 @@ struct IntensityChip: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
                     Image(systemName: icon)
-                    Text(String(localized: String.LocalizationValue(intensity.displayKey)))
+                    Text(intensity.displayName)
                         .font(.subheadline.weight(.semibold))
                     if isLocked {
                         Image(systemName: "lock.fill")
                             .font(.caption2)
                     }
                 }
-                Text(String(localized: String.LocalizationValue(intensity.blurbKey)))
+                Text(intensity.blurb)
                     .font(.caption2)
                     .foregroundStyle(isSelected ? Color.orange.opacity(0.85) : Color.secondary)
                     .lineLimit(2)

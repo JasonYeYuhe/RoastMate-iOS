@@ -24,14 +24,14 @@ struct StylePreset: Codable, Hashable, Sendable, Identifiable {
     let examples: [Example]
     let localesSupported: [String]?
 
-    /// Localized display name resolved via Localizable.strings.
+    /// Localized display name resolved against the in-app selected language.
     var displayName: String {
-        String(localized: String.LocalizationValue(displayKey))
+        AppLocalization.string(displayKey)
     }
 
     /// Localized blurb / one-line description.
     var blurb: String {
-        String(localized: String.LocalizationValue(blurbKey))
+        AppLocalization.string(blurbKey)
     }
 }
 

@@ -53,7 +53,7 @@ struct SampleGalleryView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .navigationTitle("explore.samples.section")
+        .navigationTitle(AppLocalization.string("explore.samples.section"))
         .sheet(item: $selectedSample) { sample in
             SampleDetailSheet(sample: sample)
         }
