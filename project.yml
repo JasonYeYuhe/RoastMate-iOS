@@ -57,6 +57,10 @@ targets:
     dependencies:
       - target: RoastMateShare
         embed: true
+    scheme:
+      testTargets:
+        - RoastMateTests
+      gatherCoverageData: false
 
   RoastMateMac:
     type: application
@@ -85,6 +89,8 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
         release:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
+    scheme:
+      gatherCoverageData: false
 
   RoastMateWatch:
     type: application
@@ -111,6 +117,8 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
         release:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
+    scheme:
+      gatherCoverageData: false
 
   RoastMateShare:
     type: app-extension
