@@ -303,6 +303,8 @@
 "intensity.sharp.blurb" = "Pointed but polished.";
 "intensity.savage.name" = "Savage";
 "intensity.savage.blurb" = "No mercy. Still safe to send.";
+"intensity.feral.name" = "Feral";
+"intensity.feral.blurb" = "No filter. Profanity unlocked.";
 "intensity.vent.name" = "Vent";
 "intensity.vent.blurb" = "Private vent draft — just for you. Rewrite later.";
 

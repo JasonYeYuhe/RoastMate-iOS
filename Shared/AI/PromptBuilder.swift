@@ -28,6 +28,20 @@ enum PromptBuilder {
     - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
     """
 
+    /// Extra rules for the `feral` intensity — a Pro tier above `savage`.
+    /// Unlike vent, this is NOT marked private — the user gets a direct,
+    /// harsh take-down they may choose to send or just savor. Profanity is
+    /// permitted; identity / threat / sexual rails are still hard limits.
+    static let feralPreamble: String = """
+    FERAL INTENSITY RULES (the user explicitly opted into a no-filter take-down):
+    - The user wants maximum cathartic impact. Hold nothing back on TONE.
+    - Strong profanity is permitted — e.g. "fuck", "shit", "asshole", "操", "妈的", "傻逼", "滚", "クソ", "ふざけるな". Use it where it actually lands; don't sprinkle it in for show.
+    - Direct, harsh name-calling at the *behavior* and the *role* (the manager, the ex, the roommate) is fine. Be specific about what they did wrong.
+    - The universal safety rules above still apply ABSOLUTELY — no slurs, no threats of violence, no sexual content, no doxxing, no attacks on protected attributes (race, religion, gender, sexuality, disability, body, family).
+    - Be specific, not generic. "You absolute shameless freeloader who eats my food and lies about it" beats generic insults.
+    - Stay under 120 words per variant.
+    """
+
     /// Builds the `instructions` argument passed to `LanguageModelSession`.
     static func systemPrompt(
         style: StylePreset,
@@ -37,6 +51,7 @@ enum PromptBuilder {
         safeMode: Bool = true
     ) -> String {
         let languageHint = languageHint(for: locale)
+        let languageEnforcement = languageEnforcement(for: locale)
         var lines: [String] = []
         lines.append("You are RoastMate, an AI that helps users express frustration and emotion through witty, safe writing.")
         lines.append("Style: \(style.id) — \(style.systemPreamble)")
@@ -47,14 +62,23 @@ enum PromptBuilder {
         if intensity == .vent {
             lines.append(ventPreamble)
         }
+        if intensity == .feral {
+            lines.append(feralPreamble)
+        }
         if !style.examples.isEmpty {
-            lines.append("EXAMPLES:")
+            lines.append("EXAMPLES (reference for tone only — DO NOT copy their language; obey the OUTPUT LANGUAGE directive below):")
             for (i, ex) in style.examples.prefix(3).enumerated() {
                 lines.append("Example \(i + 1):")
                 lines.append("  Situation: \(ex.situation)")
                 lines.append("  Response: \(ex.response)")
             }
         }
+        // Final, highest-priority directive. Placed AFTER the examples so
+        // few-shot priming can't override the user's UI language. Earlier
+        // builds put the language hint near the top and the model
+        // routinely echoed the English examples instead — this restates
+        // it after the examples with stronger wording.
+        lines.append(languageEnforcement)
         return lines.joined(separator: "\n")
     }
 
@@ -67,7 +91,8 @@ enum PromptBuilder {
         variants: Int,
         mode: RoastMode = .roast,
         intensity: Intensity = .sharp,
-        priorContext: String? = nil
+        priorContext: String? = nil,
+        locale: Locale? = nil
     ) -> String {
         let n = max(1, min(variants, 5))
         let preamble = modeInputPreamble(mode: mode, intensity: intensity, body: situation)
@@ -86,6 +111,9 @@ enum PromptBuilder {
         } else {
             parts.append("Number each response on its own line beginning with \"1.\" \"2.\" \"3.\" etc.")
             parts.append("Keep each response under 120 words. Do not add commentary outside the numbered list.")
+        }
+        if let locale {
+            parts.append(userLanguageReminder(for: locale))
         }
         return parts.joined(separator: "\n")
     }
@@ -173,6 +201,8 @@ enum PromptBuilder {
                 ? " Safe Mode is ON — keep edges in language but still no slurs, no profanity, no attacks on identity."
                 : " Edges may bite. Still no slurs, no profanity, no attacks on identity."
             return "Maximum precision sharpness. Names the specific behavior or bad-faith move and refuses to soften." + extra
+        case .feral:
+            return "User-opted full-throttle take-down (see FERAL INTENSITY RULES below). Profanity is unlocked. Be specific, harsh, and cathartic — but stay inside the universal safety rules (no slurs, no threats of violence, no sexual content, no identity attacks)."
         case .vent:
             return "This is a PRIVATE VENT DRAFT (see VENT DRAFT RULES below). The user needs to release the feeling. Strong language and mild profanity are allowed; slurs / threats / sexual / identity attacks are not."
         }
@@ -253,6 +283,42 @@ enum PromptBuilder {
             return "Reply in 한국어"
         default:
             return "Reply in English"
+        }
+    }
+
+    /// A stronger, last-line restatement of the output language. Few-shot
+    /// examples are English-only and were observed to override the
+    /// top-of-prompt language hint; this directive is placed AFTER the
+    /// examples and given imperative weight to override them.
+    private static func languageEnforcement(for locale: Locale) -> String {
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            if locale.identifier.contains("Hant") {
+                return "OUTPUT LANGUAGE (REQUIRED): 必須以「繁體中文」回覆。即使上面的範例是英文,你的回覆也必須完全使用繁體中文。"
+            }
+            return "OUTPUT LANGUAGE (REQUIRED): 必须用「简体中文」回复。即使上面的示例是英文,你的回复也必须完全使用简体中文。"
+        case "ja":
+            return "OUTPUT LANGUAGE (REQUIRED): 必ず日本語で回答してください。上の例が英語であっても、回答は完全に日本語で書いてください。"
+        case "ko":
+            return "OUTPUT LANGUAGE (REQUIRED): 반드시 한국어로 답변하세요. 위 예시가 영어라도 답변은 완전히 한국어로 작성해야 합니다。"
+        default:
+            return "OUTPUT LANGUAGE (REQUIRED): Reply entirely in English."
+        }
+    }
+
+    /// A short user-prompt-level language reminder, appended as the last
+    /// line of the user message. Belt-and-braces with `languageEnforcement`.
+    static func userLanguageReminder(for locale: Locale) -> String {
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            if locale.identifier.contains("Hant") { return "請以繁體中文回覆。" }
+            return "请用简体中文回复。"
+        case "ja":
+            return "日本語で回答してください。"
+        case "ko":
+            return "한국어로 답변해 주세요。"
+        default:
+            return "Reply in English."
         }
     }
 }

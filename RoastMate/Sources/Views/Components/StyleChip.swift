@@ -81,6 +81,8 @@ struct IntensityChip: View {
             return "bolt"
         case .savage:
             return "flame"
+        case .feral:
+            return "flame.fill"
         case .vent:
             return "lock.open"
         }

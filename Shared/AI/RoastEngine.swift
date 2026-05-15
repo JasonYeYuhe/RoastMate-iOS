@@ -111,12 +111,14 @@ actor RoastEngine {
             variants: effectiveVariantCount,
             mode: mode,
             intensity: intensity,
-            priorContext: priorContext
+            priorContext: priorContext,
+            locale: locale
         )
 
-        // Vent draft gets a slightly higher temperature to nudge towards
-        // emotive output; everything else uses the style's temperature.
-        let temperature = intensity == .vent
+        // Vent + Feral both lean on emotive output; nudge temperature up
+        // a touch so the model commits to the harsher register instead of
+        // hedging back toward `sharp`-style polish.
+        let temperature = (intensity == .vent || intensity == .feral)
             ? min(style.temperature + 0.1, 1.0)
             : style.temperature
 
@@ -148,7 +150,12 @@ actor RoastEngine {
         for candidate in split {
             do {
                 let safe: String
-                if intensity == .vent {
+                // Feral + vent both unlock strong language, so they bypass
+                // the strict denylist substring check and go through the
+                // relaxed (hard-rail only) validator. Universal SAFETY
+                // RULES baked into the system prompt still block slurs /
+                // threats / sexual / identity content at generation time.
+                if intensity == .vent || intensity == .feral {
                     safe = try SafetyFilter.validateVentOutput(candidate)
                 } else {
                     safe = try SafetyFilter.validateOutput(candidate)

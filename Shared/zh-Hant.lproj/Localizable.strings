@@ -303,6 +303,8 @@
 "intensity.sharp.blurb" = "話不多,刀刀見血。";
 "intensity.savage.name" = "狠";
 "intensity.savage.blurb" = "毫不留情,但還能發。";
+"intensity.feral.name" = "痛罵";
+"intensity.feral.blurb" = "徹底開火,帶髒話。";
 "intensity.vent.name" = "發洩";
 "intensity.vent.blurb" = "只給自己看的發洩稿,稍後可改成能發的。";
 

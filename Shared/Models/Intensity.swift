@@ -15,6 +15,11 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
     case calm
     case sharp
     case savage
+    /// Pro-only no-filter take-down. Profanity unlocked; universal safety
+    /// rules (no slurs, no threats, no sexual content, no identity attacks)
+    /// still apply. Distinct from `.vent` because the output is NOT marked
+    /// private — the user can send it.
+    case feral
     case vent
 
     /// Default intensity for legacy sessions that pre-date this field.
@@ -29,7 +34,7 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
     var requiresPro: Bool {
         switch self {
         case .calm, .sharp: return false
-        case .savage, .vent: return true
+        case .savage, .feral, .vent: return true
         }
     }
 
@@ -39,6 +44,7 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
         case .calm: return "intensity.calm.name"
         case .sharp: return "intensity.sharp.name"
         case .savage: return "intensity.savage.name"
+        case .feral: return "intensity.feral.name"
         case .vent: return "intensity.vent.name"
         }
     }
@@ -49,6 +55,7 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
         case .calm: return "intensity.calm.blurb"
         case .sharp: return "intensity.sharp.blurb"
         case .savage: return "intensity.savage.blurb"
+        case .feral: return "intensity.feral.blurb"
         case .vent: return "intensity.vent.blurb"
         }
     }

@@ -276,7 +276,7 @@
 		4C8869CA8D12F9544EFD87DE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorViewModel.swift; sourceTree = "<group>"; };
 		58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGenerator.swift; sourceTree = "<group>"; };
-		5C0CD8554785AFF026C0BD9A /* RoastMate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RoastMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C0CD8554785AFF026C0BD9A /* RoastMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRoast.swift; sourceTree = "<group>"; };
 		5C70372E616B3C6B9A03229A /* StoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreService.swift; sourceTree = "<group>"; };
 		5EE7F2B2FB99A5CC23C6E3C4 /* GenerateRoastIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateRoastIntent.swift; sourceTree = "<group>"; };
@@ -284,10 +284,10 @@
 		6224DA4F04F19B18E4969E96 /* UserSettingsQuotaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsQuotaTests.swift; sourceTree = "<group>"; };
 		65B2554A2EAAC8D0C056A58F /* ThreadServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadServiceTests.swift; sourceTree = "<group>"; };
 		65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		6AD73D46C9A24B116314A30A /* RoastMateUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RoastMateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6E16C14AF3D4E2914AE07F3A /* RoastMateTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RoastMateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AD73D46C9A24B116314A30A /* RoastMateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoastMateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6E16C14AF3D4E2914AE07F3A /* RoastMateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoastMateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F56C52CC38A6375FAC083A8 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
-		7073FC7C9AD2BEDF41A2693E /* RoastMateShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RoastMateShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7073FC7C9AD2BEDF41A2693E /* RoastMateShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RoastMateShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7237F29F7B891C23EAEF31D3 /* StyleChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleChip.swift; sourceTree = "<group>"; };
 		74FB98C56382D7CCB8FF1C26 /* PromptBuilderModesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilderModesTests.swift; sourceTree = "<group>"; };
 		77042C1003F6305E9448D814 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
@@ -307,18 +307,18 @@
 		A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffActivity.swift; sourceTree = "<group>"; };
 		A5DE2596F74842B90AD49144 /* SampleGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleGalleryView.swift; sourceTree = "<group>"; };
 		A6D7E56EFDB732B418844546 /* HandoffActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffActivityTests.swift; sourceTree = "<group>"; };
-		A7EB03F15C08F8D248CD091F /* RoastMateMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMateMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7EB03F15C08F8D248CD091F /* RoastMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A98C51085AE0017313819226 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyFilter.swift; sourceTree = "<group>"; };
 		B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedRoast.swift; sourceTree = "<group>"; };
 		B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStoreTests.swift; sourceTree = "<group>"; };
-		B4E99171A2C32D4676F4F488 /* RoastMateWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMateWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B74552485E60686386F9627C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B4E99171A2C32D4676F4F488 /* RoastMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B74552485E60686386F9627C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B7C6C5BEEAFFFDB727D9CAC0 /* RoastMateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastMateApp.swift; sourceTree = "<group>"; };
 		B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModelContainer.swift; sourceTree = "<group>"; };
 		C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleCatalog.swift; sourceTree = "<group>"; };
 		C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStore.swift; sourceTree = "<group>"; };
-		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
+		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ForbiddenTerms.json; sourceTree = "<group>"; };
 		D292AA9CB572696DF122016F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		E5055590FEF248BD7CBA0B09 /* SituationThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SituationThread.swift; sourceTree = "<group>"; };
@@ -432,11 +432,11 @@
 			isa = PBXGroup;
 			children = (
 				5C0CD8554785AFF026C0BD9A /* RoastMate.app */,
-				A7EB03F15C08F8D248CD091F /* RoastMateMac.app */,
+				A7EB03F15C08F8D248CD091F /* RoastMate.app */,
 				7073FC7C9AD2BEDF41A2693E /* RoastMateShare.appex */,
 				6E16C14AF3D4E2914AE07F3A /* RoastMateTests.xctest */,
 				6AD73D46C9A24B116314A30A /* RoastMateUITests.xctest */,
-				B4E99171A2C32D4676F4F488 /* RoastMateWatch.app */,
+				B4E99171A2C32D4676F4F488 /* RoastMate.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -755,7 +755,7 @@
 			packageProductDependencies = (
 			);
 			productName = RoastMateWatch;
-			productReference = B4E99171A2C32D4676F4F488 /* RoastMateWatch.app */;
+			productReference = B4E99171A2C32D4676F4F488 /* RoastMate.app */;
 			productType = "com.apple.product-type.application";
 		};
 		9BFF501D283C22CA09ACB238 /* RoastMate */ = {
@@ -793,7 +793,7 @@
 			packageProductDependencies = (
 			);
 			productName = RoastMateMac;
-			productReference = A7EB03F15C08F8D248CD091F /* RoastMateMac.app */;
+			productReference = A7EB03F15C08F8D248CD091F /* RoastMate.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -803,7 +803,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					2A302E4AC19A253C5E4E1356 = {
 						DevelopmentTeam = KHMK6Q3L3K;
@@ -1182,6 +1182,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RoastMateMac/RoastMateMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1194,6 +1195,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -1223,6 +1225,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RoastMateMac/RoastMateMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -1235,6 +1238,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1280,6 +1284,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1312,10 +1318,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1330,6 +1338,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1498,6 +1507,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1530,10 +1541,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1555,6 +1568,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

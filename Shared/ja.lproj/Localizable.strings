@@ -303,6 +303,8 @@
 "intensity.sharp.blurb" = "短く、的確に。";
 "intensity.savage.name" = "容赦なし";
 "intensity.savage.blurb" = "それでも送れる範囲で。";
+"intensity.feral.name" = "罵倒";
+"intensity.feral.blurb" = "全力で罵る。下品な言葉あり。";
 "intensity.vent.name" = "吐き出し";
 "intensity.vent.blurb" = "自分だけの吐き出し草稿。後で送れる形にできます。";
 

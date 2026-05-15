@@ -46,6 +46,64 @@ final class PromptBuilderIntensityTests: XCTestCase {
         XCTAssertTrue(prompt.lowercased().contains("professional"))
     }
 
+    func testFeralIntensityInjectsFeralPreambleButNotVent() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: style,
+            locale: Locale(identifier: "en_US"),
+            intensity: .feral
+        )
+        XCTAssertTrue(prompt.contains("FERAL INTENSITY RULES"),
+                      "Feral runs must include the profanity-unlocked preamble.")
+        XCTAssertFalse(prompt.contains("VENT DRAFT RULES"),
+                       "Feral is sendable, not a private vent — vent preamble must not leak in.")
+    }
+
+    func testLanguageDirectiveOverridesEnglishExamples_zhHans() {
+        // Regression: with English-only style examples, the model was
+        // ignoring the top-of-prompt "Reply in 简体中文" and echoing the
+        // example language. The enforcement directive lives AFTER the
+        // examples now and is unconditional.
+        let styleWithEnglishExamples = StylePreset(
+            id: "test",
+            displayKey: "test.name",
+            blurbKey: "test.blurb",
+            icon: "star",
+            tier: .free,
+            temperature: 0.8,
+            tags: [],
+            systemPreamble: "Be witty.",
+            examples: [
+                .init(situation: "English situation", response: "English answer")
+            ],
+            localesSupported: nil
+        )
+        let prompt = PromptBuilder.systemPrompt(
+            style: styleWithEnglishExamples,
+            locale: Locale(identifier: "zh_Hans_CN"),
+            intensity: .sharp
+        )
+        let exampleIdx = prompt.range(of: "English answer")?.lowerBound
+        let enforceIdx = prompt.range(of: "OUTPUT LANGUAGE (REQUIRED)")?.lowerBound
+        XCTAssertNotNil(exampleIdx)
+        XCTAssertNotNil(enforceIdx)
+        if let exampleIdx, let enforceIdx {
+            XCTAssertTrue(enforceIdx > exampleIdx,
+                          "Language enforcement must appear AFTER the English examples to override few-shot priming.")
+        }
+        XCTAssertTrue(prompt.contains("简体中文"))
+    }
+
+    func testUserPromptAppendsLanguageReminderWhenLocaleProvided() {
+        let prompt = PromptBuilder.userPrompt(
+            situation: "X",
+            styleName: "Sharp",
+            variants: 3,
+            intensity: .sharp,
+            locale: Locale(identifier: "zh_Hans_CN")
+        )
+        XCTAssertTrue(prompt.contains("请用简体中文回复"))
+    }
+
     func testSendableRewritePromptIncludesInputsAndNoProfanityRule() {
         let (system, user) = PromptBuilder.rewriteAsSendablePrompt(
             ventDraft: "This is such damn nonsense.",
