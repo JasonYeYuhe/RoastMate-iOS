@@ -89,14 +89,14 @@ struct GeneratedRoastCard: View {
             }
 
             if result.kind == .ventDraft {
-                Label("output.vent.disclosure", systemImage: "lock.fill")
+                Label(disclosureKey, systemImage: "lock.fill")
                     .font(.caption)
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(privateDraftAccent)
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.orange.opacity(0.10))
+                            .fill(privateDraftAccent.opacity(0.10))
                     )
             }
 
@@ -157,7 +157,9 @@ struct GeneratedRoastCard: View {
     private var kindLabel: LocalizedStringKey {
         switch result.kind {
         case .ventDraft:
-            return "output.kind.vent_draft.label"
+            return result.sourceIntensity == .feral
+                ? "output.kind.feral_draft.label"
+                : "output.kind.vent_draft.label"
         case .sendableReply:
             return "output.kind.sendable_reply.label"
         case .normalRoast, .rewrite:
@@ -165,10 +167,23 @@ struct GeneratedRoastCard: View {
         }
     }
 
+    private var disclosureKey: LocalizedStringKey {
+        result.sourceIntensity == .feral
+            ? "output.feral.disclosure"
+            : "output.vent.disclosure"
+    }
+
+    /// Color used for both the kind chip and the disclosure ribbon on a
+    /// private draft. Feral runs hotter (pink/red-ish) than vent (orange)
+    /// so a glance at History tells you which intensity you used.
+    private var privateDraftAccent: Color {
+        result.sourceIntensity == .feral ? .pink : .orange
+    }
+
     private var kindColor: Color {
         switch result.kind {
         case .ventDraft:
-            return .orange
+            return privateDraftAccent
         case .sendableReply:
             return .green
         case .normalRoast, .rewrite:
@@ -179,7 +194,7 @@ struct GeneratedRoastCard: View {
     private var backgroundColor: Color {
         switch result.kind {
         case .ventDraft:
-            return Color.orange.opacity(0.08)
+            return privateDraftAccent.opacity(0.08)
         case .sendableReply:
             return Color.green.opacity(0.08)
         case .normalRoast, .rewrite:

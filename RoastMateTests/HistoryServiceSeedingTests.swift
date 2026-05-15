@@ -43,28 +43,32 @@ final class HistoryServiceSeedingTests: XCTestCase {
         let context = try makeContext()
         HistoryService.seedSamplesIfNeeded(context: context)
 
-        // Find any standalone sample session that has BOTH a ventDraft and
-        // a paired sendableReply — proves the seeding read the JSON's
-        // ventResponse/sendableResponse instead of falling back to the
-        // single-response path.
+        // Tighten: only count STANDALONE sample sessions (no parent
+        // thread). The seeded sample thread also contains a vent pair,
+        // and that's tested separately in
+        // `testSeedingCreatesAtLeastOneSampleThread`. Counting it here
+        // would let the JSON-driven path regress silently.
         let allSessions = try context.fetch(FetchDescriptor<RoastSession>())
-        let pairs = allSessions.filter { session in
+        let standalonePairs = allSessions.filter { session in
+            guard session.thread == nil else { return false }
             let results = session.results ?? []
-            let drafts = results.filter { $0.kind == .ventDraft }
-            let replies = results.filter { $0.kind == .sendableReply }
-            return !drafts.isEmpty && !replies.isEmpty
+            let hasDraft = results.contains { $0.kind == .ventDraft }
+            let hasReply = results.contains { $0.kind == .sendableReply }
+            return hasDraft && hasReply
         }
-        XCTAssertGreaterThanOrEqual(pairs.count, 2,
-                                     "At least the two SampleRoasts.json vent demo pairs should seed as paired sessions.")
+        XCTAssertEqual(standalonePairs.count, 2,
+                       "Exactly the two SampleRoasts.json vent demo pairs (sample_16_vent + sample_17_vent) should seed as standalone paired sessions.")
 
         // And the sendableReply should record sourceVentDraftId so the UI
         // can pair them on the same card.
-        for session in pairs {
+        for session in standalonePairs {
             let results = session.results ?? []
             let draft = try XCTUnwrap(results.first { $0.kind == .ventDraft })
             let reply = try XCTUnwrap(results.first { $0.kind == .sendableReply })
             XCTAssertEqual(reply.sourceVentDraftId, draft.id,
                            "Sendable reply must point back to its source vent draft for UI pairing.")
+            XCTAssertEqual(draft.sourceIntensity, .vent,
+                           "JSON vent demos seed with sourceIntensity=.vent.")
         }
     }
 

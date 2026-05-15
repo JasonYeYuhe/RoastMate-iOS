@@ -36,12 +36,14 @@ enum HistoryService {
             isSampleData: isSampleData
         )
         let kind: GeneratedRoastKind = intensity.isPrivateDraft ? .ventDraft : .normalRoast
+        let sourceIntensity: Intensity? = intensity.isPrivateDraft ? intensity : nil
         for text in variants {
             let result = GeneratedRoast(
                 text: text,
                 styleId: styleId,
                 locale: locale.identifier,
-                kind: kind
+                kind: kind,
+                sourceIntensity: sourceIntensity
             )
             session.results?.append(result)
         }
@@ -207,7 +209,8 @@ enum HistoryService {
             text: ventText,
             styleId: sample.styleId,
             locale: sample.responseLocale,
-            kind: .ventDraft
+            kind: .ventDraft,
+            sourceIntensity: .vent
         )
         session.results?.append(draft)
         let reply = GeneratedRoast(
@@ -275,7 +278,8 @@ enum HistoryService {
             text: String(localized: "sample.thread.round2.vent"),
             styleId: "high_eq",
             locale: round2Locale.identifier,
-            kind: .ventDraft
+            kind: .ventDraft,
+            sourceIntensity: .vent
         )
         ventDraft.generatedAt = round2.createdAt
         round2.results?.append(ventDraft)

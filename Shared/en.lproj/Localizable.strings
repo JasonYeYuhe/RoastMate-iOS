@@ -318,8 +318,10 @@
 
 /* === Vent / Sendable output cards === */
 "output.kind.vent_draft.label" = "Vent draft · for yourself only";
+"output.kind.feral_draft.label" = "Feral draft · for yourself only";
 "output.kind.sendable_reply.label" = "Sendable reply";
 "output.vent.disclosure" = "Vent drafts are private. Don't send them — tap below for a version that actually wins.";
+"output.feral.disclosure" = "Feral drafts are private — they let the rage out raw. Don't send them. Tap below to get the version you can actually use.";
 "output.rewrite.button" = "Make it sendable";
 "output.rewrite.in_progress" = "Cooling it down…";
 

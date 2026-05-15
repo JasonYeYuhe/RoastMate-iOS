@@ -318,8 +318,10 @@
 
 /* === 發洩 / 可發送 卡片 === */
 "output.kind.vent_draft.label" = "發洩稿 · 僅自己看";
+"output.kind.feral_draft.label" = "痛罵稿 · 僅自己看";
 "output.kind.sendable_reply.label" = "可發送版";
 "output.vent.disclosure" = "發洩稿是私密的,不要直接發。需要真發,點下面讓 AI 改一版能發的。";
+"output.feral.disclosure" = "痛罵稿是私密的,把火氣先吐乾淨就好。不要直接發。點下面讓 AI 改一版能用的。";
 "output.rewrite.button" = "改成能發的";
 "output.rewrite.in_progress" = "正在降溫…";
 

@@ -318,8 +318,10 @@
 
 /* === 吐き出し / 送信可 カード === */
 "output.kind.vent_draft.label" = "吐き出し草稿 · 自分用";
+"output.kind.feral_draft.label" = "罵倒草稿 · 自分用";
 "output.kind.sendable_reply.label" = "送信可能な返し";
 "output.vent.disclosure" = "吐き出し草稿はプライベートです。そのままは送らず、下のボタンで送れる版に変えましょう。";
+"output.feral.disclosure" = "罵倒草稿はプライベートで、怒りをそのまま吐き出すためのものです。そのままは送らず、下のボタンで使える形に直しましょう。";
 "output.rewrite.button" = "送れる形にする";
 "output.rewrite.in_progress" = "温度を下げています…";
 

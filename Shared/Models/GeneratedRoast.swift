@@ -24,6 +24,17 @@ final class GeneratedRoast {
     /// liked rather than the whole session.
     var isFavorite: Bool = false
 
+    /// For `.ventDraft` results: which private-draft intensity actually
+    /// produced this row (`.vent` mild release vs `.feral` profanity-
+    /// unlocked rage). The kind enum stays as `.ventDraft` for both so
+    /// legacy rows still classify as private drafts; the UI distinguishes
+    /// the label / disclosure based on this field.
+    ///
+    /// Nil on rows written before this field existed — treat nil as
+    /// `.vent` (the only private-draft intensity that existed at the
+    /// time) so old vent drafts continue to render correctly.
+    var sourceIntensityRaw: String?
+
     /// Back-pointer required by CloudKit-backed SwiftData: every to-many
     /// relationship (`RoastSession.results`) must have an inverse on the
     /// child side. Set automatically by SwiftData when the GeneratedRoast
@@ -35,7 +46,8 @@ final class GeneratedRoast {
         styleId: String,
         locale: String = Locale.current.identifier,
         kind: GeneratedRoastKind = .normalRoast,
-        sourceVentDraftId: UUID? = nil
+        sourceVentDraftId: UUID? = nil,
+        sourceIntensity: Intensity? = nil
     ) {
         self.id = UUID()
         self.text = text
@@ -46,6 +58,7 @@ final class GeneratedRoast {
         self.rating = 0
         self.kindRaw = kind.rawValue
         self.sourceVentDraftIdRaw = sourceVentDraftId?.uuidString
+        self.sourceIntensityRaw = sourceIntensity?.rawValue
         self.isFavorite = false
     }
 
@@ -65,5 +78,20 @@ final class GeneratedRoast {
             return UUID(uuidString: s)
         }
         set { sourceVentDraftIdRaw = newValue?.uuidString }
+    }
+
+    /// Resolved source intensity for `.ventDraft` rows. Legacy rows return
+    /// `.vent`; new rows return whichever private intensity actually
+    /// produced them. Returns nil for non-private-draft kinds so the UI
+    /// can ignore the field for normal roasts and sendable replies.
+    var sourceIntensity: Intensity? {
+        get {
+            guard kind == .ventDraft else { return nil }
+            if let raw = sourceIntensityRaw, let value = Intensity(rawValue: raw) {
+                return value
+            }
+            return .vent
+        }
+        set { sourceIntensityRaw = newValue?.rawValue }
     }
 }

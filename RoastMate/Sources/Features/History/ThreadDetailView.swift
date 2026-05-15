@@ -19,6 +19,13 @@ struct ThreadDetailView: View {
     @State private var editingTitle = false
     @State private var draftTitle = ""
 
+    /// Tracks which private draft is currently being rewritten so we can
+    /// show the spinner on the right card AND prevent two rewrites at
+    /// once. State is local to this view — a separate ThreadDetailView
+    /// instance has its own independent loading state.
+    @State private var rewritingDraftId: UUID?
+    @State private var rewriteError: String?
+
     private var orderedSessions: [RoastSession] {
         (thread.sessions ?? []).sorted { $0.createdAt < $1.createdAt }
     }
@@ -45,6 +52,13 @@ struct ThreadDetailView: View {
 
                 ForEach(Array(orderedSessions.enumerated()), id: \.element.id) { index, session in
                     roundCard(session: session, roundNumber: index + 1)
+                }
+
+                if let rewriteError {
+                    Text(rewriteError)
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .padding(.horizontal, 4)
                 }
 
                 continueButton
@@ -177,13 +191,39 @@ struct ThreadDetailView: View {
                 GeneratedRoastCard(
                     result: result,
                     style: StyleCatalog.shared.style(id: result.styleId),
-                    isRewriting: false,
+                    isRewriting: rewritingDraftId == result.id,
                     hasSendableReply: sendableReplyExists(for: result, in: orderedResults),
-                    onRewrite: nil
+                    onRewrite: result.kind == .ventDraft && !sendableReplyExists(for: result, in: orderedResults)
+                        ? { triggerRewrite(draft: result, in: session) }
+                        : nil
                 )
             }
         }
         .padding(.vertical, 6)
+    }
+
+    private func triggerRewrite(draft: GeneratedRoast, in session: RoastSession) {
+        guard rewritingDraftId == nil else { return }
+        rewritingDraftId = draft.id
+        rewriteError = nil
+        Task {
+            defer { rewritingDraftId = nil }
+            do {
+                _ = try await RewriteCoordinator.rewriteAsSendable(
+                    draft: draft,
+                    session: session,
+                    context: context,
+                    locale: locale
+                )
+                Haptics.play(.generated)
+            } catch let err as RoastError {
+                rewriteError = err.errorDescription
+                Haptics.play(.error)
+            } catch {
+                rewriteError = String(localized: "rewrite.fallback.unavailable")
+                Haptics.play(.error)
+            }
+        }
     }
 
     private func intensityChipColor(_ intensity: Intensity) -> Color {
