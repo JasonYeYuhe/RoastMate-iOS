@@ -26,7 +26,7 @@ final class ThreadServiceTests: XCTestCase {
 
         XCTAssertEqual(thread.id, second.id)
         XCTAssertEqual(session.thread?.id, thread.id)
-        XCTAssertEqual(thread.sessions.count, 1)
+        XCTAssertEqual(thread.sessions?.count, 1)
     }
 
     func testPriorContextSummaryPrefersFavoriteThenSendableThenFirst() throws {
@@ -52,15 +52,15 @@ final class ThreadServiceTests: XCTestCase {
             intensity: .vent,
             thread: thread
         )
-        let draft = try XCTUnwrap(second.results.first)
+        let draft = try XCTUnwrap(second.results?.first)
         _ = HistoryService.appendSendableReply(
             toSession: second,
             sourceVentDraft: draft,
             rewrittenText: "Sendable answer.",
             context: context
         )
-        first.results.first?.isFavorite = true
-        first.results.first?.text = "Favorite answer."
+        first.results?.first?.isFavorite = true
+        first.results?.first?.text = "Favorite answer."
         try context.save()
 
         let summary = ThreadService.priorContextSummary(thread: thread)

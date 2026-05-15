@@ -79,7 +79,7 @@ struct MacMenuBarContent: View {
         case .results:
             if let session = viewModel.currentSession {
                 VStack(alignment: .leading, spacing: 8) {
-                    ForEach(session.results.sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
+                    ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                         RoastCard(text: result.text, style: StyleCatalog.shared.style(id: result.styleId))
                     }
                 }

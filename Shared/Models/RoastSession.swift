@@ -11,15 +11,15 @@ enum RoastMode: String, Codable, CaseIterable, Sendable {
 
 @Model
 final class RoastSession {
-    var id: UUID
-    var situation: String
-    var createdAt: Date
-    var modeRaw: String
-    var styleId: String
-    var localeRaw: String
-    var isFavorite: Bool
-    var tags: [String]
-    var isSampleData: Bool
+    var id: UUID = UUID()
+    var situation: String = ""
+    var createdAt: Date = Date()
+    var modeRaw: String = RoastMode.roast.rawValue
+    var styleId: String = ""
+    var localeRaw: String = ""
+    var isFavorite: Bool = false
+    var tags: [String] = []
+    var isSampleData: Bool = false
 
     /// Added in v1.x along with the Vent Mode / intensity rework. Nullable
     /// so that pre-existing SwiftData stores upgrade without migration.
@@ -31,7 +31,9 @@ final class RoastSession {
     /// thread for the "continue this event" flow.
     var thread: SituationThread?
 
-    @Relationship(deleteRule: .cascade) var results: [GeneratedRoast]
+    /// Optional for CloudKit — required by SwiftData+CloudKit integration.
+    /// Initialized to `[]` so callers can append without unwrapping first.
+    @Relationship(deleteRule: .cascade) var results: [GeneratedRoast]? = []
 
     init(
         situation: String,

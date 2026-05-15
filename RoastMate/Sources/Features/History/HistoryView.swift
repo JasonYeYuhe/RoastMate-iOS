@@ -107,7 +107,7 @@ struct HistoryView: View {
                         .foregroundStyle(.yellow)
                 }
                 Spacer()
-                Text(String(format: String(localized: "thread.round_count"), thread.sessions.count))
+                Text(String(format: String(localized: "thread.round_count"), thread.sessions?.count ?? 0))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -157,7 +157,7 @@ struct HistoryView: View {
                     .font(.body)
                     .padding(.bottom)
 
-                ForEach(session.results.sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
+                ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                     GeneratedRoastCard(
                         result: result,
                         style: StyleCatalog.shared.style(id: result.styleId),
@@ -184,7 +184,7 @@ struct HistoryView: View {
 
     private func hasSendableReply(for result: GeneratedRoast, in session: RoastSession) -> Bool {
         guard result.kind == .ventDraft else { return false }
-        return session.results.contains {
+        return (session.results ?? []).contains {
             $0.kind == .sendableReply && $0.sourceVentDraftId == result.id
         }
     }

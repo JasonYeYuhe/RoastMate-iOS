@@ -53,7 +53,7 @@ enum ThreadService {
     /// (falling back to the first output if none is favorited), capped to
     /// the last 4 turns to keep token budget sane.
     static func priorContextSummary(thread: SituationThread, excluding excludedSessionID: UUID? = nil) -> String {
-        let turns = thread.sessions
+        let turns = (thread.sessions ?? [])
             .filter { $0.id != excludedSessionID }
             .sorted { $0.createdAt < $1.createdAt }
             .suffix(4)
@@ -62,9 +62,10 @@ enum ThreadService {
         var lines: [String] = []
         lines.append("Original situation: \(thread.originalSituation)")
         for (i, turn) in turns.enumerated() {
-            let pick = turn.results.first(where: { $0.isFavorite })
-                ?? turn.results.first(where: { $0.kind == .sendableReply })
-                ?? turn.results.first
+            let results = turn.results ?? []
+            let pick = results.first(where: { $0.isFavorite })
+                ?? results.first(where: { $0.kind == .sendableReply })
+                ?? results.first
             lines.append("Round \(i + 1) update: \(turn.situation)")
             if let pick {
                 lines.append("Round \(i + 1) response we sent / wished we sent: \(pick.text)")

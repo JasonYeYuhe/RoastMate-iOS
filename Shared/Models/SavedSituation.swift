@@ -3,11 +3,11 @@ import SwiftData
 
 @Model
 final class SavedSituation {
-    var id: UUID
-    var title: String
-    var situation: String
+    var id: UUID = UUID()
+    var title: String = ""
+    var situation: String = ""
     var defaultStyleId: String?
-    var createdAt: Date
+    var createdAt: Date = Date()
 
     init(title: String, situation: String, defaultStyleId: String? = nil) {
         self.id = UUID()

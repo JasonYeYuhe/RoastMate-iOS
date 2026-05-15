@@ -43,7 +43,7 @@ enum HistoryService {
                 locale: locale.identifier,
                 kind: kind
             )
-            session.results.append(result)
+            session.results?.append(result)
         }
         if let thread {
             session.thread = thread
@@ -80,7 +80,7 @@ enum HistoryService {
             kind: .sendableReply,
             sourceVentDraftId: sourceVentDraft.id
         )
-        session.results.append(reply)
+        session.results?.append(reply)
         session.thread?.updatedAt = Date()
         do {
             try context.save()
@@ -131,7 +131,7 @@ enum HistoryService {
                 styleId: sample.styleId,
                 locale: sample.responseLocale
             )
-            session.results.append(result)
+            session.results?.append(result)
             context.insert(session)
         }
         do {

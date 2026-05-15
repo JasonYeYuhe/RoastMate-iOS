@@ -361,12 +361,12 @@ struct FeatureGeneratorView: View {
     }
 
     private func sortedResults(_ session: RoastSession) -> [GeneratedRoast] {
-        session.results.sorted { $0.generatedAt < $1.generatedAt }
+        (session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }
     }
 
     private func hasSendableReply(for result: GeneratedRoast, in session: RoastSession) -> Bool {
         guard result.kind == .ventDraft else { return false }
-        return session.results.contains {
+        return (session.results ?? []).contains {
             $0.kind == .sendableReply && $0.sourceVentDraftId == result.id
         }
     }

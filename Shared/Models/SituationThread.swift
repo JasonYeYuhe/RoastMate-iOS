@@ -38,31 +38,33 @@ enum SituationMood: String, Codable, CaseIterable, Sendable {
 
 @Model
 final class SituationThread {
-    var id: UUID
+    var id: UUID = UUID()
 
     /// Auto-generated short label, e.g. "老板临时甩锅" / "Roommate ate my food".
     /// Editable by the user.
-    var title: String
+    var title: String = ""
 
     /// Free-text first description by the user (what originally happened).
     /// Subsequent escalations live in the child `RoastSession.situation`
     /// fields, with this as the root context.
-    var originalSituation: String
+    var originalSituation: String = ""
 
-    var categoryRaw: String
+    var categoryRaw: String = SituationCategory.other.rawValue
     var moodRaw: String?
 
-    var createdAt: Date
-    var updatedAt: Date
+    var createdAt: Date = Date()
+    var updatedAt: Date = Date()
 
-    var isFavorite: Bool
-    var isResolved: Bool
+    var isFavorite: Bool = false
+    var isResolved: Bool = false
 
     /// Inverse relationship to the sessions inside this thread. Cascade on
     /// thread deletion is intentional — deleting the thread removes the
-    /// session records too.
+    /// session records too. Optional + default `[]` for CloudKit
+    /// compatibility (SwiftData+CloudKit requires all to-many relationships
+    /// be optional).
     @Relationship(deleteRule: .cascade, inverse: \RoastSession.thread)
-    var sessions: [RoastSession]
+    var sessions: [RoastSession]? = []
 
     init(
         title: String,

@@ -3,15 +3,15 @@ import SwiftData
 
 @Model
 final class UserSettings {
-    var id: UUID
-    var dailyFreeUsed: Int
-    var dailyFreeResetDate: Date
-    var hasSeenOnboarding: Bool
-    var hasAcknowledgedAgeGate: Bool
-    var hasAcknowledgedContentNotice: Bool
-    var safeModeEnabled: Bool
+    var id: UUID = UUID()
+    var dailyFreeUsed: Int = 0
+    var dailyFreeResetDate: Date = Date()
+    var hasSeenOnboarding: Bool = false
+    var hasAcknowledgedAgeGate: Bool = false
+    var hasAcknowledgedContentNotice: Bool = false
+    var safeModeEnabled: Bool = true
     var preferredLocale: String?
-    var historyRetentionDays: Int
+    var historyRetentionDays: Int = 30
 
     /// Lifetime free generations consumed by the user, counted independently
     /// of the daily quota. Added in v1.x to give new users a generous

@@ -20,7 +20,7 @@ struct ThreadDetailView: View {
     @State private var draftTitle = ""
 
     private var orderedSessions: [RoastSession] {
-        thread.sessions.sorted { $0.createdAt < $1.createdAt }
+        (thread.sessions ?? []).sorted { $0.createdAt < $1.createdAt }
     }
 
     var body: some View {
@@ -166,7 +166,7 @@ struct ThreadDetailView: View {
                     )
             }
 
-            ForEach(session.results.sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
+            ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                 Text(result.text)
                     .font(.body)
                     .textSelection(.enabled)

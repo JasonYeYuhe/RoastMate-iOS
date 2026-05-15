@@ -3,13 +3,13 @@ import SwiftData
 
 @Model
 final class GeneratedRoast {
-    var id: UUID
-    var text: String
-    var styleId: String
-    var localeRaw: String
-    var generatedAt: Date
-    var wasShared: Bool
-    var rating: Int
+    var id: UUID = UUID()
+    var text: String = ""
+    var styleId: String = ""
+    var localeRaw: String = ""
+    var generatedAt: Date = Date()
+    var wasShared: Bool = false
+    var rating: Int = 0
 
     /// Distinguishes vent drafts (private) from sendable replies (the cleaned
     /// rewrite) and ordinary roasts. Nullable so old stores upgrade without
@@ -22,7 +22,7 @@ final class GeneratedRoast {
 
     /// Per-output favorite flag. Lets users star the *exact* variant they
     /// liked rather than the whole session.
-    var isFavorite: Bool
+    var isFavorite: Bool = false
 
     init(
         text: String,

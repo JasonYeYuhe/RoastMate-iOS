@@ -17,7 +17,7 @@ final class HistoryServiceSendableReplyTests: XCTestCase {
             intensity: .vent
         )
 
-        let draft = try XCTUnwrap(session.results.first)
+        let draft = try XCTUnwrap(session.results?.first)
         let reply = HistoryService.appendSendableReply(
             toSession: session,
             sourceVentDraft: draft,
@@ -28,7 +28,7 @@ final class HistoryServiceSendableReplyTests: XCTestCase {
         XCTAssertEqual(draft.kind, .ventDraft)
         XCTAssertEqual(reply.kind, .sendableReply)
         XCTAssertEqual(reply.sourceVentDraftId, draft.id)
-        XCTAssertEqual(session.results.count, 2)
+        XCTAssertEqual(session.results?.count, 2)
     }
 
     private func makeContext() throws -> ModelContext {
