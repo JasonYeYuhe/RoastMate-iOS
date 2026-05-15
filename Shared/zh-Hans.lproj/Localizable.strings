@@ -184,6 +184,14 @@
 "explore.samples.cta" = "浏览 17 个示例场景";
 "sample.badge.standard" = "示例";
 "sample.badge.vent_demo" = "先骂后发";
+
+/* 多轮示例事件:演示「这件事还在继续,接着帮我」的体验 */
+"sample.thread.title" = "示例:同事一直推翻我的工作";
+"sample.thread.round1.situation" = "同事悄悄把我提交的代码改动回滚了,在站会上又装作「我们之前商量过要回滚」——我们根本没有。";
+"sample.thread.round1.response" = "想跟你确认下今早的回滚——我并没记得我们就这件事达成过共识。能不能跟我讲一下我漏掉了什么?省得以后两个人来回拆对方的活。";
+"sample.thread.round2.situation" = "同一个同事刚才在群里当众回我一句「哈哈你这也太上头了吧」。";
+"sample.thread.round2.vent" = "上头?整个组里也就我一个人会把 PR 描述读完再点合并。你一声不吭把我代码撤了,转身又在公屏说我「上头」?有点常识好吗。";
+"sample.thread.round2.sendable" = "我不是要把事情闹大——只是想搞清楚回滚的原因,免得又重复一遍。我们直接私聊对齐一下好吗?";
 "explore.samples.footer" = "点击任意示例,看看「帮你骂」是怎么写这个风格的。可以在设置中清除示例。";
 "explore.styles.section" = "风格";
 
@@ -304,7 +312,7 @@
 "intensity.savage.name" = "狠";
 "intensity.savage.blurb" = "毫不留情,但还能发。";
 "intensity.feral.name" = "痛骂";
-"intensity.feral.blurb" = "彻底开火,带脏话。";
+"intensity.feral.blurb" = "私密痛骂草稿,可带脏话。";
 "intensity.vent.name" = "发泄";
 "intensity.vent.blurb" = "只给自己看的发泄稿,稍后可改成能发的。";
 

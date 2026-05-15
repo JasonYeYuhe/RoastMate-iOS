@@ -184,6 +184,14 @@
 "explore.samples.cta" = "17のサンプル状況を見る";
 "sample.badge.standard" = "サンプル";
 "sample.badge.vent_demo" = "吐き出し→送信";
+
+/* 複数ラウンドのサンプル事件:「この件、まだ続いてる。引き続き手伝って」の体験を見せる */
+"sample.thread.title" = "サンプル:同僚が私の作業を勝手にひっくり返す";
+"sample.thread.round1.situation" = "同僚が私のコード変更をこっそりリバートした上に、スタンドアップで「リバートする件は事前に合意済み」と発言。実際には合意していません。";
+"sample.thread.round1.response" = "今朝のリバートについて確認させてください。私はその件で合意した記憶がありません。私が見落としている部分があれば共有してもらえますか? お互いの作業を打ち消し合うのは避けたいので。";
+"sample.thread.round2.situation" = "同じ同僚が、私のSlackに「いやそんな大げさにしなくても 笑」と公開チャンネルで返信してきました。";
+"sample.thread.round2.vent" = "大げさ?このチームでPR説明をちゃんと読んでからマージしてるの私だけだけど?無断で私のコードをひっくり返した上に、公の場で私を「大げさ」扱い?ふざけるな。";
+"sample.thread.round2.sendable" = "大げさにしたいわけではないです。ただ、また同じことを繰り返さないためにも、リバートの理由を整理させてください。DMで一度直接すり合わせませんか?";
 "explore.samples.footer" = "サンプルをタップして、各スタイルの書き方を確認できます。設定からまとめて削除できます。";
 "explore.styles.section" = "スタイル";
 
@@ -304,7 +312,7 @@
 "intensity.savage.name" = "容赦なし";
 "intensity.savage.blurb" = "それでも送れる範囲で。";
 "intensity.feral.name" = "罵倒";
-"intensity.feral.blurb" = "全力で罵る。下品な言葉あり。";
+"intensity.feral.blurb" = "非公開の罵倒下書き。下品な言葉あり。";
 "intensity.vent.name" = "吐き出し";
 "intensity.vent.blurb" = "自分だけの吐き出し草稿。後で送れる形にできます。";
 

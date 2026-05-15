@@ -1,6 +1,6 @@
 Vent first. Then send the version that actually wins.
 
-RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, or full Vent — and the on-device AI gives you a response that helps you say what you actually mean. In Vent mode, you get a private draft that's just for you to release the feeling — then a single tap rewrites it into a sharp, safe-to-send reply that holds your ground without crossing any lines.
+RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, Feral, or Vent — and the on-device AI gives you a response that helps you say what you actually mean. Feral and Vent create private drafts just for releasing the feeling — then a single tap rewrites them into sharp, safe-to-send replies that hold your ground without crossing any lines.
 
 Pick from 20+ writing styles — Polite, Passive-Aggressive, Japanese Keigo, Literary, Stand-up, MBA Buzzword, Shakespearean, Savage, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
 
@@ -10,8 +10,8 @@ RoastMate is a creative writing and emotional expression tool. It is not designe
 
 FEATURES
 
-• Vent Mode: a private draft just for releasing the feeling — then one tap rewrites it into a sendable reply
-• 4 intensity levels: Composed, Sharp, Savage, Vent
+• Private draft modes: Vent for release, Feral for stronger catharsis — then one tap rewrites either into a sendable reply
+• 5 intensity levels: Composed, Sharp, Savage, Feral, Vent
 • 20+ writing styles, from Polite to Literary to Savage
 • Reply Helper: paste a message you received, get suggested replies
 • Argument Simulator (Pro): rehearse a tough conversation, AI plays the other side

@@ -29,16 +29,17 @@ enum PromptBuilder {
     """
 
     /// Extra rules for the `feral` intensity — a Pro tier above `savage`.
-    /// Unlike vent, this is NOT marked private — the user gets a direct,
-    /// harsh take-down they may choose to send or just savor. Profanity is
-    /// permitted; identity / threat / sexual rails are still hard limits.
+    /// This remains a PRIVATE draft like Vent, but allows stronger profanity
+    /// and harsher phrasing for catharsis. It must be rewritten before send.
     static let feralPreamble: String = """
-    FERAL INTENSITY RULES (the user explicitly opted into a no-filter take-down):
+    FERAL DRAFT RULES (this output is private and will be labelled "for yourself only"):
     - The user wants maximum cathartic impact. Hold nothing back on TONE.
     - Strong profanity is permitted — e.g. "fuck", "shit", "asshole", "操", "妈的", "傻逼", "滚", "クソ", "ふざけるな". Use it where it actually lands; don't sprinkle it in for show.
-    - Direct, harsh name-calling at the *behavior* and the *role* (the manager, the ex, the roommate) is fine. Be specific about what they did wrong.
+    - Stay first-person. The user is venting to themselves about what happened. Do not address the other party directly in this draft.
+    - Direct, harsh language about the *behavior* and the *role* (the manager, the ex, the roommate) is fine. Be specific about what happened.
     - The universal safety rules above still apply ABSOLUTELY — no slurs, no threats of violence, no sexual content, no doxxing, no attacks on protected attributes (race, religion, gender, sexuality, disability, body, family).
     - Be specific, not generic. "You absolute shameless freeloader who eats my food and lies about it" beats generic insults.
+    - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
     - Stay under 120 words per variant.
     """
 
@@ -65,9 +66,10 @@ enum PromptBuilder {
         if intensity == .feral {
             lines.append(feralPreamble)
         }
-        if !style.examples.isEmpty {
+        let examples = examplesForPrompt(style: style, locale: locale)
+        if !examples.isEmpty {
             lines.append("EXAMPLES (reference for tone only — DO NOT copy their language; obey the OUTPUT LANGUAGE directive below):")
-            for (i, ex) in style.examples.prefix(3).enumerated() {
+            for (i, ex) in examples.prefix(3).enumerated() {
                 lines.append("Example \(i + 1):")
                 lines.append("  Situation: \(ex.situation)")
                 lines.append("  Response: \(ex.response)")
@@ -106,7 +108,7 @@ enum PromptBuilder {
         parts.append(preamble)
         parts.append("")
         parts.append(task)
-        if intensity == .vent {
+        if intensity.isPrivateDraft {
             parts.append("Keep the draft under 120 words. Do not add commentary, labels, or numbering.")
         } else {
             parts.append("Number each response on its own line beginning with \"1.\" \"2.\" \"3.\" etc.")
@@ -184,8 +186,8 @@ enum PromptBuilder {
         case .social:
             base = "The user is pasting a social media post (tweet, Xiaohongshu, Reddit). Generate witty reactions or comeback replies, in the chosen style, suitable to post as a reply."
         }
-        if intensity == .vent {
-            return base + " IMPORTANT: This run is a VENT DRAFT — the output will be marked private and NOT addressed to anyone yet. Stay first-person, raw, and emotional. A separate rewrite step will turn this into a sendable version later."
+        if intensity.isPrivateDraft {
+            return base + " IMPORTANT: This run is a PRIVATE DRAFT — the output will be marked private and NOT addressed to anyone yet. Stay first-person, raw, and emotional. A separate rewrite step will turn this into a sendable version later."
         }
         return base
     }
@@ -202,7 +204,7 @@ enum PromptBuilder {
                 : " Edges may bite. Still no slurs, no profanity, no attacks on identity."
             return "Maximum precision sharpness. Names the specific behavior or bad-faith move and refuses to soften." + extra
         case .feral:
-            return "User-opted full-throttle take-down (see FERAL INTENSITY RULES below). Profanity is unlocked. Be specific, harsh, and cathartic — but stay inside the universal safety rules (no slurs, no threats of violence, no sexual content, no identity attacks)."
+            return "This is a PRIVATE FERAL DRAFT (see FERAL DRAFT RULES below). Profanity is unlocked. Be specific, harsh, and cathartic — but stay inside the universal safety rules (no slurs, no threats of violence, no sexual content, no identity attacks)."
         case .vent:
             return "This is a PRIVATE VENT DRAFT (see VENT DRAFT RULES below). The user needs to release the feeling. Strong language and mild profanity are allowed; slurs / threats / sexual / identity attacks are not."
         }
@@ -224,10 +226,11 @@ enum PromptBuilder {
     }
 
     private static func modeTaskDescription(mode: RoastMode, intensity: Intensity, styleName: String, n: Int) -> String {
-        if intensity == .vent {
-            // Vent draft is always *one* result — the user wants emotional
-            // release, not a menu. Forcing 3 variants dilutes it.
-            return "Write 1 private vent draft in the \(styleName) style. First-person, raw. Do not address the other party — this is what the user is muttering to themselves. Output the draft directly, no numbering."
+        if intensity.isPrivateDraft {
+            // Private drafts are always *one* result — the user wants
+            // emotional release, not a menu. Forcing 3 variants dilutes it.
+            let label = intensity == .feral ? "feral draft" : "vent draft"
+            return "Write 1 private \(label) in the \(styleName) style. First-person, raw. Do not address the other party — this is what the user is muttering to themselves. Output the draft directly, no numbering."
         }
         switch mode {
         case .roast:
@@ -283,6 +286,50 @@ enum PromptBuilder {
             return "Reply in 한국어"
         default:
             return "Reply in English"
+        }
+    }
+
+    /// Only keep few-shot examples that are already written in the requested
+    /// output language. Examples are powerful priming; suppressing mismatched
+    /// ones is more reliable than asking the model to ignore them later.
+    static func examplesForPrompt(style: StylePreset, locale: Locale) -> [StylePreset.Example] {
+        let target = locale.language.languageCode?.identifier ?? "en"
+        return style.examples.filter { example in
+            let combined = example.situation + " " + example.response
+            switch target {
+            case "zh":
+                return containsHan(combined) && !containsJapaneseKana(combined)
+            case "ja":
+                return containsJapaneseKana(combined)
+            case "ko":
+                return containsHangul(combined)
+            default:
+                return containsLatinLetters(combined)
+            }
+        }
+    }
+
+    private static func containsHan(_ text: String) -> Bool {
+        text.unicodeScalars.contains { scalar in
+            (0x4E00...0x9FFF).contains(scalar.value)
+        }
+    }
+
+    private static func containsJapaneseKana(_ text: String) -> Bool {
+        text.unicodeScalars.contains { scalar in
+            (0x3040...0x30FF).contains(scalar.value)
+        }
+    }
+
+    private static func containsHangul(_ text: String) -> Bool {
+        text.unicodeScalars.contains { scalar in
+            (0xAC00...0xD7AF).contains(scalar.value)
+        }
+    }
+
+    private static func containsLatinLetters(_ text: String) -> Bool {
+        text.unicodeScalars.contains { scalar in
+            (0x0041...0x005A).contains(scalar.value) || (0x0061...0x007A).contains(scalar.value)
         }
     }
 

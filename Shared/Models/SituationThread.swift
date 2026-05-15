@@ -58,6 +58,13 @@ final class SituationThread {
     var isFavorite: Bool = false
     var isResolved: Bool = false
 
+    /// True for in-bundle seeded sample threads (one ships with v1.4 to
+    /// demonstrate the multi-round "continue this situation" flow to App
+    /// Store reviewers + new users). Cleanup honors this flag the same way
+    /// `RoastSession.isSampleData` does, so the user can wipe demo data
+    /// from Settings without touching their own threads.
+    var isSampleData: Bool = false
+
     /// Inverse relationship to the sessions inside this thread. Cascade on
     /// thread deletion is intentional — deleting the thread removes the
     /// session records too. Optional + default `[]` for CloudKit
@@ -70,7 +77,8 @@ final class SituationThread {
         title: String,
         originalSituation: String,
         category: SituationCategory = .other,
-        mood: SituationMood? = nil
+        mood: SituationMood? = nil,
+        isSampleData: Bool = false
     ) {
         let now = Date()
         self.id = UUID()
@@ -82,6 +90,7 @@ final class SituationThread {
         self.updatedAt = now
         self.isFavorite = false
         self.isResolved = false
+        self.isSampleData = isSampleData
         self.sessions = []
     }
 

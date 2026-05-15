@@ -10,10 +10,10 @@ enum HistoryService {
     /// free-tier history cap. Returns the inserted session.
     ///
     /// Intensity defaults to `.sharp` to preserve behavior for callers that
-    /// haven't been ported to the new picker yet. When `intensity == .vent`,
-    /// every variant is recorded as a `.ventDraft`; otherwise variants are
-    /// `.normalRoast`. Use `appendSendableReply` to attach the second-pass
-    /// rewrite after the user opts in.
+    /// haven't been ported to the new picker yet. Private-draft intensities
+    /// are recorded as `.ventDraft`; otherwise variants are `.normalRoast`.
+    /// Use `appendSendableReply` to attach the second-pass rewrite after the
+    /// user opts in.
     @discardableResult
     static func saveSession(
         situation: String,
@@ -35,7 +35,7 @@ enum HistoryService {
             intensity: intensity,
             isSampleData: isSampleData
         )
-        let kind: GeneratedRoastKind = (intensity == .vent) ? .ventDraft : .normalRoast
+        let kind: GeneratedRoastKind = intensity.isPrivateDraft ? .ventDraft : .normalRoast
         for text in variants {
             let result = GeneratedRoast(
                 text: text,
@@ -109,31 +109,51 @@ enum HistoryService {
     }
 
     /// On first launch, populate the history with the bundled samples so
-    /// the reviewer (and new user) see the feature without typing.
+    /// the reviewer (and new user) see the feature without typing. v1.4
+    /// bumps the seed key because the sample shape changed:
+    /// - vent demo pairs now seed as proper `.ventDraft` + `.sendableReply`
+    ///   results (instead of a single normal-roast row that hid the killer
+    ///   feature)
+    /// - a multi-round sample SituationThread is added so the Threads UX
+    ///   isn't empty on a fresh install
     static func seedSamplesIfNeeded(context: ModelContext) {
-        let didSeedKey = "roastmate_samples_seeded_v1"
+        let didSeedKey = "roastmate_samples_seeded_v2"
         guard !UserDefaults.standard.bool(forKey: didSeedKey) else { return }
+
+        // v1 cleanup: if the user has a v1 seed marker, leave their data
+        // alone — they may have favorited some samples. New install only.
+        let v1Key = "roastmate_samples_seeded_v1"
+        if UserDefaults.standard.bool(forKey: v1Key) {
+            UserDefaults.standard.set(true, forKey: didSeedKey)
+            return
+        }
 
         let samples = SampleRoastsCatalog.shared.all
         guard !samples.isEmpty else { return }
 
         for sample in samples {
             let locale = Locale(identifier: sample.responseLocale)
-            let session = RoastSession(
-                situation: sample.situation(for: locale),
-                mode: .roast,
-                styleId: sample.styleId,
-                locale: sample.responseLocale,
-                isSampleData: true
-            )
-            let result = GeneratedRoast(
-                text: sample.response,
-                styleId: sample.styleId,
-                locale: sample.responseLocale
-            )
-            session.results?.append(result)
-            context.insert(session)
+            if sample.isVentDemo,
+               let ventText = sample.ventResponse,
+               let sendableText = sample.sendableResponse {
+                seedVentDemoSession(
+                    sample: sample,
+                    locale: locale,
+                    ventText: ventText,
+                    sendableText: sendableText,
+                    context: context
+                )
+            } else {
+                seedStandardSampleSession(
+                    sample: sample,
+                    locale: locale,
+                    context: context
+                )
+            }
         }
+
+        seedSampleThread(context: context)
+
         do {
             try context.save()
             UserDefaults.standard.set(true, forKey: didSeedKey)
@@ -142,13 +162,156 @@ enum HistoryService {
         }
     }
 
+    /// Standard single-shot sample → one `.normalRoast` result.
+    private static func seedStandardSampleSession(
+        sample: SampleRoast,
+        locale: Locale,
+        context: ModelContext
+    ) {
+        let session = RoastSession(
+            situation: sample.situation(for: locale),
+            mode: .roast,
+            styleId: sample.styleId,
+            locale: sample.responseLocale,
+            isSampleData: true
+        )
+        let result = GeneratedRoast(
+            text: sample.response,
+            styleId: sample.styleId,
+            locale: sample.responseLocale
+        )
+        session.results?.append(result)
+        context.insert(session)
+    }
+
+    /// Vent-demo sample → one session marked as `.vent` intensity, with a
+    /// `.ventDraft` result paired to a `.sendableReply` rewrite. Visually
+    /// identical to what the user gets when they hit "Make it sendable"
+    /// themselves.
+    private static func seedVentDemoSession(
+        sample: SampleRoast,
+        locale: Locale,
+        ventText: String,
+        sendableText: String,
+        context: ModelContext
+    ) {
+        let session = RoastSession(
+            situation: sample.situation(for: locale),
+            mode: .roast,
+            styleId: sample.styleId,
+            locale: sample.responseLocale,
+            intensity: .vent,
+            isSampleData: true
+        )
+        let draft = GeneratedRoast(
+            text: ventText,
+            styleId: sample.styleId,
+            locale: sample.responseLocale,
+            kind: .ventDraft
+        )
+        session.results?.append(draft)
+        let reply = GeneratedRoast(
+            text: sendableText,
+            styleId: sample.styleId,
+            locale: sample.responseLocale,
+            kind: .sendableReply,
+            sourceVentDraftId: draft.id
+        )
+        session.results?.append(reply)
+        context.insert(session)
+    }
+
+    /// One curated multi-round sample thread that demonstrates the
+    /// "this same person came back at me — help me again" loop. Uses
+    /// localized strings so it reads natively in the user's UI language.
+    private static func seedSampleThread(context: ModelContext) {
+        let category = SituationCategory.work
+        let mood = SituationMood.wronged
+        let title = String(localized: "sample.thread.title")
+        let original = String(localized: "sample.thread.round1.situation")
+        let thread = SituationThread(
+            title: title,
+            originalSituation: original,
+            category: category,
+            mood: mood,
+            isSampleData: true
+        )
+        thread.isFavorite = true
+        context.insert(thread)
+
+        // Round 1: standard sharp roast — what I wish I'd said in the moment.
+        let round1Locale = Locale.current
+        let round1 = RoastSession(
+            situation: original,
+            mode: .roast,
+            styleId: "high_eq",
+            locale: round1Locale.identifier,
+            intensity: .sharp,
+            isSampleData: true
+        )
+        round1.thread = thread
+        let round1Result = GeneratedRoast(
+            text: String(localized: "sample.thread.round1.response"),
+            styleId: "high_eq",
+            locale: round1Locale.identifier,
+            kind: .normalRoast
+        )
+        round1.results?.append(round1Result)
+        context.insert(round1)
+
+        // Round 2: same event, escalated. Vent draft + cool-off rewrite.
+        let round2Locale = Locale.current
+        let round2 = RoastSession(
+            situation: String(localized: "sample.thread.round2.situation"),
+            mode: .roast,
+            styleId: "high_eq",
+            locale: round2Locale.identifier,
+            intensity: .vent,
+            isSampleData: true
+        )
+        round2.thread = thread
+        round2.createdAt = Date().addingTimeInterval(60 * 60 * 24)  // a day later
+        let ventDraft = GeneratedRoast(
+            text: String(localized: "sample.thread.round2.vent"),
+            styleId: "high_eq",
+            locale: round2Locale.identifier,
+            kind: .ventDraft
+        )
+        ventDraft.generatedAt = round2.createdAt
+        round2.results?.append(ventDraft)
+        let sendable = GeneratedRoast(
+            text: String(localized: "sample.thread.round2.sendable"),
+            styleId: "high_eq",
+            locale: round2Locale.identifier,
+            kind: .sendableReply,
+            sourceVentDraftId: ventDraft.id
+        )
+        sendable.generatedAt = round2.createdAt.addingTimeInterval(5)
+        round2.results?.append(sendable)
+        context.insert(round2)
+
+        thread.updatedAt = round2.createdAt
+    }
+
     static func clearSamples(context: ModelContext) {
-        let descriptor = FetchDescriptor<RoastSession>(
+        // Threads with cascade-delete on sessions will take their child
+        // sessions with them. Do threads first to avoid orphaning sample
+        // results that belong to sample threads.
+        let threadDescriptor = FetchDescriptor<SituationThread>(
             predicate: #Predicate { $0.isSampleData }
         )
-        guard let samples = try? context.fetch(descriptor) else { return }
-        for sample in samples {
-            context.delete(sample)
+        if let sampleThreads = try? context.fetch(threadDescriptor) {
+            for thread in sampleThreads {
+                context.delete(thread)
+            }
+        }
+        let sessionDescriptor = FetchDescriptor<RoastSession>(
+            predicate: #Predicate { $0.isSampleData }
+        )
+        if let standaloneSamples = try? context.fetch(sessionDescriptor) {
+            for sample in standaloneSamples {
+                context.delete(sample)
+            }
         }
         try? context.save()
     }

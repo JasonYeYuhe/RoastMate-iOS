@@ -134,8 +134,9 @@ struct ThreadDetailView: View {
     }
 
     private func roundCard(session: RoastSession, roundNumber: Int) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
+        let orderedResults = (session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 6) {
                 Text(String(format: String(localized: "thread.round.number"), roundNumber))
                     .font(.caption2.weight(.bold))
                     .padding(.horizontal, 6)
@@ -147,6 +148,12 @@ struct ThreadDetailView: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
                 }
+                Text(session.intensity.displayName)
+                    .font(.caption2.weight(.semibold))
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 1)
+                    .background(Capsule().fill(intensityChipColor(session.intensity).opacity(0.18)))
+                    .foregroundStyle(intensityChipColor(session.intensity))
                 Spacer()
                 Text(session.createdAt, style: .relative)
                     .font(.caption2)
@@ -166,21 +173,32 @@ struct ThreadDetailView: View {
                     )
             }
 
-            ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
-                Text(result.text)
-                    .font(.body)
-                    .textSelection(.enabled)
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(result.kind == .ventDraft
-                                  ? Color.orange.opacity(0.08)
-                                  : Color.blue.opacity(0.06))
-                    )
+            ForEach(orderedResults, id: \.id) { result in
+                GeneratedRoastCard(
+                    result: result,
+                    style: StyleCatalog.shared.style(id: result.styleId),
+                    isRewriting: false,
+                    hasSendableReply: sendableReplyExists(for: result, in: orderedResults),
+                    onRewrite: nil
+                )
             }
         }
         .padding(.vertical, 6)
+    }
+
+    private func intensityChipColor(_ intensity: Intensity) -> Color {
+        switch intensity {
+        case .calm: return .blue
+        case .sharp: return .gray
+        case .savage: return .red
+        case .feral: return .pink
+        case .vent: return .orange
+        }
+    }
+
+    private func sendableReplyExists(for result: GeneratedRoast, in results: [GeneratedRoast]) -> Bool {
+        guard result.kind == .ventDraft else { return false }
+        return results.contains { $0.kind == .sendableReply && $0.sourceVentDraftId == result.id }
     }
 
     private var continueButton: some View {

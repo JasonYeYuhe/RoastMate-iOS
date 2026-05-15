@@ -184,6 +184,14 @@
 "explore.samples.cta" = "瀏覽 17 個範例情境";
 "sample.badge.standard" = "範例";
 "sample.badge.vent_demo" = "先罵後發";
+
+/* 多輪範例事件:展示「這件事還沒完,繼續幫我」的體驗 */
+"sample.thread.title" = "範例:同事一直推翻我的工作";
+"sample.thread.round1.situation" = "同事偷偷把我提交的程式碼變更回滾了,在站立會議上又裝作「我們之前商量過要回滾」——我們根本沒有。";
+"sample.thread.round1.response" = "想跟你確認一下今早的回滾——我並沒記得我們就這件事達成過共識。能不能跟我說一下我漏了什麼?省得之後兩個人來回拆對方的工作。";
+"sample.thread.round2.situation" = "同一位同事剛才在群裡當眾回我一句「哈哈你也太上頭了吧」。";
+"sample.thread.round2.vent" = "上頭?整個組裡也就我一個人會把 PR 描述讀完再點合併。你一聲不吭把我程式碼撤了,轉身又在公頻說我「上頭」?有點常識好嗎。";
+"sample.thread.round2.sendable" = "我並不是要把事情鬧大——只是想搞清楚回滾的原因,免得又重複一遍。我們直接私訊對齊一下好嗎?";
 "explore.samples.footer" = "點擊任意範例,看看「幫你罵」是怎麼寫這個風格的。可以在設定中清除範例。";
 "explore.styles.section" = "風格";
 
@@ -304,7 +312,7 @@
 "intensity.savage.name" = "狠";
 "intensity.savage.blurb" = "毫不留情,但還能發。";
 "intensity.feral.name" = "痛罵";
-"intensity.feral.blurb" = "徹底開火,帶髒話。";
+"intensity.feral.blurb" = "私密痛罵草稿,可帶髒話。";
 "intensity.vent.name" = "發洩";
 "intensity.vent.blurb" = "只給自己看的發洩稿,稍後可改成能發的。";
 

@@ -10,12 +10,12 @@ final class IntensityTests: XCTestCase {
         XCTAssertTrue(Intensity.vent.requiresPro)
     }
 
-    func testOnlyVentIsPrivateDraft() {
-        // Feral output is sendable text — it must not be flagged as a
-        // private vent draft, otherwise the UI hides it behind the
-        // "for yourself only" curtain.
-        XCTAssertFalse(Intensity.feral.isVent)
-        XCTAssertTrue(Intensity.vent.isVent)
+    func testPrivateDraftPolicy() {
+        XCTAssertFalse(Intensity.calm.isPrivateDraft)
+        XCTAssertFalse(Intensity.sharp.isPrivateDraft)
+        XCTAssertFalse(Intensity.savage.isPrivateDraft)
+        XCTAssertTrue(Intensity.feral.isPrivateDraft)
+        XCTAssertTrue(Intensity.vent.isPrivateDraft)
     }
 
     func testLegacyDefaultIsSharp() {

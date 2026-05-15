@@ -7,27 +7,31 @@ import Foundation
 /// Tier policy (enforced at the call-site, not by this enum):
 /// - `.calm` and `.sharp` are free-tier.
 /// - `.savage` requires Pro.
-/// - `.vent` requires Pro **and** produces a private "vent draft" that we
-///   intentionally never advertise as a sendable message. A second LLM
-///   call (`RoastEngine.rewriteAsSendable`) converts a vent draft into a
+/// - `.feral` and `.vent` require Pro **and** produce private drafts that
+///   we intentionally never advertise as sendable messages. A second LLM
+///   call (`RoastEngine.rewriteAsSendable`) converts a private draft into a
 ///   Sendable Reply when the user explicitly asks for it.
 enum Intensity: String, Codable, CaseIterable, Sendable {
     case calm
     case sharp
     case savage
-    /// Pro-only no-filter take-down. Profanity unlocked; universal safety
+    /// Pro-only private rage draft. Profanity unlocked; universal safety
     /// rules (no slurs, no threats, no sexual content, no identity attacks)
-    /// still apply. Distinct from `.vent` because the output is NOT marked
-    /// private — the user can send it.
+    /// still apply. It is intentionally not sendable as-is.
     case feral
     case vent
 
     /// Default intensity for legacy sessions that pre-date this field.
     static var legacyDefault: Intensity { .sharp }
 
-    /// True when this intensity should produce a private vent draft instead
-    /// of an immediately-sendable reply. The UI must label these clearly as
-    /// "for yourself only" and surface a rewrite-as-sendable action.
+    /// True when this intensity should produce a private draft instead of an
+    /// immediately-sendable reply. The UI must label these clearly as "for
+    /// yourself only" and surface a rewrite-as-sendable action.
+    var isPrivateDraft: Bool {
+        self == .feral || self == .vent
+    }
+
+    /// Backward-compatible semantic helper used by older call sites/tests.
     var isVent: Bool { self == .vent }
 
     /// True when this intensity requires Pro entitlement.

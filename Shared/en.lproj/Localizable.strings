@@ -184,6 +184,14 @@
 "explore.samples.cta" = "Browse 17 sample situations";
 "sample.badge.standard" = "Sample";
 "sample.badge.vent_demo" = "Vent + Send";
+
+/* Seeded sample SituationThread that demos the multi-round "continue this event" flow. */
+"sample.thread.title" = "Sample: Coworker keeps overriding my work";
+"sample.thread.round1.situation" = "My coworker quietly reverted my code change in the team repo, then in standup framed it as 'we agreed to roll it back' — we did not.";
+"sample.thread.round1.response" = "Quick clarification on the rollback this morning — I don't recall us aligning on that decision. Want to walk me through what I missed, so we don't end up undoing each other's work?";
+"sample.thread.round2.situation" = "Same coworker just replied to my Slack message with 'lol you're being dramatic' in front of the whole channel.";
+"sample.thread.round2.vent" = "Dramatic? I'm the only person on this team who actually reads the PR descriptions before clicking merge. You revert my work without a word, then publicly call ME dramatic for asking why? Get a grip.";
+"sample.thread.round2.sendable" = "Not trying to be dramatic — I'd just like to understand the rollback before we cycle through it again. Can we move this to DM and actually align?";
 "explore.samples.footer" = "Tap a sample to see how RoastMate writes in that style. Samples can be cleared in Settings.";
 "explore.styles.section" = "Styles";
 
@@ -304,7 +312,7 @@
 "intensity.savage.name" = "Savage";
 "intensity.savage.blurb" = "No mercy. Still safe to send.";
 "intensity.feral.name" = "Feral";
-"intensity.feral.blurb" = "No filter. Profanity unlocked.";
+"intensity.feral.blurb" = "Private rage draft. Profanity unlocked.";
 "intensity.vent.name" = "Vent";
 "intensity.vent.blurb" = "Private vent draft — just for you. Rewrite later.";
 

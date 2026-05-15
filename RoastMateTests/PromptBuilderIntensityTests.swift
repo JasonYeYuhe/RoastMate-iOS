@@ -52,10 +52,10 @@ final class PromptBuilderIntensityTests: XCTestCase {
             locale: Locale(identifier: "en_US"),
             intensity: .feral
         )
-        XCTAssertTrue(prompt.contains("FERAL INTENSITY RULES"),
-                      "Feral runs must include the profanity-unlocked preamble.")
+        XCTAssertTrue(prompt.contains("FERAL DRAFT RULES"),
+                      "Feral runs must include the profanity-unlocked private-draft preamble.")
         XCTAssertFalse(prompt.contains("VENT DRAFT RULES"),
-                       "Feral is sendable, not a private vent — vent preamble must not leak in.")
+                       "Feral has its own private-draft preamble — vent preamble must not leak in.")
     }
 
     func testLanguageDirectiveOverridesEnglishExamples_zhHans() {
@@ -82,15 +82,41 @@ final class PromptBuilderIntensityTests: XCTestCase {
             locale: Locale(identifier: "zh_Hans_CN"),
             intensity: .sharp
         )
-        let exampleIdx = prompt.range(of: "English answer")?.lowerBound
-        let enforceIdx = prompt.range(of: "OUTPUT LANGUAGE (REQUIRED)")?.lowerBound
-        XCTAssertNotNil(exampleIdx)
-        XCTAssertNotNil(enforceIdx)
-        if let exampleIdx, let enforceIdx {
-            XCTAssertTrue(enforceIdx > exampleIdx,
-                          "Language enforcement must appear AFTER the English examples to override few-shot priming.")
-        }
+        XCTAssertFalse(prompt.contains("English answer"),
+                       "Mismatched English examples should be omitted for zh-Hans prompts.")
         XCTAssertTrue(prompt.contains("简体中文"))
+    }
+
+    func testExamplesForPromptKeepsTargetLanguageOnly() {
+        let mixedStyle = StylePreset(
+            id: "mixed",
+            displayKey: "test.name",
+            blurbKey: "test.blurb",
+            icon: "star",
+            tier: .free,
+            temperature: 0.8,
+            tags: [],
+            systemPreamble: "Be witty.",
+            examples: [
+                .init(situation: "English situation", response: "English answer"),
+                .init(situation: "邻居半夜很吵", response: "请先学会尊重别人。"),
+                .init(situation: "上司が手柄を横取りした", response: "その成果、私の仕事でした。")
+            ],
+            localesSupported: nil
+        )
+
+        XCTAssertEqual(
+            PromptBuilder.examplesForPrompt(style: mixedStyle, locale: Locale(identifier: "en_US")).count,
+            1
+        )
+        XCTAssertEqual(
+            PromptBuilder.examplesForPrompt(style: mixedStyle, locale: Locale(identifier: "zh_Hans_CN")).count,
+            1
+        )
+        XCTAssertEqual(
+            PromptBuilder.examplesForPrompt(style: mixedStyle, locale: Locale(identifier: "ja_JP")).count,
+            1
+        )
     }
 
     func testUserPromptAppendsLanguageReminderWhenLocaleProvided() {

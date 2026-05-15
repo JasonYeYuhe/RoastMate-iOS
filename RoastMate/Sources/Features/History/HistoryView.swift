@@ -19,12 +19,19 @@ struct HistoryView: View {
         sessions.filter { $0.thread == nil }
     }
 
+    /// Favorited threads pin to the top regardless of resolved state.
+    /// A thread either appears in Favorites OR in Active/Resolved — never
+    /// in both, so the section list stays unambiguous.
+    private var favoriteThreads: [SituationThread] {
+        threads.filter { $0.isFavorite }
+    }
+
     private var activeThreads: [SituationThread] {
-        threads.filter { !$0.isResolved }
+        threads.filter { !$0.isResolved && !$0.isFavorite }
     }
 
     private var resolvedThreads: [SituationThread] {
-        threads.filter { $0.isResolved }
+        threads.filter { $0.isResolved && !$0.isFavorite }
     }
 
     var body: some View {
@@ -37,27 +44,41 @@ struct HistoryView: View {
                 }
             } else {
                 List {
+                    if !favoriteThreads.isEmpty {
+                        Section("thread.section.favorites") {
+                            ForEach(favoriteThreads) { thread in
+                                NavigationLink(value: thread.id) {
+                                    threadRow(thread)
+                                }
+                                .swipeActions(edge: .leading) {
+                                    favoriteSwipeAction(thread)
+                                }
+                            }
+                            .onDelete { offsets in
+                                deleteThreads(favoriteThreads, at: offsets)
+                            }
+                        }
+                    }
                     if !activeThreads.isEmpty {
                         Section("thread.section.unresolved") {
                             ForEach(activeThreads) { thread in
                                 NavigationLink(value: thread.id) {
                                     threadRow(thread)
                                 }
-                            }
-                            .onDelete { offsets in
-                                deleteThreads(activeThreads, at: offsets)
-                            }
-                        }
-                    }
-                    if !resolvedThreads.isEmpty {
-                        Section("thread.section.resolved") {
-                            ForEach(resolvedThreads) { thread in
-                                NavigationLink(value: thread.id) {
-                                    threadRow(thread)
+                                .swipeActions(edge: .leading) {
+                                    favoriteSwipeAction(thread)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button {
+                                        ThreadService.markResolved(thread, resolved: true, context: context)
+                                    } label: {
+                                        Label("thread.mark_resolved", systemImage: "checkmark")
+                                    }
+                                    .tint(.green)
                                 }
                             }
                             .onDelete { offsets in
-                                deleteThreads(resolvedThreads, at: offsets)
+                                deleteThreads(activeThreads, at: offsets)
                             }
                         }
                     }
@@ -79,6 +100,26 @@ struct HistoryView: View {
                             .onDelete(perform: deleteStandalone)
                         }
                     }
+                    if !resolvedThreads.isEmpty {
+                        Section("thread.section.resolved") {
+                            ForEach(resolvedThreads) { thread in
+                                NavigationLink(value: thread.id) {
+                                    threadRow(thread)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button {
+                                        ThreadService.markResolved(thread, resolved: false, context: context)
+                                    } label: {
+                                        Label("thread.mark_unresolved", systemImage: "arrow.uturn.backward")
+                                    }
+                                    .tint(.orange)
+                                }
+                            }
+                            .onDelete { offsets in
+                                deleteThreads(resolvedThreads, at: offsets)
+                            }
+                        }
+                    }
                 }
                 .navigationDestination(for: UUID.self) { id in
                     if let thread = threads.first(where: { $0.id == id }) {
@@ -92,12 +133,33 @@ struct HistoryView: View {
         .navigationTitle("tab.history")
     }
 
+    @ViewBuilder
+    private func favoriteSwipeAction(_ thread: SituationThread) -> some View {
+        Button {
+            thread.isFavorite.toggle()
+            thread.updatedAt = Date()
+            try? context.save()
+        } label: {
+            Label(thread.isFavorite ? "thread.unfavorite" : "thread.favorite",
+                  systemImage: thread.isFavorite ? "star.slash" : "star")
+        }
+        .tint(.yellow)
+    }
+
     private func threadRow(_ thread: SituationThread) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
                 Image(systemName: "rectangle.stack")
                     .font(.caption2)
                     .foregroundStyle(.orange)
+                if thread.isSampleData {
+                    Text("sample.badge.standard")
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(Capsule().fill(Color.blue.opacity(0.18)))
+                        .foregroundStyle(.blue)
+                }
                 Text(thread.title)
                     .font(.callout.weight(.semibold))
                     .lineLimit(1)

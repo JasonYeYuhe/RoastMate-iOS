@@ -15,14 +15,15 @@ Reviewer notes for RoastMate v1.0:
    individual's identity. Safe Mode is on by default (Settings → AI &
    Privacy).
 
-   The app exposes 4 intensity levels (Calm / Sharp / Savage / Vent).
-   The "Vent" intensity produces a PRIVATE draft that is clearly
-   labelled "for yourself only" in the UI and is NOT presented as a
-   message to send. A separate user-initiated "Rewrite as Sendable"
-   action runs a second on-device generation that strips profanity,
-   adds tone control, and produces an outward-facing reply that
-   respects all the safety rules (no slurs, threats, sexual content,
-   doxxing, or identity attacks).
+   The app exposes 5 intensity levels (Calm / Sharp / Savage / Feral /
+   Vent). "Feral" and "Vent" both produce PRIVATE drafts that are
+   clearly labelled "for yourself only" in the UI and are NOT
+   presented as messages to send. Feral allows stronger profanity for
+   catharsis; Vent is the milder private-draft option. A separate
+   user-initiated "Rewrite as Sendable" action runs a second on-device
+   generation that strips profanity, adds tone control, and produces an
+   outward-facing reply that respects all the safety rules (no slurs,
+   threats, sexual content, doxxing, or identity attacks).
 
    REVIEWER TEST PATH for Vent Mode:
    a. Open the Roast Generator. In the Intensity row pick "Vent".
