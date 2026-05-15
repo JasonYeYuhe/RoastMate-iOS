@@ -67,7 +67,20 @@ struct GeneratedRoastCard: View {
     let hasSendableReply: Bool
     let onRewrite: (() -> Void)?
 
+    @Environment(\.modelContext) private var modelContext
     @State private var copied = false
+
+    /// Only sendable kinds (`.normalRoast` + `.sendableReply`) get the
+    /// star toggle. Private drafts are framed as ephemeral catharsis;
+    /// saving them across sessions would conflict with the "for yourself
+    /// only, then move on" copy. Rewrites are a transient kind we don't
+    /// surface separately.
+    private var canBeSaved: Bool {
+        switch result.kind {
+        case .normalRoast, .sendableReply: return true
+        case .ventDraft, .rewrite: return false
+        }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -145,6 +158,22 @@ struct GeneratedRoastCard: View {
                     .controlSize(.small)
                     .disabled(isRewriting)
                 }
+
+                Spacer()
+
+                if canBeSaved {
+                    Button {
+                        toggleFavorite()
+                    } label: {
+                        Image(systemName: result.isFavorite ? "star.fill" : "star")
+                            .font(.callout)
+                            .foregroundStyle(result.isFavorite ? Color.yellow : Color.secondary)
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityLabel(result.isFavorite
+                                        ? String(localized: "result.unfavorite")
+                                        : String(localized: "result.favorite"))
+                }
             }
         }
         .padding(16)
@@ -209,6 +238,12 @@ struct GeneratedRoastCard: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(text, forType: .string)
         #endif
+    }
+
+    private func toggleFavorite() {
+        result.isFavorite.toggle()
+        Haptics.play(.selection)
+        try? modelContext.save()
     }
 }
 

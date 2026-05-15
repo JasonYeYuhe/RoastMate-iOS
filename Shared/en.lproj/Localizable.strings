@@ -345,6 +345,7 @@
 "thread.promote.action" = "Group as event";
 
 "history.section.recent_rounds" = "Recent rounds";
+"history.section.saved_replies" = "Saved replies";
 
 "generator.continuation.title" = "Continuing this event";
 "generator.continuation.hint" = "Type what happened next — we'll keep the prior rounds as context.";

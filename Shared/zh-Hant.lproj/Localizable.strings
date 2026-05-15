@@ -345,6 +345,7 @@
 "thread.promote.action" = "歸到一個事件";
 
 "history.section.recent_rounds" = "最近的回合";
+"history.section.saved_replies" = "收藏的回覆";
 
 "generator.continuation.title" = "繼續這件事";
 "generator.continuation.hint" = "把後來又發生了什麼寫下來——先前的回合會自動作為背景。";

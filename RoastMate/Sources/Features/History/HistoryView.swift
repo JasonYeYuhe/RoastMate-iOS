@@ -8,6 +8,23 @@ struct HistoryView: View {
     private var sessions: [RoastSession]
     @Query(sort: [SortDescriptor(\SituationThread.updatedAt, order: .reverse)])
     private var threads: [SituationThread]
+    /// Cross-thread/session library of replies the user has starred. We
+    /// filter to sendable kinds at fetch time so private drafts never
+    /// leak into the Saved section even if a future bug toggled
+    /// `isFavorite` on one of them.
+    @Query(
+        filter: #Predicate<GeneratedRoast> { result in
+            result.isFavorite
+        },
+        sort: [SortDescriptor(\GeneratedRoast.generatedAt, order: .reverse)]
+    )
+    private var favoritedResults: [GeneratedRoast]
+
+    private var savedReplies: [GeneratedRoast] {
+        favoritedResults.filter { result in
+            result.kind == .normalRoast || result.kind == .sendableReply
+        }
+    }
 
     /// Optional hook so the parent (RootView) can switch tabs back to the
     /// Generator when "Continue this event" is tapped from a thread.
@@ -56,6 +73,23 @@ struct HistoryView: View {
                             }
                             .onDelete { offsets in
                                 deleteThreads(favoriteThreads, at: offsets)
+                            }
+                        }
+                    }
+                    if !savedReplies.isEmpty {
+                        Section("history.section.saved_replies") {
+                            ForEach(savedReplies, id: \.id) { reply in
+                                NavigationLink(value: navigationTarget(for: reply)) {
+                                    savedReplyRow(reply)
+                                }
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        unsave(reply)
+                                    } label: {
+                                        Label("result.unfavorite", systemImage: "star.slash")
+                                    }
+                                    .tint(.yellow)
+                                }
                             }
                         }
                     }
@@ -134,6 +168,56 @@ struct HistoryView: View {
             }
         }
         .navigationTitle("tab.history")
+    }
+
+    /// Tapping a saved reply navigates to whichever owner makes more
+    /// sense — its parent thread if the session is threaded, otherwise
+    /// the standalone session itself. Returns nil only for orphaned
+    /// rows (shouldn't happen — `session` is a SwiftData inverse).
+    private func navigationTarget(for reply: GeneratedRoast) -> UUID {
+        if let thread = reply.session?.thread {
+            return thread.id
+        }
+        if let session = reply.session {
+            return session.id
+        }
+        return reply.id  // dead-end; navigationDestination falls through
+    }
+
+    private func savedReplyRow(_ reply: GeneratedRoast) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 6) {
+                Image(systemName: "star.fill")
+                    .font(.caption2)
+                    .foregroundStyle(.yellow)
+                if let style = StyleCatalog.shared.style(id: reply.styleId) {
+                    Text(style.displayName)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+                if reply.kind == .sendableReply {
+                    Text("output.kind.sendable_reply.label")
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
+                        .background(Capsule().fill(Color.green.opacity(0.18)))
+                        .foregroundStyle(.green)
+                }
+                Spacer()
+                Text(reply.generatedAt, style: .relative)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            Text(reply.text)
+                .font(.callout)
+                .lineLimit(2)
+                .foregroundStyle(.primary)
+        }
+    }
+
+    private func unsave(_ reply: GeneratedRoast) {
+        reply.isFavorite = false
+        try? context.save()
     }
 
     @ViewBuilder

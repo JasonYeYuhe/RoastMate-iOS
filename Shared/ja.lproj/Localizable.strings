@@ -345,6 +345,7 @@
 "thread.promote.action" = "ひとつの出来事にまとめる";
 
 "history.section.recent_rounds" = "最近のラウンド";
+"history.section.saved_replies" = "保存した返し";
 
 "generator.continuation.title" = "この出来事の続き";
 "generator.continuation.hint" = "そのあと何が起きたか書いてください。前のラウンドは背景として残ります。";
