@@ -1,0 +1,27 @@
+name = "roastmate-vent"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Default model. Override per-deploy by editing this or sending `model` in
+# the request body. DeepSeek V3 free is the least RLHF'd toward "be polite"
+# of the OpenRouter free tier, which is exactly what Vent needs.
+[vars]
+DEFAULT_MODEL = "deepseek/deepseek-chat-v3-0324:free"
+
+# Per-device rate limit. The Worker counts each successful request against
+# (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves.
+DAILY_LIMIT_PER_DEVICE = "30"
+
+# OpenRouter referrer + product name so OpenRouter's dashboard shows
+# attribution. Not secret; safe in vars.
+OPENROUTER_REFERER = "https://github.com/JasonYeYuhe/RoastMate-iOS"
+OPENROUTER_TITLE = "RoastMate"
+
+# KV namespace for per-device rate-limit counters. Replace the `id` after
+# `npx wrangler kv:namespace create rate_limits` (see README).
+[[kv_namespaces]]
+binding = "RATE_LIMITS"
+id = "REPLACE_ME_AFTER_KV_NAMESPACE_CREATE"
+
+# Secrets (run `npx wrangler secret put OPENROUTER_API_KEY`):
+# - OPENROUTER_API_KEY: get from https://openrouter.ai/settings/keys

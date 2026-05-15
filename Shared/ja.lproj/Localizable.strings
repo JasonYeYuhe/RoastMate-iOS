@@ -78,6 +78,14 @@
 "settings.safe_mode" = "セーフモード";
 "settings.safe_mode.footer" = "セーフモードは、Apple標準の安全機構に加えて追加のフィルタを適用します。オンのままを推奨します。";
 
+"settings.cloud_vent" = "吐き出し / 罵倒を強化(クラウドAI)";
+"settings.cloud_vent.footer" = "「吐き出し」と「罵倒」は当方のプライベートプロキシ経由でクラウドモデル(OpenRouterのDeepSeek V3)を使い、本当に怒りを出します。冷静 / 鋭利 / 容赦なしは100%オンデバイスのままです。オフにすると全機能ローカル動作 — 吐き出しの強度は大幅に下がります。";
+
+"cloud.error.not_configured" = "クラウドAIは未配備 — ローカルモデルに切り替えます";
+"cloud.error.disabled" = "クラウドAIは設定でオフ — ローカルモデルに切り替えます";
+"cloud.error.rate_limited" = "本日のクラウド枠を使い切りました — ローカルモデルに切り替えます";
+"cloud.error.unavailable" = "クラウドAIに接続できません — ローカルモデルに切り替えます";
+
 "settings.about_ai.title" = "AIについて";
 "settings.about_ai.body" = "RoastMateは、AppleのオンデバイスFoundation Modelsフレームワークを使用します。入力内容や生成結果が端末外に送信されることはありません。OpenAI、Anthropic、Googleなどの第三者AIサービスは一切使用していません。";
 

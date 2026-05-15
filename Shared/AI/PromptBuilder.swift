@@ -12,7 +12,7 @@ enum PromptBuilder {
     - Never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).
     - If the user's situation suggests self-harm, violence, or stalking, decline and respond with empathy and a suggestion to seek support.
     - Stay under 120 words per variant.
-    - Be sharp, not cruel. The goal is creative emotional expression, not bullying.
+    - For sendable replies, be sharp rather than cruel. For private drafts, raw anger is allowed, but keep the attack on the behavior or choice — never on identity.
     """
 
     /// Vent draft rules. Note: phrased as imperatives, not permissions —
@@ -22,11 +22,13 @@ enum PromptBuilder {
     static let ventPreamble: String = """
     VENT DRAFT RULES (this output is private and will be labelled "for yourself only"):
     - The user is FURIOUS. They are not asking for advice and not trying to be witty. They are writing what is screaming in their head right now.
-    - Write the FIRST-PERSON inner monologue, not a clever observation. Anger first, structure last.
+    - Write a PRIVATE OUTBURST in the user's voice, not a clever observation and not a therapeutic reflection. Anger first, structure last.
+    - Imagined direct address is ALLOWED when it gives the anger more force. People vent by thinking "你到底凭什么..." / "who the hell do you think you are..." in their head. Do not flatten that into detached narration.
     - USE strong, raw language and mild profanity where it earns its place: "尼玛", "屁话", "他妈的", "服了", "damn", "hell", "うるせえ". Do not water it down into a sarcastic exclamation ("哎呀…" / "Oh my…" / "あらまあ…" are FORBIDDEN openings — those are polite-sarcasm, not vent).
     - Be specific about what the other person did. Name the behavior. "你天天凌晨两点打游戏" beats "好吵啊".
+    - Default shape: 1–3 blunt sentences that hit the grievance immediately. Start with the offense, not a proverb, compliment, or life lesson.
+    - FORBIDDEN: advice, consolation, moral lessons, self-improvement reframes, therapist voice, and reflective lines such as "如果你把这份心思放在自己身上..." / "maybe focus on yourself..." / "你值得更好的...".
     - You may not use slurs, threats of violence, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely.
-    - Stay first-person. Do not address the other party in second person — this is the user muttering to themselves, not a message they're about to send.
     - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
     """
 
@@ -39,8 +41,9 @@ enum PromptBuilder {
       * English: fuck, fucking, shit, bullshit, asshole, prick, dickhead
       * 中文: 操, 妈的, 他妈的, 傻逼, 你妈, 滚, 卧槽, 操你妈, 神经病
       * 日本語: クソ, クソが, ふざけるな, うるせえ, ばかやろう
-    - Write the FIRST-PERSON inner monologue. The user is yelling in their own head about what happened. Do not write polite-sarcasm ("哎呀…" / "Oh my…" / "あらまあ…" are FORBIDDEN openings).
+    - Write a PRIVATE OUTBURST in the user's own voice. Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. Do not write polite-sarcasm ("哎呀…" / "Oh my…" / "あらまあ…" are FORBIDDEN openings).
     - Be specific about the behavior and the role (the manager, the ex, the roommate). "你天天凌晨两点开 100 分贝枪声让整层楼跟你陪葬" beats "好吵".
+    - Default shape: 1–3 blunt sentences. Start with the offense. No advice, no consolation, no moral lesson, no reflective self-help framing.
     - Hard limits (UNIVERSAL SAFETY RULES still apply): no slurs based on race/religion/gender/sexuality/disability/body/family; no threats of physical violence; no sexual content; no doxxing.
     - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
     - Stay under 120 words.
@@ -79,6 +82,12 @@ enum PromptBuilder {
         }
         if intensity == .feral {
             lines.append(feralPreamble)
+        }
+        if intensity.isPrivateDraft {
+            let calibration = privateDraftCalibration(for: locale, intensity: intensity)
+            if !calibration.isEmpty {
+                lines.append(calibration)
+            }
         }
         let examples = examplesForPrompt(style: style, locale: locale)
         if !examples.isEmpty {
@@ -201,7 +210,7 @@ enum PromptBuilder {
             base = "The user is pasting a social media post (tweet, Xiaohongshu, Reddit). Generate witty reactions or comeback replies, in the chosen style, suitable to post as a reply."
         }
         if intensity.isPrivateDraft {
-            return base + " IMPORTANT: This run is a PRIVATE DRAFT — the output will be marked private and NOT addressed to anyone yet. Stay first-person, raw, and emotional. A separate rewrite step will turn this into a sendable version later."
+            return base + " IMPORTANT: This run is a PRIVATE DRAFT — the output will be marked private and NOT addressed to anyone yet. Keep it raw, immediate, and emotional; imagined direct address is allowed inside the user's head if it makes the anger sharper. A separate rewrite step will turn this into a sendable version later."
         }
         return base
     }
@@ -218,9 +227,9 @@ enum PromptBuilder {
                 : " Edges may bite. Still no slurs, no profanity, no attacks on identity."
             return "Maximum precision sharpness. Names the specific behavior or bad-faith move and refuses to soften." + extra
         case .feral:
-            return "PRIVATE FERAL DRAFT (see FERAL DRAFT RULES below). Write raw rage in first person. USE actual profanity, not softened approximations. Be specific about what the other person did. Universal safety rules still apply (no slurs / threats of violence / sexual / identity attacks)."
+            return "PRIVATE FERAL DRAFT (see FERAL DRAFT RULES below). Write raw rage in the user's own voice. Imagined direct address is allowed if it makes the anger land harder. USE actual profanity, not softened approximations. Be specific about what the other person did. Universal safety rules still apply (no slurs / threats of violence / sexual / identity attacks)."
         case .vent:
-            return "PRIVATE VENT DRAFT (see VENT DRAFT RULES below). Write the user's first-person inner monologue while pissed off — anger first, structure last. USE strong language and mild profanity; do not soften into polite sarcasm. Universal safety rules still apply."
+            return "PRIVATE VENT DRAFT (see VENT DRAFT RULES below). Write the user's private outburst while pissed off — anger first, structure last. Imagined direct address is allowed if it makes the anger land harder. USE strong language and mild profanity; do not soften into polite sarcasm or self-help reflection. Universal safety rules still apply."
         }
     }
 
@@ -244,7 +253,7 @@ enum PromptBuilder {
             // Private drafts are always *one* result — the user wants
             // emotional release, not a menu. Forcing 3 variants dilutes it.
             let label = intensity == .feral ? "feral draft" : "vent draft"
-            return "Write 1 private \(label) in the \(styleName) style. First-person, raw. Do not address the other party — this is what the user is muttering to themselves. Output the draft directly, no numbering."
+            return "Write 1 private \(label) in the \(styleName) style. Raw, immediate, and emotionally specific. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly, no numbering."
         }
         switch mode {
         case .roast:
@@ -287,6 +296,56 @@ enum PromptBuilder {
             }
         }
         return results.isEmpty ? [trimmed] : results
+    }
+
+    /// Private-draft calibration examples are deliberately tiny and
+    /// same-language. Apple Foundation Models tended to average vent rules
+    /// back into "polite-but-wry" prose without a concrete target shape.
+    /// These examples teach the *difference* between a dead-on vent and a
+    /// self-help reflection without importing the selected style's tone.
+    private static func privateDraftCalibration(for locale: Locale, intensity: Intensity) -> String {
+        let isFeral = intensity == .feral
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            if isFeral {
+                return """
+                PRIVATE DRAFT CALIBRATION:
+                - BAD: "如果你把这份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
+                - GOOD: "凌晨两点还狠狠干游戏开外放，你他妈真把宿舍当自己家网吧了？别人第二天不用活是吧。"
+                """
+            }
+            return """
+            PRIVATE DRAFT CALIBRATION:
+            - BAD: "如果你把这份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
+            - GOOD: "凌晨两点还开外放打游戏，真把宿舍当你一个人的网吧了？别人第二天不用活是吧。"
+            """
+        case "ja":
+            if isFeral {
+                return """
+                PRIVATE DRAFT CALIBRATION:
+                - BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)
+                - GOOD: 「深夜2時に爆音でゲームとか、マジで寮を自分の部屋だと思ってんのかよ。こっちは明日も生きるんだわ。」
+                """
+            }
+            return """
+            PRIVATE DRAFT CALIBRATION:
+            - BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)
+            - GOOD: 「深夜2時に爆音でゲームって、寮を自分だけの部屋だと思ってるの？こっちは明日もあるんだけど。」
+            """
+        default:
+            if isFeral {
+                return """
+                PRIVATE DRAFT CALIBRATION:
+                - BAD: "If you put that energy into yourself, you'd be so much further ahead." (too reflective, too polite)
+                - GOOD: "Blasting games at 2 AM like the whole dorm belongs to you? Fuck off. Other people have a tomorrow."
+                """
+            }
+            return """
+            PRIVATE DRAFT CALIBRATION:
+            - BAD: "If you put that energy into yourself, you'd be so much further ahead." (too reflective, too polite)
+            - GOOD: "Gaming out loud at 2 AM like this dorm is your private arcade? Other people have a tomorrow."
+            """
+        }
     }
 
     private static func languageHint(for locale: Locale) -> String {

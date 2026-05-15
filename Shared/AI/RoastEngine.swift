@@ -72,7 +72,9 @@ actor RoastEngine {
         intensity: Intensity = .sharp,
         safeMode: Bool = true,
         priorContext: String? = nil,
-        keepSession: Bool = false
+        keepSession: Bool = false,
+        cloudVentEnabled: Bool = true,
+        cloudClient: CloudVentService = CloudVentClient.shared
     ) async throws -> [String] {
         do {
             try SafetyFilter.validateInput(situation)
@@ -82,6 +84,31 @@ actor RoastEngine {
 
         // Private draft intensities always return a single draft; we ignore caller-supplied counts.
         let effectiveVariantCount = intensity.isPrivateDraft ? 1 : variantCount
+
+        // Cloud branch: only for private drafts (vent + feral), only when
+        // the developer has actually configured a Worker URL, and only
+        // when the user hasn't opted out. Any failure here falls through
+        // to the local path so a network blip never blocks a vent.
+        if intensity.isPrivateDraft,
+           cloudVentEnabled,
+           CloudConfig.isConfigured {
+            do {
+                let cloudText = try await runCloudVent(
+                    client: cloudClient,
+                    situation: situation,
+                    style: style,
+                    intensity: intensity,
+                    locale: locale
+                )
+                let safe = (try? SafetyFilter.validateVentOutput(cloudText)) ?? cloudText
+                return [safe]
+            } catch let err as CloudVentError {
+                logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
+                // continue to local path below
+            } catch {
+                logger.notice("Cloud vent unexpected error — falling back to local model.")
+            }
+        }
 
         #if canImport(FoundationModels)
         guard SystemLanguageModel.default.availability == .available else {
@@ -245,5 +272,27 @@ actor RoastEngine {
         return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
             ?? String(localized: "rewrite.fallback.unavailable")
         #endif
+    }
+
+    /// Helper that fronts `CloudVentClient.generate` so the engine's
+    /// branching logic stays compact. Returns the raw text on success;
+    /// throws CloudVentError on any failure (the caller falls back to
+    /// the local Foundation Models path).
+    private func runCloudVent(
+        client: CloudVentService,
+        situation: String,
+        style: StylePreset,
+        intensity: Intensity,
+        locale: Locale
+    ) async throws -> String {
+        let req = CloudVentRequest(
+            situation: situation,
+            styleName: style.displayName,
+            intensity: intensity.rawValue,
+            locale: locale.identifier,
+            deviceId: DeviceID.current()
+        )
+        let resp = try await client.generate(req)
+        return resp.text
     }
 }

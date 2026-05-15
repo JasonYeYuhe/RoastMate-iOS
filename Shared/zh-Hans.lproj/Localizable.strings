@@ -78,6 +78,14 @@
 "settings.safe_mode" = "安全模式";
 "settings.safe_mode.footer" = "安全模式在 Apple 自带的内容安全机制上再加一层过滤。建议保持开启。";
 
+"settings.cloud_vent" = "增强发泄 / 痛骂(云端 AI)";
+"settings.cloud_vent.footer" = "「发泄」和「痛骂」会通过我们的私有代理走云端模型(OpenRouter 上的 DeepSeek V3),让火气真的发出来。「体面 / 锐利 / 狠」全部 100% 本地运行。关掉就全部本地 — 发泄会温和很多。";
+
+"cloud.error.not_configured" = "云端 AI 还没部署 — 改用本地模型";
+"cloud.error.disabled" = "云端 AI 已在设置中关闭 — 改用本地模型";
+"cloud.error.rate_limited" = "今日云端配额已用完 — 改用本地模型";
+"cloud.error.unavailable" = "云端 AI 暂时不可用 — 改用本地模型";
+
 "settings.about_ai.title" = "关于 AI";
 "settings.about_ai.body" = "「帮你骂」使用 Apple 本地 Foundation Models 框架进行所有内容生成。你的输入和生成的内容永远不会离开这台设备。我们不调用 OpenAI、Anthropic、Google 或任何其他第三方 AI 服务。";
 

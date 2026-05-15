@@ -73,7 +73,8 @@ final class RoastGeneratorViewModel {
                 variantCount: isPro ? 3 : 1,
                 intensity: selectedIntensity,
                 safeMode: settings.safeModeEnabled,
-                priorContext: pendingPriorContext
+                priorContext: pendingPriorContext,
+                cloudVentEnabled: settings.cloudVentEnabled
             )
             currentSession = HistoryService.saveSession(
                 situation: text,

@@ -30,6 +30,17 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
+                Toggle("settings.cloud_vent", isOn: Binding(
+                    get: { settings?.cloudVentEnabled ?? true },
+                    set: { newValue in
+                        settings?.cloudVentEnabled = newValue
+                        try? context.save()
+                    }
+                ))
+                Text("settings.cloud_vent.footer")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 Button {
                     showAbout = true
                 } label: {

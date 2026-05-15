@@ -11,26 +11,57 @@ agree to the practices below.
 
 ## TL;DR
 
-RoastMate is built so your drafts and history **stay on your device**.
+RoastMate keeps almost all your data on your device. There is **one
+optional exception**: the Vent and Feral intensities can be routed
+through a cloud AI proxy (off by default to verify privacy; on by
+default in production to make the feature actually work).
 
-- ✅ All AI generation runs on your device using Apple's Foundation
-  Models framework.
-- ✅ Your inputs and generated text are **not** transmitted to RoastMate
-  servers, OpenAI, Anthropic, Google, or any third-party AI service.
-- ✅ We do not collect usage analytics, advertising IDs,
-  or device identifiers.
-- ✅ You can verify this by enabling Airplane Mode — RoastMate's
-  generator continues to work.
+- ✅ Calm, Sharp, and Savage intensities — 100% on-device, always.
+- ✅ Rewrite-as-sendable — 100% on-device, always.
+- ⚠️ Vent and Feral intensities — by default route through our private
+  Cloudflare Worker proxy to a cloud model (DeepSeek V3 via OpenRouter)
+  because Apple's on-device model refuses to produce real vent output.
+  You can turn this off in Settings → AI & Privacy → "Stronger Vent /
+  Feral (Cloud AI)" to keep everything local.
+- ✅ Your history, threads, and saved replies stay on-device. Cloud
+  requests for Vent / Feral are stateless — the proxy does not log
+  your text and the upstream model does not retain it.
+- ✅ No analytics SDKs, no advertising IDs, no device fingerprinting.
+
+Verify the local-only path by toggling Cloud AI off in Settings, then
+enabling Airplane Mode — every other intensity still works.
 
 ---
 
 ## Information we collect
 
-**None is collected by RoastMate servers.** The app does not contact our
-servers for any feature. The app's App Store privacy nutrition label is
-**Data Not Collected**.
+**Cloud Vent / Feral requests** are the only data the app sends to
+servers we operate. The request contains:
 
-The only network traffic the app initiates is:
+- The text of your situation (the input you typed).
+- The intensity you chose (`vent` or `feral`).
+- The style name you chose.
+- Your UI locale (`zh-Hans`, `ja`, `en`, etc.).
+- An opaque per-install UUID generated on your device. We use it
+  exclusively to enforce a daily rate-limit per device. It is not
+  linked to your Apple ID, name, email, or any other identity.
+
+**What our proxy does with the request:**
+
+1. Validates input length and intensity.
+2. Increments the per-device daily counter in Cloudflare KV.
+3. Forwards the situation + intensity + locale to OpenRouter
+   ([openrouter.ai](https://openrouter.ai)) for inference using
+   DeepSeek V3.
+4. Returns the generated text to your device. We do not retain a copy.
+
+**What OpenRouter / the upstream model do:** Per OpenRouter's policy,
+prompts sent to the DeepSeek V3 free model may be retained briefly for
+abuse-prevention purposes and may be used to improve the model. If this
+is unacceptable to you, turn Cloud AI off in Settings. The local-only
+path will still produce a (gentler) Vent draft.
+
+**Other network traffic** the app may initiate:
 
 1. **App Store / StoreKit** — when you open the paywall or make a
    subscription purchase, the system frameworks talk to Apple. We do
@@ -44,11 +75,12 @@ The only network traffic the app initiates is:
    identifier and any name/email you choose to share locally in
    Keychain, so Settings can show your account state.
 
-We do not use OpenAI, Anthropic, Google, Meta, Microsoft, or any other
-third-party AI service. We do not embed analytics SDKs (Firebase,
-Amplitude, Mixpanel, Sentry, etc.). We do not use advertising
-identifiers (IDFA, IDFV for tracking, AppsFlyer, etc.). We do not
-fingerprint your device.
+We do not use OpenAI, Anthropic, Google, Meta, Microsoft Azure, or any
+other AI service beyond the OpenRouter pathway described above for
+Vent / Feral. We do not embed analytics SDKs (Firebase, Amplitude,
+Mixpanel, Sentry, etc.). We do not use advertising identifiers (IDFA,
+IDFV for tracking, AppsFlyer, etc.). We do not fingerprint your
+device.
 
 ---
 

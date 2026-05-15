@@ -1,0 +1,127 @@
+import Foundation
+import os.log
+
+/// Errors specific to the Cloud Vent path. `RoastEngine` catches these
+/// and falls back to local Foundation Models output so a network blip
+/// never blocks a vent.
+enum CloudVentError: Error, LocalizedError {
+    case notConfigured
+    case disabledBySettings
+    case rateLimited(remaining: Int)
+    case http(status: Int, body: String?)
+    case decode
+    case empty
+    case transport(Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .notConfigured:
+            return String(localized: "cloud.error.not_configured")
+        case .disabledBySettings:
+            return String(localized: "cloud.error.disabled")
+        case .rateLimited:
+            return String(localized: "cloud.error.rate_limited")
+        case .http, .decode, .empty, .transport:
+            return String(localized: "cloud.error.unavailable")
+        }
+    }
+}
+
+/// Protocol so the engine can swap in a fake in unit tests.
+protocol CloudVentService: Sendable {
+    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse
+}
+
+struct CloudVentRequest: Encodable, Sendable {
+    let situation: String
+    let styleName: String?
+    let intensity: String     // "vent" or "feral"
+    let locale: String
+    let deviceId: String
+}
+
+struct CloudVentResponse: Decodable, Sendable {
+    let text: String
+    let model: String?
+    let remaining: Int?
+}
+
+/// HTTPS client for the Cloud Vent Worker.
+/// - Stateless: a single instance is safe to share.
+/// - URLSession is injectable so tests can mock the network without
+///   actually hitting the wire.
+final class CloudVentClient: CloudVentService, @unchecked Sendable {
+    static let shared = CloudVentClient()
+
+    private let session: URLSession
+    private let endpoint: URL
+    private let logger = Logger(subsystem: "yyh.roastmate.app", category: "CloudVent")
+
+    init(session: URLSession = .shared, endpoint: URL = CloudConfig.ventEndpoint) {
+        self.session = session
+        self.endpoint = endpoint
+    }
+
+    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse {
+        guard CloudConfig.isConfigured else {
+            throw CloudVentError.notConfigured
+        }
+        var request = URLRequest(url: endpoint, timeoutInterval: CloudConfig.requestTimeout)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("RoastMate-iOS", forHTTPHeaderField: "User-Agent")
+        do {
+            request.httpBody = try JSONEncoder().encode(req)
+        } catch {
+            throw CloudVentError.transport(error)
+        }
+
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            logger.warning("CloudVent transport error: \(error.localizedDescription, privacy: .public)")
+            throw CloudVentError.transport(error)
+        }
+
+        guard let http = response as? HTTPURLResponse else {
+            throw CloudVentError.http(status: -1, body: nil)
+        }
+        if http.statusCode == 429 {
+            let parsed = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
+            let remaining = (parsed?["remaining"]?.value as? Int) ?? 0
+            throw CloudVentError.rateLimited(remaining: remaining)
+        }
+        guard (200..<300).contains(http.statusCode) else {
+            let body = String(data: data, encoding: .utf8)
+            throw CloudVentError.http(status: http.statusCode, body: body?.prefix(200).description)
+        }
+
+        let decoded: CloudVentResponse
+        do {
+            decoded = try JSONDecoder().decode(CloudVentResponse.self, from: data)
+        } catch {
+            throw CloudVentError.decode
+        }
+        let trimmed = decoded.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            throw CloudVentError.empty
+        }
+        return CloudVentResponse(text: trimmed, model: decoded.model, remaining: decoded.remaining)
+    }
+}
+
+/// Minimal Codable shim so we can read the `remaining` int from a 429
+/// without writing a dedicated error envelope type.
+private struct AnyCodable: Decodable {
+    let value: Any
+    init(from decoder: Decoder) throws {
+        let c = try decoder.singleValueContainer()
+        if let i = try? c.decode(Int.self) { value = i; return }
+        if let d = try? c.decode(Double.self) { value = d; return }
+        if let s = try? c.decode(String.self) { value = s; return }
+        if let b = try? c.decode(Bool.self) { value = b; return }
+        value = NSNull()
+    }
+}

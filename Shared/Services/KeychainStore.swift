@@ -19,6 +19,14 @@ enum KeychainStore {
         case appleUserID = "apple.user.id"
         case appleFullName = "apple.user.full_name"
         case appleEmail = "apple.user.email"
+        /// Stable per-install opaque UUID. Sent to the Cloud Vent Worker
+        /// as the rate-limit bucket key. Pre-existing case kept for
+        /// schema migration safety.
+        case deviceID = "device.id"
+        /// Reserved for a future BYOK path; not used by the current
+        /// proxy-based cloud architecture. Left here to avoid renaming
+        /// the enum on a hypothetical opt-in BYOK toggle later.
+        case openRouterAPIKey = "openrouter.api_key"
     }
 
     @discardableResult

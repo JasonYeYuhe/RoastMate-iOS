@@ -21,6 +21,17 @@ final class UserSettings {
     /// users have already been on the daily quota and lose nothing).
     var lifetimeFreeUsed: Int?
 
+    /// Whether Vent / Feral generations route through the developer-owned
+    /// Cloud AI proxy (DeepSeek V3 via OpenRouter) instead of Apple's
+    /// on-device Foundation Models. We default to ON because the on-
+    /// device model refuses to actually vent (it reframes into wise
+    /// observations), so without cloud the marquee feature doesn't work.
+    /// Nullable so legacy stores upgrade without migration; reads back
+    /// as `true` (the new default) when missing.
+    ///
+    /// Calm / Sharp / Savage stay 100% on-device regardless of this flag.
+    var cloudVentEnabledRaw: Bool?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -32,6 +43,15 @@ final class UserSettings {
         self.preferredLocale = nil
         self.historyRetentionDays = 30
         self.lifetimeFreeUsed = 0
+        self.cloudVentEnabledRaw = true
+    }
+
+    /// Resolved cloud flag with legacy default. Treat nil (pre-cloud
+    /// installs) as opted in, since the only way to discover the feature
+    /// post-upgrade is to have it work the first time.
+    var cloudVentEnabled: Bool {
+        get { cloudVentEnabledRaw ?? true }
+        set { cloudVentEnabledRaw = newValue }
     }
 
     /// Daily cap once the lifetime allotment is exhausted.

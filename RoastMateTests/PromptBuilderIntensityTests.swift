@@ -100,6 +100,33 @@ final class PromptBuilderIntensityTests: XCTestCase {
                       "Vent preamble must call out polite-sarcasm openings as forbidden.")
     }
 
+    func testPrivateDraftAllowsImaginedDirectAddressInsteadOfForcingReflection() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "zh_Hans_CN"),
+            intensity: .vent
+        )
+        XCTAssertTrue(prompt.contains("Imagined direct address is ALLOWED"),
+                      "Private drafts should permit the user's imagined confrontation so anger can land.")
+        XCTAssertTrue(prompt.contains("PRIVATE DRAFT CALIBRATION"),
+                      "Private drafts should include a concrete same-language calibration block.")
+        XCTAssertTrue(prompt.contains("如果你把这份心思放在自己身上"),
+                      "The prompt should explicitly mark reflective self-help prose as the bad target shape.")
+    }
+
+    func testPrivateDraftTaskRejectsAdviceAndMoralLessons() {
+        let prompt = PromptBuilder.userPrompt(
+            situation: "My roommate games loudly at 2 AM.",
+            styleName: "Savage",
+            variants: 3,
+            intensity: .vent
+        )
+        XCTAssertTrue(prompt.contains("Do not give advice, reflection, or moral lessons."),
+                      "The private draft task should prevent therapist-tone drift.")
+        XCTAssertTrue(prompt.contains("imagined direct address"),
+                      "The private draft task should allow a sharper imagined confrontation.")
+    }
+
     private var emptyStyle: StylePreset {
         StylePreset(
             id: "test",

@@ -78,6 +78,14 @@
 "settings.safe_mode" = "Safe Mode";
 "settings.safe_mode.footer" = "Safe Mode adds an extra layer of filtering on top of Apple's built-in safety. We recommend keeping it on.";
 
+"settings.cloud_vent" = "Stronger Vent / Feral (Cloud AI)";
+"settings.cloud_vent.footer" = "Vent and Feral drafts route through our private proxy to a cloud model (DeepSeek V3 via OpenRouter) so the rage actually lands. Calm, Sharp, and Savage stay 100% on-device. Toggle off to keep everything local — vent output will be much gentler.";
+
+"cloud.error.not_configured" = "Cloud AI hasn't been deployed yet — using local model.";
+"cloud.error.disabled" = "Cloud AI is off in Settings — using local model.";
+"cloud.error.rate_limited" = "Today's cloud quota is used up — using local model.";
+"cloud.error.unavailable" = "Cloud AI is unavailable right now — using local model.";
+
 "settings.about_ai.title" = "About the AI";
 "settings.about_ai.body" = "RoastMate uses Apple's on-device Foundation Models framework. Your situations and generated text never leave your device. We do not use OpenAI, Anthropic, Google, or any other third-party AI service.";
 
