@@ -50,6 +50,17 @@
                ReferencedContainer = "container:RoastMate.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2A302E4AC19A253C5E4E1356"
+               BuildableName = "RoastMateUITests.xctest"
+               BlueprintName = "RoastMateUITests"
+               ReferencedContainer = "container:RoastMate.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

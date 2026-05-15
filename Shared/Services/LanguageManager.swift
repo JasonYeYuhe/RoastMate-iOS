@@ -39,6 +39,14 @@ final class LanguageManager {
     }
 
     private init() {
+        // UI-test mode pins the language so screenshots / UI tests are
+        // deterministic regardless of the simulator's -AppleLanguages
+        // resolution. This takes precedence over the stored preference.
+        if let code = AppLaunchEnvironment.uiTestLanguageCode,
+           let forced = AppLanguage(rawValue: code) {
+            self.selectedLanguage = forced
+            return
+        }
         let stored = UserDefaults.standard.string(forKey: key) ?? ""
         self.selectedLanguage = AppLanguage(rawValue: stored) ?? .system
     }

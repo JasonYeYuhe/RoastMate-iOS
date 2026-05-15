@@ -20,7 +20,6 @@ LOCALES=("en_US" "zh_Hans" "zh_Hant" "ja_JP")
 # Add more entries for iPad if/when you wire that up.
 DEVICES=(
   "iPhone 17 Pro Max"
-  "iPhone 17 Pro"
 )
 
 mkdir -p "$OUTPUT_DIR"

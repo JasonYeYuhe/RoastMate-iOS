@@ -60,6 +60,7 @@ targets:
     scheme:
       testTargets:
         - RoastMateTests
+        - RoastMateUITests
       gatherCoverageData: false
 
   RoastMateMac:

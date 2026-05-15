@@ -38,6 +38,9 @@ struct RootView: View {
             #endif
         }
         .onAppear {
+            // UI-test mode never shows onboarding — screenshots need the
+            // main UI immediately, in the forced language.
+            if AppLaunchEnvironment.isUITest { return }
             if let s = settings, !s.hasSeenOnboarding {
                 showOnboarding = true
             }

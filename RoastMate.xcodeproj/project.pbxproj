@@ -31,6 +31,7 @@
 		134AACB4B1CFE0ECDAB2E026 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		14F6F3F85DF415CE266FA2BA /* SafetyFilterVentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 856D3677A6A03567BF704991 /* SafetyFilterVentTests.swift */; };
 		16C53E3EC3C15E3FC8132445 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
+		1713A4CAC0A8813511767574 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		172431F3355F7D6772D253FB /* FeatureGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */; };
 		18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		19F5524619680F3746F33362 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEAE99564022D6C8CECBBBF /* OnboardingView.swift */; };
@@ -71,6 +72,7 @@
 		41B114D216350D2FBB8ED596 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		436E81674874880864ADEBB2 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		46A8CED3A0965C2DDDFE3C8B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
+		46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		4935EC90E92AF1E083053C6E /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		49487CD577246B3F6296AC7B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
 		496688BCEA684ED37D7B68D2 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
@@ -190,6 +192,7 @@
 		C4D46D6E74CA9C76B122324E /* RoastGeneratorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */; };
 		C5473B315D2E339D4297A72A /* UserSettingsQuotaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224DA4F04F19B18E4969E96 /* UserSettingsQuotaTests.swift */; };
 		C59B5DD91EDF35570D37F8DC /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
+		C8F4F165F8904B51E0D98DC1 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		C90E72D00DDF08EE387922B2 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		C9F8E1695EEAC0445DB50D2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
 		CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
@@ -215,6 +218,7 @@
 		E11814115BB939E0B0C6B07F /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		E311AE14AB76A1FAB0CD30B8 /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
 		E3C587646C8A8FBB783CAE04 /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
+		E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		E8D0F20EA745EAC3911102D7 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		E92BBE0A25EDBA0277B43AE5 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
 		E94FCCF3E16400F3DA47AA77 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
@@ -223,6 +227,7 @@
 		ED4FBF841758AB284918994F /* SampleGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE2596F74842B90AD49144 /* SampleGalleryView.swift */; };
 		EEA63BEFD8D99A147A1EFFAD /* HandoffStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */; };
 		EF4732F5DD6F12A6A6EBBB58 /* CloudVentEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E1152E436517DE7D09884D /* CloudVentEngineTests.swift */; };
+		EFA5C5D6B7F99734125AAFF9 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		F08C4F07044B2138587D9C42 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		F0A97A1965D4E03B1ECD7952 /* StyleChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7237F29F7B891C23EAEF31D3 /* StyleChip.swift */; };
 		F0C5CCC56C450A4343FE8614 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F71C81266E175EC1EFD5DD1 /* RootView.swift */; };
@@ -320,6 +325,7 @@
 		6E16C14AF3D4E2914AE07F3A /* RoastMateTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RoastMateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F56C52CC38A6375FAC083A8 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		7073FC7C9AD2BEDF41A2693E /* RoastMateShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RoastMateShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchEnvironment.swift; sourceTree = "<group>"; };
 		7237F29F7B891C23EAEF31D3 /* StyleChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleChip.swift; sourceTree = "<group>"; };
 		74FB98C56382D7CCB8FF1C26 /* PromptBuilderModesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilderModesTests.swift; sourceTree = "<group>"; };
 		77042C1003F6305E9448D814 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
@@ -536,6 +542,7 @@
 		84B81C67FF30000EDBE1492C /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */,
 				05F375B44B7ED51C03E8B6DA /* AuthService.swift */,
 				8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */,
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
@@ -982,6 +989,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */,
 				287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */,
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
 				2D3C20D83FE907B6D2B1F0CD /* CloudVentClient.swift in Sources */,
@@ -1035,6 +1043,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */,
 				BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
 				00FD06B70E90D21329E949C5 /* CloudVentClient.swift in Sources */,
@@ -1074,6 +1083,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFA5C5D6B7F99734125AAFF9 /* AppLaunchEnvironment.swift in Sources */,
 				CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
 				708349AE97476576726DD82C /* CloudVentClient.swift in Sources */,
@@ -1113,6 +1123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EB0FE0706DCA7459668ABB3 /* AccountSection.swift in Sources */,
+				C8F4F165F8904B51E0D98DC1 /* AppLaunchEnvironment.swift in Sources */,
 				9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */,
 				064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */,
 				8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */,
@@ -1169,6 +1180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CE91BCFCF3C1699753AD91F /* AccountSection.swift in Sources */,
+				1713A4CAC0A8813511767574 /* AppLaunchEnvironment.swift in Sources */,
 				6D1291FA64EA414BB5DE4196 /* ArgumentSimulatorView.swift in Sources */,
 				7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */,
 				8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */,

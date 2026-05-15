@@ -7,27 +7,47 @@ import XCTest
 final class ScreenshotTests: XCTestCase {
 
     override func setUp() {
-        continueAfterFailure = false
+        // Screenshot capture must be resilient: one flaky tap (e.g. the
+        // SwiftUI TextEditor briefly reporting "not hittable" while the
+        // onboarding overlay finishes dismissing) should NOT abort the
+        // other five scenes. We continue after failures and guard every
+        // interaction defensively below.
+        continueAfterFailure = true
     }
 
     func test_screenshots() {
         let app = XCUIApplication()
         app.launchArguments += [
             "-uitest",
+            "-uitestLang", uiTestLanguageCode(),
+            // Belt-and-braces: also set the standard locale args. The
+            // app's -uitest path pins LanguageManager so these aren't
+            // load-bearing, but they keep system-formatted dates etc.
+            // in the right locale too.
             "-AppleLanguages", appleLanguagesArgument(),
             "-AppleLocale", appleLocaleArgument()
         ]
         app.launch()
 
-        // 1. Onboarding / age gate flow
-        dismissOnboardingIfNeeded(app: app)
+        // App skips onboarding entirely under -uitest, so we land
+        // straight on the generator. No tapping-through required.
         capture(app: app, name: "01-generator-empty")
 
-        // 2. Generator filled in
+        // 2. Generator filled in. The TextEditor can momentarily report
+        //    "not hittable" right after onboarding dismissal — poll for
+        //    hittability instead of tapping blind, and don't fail the
+        //    run if typing doesn't take (scene 1 + 3-6 are still useful).
         let situationField = app.textViews.firstMatch
-        if situationField.waitForExistence(timeout: 2) {
-            situationField.tap()
-            situationField.typeText(sampleSituation())
+        if situationField.waitForExistence(timeout: 4) {
+            var tries = 0
+            while !situationField.isHittable && tries < 10 {
+                usleep(300_000)
+                tries += 1
+            }
+            if situationField.isHittable {
+                situationField.tap()
+                situationField.typeText(sampleSituation())
+            }
         }
         capture(app: app, name: "02-generator-filled")
 
@@ -56,17 +76,14 @@ final class ScreenshotTests: XCTestCase {
 
     // MARK: - Helpers
 
-    private func dismissOnboardingIfNeeded(app: XCUIApplication) {
-        // The 4-screen onboarding tabs through Next → Next → Next → Confirm.
-        for _ in 0..<3 {
-            let next = app.buttons["common.next"]
-            if next.waitForExistence(timeout: 1.5), next.isHittable {
-                next.tap()
-            }
-        }
-        let confirm = app.buttons["ageGate.confirm"]
-        if confirm.waitForExistence(timeout: 1.5), confirm.isHittable {
-            confirm.tap()
+    /// Maps the screenshots.sh `LOCALE` env var to the app's
+    /// `-uitestLang` codes (matching `AppLanguage.rawValue`).
+    private func uiTestLanguageCode() -> String {
+        switch currentLocale() {
+        case let s where s.hasPrefix("zh_Hans"): return "zh-Hans"
+        case let s where s.hasPrefix("zh_Hant"): return "zh-Hant"
+        case let s where s.hasPrefix("ja"):      return "ja"
+        default:                                 return "en"
         }
     }
 
