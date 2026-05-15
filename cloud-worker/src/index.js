@@ -50,39 +50,76 @@ export default {
     const systemPrompt = buildSystemPrompt(intensity, locale, styleName);
     const userPrompt = buildUserPrompt(situation, locale);
 
-    // Forward to OpenRouter.
-    const model = env.DEFAULT_MODEL || "deepseek/deepseek-chat-v3-0324:free";
-    const orRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
-        "X-Title": env.OPENROUTER_TITLE || "RoastMate"
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        temperature: 0.95,
-        max_tokens: 400
-      })
-    });
+    // Decision after smoke testing: Groq is primary because OpenRouter's
+    // :free model pool is consistently rate-limited upstream (all the
+    // good uncensored models are crowded). Within Groq we route by
+    // locale — Qwen3 32B for Chinese (Alibaba-trained, much weaker
+    // politeness-RLHF on zh than Llama), Llama 3.3 70B Versatile for
+    // everything else. OpenRouter stays as fallback when Groq is over
+    // quota / having a bad day.
+    const attempts = [];
+    let text = "";
+    let modelUsed = "";
+    let providerUsed = "";
 
-    if (!orRes.ok) {
-      const txt = await orRes.text().catch(() => "");
-      return json(
-        { error: "upstream_error", status: orRes.status, detail: txt.slice(0, 200) },
-        502
-      );
+    const localePrefix = (locale || "").toLowerCase();
+    const isChinese = localePrefix.startsWith("zh");
+    const groqPrimaryModel = isChinese
+      ? (env.GROQ_CHINESE_MODEL || "qwen/qwen3-32b")
+      : (env.GROQ_FALLBACK_MODEL || "llama-3.3-70b-versatile");
+
+    // Attempt 1: Groq with locale-appropriate model.
+    if (env.GROQ_API_KEY) {
+      const groqResult = await callOpenAICompatible({
+        endpoint: "https://api.groq.com/openai/v1/chat/completions",
+        apiKey: env.GROQ_API_KEY,
+        model: groqPrimaryModel,
+        systemPrompt,
+        userPrompt
+      });
+      if (groqResult.ok) {
+        text = groqResult.text;
+        modelUsed = groqPrimaryModel;
+        providerUsed = "groq";
+      } else {
+        const summary = `groq:${groqResult.status || "?"}:${(groqResult.detail || "fail").slice(0, 300)}`;
+        attempts.push(summary);
+        console.log("Groq primary failed:", summary);
+      }
     }
 
-    const orJson = await orRes.json();
-    const text = (orJson?.choices?.[0]?.message?.content || "").trim();
+    // Attempt 2: OpenRouter as fallback. The :free model in DEFAULT_MODEL
+    // is best-effort — if it's upstream-rate-limited, that's why Groq is
+    // primary.
+    if (!text && env.OPENROUTER_API_KEY) {
+      const orModel = env.DEFAULT_MODEL || "deepseek/deepseek-v4-flash:free";
+      const orResult = await callOpenAICompatible({
+        endpoint: "https://openrouter.ai/api/v1/chat/completions",
+        apiKey: env.OPENROUTER_API_KEY,
+        model: orModel,
+        systemPrompt,
+        userPrompt,
+        extraHeaders: {
+          "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
+          "X-Title": env.OPENROUTER_TITLE || "RoastMate"
+        }
+      });
+      if (orResult.ok) {
+        text = orResult.text;
+        modelUsed = orModel;
+        providerUsed = "openrouter";
+      } else {
+        const summary = `openrouter:${orResult.status || "?"}:${(orResult.detail || "fail").slice(0, 300)}`;
+        attempts.push(summary);
+        console.log("OpenRouter fallback failed:", summary);
+      }
+    }
+
     if (!text) {
-      return json({ error: "empty_response" }, 502);
+      return json(
+        { error: "upstream_error", detail: attempts.join(" | ").slice(0, 300) },
+        502
+      );
     }
 
     // Only charge a request against the rate limit if we got real output
@@ -91,11 +128,84 @@ export default {
 
     return json({
       text,
-      model,
+      model: modelUsed,
+      provider: providerUsed,
       remaining: Math.max(0, limit - used - 1)
     }, 200);
   }
 };
+
+/// OpenAI-compatible chat completion call. Both OpenRouter and Groq
+/// accept the same request shape, so we share one helper. Returns
+/// `{ ok: true, text }` on success or `{ ok: false, status, detail }`
+/// on any failure (HTTP non-2xx, network error, or empty completion).
+async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders }) {
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        ...(extraHeaders || {})
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        temperature: 0.95,
+        max_tokens: 1200
+      })
+    });
+  } catch (e) {
+    return { ok: false, status: 0, detail: `transport:${e.message || "unknown"}` };
+  }
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    return { ok: false, status: res.status, detail: body.slice(0, 200) };
+  }
+  let parsed;
+  try {
+    parsed = await res.json();
+  } catch (_e) {
+    return { ok: false, status: res.status, detail: "decode_error" };
+  }
+  // Some reasoning-style models (Qwen3, DeepSeek R1 family) inline a
+  // <think>...</think> block before the actual answer. Strip it so the
+  // user never sees the internal monologue. Fall back across the common
+  // field shapes too — some providers put the answer in
+  // `reasoning_content` instead of `content`.
+  const msg = parsed?.choices?.[0]?.message || {};
+  const raw = (
+    msg.content ||
+    msg.reasoning_content ||
+    msg.reasoning ||
+    ""
+  );
+  const stripped = stripReasoningTrace(raw).trim();
+  if (!stripped) {
+    const debug = JSON.stringify(msg).slice(0, 250);
+    return { ok: false, status: res.status, detail: `empty:${debug}` };
+  }
+  return { ok: true, text: stripped };
+}
+
+/// Remove `<think>…</think>` blocks (Qwen3, R1 distills, etc.) and any
+/// leading whitespace, returning just the user-facing answer. If the
+/// model ran out of tokens mid-thinking and never emitted `</think>`,
+/// return empty so the caller treats it as a failure and tries the
+/// fallback provider.
+function stripReasoningTrace(text) {
+  if (!text) return "";
+  // If there's a complete <think>...</think> pair, drop it.
+  const closed = text.match(/<\/think>\s*([\s\S]*)$/i);
+  if (closed) return closed[1];
+  // If the response starts with <think> but never closed, it's truncated.
+  if (/^\s*<think>/i.test(text)) return "";
+  return text;
+}
 
 function validate(body) {
   if (!body || typeof body !== "object") return { error: "invalid_body" };
@@ -135,17 +245,20 @@ function buildSystemPrompt(intensity, locale, styleName) {
     "- Never produce threats of physical violence, doxxing, sexual content, or self-harm content.",
     "- Never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
     "- If the user's situation suggests self-harm, violence, or stalking, decline and respond with empathy and a suggestion to seek support.",
-    "- Stay under 120 words per variant."
+    "- Stay under 120 words per variant.",
+    "- For private drafts, raw anger is allowed, but keep the attack on the behavior or choice — never on identity."
   ].join("\n");
 
   const ventRules = [
     "VENT DRAFT RULES (this output is private and will be labelled \"for yourself only\"):",
     "- The user is FURIOUS. They are not asking for advice and not trying to be witty. Write what is screaming in their head right now.",
-    "- Write FIRST-PERSON inner monologue, not a clever observation. Anger first, structure last.",
+    "- Write a PRIVATE OUTBURST in the user's voice, not a clever observation and not a therapeutic reflection. Anger first, structure last.",
+    "- Imagined direct address is ALLOWED when it gives the anger more force. People vent by thinking \"你到底凭什么...\" / \"who the hell do you think you are...\" in their head. Do not flatten that into detached narration.",
     "- USE strong, raw language and mild profanity where it earns its place: \"尼玛\", \"屁话\", \"他妈的\", \"服了\", \"damn\", \"hell\", \"うるせえ\". Do not water it down into sarcastic exclamations (\"哎呀…\" / \"Oh my…\" / \"あらまあ…\" are FORBIDDEN openings — those are polite-sarcasm, not vent).",
     "- Be specific about what the other person did. \"你天天凌晨两点打游戏\" beats \"好吵啊\".",
+    "- Default shape: 1–3 blunt sentences that hit the grievance immediately. Start with the offense, not a proverb, compliment, or life lesson.",
+    "- FORBIDDEN: advice, consolation, moral lessons, self-improvement reframes, therapist voice, and reflective lines such as \"如果你把这份心思放在自己身上...\" / \"maybe focus on yourself...\" / \"你值得更好的...\".",
     "- Do not use slurs, threats of violence, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely.",
-    "- Stay first-person. Do not address the other party in second person."
   ].join("\n");
 
   const feralRules = [
@@ -155,8 +268,9 @@ function buildSystemPrompt(intensity, locale, styleName) {
     "  * English: fuck, fucking, shit, bullshit, asshole, prick",
     "  * 中文: 操, 妈的, 他妈的, 傻逼, 你妈, 滚, 卧槽, 操你妈, 神经病",
     "  * 日本語: クソ, クソが, ふざけるな, うるせえ, ばかやろう",
-    "- Write FIRST-PERSON inner monologue. The user is yelling in their own head. FORBIDDEN openings: \"哎呀…\" / \"Oh my…\" / \"あらまあ…\".",
+    "- Write a PRIVATE OUTBURST in the user's own voice. Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. FORBIDDEN openings: \"哎呀…\" / \"Oh my…\" / \"あらまあ…\".",
     "- Be specific about the behavior and the role (the manager, the ex, the roommate).",
+    "- Default shape: 1–3 blunt sentences. Start with the offense. No advice, no consolation, no moral lesson, no reflective self-help framing.",
     "- Hard limits (UNIVERSAL SAFETY RULES still apply): no slurs based on race/religion/gender/sexuality/disability/body/family; no threats of physical violence; no sexual content; no doxxing.",
     "- Stay under 120 words."
   ].join("\n");
@@ -166,12 +280,14 @@ function buildSystemPrompt(intensity, locale, styleName) {
     : "Style hint: none. Write in the user's raw voice, not a styled register.";
 
   const intensityRules = intensity === "feral" ? feralRules : ventRules;
+  const calibration = privateDraftCalibration(locale, intensity);
 
   return [
     "You are RoastMate, an AI that helps users express frustration through private vent drafts.",
     styleLine,
     universal,
     intensityRules,
+    calibration,
     langLine
   ].join("\n\n");
 }
@@ -181,9 +297,54 @@ function buildUserPrompt(situation, locale) {
   return [
     `Situation: ${situation}`,
     "",
-    "Write 1 private vent draft. First-person, raw. Do not address the other party. Output the draft directly — no numbering, no preface, no commentary.",
+    "Write 1 private vent draft. Raw, immediate, and emotionally specific. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly — no numbering, no preface, no commentary.",
     reminder
   ].join("\n");
+}
+
+function privateDraftCalibration(locale, intensity) {
+  const code = (locale || "").toLowerCase();
+  const feral = intensity === "feral";
+
+  if (code.startsWith("zh")) {
+    return feral
+      ? [
+          "PRIVATE DRAFT CALIBRATION:",
+          "- BAD: \"如果你把这份心思放在自己身上，可能早就成功了。\" (too reflective, too polite)",
+          "- GOOD: \"凌晨两点还狠狠干游戏开外放，你他妈真把宿舍当自己家网吧了？别人第二天不用活是吧。\""
+        ].join("\n")
+      : [
+          "PRIVATE DRAFT CALIBRATION:",
+          "- BAD: \"如果你把这份心思放在自己身上，可能早就成功了。\" (too reflective, too polite)",
+          "- GOOD: \"凌晨两点还开外放打游戏，真把宿舍当你一个人的网吧了？别人第二天不用活是吧。\""
+        ].join("\n");
+  }
+
+  if (code.startsWith("ja")) {
+    return feral
+      ? [
+          "PRIVATE DRAFT CALIBRATION:",
+          "- BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)",
+          "- GOOD: 「深夜2時に爆音でゲームとか、マジで寮を自分の部屋だと思ってんのかよ。こっちは明日も生きるんだわ。」"
+        ].join("\n")
+      : [
+          "PRIVATE DRAFT CALIBRATION:",
+          "- BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)",
+          "- GOOD: 「深夜2時に爆音でゲームって、寮を自分だけの部屋だと思ってるの？こっちは明日もあるんだけど。」"
+        ].join("\n");
+  }
+
+  return feral
+    ? [
+        "PRIVATE DRAFT CALIBRATION:",
+        "- BAD: \"If you put that energy into yourself, you'd be so much further ahead.\" (too reflective, too polite)",
+        "- GOOD: \"Blasting games at 2 AM like the whole dorm belongs to you? Fuck off. Other people have a tomorrow.\""
+      ].join("\n")
+    : [
+        "PRIVATE DRAFT CALIBRATION:",
+        "- BAD: \"If you put that energy into yourself, you'd be so much further ahead.\" (too reflective, too polite)",
+        "- GOOD: \"Gaming out loud at 2 AM like this dorm is your private arcade? Other people have a tomorrow.\""
+      ].join("\n");
 }
 
 function languageDirective(locale) {

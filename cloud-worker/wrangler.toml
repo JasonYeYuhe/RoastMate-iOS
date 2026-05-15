@@ -2,11 +2,25 @@ name = "roastmate-vent"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
 
-# Default model. Override per-deploy by editing this or sending `model` in
-# the request body. DeepSeek V3 free is the least RLHF'd toward "be polite"
-# of the OpenRouter free tier, which is exactly what Vent needs.
+# Primary upstream. Dolphin Mistral 24B Venice Edition is an uncensored
+# fine-tune designed to follow instructions without "be polite" RLHF
+# pulling output back to safe sarcasm. Chosen after DeepSeek V4 Flash
+# turned out to be a reasoning model that leaked chain-of-thought into
+# the response (200 OK but content was a multi-page internal monologue).
+# If Dolphin's quality drops or it's retired, candidates in priority
+# order: nousresearch/hermes-3-llama-3.1-405b:free, z-ai/glm-4.5-air:free
+# (better for Chinese), qwen/qwen3-next-80b-a3b-instruct:free.
 [vars]
-DEFAULT_MODEL = "deepseek/deepseek-chat-v3-0324:free"
+DEFAULT_MODEL = "nousresearch/hermes-3-llama-3.1-405b:free"
+
+# Groq is now PRIMARY (OpenRouter's :free pool is consistently
+# upstream-rate-limited). The Worker routes by locale:
+# - zh-* requests → GROQ_CHINESE_MODEL (Qwen3 32B, Alibaba-trained,
+#   much weaker politeness-RLHF on Chinese than Llama, which means it
+#   actually vents instead of moralizing)
+# - everything else → GROQ_FALLBACK_MODEL (Llama 3.3 70B Versatile)
+GROQ_CHINESE_MODEL = "qwen/qwen3-32b"
+GROQ_FALLBACK_MODEL = "llama-3.3-70b-versatile"
 
 # Per-device rate limit. The Worker counts each successful request against
 # (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves.
@@ -21,7 +35,8 @@ OPENROUTER_TITLE = "RoastMate"
 # `npx wrangler kv:namespace create rate_limits` (see README).
 [[kv_namespaces]]
 binding = "RATE_LIMITS"
-id = "REPLACE_ME_AFTER_KV_NAMESPACE_CREATE"
+id = "9883573e953e4a01a3bb22f86016438a"
 
-# Secrets (run `npx wrangler secret put OPENROUTER_API_KEY`):
-# - OPENROUTER_API_KEY: get from https://openrouter.ai/settings/keys
+# Secrets (run `npx wrangler secret put <NAME>`):
+# - OPENROUTER_API_KEY: from https://openrouter.ai/settings/keys (required)
+# - GROQ_API_KEY: from https://console.groq.com/keys (optional fallback)

@@ -8,9 +8,11 @@ import Foundation
 /// the deploy step prints your `https://roastmate-vent.<subdomain>.workers.dev`
 /// URL, paste it here verbatim, then ship.
 enum CloudConfig {
-    /// Set this to your deployed Worker URL (no trailing slash on the host).
-    /// The path `/v1/vent` is appended automatically.
-    private static let ventEndpointString = "https://roastmate-vent.example.workers.dev"
+    /// Deployed Worker URL (no trailing slash on the host). The path
+    /// `/v1/vent` is appended automatically. Swap to a different
+    /// subdomain if the Worker ever moves; the iOS app needs no other
+    /// changes since the request/response contract is stable.
+    private static let ventEndpointString = "https://roastmate-vent.yyyyy-yeyuhe.workers.dev"
 
     /// Resolved URL the client posts to.
     static let ventEndpoint: URL = URL(string: "\(ventEndpointString)/v1/vent")!
@@ -21,6 +23,9 @@ enum CloudConfig {
     /// setting, so a fresh-clone or pre-deploy build still works.
     static var isConfigured: Bool {
         guard let host = ventEndpoint.host else { return false }
+        // Block both the original placeholder host and any future
+        // example domains so a misconfigured fork can't accidentally
+        // proxy through the wrong endpoint.
         return !host.contains("example.workers.dev")
     }
 

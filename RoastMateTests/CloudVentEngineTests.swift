@@ -7,10 +7,10 @@ import XCTest
 /// — these tests only care about the routing decision.
 final class CloudVentEngineTests: XCTestCase {
     func testCloudClientReceivesCorrectFieldsForVent() async throws {
+        // CloudConfig.isConfigured is now true (real Worker URL), so vent
+        // intensity should reach the cloud client with the expected
+        // request fields.
         let recorder = RecordingCloudVentService(returning: "卧槽,凌晨两点你打什么破游戏。")
-        // We don't want this test to depend on Foundation Models being
-        // available, so we let the test pass either way: the assertion is
-        // only that the recorder saw the request.
         _ = try? await RoastEngine.shared.generate(
             situation: "我室友每天凌晨两点打游戏。",
             style: testStyle,
@@ -20,12 +20,14 @@ final class CloudVentEngineTests: XCTestCase {
             cloudVentEnabled: true,
             cloudClient: recorder
         )
-        // CloudConfig.isConfigured is false by default (placeholder host),
-        // so the engine should NOT have called the cloud — recorder must
-        // see zero requests. This protects us against accidentally
-        // shipping a build that posts to the example placeholder URL.
-        XCTAssertEqual(recorder.calls.count, 0,
-                       "Engine must not call cloud when CloudConfig.isConfigured == false.")
+        XCTAssertEqual(recorder.calls.count, 1,
+                       "Vent intensity with cloud enabled + configured endpoint must route through the cloud client.")
+        let req = try XCTUnwrap(recorder.calls.first)
+        XCTAssertEqual(req.intensity, "vent")
+        XCTAssertEqual(req.locale, "zh-Hans")
+        XCTAssertEqual(req.situation, "我室友每天凌晨两点打游戏。")
+        XCTAssertFalse(req.deviceId.isEmpty,
+                       "Each request must carry the per-install device UUID for rate limiting.")
     }
 
     func testCloudClientNotCalledWhenIntensityIsSendable() async throws {

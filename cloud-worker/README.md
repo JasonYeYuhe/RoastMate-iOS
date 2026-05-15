@@ -1,18 +1,23 @@
 # RoastMate Vent Cloud Worker
 
-Tiny Cloudflare Worker that fronts OpenRouter for the Vent / Feral
-private-draft path in the iOS app. The Worker owns the OpenRouter API key
-(it never ships in the iOS binary), enforces a per-device daily rate limit,
-and serves both the iOS production traffic and any future macOS / Android
-clients.
+Tiny Cloudflare Worker that fronts two upstream LLM providers (OpenRouter
+primary, Groq fallback) for the Vent / Feral private-draft path in the
+iOS app. The Worker owns both API keys (they never ship in the iOS
+binary), enforces a per-device daily rate limit, and serves both the iOS
+production traffic and any future macOS / Android clients.
 
 ## Why this exists
 
 Apple's on-device Foundation Models is too gentle for real venting — even
 with directive prompts, it returns "wise reframing" instead of raw anger.
 We route only the **Vent** and **Feral** intensities through a less
-RLHF'd model (DeepSeek V3 free via OpenRouter). Calm / Sharp / Savage
-stay 100% on-device.
+RLHF'd model (DeepSeek V4 Flash free via OpenRouter, with Groq Llama 3.3
+70B as the fallback). Calm / Sharp / Savage stay 100% on-device.
+
+The Worker tries OpenRouter first; on any non-2xx response or empty
+completion, it transparently retries on Groq. The client sees a single
+endpoint and (for now) a single response shape — only the new
+`provider` field tells you which upstream actually answered.
 
 ## One-time setup (do this once, then forget)
 
@@ -45,11 +50,20 @@ id = "abc123..."
 
 Copy that `id` into `wrangler.toml`, replacing `REPLACE_ME_AFTER_KV_NAMESPACE_CREATE`.
 
-### Set your OpenRouter API key as a secret
+### Set the upstream API keys as secrets
+
+The Worker will use OpenRouter first, then Groq as a fallback. Either one
+alone is enough to deploy a working Worker, but having both gives you a
+real safety net when one provider rate-limits or has an outage.
 
 ```bash
+# Primary upstream — required.
+# Paste your sk-or-v1-... key from https://openrouter.ai/settings/keys
 npx wrangler secret put OPENROUTER_API_KEY
-# paste your sk-or-v1-... key from openrouter.ai/settings/keys
+
+# Fallback upstream — optional but recommended.
+# Paste your gsk_... key from https://console.groq.com/keys
+npx wrangler secret put GROQ_API_KEY
 ```
 
 ### Deploy
@@ -92,6 +106,7 @@ Response (200):
 {
   "text": "凌晨两点打 fuck...",
   "model": "deepseek/deepseek-chat-v3-0324:free",
+  "provider": "openrouter",      // or "groq" if primary failed
   "remaining": 29
 }
 ```
@@ -99,22 +114,31 @@ Response (200):
 Errors:
 - 400 `invalid_*` — request validation failed
 - 429 `rate_limit_exceeded` — device hit daily cap (default 30/day)
-- 502 `upstream_error` / `empty_response` — OpenRouter failed
-- iOS falls back to local Apple Foundation Models in any error case
+- 502 `upstream_error` with a `detail` listing whichever upstream(s) the
+  Worker tried (e.g. "openrouter:429 ... | groq:500 ..."). iOS falls
+  back to local Apple Foundation Models in any error case.
 
-## Cost / limits (current free tier)
+## Cost / limits (current tiers)
 
 - Cloudflare Workers: 100k requests/day free, plenty
 - KV: 100k reads + 1k writes/day free (we use ~30 writes per active user)
-- OpenRouter DeepSeek V3 free: 1000 requests/day per OpenRouter key
+- OpenRouter free account: 50 free-model requests/day total
+- OpenRouter pay-as-you-go account with at least $10 in credits:
+  1000 free-model requests/day total
 - DAILY_LIMIT_PER_DEVICE: 30 (controlled in wrangler.toml)
 
-Math: ~33 users hitting their daily limit fills the OpenRouter free key.
-For early launch this is fine. If you outgrow it:
+Math: the proxy host is not the bottleneck; the upstream model quota is.
+At 30 drafts/device/day, a pure free OpenRouter account supports only
+about one heavy user. A pay-as-you-go account with the 1000/day
+free-model allowance supports about 33 heavy users.
 
-1. Bump to OpenRouter paid (DeepSeek V3 ~$0.30/M tokens — ~$3/day at 10k req)
-2. Or switch to a different OpenRouter free model in `wrangler.toml`
-3. Or gate cloud vent behind Pro entitlement (you'd send a signed
+For product testing this is fine. If you outgrow it:
+
+1. Keep a small OpenRouter credit balance so the account has the
+   1000/day free-model allowance
+2. Bump to a paid OpenRouter model when you need reliability
+3. Or switch to a different upstream provider / model in `wrangler.toml`
+4. Or gate cloud vent behind Pro entitlement (you'd send a signed
    StoreKit transaction with each request and have the Worker validate it)
 
 ## Local development
