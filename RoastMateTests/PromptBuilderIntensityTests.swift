@@ -46,6 +46,75 @@ final class PromptBuilderIntensityTests: XCTestCase {
         XCTAssertTrue(prompt.lowercased().contains("professional"))
     }
 
+    func testVentOverridesPoliteStylePreamble() {
+        // Regression: real-device output for high_eq + vent was polished
+        // sarcasm ("oh my, your gaming sure is loud at 2AM!") because the
+        // high_eq style preamble said "polite, reasonable, emotionally
+        // intelligent professional" — that fought the vent register and
+        // averaged out to safe snark. Fix: for private drafts we drop the
+        // style's tone preamble and explicitly tell the model to ignore
+        // any politeness framing.
+        let politeStyle = StylePreset(
+            id: "high_eq_test",
+            displayKey: "test.name",
+            blurbKey: "test.blurb",
+            icon: "star",
+            tier: .free,
+            temperature: 0.8,
+            tags: [],
+            systemPreamble: "POLITE_PROFESSIONAL_PREAMBLE_MARKER — be reasonable and emotionally intelligent.",
+            examples: [],
+            localesSupported: nil
+        )
+        let ventPrompt = PromptBuilder.systemPrompt(
+            style: politeStyle,
+            locale: Locale(identifier: "en_US"),
+            intensity: .vent
+        )
+        XCTAssertFalse(ventPrompt.contains("POLITE_PROFESSIONAL_PREAMBLE_MARKER"),
+                       "Private drafts must suppress the style's tone preamble so politeness doesn't dilute the vent.")
+        XCTAssertTrue(ventPrompt.contains("Intensity overrides Style for private drafts"),
+                      "The override directive should be explicit so the model can't average the two.")
+
+        // Sanity: a non-private intensity STILL uses the style preamble.
+        let sharpPrompt = PromptBuilder.systemPrompt(
+            style: politeStyle,
+            locale: Locale(identifier: "en_US"),
+            intensity: .sharp
+        )
+        XCTAssertTrue(sharpPrompt.contains("POLITE_PROFESSIONAL_PREAMBLE_MARKER"),
+                      "Non-private intensities continue to use the style's tone preamble verbatim.")
+    }
+
+    func testVentPreambleIsDirectiveNotPermissive() {
+        // The original "may use strong language" phrasing produced safe
+        // snark. The preamble now uses imperatives so the model commits.
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "en_US"),
+            intensity: .vent
+        )
+        XCTAssertTrue(prompt.contains("FURIOUS"),
+                      "Vent preamble should set the emotional baseline explicitly.")
+        XCTAssertTrue(prompt.contains("FORBIDDEN openings"),
+                      "Vent preamble must call out polite-sarcasm openings as forbidden.")
+    }
+
+    private var emptyStyle: StylePreset {
+        StylePreset(
+            id: "test",
+            displayKey: "test.name",
+            blurbKey: "test.blurb",
+            icon: "star",
+            tier: .free,
+            temperature: 0.8,
+            tags: [],
+            systemPreamble: "Be witty.",
+            examples: [],
+            localesSupported: nil
+        )
+    }
+
     func testFeralIntensityInjectsFeralPreambleButNotVent() {
         let prompt = PromptBuilder.systemPrompt(
             style: style,

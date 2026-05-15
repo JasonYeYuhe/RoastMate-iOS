@@ -16,6 +16,8 @@ struct RoastGeneratorView: View {
     private var settings: UserSettings? { settingsQuery.first }
     private var isPro: Bool { StoreService.shared.isPro }
 
+    @FocusState private var situationFocused: Bool
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -32,6 +34,21 @@ struct RoastGeneratorView: View {
                 }
             }
             .padding()
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .onChange(of: viewModel.state) { _, newValue in
+            // Dismiss the keyboard the moment we start generating so the
+            // result has the full screen to breathe in. Without this the
+            // TextEditor keeps focus and the keyboard covers the bottom
+            // half of the result card on smaller phones.
+            if newValue == .loading || newValue == .results {
+                situationFocused = false
+            }
+            // Clear the "Continuing this event" banner once results land
+            // so the user knows the continuation has been consumed.
+            if newValue == .results {
+                threadContinuationBanner = nil
+            }
         }
         .navigationTitle("generator.title")
         .onAppear {
@@ -66,11 +83,6 @@ struct RoastGeneratorView: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
-        }
-        .onChange(of: viewModel.state) { _, newValue in
-            if newValue == .results {
-                threadContinuationBanner = nil
-            }
         }
     }
 
@@ -134,6 +146,7 @@ struct RoastGeneratorView: View {
             Text("generator.empty.title")
                 .font(.headline)
             TextEditor(text: $viewModel.situation)
+                .focused($situationFocused)
                 .frame(minHeight: 110)
                 .padding(8)
                 .background(
@@ -181,6 +194,11 @@ struct RoastGeneratorView: View {
 
     private var generateButton: some View {
         Button {
+            // Dismiss keyboard immediately on tap — the on-state-change
+            // hook also fires once .loading begins, but doing it here
+            // means the user sees the keyboard slide down the moment
+            // they hit Generate, not after the model warms up.
+            situationFocused = false
             if !isPro && viewModel.selectedIntensity.requiresPro {
                 showPaywall = true
             } else {

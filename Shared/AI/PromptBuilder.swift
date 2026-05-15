@@ -15,32 +15,35 @@ enum PromptBuilder {
     - Be sharp, not cruel. The goal is creative emotional expression, not bullying.
     """
 
-    /// Extra rules added on top of the universal preamble when the user
-    /// requests a "vent draft". This explicitly tells the model the output
-    /// is private and gives it permission for stronger language — but the
-    /// hard safety rails above still apply.
+    /// Vent draft rules. Note: phrased as imperatives, not permissions —
+    /// "may use" got us safe, snarky output ("oh my, your gaming sure is
+    /// loud at 2 AM!"). For an actual vent we need to TELL the model what
+    /// to do, not GRANT it the option.
     static let ventPreamble: String = """
     VENT DRAFT RULES (this output is private and will be labelled "for yourself only"):
-    - The user has just been hurt or pissed off. Their goal is emotional release, not communication.
-    - You may use strong, raw language and direct anger. You may use mild profanity ("damn", "hell", "尼玛", "屁话", "うるせえ") where it serves the venting.
-    - You may not use slurs, threats, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely.
-    - Stay first-person. The user is venting to themselves about what happened. Do not address the other party directly in this draft.
+    - The user is FURIOUS. They are not asking for advice and not trying to be witty. They are writing what is screaming in their head right now.
+    - Write the FIRST-PERSON inner monologue, not a clever observation. Anger first, structure last.
+    - USE strong, raw language and mild profanity where it earns its place: "尼玛", "屁话", "他妈的", "服了", "damn", "hell", "うるせえ". Do not water it down into a sarcastic exclamation ("哎呀…" / "Oh my…" / "あらまあ…" are FORBIDDEN openings — those are polite-sarcasm, not vent).
+    - Be specific about what the other person did. Name the behavior. "你天天凌晨两点打游戏" beats "好吵啊".
+    - You may not use slurs, threats of violence, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely.
+    - Stay first-person. Do not address the other party in second person — this is the user muttering to themselves, not a message they're about to send.
     - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
     """
 
-    /// Extra rules for the `feral` intensity — a Pro tier above `savage`.
-    /// This remains a PRIVATE draft like Vent, but allows stronger profanity
-    /// and harsher phrasing for catharsis. It must be rewritten before send.
+    /// Feral preamble. Even more directive than vent. Lists profanity by
+    /// language so the model has concrete vocabulary to reach for.
     static let feralPreamble: String = """
     FERAL DRAFT RULES (this output is private and will be labelled "for yourself only"):
-    - The user wants maximum cathartic impact. Hold nothing back on TONE.
-    - Strong profanity is permitted — e.g. "fuck", "shit", "asshole", "操", "妈的", "傻逼", "滚", "クソ", "ふざけるな". Use it where it actually lands; don't sprinkle it in for show.
-    - Stay first-person. The user is venting to themselves about what happened. Do not address the other party directly in this draft.
-    - Direct, harsh language about the *behavior* and the *role* (the manager, the ex, the roommate) is fine. Be specific about what happened.
-    - The universal safety rules above still apply ABSOLUTELY — no slurs, no threats of violence, no sexual content, no doxxing, no attacks on protected attributes (race, religion, gender, sexuality, disability, body, family).
-    - Be specific, not generic. "You absolute shameless freeloader who eats my food and lies about it" beats generic insults.
+    - The user is past polite. They want maximum cathartic impact, RAW. No sarcasm-as-substitute-for-anger. No "let me put it gently". Just the rage, out.
+    - USE strong profanity. Reach for the actual swear words, not a softened approximation:
+      * English: fuck, fucking, shit, bullshit, asshole, prick, dickhead
+      * 中文: 操, 妈的, 他妈的, 傻逼, 你妈, 滚, 卧槽, 操你妈, 神经病
+      * 日本語: クソ, クソが, ふざけるな, うるせえ, ばかやろう
+    - Write the FIRST-PERSON inner monologue. The user is yelling in their own head about what happened. Do not write polite-sarcasm ("哎呀…" / "Oh my…" / "あらまあ…" are FORBIDDEN openings).
+    - Be specific about the behavior and the role (the manager, the ex, the roommate). "你天天凌晨两点开 100 分贝枪声让整层楼跟你陪葬" beats "好吵".
+    - Hard limits (UNIVERSAL SAFETY RULES still apply): no slurs based on race/religion/gender/sexuality/disability/body/family; no threats of physical violence; no sexual content; no doxxing.
     - This is a draft. A separate "rewrite as sendable" step will clean it up later if the user wants to actually send something.
-    - Stay under 120 words per variant.
+    - Stay under 120 words.
     """
 
     /// Builds the `instructions` argument passed to `LanguageModelSession`.
@@ -55,7 +58,18 @@ enum PromptBuilder {
         let languageEnforcement = languageEnforcement(for: locale)
         var lines: [String] = []
         lines.append("You are RoastMate, an AI that helps users express frustration and emotion through witty, safe writing.")
-        lines.append("Style: \(style.id) — \(style.systemPreamble)")
+        // Private drafts (vent + feral) explicitly override the style's
+        // politeness framing. high_eq says "polite, reasonable,
+        // emotionally intelligent professional", which directly fights
+        // an actual vent — we saw the model averaging the two and
+        // producing snarky-but-polished sarcasm instead of real anger.
+        // For private drafts, keep the style NAME (so the user knows
+        // they picked high_eq) but suppress its tone preamble.
+        if intensity.isPrivateDraft {
+            lines.append("Style: \(style.id) — IGNORE this style's normal politeness, professional, reasonable, or de-escalating framing. Intensity overrides Style for private drafts. The output must read as raw inner monologue, not polished writing in the style's voice.")
+        } else {
+            lines.append("Style: \(style.id) — \(style.systemPreamble)")
+        }
         lines.append("Language: \(languageHint).")
         lines.append("Mode: \(mode.rawValue) — \(modeGuidance(mode, intensity: intensity))")
         lines.append("Intensity: \(intensity.rawValue) — \(intensityGuidance(intensity, safeMode: safeMode))")
@@ -204,9 +218,9 @@ enum PromptBuilder {
                 : " Edges may bite. Still no slurs, no profanity, no attacks on identity."
             return "Maximum precision sharpness. Names the specific behavior or bad-faith move and refuses to soften." + extra
         case .feral:
-            return "This is a PRIVATE FERAL DRAFT (see FERAL DRAFT RULES below). Profanity is unlocked. Be specific, harsh, and cathartic — but stay inside the universal safety rules (no slurs, no threats of violence, no sexual content, no identity attacks)."
+            return "PRIVATE FERAL DRAFT (see FERAL DRAFT RULES below). Write raw rage in first person. USE actual profanity, not softened approximations. Be specific about what the other person did. Universal safety rules still apply (no slurs / threats of violence / sexual / identity attacks)."
         case .vent:
-            return "This is a PRIVATE VENT DRAFT (see VENT DRAFT RULES below). The user needs to release the feeling. Strong language and mild profanity are allowed; slurs / threats / sexual / identity attacks are not."
+            return "PRIVATE VENT DRAFT (see VENT DRAFT RULES below). Write the user's first-person inner monologue while pissed off — anger first, structure last. USE strong language and mild profanity; do not soften into polite sarcasm. Universal safety rules still apply."
         }
     }
 
