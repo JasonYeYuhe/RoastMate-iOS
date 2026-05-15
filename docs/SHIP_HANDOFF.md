@@ -1,92 +1,56 @@
 # RoastMate — final ship handoff
 
-Everything that can be done from code/CLI is done. This doc is the
-single source of truth for the human-only remaining steps.
+## ✅ DONE (code + ASC, by Claude)
 
-## State of the build
+Code / repo (RoastMate-iOS @ latest main):
+- Cloud Vent/Feral live (Cloudflare Worker → Groq primary / OpenRouter
+  fallback, 30/device/day, safety-filtered, falls back to local).
+- Safety bypass bug fixed + regression test. 81/81 unit tests pass.
+- All in-app copy, Privacy Policy, App Store metadata, and the
+  marketing site (JasonYeYuhe/RoastMate, the privacy URL Apple visits)
+  aligned to the real cloud architecture.
+- Screenshot pipeline fixed (onboarding skip, CFBundleLocalizations,
+  resilient capture). English screenshots correct @ 1320×2868.
 
-- Cloud Vent/Feral: live. Worker at
-  `https://roastmate-vent.yyyyy-yeyuhe.workers.dev`, Groq primary
-  (Qwen3-32B zh / Llama-3.3-70B else), OpenRouter fallback,
-  per-device 30/day rate limit.
-- Default: Cloud AI **ON** (Settings → AI & Privacy lets the user
-  switch Vent/Feral to local).
-- Safety: cloud output runs the same vent safety filter as local;
-  a hard-rail hit discards the cloud text and falls back to local
-  (fixed + regression-tested this session).
-- 81/81 unit tests pass. iOS/macOS/watchOS/Share build clean.
-- All user-facing copy (in-app strings, App Store description,
-  Privacy Policy, marketing site) aligned with the real cloud
-  architecture. Both repos pushed:
-  - app: `JasonYeYuhe/RoastMate-iOS`
-  - marketing site (the privacy URL Apple visits):
-    `JasonYeYuhe/RoastMate` — updated, GitHub Pages redeploys auto.
+App Store Connect (filled + saved by Claude via browser):
+- **App Privacy nutrition labels — PUBLISHED.** Now declares:
+  - Name + User ID → App Functionality, Linked (Sign in with Apple)
+  - Other User Content + Device ID → App Functionality, NOT linked,
+    NOT tracking (the cloud Vent/Feral path)
+- **Promotional Text** — replaced stale "no data leaves your device"
+  with the cloud-accurate line.
+- **Description** — replaced the old "no cloud / Data Not Collected"
+  text with the full cloud-accurate description.
+- **App Review Notes** — full reviewer brief (two AI paths, how to
+  disable cloud, how vent-draft framing works, safety, contact).
+- **Contact Information** — Yuhe Ye / +81 08035267088 /
+  yyyyy.yeyuhe@icloud.com.
+- **Sign-in required** — UNCHECKED (app works without sign-in; this
+  was checked-with-no-credentials, which would have blocked review).
+- Privacy Policy URL already correct + its content now updated live.
 
-## Screenshots
+## 🔴 REMAINING — 3 things only you can do
 
-- **English (en-US): done and correct.** 6 scenes, 1320×2868
-  (App Store 6.9"), in `metadata/screenshots/en_US/iPhone_17_Pro_Max/`.
-- **zh-Hans / zh-Hant / ja: render with English text.** Known issue:
-  SwiftUI `Text("key")` does not honor the forced locale in the
-  simulator screenshot harness. Real users are unaffected — the app
-  follows the device system language correctly (a Chinese-system
-  iPhone shows the app in Chinese; verified against your earlier
-  device screenshots).
-- Your options for the localized App Store listings:
-  1. **Reuse the en-US screenshots for all locales** (very common;
-     fastest path to ship). App Store allows this.
-  2. Capture localized shots manually: set a simulator's *system*
-     language to 简体中文 / 繁體中文 / 日本語 (Settings app inside
-     the sim), run the app, screenshot the 6 scenes. The app will
-     render correctly because it follows system language.
-  3. Leave it with me as a dedicated follow-up: a localized-bundle
-     wrapper so the in-app language override (and the screenshot
-     harness) actually switches `Text` localization. This is a real
-     latent issue worth fixing but is NOT a launch blocker.
+1. **Upload screenshots** (Apple CSP blocks programmatic upload):
+   - Go to ASC → RoastMate AI → iOS App 1.0 → Previews and
+     Screenshots → drag in the 6 PNGs from
+     `metadata/screenshots/en_US/iPhone_17_Pro_Max/`
+     (01..06, they're 1320×2868 / 6.9").
+   - Localizations without their own screenshots inherit en-US, so
+     you can ship with just these. (zh/ja localized screenshots
+     render English text — known SwiftUI issue, not a blocker;
+     en-US screenshots are the standard fallback.)
 
-## ASC steps — human only (auth-gated, irreversible; I won't automate)
+2. **Upload the build** (Xcode, not browser):
+   - Xcode → Any iOS Device → Product → Archive → Organizer →
+     Distribute App → App Store Connect → Upload.
+   - Wait ~10–15 min for ASC to finish processing the build.
+   - In ASC, attach the processed build to the 1.0 version.
 
-Log in to App Store Connect yourself (Apple ID + 2FA). Then:
-
-### 1. App Privacy → Data Types
-
-Change from "Data Not Collected" to declaring these. All are
-**App Functionality**, **Not linked to identity**, **Not used for
-tracking**:
-
-- **User Content → Other User Content** — the situation text sent on
-  the Vent/Feral cloud path.
-- **Identifiers → Device ID** — the opaque per-install UUID for rate
-  limiting.
-- (Keep the existing Purchases declaration for the Pro IAP.)
-
-### 2. App Review Information → Notes
-
-Paste the block verbatim from
-`docs/ASC_FINAL_SUBMISSION_CHECKLIST.md` §2 (it explains the
-on-device vs cloud split, how a reviewer disables cloud, the
-"private draft, don't send" framing, and the safety rails).
-
-### 3. Description
-
-Sync from `metadata/{en-US,zh-Hans,zh-Hant,ja}/description.txt`
-(already cloud-accurate).
-
-### 4. Privacy Policy URL
-
-Confirm it's `https://jasonyeyuhe.github.io/RoastMate/privacy.html`
-and that the page shows the updated (cloud-aware) content. GitHub
-Pages can take a few minutes to redeploy after the push.
-
-### 5. Build + submit
-
-In Xcode: Any iOS Device → Product → Archive → Organizer →
-Distribute App → App Store Connect → Upload. Then in ASC, attach
-the build to the 1.0 version, set screenshots, **Submit for
-Review** (this final click is yours).
+3. **Submit for Review** (final, irreversible — your call):
+   - With screenshots + build attached, click "Add for Review"
+     then "Submit for Review".
 
 ## If Apple pushes back
-
-See `docs/ASC_FINAL_SUBMISSION_CHECKLIST.md` §4 — playbook for the
-likely complaints (cloud disclosure, vent profanity under 1.1,
-privacy practice description).
+See `docs/ASC_FINAL_SUBMISSION_CHECKLIST.md` §4 (cloud disclosure,
+vent profanity under 1.1, privacy description playbook).
