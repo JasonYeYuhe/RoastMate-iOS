@@ -12,7 +12,7 @@
     <div class="badge">🔥</div>
     <div>
       <h1>Privacy Policy</h1>
-      <p>RoastMate · Effective 2026-05-14</p>
+      <p>RoastMate · Effective 2026-05-15</p>
     </div>
   </header>
 
@@ -23,23 +23,39 @@
   </p>
 
   <h2>TL;DR</h2>
-  <p>RoastMate is built so your drafts and history <strong>stay on your device</strong>.</p>
+  <p>RoastMate keeps almost all your data on your device. There is <strong>one optional exception</strong>: the Vent and Feral intensities route through a developer-owned cloud proxy by default, because Apple's on-device model is too gentle to produce real vent output. You can disable this in Settings to keep everything local.</p>
   <ul class="checks">
-    <li>All AI generation runs on your device via Apple's Foundation Models framework</li>
-    <li>Your inputs and generated text are <strong>not</strong> transmitted to our servers, OpenAI, Anthropic, Google, or any third-party AI service</li>
-    <li>We do not collect usage analytics, advertising IDs, or device identifiers</li>
-    <li>You can verify this by enabling Airplane Mode — RoastMate's generator continues to work</li>
+    <li><strong>Calm / Sharp / Savage / Make-it-sendable rewrite</strong> — 100% on-device via Apple's Foundation Models, always. Works in Airplane Mode.</li>
+    <li><strong>Vent / Feral</strong> — by default the situation text you type, the intensity, the locale, and an opaque per-install UUID are sent to our Cloudflare Worker, which forwards to a third-party LLM provider for inference. Our proxy does not retain a copy of the text. Upstream providers may temporarily retain inputs per their own policies.</li>
+    <li>Your history, threads, and saved replies stay on-device.</li>
+    <li>No analytics SDKs, no advertising IDs, no device fingerprinting.</li>
+    <li>Toggle Cloud AI off in Settings → AI &amp; Privacy to keep the entire app local.</li>
   </ul>
 
   <h2>Information we collect</h2>
-  <p><strong>None is collected by RoastMate servers.</strong> The app does not contact our servers for any feature. The App Store privacy nutrition label is "Data Not Collected".</p>
-  <p>The only network traffic the app initiates is:</p>
+  <p><strong>Cloud Vent / Feral requests</strong> are the only inputs the app sends to servers we operate. Each request contains:</p>
+  <ul>
+    <li>The text of your situation (the input you typed).</li>
+    <li>The intensity you chose (<code>vent</code> or <code>feral</code>).</li>
+    <li>The style name you chose.</li>
+    <li>Your UI locale (<code>zh-Hans</code>, <code>ja</code>, <code>en</code>, etc.).</li>
+    <li>An opaque per-install UUID generated on your device, used exclusively to enforce a daily rate-limit per device. It is not linked to your Apple ID, name, email, or any other identity.</li>
+  </ul>
+  <p><strong>What our proxy does with the request:</strong></p>
+  <ol>
+    <li>Validates input length and intensity.</li>
+    <li>Increments the per-device daily counter in Cloudflare KV (we keep only the counter, not the text).</li>
+    <li>Builds the system prompt server-side and forwards your situation + locale to whichever upstream LLM provider we're currently using.</li>
+    <li>Returns the generated text to your device. Our proxy does not retain a copy of either the request text or the response.</li>
+  </ol>
+  <p><strong>What the upstream providers do:</strong> Groq, OpenRouter, and any other third-party LLM provider we route to each have their own privacy policies that govern what they do with API requests. In summary: by default these providers do not retain customer prompts long-term, but they may retain them temporarily (typically up to 30 days) for reliability investigation, abuse prevention, or compliance purposes. Refer to their published policies for the authoritative terms. If this is unacceptable to you, turn Cloud AI off in Settings — the local-only path will still produce a (gentler) Vent draft using Apple's on-device model.</p>
+  <p><strong>Other network traffic</strong> the app may initiate:</p>
   <ol>
     <li><strong>App Store / StoreKit</strong> — when you open the paywall or make a subscription purchase, system frameworks talk to Apple. We do not see your purchase details directly; we only learn whether you have an active subscription via Apple's Transaction API.</li>
     <li><strong>Sign in with Apple</strong> — if you choose to sign in, Apple's system sign-in flow talks to Apple. We store only the Apple-issued user identifier and any name/email you choose to share locally in Keychain, so Settings can show your account state.</li>
     <li><strong>Crash reports</strong> — if you have iOS / macOS Diagnostics &amp; Usage sharing enabled, Apple may send crash reports to us. These contain no personal information.</li>
   </ol>
-  <p>We do not use OpenAI, Anthropic, Google, Meta, Microsoft, or any other third-party AI service. We do not embed analytics SDKs (Firebase, Amplitude, Mixpanel, Sentry, etc.). We do not use advertising identifiers. We do not fingerprint your device.</p>
+  <p>We do not use any AI service beyond the upstream providers described above for Vent / Feral. We do not embed analytics SDKs (Firebase, Amplitude, Mixpanel, Sentry, etc.). We do not use advertising identifiers (IDFA, IDFV for tracking, AppsFlyer, etc.). We do not fingerprint your device.</p>
 
   <h2>Information stored locally on your device</h2>
   <p>The following is stored only on your device, inside the app's sandbox / App Group container:</p>
@@ -55,10 +71,10 @@
   <p>RoastMate is rated <strong>17+</strong> for mature humor and sarcasm. It is not intended for children under 17. We do not knowingly collect data from anyone — including children.</p>
 
   <h2>Your rights</h2>
-  <p>Because we do not collect or store any data on our servers, there is nothing to access, export, correct, or delete from us. To remove all local data, uninstall the app or use the in-app <strong>Settings → Clear sample data</strong> and <strong>Settings → Manage subscription</strong>.</p>
+  <p>Our proxy does not retain a copy of Vent / Feral request text, so there is no historical content stored at us to access, export, correct, or delete. The per-device daily rate-limit counter in our KV store expires automatically within 48 hours of the day it covers. To remove all local data, uninstall the app or use <strong>Settings → Clear sample data</strong> and <strong>Settings → Manage subscription</strong>. To opt out of cloud routing entirely, toggle off <strong>Settings → AI &amp; Privacy → Stronger Vent / Feral (Cloud AI)</strong>; the app will then run all paths locally.</p>
 
   <h2>Changes to this policy</h2>
-  <p>If we ever change the policy (for example, when adding optional cloud features in a future version), we will update the "Effective" date and post a notice in the app. Any future cloud features will be opt-in and clearly described.</p>
+  <p>If we materially change the policy (for example, when changing which upstream LLM providers we route to, or adding new cloud features), we will update the "Effective" date and post a notice in the app on next launch. Any new cloud feature beyond the current Vent / Feral path will be opt-in and clearly described.</p>
 
   <h2>Contact</h2>
   <p>Questions about this policy? Email <a href="mailto:support@colorarchive.me">support@colorarchive.me</a>.</p>

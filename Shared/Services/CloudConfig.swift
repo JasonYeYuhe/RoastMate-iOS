@@ -1,8 +1,9 @@
 import Foundation
 
 /// Cloud Vent / Feral configuration. The endpoint is the Cloudflare
-/// Worker URL owned by the developer; OpenRouter API keys live as a
-/// Wrangler secret on the Worker, never in the iOS binary.
+/// Worker URL owned by the developer; upstream LLM provider API keys
+/// (Groq, OpenRouter, anything we add later) live as Wrangler secrets
+/// on the Worker, never in the iOS binary.
 ///
 /// Replace `ventEndpointString` after running `npx wrangler deploy` —
 /// the deploy step prints your `https://roastmate-vent.<subdomain>.workers.dev`
@@ -29,8 +30,9 @@ enum CloudConfig {
         return !host.contains("example.workers.dev")
     }
 
-    /// Network timeout — DeepSeek V3 via OpenRouter typically responds
-    /// in 2–6 seconds; 25s leaves slack for cold path + edge variability
-    /// without dragging the UI loading state forever.
+    /// Network timeout. Groq + the OpenRouter fallback both typically
+    /// return in 2–6 seconds for our prompt size; 25s leaves slack for
+    /// upstream cold-start + edge variability without dragging the UI
+    /// loading state forever.
     static let requestTimeout: TimeInterval = 25
 }

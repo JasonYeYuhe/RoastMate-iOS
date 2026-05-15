@@ -22,9 +22,10 @@ final class UserSettings {
     var lifetimeFreeUsed: Int?
 
     /// Whether Vent / Feral generations route through the developer-owned
-    /// Cloud AI proxy (DeepSeek V3 via OpenRouter) instead of Apple's
-    /// on-device Foundation Models. We default to ON because the on-
-    /// device model refuses to actually vent (it reframes into wise
+    /// Cloud AI proxy (currently Groq primary with OpenRouter fallback;
+    /// model choice lives in `cloud-worker/wrangler.toml`) instead of
+    /// Apple's on-device Foundation Models. We default to ON because the
+    /// on-device model refuses to actually vent (it reframes into wise
     /// observations), so without cloud the marquee feature doesn't work.
     /// Nullable so legacy stores upgrade without migration; reads back
     /// as `true` (the new default) when missing.

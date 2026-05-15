@@ -14,10 +14,10 @@
 // MARK: - Onboarding
 
 "onboarding.welcome.title" = "把心里那句话写出来。";
-"onboarding.welcome.body" = "「帮你骂」用 Apple 本地 AI,把你的不爽变成俏皮、安全、可以发出去的话。全程不联网。";
+"onboarding.welcome.body" = "「帮你骂」把你的不爽变成俏皮、安全、可以发出去的话。多数模式跑在 Apple 本地 AI 上;「发泄」和「痛骂」默认走云端代理以获得更猛的输出 — 设置里随时切回全本地。";
 
 "onboarding.privacy.title" = "默认私密。";
-"onboarding.privacy.body" = "所有生成都在你的设备本地完成,使用 Apple Foundation Models 框架。你的描述永远不会上传到任何服务器。可以开飞行模式验证。";
+"onboarding.privacy.body" = "「体面 / 锐利 / 狠」三档强度和「改成能发的」改写,都用 Apple 本地 Foundation Models — 内容不出设备。「发泄」和「痛骂」默认通过我们自有的云端代理调第三方 LLM 以获得更强输出。可以在「设置 → AI 与隐私」里关闭云端路由。";
 
 "onboarding.safety.title" = "为自我表达,而非攻击他人。";
 "onboarding.safety.body" = "「帮你骂」帮你说出自己的感受,不用于针对具体的人。我们会自动去掉姓名、威胁和侮辱性词汇。";
@@ -79,7 +79,7 @@
 "settings.safe_mode.footer" = "安全模式在 Apple 自带的内容安全机制上再加一层过滤。建议保持开启。";
 
 "settings.cloud_vent" = "增强发泄 / 痛骂(云端 AI)";
-"settings.cloud_vent.footer" = "「发泄」和「痛骂」会通过我们的私有代理走云端模型(OpenRouter 上的 DeepSeek V3),让火气真的发出来。「体面 / 锐利 / 狠」全部 100% 本地运行。关掉就全部本地 — 发泄会温和很多。";
+"settings.cloud_vent.footer" = "「发泄」和「痛骂」会通过我们自有的云端代理转发给第三方 LLM 提供商,让火气真的发出来。「体面 / 锐利 / 狠」全部 100% 本地运行。关掉就全部本地 — 发泄会温和很多。";
 
 "cloud.error.not_configured" = "云端 AI 还没部署 — 改用本地模型";
 "cloud.error.disabled" = "云端 AI 已在设置中关闭 — 改用本地模型";
@@ -87,7 +87,7 @@
 "cloud.error.unavailable" = "云端 AI 暂时不可用 — 改用本地模型";
 
 "settings.about_ai.title" = "关于 AI";
-"settings.about_ai.body" = "「帮你骂」使用 Apple 本地 Foundation Models 框架进行所有内容生成。你的输入和生成的内容永远不会离开这台设备。我们不调用 OpenAI、Anthropic、Google 或任何其他第三方 AI 服务。";
+"settings.about_ai.body" = "「体面 / 锐利 / 狠 / 改成能发的」用 Apple 本地 Foundation Models 框架运行 — 这些路径上你的内容永远不会离开设备。「发泄 / 痛骂」默认通过我们自有的云端代理转发给第三方 LLM 提供商以获得更强的发泄效果。可以用上面的开关关掉云端路由,让一切回归本地。";
 
 "settings.subscription.upgrade" = "升级到 Pro";
 "settings.subscription.manage" = "管理订阅";

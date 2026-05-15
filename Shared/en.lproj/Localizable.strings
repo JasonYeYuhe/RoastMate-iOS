@@ -14,10 +14,10 @@
 // MARK: - Onboarding
 
 "onboarding.welcome.title" = "Say what you really mean.";
-"onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression — through Apple's on-device AI. Nothing leaves your device.";
+"onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression. Most modes run on Apple's on-device AI; Vent and Feral private drafts route through our cloud proxy for stronger output — you can switch them to local in Settings.";
 
 "onboarding.privacy.title" = "Private by design.";
-"onboarding.privacy.body" = "All generation happens on-device using Apple's Foundation Models framework. Your situations are never sent to any server. You can verify this in airplane mode.";
+"onboarding.privacy.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on-device with Apple's Foundation Models — your text stays on the phone. Vent and Feral drafts default to our developer-owned cloud proxy to a third-party LLM for stronger output. You can disable cloud routing in Settings → AI & Privacy.";
 
 "onboarding.safety.title" = "For self-expression, not harassment.";
 "onboarding.safety.body" = "RoastMate is for venting your own feelings — not for targeting specific people. We strip names, threats, and slurs automatically.";
@@ -79,7 +79,7 @@
 "settings.safe_mode.footer" = "Safe Mode adds an extra layer of filtering on top of Apple's built-in safety. We recommend keeping it on.";
 
 "settings.cloud_vent" = "Stronger Vent / Feral (Cloud AI)";
-"settings.cloud_vent.footer" = "Vent and Feral drafts route through our private proxy to a cloud model (DeepSeek V3 via OpenRouter) so the rage actually lands. Calm, Sharp, and Savage stay 100% on-device. Toggle off to keep everything local — vent output will be much gentler.";
+"settings.cloud_vent.footer" = "Vent and Feral drafts route through our developer-owned cloud proxy to a third-party LLM for stronger output. Calm, Sharp, and Savage stay 100% on-device. Toggle off to keep everything local — vent output will be much gentler.";
 
 "cloud.error.not_configured" = "Cloud AI hasn't been deployed yet — using local model.";
 "cloud.error.disabled" = "Cloud AI is off in Settings — using local model.";
@@ -87,7 +87,7 @@
 "cloud.error.unavailable" = "Cloud AI is unavailable right now — using local model.";
 
 "settings.about_ai.title" = "About the AI";
-"settings.about_ai.body" = "RoastMate uses Apple's on-device Foundation Models framework. Your situations and generated text never leave your device. We do not use OpenAI, Anthropic, Google, or any other third-party AI service.";
+"settings.about_ai.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on Apple's on-device Foundation Models — those paths never leave your device. Vent and Feral default to our developer-owned cloud proxy that forwards to a third-party LLM provider for stronger cathartic output. You can disable cloud routing with the toggle above to keep everything local.";
 
 "settings.subscription.upgrade" = "Upgrade to Pro";
 "settings.subscription.manage" = "Manage subscription";

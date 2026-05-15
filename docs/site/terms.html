@@ -19,7 +19,7 @@
   <p>By installing or using the RoastMate iOS, macOS, or watchOS app, you agree to these terms. If you do not agree, do not use the app.</p>
 
   <h2>1. What RoastMate is</h2>
-  <p>RoastMate is a creative writing and emotional expression tool. It uses on-device AI to help you turn frustration into witty, safe written responses across multiple styles (high-EQ, passive-aggressive, literary, Japanese keigo, and others).</p>
+  <p>RoastMate is a creative writing and emotional expression tool. Most modes — Calm, Sharp, Savage, and the "Make it sendable" rewrite — use Apple's on-device Foundation Models. The Vent and Feral private-draft intensities default to our developer-owned cloud proxy that forwards to a third-party LLM provider for stronger output, which you can disable in Settings.</p>
   <p>RoastMate is <strong>not</strong> intended for:</p>
   <ul>
     <li>Targeting, harassing, defaming, or bullying any specific person</li>
@@ -50,11 +50,11 @@
   <p>We may adjust prices in the future. Existing subscribers will receive notice in line with Apple's policies.</p>
 
   <h2>4. Disclaimer</h2>
-  <p>The app generates text via Apple's on-device Foundation Models. Output quality, tone, and accuracy will vary. You should review every generated response before using it in any conversation. The developer makes no warranty about fitness for a particular purpose, including any social, professional, or legal outcome of using generated text.</p>
+  <p>The app generates text via Apple's on-device Foundation Models or, for the Vent / Feral cloud path, via a third-party LLM provider reached through our Cloudflare Worker proxy. Output quality, tone, and accuracy will vary. You should review every generated response before using it in any conversation. The developer makes no warranty about fitness for a particular purpose, including any social, professional, or legal outcome of using generated text.</p>
   <p>The app is provided "as is". The developer is not liable for any consequence arising from how you use generated text, including but not limited to harm to relationships, employment, social standing, or legal exposure.</p>
 
   <h2>5. Privacy</h2>
-  <p>See the <a href="privacy.html">Privacy Policy</a> for how data is handled. In short: all generation happens on your device; nothing leaves it.</p>
+  <p>See the <a href="privacy.html">Privacy Policy</a> for how data is handled. Short version: most modes generate locally on your device; Vent and Feral default to a cloud proxy we operate (which forwards to a third-party LLM), and that routing can be disabled in Settings.</p>
 
   <h2>6. Changes</h2>
   <p>These terms may change. If they do, we will update the "Effective" date and post a notice in the app at the next launch.</p>

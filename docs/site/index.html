@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>RoastMate — On-device AI for witty, safe self-expression</title>
+<title>RoastMate — AI for witty, safe self-expression</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="RoastMate (帮你骂) is an on-device AI creative writing tool for iOS, macOS, and watchOS. 20+ styles. No cloud. No tracking." />
+<meta name="description" content="RoastMate (帮你骂) is a private-first AI creative writing tool for iOS, macOS, and watchOS. Most modes run on-device; Vent + Feral private drafts route through a developer-owned cloud proxy that you can disable in Settings. 20+ styles. No tracking, no ads." />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,26 +13,28 @@
     <div class="badge">🔥</div>
     <div>
       <h1>RoastMate</h1>
-      <p>帮你骂 · On-device AI for witty, safe self-expression</p>
+      <p>帮你骂 · Vent first, then send the version that wins</p>
     </div>
   </header>
 
   <p>
     Frustrated by a message you don't know how to reply to? Got hit with
     a passive-aggressive Slack and went blank? <strong>RoastMate</strong>
-    turns that frustration into clever, safe, ready-to-send expression
-    using on-device AI — Apple's Foundation Models framework, running
-    entirely on your iPhone, iPad, Mac, or Apple Watch.
+    turns that frustration into clever, safe, ready-to-send expression.
+    Most modes — Calm, Sharp, Savage, and the "Make it sendable"
+    rewrite — run on-device via Apple's Foundation Models framework.
+    Vent and Feral private drafts route through our developer-owned
+    cloud proxy for stronger output, which you can disable in
+    Settings → AI &amp; Privacy at any time.
   </p>
 
   <div class="card">
     <h3>Private by design</h3>
     <ul class="checks">
-      <li>All AI generation runs on-device via Apple's Foundation Models</li>
-      <li>No third-party AI service — no OpenAI, no Anthropic, no Google</li>
+      <li>Calm / Sharp / Savage / Rewrite — 100% on-device via Apple's Foundation Models. Works fully offline.</li>
+      <li>Vent / Feral — opt-out cloud routing through a developer-owned Cloudflare Worker to a third-party LLM provider. Our proxy doesn't retain a copy of your text; upstream providers act under their own policies. Per-device daily rate limit.</li>
       <li>No analytics SDK, no advertising identifier, no fingerprinting</li>
-      <li>Works fully offline (try Airplane Mode)</li>
-      <li>App Store privacy nutrition label: <strong>Data Not Collected</strong></li>
+      <li>Sign in with Apple is optional — the app works fully signed-out</li>
     </ul>
   </div>
 

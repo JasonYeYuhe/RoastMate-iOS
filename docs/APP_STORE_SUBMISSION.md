@@ -56,9 +56,13 @@ App Store Connect. Aligned with the W4–W10 plan in
 > Stand-up, and 15+ more), and RoastMate generates a witty response
 > just for you.
 >
-> All AI runs **on your device** using Apple's Foundation Models
-> framework. Your situations never leave your iPhone, iPad, Mac, or
-> Apple Watch. No tracking, no analytics, no cloud.
+> Calm / Sharp / Savage and the "Make it sendable" rewrite run **on
+> your device** using Apple's Foundation Models framework — those
+> paths work in Airplane Mode. The Vent and Feral private-draft
+> intensities default to a developer-owned cloud proxy that forwards
+> to a third-party LLM provider for stronger output; you can disable
+> this in Settings → AI & Privacy. No tracking, no analytics, no
+> advertising IDs.
 >
 > RoastMate is a creative writing and emotional expression tool. It is
 > not designed to target or harass any individual — we automatically

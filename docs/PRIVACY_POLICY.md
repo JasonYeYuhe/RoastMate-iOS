@@ -19,13 +19,19 @@ default in production to make the feature actually work).
 - ✅ Calm, Sharp, and Savage intensities — 100% on-device, always.
 - ✅ Rewrite-as-sendable — 100% on-device, always.
 - ⚠️ Vent and Feral intensities — by default route through our private
-  Cloudflare Worker proxy to a cloud model (DeepSeek V3 via OpenRouter)
-  because Apple's on-device model refuses to produce real vent output.
-  You can turn this off in Settings → AI & Privacy → "Stronger Vent /
-  Feral (Cloud AI)" to keep everything local.
+  Cloudflare Worker proxy to a third-party LLM provider, because
+  Apple's on-device model refuses to produce real vent output. The
+  current upstream is Groq (Qwen3 32B for Chinese / Llama 3.3 70B for
+  other locales) with OpenRouter as fallback; we may swap to a
+  different provider in the future without further notice if quality
+  or availability requires it. You can turn this off in Settings →
+  AI & Privacy → "Stronger Vent / Feral (Cloud AI)" to keep
+  everything local.
 - ✅ Your history, threads, and saved replies stay on-device. Cloud
-  requests for Vent / Feral are stateless — the proxy does not log
-  your text and the upstream model does not retain it.
+  requests for Vent / Feral are stateless on our side — we do not
+  store a copy of the text on our proxy. Upstream providers may
+  process or temporarily retain requests according to their own
+  policies; see "Information we collect" below.
 - ✅ No analytics SDKs, no advertising IDs, no device fingerprinting.
 
 Verify the local-only path by toggling Cloud AI off in Settings, then
@@ -49,17 +55,29 @@ servers we operate. The request contains:
 **What our proxy does with the request:**
 
 1. Validates input length and intensity.
-2. Increments the per-device daily counter in Cloudflare KV.
-3. Forwards the situation + intensity + locale to OpenRouter
-   ([openrouter.ai](https://openrouter.ai)) for inference using
-   DeepSeek V3.
-4. Returns the generated text to your device. We do not retain a copy.
+2. Increments the per-device daily counter in Cloudflare KV (we keep
+   only the counter, not the text).
+3. Builds the system prompt server-side (so the upstream provider
+   never sees a user-controlled system prompt) and forwards your
+   situation + locale to whichever upstream LLM provider we're
+   currently using. As of the current build that's primarily Groq
+   ([groq.com](https://groq.com)) with OpenRouter
+   ([openrouter.ai](https://openrouter.ai)) as fallback.
+4. Returns the generated text to your device. Our proxy does not
+   retain a copy of either the request text or the response.
 
-**What OpenRouter / the upstream model do:** Per OpenRouter's policy,
-prompts sent to the DeepSeek V3 free model may be retained briefly for
-abuse-prevention purposes and may be used to improve the model. If this
-is unacceptable to you, turn Cloud AI off in Settings. The local-only
-path will still produce a (gentler) Vent draft.
+**What the upstream providers do:** Groq and OpenRouter each have
+their own privacy policies that govern what they do with API
+requests. In summary: by default neither provider retains customer
+prompts long-term, but both reserve the right to retain them
+temporarily (typically up to 30 days) for reliability investigation,
+abuse prevention, or compliance purposes. Some upstream models may
+be used to improve the model. Refer to their published policies
+([Groq](https://groq.com/privacy-policy/),
+[OpenRouter](https://openrouter.ai/privacy)) for the authoritative
+terms. If this is unacceptable to you, turn Cloud AI off in
+Settings — the local-only path will still produce a (gentler) Vent
+draft using Apple's on-device model.
 
 **Other network traffic** the app may initiate:
 
@@ -75,12 +93,11 @@ path will still produce a (gentler) Vent draft.
    identifier and any name/email you choose to share locally in
    Keychain, so Settings can show your account state.
 
-We do not use OpenAI, Anthropic, Google, Meta, Microsoft Azure, or any
-other AI service beyond the OpenRouter pathway described above for
-Vent / Feral. We do not embed analytics SDKs (Firebase, Amplitude,
-Mixpanel, Sentry, etc.). We do not use advertising identifiers (IDFA,
-IDFV for tracking, AppsFlyer, etc.). We do not fingerprint your
-device.
+We do not use any AI service beyond the upstream providers described
+above for Vent / Feral. We do not embed analytics SDKs (Firebase,
+Amplitude, Mixpanel, Sentry, etc.). We do not use advertising
+identifiers (IDFA, IDFV for tracking, AppsFlyer, etc.). We do not
+fingerprint your device.
 
 ---
 
