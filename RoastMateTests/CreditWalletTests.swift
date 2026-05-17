@@ -141,6 +141,70 @@ final class CreditWalletTests: XCTestCase {
         XCTAssertFalse(CreditCatalog.Pack.p10.isBestValue)
     }
 
+    // MARK: - Starter window spans exactly N calendar days (advisor fix)
+
+    func testStarterWindowIsExactlySevenCalendarDays() {
+        // Seed mid-afternoon: the window must still close after exactly
+        // starterWindowDays *calendar* days (day 0 … day N-1), not leak
+        // an extra date because of the non-midnight seed time.
+        let seed = Calendar.current.date(byAdding: .hour, value: 15, to: base)!
+        let s = UserSettings()
+        s.ensureTrialWalletSeeded(now: seed)
+        let lastIn = day(CreditCatalog.starterWindowDays - 1)
+        let firstOut = day(CreditCatalog.starterWindowDays)
+        XCTAssertTrue(s.isInStarterWindow(now: lastIn))
+        XCTAssertFalse(s.isInStarterWindow(now: firstOut),
+                       "Window must not leak an 8th eligible day for a non-midnight seed")
+    }
+
+    func testLegacyUpgraderStillGetsStarterWindow() {
+        // Pre-v1.1 store: nil raw fields incl. firstLaunchDate. Seeding
+        // must stamp firstLaunchDate=now so the window starts at upgrade,
+        // not from a stale install date.
+        let s = UserSettings()
+        s.creditBalanceRaw = nil
+        s.hasSeededTrialWalletRaw = nil
+        s.firstLaunchDate = nil
+        s.ensureTrialWalletSeeded(now: base)
+        XCTAssertEqual(s.firstLaunchDate, base)
+        XCTAssertTrue(s.isInStarterWindow(now: base))
+        XCTAssertEqual(s.starterTrickleRemaining(now: base),
+                       CreditCatalog.starterWindowDailyTrickle)
+    }
+
+    // MARK: - Purchased-credit settlement ledger (exactly-once, durable)
+
+    func testApplyCreditGrantIsIdempotentByTxID() {
+        let s = UserSettings()
+        s.ensureTrialWalletSeeded(now: base)
+        let seeded = s.creditBalance
+
+        XCTAssertFalse(s.hasGrantedCreditTx("tx1"))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70))
+        XCTAssertEqual(s.creditBalance, seeded + 70)
+        XCTAssertTrue(s.hasGrantedCreditTx("tx1"))
+
+        // Replay of the SAME transaction must not double-grant, but is
+        // still "settled" (true) so StoreKit can finish it.
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70))
+        XCTAssertEqual(s.creditBalance, seeded + 70, "Replay must not double-grant")
+
+        // A different transaction accumulates.
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx2", credits: 10))
+        XCTAssertEqual(s.creditBalance, seeded + 80)
+        XCTAssertTrue(s.hasGrantedCreditTx("tx2"))
+    }
+
+    func testApplyCreditGrantIgnoresEmptyOrNonPositive() {
+        let s = UserSettings()
+        s.ensureTrialWalletSeeded(now: base)
+        let seeded = s.creditBalance
+        XCTAssertTrue(s.applyCreditGrant(txID: "", credits: 70))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx", credits: 0))
+        XCTAssertEqual(s.creditBalance, seeded)
+        XCTAssertFalse(s.hasGrantedCreditTx("tx"))
+    }
+
     // MARK: - Additive guarantee: legacy quota path unchanged
 
     func testLegacyQuotaPathStillFunctions() {

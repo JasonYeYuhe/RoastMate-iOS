@@ -37,10 +37,31 @@ struct GenerateRoastIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
-        let style = StyleCatalog.shared.style(id: styleId) ?? {
-            // Style id not recognised — fall back to default.
-            return StyleCatalog.shared.style(id: StyleCatalog.shared.defaultStyleId)!
-        }()
+        // Crisis preflight — parity with the in-app generator
+        // (RoastGeneratorViewModel). A hard self-harm signal must NEVER
+        // get a roast, not even head-lessly: return supportive copy
+        // instead of generating. (RoastEngine.validateInput's denylist
+        // is narrower than the crisis classifier, so this check is
+        // load-bearing here.)
+        if SafetyFilter.crisisSignal(situation) == .hard {
+            let msg = AppLocalization.string("crisis.title") + " "
+                + AppLocalization.string("crisis.body")
+            return .result(value: msg, dialog: IntentDialog(stringLiteral: msg))
+        }
+
+        // Pro styles stay subscription-only — the headless path must not
+        // bypass the in-app tier guard via an arbitrary styleId. Fall
+        // back to the (free) default style instead.
+        var style = StyleCatalog.shared.style(id: styleId)
+            ?? StyleCatalog.shared.style(id: StyleCatalog.shared.defaultStyleId)!
+        if style.tier == .pro {
+            style = StyleCatalog.shared.style(id: StyleCatalog.shared.defaultStyleId)!
+        }
+
+        // This on-device path (free intensities + free styles only, no
+        // cloud cost) is an intentional UNMETERED promotional surface:
+        // it does not spend wallet credits. Credits gate the in-app /
+        // cloud (Vent/Feral) path where the real variable cost lives.
         let locale = Locale.current
         let variants = try await RoastEngine.shared.generate(
             situation: situation,

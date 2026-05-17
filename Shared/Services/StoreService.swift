@@ -2,9 +2,10 @@ import Foundation
 import StoreKit
 import os.log
 
-/// StoreKit 2 wrapper for the Pro subscription. V1 ships with the
-/// in-memory state only; full restore + transaction listener will land
-/// when Configuration.storekit is wired up (W7 per the plan).
+/// StoreKit 2 wrapper. Owns the Pro subscription entitlement and the
+/// v1.1 consumable credit packs. Consumable settlement is durable-first
+/// and exactly-once (persist via the app-installed `creditSettler`,
+/// then finish); no server-side reconciliation by design.
 @MainActor
 @Observable
 final class StoreService {
@@ -20,14 +21,17 @@ final class StoreService {
     /// path), sorted cheapest → most credits.
     private(set) var creditProducts: [Product] = []
 
-    /// Credits from verified consumable purchases not yet written into
-    /// the on-device wallet. `UserSettings` owns persistence, so the
-    /// presenting view drains this into the wallet and zeroes it. This
-    /// also catches transactions delivered via `Transaction.updates`
-    /// (Ask-to-Buy / interrupted purchases). There is no server-side
-    /// reconciliation by design — the app has no backend and rage never
-    /// leaves the device.
-    var pendingCreditGrant: Int = 0
+    /// Persists a verified consumable's credits and returns true once
+    /// the transaction is durably accounted for (just-applied OR
+    /// already-applied) — only then is it safe to finish the StoreKit
+    /// transaction. `UserSettings` owns persistence + the exactly-once
+    /// ledger; the app installs this at launch. No server-side
+    /// reconciliation by design — the app has no backend.
+    typealias CreditSettler = @MainActor (_ txID: String, _ credits: Int) -> Bool
+
+    /// Installed by the app at bootstrap (it owns the model context).
+    var creditSettler: CreditSettler?
+
     private(set) var isPro: Bool = {
         #if DEBUG
         return true
@@ -83,30 +87,41 @@ final class StoreService {
         }
     }
 
-    /// Consumable credit-pack purchase. On a verified transaction the
-    /// credit amount is staged in `pendingCreditGrant`; the presenting
-    /// view writes it into the wallet (which owns persistence) and
-    /// finishes nothing here — `transaction.finish()` is called only
-    /// after staging so an interrupted write is recoverable via
-    /// `Transaction.updates`.
+    /// Consumable credit-pack purchase. Durable-first: the purchase
+    /// leaves the transaction UNFINISHED, then `settleConsumables()`
+    /// persists the credits via the settler and only finishes the
+    /// transaction once that write succeeded. If the process dies before
+    /// the write, StoreKit keeps the transaction in `Transaction
+    /// .unfinished` and it is recovered on the next settle.
     func purchaseCredits(_ product: Product) async throws {
         guard CreditCatalog.credits(forProductID: product.id) != nil else { return }
         let result = try await product.purchase()
         switch result {
-        case .success(let verification):
-            switch verification {
-            case .verified(let transaction):
-                if let credits = CreditCatalog.credits(forProductID: transaction.productID) {
-                    pendingCreditGrant += credits
-                }
-                await transaction.finish()
-            case .unverified:
-                logger.warning("Credit purchase verification failed.")
-            }
+        case .success(.verified):
+            await settleConsumables()
+        case .success(.unverified):
+            logger.warning("Credit purchase verification failed.")
         case .userCancelled, .pending:
             break
         @unknown default:
             break
+        }
+    }
+
+    /// Settles every unfinished consumable: persist credits via the
+    /// settler (idempotent, keyed by transaction id), and finish the
+    /// transaction ONLY after the settler confirms a durable write.
+    /// Safe to call repeatedly (launch, paywall appear, post-purchase,
+    /// Ask-to-Buy / interrupted delivery).
+    func settleConsumables() async {
+        guard let settler = creditSettler else { return }
+        for await result in Transaction.unfinished {
+            guard case .verified(let transaction) = result,
+                  let credits = CreditCatalog.credits(forProductID: transaction.productID)
+            else { continue }
+            if settler(String(transaction.id), credits) {
+                await transaction.finish()
+            }
         }
     }
 
@@ -135,13 +150,14 @@ final class StoreService {
     }
 
     private func handleTransactionUpdate(_ update: VerificationResult<Transaction>) async {
-        if case .verified(let transaction) = update {
-            // A consumable arriving here (Ask-to-Buy approved, or an
-            // interrupted purchase) still needs its credits staged so
-            // they are not silently lost.
-            if let credits = CreditCatalog.credits(forProductID: transaction.productID) {
-                pendingCreditGrant += credits
-            }
+        guard case .verified(let transaction) = update else { return }
+        if CreditCatalog.credits(forProductID: transaction.productID) != nil {
+            // Consumable (Ask-to-Buy approved / interrupted). Do NOT
+            // finish here — route through the durable-first settler so
+            // credits are persisted before the transaction is finished.
+            await settleConsumables()
+        } else {
+            // Subscription entitlement change.
             await transaction.finish()
             await refreshSubscriptionStatus()
         }

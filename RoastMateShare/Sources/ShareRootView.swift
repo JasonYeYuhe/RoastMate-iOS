@@ -155,6 +155,15 @@ struct ShareRootView: View {
         defer { isLoading = false }
         error = nil
         output = nil
+        // Crisis preflight — parity with the in-app generator. A hard
+        // self-harm signal must never be turned into a roast, including
+        // from the Share Extension. Show supportive copy, do not
+        // generate. (RoastEngine.validateInput's denylist is narrower
+        // than the crisis classifier, so this check is load-bearing.)
+        if SafetyFilter.crisisSignal(sharedText) == .hard {
+            error = String(localized: "crisis.body")
+            return
+        }
         guard let style = StyleCatalog.shared.style(id: selectedStyleId) else {
             error = String(localized: "error.generic")
             return

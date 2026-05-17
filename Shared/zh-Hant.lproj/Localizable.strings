@@ -140,6 +140,7 @@
 "paywall.pro.subtitle" = "重度使用者最佳選擇:全部風格,狠 · 痛罵 · 發洩,無限使用。";
 "settings.credits.balance" = "點數";
 "settings.credits.buy" = "取得更多點數";
+"paywall.loading" = "載入中…";
 
 // MARK: - Errors
 

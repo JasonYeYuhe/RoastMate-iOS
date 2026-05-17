@@ -74,17 +74,31 @@ struct RoastMateApp: App {
             try? context.save()
         }
         HistoryService.seedSamplesIfNeeded(context: context)
-        await StoreService.shared.loadProducts()
-        // Drain any consumable credits delivered while the app was not
-        // foregrounded (Ask-to-Buy approval, interrupted purchase) into
-        // the on-device wallet. Local-only; no server reconciliation by
-        // design. The paywall drains again on appear for the live case.
-        let pendingCredits = StoreService.shared.pendingCreditGrant
-        if pendingCredits > 0 {
-            settings.grantCredits(pendingCredits)
-            StoreService.shared.pendingCreditGrant = 0
-            try? context.save()
+        // Install the durable-first credit settler: persist the grant +
+        // the exactly-once ledger and save BEFORE StoreService finishes
+        // the StoreKit transaction. Returning false (save failed) leaves
+        // the transaction unfinished for StoreKit to replay — no lost
+        // paid credits, no double-grant. Local-only; no backend.
+        StoreService.shared.creditSettler = { txID, credits in
+            let s = HistoryService.userSettings(context: context)
+            if s.hasGrantedCreditTx(txID) { return true }
+            s.applyCreditGrant(txID: txID, credits: credits)
+            do {
+                try context.save()
+                return true
+            } catch {
+                // Roll back so the in-memory ledger matches persisted
+                // truth — otherwise a later settle would see the txID as
+                // granted and finish the transaction without it ever
+                // being durable. false ⇒ leave unfinished for replay.
+                context.rollback()
+                return false
+            }
         }
+        await StoreService.shared.loadProducts()
+        // Recover any consumable delivered while the app was not
+        // foregrounded (Ask-to-Buy approval, interrupted purchase).
+        await StoreService.shared.settleConsumables()
         await AuthService.shared.refreshCredentialStateOnLaunch()
     }
 }

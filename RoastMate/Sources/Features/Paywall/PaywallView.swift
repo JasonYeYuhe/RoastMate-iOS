@@ -47,8 +47,9 @@ struct PaywallView: View {
         }
         .frame(minWidth: 360, minHeight: 480)
         .task {
+            installSettlerIfNeeded()
             await store.loadProducts()
-            drainPendingCredits()
+            await store.settleConsumables()
         }
     }
 
@@ -122,7 +123,6 @@ struct PaywallView: View {
         return Button {
             Task {
                 try? await store.purchaseCredits(product)
-                drainPendingCredits()
             }
         } label: {
             HStack {
@@ -241,23 +241,33 @@ struct PaywallView: View {
     }
 
     private var loadingRow: some View {
-        Text("Loading…")
+        Text("paywall.loading")
             .font(.callout)
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 24)
     }
 
-    // MARK: - Wallet grant
+    // MARK: - Wallet settlement
 
-    /// Moves credits from a verified consumable purchase into the
-    /// on-device wallet (which owns persistence) and zeroes the staging
-    /// counter. Local-only by design — no server reconciliation.
-    private func drainPendingCredits() {
-        let pending = store.pendingCreditGrant
-        guard pending > 0 else { return }
-        settings.grantCredits(pending)
-        store.pendingCreditGrant = 0
-        try? context.save()
+    /// The app installs the durable-first settler at bootstrap. As a
+    /// safety net (e.g. paywall reached before bootstrap completed),
+    /// install an equivalent one bound to this view's context if none
+    /// exists. Idempotent: the wallet write is keyed by transaction id.
+    private func installSettlerIfNeeded() {
+        guard store.creditSettler == nil else { return }
+        let ctx = context
+        store.creditSettler = { txID, credits in
+            let s = settingsQuery.first ?? HistoryService.userSettings(context: ctx)
+            if s.hasGrantedCreditTx(txID) { return true }
+            s.applyCreditGrant(txID: txID, credits: credits)
+            do {
+                try ctx.save()
+                return true
+            } catch {
+                ctx.rollback()
+                return false
+            }
+        }
     }
 }

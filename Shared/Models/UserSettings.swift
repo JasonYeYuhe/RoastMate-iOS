@@ -60,6 +60,14 @@ final class UserSettings {
     /// Local-midnight reset anchor for `starterTrickleUsed`.
     var starterTrickleResetDate: Date?
 
+    /// Comma-separated StoreKit `Transaction.id`s whose credits have
+    /// already been deposited. The settlement path is durable-first
+    /// (persist wallet + this ledger, save, THEN finish the
+    /// transaction) and idempotent: a replayed/unfinished consumable is
+    /// matched here so it is finished without double-granting. Nullable
+    /// for CloudKit-safe migration.
+    var grantedCreditTxIDsRaw: String?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -77,6 +85,7 @@ final class UserSettings {
         self.firstLaunchDate = nil
         self.starterTrickleUsed = nil
         self.starterTrickleResetDate = nil
+        self.grantedCreditTxIDsRaw = nil
     }
 
     /// Resolved cloud flag with legacy default. Treat nil (pre-cloud
@@ -106,6 +115,11 @@ final class UserSettings {
         max(0, Self.freeLifetimeAllotment - lifetimeUsedSafe)
     }
 
+    /// LEGACY (pre-v1.1). Superseded by the credit wallet
+    /// (`spendOneCredit`); no longer on the live generation path. Kept
+    /// byte-unchanged with its tests purely for migration safety — do
+    /// not wire new callers to it.
+    ///
     /// Attempts to consume one free generation. Priority order:
     /// 1. Lifetime allotment (first 20 generations ever) — never touches
     ///    daily counter while this is active so the user doesn't lose their
@@ -180,6 +194,12 @@ final class UserSettings {
     /// this install. Covers fresh installs and a single top-up for users
     /// who upgrade into v1.1 (same one-time-bonus precedent as the
     /// 20-generation lifetime runway). Idempotent.
+    ///
+    /// `firstLaunchDate` is a v1.1-new field (nil on every pre-v1.1
+    /// store), so it is stamped here at seed time for BOTH fresh and
+    /// upgrading users — i.e. the starter window always begins when the
+    /// user first meets the credit system, never from a stale install
+    /// date (addresses the upgrader-misses-window concern).
     @discardableResult
     func ensureTrialWalletSeeded(now: Date = Date()) -> Bool {
         guard !hasSeededTrialWallet else { return false }
@@ -191,10 +211,19 @@ final class UserSettings {
 
     /// True while the soft-landing starter window is still open. An
     /// un-seeded store is treated as day 0 (window open).
+    ///
+    /// Anchored to the *calendar day* of first launch: the window spans
+    /// exactly `starterWindowDays` calendar days (day 0 … day N-1). The
+    /// trickle counter resets at local midnight, so anchoring on the
+    /// raw timestamp would leak one extra eligible day for any non-
+    /// midnight seed time (a seed at 15:00 + 7×24h still covers parts of
+    /// 8 dates). startOfDay closes that off.
     func isInStarterWindow(now: Date = Date()) -> Bool {
         guard let start = firstLaunchDate else { return true }
-        guard let end = Calendar.current.date(
-            byAdding: .day, value: CreditCatalog.starterWindowDays, to: start
+        let calendar = Calendar.current
+        let anchor = calendar.startOfDay(for: start)
+        guard let end = calendar.date(
+            byAdding: .day, value: CreditCatalog.starterWindowDays, to: anchor
         ) else { return false }
         return now < end
     }
@@ -264,5 +293,36 @@ final class UserSettings {
     func availableCreditsNow(now: Date = Date()) -> Int {
         let pendingTrial = hasSeededTrialWallet ? 0 : CreditCatalog.seededTrialCredits
         return creditBalance + pendingTrial + starterTrickleRemaining(now: now)
+    }
+
+    // MARK: - Purchased-credit settlement ledger (durable-first, exactly-once)
+
+    private var grantedCreditTxIDs: Set<String> {
+        guard let raw = grantedCreditTxIDsRaw, !raw.isEmpty else { return [] }
+        return Set(raw.split(separator: ",").map(String.init))
+    }
+
+    /// True if this StoreKit transaction's credits were already
+    /// deposited — so a replayed/unfinished consumable is safe to just
+    /// finish without granting again.
+    func hasGrantedCreditTx(_ txID: String) -> Bool {
+        grantedCreditTxIDs.contains(txID)
+    }
+
+    /// Idempotently deposit a verified consumable's credits. Returns
+    /// true if, after this call, the transaction is fully accounted for
+    /// (either just applied, or applied by an earlier call) — i.e. the
+    /// caller may now finish the StoreKit transaction. The wallet and
+    /// this ledger move together so a crash before the model is saved
+    /// simply leaves the transaction unfinished for StoreKit to replay.
+    @discardableResult
+    func applyCreditGrant(txID: String, credits: Int) -> Bool {
+        guard credits > 0, !txID.isEmpty else { return true }
+        if grantedCreditTxIDs.contains(txID) { return true }
+        creditBalance += credits
+        var ids = grantedCreditTxIDs
+        ids.insert(txID)
+        grantedCreditTxIDsRaw = ids.sorted().joined(separator: ",")
+        return true
     }
 }

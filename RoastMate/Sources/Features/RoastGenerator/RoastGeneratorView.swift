@@ -4,6 +4,7 @@ import SwiftData
 struct RoastGeneratorView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.locale) private var locale
+    @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel = RoastGeneratorViewModel()
     @State private var showPaywall = false
     @State private var threadContinuationBanner: String? = nil
@@ -36,6 +37,12 @@ struct RoastGeneratorView: View {
             .padding()
         }
         .scrollDismissesKeyboard(.interactively)
+        .onChange(of: scenePhase) { _, phase in
+            // Control tapped while the app was already foregrounded ON
+            // the generator tab: onAppear won't re-fire, so consume the
+            // Quick Vent request here too.
+            if phase == .active { applyQuickVentIfPending() }
+        }
         .onChange(of: viewModel.state) { _, newValue in
             // Dismiss the keyboard the moment we start generating so the
             // result has the full screen to breathe in. Without this the
@@ -55,10 +62,7 @@ struct RoastGeneratorView: View {
             // Quick Vent (Control Center / Lock Screen / Action Button /
             // Siri) lands here: pre-select Vent and focus the box. Pro
             // gating + the credit wallet still apply on Generate.
-            if LaunchRouter.shared.consumeQuickVent() {
-                viewModel.selectedIntensity = .vent
-                situationFocused = true
-            }
+            applyQuickVentIfPending()
             if let payload = HandoffStore.shared.consume() {
                 viewModel.situation = payload.situation
                 viewModel.selectedStyleId = payload.styleId
@@ -90,6 +94,17 @@ struct RoastGeneratorView: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
+        }
+    }
+
+    /// Drains a pending Quick Vent request (from a Control / Action
+    /// Button / Siri) exactly once and pre-selects the Vent intensity.
+    /// Idempotent: consume clears the flag, so a follow-up scenePhase
+    /// or onAppear is a no-op.
+    private func applyQuickVentIfPending() {
+        if LaunchRouter.shared.consumeQuickVent() {
+            viewModel.selectedIntensity = .vent
+            situationFocused = true
         }
     }
 
