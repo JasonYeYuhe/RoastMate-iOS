@@ -378,3 +378,21 @@
 "mood.amused.name" = "Amused";
 
 "rewrite.fallback.unavailable" = "Couldn't rewrite right now. The vent draft is yours to keep.";
+
+/* === Crisis support (Pillar D) === */
+"crisis.title" = "You're not alone";
+"crisis.body" = "It sounds like you're going through something really painful. RoastMate is a writing tool — it can't help with this, but people who care can. Please reach out.";
+"crisis.privacy_note" = "What you wrote stayed on your device — it wasn't sent anywhere or generated.";
+"crisis.directory_cta" = "Find a helpline near you";
+"crisis.regional_label" = "Or contact directly:";
+"crisis.emergency_note" = "If you might act on these feelings, or you're in immediate danger, please contact your local emergency services now.";
+"crisis.dismiss" = "Go back and edit my message";
+
+/* === Trust / About AI (Pillar D) === */
+"settings.about_ai.ondevice_label" = "On-device by default — Apple Foundation Models; your text stays on the phone";
+"settings.about_ai.cloud_label" = "Stronger drafts can use an optional developer-owned cloud proxy — toggle off anytime";
+"settings.about_ai.no_bigai_label" = "No OpenAI / Anthropic / Google";
+"trust.not_companion.title" = "A tool, not a companion";
+"trust.not_companion.body" = "RoastMate won't remember you, befriend you, or replace a friend, therapist, or professional. It helps you say it, then gets out of the way.";
+"crisis.banner" = "Venting helps — and if this feels heavier than venting, support is here.";
+"crisis.banner.cta" = "Find help";

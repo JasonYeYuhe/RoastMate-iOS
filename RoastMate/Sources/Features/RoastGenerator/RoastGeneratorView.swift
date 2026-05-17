@@ -255,6 +255,9 @@ struct RoastGeneratorView: View {
         switch viewModel.state {
         case .results:
             VStack(alignment: .leading, spacing: 12) {
+                if viewModel.crisisBanner {
+                    CrisisBanner()
+                }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "exclamationmark.triangle")
@@ -300,6 +303,8 @@ struct RoastGeneratorView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.orange.opacity(0.12))
             )
+        case .crisis:
+            CrisisSupportView(onDismiss: { viewModel.state = .idle })
         case .idle, .loading:
             EmptyView()
         }

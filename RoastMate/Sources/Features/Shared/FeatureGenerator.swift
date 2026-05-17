@@ -24,6 +24,9 @@ final class FeatureGeneratorViewModel {
         case loading
         case results
         case error(String)
+        /// Input signalled the user's own self-harm risk — show
+        /// supportive resources instead of generating.
+        case crisis
     }
 
     let config: FeatureGeneratorConfig
@@ -34,6 +37,8 @@ final class FeatureGeneratorViewModel {
     var currentSession: RoastSession?
     var rewritingDraftId: UUID?
     var rewriteError: String?
+    /// Soft self-harm signal: results still shown, plus a supportive banner.
+    var crisisBanner: Bool = false
 
     init(config: FeatureGeneratorConfig) {
         self.config = config
@@ -47,6 +52,21 @@ final class FeatureGeneratorViewModel {
     func generate(context: ModelContext, locale: Locale) async {
         let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
+        // Self-harm handoff (two-tier). `.hard` intercepts BEFORE quota /
+        // Pro gating / the engine so a person in distress gets care, not
+        // an error or a paywall, and no free quota is spent. `.soft`
+        // keeps generating (it's a venting app) but flags a supportive
+        // banner. Filters stay unchanged.
+        switch SafetyFilter.crisisSignal(text) {
+        case .hard:
+            crisisBanner = false
+            state = .crisis
+            return
+        case .soft:
+            crisisBanner = true
+        case .none:
+            crisisBanner = false
+        }
         guard let style = style() else {
             state = .error(String(localized: "error.generic"))
             return
@@ -312,6 +332,9 @@ struct FeatureGeneratorView: View {
         switch viewModel.state {
         case .results:
             VStack(alignment: .leading, spacing: 12) {
+                if viewModel.crisisBanner {
+                    CrisisBanner()
+                }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "exclamationmark.triangle")
@@ -355,6 +378,8 @@ struct FeatureGeneratorView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.orange.opacity(0.12))
             )
+        case .crisis:
+            CrisisSupportView(onDismiss: { viewModel.state = .idle })
         case .idle, .loading:
             EmptyView()
         }

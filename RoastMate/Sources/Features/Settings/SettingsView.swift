@@ -159,15 +159,26 @@ struct AboutAIView: View {
                 .font(.body)
                 .multilineTextAlignment(.leading)
             Divider()
-            Label("Apple Foundation Models · on-device", systemImage: "checkmark.seal")
+            Label("settings.about_ai.ondevice_label", systemImage: "checkmark.seal")
                 .foregroundStyle(.green)
-            Label("No OpenAI / Anthropic / Google", systemImage: "xmark.shield")
+            Label("settings.about_ai.cloud_label", systemImage: "cloud")
+                .foregroundStyle(.secondary)
+            Label("settings.about_ai.no_bigai_label", systemImage: "xmark.shield")
                 .foregroundStyle(.secondary)
             Label("settings.about_ai.privacy_label", systemImage: "lock.shield")
                 .foregroundStyle(.secondary)
+            Divider()
+            VStack(alignment: .leading, spacing: 4) {
+                Label("trust.not_companion.title", systemImage: "person.crop.circle.badge.xmark")
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(.primary)
+                Text("trust.not_companion.body")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Spacer()
         }
         .padding(24)
-        .frame(minWidth: 360, minHeight: 380)
+        .frame(minWidth: 360, minHeight: 480)
     }
 }

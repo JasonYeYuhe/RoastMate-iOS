@@ -378,3 +378,21 @@
 "mood.amused.name" = "あきれ笑い";
 
 "rewrite.fallback.unavailable" = "今回は書き換えられませんでした。吐き出し草稿はあなたのものです。";
+
+/* === Crisis support (Pillar D) === */
+"crisis.title" = "あなたは一人じゃない";
+"crisis.body" = "とてもつらい状況にいるようですね。RoastMate は文章を書くためのツールで、これには力になれません。でも、支えてくれる人がいます。どうか連絡してみてください。";
+"crisis.privacy_note" = "書いた内容はこの端末内にとどまり、どこにも送信されず、生成もされていません。";
+"crisis.directory_cta" = "近くの相談窓口を探す";
+"crisis.regional_label" = "または直接連絡：";
+"crisis.emergency_note" = "その気持ちで行動してしまいそうなとき、または今すぐ危険があるときは、すぐに地域の緊急サービスに連絡してください。";
+"crisis.dismiss" = "戻って内容を編集する";
+
+/* === Trust / About AI (Pillar D) === */
+"settings.about_ai.ondevice_label" = "標準で端末内処理——Apple Foundation Models。文章は端末内にとどまります";
+"settings.about_ai.cloud_label" = "より強い下書きは任意の開発者運営クラウドプロキシを利用——いつでもオフにできます";
+"settings.about_ai.no_bigai_label" = "OpenAI / Anthropic / Google は不使用";
+"trust.not_companion.title" = "相棒ではなく、道具";
+"trust.not_companion.body" = "RoastMate はあなたを記憶せず、友達にもならず、友人・カウンセラー・専門家の代わりにもなりません。言葉にするのを手伝い、あとは引きます。";
+"crisis.banner" = "吐き出すのは大切です——もしただの愚痴より重いと感じたら、相談先があります。";
+"crisis.banner.cta" = "相談先を見る";

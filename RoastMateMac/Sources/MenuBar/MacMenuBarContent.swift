@@ -77,8 +77,11 @@ struct MacMenuBarContent: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, 4)
         case .results:
-            if let session = viewModel.currentSession {
-                VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 8) {
+                if viewModel.crisisBanner {
+                    CrisisBanner()
+                }
+                if let session = viewModel.currentSession {
                     ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                         RoastCard(text: result.text, style: StyleCatalog.shared.style(id: result.styleId))
                     }
@@ -88,6 +91,8 @@ struct MacMenuBarContent: View {
             Text(message)
                 .font(.callout)
                 .foregroundStyle(.orange)
+        case .crisis:
+            CrisisSupportView(onDismiss: { viewModel.state = .idle })
         }
     }
 }

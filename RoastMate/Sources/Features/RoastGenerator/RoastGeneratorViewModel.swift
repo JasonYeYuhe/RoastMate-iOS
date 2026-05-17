@@ -10,6 +10,9 @@ final class RoastGeneratorViewModel {
         case loading
         case results
         case error(String)
+        /// Input signalled the user's own self-harm risk — show
+        /// supportive resources instead of generating.
+        case crisis
     }
 
     var situation: String = ""
@@ -19,6 +22,8 @@ final class RoastGeneratorViewModel {
     var currentSession: RoastSession?
     var rewritingDraftId: UUID?
     var rewriteError: String?
+    /// Soft self-harm signal: results still shown, plus a supportive banner.
+    var crisisBanner: Bool = false
 
     /// When non-nil, the next `generate()` call attaches the new session to
     /// this thread and feeds the prior-context summary into the engine.
@@ -39,6 +44,21 @@ final class RoastGeneratorViewModel {
     func generate(context: ModelContext, locale: Locale) async {
         let text = situation.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
+        // Self-harm handoff (two-tier). `.hard` intercepts BEFORE quota /
+        // Pro gating / the engine so a person in distress gets care, not
+        // an error or a paywall, and no free quota is spent. `.soft`
+        // keeps generating (it's a venting app) but flags a supportive
+        // banner. Filters stay unchanged.
+        switch SafetyFilter.crisisSignal(text) {
+        case .hard:
+            crisisBanner = false
+            state = .crisis
+            return
+        case .soft:
+            crisisBanner = true
+        case .none:
+            crisisBanner = false
+        }
         guard let style = style() else {
             state = .error(String(localized: "error.generic"))
             return
@@ -145,6 +165,7 @@ final class RoastGeneratorViewModel {
         selectedIntensity = .sharp
         currentSession = nil
         rewriteError = nil
+        crisisBanner = false
         state = .idle
     }
 }

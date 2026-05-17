@@ -110,6 +110,69 @@ enum SafetyFilter {
         let lower = text.lowercased()
         return denylist.first { !$0.isEmpty && lower.contains($0) }
     }
+
+    // MARK: - Self-harm crisis detection (two-tier)
+    //
+    // ADDITIVE ONLY. This does NOT modify or relax `validateInput`,
+    // `validateOutput`, or `validateVentOutput` — those filters are
+    // unchanged, so the safety guarantee is not weakened. This signals
+    // the *user's own* self-harm risk so the UI can offer supportive
+    // resources, distinct from the denylist (slurs / threats aimed at
+    // *others*).
+    //
+    // Two tiers, because this is a venting app:
+    //  • `.hard` — explicit ideation. The UI intercepts *before*
+    //    generating and shows the full support card (input never
+    //    generated).
+    //  • `.soft` — hyperbole-prone phrases ("ugh I want to die"). The
+    //    roast still generates, but a gentle supportive banner is shown
+    //    alongside it. Venting isn't blocked; help is still offered.
+    //
+    // Privacy: this never logs the input or the matched phrase.
+    enum CrisisSignal: Equatable { case none, soft, hard }
+
+    /// Explicit ideation — always intercept.
+    private static let hardSelfHarmPhrases: [String] = [
+        // English
+        "kill myself", "killing myself", "kill my self", "end my life",
+        "ending my life", "take my own life", "suicidal",
+        "don't want to live", "dont want to live", "do not want to live",
+        "no reason to live", "better off dead", "self-harm", "self harm",
+        "cut myself", "cutting myself", "hurt myself", "harm myself",
+        // 中文（强信号）
+        "自杀", "自殺", "我想自杀", "想自杀", "我要自杀", "我想自殺",
+        "想自殺", "我要自殺", "不想活了", "不想活", "活不下去", "我不想活",
+        "结束自己的生命", "结束生命", "結束自己的生命", "結束生命",
+        "自残", "自伤", "伤害自己", "自殘", "傷害自己", "轻生", "輕生",
+        "了結自己",
+        // 日本語（強い表現）
+        "自殺したい", "自殺する", "もう生きられない", "リストカット",
+        "自傷", "自分を傷つけ"
+    ]
+
+    /// Hyperbole-prone — still generate, but surface a supportive banner.
+    private static let softSelfHarmPhrases: [String] = [
+        // English
+        "want to die", "wanna die", "i want to die", "end it all",
+        "i can't go on", "i cant go on", "want to disappear",
+        "don't want to be here", "dont want to be here",
+        // 中文（可能是夸张表达）
+        "我想死", "想死", "想去死", "活着没意思", "活着没意义",
+        "撑不下去了", "撐不下去", "一了百了", "解脱算了",
+        // 日本語（誇張表現の可能性）
+        "死にたい", "消えたい", "生きていたくない", "生きるのがつらい",
+        "いなくなりたい"
+    ]
+
+    /// Two-tier self-harm signal. `.hard` → intercept (do not generate);
+    /// `.soft` → keep generating but show a supportive banner; `.none`
+    /// → normal. Does not gate or alter the filters above.
+    static func crisisSignal(_ text: String) -> CrisisSignal {
+        let lower = text.lowercased()
+        if hardSelfHarmPhrases.contains(where: { lower.contains($0) }) { return .hard }
+        if softSelfHarmPhrases.contains(where: { lower.contains($0) }) { return .soft }
+        return .none
+    }
 }
 
 private struct ForbiddenTermsFile: Codable {

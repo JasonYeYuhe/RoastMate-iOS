@@ -378,3 +378,21 @@
 "mood.amused.name" = "想笑";
 
 "rewrite.fallback.unavailable" = "这次没改出来。发泄稿留给你。";
+
+/* === Crisis support (Pillar D) === */
+"crisis.title" = "你并不孤单";
+"crisis.body" = "听起来你正在经历很痛苦的事。RoastMate 只是一个写作工具，帮不了这个忙，但有人可以。请向他们求助。";
+"crisis.privacy_note" = "你写的内容只留在这台设备上——没有上传，也没有生成任何回复。";
+"crisis.directory_cta" = "查找你所在地区的求助热线";
+"crisis.regional_label" = "或直接联系：";
+"crisis.emergency_note" = "如果你可能会伤害自己，或正处于紧急危险中，请立即联系当地急救服务。";
+"crisis.dismiss" = "返回修改我写的内容";
+
+/* === Trust / About AI (Pillar D) === */
+"settings.about_ai.ondevice_label" = "默认在设备本地运行——Apple 基础模型；你的文字留在手机上";
+"settings.about_ai.cloud_label" = "更强的草稿可选用开发者自有云代理——可随时关闭";
+"settings.about_ai.no_bigai_label" = "不使用 OpenAI / Anthropic / Google";
+"trust.not_companion.title" = "是工具，不是陪伴";
+"trust.not_companion.body" = "RoastMate 不会记住你、与你做朋友，也不会取代朋友、心理咨询师或专业人士。它帮你说出口，然后退到一旁。";
+"crisis.banner" = "发泄是好事——如果这已经不只是发泄，也有人能帮你。";
+"crisis.banner.cta" = "寻求帮助";
