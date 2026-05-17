@@ -65,10 +65,14 @@ struct GeneratedRoastCard: View {
     let style: StylePreset?
     let isRewriting: Bool
     let hasSendableReply: Bool
+    /// For a `.sendableReply`, the text of its source `.ventDraft`, so the
+    /// share card can offer the Vent→Sent layout. nil otherwise.
+    var pairedVentText: String? = nil
     let onRewrite: (() -> Void)?
 
     @Environment(\.modelContext) private var modelContext
     @State private var copied = false
+    @State private var showShareCard = false
 
     /// Only sendable kinds (`.normalRoast` + `.sendableReply`) get the
     /// star toggle. Private drafts are framed as ephemeral catharsis;
@@ -142,6 +146,19 @@ struct GeneratedRoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
+                // Share as image — sendable kinds only; the private vent
+                // draft itself is never offered as a shareable card.
+                if result.kind == .normalRoast || result.kind == .sendableReply {
+                    Button {
+                        showShareCard = true
+                    } label: {
+                        Label("sharecard.button", systemImage: "photo.on.rectangle.angled")
+                            .font(.callout)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
+
                 if result.kind == .ventDraft, !hasSendableReply, let onRewrite {
                     Button {
                         onRewrite()
@@ -181,6 +198,13 @@ struct GeneratedRoastCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(backgroundColor)
         )
+        .sheet(isPresented: $showShareCard) {
+            ShareCardComposer(
+                sentText: result.text,
+                styleName: style?.displayName,
+                sourceVent: result.kind == .sendableReply ? pairedVentText : nil
+            )
+        }
     }
 
     private var kindLabel: LocalizedStringKey {

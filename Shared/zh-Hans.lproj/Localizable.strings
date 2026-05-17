@@ -396,3 +396,24 @@
 "trust.not_companion.body" = "RoastMate 不会记住你、与你做朋友，也不会取代朋友、心理咨询师或专业人士。它帮你说出口，然后退到一旁。";
 "crisis.banner" = "发泄是好事——如果这已经不只是发泄，也有人能帮你。";
 "crisis.banner.cta" = "寻求帮助";
+
+/* === Share card (Pillar A) === */
+"sharecard.button" = "做成图";
+"sharecard.title" = "分享为图片";
+"sharecard.cancel" = "取消";
+"sharecard.share" = "分享图片";
+"sharecard.format_label" = "尺寸";
+"sharecard.format.portrait" = "竖版 4:5";
+"sharecard.format.story" = "全屏 9:16";
+"sharecard.include_vent" = "包含我的发泄原文";
+"sharecard.include_vent.hint" = "默认关闭。发泄稿是私密的——只有你确认后才会出现在图片里。";
+"sharecard.edit_label" = "公开前可编辑（已自动隐去隐私信息）";
+"sharecard.warn.title" = "确定要公开发泄原文吗？";
+"sharecard.warn.body" = "这段文字本来只属于你。公开前请逐字检查；我们已自动隐去邮箱、电话和链接，你也可以继续编辑。";
+"sharecard.warn.confirm" = "包含它";
+"sharecard.warn.cancel" = "保持私密";
+"sharecard.comeback_eyebrow" = "我的回击";
+"sharecard.before_label" = "我差点发出去的";
+"sharecard.after_label" = "我最后说的";
+"sharecard.vent_hidden" = "私密发泄 · 已隐藏";
+"sharecard.watermark" = "先骂个痛快，再发会赢的版本";

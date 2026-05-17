@@ -193,6 +193,7 @@ struct ThreadDetailView: View {
                     style: StyleCatalog.shared.style(id: result.styleId),
                     isRewriting: rewritingDraftId == result.id,
                     hasSendableReply: sendableReplyExists(for: result, in: orderedResults),
+                    pairedVentText: ShareCardPairing.ventText(for: result, in: orderedResults),
                     onRewrite: result.kind == .ventDraft && !sendableReplyExists(for: result, in: orderedResults)
                         ? { triggerRewrite(draft: result, in: session) }
                         : nil
