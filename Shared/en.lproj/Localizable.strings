@@ -47,6 +47,17 @@
 "scenario.cat.family" = "Family";
 "scenario.cat.roommate" = "Roommate";
 "scenario.cat.groupchat" = "Group chat";
+
+// MARK: - Voice venting (on-device, ephemeral)
+"voice.button" = "Vent by voice";
+"voice.title" = "Speak your vent";
+"voice.disclosure" = "100% on-device · your voice is never stored";
+"voice.listening" = "Listening… speak freely.";
+"voice.stop" = "Stop & use this";
+"voice.permission.needed" = "RoastMate needs microphone & speech access to transcribe on your device.";
+"voice.permission.grant" = "Allow";
+"voice.permission.denied" = "Microphone or speech access is off. Enable it in Settings to vent by voice.";
+"voice.unsupported" = "On-device voice isn't available for this language.";
 "generator.sample_remix" = "Remix this";
 
 // MARK: - Result

@@ -43,6 +43,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_CFBundleDisplayName: RoastMate
         INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "RoastMate transcribes your spoken vent on-device. Your voice is never stored or sent anywhere."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Speech recognition runs entirely on your device to turn your spoken vent into editable text. Nothing leaves your phone."
         INFOPLIST_FILE: RoastMate/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor

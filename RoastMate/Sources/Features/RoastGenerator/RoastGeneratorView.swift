@@ -8,6 +8,10 @@ struct RoastGeneratorView: View {
     @State private var viewModel = RoastGeneratorViewModel()
     @State private var showPaywall = false
     @State private var threadContinuationBanner: String? = nil
+    #if os(iOS)
+    @State private var voiceGate: VoiceVentGate? = nil
+    @State private var showVoiceSheet = false
+    #endif
     @Query private var settingsQuery: [UserSettings]
     @Query private var threads: [SituationThread]
 
@@ -96,6 +100,17 @@ struct RoastGeneratorView: View {
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
         }
+        #if os(iOS)
+        .task(id: locale) {
+            voiceGate = await VoiceVentTranscriber.currentGate(appLocale: locale)
+        }
+        .sheet(isPresented: $showVoiceSheet) {
+            VoiceVentSheet(appLocale: locale) { transcript in
+                viewModel.applyVoiceTranscript(transcript)
+                situationFocused = false
+            }
+        }
+        #endif
     }
 
     /// Drains a pending Quick Vent request (from a Control / Action
@@ -183,6 +198,24 @@ struct RoastGeneratorView: View {
                             .padding(14)
                             .allowsHitTesting(false)
                     }
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    #if os(iOS)
+                    if voiceGate?.showsAffordance == true {
+                        Button {
+                            showVoiceSheet = true
+                        } label: {
+                            Image(systemName: "mic.fill")
+                                .font(.callout.weight(.semibold))
+                                .foregroundStyle(.orange)
+                                .padding(8)
+                                .background(Circle().fill(Color.orange.opacity(0.14)))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("voice.button"))
+                        .padding(10)
+                    }
+                    #endif
                 }
             Text("generator.empty.subtitle")
                 .font(.caption)

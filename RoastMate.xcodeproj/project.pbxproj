@@ -79,12 +79,14 @@
 		2EB1BDC620D6820CB50D572F /* ShareCardComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACFB0A16144FB99761AFC8C /* ShareCardComposer.swift */; };
 		2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
+		31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		344B79E5E67F7AC0A9672BFF /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		3541E840D5FA220EFA44F8C6 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
 		3544742806A9B8592027BD91 /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
 		35EC89B2E1708C44634ABBFF /* GeneratedRoastSourceIntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE9D7DE34335C97A63A81CA /* GeneratedRoastSourceIntensityTests.swift */; };
 		36C96C621D8EFC99ADF6490C /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F56C52CC38A6375FAC083A8 /* ExploreView.swift */; };
+		36DE5FC84187D300B3C11063 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		37A58D9925817D606CDAAF7F /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		388F448B02D52272681946B5 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		3AEE51908660D480813CD995 /* HistorySessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */; };
@@ -148,6 +150,7 @@
 		65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		66F1F5CB70029246E49FAE36 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F32B5D19D53FB9C880B922 /* HistoryView.swift */; };
 		674B28B74075E04EE0586A0E /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
+		676355E41A02D0FC5DA4184A /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		68473C13DFF73CCB2406AA6F /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		696A50C08BAEADA6F9AD0D17 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
@@ -163,6 +166,7 @@
 		71979856D909667E84F725FD /* ThreadServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B2554A2EAAC8D0C056A58F /* ThreadServiceTests.swift */; };
 		7311337B73B1C190E6D0CF4D /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		734530F27669026BEE82284E /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
+		737FD10435742A8B94C66A33 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		74268AC32FDB34B1378D20EC /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		7455D048B076CD68DCF281F0 /* RoastMateShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7073FC7C9AD2BEDF41A2693E /* RoastMateShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		74754F25B41BAD9383C689FD /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
@@ -172,6 +176,7 @@
 		7833F713E282495DF726B820 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		786AD5795CE740B5A69678EB /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		78C7E4B48D65423CA81A267C /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
+		799D515828CD850D8AB38191 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		79C9C9727259EB3F8214F0EC /* HistoryServiceSeedingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B083E28F113298B96278CC /* HistoryServiceSeedingTests.swift */; };
 		7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE713D8BAF11D2A4B568BD /* ArgumentSimulatorViewModel.swift */; };
 		7A78E7FA8936D1C1BA02B1A7 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D292AA9CB572696DF122016F /* PaywallView.swift */; };
@@ -218,6 +223,7 @@
 		977C6BDD74B711051EA50850 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		98B9C565A5F175158C8110EB /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		997087433748B46D4BA84311 /* ShareCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D09E8118DF68AA860F66E81 /* ShareCardTests.swift */; };
+		998053ABB3B90B92693BCA28 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		9B9127AA255504C18DC18EE3 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		9C80752CDF47F939708658CF /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		9C95C8A20AD90251958359FF /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
@@ -226,6 +232,7 @@
 		9D6FD6497072B5CADE6A780E /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		9DED25ED81EDF49FA9BC638E /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		9FAFAA809A538B41EC3E06B7 /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
+		A1F061CB240CD31930641CE9 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
 		A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		A50453236C33115558205278 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		A5C0D08DE2F07F7855FFE85B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
@@ -237,6 +244,8 @@
 		A7D0EA62E689636A866C0605 /* IntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B4101DE1A025BBCFB379 /* IntensityTests.swift */; };
 		A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
+		AAF4CA9DC81346C933FE0B15 /* VoiceVentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */; };
+		ACDEC04B9B439D36E2800940 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		ADF20E86735BD6742466F6CE /* CrisisSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4033DDD59B2FB940AF7C3C67 /* CrisisSupportView.swift */; };
 		AEEE917CEDEFE01516080296 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		AFBC63E7FFAF9695BDBFBFBC /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
@@ -268,6 +277,7 @@
 		C28344518AEB069722838962 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
 		C2EF3E50DC95CD99854F7DA2 /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		C3442101E76291E09EC23E5E /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
+		C391DEBFA8BC7963045B2D82 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		C42063E72232619019568007 /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		C450C0EBA820611287B50FF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2ED4E06FE20675139E16E6DB /* Assets.xcassets */; };
 		C4D46D6E74CA9C76B122324E /* RoastGeneratorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */; };
@@ -341,6 +351,7 @@
 		F6343FF17C60C8FCFD849038 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
 		F78639AE31EC2B76EE255D7E /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
 		F7B3D47A17C1738051DA328A /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
+		F7D29F37AE3E83FD9C7230B7 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
 		F8564091DC2A58F6CD338CCF /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
 		F9E5BE28B1F74F360EAA5994 /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		FB5DAEA18959F2CD19849571 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
@@ -439,6 +450,7 @@
 		4F762D491194741211677317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorViewModel.swift; sourceTree = "<group>"; };
 		58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGenerator.swift; sourceTree = "<group>"; };
+		59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVentTests.swift; sourceTree = "<group>"; };
 		5ACFB0A16144FB99761AFC8C /* ShareCardComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardComposer.swift; sourceTree = "<group>"; };
 		5C0CD8554785AFF026C0BD9A /* RoastMate.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = RoastMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleRoast.swift; sourceTree = "<group>"; };
@@ -495,6 +507,7 @@
 		C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStore.swift; sourceTree = "<group>"; };
 		C6170E3A5DBB1F27F26CF7EC /* ScenarioCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioCatalogTests.swift; sourceTree = "<group>"; };
+		C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVentTranscriber.swift; sourceTree = "<group>"; };
 		C994C838B393F986EB67EDCA /* DeviceID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceID.swift; sourceTree = "<group>"; };
 		CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRouter.swift; sourceTree = "<group>"; };
 		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
@@ -505,7 +518,9 @@
 		EA10FA2DEB7AFCCFEC1468EE /* MacMenuBarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuBarContent.swift; sourceTree = "<group>"; };
 		EA1A9BF2523442F3D7A2C243 /* Redactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redactor.swift; sourceTree = "<group>"; };
 		EBE9D7DE34335C97A63A81CA /* GeneratedRoastSourceIntensityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedRoastSourceIntensityTests.swift; sourceTree = "<group>"; };
+		ED2B32D471683AE995D046C4 /* VoiceVent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVent.swift; sourceTree = "<group>"; };
 		EF4C713BC0D271FCF06C41EB /* RoastMateWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastMateWatchApp.swift; sourceTree = "<group>"; };
+		F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVentSheet.swift; sourceTree = "<group>"; };
 		F35435AF43856D6230E0A35F /* SafetyFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyFilterTests.swift; sourceTree = "<group>"; };
 		F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffStore.swift; sourceTree = "<group>"; };
 		FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
@@ -597,6 +612,15 @@
 			path = RoastMateUITests;
 			sourceTree = "<group>";
 		};
+		4C602706C9D23E8D0F01D6D3 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */,
+				C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
 		4FB9A199B9907933BC2E2F09 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -669,6 +693,7 @@
 				B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */,
 				65B2554A2EAAC8D0C056A58F /* ThreadServiceTests.swift */,
 				6224DA4F04F19B18E4969E96 /* UserSettingsQuotaTests.swift */,
+				59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */,
 			);
 			path = RoastMateTests;
 			sourceTree = "<group>";
@@ -737,6 +762,7 @@
 				5C70372E616B3C6B9A03229A /* StoreService.swift */,
 				C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */,
 				2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */,
+				ED2B32D471683AE995D046C4 /* VoiceVent.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -813,6 +839,7 @@
 				317379F238F8382C50A0D043 /* Shared */,
 				C7A2058774F5BD598D69F665 /* SocialRoast */,
 				91CE7B4BE547A5BF3649CB0A /* StyleLibrary */,
+				4C602706C9D23E8D0F01D6D3 /* Voice */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -1292,6 +1319,8 @@
 				71979856D909667E84F725FD /* ThreadServiceTests.swift in Sources */,
 				7311337B73B1C190E6D0CF4D /* UserSettings.swift in Sources */,
 				C5473B315D2E339D4297A72A /* UserSettingsQuotaTests.swift in Sources */,
+				36DE5FC84187D300B3C11063 /* VoiceVent.swift in Sources */,
+				AAF4CA9DC81346C933FE0B15 /* VoiceVentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1338,6 +1367,7 @@
 				8C1B163B9E96487B60D23505 /* ThreadContinuationStore.swift in Sources */,
 				20CA46D67579A9902A9F0B93 /* ThreadService.swift in Sources */,
 				CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */,
+				737FD10435742A8B94C66A33 /* VoiceVent.swift in Sources */,
 				DC905534746E85F12A9A01B4 /* WatchHomeView.swift in Sources */,
 				0278356E9AADD4119F637AA9 /* WatchQuickPromptView.swift in Sources */,
 			);
@@ -1386,6 +1416,7 @@
 				EB9E387A1FD32D4DDE4B7464 /* ThreadContinuationStore.swift in Sources */,
 				9393227E7656F563044AD9C0 /* ThreadService.swift in Sources */,
 				98B9C565A5F175158C8110EB /* UserSettings.swift in Sources */,
+				C391DEBFA8BC7963045B2D82 /* VoiceVent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1433,6 +1464,7 @@
 				21AFC0AD60E17DD1BC537CE0 /* ThreadContinuationStore.swift in Sources */,
 				5F1D83BF1578093F81386156 /* ThreadService.swift in Sources */,
 				A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */,
+				ACDEC04B9B439D36E2800940 /* VoiceVent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1502,6 +1534,9 @@
 				854EFD62EF0FEC4C5366BFE2 /* ThreadDetailView.swift in Sources */,
 				CACFB3F2643DBF8DA4D6B8EA /* ThreadService.swift in Sources */,
 				DE0F97BE440D311A38EE40F5 /* UserSettings.swift in Sources */,
+				799D515828CD850D8AB38191 /* VoiceVent.swift in Sources */,
+				A1F061CB240CD31930641CE9 /* VoiceVentSheet.swift in Sources */,
+				998053ABB3B90B92693BCA28 /* VoiceVentTranscriber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1570,6 +1605,9 @@
 				BF23A5F0AAE256CE999DEEC1 /* ThreadDetailView.swift in Sources */,
 				D15939753D0304B1E8335C2C /* ThreadService.swift in Sources */,
 				3FFA8E1FDD919492E53C0990 /* UserSettings.swift in Sources */,
+				676355E41A02D0FC5DA4184A /* VoiceVent.swift in Sources */,
+				F7D29F37AE3E83FD9C7230B7 /* VoiceVentSheet.swift in Sources */,
+				31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1826,6 +1864,8 @@
 				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "RoastMate transcribes your spoken vent on-device. Your voice is never stored or sent anywhere.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs entirely on your device to turn your spoken vent into editable text. Nothing leaves your phone.";
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1894,6 +1934,8 @@
 				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "RoastMate transcribes your spoken vent on-device. Your voice is never stored or sent anywhere.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs entirely on your device to turn your spoken vent into editable text. Nothing leaves your phone.";
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

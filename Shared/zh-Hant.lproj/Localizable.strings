@@ -47,6 +47,17 @@
 "scenario.cat.family" = "家人";
 "scenario.cat.roommate" = "室友";
 "scenario.cat.groupchat" = "群組";
+
+// MARK: - Voice venting (on-device, ephemeral)
+"voice.button" = "語音吐槽";
+"voice.title" = "說出你的吐槽";
+"voice.disclosure" = "100% 裝置本機處理 · 語音絕不儲存";
+"voice.listening" = "聆聽中…儘管說。";
+"voice.stop" = "停止並使用";
+"voice.permission.needed" = "需要麥克風與語音權限,以在本機轉寫。";
+"voice.permission.grant" = "允許";
+"voice.permission.denied" = "麥克風或語音權限已關閉。請到設定開啟以使用語音。";
+"voice.unsupported" = "目前語言尚不支援本機語音。";
 "generator.sample_remix" = "用這個生成";
 
 // MARK: - Result

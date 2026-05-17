@@ -47,6 +47,17 @@
 "scenario.cat.family" = "家族";
 "scenario.cat.roommate" = "ルームメイト";
 "scenario.cat.groupchat" = "グループ";
+
+// MARK: - Voice venting (on-device, ephemeral)
+"voice.button" = "音声で吐き出す";
+"voice.title" = "声で吐き出す";
+"voice.disclosure" = "100%デバイス内処理・音声は保存されません";
+"voice.listening" = "聞いています…自由に話してください。";
+"voice.stop" = "停止して使う";
+"voice.permission.needed" = "デバイス内で文字起こしするには、マイクと音声認識の許可が必要です。";
+"voice.permission.grant" = "許可する";
+"voice.permission.denied" = "マイクまたは音声認識がオフです。設定でオンにしてください。";
+"voice.unsupported" = "この言語ではデバイス内音声に対応していません。";
 "generator.sample_remix" = "これで生成";
 
 // MARK: - Result

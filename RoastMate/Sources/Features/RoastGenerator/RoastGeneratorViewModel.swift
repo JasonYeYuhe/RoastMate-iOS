@@ -163,6 +163,21 @@ final class RoastGeneratorViewModel {
         rewritingDraftId = nil
     }
 
+    /// Pre-fills the vent box from an on-device voice transcript. Pure
+    /// prefill — voice is a free input modality; the transcript then
+    /// goes through the SAME generate() path as typed text, so the
+    /// crisis/safety preflight and credit/Pro gating are inherited
+    /// unchanged (a new input path must not bypass the safety net).
+    func applyVoiceTranscript(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        situation = trimmed
+        currentSession = nil
+        rewriteError = nil
+        crisisBanner = false
+        state = .idle
+    }
+
     /// Pre-fills the generator from a curated zh-first scenario (situation
     /// + a free-tier style + intensity). Pure prefill — generation still
     /// goes through the normal credit/Pro gating on Generate.
