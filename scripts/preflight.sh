@@ -177,10 +177,14 @@ build_target "RoastMateControls" "generic/platform=iOS Simulator"   "-sdk iphone
 
 # ─────────────────────────────────────────────────────────────────────
 section "Unit tests"
-if xcodebuild -project "$PROJECT" -scheme RoastMateTests \
+# xcodegen only emits schemes for app/extension targets — there is no
+# "RoastMateTests" scheme (this step silently failed since the v1.0
+# initial commit). Tests run via the RoastMate scheme's test action
+# (testTargets: RoastMateTests + RoastMateUITests).
+if xcodebuild -project "$PROJECT" -scheme RoastMate \
     -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
     CODE_SIGNING_ALLOWED=NO test 2>&1 \
-    | tail -20 | grep -q "TEST SUCCEEDED"; then
+    | grep -q "\*\* TEST SUCCEEDED \*\*"; then
   ok "unit tests pass"
 else
   fail "unit tests failed"
