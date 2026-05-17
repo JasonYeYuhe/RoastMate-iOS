@@ -1864,8 +1864,8 @@
 				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "RoastMate transcribes your spoken vent on-device. Your voice is never stored or sent anywhere.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs entirely on your device to turn your spoken vent into editable text. Nothing leaves your phone.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The mic is used only to transcribe your spoken vent on-device. Your voice audio is never recorded, saved, or sent anywhere.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs on-device to turn your spoken vent into editable text. Your voice audio never leaves your phone.";
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -1934,8 +1934,8 @@
 				INFOPLIST_FILE = RoastMate/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "RoastMate transcribes your spoken vent on-device. Your voice is never stored or sent anywhere.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs entirely on your device to turn your spoken vent into editable text. Nothing leaves your phone.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The mic is used only to transcribe your spoken vent on-device. Your voice audio is never recorded, saved, or sent anywhere.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs on-device to turn your spoken vent into editable text. Your voice audio never leaves your phone.";
 				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
