@@ -50,10 +50,21 @@ struct VoiceVentSheet: View {
             gate = g
             if g == .ready { await beginRecording() }
         }
+        .onDisappear {
+            // Interactive/!button dismissal must still stop the mic.
+            // stop() is idempotent, so this is safe even after finish().
+            Task { await transcriber.stop() }
+        }
     }
 
     private var recording: some View {
         VStack(spacing: 16) {
+            if transcriber.isPreparing {
+                ProgressView()
+                Text("voice.preparing")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Image(systemName: transcriber.isRecording ? "waveform" : "mic.fill")
                 .font(.system(size: 44))
                 .foregroundStyle(.orange)

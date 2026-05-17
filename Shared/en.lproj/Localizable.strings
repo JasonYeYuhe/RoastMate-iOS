@@ -51,7 +51,8 @@
 // MARK: - Voice venting (on-device, ephemeral)
 "voice.button" = "Vent by voice";
 "voice.title" = "Speak your vent";
-"voice.disclosure" = "100% on-device · your voice is never stored";
+"voice.disclosure" = "Voice is transcribed on-device · audio is never recorded or sent";
+"voice.preparing" = "Preparing the on-device voice model…";
 "voice.listening" = "Listening… speak freely.";
 "voice.stop" = "Stop & use this";
 "voice.permission.needed" = "RoastMate needs microphone & speech access to transcribe on your device.";

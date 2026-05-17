@@ -51,7 +51,8 @@
 // MARK: - Voice venting (on-device, ephemeral)
 "voice.button" = "音声で吐き出す";
 "voice.title" = "声で吐き出す";
-"voice.disclosure" = "100%デバイス内処理・音声は保存されません";
+"voice.disclosure" = "音声はデバイス内で文字化・録音や送信は一切なし";
+"voice.preparing" = "デバイス内の音声モデルを準備中…";
 "voice.listening" = "聞いています…自由に話してください。";
 "voice.stop" = "停止して使う";
 "voice.permission.needed" = "デバイス内で文字起こしするには、マイクと音声認識の許可が必要です。";

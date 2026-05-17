@@ -51,7 +51,8 @@
 // MARK: - Voice venting (on-device, ephemeral)
 "voice.button" = "語音吐槽";
 "voice.title" = "說出你的吐槽";
-"voice.disclosure" = "100% 裝置本機處理 · 語音絕不儲存";
+"voice.disclosure" = "語音在裝置本機轉寫 · 音訊絕不錄製或上傳";
+"voice.preparing" = "正在準備本機語音模型…";
 "voice.listening" = "聆聽中…儘管說。";
 "voice.stop" = "停止並使用";
 "voice.permission.needed" = "需要麥克風與語音權限,以在本機轉寫。";
