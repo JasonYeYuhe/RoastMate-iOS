@@ -125,6 +125,22 @@
 "paywall.subscribe" = "Subscribe";
 "paywall.continue_free" = "Continue with free";
 
+// MARK: - Credits (v1.1 hybrid monetization)
+"wallet.credits" = "%d credits";
+"wallet.starter" = "%d free today";
+"wallet.starter.hint" = "Free starter week";
+"paywall.out_of_credits.title" = "Out of credits";
+"paywall.out_of_credits.body" = "Grab a credit pack, or go unlimited with Pro.";
+"paywall.credits.title" = "Credit packs";
+"paywall.credits.subtitle" = "Pay only for what you use — no subscription.";
+"paywall.credits.pack" = "%d credits";
+"paywall.credits.bestvalue" = "Best value";
+"paywall.credits.note" = "Credits add generations and rewrites. Savage, Feral and Vent stay Pro-only.";
+"paywall.pro.title" = "Or go unlimited";
+"paywall.pro.subtitle" = "Best value for heavy users: every style, Savage · Feral · Vent, unlimited.";
+"settings.credits.balance" = "Credits";
+"settings.credits.buy" = "Get more credits";
+
 // MARK: - Errors
 
 "error.generic" = "Something went wrong. Try again?";

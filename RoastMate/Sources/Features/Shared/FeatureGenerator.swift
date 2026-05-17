@@ -90,8 +90,11 @@ final class FeatureGeneratorViewModel {
         }
 
         if !isPro {
-            guard settings.consumeFreeQuotaIfAvailable() else {
-                state = .error(String(localized: "quota.exhausted.body"))
+            // Credits add quantity only; the Pro-only guards above are
+            // unchanged. View intent-triggers the paywall first — this
+            // is the safety net.
+            guard settings.spendOneCredit() else {
+                state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
             }
             try? context.save()
@@ -176,6 +179,9 @@ struct FeatureGeneratorView: View {
     @Environment(\.locale) private var locale
     @State private var viewModel: FeatureGeneratorViewModel
     @State private var showPaywall = false
+    @Query private var settingsQuery: [UserSettings]
+
+    private var settings: UserSettings? { settingsQuery.first }
 
     private var styles: [StylePreset] {
         if viewModel.config.proGated {
@@ -281,6 +287,9 @@ struct FeatureGeneratorView: View {
     private var generateButton: some View {
         Button {
             if !isPro && viewModel.selectedIntensity.requiresPro {
+                showPaywall = true
+            } else if !isPro && settings?.canSpendNow() == false {
+                // Intent-triggered paywall at the peak moment.
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }

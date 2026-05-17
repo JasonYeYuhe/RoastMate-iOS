@@ -61,6 +61,10 @@ struct RoastMateApp: App {
     private func bootstrap() async {
         let context = modelContainer.mainContext
         let settings = HistoryService.userSettings(context: context)
+        // Grant the one-time seeded trial wallet (fresh installs + a
+        // single top-up for users upgrading into v1.1). Idempotent.
+        settings.ensureTrialWalletSeeded()
+        try? context.save()
         if AppLaunchEnvironment.isUITest {
             // Deterministic UI-test state: no onboarding / age gate /
             // content-notice walls so screenshots land on the real UI.
@@ -71,6 +75,16 @@ struct RoastMateApp: App {
         }
         HistoryService.seedSamplesIfNeeded(context: context)
         await StoreService.shared.loadProducts()
+        // Drain any consumable credits delivered while the app was not
+        // foregrounded (Ask-to-Buy approval, interrupted purchase) into
+        // the on-device wallet. Local-only; no server reconciliation by
+        // design. The paywall drains again on appear for the live case.
+        let pendingCredits = StoreService.shared.pendingCreditGrant
+        if pendingCredits > 0 {
+            settings.grantCredits(pendingCredits)
+            StoreService.shared.pendingCreditGrant = 0
+            try? context.save()
+        }
         await AuthService.shared.refreshCredentialStateOnLaunch()
     }
 }

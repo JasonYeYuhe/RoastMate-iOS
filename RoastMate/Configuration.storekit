@@ -1,7 +1,128 @@
 {
   "identifier" : "RoastMatePro",
   "nonRenewingSubscriptions" : [],
-  "products" : [],
+  "products" : [
+    {
+      "displayPrice" : "1",
+      "familyShareable" : false,
+      "internalID" : "RoastMateCredits10",
+      "localizations" : [
+        {
+          "description" : "10 generations or rewrites. No subscription.",
+          "displayName" : "10 Credits",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "10 次生成或改写,无需订阅。",
+          "displayName" : "10 点",
+          "locale" : "zh_Hans"
+        },
+        {
+          "description" : "10 次生成或改寫,無需訂閱。",
+          "displayName" : "10 點",
+          "locale" : "zh_Hant"
+        },
+        {
+          "description" : "生成または書き直し10回。サブスク不要。",
+          "displayName" : "10クレジット",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "yyh.roastmate.app.credits.10",
+      "referenceName" : "Credits 10",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "6",
+      "familyShareable" : false,
+      "internalID" : "RoastMateCredits70",
+      "localizations" : [
+        {
+          "description" : "70 generations or rewrites. No subscription.",
+          "displayName" : "70 Credits",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "70 次生成或改写,无需订阅。",
+          "displayName" : "70 点",
+          "locale" : "zh_Hans"
+        },
+        {
+          "description" : "70 次生成或改寫,無需訂閱。",
+          "displayName" : "70 點",
+          "locale" : "zh_Hant"
+        },
+        {
+          "description" : "生成または書き直し70回。サブスク不要。",
+          "displayName" : "70クレジット",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "yyh.roastmate.app.credits.70",
+      "referenceName" : "Credits 70",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "12",
+      "familyShareable" : false,
+      "internalID" : "RoastMateCredits160",
+      "localizations" : [
+        {
+          "description" : "160 generations or rewrites. No subscription.",
+          "displayName" : "160 Credits",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "160 次生成或改写,无需订阅。",
+          "displayName" : "160 点",
+          "locale" : "zh_Hans"
+        },
+        {
+          "description" : "160 次生成或改寫,無需訂閱。",
+          "displayName" : "160 點",
+          "locale" : "zh_Hant"
+        },
+        {
+          "description" : "生成または書き直し160回。サブスク不要。",
+          "displayName" : "160クレジット",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "yyh.roastmate.app.credits.160",
+      "referenceName" : "Credits 160",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "25",
+      "familyShareable" : false,
+      "internalID" : "RoastMateCredits380",
+      "localizations" : [
+        {
+          "description" : "380 generations or rewrites. Best value.",
+          "displayName" : "380 Credits",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "380 次生成或改写,最划算。",
+          "displayName" : "380 点",
+          "locale" : "zh_Hans"
+        },
+        {
+          "description" : "380 次生成或改寫,最划算。",
+          "displayName" : "380 點",
+          "locale" : "zh_Hant"
+        },
+        {
+          "description" : "生成または書き直し380回。最もお得。",
+          "displayName" : "380クレジット",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "yyh.roastmate.app.credits.380",
+      "referenceName" : "Credits 380",
+      "type" : "Consumable"
+    }
+  ],
   "settings" : {
     "_applicationInternalID" : "yyh.roastmate.app",
     "_developerTeamID" : "KHMK6Q3L3K",

@@ -75,8 +75,12 @@ final class RoastGeneratorViewModel {
             return
         }
         if !isPro {
-            guard settings.consumeFreeQuotaIfAvailable() else {
-                state = .error(String(localized: "quota.exhausted.body"))
+            // Credits are a quantity knob only — the Pro-only intensity
+            // and style guards above are unchanged, so spending a credit
+            // never unlocks a capability. The View intent-triggers the
+            // paywall before reaching here; this is the safety net.
+            guard settings.spendOneCredit() else {
+                state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
             }
             try? context.save()

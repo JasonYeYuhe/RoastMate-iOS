@@ -125,6 +125,22 @@
 "paywall.subscribe" = "立即訂閱";
 "paywall.continue_free" = "繼續免費使用";
 
+// MARK: - Credits (v1.1 hybrid monetization)
+"wallet.credits" = "%d 點";
+"wallet.starter" = "今日免費 %d 次";
+"wallet.starter.hint" = "新手體驗週";
+"paywall.out_of_credits.title" = "點數已用完";
+"paywall.out_of_credits.body" = "購買點數包,或升級 Pro 享受無限。";
+"paywall.credits.title" = "點數包";
+"paywall.credits.subtitle" = "按需付費,無需訂閱。";
+"paywall.credits.pack" = "%d 點";
+"paywall.credits.bestvalue" = "最划算";
+"paywall.credits.note" = "點數用於生成和改寫。狠、痛罵、發洩仍為 Pro 專屬。";
+"paywall.pro.title" = "或解鎖無限";
+"paywall.pro.subtitle" = "重度使用者最佳選擇:全部風格,狠 · 痛罵 · 發洩,無限使用。";
+"settings.credits.balance" = "點數";
+"settings.credits.buy" = "取得更多點數";
+
 // MARK: - Errors
 
 "error.generic" = "出了點問題,再試一次?";

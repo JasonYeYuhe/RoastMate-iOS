@@ -125,6 +125,22 @@
 "paywall.subscribe" = "登録する";
 "paywall.continue_free" = "無料のまま続ける";
 
+// MARK: - Credits (v1.1 hybrid monetization)
+"wallet.credits" = "%d クレジット";
+"wallet.starter" = "今日は無料であと%d回";
+"wallet.starter.hint" = "お試し週間";
+"paywall.out_of_credits.title" = "クレジットがありません";
+"paywall.out_of_credits.body" = "クレジットパックを購入するか、Proで無制限に。";
+"paywall.credits.title" = "クレジットパック";
+"paywall.credits.subtitle" = "使った分だけ。サブスク不要。";
+"paywall.credits.pack" = "%d クレジット";
+"paywall.credits.bestvalue" = "最もお得";
+"paywall.credits.note" = "クレジットは生成と書き直しに使えます。容赦なし・罵倒・吐き出しはPro限定のままです。";
+"paywall.pro.title" = "または無制限に";
+"paywall.pro.subtitle" = "ヘビーユーザーに最適:全スタイル、容赦なし・罵倒・吐き出し、無制限。";
+"settings.credits.balance" = "クレジット";
+"settings.credits.buy" = "クレジットを追加";
+
 // MARK: - Errors
 
 "error.generic" = "問題が発生しました。もう一度お試しください。";

@@ -33,6 +33,33 @@ final class UserSettings {
     /// Calm / Sharp / Savage stay 100% on-device regardless of this flag.
     var cloudVentEnabledRaw: Bool?
 
+    // MARK: - Credit wallet (v1.1 Pillar B — consumables-primary)
+
+    /// Spendable credit balance. One credit == one generation / one
+    /// sendable-rewrite. Credits are a quantity knob only and never
+    /// unlock a Pro capability. Nullable so CloudKit-backed stores
+    /// upgrade without a migration (same pattern as `lifetimeFreeUsed`);
+    /// resolves through `creditBalance`, which lazily seeds the trial
+    /// wallet exactly once.
+    var creditBalanceRaw: Int?
+
+    /// Whether the one-time seeded trial wallet has been granted. Gates
+    /// the grant so it happens once per install — including once for
+    /// already-installed users on upgrade (nil → not yet granted).
+    var hasSeededTrialWalletRaw: Bool?
+
+    /// First-launch anchor for the starter window. Set when the trial
+    /// wallet is seeded; nil on legacy stores until first resolve.
+    var firstLaunchDate: Date?
+
+    /// Free starter-window generations used today (does not touch the
+    /// wallet). Separate from `dailyFreeUsed` so the legacy quota path
+    /// and its tests stay byte-unchanged.
+    var starterTrickleUsed: Int?
+
+    /// Local-midnight reset anchor for `starterTrickleUsed`.
+    var starterTrickleResetDate: Date?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -45,6 +72,11 @@ final class UserSettings {
         self.historyRetentionDays = 30
         self.lifetimeFreeUsed = 0
         self.cloudVentEnabledRaw = true
+        self.creditBalanceRaw = nil
+        self.hasSeededTrialWalletRaw = nil
+        self.firstLaunchDate = nil
+        self.starterTrickleUsed = nil
+        self.starterTrickleResetDate = nil
     }
 
     /// Resolved cloud flag with legacy default. Treat nil (pre-cloud
@@ -123,4 +155,114 @@ final class UserSettings {
     /// uses this to switch the quota chip copy from "X free today" to
     /// "X free to start (then 5/day)".
     var isInLifetimeWindow: Bool { lifetimeRemaining > 0 }
+
+    // MARK: - Credit wallet (v1.1 Pillar B)
+    //
+    // Additive layer over the legacy quota above. The generation path
+    // now spends through `spendOneCredit`; the legacy lifetime/daily
+    // counters and their tests are left byte-unchanged (same additive
+    // discipline Pillar D used for the safety filter).
+
+    /// Spendable balance. One credit == one generation/rewrite. Credits
+    /// are a quantity knob only — they never unlock a Pro capability.
+    var creditBalance: Int {
+        get { creditBalanceRaw ?? 0 }
+        set { creditBalanceRaw = max(0, newValue) }
+    }
+
+    /// Whether the one-time seeded trial wallet has been granted.
+    var hasSeededTrialWallet: Bool {
+        get { hasSeededTrialWalletRaw ?? false }
+        set { hasSeededTrialWalletRaw = newValue }
+    }
+
+    /// Grants the one-time trial wallet if it has never been granted on
+    /// this install. Covers fresh installs and a single top-up for users
+    /// who upgrade into v1.1 (same one-time-bonus precedent as the
+    /// 20-generation lifetime runway). Idempotent.
+    @discardableResult
+    func ensureTrialWalletSeeded(now: Date = Date()) -> Bool {
+        guard !hasSeededTrialWallet else { return false }
+        creditBalance += CreditCatalog.seededTrialCredits
+        hasSeededTrialWallet = true
+        if firstLaunchDate == nil { firstLaunchDate = now }
+        return true
+    }
+
+    /// True while the soft-landing starter window is still open. An
+    /// un-seeded store is treated as day 0 (window open).
+    func isInStarterWindow(now: Date = Date()) -> Bool {
+        guard let start = firstLaunchDate else { return true }
+        guard let end = Calendar.current.date(
+            byAdding: .day, value: CreditCatalog.starterWindowDays, to: start
+        ) else { return false }
+        return now < end
+    }
+
+    /// Starter-trickle used today, honoring the local-midnight rollover
+    /// without mutating (used by the read-only peeks).
+    private func starterTrickleUsedToday(now: Date) -> Int {
+        guard let reset = starterTrickleResetDate,
+              Calendar.current.isDate(reset, inSameDayAs: now) else { return 0 }
+        return starterTrickleUsed ?? 0
+    }
+
+    /// Free starter-window generations left today (0 once the window
+    /// closes). Does not touch the wallet.
+    func starterTrickleRemaining(now: Date = Date()) -> Int {
+        guard isInStarterWindow(now: now) else { return 0 }
+        return max(0, CreditCatalog.starterWindowDailyTrickle - starterTrickleUsedToday(now: now))
+    }
+
+    /// Read-only: can the user generate right now without paying?
+    /// (pending trial grant, today's free trickle, or a wallet credit).
+    func canSpendNow(now: Date = Date()) -> Bool {
+        if !hasSeededTrialWallet { return true }
+        if starterTrickleRemaining(now: now) > 0 { return true }
+        return creditBalance > 0
+    }
+
+    /// Spends one unit for a generation/rewrite. Priority:
+    /// 1. Lazily seed the trial wallet (first spend ever).
+    /// 2. Free starter-window trickle — does NOT touch the wallet, so the
+    ///    seeded credits survive the soft-landing window.
+    /// 3. One wallet credit.
+    /// Returns false only when nothing is available → the caller shows
+    /// the intent-triggered paywall.
+    func spendOneCredit(now: Date = Date()) -> Bool {
+        ensureTrialWalletSeeded(now: now)
+
+        if isInStarterWindow(now: now) {
+            let calendar = Calendar.current
+            if let reset = starterTrickleResetDate,
+               calendar.isDate(reset, inSameDayAs: now) {
+                // same day — keep the running count
+            } else {
+                starterTrickleUsed = 0
+                starterTrickleResetDate = calendar.startOfDay(for: now)
+            }
+            let used = starterTrickleUsed ?? 0
+            if used < CreditCatalog.starterWindowDailyTrickle {
+                starterTrickleUsed = used + 1
+                return true
+            }
+        }
+
+        guard creditBalance > 0 else { return false }
+        creditBalance -= 1
+        return true
+    }
+
+    /// Deposits purchased credits into the wallet.
+    func grantCredits(_ amount: Int) {
+        guard amount > 0 else { return }
+        creditBalance += amount
+    }
+
+    /// Generations available right now without paying (trial-aware) —
+    /// surfaced in the wallet chip.
+    func availableCreditsNow(now: Date = Date()) -> Int {
+        let pendingTrial = hasSeededTrialWallet ? 0 : CreditCatalog.seededTrialCredits
+        return creditBalance + pendingTrial + starterTrickleRemaining(now: now)
+    }
 }

@@ -67,6 +67,14 @@ struct SettingsView: View {
                     Label("Pro", systemImage: "checkmark.seal.fill")
                         .foregroundStyle(.orange)
                 } else {
+                    HStack {
+                        Text("settings.credits.balance")
+                        Spacer()
+                        Text(verbatim: "\(settings?.availableCreditsNow() ?? 0)")
+                            .foregroundStyle(.secondary)
+                    }
+                    Button("settings.credits.buy") { showPaywall = true }
+                        .foregroundStyle(.orange)
                     Button("settings.subscription.upgrade") { showPaywall = true }
                         .foregroundStyle(.orange)
                 }

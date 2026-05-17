@@ -88,17 +88,17 @@ struct RoastGeneratorView: View {
 
     @ViewBuilder
     private func quotaChip(for settings: UserSettings) -> some View {
-        if settings.isInLifetimeWindow {
+        if settings.isInStarterWindow(), settings.starterTrickleRemaining() > 0 {
             VStack(alignment: .trailing, spacing: 0) {
-                Text(String(format: String(localized: "quota.remaining.lifetime"), settings.lifetimeRemaining))
+                Text(String(format: String(localized: "wallet.starter"), settings.starterTrickleRemaining()))
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.orange)
-                Text("quota.lifetime.hint")
+                Text("wallet.starter.hint")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
         } else {
-            Text(String(format: String(localized: "quota.remaining"), settings.totalRemainingFreeNow))
+            Text(String(format: String(localized: "wallet.credits"), settings.availableCreditsNow()))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -200,6 +200,11 @@ struct RoastGeneratorView: View {
             // they hit Generate, not after the model warms up.
             situationFocused = false
             if !isPro && viewModel.selectedIntensity.requiresPro {
+                showPaywall = true
+            } else if !isPro && settings?.canSpendNow() == false {
+                // Intent-triggered paywall: fire at the peak moment the
+                // user reaches for a generation with an empty wallet —
+                // not at onboarding.
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }
