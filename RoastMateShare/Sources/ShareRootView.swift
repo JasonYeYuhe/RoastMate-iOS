@@ -13,9 +13,15 @@ struct ShareRootView: View {
     @State private var isLoading = false
     @State private var error: String? = nil
     @State private var mode: RoastMode = .reply
+    @State private var intensity: Intensity = .sharp
     @State private var copied = false
 
     private var styles: [StylePreset] { StyleCatalog.shared.byTier(.free) }
+
+    /// Only the free intensities. Savage / Feral / Vent are Pro-only
+    /// and the extension has no StoreKit surface — those stay in the
+    /// app where entitlement gating lives.
+    private let intensities: [Intensity] = [.calm, .sharp]
 
     var body: some View {
         NavigationStack {
@@ -23,6 +29,7 @@ struct ShareRootView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     sharedInputCard
                     modePicker
+                    intensityPicker
                     styleRow
                     generateButton
                     if let output {
@@ -69,6 +76,15 @@ struct ShareRootView: View {
             Text("feature.reply.title").tag(RoastMode.reply)
             Text("feature.translator.title").tag(RoastMode.translate)
             Text("feature.social.title").tag(RoastMode.social)
+        }
+        .pickerStyle(.segmented)
+    }
+
+    private var intensityPicker: some View {
+        Picker("share.intensity", selection: $intensity) {
+            ForEach(intensities, id: \.self) { level in
+                Text(level.displayName).tag(level)
+            }
         }
         .pickerStyle(.segmented)
     }
@@ -149,7 +165,8 @@ struct ShareRootView: View {
                 style: style,
                 locale: Locale.current,
                 variantCount: 1,
-                mode: mode
+                mode: mode,
+                intensity: intensity
             )
             output = variants.first
         } catch let err as RoastError {

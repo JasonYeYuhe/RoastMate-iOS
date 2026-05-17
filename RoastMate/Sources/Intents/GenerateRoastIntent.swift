@@ -22,6 +22,13 @@ struct GenerateRoastIntent: AppIntent {
     )
     var styleId: String
 
+    @Parameter(
+        title: "intent.param.intensity",
+        description: "intent.param.intensity.description",
+        default: .sharp
+    )
+    var intensity: RoastIntensityAppEnum
+
     static var parameterSummary: some ParameterSummary {
         Summary("Generate a \(\.$styleId) roast for \(\.$situation)")
     }
@@ -40,10 +47,38 @@ struct GenerateRoastIntent: AppIntent {
             style: style,
             locale: locale,
             variantCount: 1,
-            mode: .roast
+            mode: .roast,
+            intensity: intensity.resolved
         )
         let response = variants.first ?? String(localized: "roast.error.no_variants")
         return .result(value: response, dialog: IntentDialog(stringLiteral: response))
+    }
+}
+
+/// The headless intent only exposes the free intensities. Savage /
+/// Feral / Vent are Pro-only, safety-sensitive private drafts — they
+/// must go through the app (where entitlement gating, the credit wallet
+/// and the crisis safety net live), so they are deliberately not
+/// reachable from a no-UI Siri/Shortcuts run. Vent is offered instead
+/// via `QuickVentIntent`, which opens the app.
+enum RoastIntensityAppEnum: String, AppEnum {
+    case calm
+    case sharp
+
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(
+        name: "intent.param.intensity"
+    )
+
+    static let caseDisplayRepresentations: [RoastIntensityAppEnum: DisplayRepresentation] = [
+        .calm: DisplayRepresentation(title: "intensity.calm.name"),
+        .sharp: DisplayRepresentation(title: "intensity.sharp.name")
+    ]
+
+    var resolved: Intensity {
+        switch self {
+        case .calm: return .calm
+        case .sharp: return .sharp
+        }
     }
 }
 
@@ -58,6 +93,17 @@ struct RoastMateShortcutsProvider: AppShortcutsProvider {
                 "\(.applicationName)で返しを作って"
             ],
             shortTitle: "intent.shortcut.short_title",
+            systemImageName: "flame.fill"
+        )
+        AppShortcut(
+            intent: QuickVentIntent(),
+            phrases: [
+                "Vent with \(.applicationName)",
+                "Vent about this with \(.applicationName)",
+                "用\(.applicationName)发泄一下",
+                "\(.applicationName)で吐き出す"
+            ],
+            shortTitle: "intent.quick_vent.short_title",
             systemImageName: "flame.fill"
         )
     }

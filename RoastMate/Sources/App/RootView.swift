@@ -3,6 +3,7 @@ import SwiftData
 
 struct RootView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.scenePhase) private var scenePhase
     @Query private var settingsQuery: [UserSettings]
     @State private var showOnboarding = false
     @State private var selection: AppSection = .generator
@@ -38,11 +39,22 @@ struct RootView: View {
             #endif
         }
         .onAppear {
+            // A Quick Vent request (Control / Action Button / Siri)
+            // routes to the generator tab; the generator drains it.
+            if LaunchRouter.shared.hasPendingQuickVent {
+                selection = .generator
+            }
             // UI-test mode never shows onboarding — screenshots need the
             // main UI immediately, in the forced language.
             if AppLaunchEnvironment.isUITest { return }
             if let s = settings, !s.hasSeenOnboarding {
                 showOnboarding = true
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Control tapped while the app was already backgrounded.
+            if phase == .active, LaunchRouter.shared.hasPendingQuickVent {
+                selection = .generator
             }
         }
         .sheet(isPresented: $showOnboarding) {

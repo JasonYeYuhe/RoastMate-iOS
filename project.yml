@@ -58,6 +58,8 @@ targets:
     dependencies:
       - target: RoastMateShare
         embed: true
+      - target: RoastMateControls
+        embed: true
     scheme:
       testTargets:
         - RoastMateTests
@@ -146,6 +148,30 @@ targets:
         release:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
 
+  RoastMateControls:
+    type: app-extension
+    platform: iOS
+    sources:
+      - RoastMateControls/Sources
+      - path: RoastMateControls/Info.plist
+        buildPhase: none
+      - Shared
+      - path: Shared/Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.controls
+        PRODUCT_NAME: RoastMateControls
+        INFOPLIST_FILE: RoastMateControls/Info.plist
+        CODE_SIGN_ENTITLEMENTS: RoastMateControls/RoastMateControls.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1"
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
   RoastMateTests:
     type: bundle.unit-test
     platform: iOS
@@ -154,6 +180,17 @@ targets:
       - Shared
       - path: Shared/Resources
         buildPhase: resources
+    # Hostless bundle (TEST_HOST/BUNDLE_LOADER empty): logic under test
+    # lives in Shared (compiled in directly) and app-target types are
+    # reached via `@testable import RoastMate`. `link: false` makes the
+    # app a build-ORDER dependency only — it guarantees RoastMate's
+    # testing-enabled .swiftmodule exists before these tests compile
+    # (cold/parallel builds otherwise race, surfacing as "unable to
+    # resolve module dependency: 'RoastMate'") WITHOUT linking the app
+    # binary, which would double-link Shared.
+    dependencies:
+      - target: RoastMate
+        link: false
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.tests

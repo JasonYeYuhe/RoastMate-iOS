@@ -189,6 +189,16 @@
 "intent.param.style.description" = "Which RoastMate writing style to use.";
 "intent.shortcut.short_title" = "Roast this";
 
+// MARK: - Native capture (v1.1 Pillar C)
+"intent.param.intensity" = "Intensity";
+"intent.param.intensity.description" = "How sharp the response should be.";
+"intent.quick_vent.title" = "Quick Vent";
+"intent.quick_vent.description" = "Open RoastMate straight to a private vent.";
+"intent.quick_vent.short_title" = "Vent";
+"control.quick_vent.title" = "Quick Vent";
+"control.quick_vent.description" = "One tap to a private vent box.";
+"share.intensity" = "Intensity";
+
 // MARK: - Common
 
 "common.cancel" = "Cancel";

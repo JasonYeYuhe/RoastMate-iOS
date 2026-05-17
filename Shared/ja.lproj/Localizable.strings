@@ -189,6 +189,16 @@
 "intent.param.style.description" = "どの「帮你骂」スタイルで書くか。";
 "intent.shortcut.short_title" = "一言ください";
 
+// MARK: - Native capture (v1.1 Pillar C)
+"intent.param.intensity" = "強さ";
+"intent.param.intensity.description" = "返しの鋭さ。";
+"intent.quick_vent.title" = "クイック吐き出し";
+"intent.quick_vent.description" = "RoastMateの吐き出し欄をすぐ開く。";
+"intent.quick_vent.short_title" = "吐き出す";
+"control.quick_vent.title" = "クイック吐き出し";
+"control.quick_vent.description" = "ワンタップでプライベートな吐き出し欄へ。";
+"share.intensity" = "強さ";
+
 // MARK: - Common
 
 "common.cancel" = "キャンセル";

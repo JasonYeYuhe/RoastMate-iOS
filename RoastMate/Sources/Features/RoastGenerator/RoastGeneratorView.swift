@@ -52,6 +52,13 @@ struct RoastGeneratorView: View {
         }
         .navigationTitle(AppLocalization.string("generator.title"))
         .onAppear {
+            // Quick Vent (Control Center / Lock Screen / Action Button /
+            // Siri) lands here: pre-select Vent and focus the box. Pro
+            // gating + the credit wallet still apply on Generate.
+            if LaunchRouter.shared.consumeQuickVent() {
+                viewModel.selectedIntensity = .vent
+                situationFocused = true
+            }
             if let payload = HandoffStore.shared.consume() {
                 viewModel.situation = payload.situation
                 viewModel.selectedStyleId = payload.styleId

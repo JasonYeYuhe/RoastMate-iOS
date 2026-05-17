@@ -51,6 +51,8 @@ require_file "$PROJECT_DIR/RoastMateMac/RoastMateMac.entitlements"
 require_file "$PROJECT_DIR/RoastMateWatch/RoastMateWatch.entitlements"
 require_file "$PROJECT_DIR/RoastMateShare/RoastMateShare.entitlements"
 require_file "$PROJECT_DIR/RoastMateShare/Info.plist"
+require_file "$PROJECT_DIR/RoastMateControls/RoastMateControls.entitlements"
+require_file "$PROJECT_DIR/RoastMateControls/Info.plist"
 require_file "$PROJECT_DIR/RoastMate/Configuration.storekit"
 
 # ─────────────────────────────────────────────────────────────────────
@@ -171,6 +173,7 @@ build_target "RoastMate"      "generic/platform=iOS Simulator"      "-sdk iphone
 build_target "RoastMateMac"   "generic/platform=macOS"              ""
 build_target "RoastMateWatch" "generic/platform=watchOS Simulator"  "-sdk watchsimulator"
 build_target "RoastMateShare" "generic/platform=iOS Simulator"      "-sdk iphonesimulator"
+build_target "RoastMateControls" "generic/platform=iOS Simulator"   "-sdk iphonesimulator"
 
 # ─────────────────────────────────────────────────────────────────────
 section "Unit tests"

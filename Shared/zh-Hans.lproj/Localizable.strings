@@ -189,6 +189,16 @@
 "intent.param.style.description" = "用哪种「帮你骂」风格。";
 "intent.shortcut.short_title" = "帮我写一句";
 
+// MARK: - Native capture (v1.1 Pillar C)
+"intent.param.intensity" = "强度";
+"intent.param.intensity.description" = "回应有多锋利。";
+"intent.quick_vent.title" = "快速发泄";
+"intent.quick_vent.description" = "一键打开 RoastMate 的私密发泄框。";
+"intent.quick_vent.short_title" = "发泄";
+"control.quick_vent.title" = "快速发泄";
+"control.quick_vent.description" = "一键进入私密发泄框。";
+"share.intensity" = "强度";
+
 // MARK: - Common
 
 "common.cancel" = "取消";
