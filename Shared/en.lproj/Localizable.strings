@@ -155,6 +155,7 @@
 "paywall.credits.pack" = "%d credits";
 "paywall.credits.bestvalue" = "Best value";
 "paywall.credits.note" = "Credits add generations and rewrites. Savage, Feral and Vent stay Pro-only.";
+"paywall.credits.balance" = "You have %d credits";
 "paywall.pro.title" = "Or go unlimited";
 "paywall.pro.subtitle" = "Best value for heavy users: every style, Savage · Feral · Vent, unlimited.";
 "settings.credits.balance" = "Credits";

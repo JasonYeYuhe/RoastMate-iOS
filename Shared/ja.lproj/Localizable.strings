@@ -155,6 +155,7 @@
 "paywall.credits.pack" = "%d クレジット";
 "paywall.credits.bestvalue" = "最もお得";
 "paywall.credits.note" = "クレジットは生成と書き直しに使えます。容赦なし・罵倒・吐き出しはPro限定のままです。";
+"paywall.credits.balance" = "残り %d クレジット";
 "paywall.pro.title" = "または無制限に";
 "paywall.pro.subtitle" = "ヘビーユーザーに最適:全スタイル、容赦なし・罵倒・吐き出し、無制限。";
 "settings.credits.balance" = "クレジット";

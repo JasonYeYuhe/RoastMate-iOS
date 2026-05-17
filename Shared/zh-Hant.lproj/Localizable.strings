@@ -155,6 +155,7 @@
 "paywall.credits.pack" = "%d 點";
 "paywall.credits.bestvalue" = "最划算";
 "paywall.credits.note" = "點數用於生成和改寫。狠、痛罵、發洩仍為 Pro 專屬。";
+"paywall.credits.balance" = "你還有 %d 點";
 "paywall.pro.title" = "或解鎖無限";
 "paywall.pro.subtitle" = "重度使用者最佳選擇:全部風格,狠 · 痛罵 · 發洩,無限使用。";
 "settings.credits.balance" = "點數";

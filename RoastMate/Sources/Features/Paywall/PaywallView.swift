@@ -103,6 +103,12 @@ struct PaywallView: View {
                 Text("paywall.credits.subtitle")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                if settings.availableCreditsNow() > 0 {
+                    Text(String(format: String(localized: "paywall.credits.balance"),
+                                settings.availableCreditsNow()))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.orange)
+                }
             }
             if store.creditProducts.isEmpty {
                 loadingRow
