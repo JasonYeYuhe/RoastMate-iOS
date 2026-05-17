@@ -31,6 +31,7 @@ struct RoastGeneratorView: View {
                 generateButton
                 resultsSection
                 if case .idle = viewModel.state {
+                    scenarioSection
                     sampleSection
                 }
             }
@@ -346,6 +347,49 @@ struct RoastGeneratorView: View {
         guard result.kind == .ventDraft else { return false }
         return (session.results ?? []).contains {
             $0.kind == .sendableReply && $0.sourceVentDraftId == result.id
+        }
+    }
+
+    @ViewBuilder
+    private var scenarioSection: some View {
+        let catalog = ScenarioCatalog.shared
+        let cats = catalog.orderedCategories
+        if !cats.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("scenario.section")
+                    .font(.headline)
+                    .padding(.top, 4)
+                ForEach(cats, id: \.self) { cat in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(LocalizedStringKey("scenario.cat.\(cat)"))
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(catalog.scenarios(in: cat)) { scenario in
+                                    Button {
+                                        viewModel.loadScenario(scenario, locale: locale)
+                                        situationFocused = false
+                                    } label: {
+                                        Text(scenario.prompt(for: locale))
+                                            .font(.caption)
+                                            .multilineTextAlignment(.leading)
+                                            .lineLimit(3)
+                                            .frame(width: 200, alignment: .leading)
+                                            .padding(10)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 10)
+                                                    .fill(Color.orange.opacity(0.08))
+                                            )
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.vertical, 1)
+                        }
+                    }
+                }
+            }
         }
     }
 

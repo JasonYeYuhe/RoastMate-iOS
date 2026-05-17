@@ -39,6 +39,14 @@
 "generator.empty.subtitle" = "描述一個讓你不爽的場景 ——一條令人窒息的訊息、一個奇葩同事、一次糟糕的對話 ——「幫你罵」會幫你說回去。";
 "generator.loading" = "正在組織語言……";
 "generator.sample_section" = "試試範例";
+
+// MARK: - Scenario pack (zh-first quick starts)
+"scenario.section" = "從情境開始";
+"scenario.cat.boss" = "主管";
+"scenario.cat.ex" = "前任";
+"scenario.cat.family" = "家人";
+"scenario.cat.roommate" = "室友";
+"scenario.cat.groupchat" = "群組";
 "generator.sample_remix" = "用這個生成";
 
 // MARK: - Result

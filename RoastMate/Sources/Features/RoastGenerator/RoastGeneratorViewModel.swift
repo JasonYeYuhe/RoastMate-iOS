@@ -163,6 +163,19 @@ final class RoastGeneratorViewModel {
         rewritingDraftId = nil
     }
 
+    /// Pre-fills the generator from a curated zh-first scenario (situation
+    /// + a free-tier style + intensity). Pure prefill — generation still
+    /// goes through the normal credit/Pro gating on Generate.
+    func loadScenario(_ scenario: Scenario, locale: Locale) {
+        situation = scenario.prompt(for: locale)
+        selectedStyleId = scenario.defaultStyleId
+        selectedIntensity = scenario.intensity
+        currentSession = nil
+        rewriteError = nil
+        crisisBanner = false
+        state = .idle
+    }
+
     func loadSample(_ sample: SampleRoast, locale: Locale) {
         situation = sample.situation(for: locale)
         selectedStyleId = sample.styleId

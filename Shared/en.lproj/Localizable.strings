@@ -39,6 +39,14 @@
 "generator.empty.subtitle" = "Describe a situation — a frustrating message, a rude colleague, a missed deadline — and RoastMate will help you say it back.";
 "generator.loading" = "Composing…";
 "generator.sample_section" = "Try a sample";
+
+// MARK: - Scenario pack (zh-first quick starts)
+"scenario.section" = "Start from a scenario";
+"scenario.cat.boss" = "Boss";
+"scenario.cat.ex" = "Ex";
+"scenario.cat.family" = "Family";
+"scenario.cat.roommate" = "Roommate";
+"scenario.cat.groupchat" = "Group chat";
 "generator.sample_remix" = "Remix this";
 
 // MARK: - Result

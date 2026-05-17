@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "boss_credit",
+      "category": "boss",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "My manager took credit for my project in front of the whole team.",
+        "zh-Hans": "我做的项目,领导在全组面前说成是他的功劳。",
+        "zh-Hant": "我做的專案,主管在整個團隊面前說成是他的功勞。",
+        "ja": "自分が進めたプロジェクトを、上司がチーム全員の前で自分の手柄のように話しました。"
+      }
+    },
+    {
+      "id": "boss_lastmin",
+      "category": "boss",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "My boss dropped an 'urgent' task on me at 6pm Friday, due Monday.",
+        "zh-Hans": "周五傍晚六点,领导甩给我一个『紧急』任务,周一就要。",
+        "zh-Hant": "週五傍晚六點,主管丟給我一個『緊急』任務,週一就要交。",
+        "ja": "金曜の夕方6時に、上司から月曜締め切りの『至急』案件を振られました。"
+      }
+    },
+    {
+      "id": "ex_backafter",
+      "category": "ex",
+      "defaultStyleId": "literary_lu_xun",
+      "defaultIntensity": "calm",
+      "prompt": {
+        "en": "My ex texted 'hey stranger' like nothing ever happened.",
+        "zh-Hans": "前任突然发来一句『在吗』,好像什么都没发生过。",
+        "zh-Hant": "前任突然傳來一句『在嗎』,好像什麼都沒發生過。",
+        "ja": "元恋人から急に『元気?』と、何事もなかったように連絡が来ました。"
+      }
+    },
+    {
+      "id": "ex_blame",
+      "category": "ex",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "My ex is telling our friends the breakup was entirely my fault.",
+        "zh-Hans": "前任跟我们共同的朋友说,分手全是我的错。",
+        "zh-Hant": "前任跟我們共同的朋友說,分手全都是我的錯。",
+        "ja": "元恋人が、別れた原因は全部私のせいだと友人たちに言いふらしています。"
+      }
+    },
+    {
+      "id": "family_compare",
+      "category": "family",
+      "defaultStyleId": "grandma_wisdom",
+      "defaultIntensity": "calm",
+      "prompt": {
+        "en": "A relative keeps comparing me to my 'more successful' cousin.",
+        "zh-Hans": "亲戚总把我和『更有出息』的表哥比来比去。",
+        "zh-Hant": "親戚總是拿我跟『比較有出息』的表哥比來比去。",
+        "ja": "親戚がいつも私を『もっと成功している』いとこと比べてきます。"
+      }
+    },
+    {
+      "id": "family_money",
+      "category": "family",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "calm",
+      "prompt": {
+        "en": "A family member 'borrowed' money months ago and acts like I'm rude for asking.",
+        "zh-Hans": "家里人几个月前『借』了钱,现在我一问反倒成了我没礼貌。",
+        "zh-Hant": "家裡人幾個月前『借』了錢,現在我一問反而變成我沒禮貌。",
+        "ja": "数か月前にお金を『貸して』と言われたのに、催促するとこちらが失礼みたいに扱われます。"
+      }
+    },
+    {
+      "id": "roommate_mess",
+      "category": "roommate",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "My roommate leaves dishes for days and says I'm 'too uptight'.",
+        "zh-Hans": "室友的碗能放好几天,还说我『太计较』。",
+        "zh-Hant": "室友的碗可以放好幾天,還說我『太計較』。",
+        "ja": "ルームメイトは何日も食器を放置するのに、私が『神経質すぎる』と言います。"
+      }
+    },
+    {
+      "id": "roommate_rent",
+      "category": "roommate",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "My roommate is always 'about to' pay back their half of the rent.",
+        "zh-Hans": "室友那半份房租,永远是『马上就转』。",
+        "zh-Hant": "室友那半份房租,永遠都是『馬上就轉』。",
+        "ja": "ルームメイトは家賃の折半をいつも『今すぐ払う』と言うだけです。"
+      }
+    },
+    {
+      "id": "groupchat_ignored",
+      "category": "groupchat",
+      "defaultStyleId": "tweet_short",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "I suggested something in the group chat, everyone ignored it — then praised the same idea from someone else.",
+        "zh-Hans": "我在群里提了个建议没人理,别人说了一模一样的就被夸。",
+        "zh-Hant": "我在群組提了個建議沒人理,別人講了一模一樣的就被稱讚。",
+        "ja": "グループチャットで提案したら無視されたのに、同じ案を別の人が言ったら絶賛されました。"
+      }
+    },
+    {
+      "id": "groupchat_screenshot",
+      "category": "groupchat",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "calm",
+      "prompt": {
+        "en": "Someone screenshotted my private message into the group chat to make me look bad.",
+        "zh-Hans": "有人把我的私聊截图发到群里,故意让我难堪。",
+        "zh-Hant": "有人把我的私訊截圖發到群組,故意讓我難堪。",
+        "ja": "誰かが私の個人メッセージをスクショしてグループに晒し、わざと私を貶めました。"
+      }
+    }
+  ]
+}

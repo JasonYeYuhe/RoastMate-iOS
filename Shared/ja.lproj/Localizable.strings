@@ -39,6 +39,14 @@
 "generator.empty.subtitle" = "イラっとした出来事を一行で書くと、RoastMateが上手な言い返しを考えます。";
 "generator.loading" = "考えています…";
 "generator.sample_section" = "サンプルを試す";
+
+// MARK: - Scenario pack (zh-first quick starts)
+"scenario.section" = "シーンから始める";
+"scenario.cat.boss" = "上司";
+"scenario.cat.ex" = "元恋人";
+"scenario.cat.family" = "家族";
+"scenario.cat.roommate" = "ルームメイト";
+"scenario.cat.groupchat" = "グループ";
 "generator.sample_remix" = "これで生成";
 
 // MARK: - Result
