@@ -62,11 +62,14 @@ targets:
         embed: true
       - target: RoastMateControls
         embed: true
+      - target: RoastMateKeyboard
+        embed: true
     scheme:
       testTargets:
         - RoastMateTests
         - RoastMateUITests
       gatherCoverageData: false
+      storeKitConfiguration: RoastMate/Configuration.storekit
 
   RoastMateMac:
     type: application
@@ -166,6 +169,30 @@ targets:
         PRODUCT_NAME: RoastMateControls
         INFOPLIST_FILE: RoastMateControls/Info.plist
         CODE_SIGN_ENTITLEMENTS: RoastMateControls/RoastMateControls.entitlements
+        GENERATE_INFOPLIST_FILE: NO
+        TARGETED_DEVICE_FAMILY: "1"
+      configs:
+        debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+
+  RoastMateKeyboard:
+    type: app-extension
+    platform: iOS
+    sources:
+      - RoastMateKeyboard/Sources
+      - path: RoastMateKeyboard/Info.plist
+        buildPhase: none
+      - Shared
+      - path: Shared/Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.keyboard
+        PRODUCT_NAME: RoastMateKeyboard
+        INFOPLIST_FILE: RoastMateKeyboard/Info.plist
+        CODE_SIGN_ENTITLEMENTS: RoastMateKeyboard/RoastMateKeyboard.entitlements
         GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1"
       configs:
