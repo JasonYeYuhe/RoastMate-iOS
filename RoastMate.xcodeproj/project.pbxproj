@@ -246,7 +246,6 @@
 		91E564F424568FA53E3FD431 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		92A59D4A8B138605FFC7BDA1 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		9312E3AAD8D609B85D1CA8F3 /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
-		933C4BC42613FE29659A00DC /* RoastMateKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3E4024604D829AF4E99B0969 /* RoastMateKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		937D30AE0D38DD43B7656396 /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
 		9393227E7656F563044AD9C0 /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		93ACC0BDE61190EA0A7B521E /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
@@ -432,13 +431,6 @@
 			remoteGlobalIDString = 9BFF501D283C22CA09ACB238;
 			remoteInfo = RoastMate;
 		};
-		889A0BB265C1D3FF65ED45DE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 777C3A23B63197BE6A102A0B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 74F24A1BE8EC5BC6E3636BDA;
-			remoteInfo = RoastMateKeyboard;
-		};
 		8CEE760279D583C02B58D744 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 777C3A23B63197BE6A102A0B /* Project object */;
@@ -464,7 +456,6 @@
 			files = (
 				7455D048B076CD68DCF281F0 /* RoastMateShare.appex in Embed Foundation Extensions */,
 				C9BC71222E2EA7613F16DC92 /* RoastMateControls.appex in Embed Foundation Extensions */,
-				933C4BC42613FE29659A00DC /* RoastMateKeyboard.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1183,7 +1174,6 @@
 			dependencies = (
 				8F37994F8FD25BB2DD3E3A35 /* PBXTargetDependency */,
 				21109A85173370F86A4FAD4C /* PBXTargetDependency */,
-				F6D42504D2D1CD3366A9DBF3 /* PBXTargetDependency */,
 			);
 			name = RoastMate;
 			packageProductDependencies = (
@@ -1819,11 +1809,6 @@
 			isa = PBXTargetDependency;
 			target = 3BDB8AB62333D0497041022A /* RoastMateShare */;
 			targetProxy = EFA13F525FE3F5A3886C2E30 /* PBXContainerItemProxy */;
-		};
-		F6D42504D2D1CD3366A9DBF3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 74F24A1BE8EC5BC6E3636BDA /* RoastMateKeyboard */;
-			targetProxy = 889A0BB265C1D3FF65ED45DE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

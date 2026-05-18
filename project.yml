@@ -62,8 +62,13 @@ targets:
         embed: true
       - target: RoastMateControls
         embed: true
-      - target: RoastMateKeyboard
-        embed: true
+      # RoastMateKeyboard intentionally NOT embedded in v1.1: spike 14f3e6e +
+      # decision 2026-05-19 Option B (re-rank) → keyboard skeleton stays
+      # committed but DORMANT, not shipped. Its App-Group entitlement has no
+      # provisioning profile, so embedding it breaks the release archive.
+      # Re-add this embed only if the keyboard is ever revived (Option A/C).
+      # - target: RoastMateKeyboard
+      #   embed: true
     scheme:
       testTargets:
         - RoastMateTests
