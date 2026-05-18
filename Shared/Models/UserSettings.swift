@@ -31,7 +31,21 @@ final class UserSettings {
     /// as `true` (the new default) when missing.
     ///
     /// Calm / Sharp / Savage stay 100% on-device regardless of this flag.
+    ///
+    /// DEPRECATED as the source of truth — superseded by
+    /// `cloudAIConsentRaw` for Apple Guideline 5.1.2(i). Kept (additive
+    /// discipline, no migration) only so a prior **explicit opt-out**
+    /// (`== false`) is honored as `.denied` without re-prompting. Its old
+    /// nil→true "auto opted-in" reading is intentionally NOT carried over:
+    /// auto-clouding before explicit permission is exactly what 5.1.2(i)
+    /// forbids.
     var cloudVentEnabledRaw: Bool?
+
+    /// 5.1.2(i) explicit consent for the third-party-AI (cloud Vent /
+    /// Feral) path. Raw `CloudConsent` rawValue; nil = never asked.
+    /// Nullable so CloudKit-backed stores upgrade without a migration
+    /// (same pattern as the Pillar B wallet fields).
+    var cloudAIConsentRaw: String?
 
     // MARK: - Credit wallet (v1.1 Pillar B — consumables-primary)
 
@@ -79,7 +93,8 @@ final class UserSettings {
         self.preferredLocale = nil
         self.historyRetentionDays = 30
         self.lifetimeFreeUsed = 0
-        self.cloudVentEnabledRaw = true
+        self.cloudVentEnabledRaw = nil
+        self.cloudAIConsentRaw = nil
         self.creditBalanceRaw = nil
         self.hasSeededTrialWalletRaw = nil
         self.firstLaunchDate = nil
@@ -88,12 +103,36 @@ final class UserSettings {
         self.grantedCreditTxIDsRaw = nil
     }
 
-    /// Resolved cloud flag with legacy default. Treat nil (pre-cloud
-    /// installs) as opted in, since the only way to discover the feature
-    /// post-upgrade is to have it work the first time.
+    /// 5.1.2(i) explicit consent for the cloud (third-party-AI) path.
+    /// Resolution order:
+    /// 1. An explicit recorded choice (`cloudAIConsentRaw`) wins.
+    /// 2. Else honor a prior **explicit** Settings opt-out
+    ///    (`cloudVentEnabledRaw == false`) as `.denied` so we never
+    ///    re-nag a user who already said no.
+    /// 3. Else `.notAsked` — including legacy nil/true installs: the old
+    ///    "auto opted-in" reading is deliberately dropped (auto-clouding
+    ///    before explicit permission violates 5.1.2(i)).
+    var cloudConsent: CloudConsent {
+        get {
+            if let raw = cloudAIConsentRaw,
+               let c = CloudConsent(rawValue: raw) { return c }
+            if cloudVentEnabledRaw == false { return .denied }
+            return .notAsked
+        }
+        set {
+            cloudAIConsentRaw = newValue.rawValue
+            // Keep the legacy mirror coherent for any old reader.
+            cloudVentEnabledRaw = (newValue == .granted)
+        }
+    }
+
+    /// Back-compat bridge: existing callers/tests keep using
+    /// `cloudVentEnabled`, but it now means "consent explicitly granted"
+    /// — `false` for both `notAsked` and `denied`, so no caller can
+    /// silently cloud before the user has agreed.
     var cloudVentEnabled: Bool {
-        get { cloudVentEnabledRaw ?? true }
-        set { cloudVentEnabledRaw = newValue }
+        get { cloudConsent == .granted }
+        set { cloudConsent = newValue ? .granted : .denied }
     }
 
     /// Daily cap once the lifetime allotment is exhausted.

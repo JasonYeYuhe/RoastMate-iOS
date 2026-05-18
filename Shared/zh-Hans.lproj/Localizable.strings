@@ -99,15 +99,25 @@
 "settings.safe_mode.footer" = "安全模式在 Apple 自带的内容安全机制上再加一层过滤。建议保持开启。";
 
 "settings.cloud_vent" = "增强发泄 / 痛骂(云端 AI)";
-"settings.cloud_vent.footer" = "「发泄」和「痛骂」会通过我们自有的云端代理转发给第三方 LLM 提供商,让火气真的发出来。「体面 / 锐利 / 狠」全部 100% 本地运行。关掉就全部本地 — 发泄会温和很多。";
+"settings.cloud_vent.footer" = "「发泄」和「痛骂」可以通过我们自有的云端代理转发给第三方 LLM 以获得更强输出 —— 仅在你明确同意后。「体面 / 锐利 / 狠」始终 100% 本地运行。关掉就全部本地 —— 发泄会温和很多。";
 
 "cloud.error.not_configured" = "云端 AI 还没部署 — 改用本地模型";
 "cloud.error.disabled" = "云端 AI 已在设置中关闭 — 改用本地模型";
 "cloud.error.rate_limited" = "今日云端配额已用完 — 改用本地模型";
 "cloud.error.unavailable" = "云端 AI 暂时不可用 — 改用本地模型";
 
+"cloud.consent.title" = "「发泄 / 痛骂」是否使用云端 AI?";
+"cloud.consent.body" = "「发泄」和「痛骂」生成的是原始、宣泄式的草稿。为了够劲,这个模式会通过我们自有的代理把你的文字发给第三方 AI 模型。你来决定 —— 只问这一次。";
+"cloud.consent.point.what" = "你的情境文字 + 一个随机的安装标识会发送给第三方 LLM(经我们的代理),仅用于生成这次草稿。";
+"cloud.consent.point.nostore" = "我们不存储、也不用于训练;不发送账号、姓名或通讯录。";
+"cloud.consent.point.local" = "拒绝的话,「发泄 / 痛骂」全部 100% 本地运行(输出更温和)。";
+"cloud.consent.point.change" = "随时可在「设置」里更改。";
+"cloud.consent.allow" = "允许使用云端 AI";
+"cloud.consent.deny" = "保持本地运行";
+"cloud.consent.footnote" = "「体面 / 锐利 / 狠」始终本地运行,从不使用云端。";
+
 "settings.about_ai.title" = "关于 AI";
-"settings.about_ai.body" = "「体面 / 锐利 / 狠 / 改成能发的」用 Apple 本地 Foundation Models 框架运行 — 这些路径上你的内容永远不会离开设备。「发泄 / 痛骂」默认通过我们自有的云端代理转发给第三方 LLM 提供商以获得更强的发泄效果。可以用上面的开关关掉云端路由,让一切回归本地。";
+"settings.about_ai.body" = "「体面 / 锐利 / 狠 / 改成能发的」用 Apple 本地 Foundation Models 框架运行 — 这些路径上你的内容永远不会离开设备。「发泄 / 痛骂」可以通过我们自有的云端代理转发给第三方 LLM 提供商以获得更强的发泄效果,但仅在你首次明确同意后(由你选择,且随时可在此更改)。";
 
 "settings.subscription.upgrade" = "升级到 Pro";
 "settings.subscription.manage" = "管理订阅";

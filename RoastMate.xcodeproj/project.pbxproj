@@ -80,6 +80,7 @@
 		2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
+		31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */; };
 		344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		344B79E5E67F7AC0A9672BFF /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		3541E840D5FA220EFA44F8C6 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
@@ -103,6 +104,7 @@
 		46A8CED3A0965C2DDDFE3C8B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
 		46D3A08A2641F6DB1637C529 /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
+		48BF363AAE71A9FD8F260002 /* CloudConsentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */; };
 		4935EC90E92AF1E083053C6E /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		49487CD577246B3F6296AC7B /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
 		496688BCEA684ED37D7B68D2 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
@@ -131,7 +133,9 @@
 		56CFA12ECCB16C04BF192264 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		571FF89781597F11FB6167FC /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		57BC6E272A9596B3B03E6591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
+		58999A2E7980947164A96920 /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		58F0BF079A48F3562111CCEC /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
+		595B0FB65B8BF1A963DCFB7B /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		5A6C26FD3A8CDCA3898A9198 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		5AF7682FE0EB078C347C8275 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F71C81266E175EC1EFD5DD1 /* RootView.swift */; };
 		5D52051912F968BC0C5395D2 /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
@@ -142,6 +146,7 @@
 		60037DFF670ECB3E01FEBD52 /* Scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 79FA1A22CDF8D4E34A99B7C7 /* Scenarios.json */; };
 		600A4AEBCFFC40A9097043FC /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		61F4B47889D22A5BFDFFF330 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
+		62130181AC40B13F67A2D2C5 /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		628C2305DDC97AA1A43500D5 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
 		62B58DEA99677AD5C45BBEB5 /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
 		62F534881B1C940003515A70 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
@@ -230,9 +235,11 @@
 		9CCFB5603DAD5CF14695D8C8 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		9CE91BCFCF3C1699753AD91F /* AccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DAD9564C37433030E22769 /* AccountSection.swift */; };
 		9D6FD6497072B5CADE6A780E /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
+		9DE1FDA11303862B4FDC38A2 /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		9DED25ED81EDF49FA9BC638E /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		9FAFAA809A538B41EC3E06B7 /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		A1F061CB240CD31930641CE9 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
+		A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		A50453236C33115558205278 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		A5C0D08DE2F07F7855FFE85B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
@@ -309,6 +316,7 @@
 		D78FF96DC5F373077431A4B3 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
 		D847BD77E615D555C65FE497 /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
 		D8569BD522A033A47DCE711E /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
+		DB9EF4657F48B0B06E9A9B47 /* CloudConsentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */; };
 		DBE75C26FF2DB5D2462DE07E /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		DC80035E5A408B991F6E6267 /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		DC905534746E85F12A9A01B4 /* WatchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08257B0896C66BFDF4A55DF7 /* WatchHomeView.swift */; };
@@ -353,6 +361,7 @@
 		F7B3D47A17C1738051DA328A /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		F7D29F37AE3E83FD9C7230B7 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
 		F8564091DC2A58F6CD338CCF /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
+		F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		F9E5BE28B1F74F360EAA5994 /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		FB5DAEA18959F2CD19849571 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
 		FB9C143C277B8DAD30DE6CBA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8869CA8D12F9544EFD87DE /* SettingsView.swift */; };
@@ -435,6 +444,7 @@
 		2ED4E06FE20675139E16E6DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F96088323D369E40BFBA315 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		31277B6E9CF593725FAFC384 /* RoastCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastCard.swift; sourceTree = "<group>"; };
+		31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentGate.swift; sourceTree = "<group>"; };
 		3361A33F1F5E649C0F3F0B85 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySessionDetailView.swift; sourceTree = "<group>"; };
 		3A75DD3D3294393867B93031 /* WatchQuickPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQuickPromptView.swift; sourceTree = "<group>"; };
@@ -489,6 +499,7 @@
 		8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleRoasts.json; sourceTree = "<group>"; };
 		8F71C81266E175EC1EFD5DD1 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		963F633CF99333D82BDE3A4A /* ShareRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareRootView.swift; sourceTree = "<group>"; };
+		9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentGateTests.swift; sourceTree = "<group>"; };
 		9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
 		A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffActivity.swift; sourceTree = "<group>"; };
 		A5DE2596F74842B90AD49144 /* SampleGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleGalleryView.swift; sourceTree = "<group>"; };
@@ -511,6 +522,7 @@
 		C994C838B393F986EB67EDCA /* DeviceID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceID.swift; sourceTree = "<group>"; };
 		CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRouter.swift; sourceTree = "<group>"; };
 		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
+		D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentSheet.swift; sourceTree = "<group>"; };
 		D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ForbiddenTerms.json; sourceTree = "<group>"; };
 		D292AA9CB572696DF122016F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		E5055590FEF248BD7CBA0B09 /* SituationThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SituationThread.swift; sourceTree = "<group>"; };
@@ -671,6 +683,7 @@
 		5C4A3CFD63E4A053DF196425 /* RoastMateTests */ = {
 			isa = PBXGroup;
 			children = (
+				9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */,
 				09E1152E436517DE7D09884D /* CloudVentEngineTests.swift */,
 				3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */,
 				7BDC847798DC7EB609F0748B /* CrisisDetectionTests.swift */,
@@ -744,6 +757,7 @@
 				C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */,
 				05F375B44B7ED51C03E8B6DA /* AuthService.swift */,
 				8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */,
+				31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */,
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
 				4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */,
 				C994C838B393F986EB67EDCA /* DeviceID.swift */,
@@ -934,6 +948,7 @@
 		F8D76D69CF7B443789C7C242 /* RoastGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */,
 				85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */,
 				58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */,
 			);
@@ -1263,6 +1278,8 @@
 				62F534881B1C940003515A70 /* AppLocalization.swift in Sources */,
 				287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */,
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
+				9DE1FDA11303862B4FDC38A2 /* CloudConsentGate.swift in Sources */,
+				31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */,
 				2D3C20D83FE907B6D2B1F0CD /* CloudVentClient.swift in Sources */,
 				EF4732F5DD6F12A6A6EBBB58 /* CloudVentEngineTests.swift in Sources */,
 				9C95C8A20AD90251958359FF /* CreditCatalog.swift in Sources */,
@@ -1332,6 +1349,7 @@
 				24D9C3B0147763A3B6C4AD98 /* AppLocalization.swift in Sources */,
 				BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
+				58999A2E7980947164A96920 /* CloudConsentGate.swift in Sources */,
 				00FD06B70E90D21329E949C5 /* CloudVentClient.swift in Sources */,
 				2250DC4B03CAA509509E13E0 /* CreditCatalog.swift in Sources */,
 				3544742806A9B8592027BD91 /* CrisisResources.swift in Sources */,
@@ -1381,6 +1399,7 @@
 				FF358B9FA48E40DF12A3E154 /* AppLocalization.swift in Sources */,
 				127F44F5390D81E12A410DA9 /* AuthService.swift in Sources */,
 				A5D71BF4F9A5B628D3CB30D3 /* CloudConfig.swift in Sources */,
+				F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */,
 				A69BCCA022A00C12CB41E52D /* CloudVentClient.swift in Sources */,
 				E58A6536F3DC9C2BCC523364 /* CreditCatalog.swift in Sources */,
 				69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */,
@@ -1428,6 +1447,7 @@
 				501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */,
 				CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
+				62130181AC40B13F67A2D2C5 /* CloudConsentGate.swift in Sources */,
 				708349AE97476576726DD82C /* CloudVentClient.swift in Sources */,
 				F2FF341791CDA27193820D2E /* CreditCatalog.swift in Sources */,
 				C1077B377B0297E5A86A3035 /* CrisisResources.swift in Sources */,
@@ -1479,6 +1499,8 @@
 				064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */,
 				8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */,
 				85AA70766AD83FA3F082F502 /* CloudConfig.swift in Sources */,
+				A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */,
+				DB9EF4657F48B0B06E9A9B47 /* CloudConsentSheet.swift in Sources */,
 				B3D7C85BC37B521D732F14E2 /* CloudVentClient.swift in Sources */,
 				A6FA1560F6FC63844713A097 /* CreditCatalog.swift in Sources */,
 				17C053B5043E6956F54BDBF2 /* CrisisResources.swift in Sources */,
@@ -1551,6 +1573,8 @@
 				7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */,
 				8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */,
 				BD84D453D82BEB9F5EDE223D /* CloudConfig.swift in Sources */,
+				595B0FB65B8BF1A963DCFB7B /* CloudConsentGate.swift in Sources */,
+				48BF363AAE71A9FD8F260002 /* CloudConsentSheet.swift in Sources */,
 				F3FCD59A7942E7B0B5956325 /* CloudVentClient.swift in Sources */,
 				62B58DEA99677AD5C45BBEB5 /* CreditCatalog.swift in Sources */,
 				6ECE6F91F601493E30C77F1D /* CrisisResources.swift in Sources */,

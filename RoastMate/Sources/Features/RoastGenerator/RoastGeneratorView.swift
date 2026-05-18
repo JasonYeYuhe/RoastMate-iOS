@@ -100,6 +100,16 @@ struct RoastGeneratorView: View {
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
         }
+        .sheet(isPresented: $viewModel.pendingCloudConsent) {
+            CloudConsentSheet(
+                onAllow: {
+                    Task { await viewModel.resolveCloudConsent(true, context: context, locale: locale) }
+                },
+                onDeny: {
+                    Task { await viewModel.resolveCloudConsent(false, context: context, locale: locale) }
+                }
+            )
+        }
         #if os(iOS)
         .task(id: locale) {
             voiceGate = await VoiceVentTranscriber.currentGate(appLocale: locale)

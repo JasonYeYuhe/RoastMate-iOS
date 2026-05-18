@@ -99,15 +99,25 @@
 "settings.safe_mode.footer" = "Safe Mode adds an extra layer of filtering on top of Apple's built-in safety. We recommend keeping it on.";
 
 "settings.cloud_vent" = "Stronger Vent / Feral (Cloud AI)";
-"settings.cloud_vent.footer" = "Vent and Feral drafts route through our developer-owned cloud proxy to a third-party LLM for stronger output. Calm, Sharp, and Savage stay 100% on-device. Toggle off to keep everything local — vent output will be much gentler.";
+"settings.cloud_vent.footer" = "Vent and Feral can use our developer-owned cloud proxy to a third-party LLM for stronger output — only after you explicitly allow it. Calm, Sharp, and Savage always stay 100% on-device. Off keeps everything local — vent output will be much gentler.";
 
 "cloud.error.not_configured" = "Cloud AI hasn't been deployed yet — using local model.";
 "cloud.error.disabled" = "Cloud AI is off in Settings — using local model.";
 "cloud.error.rate_limited" = "Today's cloud quota is used up — using local model.";
 "cloud.error.unavailable" = "Cloud AI is unavailable right now — using local model.";
 
+"cloud.consent.title" = "Use Cloud AI for Vent / Feral?";
+"cloud.consent.body" = "Vent and Feral make raw, cathartic drafts. To be strong enough they send your text to a third-party AI model through our developer-owned proxy. You choose — once.";
+"cloud.consent.point.what" = "Your situation text plus a random per-install ID go to a third-party LLM (via our proxy) only to generate this draft.";
+"cloud.consent.point.nostore" = "We don't store it or use it for training; no account, name, or contacts are sent.";
+"cloud.consent.point.local" = "Decline and Vent / Feral stay 100% on-device (gentler output).";
+"cloud.consent.point.change" = "You can change this anytime in Settings.";
+"cloud.consent.allow" = "Allow Cloud AI";
+"cloud.consent.deny" = "Keep on-device";
+"cloud.consent.footnote" = "Calm, Sharp, and Savage always run on-device and never use cloud.";
+
 "settings.about_ai.title" = "About the AI";
-"settings.about_ai.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on Apple's on-device Foundation Models — those paths never leave your device. Vent and Feral default to our developer-owned cloud proxy that forwards to a third-party LLM provider for stronger cathartic output. You can disable cloud routing with the toggle above to keep everything local.";
+"settings.about_ai.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on Apple's on-device Foundation Models — those paths never leave your device. Vent and Feral can use our developer-owned cloud proxy to a third-party LLM provider for stronger cathartic output, but only after you explicitly allow it (you choose the first time, and can change it here anytime).";
 
 "settings.subscription.upgrade" = "Upgrade to Pro";
 "settings.subscription.manage" = "Manage subscription";

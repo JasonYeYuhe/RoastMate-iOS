@@ -25,6 +25,12 @@ final class RoastGeneratorViewModel {
     /// Soft self-harm signal: results still shown, plus a supportive banner.
     var crisisBanner: Bool = false
 
+    /// Drives the one-time 5.1.2(i) cloud-AI consent sheet. Set when a
+    /// Vent/Feral generation needs explicit permission before any
+    /// third-party request; `resolveCloudConsent` records the choice and
+    /// resumes generation.
+    var pendingCloudConsent: Bool = false
+
     /// When non-nil, the next `generate()` call attaches the new session to
     /// this thread and feeds the prior-context summary into the engine.
     /// Cleared after one generation.
@@ -74,6 +80,23 @@ final class RoastGeneratorViewModel {
             state = .error(String(localized: "quota.exhausted.body"))
             return
         }
+
+        // 5.1.2(i): before the FIRST cloud (third-party-AI) Vent/Feral
+        // request, the user must explicitly choose. `.needsConsent` halts
+        // here — no credit spent, nothing generated — and shows the
+        // consent sheet; `resolveCloudConsent` records the choice and
+        // re-enters `generate`. Crisis handoff already ran above, so a
+        // person in distress never reaches this prompt.
+        let cloudGate = CloudConsentGate.decide(
+            isPrivateDraft: selectedIntensity.isPrivateDraft,
+            cloudConfigured: CloudConfig.isConfigured,
+            consent: settings.cloudConsent
+        )
+        if cloudGate == .needsConsent {
+            pendingCloudConsent = true
+            return
+        }
+
         if !isPro {
             // Credits are a quantity knob only — the Pro-only intensity
             // and style guards above are unchanged, so spending a credit
@@ -98,7 +121,7 @@ final class RoastGeneratorViewModel {
                 intensity: selectedIntensity,
                 safeMode: settings.safeModeEnabled,
                 priorContext: pendingPriorContext,
-                cloudVentEnabled: settings.cloudVentEnabled
+                cloudVentEnabled: cloudGate.allowsCloud
             )
             currentSession = HistoryService.saveSession(
                 situation: text,
@@ -122,6 +145,20 @@ final class RoastGeneratorViewModel {
             state = .error(error.localizedDescription)
             Haptics.play(.error)
         }
+    }
+
+    /// Records the user's one-time 5.1.2(i) choice for the cloud
+    /// (third-party-AI) path, then resumes the generation they were
+    /// trying to run. `allow == false` is a durable `.denied` — Vent/
+    /// Feral simply proceed on-device and the prompt never re-appears.
+    func resolveCloudConsent(_ allow: Bool,
+                             context: ModelContext,
+                             locale: Locale) async {
+        let settings = HistoryService.userSettings(context: context)
+        settings.cloudConsent = allow ? .granted : .denied
+        try? context.save()
+        pendingCloudConsent = false
+        await generate(context: context, locale: locale)
     }
 
     func rewriteAsSendable(

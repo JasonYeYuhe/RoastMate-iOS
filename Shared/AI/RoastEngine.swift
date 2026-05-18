@@ -73,7 +73,11 @@ actor RoastEngine {
         safeMode: Bool = true,
         priorContext: String? = nil,
         keepSession: Bool = false,
-        cloudVentEnabled: Bool = true,
+        // 5.1.2(i) defense-in-depth: defaults to FALSE so any caller that
+        // does not explicitly pass a consent-resolved value can never
+        // silently route the user's text to the third-party cloud. Only
+        // the consent-gated generator path passes `true`.
+        cloudVentEnabled: Bool = false,
         cloudClient: CloudVentService = CloudVentClient.shared
     ) async throws -> [String] {
         do {
