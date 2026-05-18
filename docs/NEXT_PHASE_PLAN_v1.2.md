@@ -178,9 +178,16 @@ is shorter, the dependencies are falsifiable, the moat no longer waits on Apple.
    repricing) — this is a paywall-emphasis + copy change (Pro = the value tier;
    credits = pay-as-you-go overflow), not a re-architecture. Implementation is
    the next reversible code item after compliance.
-2. **Custom Keyboard Extension = committed v1.2 spine.** Adopted (both
-   advisors' top structural fix; zero unannounced-API dependency). Large build
-   → scoped as the v1.2 milestone, not started blindly this phase.
+2. **Custom Keyboard Extension — REOPENED by the spike, RESOLVED 2026-05-19 →
+   Option B (re-rank).** Originally adopted as the v1.2 spine, but the
+   feasibility spike (`14f3e6e`, `docs/v1.2_KEYBOARD_SPIKE.md`) found it needs
+   Full Access (fights the privacy moat), can't run inline gen (~48 MB ceiling),
+   can't self-launch the app, and even App-Group handoff needs Full Access —
+   end UX only marginally beats the existing Share Extension. **User chose
+   Option B:** keep the Share Extension as the capture surface; the keyboard
+   skeleton stays committed but **dormant**; the **v1.2 spine reallocates to
+   deepening on-device Vent quality + the share-loop** (see Milestone C/D).
+   This supersedes the original "keyboard = v1.2 spine" framing in §4 ¶6.
 3. **Cloud default → first-run explicit choice. DONE & SHIPPED IN CODE**
    (`f6938e5`, the 5.1.2(i) consent gate). Decision closed.
 4. **Age affirmation → use the EXISTING `hasAcknowledgedAgeGate` flow; add no
