@@ -2,11 +2,15 @@ import SwiftUI
 import SwiftData
 import StoreKit
 
-/// v1.1 hybrid monetization paywall. Consumables are PRIMARY (the
-/// zh-first pay-as-you-go path) and shown first; Pro is positioned as
-/// the unlimited best-value tier for heavy users. Credits are a
-/// quantity knob only — Savage / Feral / Vent and the Pro style shelf
-/// stay subscription-only no matter how many credits are bought.
+/// v1.2 hybrid monetization paywall. **Pro is PRIMARY** — it is the
+/// only thing that unlocks the marquee modes (Vent / Feral / Savage) +
+/// unlimited + every style, so it is the hero and shown first. Credit
+/// packs are honest pay-as-you-go *overflow* (no subscription, quantity
+/// only) shown second. This corrects the v1.1 "consumables-primary"
+/// framing, which foregrounded packs while the things users actually
+/// want stayed Pro-gated (the "monetization theater" both the Gemini
+/// 3.1 Pro and Codex reviews flagged). No pricing / SKU / entitlement
+/// change — packs still never unlock a Pro capability.
 ///
 /// This screen is intent-triggered (it fires at the peak moment the
 /// user reaches for a generation with an empty wallet, or taps a
@@ -28,9 +32,9 @@ struct PaywallView: View {
                 if settings.availableCreditsNow() == 0 {
                     outOfCreditsBanner
                 }
-                creditPacksSection
-                Divider()
                 proSection
+                Divider()
+                creditPacksSection
 
                 Button("paywall.restore") {
                     Task { await store.restorePurchases() }
@@ -160,7 +164,15 @@ struct PaywallView: View {
     private var proSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("paywall.pro.title").font(.headline)
+                HStack(spacing: 8) {
+                    Text("paywall.pro.title").font(.headline)
+                    Text("paywall.pro.recommended")
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(Color.orange.opacity(0.18)))
+                        .foregroundStyle(.orange)
+                }
                 Text("paywall.pro.subtitle")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -173,6 +185,15 @@ struct PaywallView: View {
                 loadingRow
             }
         }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.orange.opacity(0.06))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(Color.orange.opacity(0.25), lineWidth: 1)
+        )
     }
 
     private var featureCallouts: some View {
