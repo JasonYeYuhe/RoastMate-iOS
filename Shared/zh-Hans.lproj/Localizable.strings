@@ -174,6 +174,15 @@
 "settings.credits.buy" = "获取更多点数";
 "paywall.loading" = "加载中…";
 
+// MARK: - Paywall legal (Apple 3.1.2(c) — auto-renew disclosure + EULA/Privacy)
+"paywall.length.day" = "%d 天";
+"paywall.length.week" = "%d 周";
+"paywall.length.month" = "%d 个月";
+"paywall.length.year" = "%d 年";
+"paywall.legal.terms" = "使用条款(EULA)";
+"paywall.legal.privacy" = "隐私政策";
+"paywall.legal.note" = "自动续订订阅。购买确认时向您的 Apple ID 账户收费。除非在当前订阅期结束前至少 24 小时取消,否则将按相同价格自动续订。可随时在「设置 → Apple ID → 订阅」中管理或取消。订阅一经购买,免费试用期未使用的剩余部分即作废。";
+
 // MARK: - Errors
 
 "error.generic" = "出了点问题,再试一次?";

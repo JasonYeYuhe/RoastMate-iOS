@@ -46,6 +46,8 @@ struct PaywallView: View {
                     isPresented = false
                 }
                 .frame(maxWidth: .infinity)
+
+                legalFooter
             }
             .padding(24)
         }
@@ -98,7 +100,7 @@ struct PaywallView: View {
         )
     }
 
-    // MARK: - Credit packs (primary)
+    // MARK: - Credit packs (overflow — honest pay-as-you-go, never unlocks Pro)
 
     private var creditPacksSection: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -159,7 +161,7 @@ struct PaywallView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - Pro (best value for heavy users)
+    // MARK: - Pro (PRIMARY — unlocks the marquee modes + unlimited + every style)
 
     private var proSection: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -252,6 +254,11 @@ struct PaywallView: View {
                     Text(product.description.isEmpty ? product.id : product.description)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    if let period = product.subscription?.subscriptionPeriod {
+                        Text(periodLabel(period))
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
                 Spacer()
                 Text(product.displayPrice)
@@ -265,6 +272,47 @@ struct PaywallView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    private func periodLabel(_ period: Product.SubscriptionPeriod) -> String {
+        let count = period.value
+        let key: String.LocalizationValue
+        switch period.unit {
+        case .day:   key = "paywall.length.day"
+        case .week:  key = "paywall.length.week"
+        case .month: key = "paywall.length.month"
+        case .year:  key = "paywall.length.year"
+        @unknown default: return ""
+        }
+        return String(format: String(localized: key), count)
+    }
+
+    // MARK: - Legal footer (Apple 3.1.2(c) — EULA + Privacy + auto-renew disclosure)
+
+    private var legalFooter: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 6) {
+                Link(destination: URL(string: "https://jasonyeyuhe.github.io/RoastMate/terms.html")!) {
+                    Text("paywall.legal.terms")
+                        .underline()
+                }
+                Text("·").foregroundStyle(.tertiary)
+                Link(destination: URL(string: "https://jasonyeyuhe.github.io/RoastMate/privacy.html")!) {
+                    Text("paywall.legal.privacy")
+                        .underline()
+                }
+            }
+            .font(.footnote)
+            .frame(maxWidth: .infinity)
+
+            Text("paywall.legal.note")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 4)
+        }
+        .padding(.top, 8)
     }
 
     private var loadingRow: some View {

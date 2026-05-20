@@ -33,8 +33,16 @@ PRO
 • Multi-turn Argument Simulator
 • Unlimited history
 
-Monthly $2.99 / Yearly $19.99 (7-day free trial)
+RoastMate Pro Monthly — 1 month — $2.99 (or local equivalent)
+RoastMate Pro Yearly — 1 year — $19.99 (or local equivalent), 7-day free trial for eligible new subscribers
+
+Payment is charged to your Apple ID at confirmation of purchase. Auto-renews at the same price unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings → Apple ID → Subscriptions.
 
 PRIVACY
 
 Calm / Sharp / Savage / Rewrite — fully on-device with Apple's Foundation Models. Vent / Feral private drafts route through a developer-owned Cloudflare Worker that forwards to third-party LLM providers, stateless on our side and per-device rate-limited. You can disable cloud routing in Settings → AI & Privacy. Sign in with Apple is optional; when signed in, only an Apple-issued User ID is stored locally. No analytics, no advertising IDs, no fingerprinting.
+
+TERMS OF USE (EULA) & PRIVACY POLICY
+
+Terms of Use (EULA): https://jasonyeyuhe.github.io/RoastMate/terms.html
+Privacy Policy: https://jasonyeyuhe.github.io/RoastMate/privacy.html

@@ -33,8 +33,16 @@ Pro 解锁
 • 多轮吵架模拟器
 • 无限历史
 
-月度 ¥21 / 年度 ¥138(7 天免费试用)
+RoastMate Pro 月度 —— 1 个月 —— ¥21(或当地等值价)
+RoastMate Pro 年度 —— 1 年 —— ¥138(或当地等值价),符合条件的新订阅者享 7 天免费试用
+
+购买确认时向您的 Apple ID 账户收费。除非在当前订阅期结束前至少 24 小时取消,否则将按相同价格自动续订。可随时在「设置 → Apple ID → 订阅」中管理或取消。
 
 隐私
 
 「体面 / 锐利 / 狠 / 改成能发的」使用 Apple 本地 Foundation Models 框架,不联网、不上传。「发泄 / 痛骂」默认通过我们自有的 Cloudflare 代理转发给第三方 LLM 提供商,代理本身不留存内容、按设备每日限速,可在「设置 → AI 与隐私」中随时关闭。Apple 登录为可选项;登录后我们只在本地保存 Apple 颁发的稳定用户 ID。无分析 SDK、无广告标识符、无设备指纹。
+
+使用条款(EULA)与隐私政策
+
+使用条款(EULA):https://jasonyeyuhe.github.io/RoastMate/terms.html
+隐私政策:https://jasonyeyuhe.github.io/RoastMate/privacy.html

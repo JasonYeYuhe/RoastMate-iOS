@@ -33,8 +33,16 @@ Pro 解鎖
 • 多輪吵架模擬器
 • 無限歷史
 
-月度 NT$90 / 年度 NT$590(7 天免費試用)
+RoastMate Pro 月度 —— 1 個月 —— NT$90(或當地等值價)
+RoastMate Pro 年度 —— 1 年 —— NT$590(或當地等值價),符合條件的新訂閱者享 7 天免費試用
+
+購買確認時向你的 Apple ID 帳戶收費。除非在當前訂閱期結束前至少 24 小時取消,否則將以相同價格自動續訂。可隨時在「設定 → Apple ID → 訂閱項目」中管理或取消。
 
 隱私
 
 「得體 / 銳利 / 狠 / 改成能發的」使用 Apple 本地 Foundation Models 框架,不連網、不上傳。「發洩 / 痛罵」預設透過我們自有的 Cloudflare 代理轉發給第三方 LLM 提供商,代理本身不留存內容、按裝置每日限速,可在「設定 → AI 與隱私」中隨時關閉。Apple 登入為選擇性;登入後僅在本機保存 Apple 核發的穩定使用者 ID。無分析 SDK、無廣告識別碼、無裝置指紋。
+
+使用條款(EULA)與隱私權政策
+
+使用條款(EULA):https://jasonyeyuhe.github.io/RoastMate/terms.html
+隱私權政策:https://jasonyeyuhe.github.io/RoastMate/privacy.html
