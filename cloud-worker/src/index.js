@@ -414,11 +414,23 @@ function buildSystemPrompt(intensity, locale, styleName) {
   // not a replacement. Per-locale so en/ja outputs aren't affected.
   // Per-intensity so this only fires for vent/feral, not sharp/calm.
   const localePrefix = (locale || "").toLowerCase();
+  const isTraditionalZh = localePrefix.includes("hant") || localePrefix.includes("tw") || localePrefix.includes("hk");
   let localeReinforcement = "";
   if (localePrefix.startsWith("zh") && (intensity === "vent" || intensity === "feral")) {
-    localeReinforcement = (intensity === "feral")
-      ? "中文 FERAL 强制指令:必须使用 2-3 个强烈词。例:他妈的、老子、傻逼、操、卧槽、滚、神经病。零粗口 = 没完成任务。不许用「哎呀」「真是的」开头。"
-      : "中文 VENT 强制指令:必须使用 1-2 个强烈词(不许零粗口)。可选:他妈的、老子、特么、服了、装什么装、烦死了。不许用「哎呀」「真是的」「唉」开头。";
+    // Hant + Hans split: same intensity rule but the example wordlist
+    // must be in the target script to avoid char-bleed (observed
+    // 2026-05-23: model echoes "特么" simplified 么 into zh-Hant output).
+    // Also: avoid PRC-only terms (朋友圈, 微博, 抖音) in zh-Hant; the
+    // model latent vocabulary will use them unless explicitly told.
+    if (isTraditionalZh) {
+      localeReinforcement = (intensity === "feral")
+        ? "繁體中文 FERAL 強制指令:必須使用 2-3 個強烈詞。例:他媽的、老子、傻逼、操、幹、滾、神經病。零粗口 = 沒完成任務。不許用「哎呀」「真是的」開頭。避免簡體字(誰不能寫成谁)。避免大陸專屬詞(朋友圈 → 限動/貼文,微博 → IG/FB)。"
+        : "繁體中文 VENT 強制指令:必須使用 1-2 個強烈詞(不許零粗口)。可選:他媽的、老子、特麼、服了、裝什麼裝、煩死了。不許用「哎呀」「真是的」「唉」開頭。避免簡體字(誰不能寫成谁,讓不能寫成让)。避免大陸專屬詞(朋友圈 → 限動/貼文)。";
+    } else {
+      localeReinforcement = (intensity === "feral")
+        ? "中文 FERAL 强制指令:必须使用 2-3 个强烈词。例:他妈的、老子、傻逼、操、卧槽、滚、神经病。零粗口 = 没完成任务。不许用「哎呀」「真是的」开头。"
+        : "中文 VENT 强制指令:必须使用 1-2 个强烈词(不许零粗口)。可选:他妈的、老子、特么、服了、装什么装、烦死了。不许用「哎呀」「真是的」「唉」开头。";
+    }
   } else if (localePrefix.startsWith("ja") && (intensity === "vent" || intensity === "feral")) {
     localeReinforcement = (intensity === "feral")
       ? "日本語 FERAL 強制ルール:強い罵り言葉を 2-3 個必ず使う。例:クソ、クソが、ふざけるな、うるせえ、ばかやろう。罵り言葉ゼロ = タスク未達成。「あらまあ」「やれやれ」で始めるな。"
