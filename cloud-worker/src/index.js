@@ -162,11 +162,23 @@ export default {
       }
     }
 
-    // Attempt 2: OpenRouter as fallback. The :free model in DEFAULT_MODEL
-    // is best-effort — if it's upstream-rate-limited, that's why Groq is
-    // primary.
+    // Attempt 2: OpenRouter fallback — GLM 4.5 Air :free.
+    // Choice rationale (2026-05-23, see evals/runs/2026-05-23-backend-
+    // compare-zh-vent.md): in a 24-model :free sweep on a long zh-Hans
+    // vent prompt, GLM 4.5 Air tied for the highest quality (5.0
+    // fluency + full input-thread coverage). It's NOT primary because
+    // its latency on long inputs ran 55s in the same test, and the
+    // OpenRouter :free pool is structurally shared (8/24 models
+    // returned persistent 429 the same day). Groq Qwen3-32B is the
+    // primary because it's ≤3s and our quota is isolated.
+    //
+    // We override the historical DEFAULT_MODEL env var here because
+    // it pointed at Hermes-3-405B :free which has been returning 429
+    // on every attempt this day — the chain was effectively Groq-only
+    // by accident. Hard-coding GLM Air ensures the fallback is a
+    // model we've actually verified works today.
     if (!text && env.OPENROUTER_API_KEY) {
-      const orModel = env.DEFAULT_MODEL || "deepseek/deepseek-v4-flash:free";
+      const orModel = env.DEFAULT_MODEL || "z-ai/glm-4.5-air:free";
       const orResult = await callOpenAICompatible({
         endpoint: "https://openrouter.ai/api/v1/chat/completions",
         apiKey: env.OPENROUTER_API_KEY,
@@ -266,18 +278,49 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
   return { ok: true, text: stripped };
 }
 
-/// Remove `<think>…</think>` blocks (Qwen3, R1 distills, etc.) and any
-/// leading whitespace, returning just the user-facing answer. If the
-/// model ran out of tokens mid-thinking and never emitted `</think>`,
-/// return empty so the caller treats it as a failure and tries the
-/// fallback provider.
+/// Remove `<think>…</think>` blocks (Qwen3, R1 distills, etc.), strip
+/// plain-prose reasoning traces (Nemotron-3-nano-omni-reasoning leaks
+/// these without any tag wrapping), and return just the user-facing
+/// answer. If the model ran out of tokens mid-thinking and never
+/// emitted `</think>` — or if the entire response is plain-prose
+/// reasoning — return empty so the caller treats it as a failure and
+/// tries the next fallback provider.
 function stripReasoningTrace(text) {
   if (!text) return "";
-  // If there's a complete <think>...</think> pair, drop it.
+
+  // Tag-wrapped reasoning trace (Qwen3, R1 distills, DeepSeek-V3).
   const closed = text.match(/<\/think>\s*([\s\S]*)$/i);
   if (closed) return closed[1];
-  // If the response starts with <think> but never closed, it's truncated.
   if (/^\s*<think>/i.test(text)) return "";
+
+  // Plain-prose reasoning trace heuristic. Some reasoning models
+  // (Nemotron-3 Nano Omni Reasoning observed 2026-05-23) emit their
+  // chain-of-thought as ordinary English prose, then never get to the
+  // final answer in the budgeted tokens, or wedge the final answer at
+  // the very end after thousands of chars of reasoning. Indicators:
+  //   - Long output (>1200 chars)
+  //   - Contains tell-tale meta-reasoning phrases in English
+  //     ("We need to", "Let's", "We must", "First sentence:", etc.)
+  //   - Starts with one of these phrases or with "<thought>" tag
+  if (text.length > 1200) {
+    const reasoningProbes = [
+      /^\s*(?:We need to|Let's|We must|First[, ]|Step 1)/i,
+      /\b(?:We need to produce|We need to ensure|We need to express|We need to keep|Let me craft|Let's craft|We should)/i,
+      /(?:First sentence:|Second sentence:|Word count:|Check (?:constraints|for any prohibited))/i
+    ];
+    let probeHits = 0;
+    for (const p of reasoningProbes) if (p.test(text)) probeHits++;
+    if (probeHits >= 2) return "";
+  }
+
+  // Always-applicable: if the model wrapped its final answer in
+  // an explicit "Final answer:" / "Answer:" suffix, return just that
+  // suffix (rare but observed on a couple Nemotron variants).
+  const finalAnswerMatch = text.match(/(?:Final answer|Answer)\s*:[\s\S]+?[\n。](.*)$/i);
+  if (finalAnswerMatch && finalAnswerMatch[1].trim().length > 10) {
+    return finalAnswerMatch[1];
+  }
+
   return text;
 }
 
