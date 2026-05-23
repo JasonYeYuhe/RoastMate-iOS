@@ -16,41 +16,46 @@
 // Production app does NOT set this field; it's a side door for offline
 // model evaluation.
 
-// FREE-ONLY allowlist (2026-05-23 update v2): paid models removed at user
-// direction. Eval comparison budget is $0. Expanded from initial 4 to 11
-// after re-canvassing OpenRouter /v1/models for current :free offerings.
-// Note: OpenRouter ":free" tier sometimes returns 402 ("Out of credits")
-// when the upstream provider's free quota is exhausted — that's a global
-// pool, not user-specific. 429s are upstream rate-limit blips, retry-able.
+// FREE-ONLY allowlist (2026-05-23 update v3): expanded to canvass the
+// full OpenRouter :free pool for the eval harness. Budget = $0 per user
+// direction; "slurs are acceptable in vent mode" per same direction, so
+// uncensored-tuned models (Venice, MiniMax) are now first-class
+// candidates instead of being filtered out at the model layer.
+// Note: ":free" tier returns 402 ("Out of credits") when the provider's
+// global free quota is exhausted (NOT user-specific); 429 = upstream
+// rate-limit. Account top-up does not unlock the :free pool.
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
-  // DeepSeek V4 Flash free — 1M context, MoE 284B/13B activated.
-  // Originally dropped from DEFAULT_MODEL on 2026-05-15 for leaking
-  // CoT as plain text. The `stripReasoningTrace` helper now catches
-  // tagged CoT; plain-text CoT would still leak through.
+  // === All 24 :free models from OpenRouter as of 2026-05-23. ===
+  // Full sweep per user direction "都测试一下". Slurs are explicitly
+  // OK in vent mode, so uncensored-tuned models are first-class.
+  // Code-tuned models (Poolside, Qwen Coder, Baidu CoBuddy) are
+  // included for completeness even though they're expected to
+  // under-perform on emotional-vent output — the failure mode is
+  // worth documenting.
+  "arcee-ai/trinity-large-thinking:free",
+  "baidu/cobuddy:free",
+  "cognitivecomputations/dolphin-mistral-24b-venice-edition:free", // the Venice Uncensored / original DEFAULT_MODEL pick
   "deepseek/deepseek-v4-flash:free",
-  // GLM 4.5 Air free (z.ai) — proven on 2026-05-23 to beat Qwen3-32B
-  // on zh vent calibration. Current best free Chinese option.
-  "z-ai/glm-4.5-air:free",
-  // MiniMax — Shanghai-based Chinese AI; strong on zh, larger
-  // context, low public benchmark data but worth a real test.
-  "minimax/minimax-m2.5:free",
-  // Google Gemma 4 (MoE 26B-A4B activated, and dense 31B). Google
-  // models historically weaker on idiomatic zh; included for breadth.
   "google/gemma-4-26b-a4b-it:free",
   "google/gemma-4-31b-it:free",
-  // OpenAI open-weights GPT-OSS 120B — first OpenAI open release,
-  // included as a Western-model baseline.
-  "openai/gpt-oss-120b:free",
-  // Meta Llama 3.3 70B Instruct — same family as the Groq paid
-  // fallback, but free on OpenRouter.
+  "liquid/lfm-2.5-1.2b-instruct:free",   // (correct OR id has dash before 2.5)
+  "liquid/lfm-2.5-1.2b-thinking:free",
+  "meta-llama/llama-3.2-3b-instruct:free",
   "meta-llama/llama-3.3-70b-instruct:free",
-  // Hermes 3 Llama 3.1 405B — current production DEFAULT_MODEL.
+  "minimax/minimax-m2.5:free",
   "nousresearch/hermes-3-llama-3.1-405b:free",
-  // Arcee Trinity Large Thinking — explicit reasoning model. Will
-  // very likely leak CoT (either tagged or plain-text). Included so
-  // we can document the failure mode, not because we expect it to
-  // ship.
-  "arcee-ai/trinity-large-thinking:free"
+  "nvidia/nemotron-3-nano-30b-a3b:free",
+  "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "nvidia/nemotron-3-super-120b-a12b:free",
+  "nvidia/nemotron-nano-12b-v2-vl:free",
+  "nvidia/nemotron-nano-9b-v2:free",
+  "openai/gpt-oss-120b:free",
+  "openai/gpt-oss-20b:free",
+  "poolside/laguna-m.1:free",            // code-tuned; expected to fail vent rubric
+  "poolside/laguna-xs.2:free",           // code-tuned
+  "qwen/qwen3-coder:free",               // code-tuned
+  "qwen/qwen3-next-80b-a3b-instruct:free",
+  "z-ai/glm-4.5-air:free"
 ]);
 
 export default {
