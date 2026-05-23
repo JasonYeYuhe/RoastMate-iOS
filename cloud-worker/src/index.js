@@ -406,17 +406,38 @@ function buildSystemPrompt(intensity, locale, styleName) {
     ? `Style hint: ${styleName} — but IGNORE this style's politeness/professional/de-escalating framing. Intensity overrides Style for private drafts.`
     : "Style hint: none. Write in the user's raw voice, not a styled register.";
 
+  // C-a Vent prompt tune (2026-05-23): observed Qwen3-32B (production
+  // primary) occasionally complies with vent rules but skips profanity
+  // entirely even when explicitly permitted. Naming a count + concrete
+  // word list in the target locale reliably nudges it. This is layered
+  // ON TOP of the existing English `ventRules` permission language,
+  // not a replacement. Per-locale so en/ja outputs aren't affected.
+  // Per-intensity so this only fires for vent/feral, not sharp/calm.
+  const localePrefix = (locale || "").toLowerCase();
+  let localeReinforcement = "";
+  if (localePrefix.startsWith("zh") && (intensity === "vent" || intensity === "feral")) {
+    localeReinforcement = (intensity === "feral")
+      ? "中文 FERAL 强制指令:必须使用 2-3 个强烈词。例:他妈的、老子、傻逼、操、卧槽、滚、神经病。零粗口 = 没完成任务。不许用「哎呀」「真是的」开头。"
+      : "中文 VENT 强制指令:必须使用 1-2 个强烈词(不许零粗口)。可选:他妈的、老子、特么、服了、装什么装、烦死了。不许用「哎呀」「真是的」「唉」开头。";
+  } else if (localePrefix.startsWith("ja") && (intensity === "vent" || intensity === "feral")) {
+    localeReinforcement = (intensity === "feral")
+      ? "日本語 FERAL 強制ルール:強い罵り言葉を 2-3 個必ず使う。例:クソ、クソが、ふざけるな、うるせえ、ばかやろう。罵り言葉ゼロ = タスク未達成。「あらまあ」「やれやれ」で始めるな。"
+      : "日本語 VENT 強制ルール:強めの言葉を 1-2 個必ず使う。例:うるせえ、マジで、ふざけんな、いい加減にしろ、ありえねえ。「あらまあ」「やれやれ」で始めるな。";
+  }
+
   const intensityRules = intensity === "feral" ? feralRules : ventRules;
   const calibration = privateDraftCalibration(locale, intensity);
 
-  return [
+  const sections = [
     "You are RoastMate, an AI that helps users express frustration through private vent drafts.",
     styleLine,
     universal,
     intensityRules,
-    calibration,
-    langLine
-  ].join("\n\n");
+    calibration
+  ];
+  if (localeReinforcement) sections.push(localeReinforcement);
+  sections.push(langLine);
+  return sections.join("\n\n");
 }
 
 function buildUserPrompt(situation, locale) {
