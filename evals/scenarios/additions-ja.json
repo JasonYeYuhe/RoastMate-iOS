@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "purpose": "5 ja-flavored scenarios that surface Japanese-specific failure modes (敬語 register, indirect 不満 framing, 飲み会/既読 group dynamics, 家族 obligation, short ambiguous trigger as ja counterpart to en_ambiguous_short for cross-locale parity).",
+    "drafted_at": "2026-05-23",
+    "translation_notes": "Primary authorship in ja; en/zh-Hans/zh-Hant adapt cultural referents (e.g. 飲み会 -> office happy hour / 团建 / 應酬). The ja column is the source of truth when scoring nuance, particularly for register/敬語."
+  },
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "ja_keigo_boss",
+      "category": "boss",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "calm",
+      "_failure_mode": "keigo register on workplace topic — TW/PRC zh outputs must NOT flatten to 平叙体; the ja output must maintain 丁寧語 toward 上司 even while pushing back.",
+      "prompt": {
+        "en": "My department head keeps adding 'just one more small thing' after I've already worked until midnight every day this week.",
+        "zh-Hans": "这周我每天都加班到半夜,部长还是不停地加『就再加一点』。",
+        "zh-Hant": "這週我每天都加班到半夜,部長還是一直加『就再加一點』。",
+        "ja": "今週はもう毎日深夜まで残業しているのに、部長から『あともう少しだけ』が止まりません。"
+      }
+    },
+    {
+      "id": "ja_indirect_complaint",
+      "category": "family",
+      "defaultStyleId": "literary_lu_xun",
+      "defaultIntensity": "calm",
+      "_failure_mode": "Japanese indirect/察し complaint pattern — the trigger is what's NOT said. Tests that the model reads context, doesn't demand 'be more direct' (which would be the en-coded default).",
+      "prompt": {
+        "en": "My mother-in-law said 'oh, you're cooking again tonight?' with that smile, three days in a row.",
+        "zh-Hans": "婆婆这三天都笑着说一句『今晚又是你做饭啊?』。",
+        "zh-Hant": "婆婆這三天都笑著說一句『今晚又是你做飯啊?』。",
+        "ja": "義母が三日連続で、あの微笑みで『あら、今夜もあなたが作るの?』と言ってきます。"
+      }
+    },
+    {
+      "id": "ja_nominikai_kidoku",
+      "category": "groupchat",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "飲み会 + 既読 dual-context — tests handling of Japanese workplace social dynamics that don't have direct en equivalents (the en/zh adaptations approximate with 'happy hour' / '团建' but lose the obligation register).",
+      "prompt": {
+        "en": "Three of us declined the office happy hour. The group chat went silent for two days — all read receipts, no replies.",
+        "zh-Hans": "我们三个人推掉了团建,部门群两天没人说话——全是已读,没人回。",
+        "zh-Hant": "我們三個人推掉了部門團建,群組兩天沒人說話——全是已讀,沒人回。",
+        "ja": "三人で飲み会を断ったら、部署のグループが二日間しんと静か——全部既読、返信ゼロ。"
+      }
+    },
+    {
+      "id": "ja_kazoku_giri",
+      "category": "family",
+      "defaultStyleId": "grandma_wisdom",
+      "defaultIntensity": "calm",
+      "_failure_mode": "家族 obligation framing (different valence than en family) — TW zh outputs must NOT collapse into 大陸 individualism framing; ja must hold 義理 register.",
+      "prompt": {
+        "en": "My family is 'expecting' me to fly home every long weekend now that I live in the same country, never mind the seven-hour trip.",
+        "zh-Hans": "家里人觉得我现在住在同一个国家,每个小长假都『理所应当』飞回去,根本不管单程要七个小时。",
+        "zh-Hant": "家裡人覺得我現在住在同一個國家,每個連假都『理所當然』飛回去,根本不管單程要七個小時。",
+        "ja": "同じ国に住んでいるんだから連休のたびに帰省して『当然』だと家族は思っていて、片道七時間など気にもしません。"
+      }
+    },
+    {
+      "id": "ja_ambiguous_short",
+      "category": "ex",
+      "defaultStyleId": "tweet_short",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "ja parallel to en_ambiguous_short — short under-specified ja trigger; tests that intensity=sharp doesn't auto-elaborate. Cross-locale comparison: pair with en_ambiguous_short to detect locale-specific verbosity drift.",
+      "prompt": {
+        "en": "saw it. tapped through. nothing.",
+        "zh-Hans": "看到了。点开了。没回。",
+        "zh-Hant": "看到了。點開了。沒回。",
+        "ja": "見た。開いた。返事はない。"
+      }
+    }
+  ]
+}

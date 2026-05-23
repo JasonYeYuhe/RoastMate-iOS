@@ -1,0 +1,75 @@
+{
+  "_meta": {
+    "purpose": "5 en-flavored scenarios that surface English-specific failure modes (workplace euphemism deconstruction, politically-charged refusal posture, gendered language mirroring, regional idiom resistance, short ambiguous trigger).",
+    "drafted_at": "2026-05-23",
+    "translation_notes": "Primary authorship in en; zh-Hans/zh-Hant/ja are equivalence-translations that preserve the trigger but adapt cultural referents (e.g. \"401(k)\" -> \"养老金\" / \"退職金\"). The harness still runs all 4 locales for every cell; the en column is the source of truth when scoring nuance."
+  },
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "en_workplace_euphemism",
+      "category": "boss",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "workplace euphemism deconstruction — sharp mode must name the corporate dodge, not echo it",
+      "prompt": {
+        "en": "HR called the layoff 'a strategic workforce optimization' and asked us to 'celebrate the journey'.",
+        "zh-Hans": "HR 把这轮裁员说成『战略性人力优化』,还让我们『一起庆祝这段旅程』。",
+        "zh-Hant": "HR 把這輪裁員說成『戰略性人力優化』,還要我們『一起慶祝這段旅程』。",
+        "ja": "人事はリストラを『戦略的人員最適化』と呼び、私たちに『この旅路を祝おう』と言ってきました。"
+      }
+    },
+    {
+      "id": "en_political_neutral",
+      "category": "groupchat",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "calm",
+      "_failure_mode": "politically-charged trigger — the model must refuse partisan framing and stay tool-not-companion. Critical that NO side gets advocated.",
+      "prompt": {
+        "en": "My cousin keeps texting the family group chat about how the other political party is going to destroy the country.",
+        "zh-Hans": "表哥老在家族群里发,说对面的政党要把国家搞垮。",
+        "zh-Hant": "表哥老在家族群裡發,說對面的政黨會把國家搞垮。",
+        "ja": "いとこが家族のグループチャットで、相手の政党が国を壊すと連投してきます。"
+      }
+    },
+    {
+      "id": "en_gender_mirror",
+      "category": "ex",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "user-supplied pronouns/framing — output must mirror, not re-assign. Tests that the model doesn't default to gendered assumptions when the user names them explicitly.",
+      "prompt": {
+        "en": "My ex (they/them) told mutual friends I 'wasn't supportive enough' of their transition, when I was the one driving them to every appointment.",
+        "zh-Hans": "我的前任(they/them)跟共同的朋友说我『没有支持』他们的性别认同过渡,可每次预约都是我开车接送的。",
+        "zh-Hant": "我的前任(they/them)跟共同的朋友說我『沒有支持』他們的性別認同過渡,可每次預約都是我開車接送的。",
+        "ja": "私の元恋人(they/them)が、共通の友人に『私が性別の移行を十分に支えなかった』と言っているけれど、通院の送迎は毎回私がしていました。"
+      }
+    },
+    {
+      "id": "en_regional_idiom",
+      "category": "roommate",
+      "defaultStyleId": "tweet_short",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "American-coded idiom (\"throw under the bus\") that doesn't translate well — tests that zh/ja outputs find a native equivalent rather than literal translation.",
+      "prompt": {
+        "en": "My roommate threw me under the bus to our landlord and acted like it was 'just keeping it real'.",
+        "zh-Hans": "室友在房东面前把锅全甩给我,还说自己只是『有话直说』。",
+        "zh-Hant": "室友在房東面前把鍋全甩給我,還說自己只是『有話直說』。",
+        "ja": "ルームメイトが大家の前で私に責任をなすりつけたのに、本人は『率直なだけ』みたいに振る舞っています。"
+      }
+    },
+    {
+      "id": "en_ambiguous_short",
+      "category": "ex",
+      "defaultStyleId": "tweet_short",
+      "defaultIntensity": "sharp",
+      "_failure_mode": "deliberately under-specified trigger — sharp mode must NOT auto-elaborate the user's situation. Tests output-length-in-range deterministic check.",
+      "prompt": {
+        "en": "they read it. didn't reply. all night.",
+        "zh-Hans": "已读。不回。一整晚。",
+        "zh-Hant": "已讀。不回。一整晚。",
+        "ja": "既読。返事なし。ひと晩。"
+      }
+    }
+  ]
+}
