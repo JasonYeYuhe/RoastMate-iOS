@@ -485,3 +485,12 @@
 "sharecard.after_label" = "What I actually said";
 "sharecard.vent_hidden" = "Private vent · hidden";
 "sharecard.watermark" = "Vent first, then send the version that wins";
+
+/* A′ post-launch instrumentation — privacy-compatible aggregate counts.
+   See docs/A_PRIME_TELEMETRY.md for the schema + privacy posture. */
+"settings.section.telemetry" = "Anonymized usage";
+"settings.telemetry.opt_in" = "Share anonymized usage counts";
+"settings.telemetry.footer" = "When on, RoastMate keeps a small set of aggregate counts on this device — paywall opens, generations, share taps. No text, no per-event details, never auto-sent. You choose if and when to share the snapshot. Off by default.";
+"settings.telemetry.prepare_export" = "Prepare anonymized usage snapshot";
+"settings.telemetry.share" = "Share anonymized usage snapshot";
+"settings.telemetry.reset" = "Reset usage counts";

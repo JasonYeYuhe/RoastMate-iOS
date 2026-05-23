@@ -82,6 +82,22 @@ final class UserSettings {
     /// for CloudKit-safe migration.
     var grantedCreditTxIDsRaw: String?
 
+    // MARK: - A′ telemetry opt-in (v1.2 post-launch instrumentation)
+
+    /// Opt-in for anonymized aggregate usage counters (paywall
+    /// impressions, cloud/on-device generation split, share taps, etc.).
+    /// Off by default — the app works identically. Nullable for
+    /// CloudKit-safe migration; nil reads back as `false` (the safe
+    /// default). See `docs/A_PRIME_TELEMETRY.md` for the privacy posture
+    /// + schema; the live counter store is `EventLedger`.
+    var telemetryOptInRaw: Bool?
+
+    /// Stamped the first time `telemetryOptedIn` flips to true. Exposed
+    /// at export time as `opt_in_week` (rounded to ISO week). Cleared
+    /// when the user turns telemetry off so a re-opt-in starts a fresh
+    /// window rather than inheriting the prior stamp.
+    var telemetryOptInDate: Date?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -101,6 +117,8 @@ final class UserSettings {
         self.starterTrickleUsed = nil
         self.starterTrickleResetDate = nil
         self.grantedCreditTxIDsRaw = nil
+        self.telemetryOptInRaw = nil
+        self.telemetryOptInDate = nil
     }
 
     /// 5.1.2(i) explicit consent for the cloud (third-party-AI) path.
@@ -133,6 +151,22 @@ final class UserSettings {
     var cloudVentEnabled: Bool {
         get { cloudConsent == .granted }
         set { cloudConsent = newValue ? .granted : .denied }
+    }
+
+    /// True iff the user has explicitly opted into anonymized aggregate
+    /// usage telemetry (`EventLedger`). Default false. Setting to true
+    /// stamps `telemetryOptInDate`; setting to false clears both the flag
+    /// and the date so a re-opt-in starts a fresh window.
+    var telemetryOptedIn: Bool {
+        get { telemetryOptInRaw ?? false }
+        set {
+            telemetryOptInRaw = newValue
+            if newValue {
+                if telemetryOptInDate == nil { telemetryOptInDate = Date() }
+            } else {
+                telemetryOptInDate = nil
+            }
+        }
     }
 
     /// Daily cap once the lifetime allotment is exhausted.

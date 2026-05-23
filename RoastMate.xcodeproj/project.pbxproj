@@ -27,6 +27,7 @@
 		09F30D834F0685634CAA6D95 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		0ACC5D32D45B9A258EC9614E /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
 		0ACFF8F674AC657C4A377ED8 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
+		0BA71F80510EC4EE33CD0922 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		0BDEA9E57B5C38451A22D87E /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		0C36FA4E3E27FE33631C1AA3 /* HandoffStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */; };
 		0CD6E722904237DC4347F4F5 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
@@ -36,6 +37,7 @@
 		0E4F36B8F6323FE5DE55C26E /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		0F0475454D81D04714AA9E55 /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		0F81F9D0DFE01120BA060599 /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
+		101C81DBA467CB35855A4615 /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		12112385567A4A33A9EA26E2 /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		127F44F5390D81E12A410DA9 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		1284D45E6883BBCC69738567 /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
@@ -109,11 +111,14 @@
 		3EE72D116A1B6FD9E52B417A /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		3FC5331335B8EEC137ACB93F /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
 		3FFA8E1FDD919492E53C0990 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
+		41414496920250AC99411AFC /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		4187578C120800BC1174D45D /* CreditWalletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */; };
 		41AAA6FE325636746C8D8736 /* HandoffActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6D7E56EFDB732B418844546 /* HandoffActivityTests.swift */; };
 		41B114D216350D2FBB8ED596 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		436E81674874880864ADEBB2 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		451F804DB31964F10F7918CD /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
+		452073A5DE44BD6D4808F521 /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
+		461316BE069D5ADB750BCF67 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		46A8CED3A0965C2DDDFE3C8B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
 		46D3A08A2641F6DB1637C529 /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
@@ -123,6 +128,7 @@
 		496688BCEA684ED37D7B68D2 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		49B4912A52715E41FD659424 /* CloudVentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */; };
 		4A56B89B3E5D2C3ECB7D6BD7 /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
+		4B3B855D5F7C74190F63BC6E /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		4B59E0D699CA083D612A9F9A /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
 		4C5947166420BF114079E296 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		4D68ACDAAF6C7D1B4D76FDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 621D1F985587ABFC8E6A2F3C /* Assets.xcassets */; };
@@ -171,6 +177,7 @@
 		62F534881B1C940003515A70 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		63144714DE37F54D46572391 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		6366BF9557A72422E74306E4 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
+		64FEC08EC132479DF960EF54 /* EventLedgerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB405F2612E72113E3E3F3DF /* EventLedgerTests.swift */; };
 		65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		66F1F5CB70029246E49FAE36 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F32B5D19D53FB9C880B922 /* HistoryView.swift */; };
 		674B28B74075E04EE0586A0E /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
@@ -190,6 +197,7 @@
 		70C171E1EAAA54A9E45E6E77 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		71979856D909667E84F725FD /* ThreadServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B2554A2EAAC8D0C056A58F /* ThreadServiceTests.swift */; };
 		7311337B73B1C190E6D0CF4D /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
+		73204F7478DEA045FC8903A8 /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		734530F27669026BEE82284E /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		737FD10435742A8B94C66A33 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		74268AC32FDB34B1378D20EC /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
@@ -239,6 +247,7 @@
 		8B3E0AEA64EF8679E0F590AE /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		8C1B163B9E96487B60D23505 /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		8C3C77F69C0EC22D3AB559ED /* ScenarioCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6170E3A5DBB1F27F26CF7EC /* ScenarioCatalogTests.swift */; };
+		8CD997040B7F1E9463F95B99 /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		8E44449307DBAD23404217DB /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
 		904A890AB98A866D9CE12415 /* SampleGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE2596F74842B90AD49144 /* SampleGalleryView.swift */; };
@@ -283,6 +292,7 @@
 		ACDEC04B9B439D36E2800940 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		ACFC6002C6FDB4A5A57DB9C4 /* Scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 79FA1A22CDF8D4E34A99B7C7 /* Scenarios.json */; };
 		ADF20E86735BD6742466F6CE /* CrisisSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4033DDD59B2FB940AF7C3C67 /* CrisisSupportView.swift */; };
+		AE0E7567106A6F8954381A2F /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		AEEE917CEDEFE01516080296 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		AF186B66FA6944308FF7AC89 /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		AFBC63E7FFAF9695BDBFBFBC /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
@@ -302,6 +312,7 @@
 		BA8C9618DA1C910C4DA2BE54 /* SafetyFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35435AF43856D6230E0A35F /* SafetyFilterTests.swift */; };
 		BAB8A7AB54C24F7735B487C6 /* HandoffStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */; };
 		BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
+		BC918E112E327A993F7887C7 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		BD84D453D82BEB9F5EDE223D /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		BDA8A21F3065B145C8E9A4C8 /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		BE445CE5EAC402AA49FFF03C /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
@@ -326,6 +337,7 @@
 		C796994D827EAD9B2F670B2A /* Scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 79FA1A22CDF8D4E34A99B7C7 /* Scenarios.json */; };
 		C8F4F165F8904B51E0D98DC1 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		C90E72D00DDF08EE387922B2 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
+		C90F2CB6E956CC1CACC2D2DE /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		C9BC71222E2EA7613F16DC92 /* RoastMateControls.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 647D38906DFEF1F6AF1CC2E2 /* RoastMateControls.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C9F8E1695EEAC0445DB50D2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
 		CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
@@ -338,6 +350,7 @@
 		CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		CEE99A195AF50DC6C642C096 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
 		CFB4AEB5253285A56AB33792 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
+		CFEB321CD1E5D1FB3A2BA1E6 /* TelemetryExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F313D8BE3B58F3F19C2827CD /* TelemetryExportTests.swift */; };
 		D064B389D8B58192C8655E07 /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		D09D84A21C3F3BA182C072C7 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
 		D15939753D0304B1E8335C2C /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
@@ -346,6 +359,7 @@
 		D2AB30A279DAB598A71CFCFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
 		D2BE9DDB22697B0CC5EC5B86 /* Scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 79FA1A22CDF8D4E34A99B7C7 /* Scenarios.json */; };
 		D2FDD06E448092213E98F687 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
+		D3A505EF47A895139D820607 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		D4579151EB5F81E233E16D14 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		D5A5D76E86294844522CF9DE /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		D63681066869C80A1BA0EEBF /* StylePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F37D7C4EDA50657292425 /* StylePreset.swift */; };
@@ -353,6 +367,7 @@
 		D78FF96DC5F373077431A4B3 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
 		D847BD77E615D555C65FE497 /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
 		D8569BD522A033A47DCE711E /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
+		D87091E3C656B52DAC53066B /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		DB9E10A2147A053C689D3DD3 /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		DB9EF4657F48B0B06E9A9B47 /* CloudConsentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */; };
 		DBE75C26FF2DB5D2462DE07E /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
@@ -379,6 +394,7 @@
 		E92BBE0A25EDBA0277B43AE5 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
 		E94FCCF3E16400F3DA47AA77 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		E969F6B03317AF83D3FBE753 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
+		E9AF6A730B4D64456E3A0931 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		EACE427EF3EB2E5210DD900D /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		EB4C08900A59D8F799C26E3B /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		EB6087C55405057B1D44EEBF /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
@@ -498,6 +514,7 @@
 		3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastEngine.swift; sourceTree = "<group>"; };
 		3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWalletTests.swift; sourceTree = "<group>"; };
 		3E4024604D829AF4E99B0969 /* RoastMateKeyboard.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = RoastMateKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryExport.swift; sourceTree = "<group>"; };
 		4033DDD59B2FB940AF7C3C67 /* CrisisSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrisisSupportView.swift; sourceTree = "<group>"; };
 		41186941221FDE0CCE720C6E /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		4148B97F3028971E577D0B36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -578,13 +595,16 @@
 		E77A26B509F3B0F4D63F638D /* RewriteCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteCoordinatorTests.swift; sourceTree = "<group>"; };
 		EA10FA2DEB7AFCCFEC1468EE /* MacMenuBarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMenuBarContent.swift; sourceTree = "<group>"; };
 		EA1A9BF2523442F3D7A2C243 /* Redactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redactor.swift; sourceTree = "<group>"; };
+		EB405F2612E72113E3E3F3DF /* EventLedgerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLedgerTests.swift; sourceTree = "<group>"; };
 		EBE9D7DE34335C97A63A81CA /* GeneratedRoastSourceIntensityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedRoastSourceIntensityTests.swift; sourceTree = "<group>"; };
 		ED2B32D471683AE995D046C4 /* VoiceVent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVent.swift; sourceTree = "<group>"; };
 		EF4C713BC0D271FCF06C41EB /* RoastMateWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastMateWatchApp.swift; sourceTree = "<group>"; };
 		F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceVentSheet.swift; sourceTree = "<group>"; };
+		F313D8BE3B58F3F19C2827CD /* TelemetryExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryExportTests.swift; sourceTree = "<group>"; };
 		F35435AF43856D6230E0A35F /* SafetyFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyFilterTests.swift; sourceTree = "<group>"; };
 		F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandoffStore.swift; sourceTree = "<group>"; };
 		FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
+		FB1FC6398F46F7E52915FE14 /* EventLedger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLedger.swift; sourceTree = "<group>"; };
 		FDB74A247001CF2C1093499E /* FallbackRoasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackRoasts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -745,6 +765,7 @@
 				09E1152E436517DE7D09884D /* CloudVentEngineTests.swift */,
 				3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */,
 				7BDC847798DC7EB609F0748B /* CrisisDetectionTests.swift */,
+				EB405F2612E72113E3E3F3DF /* EventLedgerTests.swift */,
 				EBE9D7DE34335C97A63A81CA /* GeneratedRoastSourceIntensityTests.swift */,
 				A6D7E56EFDB732B418844546 /* HandoffActivityTests.swift */,
 				65B083E28F113298B96278CC /* HistoryServiceSeedingTests.swift */,
@@ -761,6 +782,7 @@
 				C6170E3A5DBB1F27F26CF7EC /* ScenarioCatalogTests.swift */,
 				0D09E8118DF68AA860F66E81 /* ShareCardTests.swift */,
 				115B5C918D3BD5C5C8372636 /* StyleCatalogTests.swift */,
+				F313D8BE3B58F3F19C2827CD /* TelemetryExportTests.swift */,
 				B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */,
 				65B2554A2EAAC8D0C056A58F /* ThreadServiceTests.swift */,
 				6224DA4F04F19B18E4969E96 /* UserSettingsQuotaTests.swift */,
@@ -818,6 +840,7 @@
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
 				4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */,
 				C994C838B393F986EB67EDCA /* DeviceID.swift */,
+				FB1FC6398F46F7E52915FE14 /* EventLedger.swift */,
 				A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */,
 				F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */,
 				4236421FE8592A838FACBD94 /* Haptics.swift */,
@@ -831,6 +854,7 @@
 				87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */,
 				14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */,
 				5C70372E616B3C6B9A03229A /* StoreService.swift */,
+				3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */,
 				C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */,
 				2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */,
 				ED2B32D471683AE995D046C4 /* VoiceVent.swift */,
@@ -1387,6 +1411,7 @@
 				C031B95EDC30C850D1A87F4B /* CreditCatalog.swift in Sources */,
 				4F8862E3FE82089278693BAE /* CrisisResources.swift in Sources */,
 				0E4F36B8F6323FE5DE55C26E /* DeviceID.swift in Sources */,
+				E9AF6A730B4D64456E3A0931 /* EventLedger.swift in Sources */,
 				21A42C04029CBFA12252AFDA /* FallbackRoasts.swift in Sources */,
 				8B3E0AEA64EF8679E0F590AE /* GeneratedRoast.swift in Sources */,
 				E0E596691BE51CCE479B6C06 /* HandoffActivity.swift in Sources */,
@@ -1415,6 +1440,7 @@
 				1A7D75D83D7139B0CA88DD85 /* StoreService.swift in Sources */,
 				28E5030A01A6CE2337BE779B /* StyleCatalog.swift in Sources */,
 				E4C1811625BB8EA5AFD8F6DF /* StylePreset.swift in Sources */,
+				452073A5DE44BD6D4808F521 /* TelemetryExport.swift in Sources */,
 				0F0475454D81D04714AA9E55 /* ThreadContinuationStore.swift in Sources */,
 				2DDAEC1956924008815641B8 /* ThreadService.swift in Sources */,
 				6B0BE716B3F2FA0E05215824 /* UserSettings.swift in Sources */,
@@ -1439,6 +1465,8 @@
 				E17442043005D91C9E17F8E0 /* CrisisDetectionTests.swift in Sources */,
 				14B24B0449E597E569A8DC86 /* CrisisResources.swift in Sources */,
 				0029106AF5E255E4CB46AF07 /* DeviceID.swift in Sources */,
+				D3A505EF47A895139D820607 /* EventLedger.swift in Sources */,
+				64FEC08EC132479DF960EF54 /* EventLedgerTests.swift in Sources */,
 				63144714DE37F54D46572391 /* FallbackRoasts.swift in Sources */,
 				9FAFAA809A538B41EC3E06B7 /* GeneratedRoast.swift in Sources */,
 				35EC89B2E1708C44634ABBFF /* GeneratedRoastSourceIntensityTests.swift in Sources */,
@@ -1482,6 +1510,8 @@
 				E8D0F20EA745EAC3911102D7 /* StyleCatalog.swift in Sources */,
 				D1AE0AA617539A84C903B5B4 /* StyleCatalogTests.swift in Sources */,
 				E1058A3070AC421A57FBB0C8 /* StylePreset.swift in Sources */,
+				101C81DBA467CB35855A4615 /* TelemetryExport.swift in Sources */,
+				CFEB321CD1E5D1FB3A2BA1E6 /* TelemetryExportTests.swift in Sources */,
 				74C6A01615A29CF89B1CCD4E /* ThreadContinuationStore.swift in Sources */,
 				BE7E3B00D1023297B6F91440 /* ThreadContinuationStoreTests.swift in Sources */,
 				DC80035E5A408B991F6E6267 /* ThreadService.swift in Sources */,
@@ -1506,6 +1536,7 @@
 				2250DC4B03CAA509509E13E0 /* CreditCatalog.swift in Sources */,
 				3544742806A9B8592027BD91 /* CrisisResources.swift in Sources */,
 				496688BCEA684ED37D7B68D2 /* DeviceID.swift in Sources */,
+				BC918E112E327A993F7887C7 /* EventLedger.swift in Sources */,
 				F22B539AFD4DD26A03EE2939 /* FallbackRoasts.swift in Sources */,
 				52DA49A90E5312160C42432A /* GeneratedRoast.swift in Sources */,
 				65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */,
@@ -1534,6 +1565,7 @@
 				1CF535A4D7F0B0D8011816AB /* StoreService.swift in Sources */,
 				2D7135494714DD996B85C42B /* StyleCatalog.swift in Sources */,
 				7E7FBA91C792307D364F140B /* StylePreset.swift in Sources */,
+				AE0E7567106A6F8954381A2F /* TelemetryExport.swift in Sources */,
 				8C1B163B9E96487B60D23505 /* ThreadContinuationStore.swift in Sources */,
 				20CA46D67579A9902A9F0B93 /* ThreadService.swift in Sources */,
 				CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */,
@@ -1556,6 +1588,7 @@
 				E58A6536F3DC9C2BCC523364 /* CreditCatalog.swift in Sources */,
 				69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */,
 				09F30D834F0685634CAA6D95 /* DeviceID.swift in Sources */,
+				D87091E3C656B52DAC53066B /* EventLedger.swift in Sources */,
 				571FF89781597F11FB6167FC /* FallbackRoasts.swift in Sources */,
 				46D3A08A2641F6DB1637C529 /* GeneratedRoast.swift in Sources */,
 				17BE752B80E9E9A023EC0D22 /* HandoffActivity.swift in Sources */,
@@ -1584,6 +1617,7 @@
 				EACE427EF3EB2E5210DD900D /* StoreService.swift in Sources */,
 				344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */,
 				1F76B53BDD3EEC54879CC35E /* StylePreset.swift in Sources */,
+				73204F7478DEA045FC8903A8 /* TelemetryExport.swift in Sources */,
 				EB9E387A1FD32D4DDE4B7464 /* ThreadContinuationStore.swift in Sources */,
 				9393227E7656F563044AD9C0 /* ThreadService.swift in Sources */,
 				98B9C565A5F175158C8110EB /* UserSettings.swift in Sources */,
@@ -1604,6 +1638,7 @@
 				F2FF341791CDA27193820D2E /* CreditCatalog.swift in Sources */,
 				C1077B377B0297E5A86A3035 /* CrisisResources.swift in Sources */,
 				12AF14FF4BF980EAD3A0B131 /* DeviceID.swift in Sources */,
+				41414496920250AC99411AFC /* EventLedger.swift in Sources */,
 				01BDB320FA391B912161AF3D /* FallbackRoasts.swift in Sources */,
 				86F4F2DD92B5AABB5D284FC4 /* GeneratedRoast.swift in Sources */,
 				78C7E4B48D65423CA81A267C /* HandoffActivity.swift in Sources */,
@@ -1633,6 +1668,7 @@
 				0BDEA9E57B5C38451A22D87E /* StoreService.swift in Sources */,
 				436E81674874880864ADEBB2 /* StyleCatalog.swift in Sources */,
 				D63681066869C80A1BA0EEBF /* StylePreset.swift in Sources */,
+				C90F2CB6E956CC1CACC2D2DE /* TelemetryExport.swift in Sources */,
 				21AFC0AD60E17DD1BC537CE0 /* ThreadContinuationStore.swift in Sources */,
 				5F1D83BF1578093F81386156 /* ThreadService.swift in Sources */,
 				A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */,
@@ -1658,6 +1694,7 @@
 				17C053B5043E6956F54BDBF2 /* CrisisResources.swift in Sources */,
 				EF9E193F27BCB2D407AF2847 /* CrisisSupportView.swift in Sources */,
 				A75CE5E1A1EE82A462BD9B27 /* DeviceID.swift in Sources */,
+				0BA71F80510EC4EE33CD0922 /* EventLedger.swift in Sources */,
 				36C96C621D8EFC99ADF6490C /* ExploreView.swift in Sources */,
 				9CCFB5603DAD5CF14695D8C8 /* FallbackRoasts.swift in Sources */,
 				DCA72479EBB511CAF69800D9 /* FeatureGenerator.swift in Sources */,
@@ -1704,6 +1741,7 @@
 				5A6C26FD3A8CDCA3898A9198 /* StyleCatalog.swift in Sources */,
 				F0A97A1965D4E03B1ECD7952 /* StyleChip.swift in Sources */,
 				CD2EE9DE7B356CEEB5BC0B6E /* StylePreset.swift in Sources */,
+				8CD997040B7F1E9463F95B99 /* TelemetryExport.swift in Sources */,
 				8E44449307DBAD23404217DB /* ThreadContinuationStore.swift in Sources */,
 				854EFD62EF0FEC4C5366BFE2 /* ThreadDetailView.swift in Sources */,
 				CACFB3F2643DBF8DA4D6B8EA /* ThreadService.swift in Sources */,
@@ -1732,6 +1770,7 @@
 				6ECE6F91F601493E30C77F1D /* CrisisResources.swift in Sources */,
 				ADF20E86735BD6742466F6CE /* CrisisSupportView.swift in Sources */,
 				0D7BB757E872FBA18E8BE965 /* DeviceID.swift in Sources */,
+				461316BE069D5ADB750BCF67 /* EventLedger.swift in Sources */,
 				19FCFCAD16046BD27AB0C31F /* ExploreView.swift in Sources */,
 				F08C4F07044B2138587D9C42 /* FallbackRoasts.swift in Sources */,
 				172431F3355F7D6772D253FB /* FeatureGenerator.swift in Sources */,
@@ -1777,6 +1816,7 @@
 				A65EF20116432016F2E67863 /* StyleCatalog.swift in Sources */,
 				00638E23DDF078201E154D4B /* StyleChip.swift in Sources */,
 				C1E3D5E87674703A306374C6 /* StylePreset.swift in Sources */,
+				4B3B855D5F7C74190F63BC6E /* TelemetryExport.swift in Sources */,
 				9DED25ED81EDF49FA9BC638E /* ThreadContinuationStore.swift in Sources */,
 				BF23A5F0AAE256CE999DEEC1 /* ThreadDetailView.swift in Sources */,
 				D15939753D0304B1E8335C2C /* ThreadService.swift in Sources */,

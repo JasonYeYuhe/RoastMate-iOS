@@ -485,3 +485,11 @@
 "sharecard.after_label" = "我最後說的";
 "sharecard.vent_hidden" = "私密發洩 · 已隱藏";
 "sharecard.watermark" = "先罵個痛快，再發會贏的版本";
+
+/* A′ 上線後埋點 — 隱私友善的彙總計數。詳見 docs/A_PRIME_TELEMETRY.md。 */
+"settings.section.telemetry" = "匿名使用數據";
+"settings.telemetry.opt_in" = "分享匿名使用計數";
+"settings.telemetry.footer" = "開啟後,RoastMate 只在本機保存一小組彙總計數(付費牆開啟、生成次數、分享點擊)。不含任何文字或單次事件細節,絕不自動上傳。要不要、何時分享 JSON 快照由你決定。預設關閉。";
+"settings.telemetry.prepare_export" = "準備匿名使用快照";
+"settings.telemetry.share" = "分享匿名使用快照";
+"settings.telemetry.reset" = "重置使用計數";

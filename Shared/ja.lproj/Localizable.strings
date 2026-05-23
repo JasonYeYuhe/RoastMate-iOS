@@ -485,3 +485,12 @@
 "sharecard.after_label" = "実際に言った言葉";
 "sharecard.vent_hidden" = "非公開の吐き出し · 非表示";
 "sharecard.watermark" = "まず吐き出し、勝てる方を送る";
+
+/* A′ ローンチ後の計測 — プライバシー両立の集計カウント。
+   詳細は docs/A_PRIME_TELEMETRY.md を参照。 */
+"settings.section.telemetry" = "匿名利用データ";
+"settings.telemetry.opt_in" = "匿名の利用カウントを共有";
+"settings.telemetry.footer" = "オンにすると、RoastMate はこの端末内に小さな集計カウントだけを保存します(ペイウォール表示、生成回数、共有タップ)。テキストや個別イベントの詳細は含まれず、自動送信もしません。スナップショットを共有するかどうかは、あなたが決めます。既定はオフ。";
+"settings.telemetry.prepare_export" = "匿名利用スナップショットを準備";
+"settings.telemetry.share" = "匿名利用スナップショットを共有";
+"settings.telemetry.reset" = "利用カウントをリセット";

@@ -52,6 +52,10 @@ struct PaywallView: View {
             .padding(24)
         }
         .frame(minWidth: 360, minHeight: 480)
+        .onAppear {
+            // A′ telemetry: paywall impression. No-op when opted out.
+            EventLedger.shared.recordPaywallImpression()
+        }
         .task {
             installSettlerIfNeeded()
             await store.loadProducts()

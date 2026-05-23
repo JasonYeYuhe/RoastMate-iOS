@@ -58,6 +58,11 @@ struct ShareCardComposer: View {
                         ShareLink(item: url) {
                             Label("sharecard.share", systemImage: "square.and.arrow.up")
                         }
+                        .simultaneousGesture(TapGesture().onEnded {
+                            // A′ telemetry: user opened the Share Sheet
+                            // from the share-card composer.
+                            EventLedger.shared.recordShareTap()
+                        })
                     } else {
                         ProgressView()
                     }

@@ -70,11 +70,13 @@ final class StoreService {
 
     /// Subscription purchase (Pro). Unchanged behavior.
     func purchase(_ product: Product) async throws {
+        EventLedger.shared.recordPurchaseAttempt()  // A′
         let result = try await product.purchase()
         switch result {
         case .success(let verification):
             switch verification {
             case .verified(let transaction):
+                EventLedger.shared.recordPurchaseCompleted()  // A′
                 await transaction.finish()
                 await refreshSubscriptionStatus()
             case .unverified:
@@ -95,9 +97,11 @@ final class StoreService {
     /// .unfinished` and it is recovered on the next settle.
     func purchaseCredits(_ product: Product) async throws {
         guard CreditCatalog.credits(forProductID: product.id) != nil else { return }
+        EventLedger.shared.recordPurchaseAttempt()  // A′
         let result = try await product.purchase()
         switch result {
         case .success(.verified):
+            EventLedger.shared.recordPurchaseCompleted()  // A′
             await settleConsumables()
         case .success(.unverified):
             logger.warning("Credit purchase verification failed.")

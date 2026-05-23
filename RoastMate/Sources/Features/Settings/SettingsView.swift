@@ -7,11 +7,28 @@ struct SettingsView: View {
     @State private var languageManager = LanguageManager.shared
     @State private var showAbout = false
     @State private var showPaywall = false
+    @State private var preparedTelemetryURL: URL?
 
     private var settings: UserSettings? { settingsQuery.first }
     private var version: String {
         let s = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
         return s
+    }
+
+    /// Build the live A′ snapshot from the EventLedger + the user's
+    /// `UserSettings` (the canonical source for opt-in/install dates).
+    private func makeTelemetrySnapshot() -> TelemetrySnapshot {
+        TelemetryExport.buildSnapshot(
+            counters: EventLedger.shared.snapshot(),
+            appVersion: TelemetryExport.currentAppVersion,
+            build: TelemetryExport.currentBuild,
+            platform: TelemetryExport.currentPlatform,
+            osMajor: TelemetryExport.currentOSMajor,
+            locale: Locale.current.identifier,
+            installDate: settings?.firstLaunchDate,
+            consentState: settings?.cloudConsent.rawValue ?? "notAsked",
+            optInDate: settings?.telemetryOptInDate
+        )
     }
 
     var body: some View {
@@ -52,6 +69,46 @@ struct SettingsView: View {
                     }
                 }
                 .foregroundStyle(.primary)
+            }
+
+            Section(header: Text("settings.section.telemetry")) {
+                Toggle("settings.telemetry.opt_in", isOn: Binding(
+                    get: { settings?.telemetryOptedIn ?? false },
+                    set: { newValue in
+                        settings?.telemetryOptedIn = newValue
+                        try? context.save()
+                        // Mirror the canonical flag into the App-Group
+                        // defaults EventLedger reads lock-free.
+                        EventLedger.shared.setOptIn(newValue)
+                        // Opting back out clears the buffer so a
+                        // re-opt-in starts from zero.
+                        if !newValue {
+                            EventLedger.shared.resetCounters()
+                            preparedTelemetryURL = nil
+                        }
+                    }
+                ))
+                Text("settings.telemetry.footer")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if settings?.telemetryOptedIn == true {
+                    if let url = preparedTelemetryURL {
+                        ShareLink(item: url) {
+                            Label("settings.telemetry.share",
+                                  systemImage: "square.and.arrow.up")
+                        }
+                    } else {
+                        Button("settings.telemetry.prepare_export") {
+                            preparedTelemetryURL =
+                                try? TelemetryExport.writeJSONFile(makeTelemetrySnapshot())
+                        }
+                    }
+                    Button("settings.telemetry.reset", role: .destructive) {
+                        EventLedger.shared.resetCounters()
+                        preparedTelemetryURL = nil
+                    }
+                }
             }
 
             Section(header: Text("settings.section.appearance")) {

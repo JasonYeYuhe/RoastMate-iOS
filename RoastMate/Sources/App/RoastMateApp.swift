@@ -65,6 +65,13 @@ struct RoastMateApp: App {
         // single top-up for users upgrading into v1.1). Idempotent.
         settings.ensureTrialWalletSeeded()
         try? context.save()
+        // A′ telemetry: mirror the canonical UserSettings opt-in into the
+        // App-Group defaults EventLedger reads lock-free, then record
+        // this session start. Opt-out by default → setOptIn(false) is the
+        // no-op default and recordSessionStart is a no-op until the user
+        // explicitly enables telemetry in Settings.
+        EventLedger.shared.setOptIn(settings.telemetryOptedIn)
+        EventLedger.shared.recordSessionStart()
         if AppLaunchEnvironment.isUITest {
             // Deterministic UI-test state: no onboarding / age gate /
             // content-notice walls so screenshots land on the real UI.
