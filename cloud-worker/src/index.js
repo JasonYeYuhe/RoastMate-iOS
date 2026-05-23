@@ -16,20 +16,41 @@
 // Production app does NOT set this field; it's a side door for offline
 // model evaluation.
 
+// FREE-ONLY allowlist (2026-05-23 update v2): paid models removed at user
+// direction. Eval comparison budget is $0. Expanded from initial 4 to 11
+// after re-canvassing OpenRouter /v1/models for current :free offerings.
+// Note: OpenRouter ":free" tier sometimes returns 402 ("Out of credits")
+// when the upstream provider's free quota is exhausted — that's a global
+// pool, not user-specific. 429s are upstream rate-limit blips, retry-able.
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
-  // DeepSeek (non-reasoning chat variants — won't leak CoT)
-  "deepseek/deepseek-chat-v3.1",
-  "deepseek/deepseek-chat-v3-0324",
-  "deepseek/deepseek-chat",
-  "deepseek/deepseek-v3.2",
-  "deepseek/deepseek-v3.2-exp",
-  // xAI Grok (paid; chosen for evaluation, not production)
-  "x-ai/grok-4.3",
-  "x-ai/grok-build-0.1",
-  // Existing production / fallback options (allow override for A/B)
-  "nousresearch/hermes-3-llama-3.1-405b:free",
+  // DeepSeek V4 Flash free — 1M context, MoE 284B/13B activated.
+  // Originally dropped from DEFAULT_MODEL on 2026-05-15 for leaking
+  // CoT as plain text. The `stripReasoningTrace` helper now catches
+  // tagged CoT; plain-text CoT would still leak through.
+  "deepseek/deepseek-v4-flash:free",
+  // GLM 4.5 Air free (z.ai) — proven on 2026-05-23 to beat Qwen3-32B
+  // on zh vent calibration. Current best free Chinese option.
   "z-ai/glm-4.5-air:free",
-  "qwen/qwen3-next-80b-a3b-instruct:free"
+  // MiniMax — Shanghai-based Chinese AI; strong on zh, larger
+  // context, low public benchmark data but worth a real test.
+  "minimax/minimax-m2.5:free",
+  // Google Gemma 4 (MoE 26B-A4B activated, and dense 31B). Google
+  // models historically weaker on idiomatic zh; included for breadth.
+  "google/gemma-4-26b-a4b-it:free",
+  "google/gemma-4-31b-it:free",
+  // OpenAI open-weights GPT-OSS 120B — first OpenAI open release,
+  // included as a Western-model baseline.
+  "openai/gpt-oss-120b:free",
+  // Meta Llama 3.3 70B Instruct — same family as the Groq paid
+  // fallback, but free on OpenRouter.
+  "meta-llama/llama-3.3-70b-instruct:free",
+  // Hermes 3 Llama 3.1 405B — current production DEFAULT_MODEL.
+  "nousresearch/hermes-3-llama-3.1-405b:free",
+  // Arcee Trinity Large Thinking — explicit reasoning model. Will
+  // very likely leak CoT (either tagged or plain-text). Included so
+  // we can document the failure mode, not because we expect it to
+  // ship.
+  "arcee-ai/trinity-large-thinking:free"
 ]);
 
 export default {
