@@ -48,3 +48,6 @@ cloud-worker/dist/
 RoastMate 2.xcodeproj/
 metadata/screenshots/iphone screenshots/
 metadata/screenshots/mac screenshots /
+
+# Claude Code local state (per-user; never commit)
+.claude/

@@ -1,0 +1,3 @@
+• New: opt-in to share anonymized usage (off by default).
+  Counters only — never your text. Export is one tap from Settings.
+• Privacy posture unchanged: no third-party SDK, no personal info.
