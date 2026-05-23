@@ -57,9 +57,15 @@ real users can export it; the plan must not let build 8 drift to W4.
 **Scope:**
 - Bump `CURRENT_PROJECT_VERSION` 7→8 (per-platform; ASC accepts macOS 8
   even though iOS 7 is LIVE).
-- **Minimal C-c:** a subtle "via RoastMate" badge on the share card so
-  the artifact is at least attributable. NO QR code, NO template work,
-  NO size variants — those wait for A′ share-tap data to justify them.
+- **Minimal C-c:** ~~a subtle "via RoastMate" badge on the share card so
+  the artifact is at least attributable~~ → **already shipped in v1.0**
+  (`ShareCardView.swift:114-127` renders flame + "RoastMate" heavy +
+  localized tagline). v2-of-v2 correction 2026-05-23 after re-reading
+  the live code; both advisors re-converged on **skip the badge edit
+  this phase**, treat brand-forward watermark as the attribution, and
+  defer explicit "via" provenance language until A′ data shows share-
+  card-driven acquisition or confusion. NO QR / template / size
+  variants either — those wait for A′ share-tap data to justify them.
 - Archive + export + altool upload for iOS (build 8). Submit to TestFlight
   external testing for the dev's 2-3 zh / en / ja beta testers.
 - macOS build 8 can wait until macOS 1.0 review clears (don't compete

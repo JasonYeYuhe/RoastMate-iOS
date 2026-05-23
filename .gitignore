@@ -43,3 +43,8 @@ AuthKey_*.p8
 cloud-worker/node_modules/
 cloud-worker/.wrangler/
 cloud-worker/dist/
+
+# iCloud-rename dups (do not track copies)
+RoastMate 2.xcodeproj/
+metadata/screenshots/iphone screenshots/
+metadata/screenshots/mac screenshots /
