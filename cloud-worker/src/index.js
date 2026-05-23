@@ -8,6 +8,29 @@
 //
 // Rate-limit: per-device (anonymized UUID from the app) per UTC day,
 // counted in KV. Limit defined by env.DAILY_LIMIT_PER_DEVICE.
+//
+// Optional `model` body field: if present AND in MODEL_OVERRIDE_ALLOWLIST,
+// the request bypasses the Groq primary route and goes straight to
+// OpenRouter with the requested model. Used by the eval harness
+// (evals/runner/) for backend comparison (DeepSeek vs Grok vs Groq).
+// Production app does NOT set this field; it's a side door for offline
+// model evaluation.
+
+const MODEL_OVERRIDE_ALLOWLIST = new Set([
+  // DeepSeek (non-reasoning chat variants — won't leak CoT)
+  "deepseek/deepseek-chat-v3.1",
+  "deepseek/deepseek-chat-v3-0324",
+  "deepseek/deepseek-chat",
+  "deepseek/deepseek-v3.2",
+  "deepseek/deepseek-v3.2-exp",
+  // xAI Grok (paid; chosen for evaluation, not production)
+  "x-ai/grok-4.3",
+  "x-ai/grok-build-0.1",
+  // Existing production / fallback options (allow override for A/B)
+  "nousresearch/hermes-3-llama-3.1-405b:free",
+  "z-ai/glm-4.5-air:free",
+  "qwen/qwen3-next-80b-a3b-instruct:free"
+]);
 
 export default {
   async fetch(req, env) {
@@ -33,7 +56,7 @@ export default {
     if (validation.error) {
       return json({ error: validation.error }, 400);
     }
-    const { situation, styleName, intensity, locale, deviceId } = validation.value;
+    const { situation, styleName, intensity, locale, deviceId, modelOverride } = validation.value;
 
     // Per-device daily rate limit.
     const limit = parseInt(env.DAILY_LIMIT_PER_DEVICE || "30", 10);
@@ -68,8 +91,33 @@ export default {
       ? (env.GROQ_CHINESE_MODEL || "qwen/qwen3-32b")
       : (env.GROQ_FALLBACK_MODEL || "llama-3.3-70b-versatile");
 
-    // Attempt 1: Groq with locale-appropriate model.
-    if (env.GROQ_API_KEY) {
+    // Model-override branch: eval harness explicitly asked for a specific
+    // OpenRouter model. Skip Groq, go straight to OpenRouter so the test
+    // sees what THAT model returns, not whatever Groq is routing today.
+    if (modelOverride && env.OPENROUTER_API_KEY) {
+      const ovrResult = await callOpenAICompatible({
+        endpoint: "https://openrouter.ai/api/v1/chat/completions",
+        apiKey: env.OPENROUTER_API_KEY,
+        model: modelOverride,
+        systemPrompt,
+        userPrompt,
+        extraHeaders: {
+          "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
+          "X-Title": env.OPENROUTER_TITLE || "RoastMate"
+        }
+      });
+      if (ovrResult.ok) {
+        text = ovrResult.text;
+        modelUsed = modelOverride;
+        providerUsed = "openrouter-override";
+      } else {
+        attempts.push(`openrouter-override:${ovrResult.status || "?"}:${(ovrResult.detail || "fail").slice(0, 300)}`);
+      }
+    }
+
+    // Attempt 1: Groq with locale-appropriate model. (Skipped if model
+    // override was requested and succeeded above.)
+    if (!text && !modelOverride && env.GROQ_API_KEY) {
       const groqResult = await callOpenAICompatible({
         endpoint: "https://api.groq.com/openai/v1/chat/completions",
         apiKey: env.GROQ_API_KEY,
@@ -209,7 +257,7 @@ function stripReasoningTrace(text) {
 
 function validate(body) {
   if (!body || typeof body !== "object") return { error: "invalid_body" };
-  const { situation, styleName, intensity, locale, deviceId } = body;
+  const { situation, styleName, intensity, locale, deviceId, model } = body;
   if (typeof situation !== "string" || situation.length < 1 || situation.length > 1500) {
     return { error: "invalid_situation" };
   }
@@ -225,13 +273,23 @@ function validate(body) {
   if (styleName !== undefined && typeof styleName !== "string") {
     return { error: "invalid_style_name" };
   }
+  // Eval harness side door: optional `model` body field. Must be in the
+  // allowlist to prevent abuse via cost-bombing arbitrary models.
+  let modelOverride = "";
+  if (model !== undefined) {
+    if (typeof model !== "string" || !MODEL_OVERRIDE_ALLOWLIST.has(model)) {
+      return { error: "model_not_in_allowlist" };
+    }
+    modelOverride = model;
+  }
   return {
     value: {
       situation,
       styleName: typeof styleName === "string" ? styleName.slice(0, 80) : "",
       intensity,
       locale,
-      deviceId
+      deviceId,
+      modelOverride
     }
   };
 }
