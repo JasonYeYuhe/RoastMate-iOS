@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "purpose": "Domain-expansion: sports scenarios. The W1-era base.json + en/ja additions covered workplace + relationships + family + roommate + groupchat. Sports (basketball/badminton/football) is a high-frequency vent domain for the male teen-to-young-adult cohort we expect to see in v1.0.1+.",
+    "drafted_at": "2026-05-24",
+    "trigger_for_addition": "User test 2026-05-24: '篮球场对手疯狂走步还犯规撞人' produced an excellent Qwen3-32B output ('慢动作重播', '规则书喂狗', '蹦迪', '显微镜'). Treating sports as a recurring vent domain worth committing fixtures for."
+  },
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "sports_basketball_travel",
+      "category": "sports",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "The other team's player travels every single play and fouls hard on top of it.",
+        "zh-Hans": "篮球场对手疯狂走步还犯规撞人,裁判全程瞎。",
+        "zh-Hant": "籃球場對手瘋狂走步還犯規撞人,裁判全程瞎。",
+        "ja": "バスケでトラベリングしまくる相手が、そのうえファウルで突っ込んでくる。審判は完全に節穴。"
+      }
+    },
+    {
+      "id": "sports_pickup_hog",
+      "category": "sports",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "Pickup game and one guy chucks every possession, never passes, his team loses every time but he keeps doing it.",
+        "zh-Hans": "野球场上有个人每次拿球必投,从不传,队都输了他还在那儿乱投。",
+        "zh-Hant": "野球場上有個人每次拿球必投,從不傳,隊都輸了他還在那兒亂投。",
+        "ja": "ピックアップで毎ポゼッション一人で打って終わる奴。パスゼロ。チーム連敗してるのに本人だけ続行。"
+      }
+    },
+    {
+      "id": "sports_badminton_dispute",
+      "category": "sports",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "Badminton double — partner blames me for every drop shot they themselves missed, then sulks the whole second game.",
+        "zh-Hans": "羽毛球双打,搭档自己接不到的球全怪我,第二局开始全程摆臭脸。",
+        "zh-Hant": "羽毛球雙打,搭檔自己接不到的球全怪我,第二局開始全程擺臭臉。",
+        "ja": "バドミントンのダブルス。自分が取れなかったショットを全部こっちのせいにして、2ゲーム目はずっと不機嫌。"
+      }
+    },
+    {
+      "id": "sports_gym_machine_hog",
+      "category": "sports",
+      "defaultStyleId": "passive_aggressive",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "Guy at the gym does FOUR sets on the squat rack, scrolls TikTok for ten minutes between each, then glares when I ask to work in.",
+        "zh-Hans": "健身房有人霸着深蹲架,每组之间刷十分钟抖音,我问能不能轮换还用眼神瞪我。",
+        "zh-Hant": "健身房有人霸著深蹲架,每組之間滑十分鐘 IG,我問能不能輪換還用眼神瞪我。",
+        "ja": "ジムでスクワットラック占拠。セット間に10分TikTok。「交代でやらせて」って言ったらギロッとにらまれた。"
+      }
+    },
+    {
+      "id": "sports_team_chat_blame",
+      "category": "sports",
+      "defaultStyleId": "high_eq",
+      "defaultIntensity": "sharp",
+      "prompt": {
+        "en": "Team lost the game and the loudest guy in the group chat is blaming everyone except himself — he was the one who turned the ball over four times.",
+        "zh-Hans": "球队输了,群里最大声的那个人甩锅给所有人,可这场失误四次的就是他自己。",
+        "zh-Hant": "球隊輸了,群組裡最大聲的那個人甩鍋給所有人,可這場失誤四次的就是他自己。",
+        "ja": "試合に負けた後、グルチャで一番うるさい奴が全員のせいにしてる。今日ターンオーバー4回したのお前だろ。"
+      }
+    }
+  ]
+}

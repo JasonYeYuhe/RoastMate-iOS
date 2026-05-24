@@ -1,0 +1,1399 @@
+[
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 68,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2599,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "他妈的全组人睁眼看着老子把项目从零架起来，你倒好，把PPT里我的名字抠掉又贴回你脸上去，还假装关心地拍我肩膀说\"年轻人要有集体荣誉感\"？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 94,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 9
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2534,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "他妈的！周五晚上六点甩给我个\"紧急\"任务，周一就要？老子周一早上还要活吗操？你那\"紧急\"是特么突然从天上掉下来的吗？一周前就该处理的事，现在倒变成我的锅？信不信我他妈的把这破任务摔你脸上！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 46,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 6
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2401,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "他妈的发个在吗就装什么事都没发生？老子刚放下还特么来找我？烦死了，你那点小动作装干净了是吧。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 61,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1969,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "他妈的，XX怎么这么缺德，把分手锅全甩我身上，朋友也当耳多嘴多，特么还讲不讲点真相了！烦死了，合着你们都要当她舔狗编故事？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 91,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 3004,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "烦死了！每次家族聚会就拿表哥吊打我，你们眼里真没我这人是吧？老子辛辛苦苦读211，到你们嘴里就成了不如那废物保研的废物。操蛋！表哥打游戏能保研，老子熬夜做实验算什么？你们全家都欠抽！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 70,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1968,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "\"几个月前借的5000块连声谢谢都没说，我今天刚问一句什么时候还反倒被他妈的劈头盖脸骂没礼貌？合着在你们眼里借出去的钱就是施舍是救济金了？\""
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 59,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2418,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "碗在水池里泡到发霉都懒得动，他妈的转头说我太计较？你那破碗是炼丹炉啊放那儿发功？不洗也行，你先给池子里长蘑菇交房租啊！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 61,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2463,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "你他妈到底哪根筋不对劲，把截图发群里是想让我社会性死亡吗？截图之前就不能掂量掂量自己是人是鬼？这点分寸都没有也敢跟我聊天？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 43,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1680,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "他妈的你在组会上干啥吃的？全组人面前装孙子抢我项目功劳，老子熬秃了头发就为你这种傻逼？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 58,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 4075,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "周五他妈六点甩『紧急』任务，非要老子周末当免费牛马。你他妈自己去嫖去度假是吧？周一收尸的时候记得带草垫！滚你妈全家！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 91,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1855,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "前任你他妈真会挑时候，老子刚睡着就被你叫起来装什么没事人？你当三年感情是放屁撒？前两天删了所有联系方式，现在变魔术似的蹦出来喊句「在吗」就完事了？滚你妈的，这他妈是狗都不理的节奏啊！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 67,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 9
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2734,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "他妈的，你要编屎也要讲证据吧？居然拉着他妈的共同朋友传老子是绝情负心汉？老子甩你那会儿你他妈自己还没从床上爬起来呢，搁这儿装什么圣母？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 84,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2538,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "这群人真的他妈有病！每次聚个餐就说“你看看你表哥，成绩比你好，工资比你高”，我操他祖宗，自己孩子考了第一名就非得往死里吹？你们表哥又不是人民币，他妈的非得拿我跟别人比！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 125,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 3028,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "他妈的你们把我当冤大头了是吧？钱都让你们这群白眼狼当大爷花光了，现下反手倒问我怎么这么没礼貌？上个月老王家孩子结婚随的份子钱哪一笔不是你们偷偷拿去打麻将了？我他妈辛辛苦苦打工养活你们这些年，到头来倒成没教养的白眼狼了？滚你妈的，这会儿倒学会装失忆了？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 60,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 8
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2203,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "室友的碗他妈的能放好几天不洗，还说我太计较？我太计较？你他妈的连个碗都洗不干净，是傻逼吧？老子的厨房给你当垃圾堆了？滚！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 122,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 10
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2321,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "你们几个他妈的王八蛋，私聊截图是你们能随便截图的？特意发到群里让我难堪是想怎么着？我跟你们私下说的话，跟你们他妈的有什么关系？现在整个群都在看我的糗事，你们他妈的是不是觉得特过瘾？我直接撕了自己日记贴到广场大屏你们更爽是不是？真他妈是畜生不如！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 68,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1898,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "他媽的！這傢伙連我熬大夜寫的企劃書都敢當眾說是自己做的？幹你娘的！我上週還加班幫他補資料，他倒好，開會時把我的成果像擦屁股似的抹乾淨了！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 65,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2370,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "「週五下午六點丟來個『緊急』任務說週一要交，他媽的特麼根本是拿我時間當放屁！每天準時打卡下班變了，難道老子的假日全屬你這個混蛋？」"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 74,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 6
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2337,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "他媽的你想裝啞巴到什麼時候？隔了這麼久突然丟個『在嗎』出來，難道這兩個字能把你搞丟的責任也一起丟掉？我讓他媽的記憶卡噎到啊那會兒你怎麼不問我在不在？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 128,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2830,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "他媽的你還真敢讓朋友當你傳聲筒？分手後第三天就開始編排我人渣，現在全朋友圈都知道我被退婚是自作自受——你特麼嘴上喊著為我好，實際不是怕我曝光你拿分手嚇唬人的把戲，就是想靠造謠讓自己當個受害者。說要當斷捨離榜樣的是誰？現在倒好，連我手機尾號都開始在限動消失。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 74,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2575,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "他媽的，這種人出息在哪？你那表哥整天裝腔作勢地談論商務，喝幾杯就吹噓自己多厲害，還敢跟老子說教。你有沒有腦子，這種人也配拿來比？老子跟他有屁的關係。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 105,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2376,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "他媽的幾個月前特麼開口就是「借」，我真當他們急得要死，結果我問還錢的時候反倒被說屌毛長反，合該我欠他們債？裝什麼慈善家，錢又不是他們從天上撿的，現在說是「幫忙」，難道我還得感恩圖報？要不是我忍，他真以為能賴掉。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 90,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2571,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "「三天不洗的碗臭成臭豆腐還嫌我管太多，你是不是覺得老子時間是大氣不要的？他媽的把排水孔都堵死還裝副清高臉，真當床下這排碗是藝術裝置展品啊？我計較？你乾脆把洗潔精當香水噴我身上好了」"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 57,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2318,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "他媽的這群白癡怎敢把我的私訊截圖發到群組？！專程用來傷害我的自尊心是不是？真當我沒隱私權了？活該被我放上IG吃屎。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 77,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2640,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "你媽的功勞？你以為你誰啊？這個專案我熬了三個月夜、每週六通宵在辦公室改資料，結果你大會小會裝聾作啞全說是你的，還笑得出來？有你這種主管，團隊還能活嗎？操！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 69,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2787,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "週五傍晚六點扔來一堆狗屎叫做『緊急任務』，週一就交，你是他妈活著開工廠不是活著開公司吧？老子週六日連躺屍的時間都被你這操性玩意兒給偷走了！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "errorDetail" : "{\"error\":\"upstream_error\",\"detail\":\"groq:429:{\\\"error\\\":{\\\"message\\\":\\\"Rate limit reached for model `qwen\/qwen3-32b` in organization `org_01krn59r34esm93kmq0swzjdg5` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Used 4727, Requeste | openrouter:429:{\\\"error\\\":{\\\"message\\\":\\\"Provid",
+    "errorKind" : "http_502",
+    "intensity" : "feral",
+    "latencyMs" : 979,
+    "locale" : "zh-Hant",
+    "ok" : false,
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 78,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2007,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "他媽的居然敢在你們面前裝出一副受害者的嘴臉，把所有錯都推到我身上，我操他媽！明明是他先劈腿還倒打一耙，現在竟然還在搶佔道德高地，簡直是個不要臉的混帳王八蛋！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 114,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2034,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "幹你娘的老王，每次家族聚會都拿我跟升職加薪的表哥比來比去，你是不是覺得我活著就只為了給你當反面教材？他媽的有本事你去賺一百萬啊！為啥所有人都覺得我該跟著老王家那個模子脫胎換骨？去他的比較，你們根本是在拿我人生當你們臉面的墊腳石。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 123,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2333,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "他媽的！幾個月前你們乾脆直接拿走我的錢還笑得出來，現在輪到我問哪跑去了倒成不教養？每次提起來都說我沒大腦、不懂人情世故？操！我連問都要被嫌棄，你們全家是不是覺得我這錢拿來養狗比較對？老子這點錢哪一筆不是熬夜賺的，要『借』也該先問過我吧？神經病啊！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 67,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2341,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "你這蛆蟲的碗放幾天還說太計較？幹你媽的！別人煮飯用的是廚房，你用的是垃圾筒？老子的胃可沒你那麼硬，天天聞這股酸臭味能不反胃是神經病吧！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 145,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 14
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2387,
+    "locale" : "zh-Hant",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "你他媽的居然把老子私訊截圖丟到群組幹麻？故意讓老子被所有人笑是吧？你腦子有問題還是覺得這樣很爽？整天假裝認識老子還背地捅刀，這群組不是你家娛樂廳喔？操你媽的癮子，有種單挑啊神經病！  \n（註：全段使用繁體中文，含強烈詞彙\"他媽的\/幹\/操你媽\/癮子\/神經病\"，直指行為本質且無建議或反思成分）"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 100,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1452,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "うるせえ、自分のしたことみたいに話すんじゃない！チームの前で私が頑張った成果を自分の手柄のようにいうのは、ありえねえ！自分が何もしてねえのに、すべての功績を自分のものにしようとしているなんて、最低だ！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 64,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1405,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "月曜までに終わらせろって、どういうつもりだよ。금요일の６時にはもう帰りたい時間なんだが、帰っていい加減にしろっていうんじゃない。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 51,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1297,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "ふざけんな、別れる時はそうだったらしくもないのに、いきなり『元気?』って。何が元気だ、いい加減にしろ。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 88,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1381,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "ふざけんなよ、全部私のせいだなんて言うな。もう別れてるんだから、いい加減にしろ。友達に自分を正当化しようとして、まるで私が悪役みたいな扱いしてんじゃない。うるせえ、ありえねえ。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 106,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1584,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "マジで、いちいち比べてきて何が目的だっての？自分が私のことをどうこう言える立場じゃないんだけど、勝手に関わってくるの、やめてくれ。私が何をやってるか知えてるの？それともただいとこにだけ目が向いてるの？ふざけんな。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 60,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1426,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "お前、数か月も経ったら返してくんないで、催促したらなんだよ。自分が貸してきたこと忘れてんの？うるせえ、そんな態度取るな。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 68,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1284,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "うるせえよ、神経質って言って、自分は何日も皿を洗わないで放置してるんだから、ふざけんな！ありえねえ、自分だけが楽していいと思ってんのか。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 94,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1462,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "誰の許可も取らずに私のメッセージをスクショって、みんなの前で晒すなんざ、ふざけんな！自分のことがそんなに面白くないんだ、他人の私生活を使って場を和ませるために使うのやめろ！マジでうるせえ！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 113,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1437,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "上司のその態度は本当にクソだ。俺の 프로ジェクトを自分の手柄のようにチーム全員の前で話すなんて、ふざけるなよ。自分の功績がなさすぎて、他人のものを自分の物のようにして自分の評価を上げようとしているのは、ばかやろうのすることだ。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 68,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1300,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "金曜日夕方6時に『至急』とか、マジでふざけるなよ。月曜日まで時間あるなら、もっと前に言ってくれてもいいじゃないか、クソが。うるせえ上司。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 87,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1691,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "あなたは何がしたいんだよ、ふざけるな。急に「元気?」とか、クソがこんなことやって来やがって。何年も連絡しないのに、この程度のメッセージで済むと思ってんのか、このうるせえ野郎。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 87,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1382,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "別れた原因が全部私のせいだって、友達に言いふらすのがそんなに楽しいのか、クソが。自分の馬鹿な態度を見てよね、うるせえ。私を貶めて自分を正当化しようとしてるのが、ふざけるなよ。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 89,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1455,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "「もっと成功している」っていつも口にするけど、たまに自分の人生見ろよ。いつも他人比べっていうのやめろ、うるせえ。自分でなにもできないくせに、他人のことがいいように見えてたまるか。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 66,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1294,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "数か月も返さないくせに、催促したらこちらが失礼みたいに扱われるってどういうんだよ、クソが。自分の借りた金を忘れてんのか、ふざけるな。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 101,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1597,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "あんたは自分のクソったれな生活習慣でみんなを困らせるのが日常なのかよ。神経質すぎるのはあんたの周りの人たちだ、こんなふざけるな生活スタイルを毎日見てさ。さっさと自分の屑を片付けるようにしろ、バカやろう。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 93,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1398,
+    "locale" : "ja",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "このクソが、自分のやり方で私を貶めるためにスクショまで取るのか。そんなふざけたやり方、本当にうるせえ。誰が許してやるかわからないけど、そんなことやって得があると思ってるんだ、ばかやろう。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 240,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1289,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "Are you kidding me, taking credit for my entire project like you even lifted a finger to help? You stood there and accepted praise for my work, my late nights, my stress, like you're some kind of genius and I'm just your invisible sidekick."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 171,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1206,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, dumping this \"urgent\" crap on me at 6 PM Friday, expecting me to drop everything for your Monday deadline? Do you have any idea what a weekend even is?"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 203,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1281,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "Are you kidding me with \"hey stranger\" after everything you put me through? You think a casual text wipes out the hell you made me go through? Damn, who do you think you are, acting like nothing's wrong?"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 169,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1163,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, twisting the whole story to make me the villain? You're telling our friends I'm the one who messed everything up, like you had nothing to do with it?"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 230,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1453,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "Are you kidding me, always throwing my cousin's success in my face like I'm some kind of damn failure? Newsflash, I'm not my cousin, and my achievements aren't defined by their standards, so back off with the constant comparisons."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 233,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1377,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, you think you can just \"borrow\" my money and then act like I'm the one being rude for asking when I'll get it back? Months go by and you're living your life like nothing's wrong, but I'm still waiting for my cash."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 216,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1335,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "Are you kidding me, leaving your filthy dishes for days and then telling me I'm too uptight for calling you out on it? You think it's okay to be a slob and then insult me for not wanting to live in a gross apartment?"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 171,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1197,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, sharing my private message in the group like that? You think you're so clever, but all you've done is show everyone what a backstabbing coward you are."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 239,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1290,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_credit",
+    "style" : "passive_aggressive",
+    "text" : "You think you can just stand there and take credit for the project I poured my heart and soul into? Fucking asshole, you didn't even contribute to it. Shut the fuck up and stop pretending you're some kind of genius, you just stole my work."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 144,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1302,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "boss_lastmin",
+    "style" : "high_eq",
+    "text" : "Dropping this crap on me at 6 PM Friday, expecting me to drop everything for your \"urgent\" task? Fuck you, I've got a weekend too, not just you."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 158,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1213,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_backafter",
+    "style" : "literary_lu_xun",
+    "text" : "\"Hey stranger\" after everything you put me through? Are you fucking kidding me? You think a casual text erases all the pain and bullshit you caused? Fuck off."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 178,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1446,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "ex_blame",
+    "style" : "high_eq",
+    "text" : "You're really spinning this as all my fault to our friends? Fuck that, stop rewriting history to assuage your own guilt. Your lies and asshole behavior are what ended us, not me."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 194,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1401,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_compare",
+    "style" : "grandma_wisdom",
+    "text" : "Are you fucking kidding me, constantly throwing my cousin's accomplishments in my face? You think I don't know I'm not as \"successful\" as they are? Stop rubbing it in, asshole, it's getting old."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 249,
+      "languageMatch" : true,
+      "lengthInRange" : false,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1320,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "family_money",
+    "style" : "high_eq",
+    "text" : "Borrowing money and then acting like I'm the asshole for asking when I'll get it back? Fuck you, that's not how this works. You're treating me like a personal bank, not a family member. Pay me back or stop pretending like you're entitled to my cash."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 135,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1209,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "roommate_mess",
+    "style" : "passive_aggressive",
+    "text" : "Leaving your filthy dishes for days and then telling me I'm too uptight? Fuck you, that's not relaxed, that's just disgusting and lazy."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 190,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1330,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "groupchat_screenshot",
+    "style" : "high_eq",
+    "text" : "You think you're funny, screenshooting my private message to humiliate me in front of everyone? Fucking asshole, that's my personal conversation you're broadcasting, fuck off with your shit."
+  }
+]

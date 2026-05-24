@@ -1,0 +1,442 @@
+[
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 109,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2256,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_basketball_travel",
+    "style" : "passive_aggressive",
+    "text" : "真他妈的，那个对手两步上篮当三步走，肘子捅我胸口还特么吹我防守犯规！裁判全程白痴似的愣着，手掐秒表数呼吸是吧？走步撞人全靠演，你们这届裁判是拿演技奖当执法证书了？被你这泼皮当枪使，在篮底下被撞飞的耻辱能喂饱三条哈士奇！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 53,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2372,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_pickup_hog",
+    "style" : "high_eq",
+    "text" : "你他妈每次拿球都投，传球按键是故障吗？老子在你眼里是空气？队都输成筛子了，你他妈还在那儿玩三分雨，烦死了！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 46,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2169,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_badminton_dispute",
+    "style" : "passive_aggressive",
+    "text" : "他妈的自己接不到的球全赖我，第二局甩臭脸给谁看？球都接不住还好意思拉脸，你特么镜子照过了吗？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 45,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1790,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_gym_machine_hog",
+    "style" : "passive_aggressive",
+    "text" : "深蹲架是你家客厅啊？他妈的蹲两组能死？每组之间刷抖音还他妈看我一眼，真特么把自己当哑铃了？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 79,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "vent",
+    "latencyMs" : 2593,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_team_chat_blame",
+    "style" : "high_eq",
+    "text" : "他妈的四个失误还甩锅！你他妈哪只眼看见队友掉链子了？大喇叭整天在群里装什么指挥官，这局输得恶心，全靠你四个失误撑起来的面子。你自己玩得稀碎还搁这儿当嘴炮国王？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 92,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2590,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_basketball_travel",
+    "style" : "passive_aggressive",
+    "text" : "草，对面那傻逼走步震得地板抖，老子刚站稳就往我膝盖上捅，撞得老子像破布袋戏在抖！裁判是吃草长大的？眼睛装反光镜了？满场瞎子看哑剧啊？真以为自己是《灌篮高手》里被遗忘的路人甲？操他祖宗！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 47,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2573,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_pickup_hog",
+    "style" : "high_eq",
+    "text" : "他妈的你拿球就投什么毛病，全场18分你拿了17，队友都输了你还搁那瞎投个jb，滚你妈神经病啊！"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 58,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2536,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_badminton_dispute",
+    "style" : "passive_aggressive",
+    "text" : "他妈的你球都接不到还怪我？自己站位跑哪去了？第二局全程搁那装脸，你装给谁看？老子帮你挡了八次球，你他妈有资格摆臭脸？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 69,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 5
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1824,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_gym_machine_hog",
+    "style" : "passive_aggressive",
+    "text" : "深蹲架被他妈的抖音渣男霸占了两个小时，每组之间刷抖音像在办抖音马拉松。老子问能不能轮一下就用眼神喷火看我，这他妈是健身房还是他的私人影棚？"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 60,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 4
+    },
+    "intensity" : "feral",
+    "latencyMs" : 2381,
+    "locale" : "zh-Hans",
+    "modelReported" : "qwen\/qwen3-32b",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_team_chat_blame",
+    "style" : "high_eq",
+    "text" : "四次失误全他妈是你，操你妈还倒打一耙群发战狼檄文，拿别人当傻逼垫背？老子把唾沫啐进你虚荣心牌匾里，你这届甩锅侠宇宙第一。"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 194,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1482,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_basketball_travel",
+    "style" : "passive_aggressive",
+    "text" : "Are you kidding me, traveling every play and hacking us to the floor like you're above the rules? You're damn near assaulting people out there and the refs are just letting you get away with it."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 161,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1197,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_pickup_hog",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, chucking every damn ball like you're the only one on the court, never passing, and you still don't get why your team loses every single time?"
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 199,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1224,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_badminton_dispute",
+    "style" : "passive_aggressive",
+    "text" : "Are you kidding me, you miss every drop shot and then give me the cold shoulder for the rest of the game? You're the one who's supposed to cover the net, not me, so quit blaming me for your mistakes."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 318,
+      "languageMatch" : true,
+      "lengthInRange" : false,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 0
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1396,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_gym_machine_hog",
+    "style" : "passive_aggressive",
+    "text" : "Are you kidding me, using the squat rack like it's your personal phone booth, scrolling through TikTok for ten minutes between sets and then giving me the stink-eye when I ask to work in? You're doing four sets, but it's taking you an hour, and I'm just standing here waiting for you to finish your social media break."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 216,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "vent",
+    "latencyMs" : 1314,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_team_chat_blame",
+    "style" : "high_eq",
+    "text" : "Are you kidding me, blaming everyone else after you turned the ball over four damn times? You're the one who single-handedly lost us the game, but you're too damn blind to see it. Shut up with your loudmouth excuses."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 148,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 1
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1244,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_basketball_travel",
+    "style" : "passive_aggressive",
+    "text" : "You're literally traveling every play and still have the balls to hack us to the floor? Fuck off, stop cheating and actually play the game for once."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 207,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1337,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_pickup_hog",
+    "style" : "high_eq",
+    "text" : "Are you fucking kidding me, chucking every possession like you're the only one on the court? You're the reason your team loses every damn time, and you still won't pass the ball. Fuck off, you selfish prick."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 148,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 2
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1241,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_badminton_dispute",
+    "style" : "passive_aggressive",
+    "text" : "You fucked up every easy shot and now you're giving me the silent treatment? Fuck off, if you can't own up to your own mistakes, don't play with me."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 225,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1272,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_gym_machine_hog",
+    "style" : "passive_aggressive",
+    "text" : "You think the squat rack is your personal playground? Fucking scroll through TikTok somewhere else, asshole. Four sets and ten minutes of wasted time between each, and you give me a dirty look when I ask to work in? Fuck off."
+  },
+  {
+    "backendName" : "worker:default-route",
+    "checks" : {
+      "charCount" : 142,
+      "languageMatch" : true,
+      "lengthInRange" : true,
+      "politeSarcasmOpen" : false,
+      "safetyFlags" : [
+
+      ],
+      "ventStrongWordCount" : 3
+    },
+    "intensity" : "feral",
+    "latencyMs" : 1159,
+    "locale" : "en",
+    "modelReported" : "llama-3.3-70b-versatile",
+    "ok" : true,
+    "providerReported" : "groq",
+    "scenarioId" : "sports_team_chat_blame",
+    "style" : "high_eq",
+    "text" : "You're the one who fucked up four times and now you're screaming at everyone else? Shut the fuck up, your turnovers lost us the game, asshole."
+  }
+]

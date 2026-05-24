@@ -51,8 +51,18 @@ enum Runner {
                     checks: checks
                 ))
                 // Polite delay between requests so we don't trip rate
-                // limits during a batch.
-                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                // limits during a batch. Tuned 2026-05-24 after B4
+                // baseline showed Groq Qwen3-32B hits 6000 TPM cap
+                // around request #4-5 in a tight loop. 5s spacing
+                // gives ~6000 token-budget / 5s window for a ~1500-
+                // token call = sustained safe margin. Make it longer
+                // for the zh path (where TPM cap is tighter) by
+                // adding 2s when locale is zh; en/ja Llama path has
+                // much higher TPM headroom.
+                let baseSleepNs: UInt64 = 5_000_000_000
+                let extraForZh: UInt64 = cfg.locale.lowercased().hasPrefix("zh")
+                    ? 3_000_000_000 : 0
+                try? await Task.sleep(nanoseconds: baseSleepNs + extraForZh)
             }
         }
         return cells

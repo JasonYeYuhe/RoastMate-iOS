@@ -6,33 +6,39 @@ struct App {
         var scenariosPath: URL =
             URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
                 .appendingPathComponent("evals/scenarios/base.json")
-        var locale: String = "zh-Hans"
-        var intensity: String = "vent"
+        var locales: [String] = ["zh-Hans"]
+        var intensities: [String] = ["vent"]
         var styleOverride: String?
         var models: [String] = []
         var includeDefault: Bool = true
         var outDir: URL = URL(fileURLWithPath: "evals/runs")
+        var label: String?  // optional run label for the output dir name
     }
 
     static let usage = """
-    eval-runner — RoastMate Tier-A/B harness scaffold (B3 day 1)
+    eval-runner — RoastMate Tier-A/B harness (B3 day 2)
 
     USAGE:
-      eval-runner [--scenarios PATH] [--locale BCP47] [--intensity vent|feral|sharp|calm]
-                  [--style STYLE_ID] [--model OR_MODEL_ID]... [--no-default] [--out DIR]
+      eval-runner [--scenarios PATH] [--locale BCP47,…] [--intensity vent,feral,…]
+                  [--style STYLE_ID] [--model OR_MODEL_ID]… [--no-default]
+                  [--out DIR] [--label NAME]
 
     DEFAULTS:
       --scenarios   evals/scenarios/base.json
-      --locale      zh-Hans
-      --intensity   vent
+      --locale      zh-Hans              (comma-separate for multi: "zh-Hans,ja,en")
+      --intensity   vent                 (comma-separate: "vent,feral")
       --out         evals/runs/<timestamp>/
 
     EXAMPLES:
-      swift run eval-runner
-      swift run eval-runner --locale zh-Hant \\
-          --model z-ai/glm-4.5-air:free \\
-          --model minimax/minimax-m2.5:free
-      swift run eval-runner --no-default --model deepseek/deepseek-v4-flash:free
+      # default route, 8 base scenarios on zh-Hans vent
+      eval-runner
+
+      # B4 baseline: 8 scenarios × 2 intensities × 4 locales = 64 cells
+      eval-runner --locale zh-Hans,zh-Hant,ja,en --intensity vent,feral \\
+          --label baseline-build-8
+
+      # cross-test default + GLM Air on zh-Hant vent
+      eval-runner --locale zh-Hant --model z-ai/glm-4.5-air:free
     """
 
     static func parseArgs() -> CLIArgs {
@@ -43,12 +49,13 @@ struct App {
             let k = argv[i]
             switch k {
             case "--scenarios": i += 1; a.scenariosPath = URL(fileURLWithPath: argv[i])
-            case "--locale":    i += 1; a.locale = argv[i]
-            case "--intensity": i += 1; a.intensity = argv[i]
+            case "--locale":    i += 1; a.locales = argv[i].split(separator: ",").map(String.init)
+            case "--intensity": i += 1; a.intensities = argv[i].split(separator: ",").map(String.init)
             case "--style":     i += 1; a.styleOverride = argv[i]
             case "--model":     i += 1; a.models.append(argv[i])
             case "--no-default": a.includeDefault = false
             case "--out":       i += 1; a.outDir = URL(fileURLWithPath: argv[i])
+            case "--label":     i += 1; a.label = argv[i]
             case "--help", "-h": print(usage); exit(0)
             default:
                 FileHandle.standardError.write("Unknown arg: \(k)\n".data(using: .utf8)!)
@@ -79,37 +86,50 @@ struct App {
                 exit(2)
             }
             print("backends: \(backends.map(\.name).joined(separator: ", "))")
-            print("locale=\(args.locale) intensity=\(args.intensity)")
+            print("locales=\(args.locales) intensities=\(args.intensities)")
+            let totalCells = scenarios.count * backends.count *
+                             args.locales.count * args.intensities.count
+            print("planning \(totalCells) cells "
+                  + "(\(scenarios.count) scenarios × \(backends.count) backend × "
+                  + "\(args.locales.count) locale × \(args.intensities.count) intensity)")
 
-            let cfg = RunConfig(
-                scenarios: scenarios, backends: backends,
-                intensity: args.intensity, locale: args.locale,
-                styleOverride: args.styleOverride
-            )
             let started = Date()
-            let cells = await Runner.run(cfg)
+            var allCells: [CellResult] = []
+            for locale in args.locales {
+                for intensity in args.intensities {
+                    print("--- locale=\(locale) intensity=\(intensity) ---")
+                    let cfg = RunConfig(
+                        scenarios: scenarios, backends: backends,
+                        intensity: intensity, locale: locale,
+                        styleOverride: args.styleOverride
+                    )
+                    let subset = await Runner.run(cfg)
+                    let okHere = subset.filter(\.ok).count
+                    print("  \(okHere)/\(subset.count) ok")
+                    allCells.append(contentsOf: subset)
+                }
+            }
             let elapsed = Int(Date().timeIntervalSince(started))
-            print("ran \(cells.count) cells in \(elapsed)s")
+            print("ran \(allCells.count) cells in \(elapsed)s")
 
             // Write output
             let ts = ISO8601DateFormatter().string(from: Date())
                 .replacingOccurrences(of: ":", with: "")
                 .replacingOccurrences(of: "-", with: "")
-            let dir = args.outDir.appendingPathComponent("run-\(ts.prefix(15))")
+            let suffix = args.label ?? String(ts.prefix(15))
+            let dir = args.outDir.appendingPathComponent("run-\(suffix)")
             try FileManager.default.createDirectory(at: dir,
                                                      withIntermediateDirectories: true)
             let jsonPath = dir.appendingPathComponent("results.json")
             let mdPath = dir.appendingPathComponent("report.md")
-            try ReportWriter.writeJSON(cells, to: jsonPath)
-            try ReportWriter.writeMarkdown(
-                cells, to: mdPath,
-                header: "Eval run — \(args.locale)/\(args.intensity)"
-            )
+            try ReportWriter.writeJSON(allCells, to: jsonPath)
+            let header = "Eval run — locales=\(args.locales.joined(separator: ",")) intensities=\(args.intensities.joined(separator: ","))"
+            try ReportWriter.writeMarkdown(allCells, to: mdPath, header: header)
             print("wrote \(jsonPath.path)")
             print("wrote \(mdPath.path)")
 
-            let ok = cells.filter(\.ok).count
-            print("PASS \(ok)/\(cells.count)")
+            let ok = allCells.filter(\.ok).count
+            print("PASS \(ok)/\(allCells.count)")
         } catch {
             FileHandle.standardError.write("ERROR: \(error)\n".data(using: .utf8)!)
             exit(1)
