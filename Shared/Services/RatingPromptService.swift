@@ -3,6 +3,7 @@ import Foundation
 import UIKit
 import StoreKit
 #elseif os(macOS) && !APP_EXTENSION
+import AppKit
 import StoreKit
 #endif
 
@@ -85,12 +86,15 @@ public final class RatingPromptService: @unchecked Sendable {
             if let scene = UIApplication.shared.connectedScenes
                 .compactMap({ $0 as? UIWindowScene })
                 .first(where: { $0.activationState == .foregroundActive }) {
-                SKStoreReviewController.requestReview(in: scene)
+                AppStore.requestReview(in: scene)
             }
         }
         #elseif os(macOS) && !APP_EXTENSION
         DispatchQueue.main.async {
-            SKStoreReviewController.requestReview()
+            if let controller = NSApplication.shared.keyWindow?.contentViewController
+                ?? NSApplication.shared.mainWindow?.contentViewController {
+                AppStore.requestReview(in: controller)
+            }
         }
         #endif
         // watchOS, iOS/macOS app extensions: no-op (extensions never
