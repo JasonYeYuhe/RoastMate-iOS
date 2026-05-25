@@ -147,4 +147,79 @@ final class EventLedgerTests: XCTestCase {
                        iterations * workers,
                        "lost an update under concurrent bumps.")
     }
+
+    // MARK: - Schema v2 — ε2 generation feedback (Phase 3 W1)
+
+    func test_feedbackUpAndDown_incrementSeparateCounters() {
+        ledger.setOptIn(true)
+        ledger.recordFeedbackUp()
+        ledger.recordFeedbackUp()
+        ledger.recordFeedbackDown()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feedback_thumbsup"], 2)
+        XCTAssertEqual(s["feedback_thumbsdown"], 1)
+    }
+
+    func test_feedbackTag_eachTagHasItsOwnCounter() {
+        ledger.setOptIn(true)
+        ledger.recordFeedbackTag(.wrongTone)
+        ledger.recordFeedbackTag(.wrongTone)
+        ledger.recordFeedbackTag(.tooSoft)
+        ledger.recordFeedbackTag(.tooHarsh)
+        ledger.recordFeedbackTag(.wrongLanguage)
+        ledger.recordFeedbackTag(.wrongStyle)
+        ledger.recordFeedbackTag(.didntAddress)
+        ledger.recordFeedbackTag(.factuallyWrong)
+        ledger.recordFeedbackTag(.other)
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feedback_tag_wrong_tone"], 2)
+        XCTAssertEqual(s["feedback_tag_too_soft"], 1)
+        XCTAssertEqual(s["feedback_tag_too_harsh"], 1)
+        XCTAssertEqual(s["feedback_tag_wrong_language"], 1)
+        XCTAssertEqual(s["feedback_tag_wrong_style"], 1)
+        XCTAssertEqual(s["feedback_tag_didnt_address"], 1)
+        XCTAssertEqual(s["feedback_tag_factually_wrong"], 1)
+        XCTAssertEqual(s["feedback_tag_other"], 1)
+    }
+
+    func test_feedbackCounters_areOptOutGated() {
+        // Opted out by default → feedback bumps must be no-ops.
+        ledger.recordFeedbackUp()
+        ledger.recordFeedbackDown()
+        ledger.recordFeedbackTag(.wrongTone)
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feedback_thumbsup"], 0)
+        XCTAssertEqual(s["feedback_thumbsdown"], 0)
+        XCTAssertEqual(s["feedback_tag_wrong_tone"], 0)
+    }
+
+    func test_v1Counters_keepTheirRawKeysAfterV2() {
+        // Public-contract regression guard: the v1 raw keys must never
+        // rename. Lock the exact strings the export schema documents.
+        let allRaw = EventLedger.Counter.allCases.map(\.rawValue)
+        for expected in [
+            "paywall_impressions",
+            "generations_total",
+            "generations_cloud",
+            "generations_on_device",
+            "purchase_attempts",
+            "purchases_completed",
+            "share_taps",
+            "session_starts",
+        ] {
+            XCTAssertTrue(allRaw.contains(expected),
+                          "v1 counter \(expected) must still exist as a Counter case.")
+        }
+    }
+
+    func test_v2Counters_areAppendedAtEndOfEnum() {
+        // The additive contract says v2 counters land AFTER v1 counters in
+        // Counter.allCases. Verify by checking the first v2 index is past
+        // the last v1 index.
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let lastV1 = cases.firstIndex(of: "session_starts") ?? -1
+        let firstV2 = cases.firstIndex(of: "feedback_thumbsup") ?? -1
+        XCTAssertGreaterThan(firstV2, lastV1,
+                             "v2 counters must be appended at end of the enum.")
+    }
 }

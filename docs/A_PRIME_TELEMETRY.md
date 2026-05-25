@@ -40,10 +40,28 @@ Codex/Gemini convergent post-launch advisor synthesis.
 | `share_taps` | a share-card/share-extension share action fired |
 | `session_starts` | `RoastMateApp.bootstrap()` ran (cold or warm-from-background) |
 
+### Counters added in schema v2 (ships v1.0.2, ε2)
+| key | semantics |
+|---|---|
+| `feedback_thumbsup` | user tapped 👍 on a generation card |
+| `feedback_thumbsdown` | user tapped 👎 (and picked a tag — cancel doesn't count) |
+| `feedback_tag_wrong_tone` | 👎 tag — output's tone was off |
+| `feedback_tag_too_soft` | 👎 tag — output didn't bite enough |
+| `feedback_tag_too_harsh` | 👎 tag — output went too hard |
+| `feedback_tag_wrong_language` | 👎 tag — output came in the wrong language |
+| `feedback_tag_wrong_style` | 👎 tag — output didn't read as the picked style |
+| `feedback_tag_didnt_address` | 👎 tag — output ignored the situation |
+| `feedback_tag_factually_wrong` | 👎 tag — output contained a factual error |
+| `feedback_tag_other` | 👎 tag — user picked "other" |
+
+Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
+forever; new counters land end-of-enum. No raw text or generation content
+is ever logged.
+
 ### Snapshot context (built at EXPORT time, never persisted as series)
 | field | value |
 |---|---|
-| `schema_version` | `1` |
+| `schema_version` | `2` (was `1` in v1.0.0/v1.0.1; bumped in v1.0.2 with ε2 counters) |
 | `exported_at_week` | ISO week of export, e.g. `2026-W21` |
 | `app_version` | `MARKETING_VERSION` (e.g. `1.0.0`) |
 | `build` | `CURRENT_PROJECT_VERSION` (e.g. `7`) |

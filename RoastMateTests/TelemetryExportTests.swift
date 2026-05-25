@@ -47,7 +47,7 @@ final class TelemetryExportTests: XCTestCase {
             now: now
         )
 
-        XCTAssertEqual(snap.schemaVersion, 1)
+        XCTAssertEqual(snap.schemaVersion, 2)  // bumped in v1.0.2 (ε2 counters)
         XCTAssertEqual(snap.exportedAtWeek, "2026-W22")
         XCTAssertEqual(snap.appVersion, "1.0.0")
         XCTAssertEqual(snap.build, "7")
@@ -90,7 +90,7 @@ final class TelemetryExportTests: XCTestCase {
 
         let str = String(data: data1, encoding: .utf8) ?? ""
         // Snake-cased schema fields are stable contract — names locked.
-        XCTAssertTrue(str.contains("\"schema_version\" : 1"))
+        XCTAssertTrue(str.contains("\"schema_version\" : 2"))
         XCTAssertTrue(str.contains("\"exported_at_week\" : \"2026-W21\""))
         XCTAssertTrue(str.contains("\"os_major\" : 26"))
         XCTAssertTrue(str.contains("\"counters\""))

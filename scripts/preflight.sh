@@ -191,6 +191,54 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────
+# α4 (Phase 3 W1): Tier A smoke harness. 1 scenario × vent+feral × 4
+# locales = 8 cells, ≤2 min. Hits the live cloud worker, so this step
+# is opt-in via ROASTMATE_TIER_A=1 — every prompt/model/setting change
+# should run it before archive; routine dev can skip.
+#
+# When α2 ships /v1/sharp (W3), Tier A expands to 4 intensities × 4
+# locales = 16 cells. Strong-word regression vs baseline is checked
+# by scripts/eval-rerun.sh, not by this gate.
+if [ "${ROASTMATE_TIER_A:-0}" = "1" ]; then
+  section "Tier A smoke (--tier-a)"
+  RUNNER_DIR="$PROJECT_DIR/evals/runner"
+  RUNNER_BIN="$RUNNER_DIR/.build/debug/eval-runner"
+  if (cd "$RUNNER_DIR" && swift build 2>&1) | tail -3 | grep -q "Build complete"; then
+    ok "eval-runner built"
+  else
+    fail "eval-runner build failed"
+  fi
+  TIER_A_DIR="$PROJECT_DIR/evals/runs/run-preflight-tier-a"
+  if [ -x "$RUNNER_BIN" ]; then
+    if (cd "$PROJECT_DIR" && "$RUNNER_BIN" --tier-a --label preflight-tier-a); then
+      ok "Tier A cells passed"
+    else
+      fail "Tier A failed — archive blocked (see stderr above)"
+    fi
+
+    # Strong-word regression check vs the committed baseline. A drop of
+    # ≥2 strong words in any cell vs run-baseline-build-8 means a prompt
+    # tune lost its bite — block the archive. Per advisor synthesis the
+    # baseline diff is the load-bearing regression gate.
+    BASELINE="$PROJECT_DIR/evals/runs/run-baseline-build-8"
+    if [ -f "$BASELINE/results.json" ] && [ -f "$TIER_A_DIR/results.json" ]; then
+      if "$PROJECT_DIR/scripts/eval-rerun.sh" --strict "$BASELINE" "$TIER_A_DIR" > /dev/null; then
+        ok "no strong-word regression vs baseline"
+      else
+        fail "strong-word regression vs baseline (run eval-rerun.sh for details)"
+      fi
+    else
+      echo "  (skipping baseline diff — results.json missing)"
+    fi
+  else
+    fail "eval-runner binary missing at $RUNNER_BIN"
+  fi
+else
+  echo ""
+  echo "(skipping Tier A smoke — set ROASTMATE_TIER_A=1 before archive)"
+fi
+
+# ─────────────────────────────────────────────────────────────────────
 echo ""
 echo "=============================="
 echo " Results: $PASS pass, $FAIL fail"

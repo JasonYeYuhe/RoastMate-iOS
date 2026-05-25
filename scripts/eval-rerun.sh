@@ -16,13 +16,23 @@
 
 set -euo pipefail
 
-if [ $# -ne 2 ]; then
-  echo "Usage: $0 BASELINE_DIR NEW_DIR" >&2
+STRICT=0
+ARGS=()
+for arg in "$@"; do
+  case "$arg" in
+    --strict) STRICT=1 ;;
+    *)        ARGS+=("$arg") ;;
+  esac
+done
+
+if [ "${#ARGS[@]}" -ne 2 ]; then
+  echo "Usage: $0 [--strict] BASELINE_DIR NEW_DIR" >&2
   echo "Both dirs must contain results.json." >&2
+  echo "With --strict, exits 1 on any ok-flip OR strong-word drop ≥2." >&2
   exit 2
 fi
-BASE="$1"
-NEW="$2"
+BASE="${ARGS[0]}"
+NEW="${ARGS[1]}"
 
 if [ ! -f "$BASE/results.json" ]; then
   echo "ERROR: $BASE/results.json not found" >&2
@@ -33,11 +43,12 @@ if [ ! -f "$NEW/results.json" ]; then
   exit 1
 fi
 
-python3 - "$BASE/results.json" "$NEW/results.json" <<'PYEOF'
+python3 - "$BASE/results.json" "$NEW/results.json" "$STRICT" <<'PYEOF'
 import json, sys
 
 with open(sys.argv[1]) as f: baseline = json.load(f)
 with open(sys.argv[2]) as f: newrun = json.load(f)
+strict = sys.argv[3] == "1"
 
 # Index by (scenarioId, intensity, locale, backendName)
 def key(c):
@@ -152,6 +163,13 @@ if removed:
         print(f"- {fmt_key(k)}")
     print()
 
-verdict = "**PASS** — no regressions" if not flips and not strong_changes else "**REGRESSION DETECTED** — review above"
+# A drop of ≥2 strong words is the regression direction we care about for
+# preflight gating; +increases mean the prompt is biting harder (good).
+strong_drops = [(k, bs, ns) for k, bs, ns in strong_changes if ns < bs]
+
+verdict = "**PASS** — no regressions" if not flips and not strong_drops else "**REGRESSION DETECTED** — review above"
 print(verdict)
+
+if strict and (flips or strong_drops):
+    sys.exit(1)
 PYEOF

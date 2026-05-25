@@ -70,6 +70,22 @@
 "result.unfavorite" = "Saved";
 "result.regenerate" = "Generate again";
 
+// MARK: - Feedback (ε2, Phase 3 W1)
+
+"feedback.up.accessibility" = "Mark as helpful";
+"feedback.down.accessibility" = "Mark as off";
+"feedback.thanks" = "Thanks";
+"feedback.tag.title" = "What was off?";
+"feedback.tag.wrong_tone" = "Wrong tone";
+"feedback.tag.too_soft" = "Too soft";
+"feedback.tag.too_harsh" = "Too harsh";
+"feedback.tag.wrong_language" = "Wrong language";
+"feedback.tag.wrong_style" = "Wrong style";
+"feedback.tag.didnt_address" = "Didn't address situation";
+"feedback.tag.factually_wrong" = "Factually wrong";
+"feedback.tag.other" = "Other";
+"feedback.tag.cancel" = "Cancel";
+
 // MARK: - History
 
 "history.title" = "History";

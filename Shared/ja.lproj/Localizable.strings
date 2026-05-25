@@ -70,6 +70,22 @@
 "result.unfavorite" = "保存済み";
 "result.regenerate" = "再生成";
 
+// MARK: - Feedback (ε2, Phase 3 W1)
+
+"feedback.up.accessibility" = "役に立ったとマーク";
+"feedback.down.accessibility" = "ズレてるとマーク";
+"feedback.thanks" = "ありがとう";
+"feedback.tag.title" = "どこがズレてた？";
+"feedback.tag.wrong_tone" = "トーンが違う";
+"feedback.tag.too_soft" = "弱すぎる";
+"feedback.tag.too_harsh" = "強すぎる";
+"feedback.tag.wrong_language" = "言語が違う";
+"feedback.tag.wrong_style" = "スタイルが違う";
+"feedback.tag.didnt_address" = "状況に合っていない";
+"feedback.tag.factually_wrong" = "事実誤認";
+"feedback.tag.other" = "その他";
+"feedback.tag.cancel" = "キャンセル";
+
 // MARK: - History
 
 "history.title" = "履歴";

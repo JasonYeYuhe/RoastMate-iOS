@@ -70,6 +70,22 @@
 "result.unfavorite" = "已收藏";
 "result.regenerate" = "再生成一条";
 
+// MARK: - Feedback (ε2, Phase 3 W1)
+
+"feedback.up.accessibility" = "标记为有用";
+"feedback.down.accessibility" = "标记为不对劲";
+"feedback.thanks" = "已收到";
+"feedback.tag.title" = "哪里不对？";
+"feedback.tag.wrong_tone" = "语气不对";
+"feedback.tag.too_soft" = "太软了";
+"feedback.tag.too_harsh" = "太狠了";
+"feedback.tag.wrong_language" = "语言不对";
+"feedback.tag.wrong_style" = "风格不对";
+"feedback.tag.didnt_address" = "没说到点子上";
+"feedback.tag.factually_wrong" = "信息错误";
+"feedback.tag.other" = "其他";
+"feedback.tag.cancel" = "取消";
+
 // MARK: - History
 
 "history.title" = "历史";

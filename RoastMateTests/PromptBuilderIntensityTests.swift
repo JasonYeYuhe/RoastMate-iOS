@@ -226,6 +226,124 @@ final class PromptBuilderIntensityTests: XCTestCase {
         XCTAssertTrue(prompt.contains("请用简体中文回复"))
     }
 
+    // MARK: - Sharp/Calm tone calibration (α1, Phase 3 W1)
+    //
+    // Sharp uses on-device Apple FM in production. The universal
+    // intensityGuidance line works in English but routinely drifts
+    // toward over-polite / hedge-creep / apology-creep in zh + ja.
+    // sharpCalmCalibration() adds same-language BAD/GOOD anchors. en
+    // stays untuned (the baseline already lands Sharp/Calm cleanly).
+
+    func testSharpZhHansIncludesSharpToneCalibration() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "zh_Hans_CN"),
+            intensity: .sharp
+        )
+        XCTAssertTrue(prompt.contains("SHARP TONE CALIBRATION"),
+                      "Sharp + zh-Hans should include the new calibration block.")
+        XCTAssertTrue(prompt.contains("终结对话的那一句"),
+                      "Simplified-Chinese variant of the Sharp anchor should ship.")
+        XCTAssertTrue(prompt.contains("hedge-creep"),
+                      "Failure-mode label should be explicit so the model can avoid it.")
+        XCTAssertFalse(prompt.contains("終結對話的那一句"),
+                       "Traditional-Chinese phrasing must not leak into a zh-Hans prompt.")
+    }
+
+    func testSharpZhHantIncludesTraditionalCalibration() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "zh-Hant-TW"),
+            intensity: .sharp
+        )
+        XCTAssertTrue(prompt.contains("SHARP TONE CALIBRATION"))
+        XCTAssertTrue(prompt.contains("終結對話的那一句"),
+                      "zh-Hant should get the traditional-Chinese variant.")
+        XCTAssertFalse(prompt.contains("终结对话的那一句"),
+                       "Simplified-Chinese phrasing must not leak into a zh-Hant prompt.")
+    }
+
+    func testSharpJaIncludesJapaneseCalibration() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "ja_JP"),
+            intensity: .sharp
+        )
+        XCTAssertTrue(prompt.contains("SHARP TONE CALIBRATION"))
+        XCTAssertTrue(prompt.contains("やり取りを終わらせる一行"),
+                      "ja-specific Sharp anchor should ship.")
+        XCTAssertTrue(prompt.contains("深夜2時"))
+    }
+
+    func testSharpEnglishStaysUntuned() {
+        // The universal intensityGuidance already lands Sharp cleanly in
+        // English — adding a calibration block risks overfitting. en stays
+        // explicitly empty in sharpCalmCalibration().
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "en_US"),
+            intensity: .sharp
+        )
+        XCTAssertFalse(prompt.contains("SHARP TONE CALIBRATION"),
+                       "en should not receive the new calibration block.")
+        XCTAssertFalse(prompt.contains("CALM TONE CALIBRATION"))
+    }
+
+    func testCalmZhHansIncludesNoApologyAnchor() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "zh_Hans_CN"),
+            intensity: .calm
+        )
+        XCTAssertTrue(prompt.contains("CALM TONE CALIBRATION"),
+                      "Calm + zh-Hans should include the new calibration block.")
+        XCTAssertTrue(prompt.contains("沉稳但立场清楚"),
+                      "Calm anchor must distinguish composed from conceding.")
+        XCTAssertTrue(prompt.contains("被打扰的那方不该道歉"),
+                      "Calm calibration should explicitly mark apology-creep as BAD.")
+    }
+
+    func testCalmZhHantIncludesTraditionalNoApologyAnchor() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "zh-Hant-TW"),
+            intensity: .calm
+        )
+        XCTAssertTrue(prompt.contains("CALM TONE CALIBRATION"))
+        XCTAssertTrue(prompt.contains("沉穩但立場清楚"))
+        XCTAssertTrue(prompt.contains("被打擾的那方不該道歉"))
+    }
+
+    func testCalmJaIncludesNoApologyAnchor() {
+        let prompt = PromptBuilder.systemPrompt(
+            style: emptyStyle,
+            locale: Locale(identifier: "ja_JP"),
+            intensity: .calm
+        )
+        XCTAssertTrue(prompt.contains("CALM TONE CALIBRATION"))
+        XCTAssertTrue(prompt.contains("落ち着いた立場保持"))
+        XCTAssertTrue(prompt.contains("困らされた側が謝るのは不自然"),
+                      "ja Calm calibration should explicitly flag apology-by-the-victim as BAD.")
+    }
+
+    func testSharpCalmCalibrationDoesNotLeakIntoOtherIntensities() {
+        // Regression guard: only Sharp + Calm should receive the new
+        // calibration. Savage has its own intensityGuidance variant; vent
+        // and feral have their own private-draft preambles. Mixing the
+        // calibrations would dilute their distinct tones.
+        for intensity: Intensity in [.savage, .vent, .feral] {
+            let prompt = PromptBuilder.systemPrompt(
+                style: emptyStyle,
+                locale: Locale(identifier: "zh_Hans_CN"),
+                intensity: intensity
+            )
+            XCTAssertFalse(prompt.contains("SHARP TONE CALIBRATION"),
+                           "\(intensity.rawValue) must not include Sharp calibration.")
+            XCTAssertFalse(prompt.contains("CALM TONE CALIBRATION"),
+                           "\(intensity.rawValue) must not include Calm calibration.")
+        }
+    }
+
     func testSendableRewritePromptIncludesInputsAndNoProfanityRule() {
         let (system, user) = PromptBuilder.rewriteAsSendablePrompt(
             ventDraft: "This is such damn nonsense.",
