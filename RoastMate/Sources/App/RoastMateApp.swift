@@ -72,6 +72,9 @@ struct RoastMateApp: App {
         // explicitly enables telemetry in Settings.
         EventLedger.shared.setOptIn(settings.telemetryOptedIn)
         EventLedger.shared.recordSessionStart()
+        // ε1: per-session rating-prompt counters start fresh on cold
+        // launch so the 3-successful-generations gate resets each session.
+        RatingPromptService.shared.resetSession()
         if AppLaunchEnvironment.isUITest {
             // Deterministic UI-test state: no onboarding / age gate /
             // content-notice walls so screenshots land on the real UI.

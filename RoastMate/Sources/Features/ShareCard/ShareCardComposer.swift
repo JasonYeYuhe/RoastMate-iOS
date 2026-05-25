@@ -62,6 +62,11 @@ struct ShareCardComposer: View {
                             // A′ telemetry: user opened the Share Sheet
                             // from the share-card composer.
                             EventLedger.shared.recordShareTap()
+                            // ε1: a successful share tap is one of the two
+                            // triggers for the in-app App Store rating
+                            // prompt. Service enforces at-most-once per
+                            // session itself.
+                            RatingPromptService.shared.notifySuccessfulShare()
                         })
                     } else {
                         ProgressView()

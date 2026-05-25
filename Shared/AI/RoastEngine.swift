@@ -113,6 +113,7 @@ actor RoastEngine {
                 // disallowed content on a safety failure.
                 let safe = try SafetyFilter.validateVentOutput(cloudText)
                 EventLedger.shared.recordGeneration(cloud: true)  // A′
+                RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
                 return [safe]
             } catch let err as CloudVentError {
                 logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
@@ -212,6 +213,7 @@ actor RoastEngine {
             return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
         }
         EventLedger.shared.recordGeneration(cloud: false)  // A′
+        RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
         return Array(sanitized.prefix(effectiveVariantCount))
         #else
         return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)

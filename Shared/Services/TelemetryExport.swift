@@ -50,7 +50,9 @@ public enum TelemetryExport {
         now: Date = Date()
     ) -> TelemetrySnapshot {
         TelemetrySnapshot(
-            schemaVersion: 1,
+            // schema v2 (ships in v1.0.2): adds feedback_thumbsup/down +
+            // feedback_tag_* counters end-of-enum. v1 keys all preserved.
+            schemaVersion: 2,
             exportedAtWeek: isoWeek(now),
             appVersion: appVersion,
             build: build,

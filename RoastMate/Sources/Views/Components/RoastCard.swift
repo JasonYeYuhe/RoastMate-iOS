@@ -192,6 +192,7 @@ struct GeneratedRoastCard: View {
                                         : String(localized: "result.favorite"))
                 }
             }
+            FeedbackBar()
         }
         .padding(16)
         .background(
@@ -277,3 +278,76 @@ import UIKit
 #if canImport(AppKit)
 import AppKit
 #endif
+
+/// ε2 (Phase 3 W1, ships in v1.0.2): tiny 👍 / 👎 row beneath each
+/// generation card. 👎 opens a confirmation dialog with 8 tag categories.
+/// Stored as A′ schema-v2 counters; **no raw text is ever logged**.
+///
+/// Submission state is per-view-instance only (resets when the card view
+/// recycles). At low N=5-20 the over-count risk from a user re-rating an
+/// older card after navigating away is bounded; persistent dedup is
+/// deferred to W2's α3 if A′ shows it actually inflates signal.
+struct FeedbackBar: View {
+    @State private var submitted = false
+    @State private var showTagDialog = false
+
+    var body: some View {
+        Group {
+            if submitted {
+                HStack {
+                    Spacer()
+                    Label("feedback.thanks", systemImage: "checkmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                HStack(spacing: 18) {
+                    Spacer()
+                    Button {
+                        EventLedger.shared.recordFeedbackUp()
+                        Haptics.play(.selection)
+                        submitted = true
+                    } label: {
+                        Image(systemName: "hand.thumbsup")
+                            .font(.callout)
+                    }
+                    .accessibilityLabel(Text("feedback.up.accessibility"))
+
+                    Button {
+                        showTagDialog = true
+                    } label: {
+                        Image(systemName: "hand.thumbsdown")
+                            .font(.callout)
+                    }
+                    .accessibilityLabel(Text("feedback.down.accessibility"))
+                }
+                .buttonStyle(.borderless)
+                .controlSize(.small)
+                .foregroundStyle(.secondary)
+                .confirmationDialog(
+                    Text("feedback.tag.title"),
+                    isPresented: $showTagDialog,
+                    titleVisibility: .visible
+                ) {
+                    Button("feedback.tag.wrong_tone")        { submit(.wrongTone) }
+                    Button("feedback.tag.too_soft")          { submit(.tooSoft) }
+                    Button("feedback.tag.too_harsh")         { submit(.tooHarsh) }
+                    Button("feedback.tag.wrong_language")    { submit(.wrongLanguage) }
+                    Button("feedback.tag.wrong_style")       { submit(.wrongStyle) }
+                    Button("feedback.tag.didnt_address")     { submit(.didntAddress) }
+                    Button("feedback.tag.factually_wrong")   { submit(.factuallyWrong) }
+                    Button("feedback.tag.other")             { submit(.other) }
+                    Button("feedback.tag.cancel", role: .cancel) { /* abort, no record */ }
+                }
+            }
+        }
+        .padding(.top, 2)
+    }
+
+    private func submit(_ tag: EventLedger.FeedbackTag) {
+        EventLedger.shared.recordFeedbackDown()
+        EventLedger.shared.recordFeedbackTag(tag)
+        Haptics.play(.selection)
+        submitted = true
+    }
+}

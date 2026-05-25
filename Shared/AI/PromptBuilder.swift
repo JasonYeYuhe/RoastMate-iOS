@@ -89,6 +89,12 @@ enum PromptBuilder {
                 lines.append(calibration)
             }
         }
+        if intensity == .sharp || intensity == .calm {
+            let calibration = sharpCalmCalibration(for: locale, intensity: intensity)
+            if !calibration.isEmpty {
+                lines.append(calibration)
+            }
+        }
         let examples = examplesForPrompt(style: style, locale: locale)
         if !examples.isEmpty {
             lines.append("EXAMPLES (reference for tone only — DO NOT copy their language; obey the OUTPUT LANGUAGE directive below):")
@@ -345,6 +351,72 @@ enum PromptBuilder {
             - BAD: "If you put that energy into yourself, you'd be so much further ahead." (too reflective, too polite)
             - GOOD: "Gaming out loud at 2 AM like this dorm is your private arcade? Other people have a tomorrow."
             """
+        }
+    }
+
+    /// Sharp/Calm tone calibration. Apple FM in zh + ja regularly drifts
+    /// toward over-polite, hedge-creep, or apology-creep — Sharp loses its
+    /// bite and Calm concedes the user's legitimate position. Same-language
+    /// BAD/GOOD pairs anchor the model to the right shape. en stays untuned;
+    /// the universal intensityGuidance line already works in English.
+    private static func sharpCalmCalibration(for locale: Locale, intensity: Intensity) -> String {
+        let isSharp = intensity == .sharp
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            let isHant = locale.identifier.contains("Hant")
+            if isSharp {
+                if isHant {
+                    return """
+                    SHARP TONE CALIBRATION (Sharp ≠ 沒禮貌, Sharp ≠ vent, Sharp = 終結對話的那一句):
+                    - BAD: 「不好意思，下次能不能注意一下音量？謝謝。」 (太軟, hedge-creep, 在請求許可)
+                    - BAD: 「啊好吵，能小聲點嗎？」 (太情緒化, 還是在乞求)
+                    - GOOD: 「凌晨兩點的音量是你的事，整層樓的睡眠不是。今晚開始調低，不然我直接找物管。」 (點名行為, 給出底線, 不帶髒話)
+                    """
+                }
+                return """
+                SHARP TONE CALIBRATION (Sharp ≠ 没礼貌, Sharp ≠ vent, Sharp = 终结对话的那一句):
+                - BAD: "不好意思，下次能不能注意一下音量？谢谢。" (太软, hedge-creep, 在请求许可)
+                - BAD: "啊好吵，能小声点吗？" (太情绪化, 还是在乞求)
+                - GOOD: "凌晨两点的音量是你的事，整层楼的睡眠不是。今晚开始调低，否则我直接找物业。" (点名行为, 给出底线, 不带脏话)
+                """
+            }
+            // .calm
+            if isHant {
+                return """
+                CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 退讓, Calm = 沉穩但立場清楚):
+                - BAD: 「對不起打擾你了，方便的話下次小聲一點好嗎？」 (concedes — 被打擾的那方不該道歉)
+                - BAD: 「我也理解你想放鬆，但是…」 (太寬宏, 退讓在前)
+                - GOOD: 「凌晨兩點的音量已經影響到整層樓休息。今晚開始降下來嗎？時間不方便可以再約。」 (沉穩, 點名行為, 不道歉, 不退讓)
+                """
+            }
+            return """
+            CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 让步, Calm = 沉稳但立场清楚):
+            - BAD: "对不起打扰你了，方便的话下次小声一点好吗？" (concedes — 被打扰的那方不该道歉)
+            - BAD: "我也理解你想放松，但是…" (太宽宏, 退让在前)
+            - GOOD: "凌晨两点的音量已经影响到整层楼休息。今晚开始降下来吗？时间不方便可以再约。" (沉稳, 点名行为, 不道歉, 不让步)
+            """
+        case "ja":
+            if isSharp {
+                return """
+                SHARP TONE CALIBRATION (Sharp ≠ 失礼, Sharp ≠ vent, Sharp = やり取りを終わらせる一行):
+                - BAD: 「すみません、次回は少し配慮していただけると助かります。」 (過度に丁寧, hedge-creep, 許可を求めている)
+                - BAD: 「うるさいんですけど、もう少し静かにしてもらえますか？」 (感情的, 依然お願い口調)
+                - GOOD: 「深夜2時の音量はあなたの自由ですが、隣の睡眠はあなたの自由じゃない。今夜から下げてください。無理なら管理人に話します。」 (行為を名指し, 線を引く, 罵倒なし)
+                """
+            }
+            // .calm
+            return """
+            CALM TONE CALIBRATION (Calm ≠ 謝罪, Calm ≠ 譲歩, Calm = 落ち着いた立場保持):
+            - BAD: 「すみません、ちょっとだけ静かにしていただけませんか…」 (過度な謝罪 — 困らされた側が謝るのは不自然)
+            - BAD: 「リラックスしたい気持ちは分かりますが…」 (寛大すぎる, 譲歩が先)
+            - GOOD: 「深夜2時の音量が隣の睡眠に響いています。今夜から下げてもらえますか。難しければ別の時間で相談しましょう。」 (落ち着き, 行為を名指し, 謝らない, 譲歩しない)
+            """
+        default:
+            // en/ko/other: untuned. The universal intensityGuidance line
+            // already produces clean Sharp/Calm output in English (verified
+            // in baseline). ko has too few real-traffic samples to tune
+            // confidently — defer until Phase 4 if A′ shows demand.
+            return ""
         }
     }
 
