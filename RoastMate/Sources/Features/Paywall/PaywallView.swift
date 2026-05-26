@@ -340,7 +340,11 @@ struct PaywallView: View {
         store.creditSettler = { txID, credits in
             let s = settingsQuery.first ?? HistoryService.userSettings(context: ctx)
             if s.hasGrantedCreditTx(txID) { return true }
-            s.applyCreditGrant(txID: txID, credits: credits)
+            // β3: pass context so the grant lands as a
+            // CreditLedgerEntry(.grant, txID:) — cross-device safe.
+            // Gemini's W2 review caught this fallback-settler bypassing
+            // the ledger via the old default-nil signature.
+            s.applyCreditGrant(txID: txID, credits: credits, context: ctx)
             do {
                 try ctx.save()
                 return true

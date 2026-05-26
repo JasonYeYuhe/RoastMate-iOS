@@ -376,7 +376,14 @@ final class UserSettings {
     /// This is the cross-device-safe path; passing nil falls back to
     /// the legacy decrement for unit tests that don't carry a
     /// ModelContext.
-    func spendOneCredit(now: Date = Date(), context: ModelContext? = nil) -> Bool {
+    ///
+    /// **`context` has NO default** (per Gemini W2 review 2026-05-26):
+    /// the previous `= nil` default silently let a production caller
+    /// (`RoastGeneratorViewModel`) bypass the ledger and re-introduce
+    /// the multi-device lost-update bug. Forcing the parameter makes
+    /// every future caller's intent explicit at the compile site —
+    /// tests pass `nil`, prod passes the model context.
+    func spendOneCredit(now: Date = Date(), context: ModelContext?) -> Bool {
         ensureTrialWalletSeeded(now: now)
 
         if isInStarterWindow(now: now) {
@@ -449,8 +456,12 @@ final class UserSettings {
     /// share extension before its Shared/ catches up) still dedupes
     /// correctly. Passing nil falls back to the legacy increment-and-
     /// set-insert path for unit tests without a ModelContext.
+    ///
+    /// **`context` has NO default** (same rationale as `spendOneCredit`
+    /// — Gemini W2 review 2026-05-26 caught `PaywallView` bypassing
+    /// the ledger via the previous default-nil signature).
     @discardableResult
-    func applyCreditGrant(txID: String, credits: Int, context: ModelContext? = nil) -> Bool {
+    func applyCreditGrant(txID: String, credits: Int, context: ModelContext?) -> Bool {
         guard credits > 0, !txID.isEmpty else { return true }
         if grantedCreditTxIDs.contains(txID) { return true }
         if let context, CreditWallet.hasGrant(txID: txID, context: context) {

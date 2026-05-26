@@ -78,13 +78,28 @@ final class CreditLedgerEntry {
         Kind(rawValue: kindRaw) ?? .spend
     }
 
-    /// Signed contribution to the wallet balance.
+    /// Signed contribution to the wallet **ledger delta**. The
+    /// `legacyBaseline` kind contributes ZERO here — it represents a
+    /// pre-upgrade starting point, not an additive transaction.
+    /// `CreditWallet.recomputeBalance` adds `MAX(all legacyBaseline
+    /// amounts)` on top of `ledgerDelta` to produce the final balance.
     var signedAmount: Int {
-        kind == .grant ? amount : -amount
+        switch kind {
+        case .grant: return amount
+        case .spend: return -amount
+        case .legacyBaseline: return 0
+        }
     }
 
+    /// `.grant` / `.spend` are transactional entries. `.legacyBaseline`
+    /// is a per-device snapshot of `creditBalanceRaw` at upgrade time
+    /// — needed because the v1.0.1/v1.0.2 wallet was a CloudKit-mirrored
+    /// scalar prone to last-writer-wins divergence; recording each
+    /// device's view as its own record and taking the MAX is the
+    /// conflict-free self-healing baseline (Codex W2 review 2026-05-26).
     enum Kind: String, Codable, Sendable {
         case grant
         case spend
+        case legacyBaseline = "legacy_baseline"
     }
 }

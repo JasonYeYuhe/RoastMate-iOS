@@ -147,6 +147,60 @@ final class CreditWalletLedgerTests: XCTestCase {
                        "Cross-device offline-spend oversell clamps to 0 — the user effectively gets a free generation, but no negative balance lock-in.")
     }
 
+    // MARK: - β3 baseline self-healing (Codex W2 review 2026-05-26)
+
+    @MainActor func test_legacyBaseline_isPerDeviceID_dedupOnRepeatedRecomputes() {
+        settings.creditBalance = 5
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        let entries = try! context.fetch(FetchDescriptor<CreditLedgerEntry>())
+        let baselineEntries = entries.filter { $0.kind == .legacyBaseline }
+        XCTAssertEqual(baselineEntries.count, 1,
+                       "Per-device baseline entry must be inserted only once — no feedback loop on subsequent recomputes.")
+    }
+
+    @MainActor func test_legacyBaseline_takesMaxAcrossMultipleDevices() {
+        // Simulate two other devices on the same Apple ID having
+        // CloudKit-synced their own baseline entries down to this device.
+        context.insert(CreditLedgerEntry(kind: .legacyBaseline, amount: 3, deviceID: "device-A"))
+        context.insert(CreditLedgerEntry(kind: .legacyBaseline, amount: 9, deviceID: "device-B"))
+        // This device snapshots its own pre-upgrade balance (5).
+        settings.creditBalance = 5
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        XCTAssertEqual(settings.creditBalance, 9,
+                       "Baseline takes the MAX snapshot across all devices — most generous wins, no last-write-wins data loss.")
+    }
+
+    @MainActor func test_legacyBaseline_doesNotContributeToLedgerDelta() {
+        context.insert(CreditLedgerEntry(kind: .legacyBaseline, amount: 5, deviceID: "device-A"))
+        context.insert(CreditLedgerEntry(kind: .legacyBaseline, amount: 7, deviceID: "device-B"))
+        XCTAssertEqual(CreditWallet.ledgerDelta(context: context), 0,
+                       ".legacyBaseline entries are starting-point markers; signedAmount must return 0 for them.")
+    }
+
+    @MainActor func test_legacyBaseline_signedAmountIsZero() {
+        let entry = CreditLedgerEntry(kind: .legacyBaseline, amount: 42)
+        XCTAssertEqual(entry.signedAmount, 0,
+                       "Sanity: legacyBaseline.signedAmount must be 0 even for non-zero amounts.")
+    }
+
+    @MainActor func test_legacyBaseline_doesNotSeed_whenFreshInstall() {
+        // creditBalanceRaw is the default 0 (no `creditBalance = N`
+        // setter called). Recompute snapshots 0, MAX over the single
+        // entry = 0. Balance stays 0.
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        XCTAssertEqual(settings.creditBalance, 0)
+        let baselines = try! context.fetch(FetchDescriptor<CreditLedgerEntry>())
+            .filter { $0.kind == .legacyBaseline }
+        XCTAssertEqual(baselineCount(baselines), 1,
+                       "Fresh install still inserts ONE baseline (amount 0) so future grants compose against a defined starting point.")
+    }
+
+    @MainActor private func baselineCount(_ entries: [CreditLedgerEntry]) -> Int {
+        entries.count
+    }
+
     // MARK: - deviceID
 
     @MainActor func test_deviceID_isStableAcrossCalls() {

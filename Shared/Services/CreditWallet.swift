@@ -100,19 +100,86 @@ enum CreditWallet {
     /// Called after every ledger insert and at app launch so contextless
     /// readers (Watch, share extension, computed property paths) see
     /// the latest merged truth modulo CloudKit sync latency.
+    ///
+    /// **Baseline self-healing (Codex W2 review 2026-05-26):** instead
+    /// of trusting a CloudKit-mirrored scalar (`legacyBalanceBaselineRaw`)
+    /// which can be clobbered by last-writer-wins, this records each
+    /// device's snapshot of the pre-β3 balance as its own
+    /// `.legacyBaseline` ledger entry (keyed by `deviceID`). The
+    /// computed baseline is MAX over all entries — multi-device
+    /// upgrades converge on the most generous snapshot, no data loss
+    /// from sync ordering.
     static func recomputeBalance(context: ModelContext, settings: UserSettings) {
-        // baseline = pre-upgrade balance, frozen by upgrade. legacy
-        // grants/spends that happened pre-upgrade live in the baseline.
-        let baseline = settings.legacyBalanceBaselineRaw ?? settings.creditBalance
+        ensureLegacyBaselineEntry(settings: settings, context: context)
+        let baseline = legacyBaseline(context: context, fallback: settings)
+        // Migrate the deprecated scalar cache one-way so any stale
+        // reader still sees something defensible. The ledger entries
+        // are the canonical source of truth from here on.
         if settings.legacyBalanceBaselineRaw == nil {
-            // First post-upgrade observation — freeze the legacy
-            // balance as the baseline so subsequent ledger deltas
-            // compose correctly. Idempotent: only writes once.
             settings.legacyBalanceBaselineRaw = baseline
         }
         let delta = ledgerDelta(context: context)
         let computed = max(0, baseline + delta)
         settings.creditBalance = computed
+    }
+
+    /// Idempotently insert a `.legacyBaseline` entry for THIS device
+    /// (keyed by `deviceID`). Each device contributes its own pre-β3
+    /// balance snapshot; the maximum across all entries becomes the
+    /// global baseline.
+    private static func ensureLegacyBaselineEntry(
+        settings: UserSettings,
+        context: ModelContext
+    ) {
+        let myDeviceID = deviceID()
+        let id = myDeviceID
+        var existing = FetchDescriptor<CreditLedgerEntry>(
+            predicate: #Predicate { entry in
+                entry.kindRaw == "legacy_baseline" && entry.deviceID == id
+            }
+        )
+        existing.fetchLimit = 1
+        if (try? context.fetch(existing))?.first != nil {
+            // Already snapshotted for this device — leave it alone. The
+            // ledger is append-only and per-device baseline is a one-
+            // time observation. (Re-promoting on subsequent launches
+            // would create a feedback loop: recompute writes a new
+            // `creditBalanceRaw`, next launch reads it back as
+            // "scalarSeed", entry grows, recompute again, etc.)
+            return
+        }
+        // First observation on this device: snapshot whatever
+        // creditBalanceRaw is showing right now. legacyBalanceBaselineRaw
+        // (if set by an earlier v1.0.3 launch on this device) is the
+        // preferred seed since it's the frozen pre-ledger value.
+        let snapshot = settings.legacyBalanceBaselineRaw
+            ?? settings.creditBalanceRaw
+            ?? 0
+        let entry = CreditLedgerEntry(
+            kind: .legacyBaseline,
+            amount: snapshot,
+            deviceID: myDeviceID
+        )
+        context.insert(entry)
+    }
+
+    /// MAX over all `.legacyBaseline` entries' amounts (across every
+    /// device on this iCloud account). Falls back to
+    /// `UserSettings.creditBalanceRaw` (clamped ≥0) when the ledger
+    /// has no baseline entries yet — e.g. immediately after the very
+    /// first recompute call before `context.save()` has fired.
+    static func legacyBaseline(context: ModelContext, fallback settings: UserSettings) -> Int {
+        var descriptor = FetchDescriptor<CreditLedgerEntry>(
+            predicate: #Predicate { entry in
+                entry.kindRaw == "legacy_baseline"
+            }
+        )
+        descriptor.fetchLimit = 100  // multi-device upper bound; tighter than nil
+        let entries = (try? context.fetch(descriptor)) ?? []
+        guard !entries.isEmpty else {
+            return max(0, settings.creditBalanceRaw ?? 0)
+        }
+        return entries.map(\.amount).max() ?? 0
     }
 
     // MARK: - Internals

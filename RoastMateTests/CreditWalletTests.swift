@@ -50,13 +50,13 @@ final class CreditWalletTests: XCTestCase {
 
         // Today's free trickle is consumed first; wallet untouched.
         for _ in 0..<CreditCatalog.starterWindowDailyTrickle {
-            XCTAssertTrue(s.spendOneCredit(now: base))
+            XCTAssertTrue(s.spendOneCredit(now: base, context: nil))
         }
         XCTAssertEqual(s.creditBalance, seeded, "Trickle must not touch the wallet")
         XCTAssertEqual(s.starterTrickleRemaining(now: base), 0)
 
         // Trickle exhausted today → next spend comes from the wallet.
-        XCTAssertTrue(s.spendOneCredit(now: base))
+        XCTAssertTrue(s.spendOneCredit(now: base, context: nil))
         XCTAssertEqual(s.creditBalance, seeded - 1)
     }
 
@@ -64,14 +64,14 @@ final class CreditWalletTests: XCTestCase {
         let s = UserSettings()
         s.ensureTrialWalletSeeded(now: base)
         for _ in 0..<CreditCatalog.starterWindowDailyTrickle {
-            _ = s.spendOneCredit(now: base)
+            _ = s.spendOneCredit(now: base, context: nil)
         }
         XCTAssertEqual(s.starterTrickleRemaining(now: base), 0)
         // Next day, still inside the starter window → fresh trickle.
         XCTAssertEqual(s.starterTrickleRemaining(now: day(1)),
                        CreditCatalog.starterWindowDailyTrickle)
         let seeded = s.creditBalance
-        XCTAssertTrue(s.spendOneCredit(now: day(1)))
+        XCTAssertTrue(s.spendOneCredit(now: day(1), context: nil))
         XCTAssertEqual(s.creditBalance, seeded, "Day-2 trickle must not touch the wallet")
     }
 
@@ -86,11 +86,11 @@ final class CreditWalletTests: XCTestCase {
 
         let seeded = s.creditBalance
         for i in 1...seeded {
-            XCTAssertTrue(s.spendOneCredit(now: afterWindow))
+            XCTAssertTrue(s.spendOneCredit(now: afterWindow, context: nil))
             XCTAssertEqual(s.creditBalance, seeded - i)
         }
         // Wallet empty + window closed → blocked (paywall intent).
-        XCTAssertFalse(s.spendOneCredit(now: afterWindow))
+        XCTAssertFalse(s.spendOneCredit(now: afterWindow, context: nil))
         XCTAssertFalse(s.canSpendNow(now: afterWindow))
     }
 
@@ -180,17 +180,17 @@ final class CreditWalletTests: XCTestCase {
         let seeded = s.creditBalance
 
         XCTAssertFalse(s.hasGrantedCreditTx("tx1"))
-        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70, context: nil))
         XCTAssertEqual(s.creditBalance, seeded + 70)
         XCTAssertTrue(s.hasGrantedCreditTx("tx1"))
 
         // Replay of the SAME transaction must not double-grant, but is
         // still "settled" (true) so StoreKit can finish it.
-        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx1", credits: 70, context: nil))
         XCTAssertEqual(s.creditBalance, seeded + 70, "Replay must not double-grant")
 
         // A different transaction accumulates.
-        XCTAssertTrue(s.applyCreditGrant(txID: "tx2", credits: 10))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx2", credits: 10, context: nil))
         XCTAssertEqual(s.creditBalance, seeded + 80)
         XCTAssertTrue(s.hasGrantedCreditTx("tx2"))
     }
@@ -199,8 +199,8 @@ final class CreditWalletTests: XCTestCase {
         let s = UserSettings()
         s.ensureTrialWalletSeeded(now: base)
         let seeded = s.creditBalance
-        XCTAssertTrue(s.applyCreditGrant(txID: "", credits: 70))
-        XCTAssertTrue(s.applyCreditGrant(txID: "tx", credits: 0))
+        XCTAssertTrue(s.applyCreditGrant(txID: "", credits: 70, context: nil))
+        XCTAssertTrue(s.applyCreditGrant(txID: "tx", credits: 0, context: nil))
         XCTAssertEqual(s.creditBalance, seeded)
         XCTAssertFalse(s.hasGrantedCreditTx("tx"))
     }

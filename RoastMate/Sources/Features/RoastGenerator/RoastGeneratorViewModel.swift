@@ -102,7 +102,12 @@ final class RoastGeneratorViewModel {
             // and style guards above are unchanged, so spending a credit
             // never unlocks a capability. The View intent-triggers the
             // paywall before reaching here; this is the safety net.
-            guard settings.spendOneCredit() else {
+            // β3: pass context so the spend lands as a CreditLedgerEntry,
+            // not a creditBalanceRaw decrement. Gemini's W2 review caught
+            // this site bypassing the ledger via the old default-nil
+            // signature; the parameter is now non-defaulted so a future
+            // omission is a compile error.
+            guard settings.spendOneCredit(context: context) else {
                 state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
             }
