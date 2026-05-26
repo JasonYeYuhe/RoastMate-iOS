@@ -96,7 +96,11 @@ struct RoastMateApp: App {
         StoreService.shared.creditSettler = { txID, credits in
             let s = HistoryService.userSettings(context: context)
             if s.hasGrantedCreditTx(txID) { return true }
-            s.applyCreditGrant(txID: txID, credits: credits)
+            // β3: pass context so the grant lands as a
+            // CreditLedgerEntry(.grant, txID:) record — cross-device
+            // safe under set-union merge instead of scalar last-write-
+            // wins on creditBalanceRaw.
+            s.applyCreditGrant(txID: txID, credits: credits, context: context)
             do {
                 try context.save()
                 return true
@@ -109,7 +113,33 @@ struct RoastMateApp: App {
                 return false
             }
         }
+        // β3: recompute the cached balance from the ledger on every
+        // cold launch so contextless readers see the latest merged
+        // truth (modulo CloudKit sync latency). Idempotent.
+        CreditWallet.recomputeBalance(context: context, settings: settings)
+        try? context.save()
+        // β2: write StoreKit-verified Pro state through to UserSettings
+        // so CloudKit can mirror it to other devices on the same Apple
+        // ID. StoreKit stays canonical — this is a trust-signal mirror
+        // only. Clearing on `isPro = false` resets the optimistic grace
+        // window everywhere.
+        StoreService.shared.proPersister = { isPro in
+            let s = HistoryService.userSettings(context: context)
+            s.proLastVerifiedAt = isPro ? Date() : nil
+            try? context.save()
+        }
+        // β2: optimistic Pro seed from CloudKit — lights up Pro
+        // capabilities immediately on a fresh device while StoreKit
+        // verifies in the background. Stale grants outside the grace
+        // window are ignored; StoreKit will downgrade if the
+        // entitlement has actually expired.
+        StoreService.shared.seedOptimisticPro(verifiedAt: settings.proLastVerifiedAt)
         await StoreService.shared.loadProducts()
+        // β2: StoreKit verification AFTER products load — this is the
+        // canonical path. Confirms or revokes the optimistic seed and
+        // (via proPersister) refreshes proLastVerifiedAt for sibling
+        // devices' next optimistic seed.
+        await StoreService.shared.refreshSubscriptionStatus()
         // Recover any consumable delivered while the app was not
         // foregrounded (Ask-to-Buy approval, interrupted purchase).
         await StoreService.shared.settleConsumables()

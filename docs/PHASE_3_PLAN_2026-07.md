@@ -176,6 +176,30 @@ HTTP. Move the existing EvalRunner sources into a new
 
 ### 3.2 β — Cross-device convergence
 
+> **2026-05-26 amendment (Phase 3 W2 execution).** Surprise discovered
+> during implementation: `Shared/SharedModelContainer.swift` already
+> uses SwiftData's default-store `ModelConfiguration`, which auto-mirrors
+> 5 `@Model`s (including `UserSettings`) to the CloudKit private
+> container `iCloud.yyh.roastmate.app`. The plan's premise ("Apple Sign-
+> In stores `userID + fullName + email` in the app-group Keychain only")
+> was half-right: identity tuple IS Keychain-only (correct, PII), but
+> derived user state (Pro flag, wallet, consents) was already CloudKit-
+> synced. Both advisors re-consulted 2026-05-26 converged on:
+>
+> - **β1+β2 ⇒ Option A**: add `proLastVerifiedAt: Date?` to existing
+>   UserSettings, not a new `User` record. ~30 lines vs ~150 for a
+>   redundant 6th `@Model`. Shipped.
+> - **β3 was NOT actually deferred**: the wallet's `creditBalanceRaw`
+>   was already CloudKit-syncing as a plain Int with no per-spend
+>   idempotency key → multi-device offline-spend was a latent data-loss
+>   bug today, not a Phase 4 candidate. Promoted to W2 alongside β1+β2.
+>   Fixed via new `CreditLedgerEntry` `@Model` (append-only ledger;
+>   grants keyed by StoreKit txID, spends keyed by per-insert UUID).
+>   Shipped.
+>
+> β4 (history sync) remains explicitly Phase 4 (no observed demand).
+
+
 Today's Apple Sign-In stores `userID` + `fullName` + `email` in the
 **app-group Keychain only**. The user record isn't on a server; the
 Pro subscription state isn't synced across devices (works only via

@@ -98,6 +98,42 @@ final class UserSettings {
     /// window rather than inheriting the prior stamp.
     var telemetryOptInDate: Date?
 
+    // MARK: - β1/β2 Cross-device Pro state (Phase 3 W2)
+
+    /// Last time StoreKit verified an active Pro entitlement (monthly or
+    /// yearly) on this iCloud account. CloudKit-mirrored — a fresh
+    /// install on the same Apple ID sees this within the SwiftData sync
+    /// window. Lets the UI light up Pro optimistically while StoreKit
+    /// runs its own verification in the background. StoreKit remains
+    /// canonical: if `refreshSubscriptionStatus` reports no active
+    /// entitlement locally, this gets cleared (no `isPro` lock-in via
+    /// stale CloudKit state).
+    ///
+    /// Nullable for CloudKit-safe migration (same pattern as the v1.1
+    /// wallet fields). Nil = never verified on any device → no
+    /// optimistic Pro grant.
+    var proLastVerifiedAt: Date?
+
+    // MARK: - β3 Wallet ledger baseline (Phase 3 W2)
+
+    /// One-time snapshot of `creditBalanceRaw` taken when this install
+    /// first observed the post-β3 ledger code path. Frozen forever
+    /// after that. Computed balance = `legacyBalanceBaselineRaw + Σ
+    /// ledger grants − Σ ledger spends`, then cached back into
+    /// `creditBalanceRaw` for legacy/contextless readers.
+    ///
+    /// Why a baseline: pre-β3 spends/grants mutated `creditBalanceRaw`
+    /// directly and CloudKit-synced the scalar (the bug). We can't
+    /// undo those pre-existing writes — they ARE the user's truth as
+    /// of upgrade — so we freeze them as the starting point and only
+    /// the *new* transactions flow through the ledger. The cross-device
+    /// hazard from here forward is defused.
+    ///
+    /// Nullable for CloudKit-safe migration. nil ≡ "not yet snapshotted"
+    /// → first `CreditWallet.recomputeBalance` call seeds it from the
+    /// current `creditBalance`. Idempotent: writes once.
+    var legacyBalanceBaselineRaw: Int?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -119,6 +155,8 @@ final class UserSettings {
         self.grantedCreditTxIDsRaw = nil
         self.telemetryOptInRaw = nil
         self.telemetryOptInDate = nil
+        self.proLastVerifiedAt = nil
+        self.legacyBalanceBaselineRaw = nil
     }
 
     /// 5.1.2(i) explicit consent for the cloud (third-party-AI) path.
@@ -331,7 +369,14 @@ final class UserSettings {
     /// 3. One wallet credit.
     /// Returns false only when nothing is available → the caller shows
     /// the intent-triggered paywall.
-    func spendOneCredit(now: Date = Date()) -> Bool {
+    ///
+    /// **β3 (Phase 3 W2):** when `context` is non-nil, the wallet-credit
+    /// branch inserts a `CreditLedgerEntry(.spend)` via `CreditWallet`
+    /// instead of decrementing the shared `creditBalanceRaw` scalar.
+    /// This is the cross-device-safe path; passing nil falls back to
+    /// the legacy decrement for unit tests that don't carry a
+    /// ModelContext.
+    func spendOneCredit(now: Date = Date(), context: ModelContext? = nil) -> Bool {
         ensureTrialWalletSeeded(now: now)
 
         if isInStarterWindow(now: now) {
@@ -351,7 +396,14 @@ final class UserSettings {
         }
 
         guard creditBalance > 0 else { return false }
-        creditBalance -= 1
+        if let context {
+            // β3 ledger path — append-only, conflict-free cross-device.
+            CreditWallet.recordSpend(settings: self, context: context)
+        } else {
+            // Legacy path — kept for unit tests. Production callers
+            // always pass a ModelContext.
+            creditBalance -= 1
+        }
         return true
     }
 
@@ -388,11 +440,38 @@ final class UserSettings {
     /// caller may now finish the StoreKit transaction. The wallet and
     /// this ledger move together so a crash before the model is saved
     /// simply leaves the transaction unfinished for StoreKit to replay.
+    ///
+    /// **β3 (Phase 3 W2):** when `context` is non-nil, the deposit is
+    /// recorded as a `CreditLedgerEntry(.grant, txID:)` — both as the
+    /// idempotency key and as the cross-device-safe primitive. The
+    /// legacy `grantedCreditTxIDsRaw` set is still updated as a
+    /// back-compat mirror so a pre-β3 reader (Watch on the old binary,
+    /// share extension before its Shared/ catches up) still dedupes
+    /// correctly. Passing nil falls back to the legacy increment-and-
+    /// set-insert path for unit tests without a ModelContext.
     @discardableResult
-    func applyCreditGrant(txID: String, credits: Int) -> Bool {
+    func applyCreditGrant(txID: String, credits: Int, context: ModelContext? = nil) -> Bool {
         guard credits > 0, !txID.isEmpty else { return true }
         if grantedCreditTxIDs.contains(txID) { return true }
-        creditBalance += credits
+        if let context, CreditWallet.hasGrant(txID: txID, context: context) {
+            // Already in the ledger from a prior device; update the
+            // legacy mirror so this device also sees the dedupe and
+            // return.
+            var ids = grantedCreditTxIDs
+            ids.insert(txID)
+            grantedCreditTxIDsRaw = ids.sorted().joined(separator: ",")
+            return true
+        }
+        if let context {
+            CreditWallet.recordGrant(
+                settings: self,
+                context: context,
+                txID: txID,
+                credits: credits
+            )
+        } else {
+            creditBalance += credits
+        }
         var ids = grantedCreditTxIDs
         ids.insert(txID)
         grantedCreditTxIDsRaw = ids.sorted().joined(separator: ",")

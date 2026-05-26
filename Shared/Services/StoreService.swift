@@ -14,6 +14,14 @@ final class StoreService {
     nonisolated static let monthlyProductId = "yyh.roastmate.app.pro.monthly"
     nonisolated static let yearlyProductId = "yyh.roastmate.app.pro.yearly"
 
+    /// β2: how recent a CloudKit-synced `proLastVerifiedAt` can be and
+    /// still grant optimistic Pro on launch. Sized to outlast a typical
+    /// monthly billing cycle so a brief sync delay doesn't downgrade
+    /// the user mid-billing. StoreKit always re-verifies in the
+    /// background, so a stale `true` self-heals to `false` within a
+    /// second of launch when entitlement has actually expired.
+    nonisolated static let optimisticProGraceDays: TimeInterval = 90 * 24 * 60 * 60
+
     /// Subscription products only (Pro — the unlimited best-value tier).
     private(set) var products: [Product] = []
 
@@ -31,6 +39,15 @@ final class StoreService {
 
     /// Installed by the app at bootstrap (it owns the model context).
     var creditSettler: CreditSettler?
+
+    /// β2 (Phase 3 W2): persister hook for Pro state. Installed by the
+    /// app at bootstrap to write `proLastVerifiedAt` onto the
+    /// CloudKit-synced `UserSettings` whenever StoreKit confirms the
+    /// entitlement. StoreKit stays canonical — this is purely a
+    /// trust-signal mirror used to seed optimistic Pro on a fresh
+    /// device.
+    typealias ProPersister = @MainActor (_ isPro: Bool) -> Void
+    var proPersister: ProPersister?
 
     private(set) var isPro: Bool = {
         #if DEBUG
@@ -138,6 +155,10 @@ final class StoreService {
         #if DEBUG
         // DEBUG builds bypass the StoreKit entitlement check so the developer's
         // own device is always Pro. Release builds still go through StoreKit.
+        // β2 NOTE: deliberately do NOT call `proPersister(true)` here — DEBUG
+        // Pro is local-only and must never write a CloudKit-synced
+        // `proLastVerifiedAt`, which would grant Release devices on the
+        // same Apple ID a stale optimistic Pro.
         isPro = true
         return
         #else
@@ -149,8 +170,30 @@ final class StoreService {
                 pro = true
             }
         }
+        let wasPro = isPro
         isPro = pro
+        // β2: persist on transition AND while still-Pro (refresh the
+        // verifiedAt so the CloudKit copy stays warm for any other
+        // device's optimistic seed). Clearing on transition-to-false
+        // resets the optimistic grace window across all devices.
+        if pro || wasPro != pro {
+            proPersister?(pro)
+        }
         #endif
+    }
+
+    /// β2: optimistically grant Pro at launch from a CloudKit-synced
+    /// `UserSettings.proLastVerifiedAt`. Stale grants outside the grace
+    /// window are ignored; `refreshSubscriptionStatus()` then runs in
+    /// the background and confirms (or revokes) the optimistic state.
+    /// Returns true iff the seed actually granted Pro.
+    @discardableResult
+    func seedOptimisticPro(verifiedAt: Date?, now: Date = Date()) -> Bool {
+        guard let verifiedAt else { return false }
+        let age = now.timeIntervalSince(verifiedAt)
+        guard age >= 0, age <= Self.optimisticProGraceDays else { return false }
+        isPro = true
+        return true
     }
 
     private func handleTransactionUpdate(_ update: VerificationResult<Transaction>) async {

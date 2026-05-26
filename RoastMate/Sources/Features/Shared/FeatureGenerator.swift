@@ -92,8 +92,9 @@ final class FeatureGeneratorViewModel {
         if !isPro {
             // Credits add quantity only; the Pro-only guards above are
             // unchanged. View intent-triggers the paywall first — this
-            // is the safety net.
-            guard settings.spendOneCredit() else {
+            // is the safety net. β3: pass context so the spend lands as
+            // a CreditLedgerEntry, not a creditBalanceRaw decrement.
+            guard settings.spendOneCredit(context: context) else {
                 state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
             }
