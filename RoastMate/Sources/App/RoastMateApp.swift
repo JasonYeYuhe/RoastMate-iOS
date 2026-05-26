@@ -72,6 +72,10 @@ struct RoastMateApp: App {
         // explicitly enables telemetry in Settings.
         EventLedger.shared.setOptIn(settings.telemetryOptedIn)
         EventLedger.shared.recordSessionStart()
+        // α3: per-session "this session produced at least one generation"
+        // gate re-arms on cold launch. sessions_with_generation /
+        // session_starts is the D7/D30 return-to-tool proxy.
+        EventLedger.shared.resetSessionMarkers()
         // ε1: per-session rating-prompt counters start fresh on cold
         // launch so the 3-successful-generations gate resets each session.
         RatingPromptService.shared.resetSession()

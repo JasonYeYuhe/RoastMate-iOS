@@ -213,6 +213,7 @@ struct FeatureGeneratorView: View {
         }
         .onAppear {
             if viewModel.config.proGated && !isPro {
+                EventLedger.shared.recordPaywallImpression(source: .proTap)
                 showPaywall = true
             }
         }
@@ -273,6 +274,7 @@ struct FeatureGeneratorView: View {
                             isLocked: !isPro && style.tier == .pro
                         ) {
                             if !isPro && style.tier == .pro {
+                                EventLedger.shared.recordPaywallImpression(source: .styleLocked)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedStyleId = style.id
@@ -287,9 +289,11 @@ struct FeatureGeneratorView: View {
     private var generateButton: some View {
         Button {
             if !isPro && viewModel.selectedIntensity.requiresPro {
+                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                 showPaywall = true
             } else if !isPro && settings?.canSpendNow() == false {
                 // Intent-triggered paywall at the peak moment.
+                EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }
@@ -324,6 +328,7 @@ struct FeatureGeneratorView: View {
                             isLocked: !isPro && intensity.requiresPro
                         ) {
                             if !isPro && intensity.requiresPro {
+                                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedIntensity = intensity

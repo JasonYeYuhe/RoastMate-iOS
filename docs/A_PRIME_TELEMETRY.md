@@ -40,7 +40,7 @@ Codex/Gemini convergent post-launch advisor synthesis.
 | `share_taps` | a share-card/share-extension share action fired |
 | `session_starts` | `RoastMateApp.bootstrap()` ran (cold or warm-from-background) |
 
-### Counters added in schema v2 (ships v1.0.2, ε2)
+### Counters added in schema v2 (ε2 — ships v1.0.2)
 | key | semantics |
 |---|---|
 | `feedback_thumbsup` | user tapped 👍 on a generation card |
@@ -54,9 +54,30 @@ Codex/Gemini convergent post-launch advisor synthesis.
 | `feedback_tag_factually_wrong` | 👎 tag — output contained a factual error |
 | `feedback_tag_other` | 👎 tag — user picked "other" |
 
+### Counters added in schema v2 (α3 — ships v1.0.3)
+| key | semantics |
+|---|---|
+| `generations_failed_guardrail` | LLM refused (Apple FM guardrailViolation or cloud safety bounce) |
+| `generations_failed_network` | network error reached the user (cloud chain failed and no on-device fallback fired) |
+| `generations_failed_quota` | context length / rate / TPM limit hit |
+| `generations_failed_safety_filter` | every candidate tripped SafetyFilter — fell back to curated lines |
+| `generations_failed_model_asset_missing` | Apple FM model asset unavailable on device (not yet downloaded) |
+| `paywall_trigger_low_credits` | user reached for generate with empty wallet, OR tapped "Get more credits" in Settings |
+| `paywall_trigger_pro_tap` | user tapped "Upgrade to Pro" OR entered a Pro-gated feature (Argument Simulator etc.) |
+| `paywall_trigger_style_locked` | user tapped a Pro-only style chip while on Free |
+| `paywall_trigger_intensity_locked` | user picked a Pro-only intensity (savage, etc.) while on Free |
+| `sessions_with_generation` | bumped ONCE per cold launch the first time a generation succeeds — `sessions_with_generation / session_starts` is the D7/D30 return-to-tool proxy |
+
 Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
 forever; new counters land end-of-enum. No raw text or generation content
 is ever logged.
+
+Note on `paywall_impressions` (v1, legacy): now bumped automatically by
+`recordPaywallImpression(source:)` for back-compat — every sourced
+impression bumps both the legacy counter AND the source-specific one. The
+PaywallView.onAppear no-arg bump was removed in v1.0.3 to prevent
+double-counting; if you see legacy paywall_impressions exceed the sum of
+paywall_trigger_*, an untagged caller exists somewhere.
 
 ### Snapshot context (built at EXPORT time, never persisted as series)
 | field | value |

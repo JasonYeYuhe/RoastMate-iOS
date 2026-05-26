@@ -130,9 +130,15 @@ struct SettingsView: View {
                         Text(verbatim: "\(settings?.availableCreditsNow() ?? 0)")
                             .foregroundStyle(.secondary)
                     }
-                    Button("settings.credits.buy") { showPaywall = true }
+                    Button("settings.credits.buy") {
+                        EventLedger.shared.recordPaywallImpression(source: .lowCredits)
+                        showPaywall = true
+                    }
                         .foregroundStyle(.orange)
-                    Button("settings.subscription.upgrade") { showPaywall = true }
+                    Button("settings.subscription.upgrade") {
+                        EventLedger.shared.recordPaywallImpression(source: .proTap)
+                        showPaywall = true
+                    }
                         .foregroundStyle(.orange)
                 }
                 Button("settings.subscription.restore") {

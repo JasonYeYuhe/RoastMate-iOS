@@ -28,7 +28,10 @@ struct ArgumentSimulatorView: View {
             PaywallView(isPresented: $showPaywall)
         }
         .onAppear {
-            if !isPro { showPaywall = true }
+            if !isPro {
+                EventLedger.shared.recordPaywallImpression(source: .proTap)
+                showPaywall = true
+            }
         }
     }
 

@@ -113,6 +113,7 @@ actor RoastEngine {
                 // disallowed content on a safety failure.
                 let safe = try SafetyFilter.validateVentOutput(cloudText)
                 EventLedger.shared.recordGeneration(cloud: true)  // A′
+                EventLedger.shared.recordFirstGenerationOfSession()  // α3
                 RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
                 return [safe]
             } catch let err as CloudVentError {
@@ -129,6 +130,7 @@ actor RoastEngine {
         #if canImport(FoundationModels)
         guard SystemLanguageModel.default.availability == .available else {
             logger.notice("Foundation Models unavailable; using curated fallback.")
+            EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
             return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
         }
 
@@ -176,6 +178,7 @@ actor RoastEngine {
             )
         } catch let genErr as LanguageModelSession.GenerationError {
             logger.warning("Foundation Models generation error: \(String(describing: genErr))")
+            EventLedger.shared.recordFailure(Self.failureCategory(for: genErr))  // α3
             return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
         } catch {
             throw RoastError.generationFailed(underlying: error)
@@ -210,9 +213,11 @@ actor RoastEngine {
         }
 
         if sanitized.isEmpty {
+            EventLedger.shared.recordFailure(.safetyFilter)  // α3 — every candidate tripped safety
             return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
         }
         EventLedger.shared.recordGeneration(cloud: false)  // A′
+        EventLedger.shared.recordFirstGenerationOfSession()  // α3
         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
         return Array(sanitized.prefix(effectiveVariantCount))
         #else
@@ -313,4 +318,28 @@ actor RoastEngine {
         let resp = try await client.generate(req)
         return resp.text
     }
+
+    #if canImport(FoundationModels)
+    /// α3: map a Foundation Models `GenerationError` to an A′ failure
+    /// category. Done by string-introspection on the error description so
+    /// the mapping survives API additions — new cases fall through to
+    /// `.guardrail` (the conservative bucket) until we add a specific
+    /// branch. Tested via `RoastEngineFailureCategoryTests`.
+    fileprivate static func failureCategory(
+        for error: LanguageModelSession.GenerationError
+    ) -> EventLedger.FailureCategory {
+        let desc = String(describing: error).lowercased()
+        if desc.contains("guardrail") || desc.contains("safety") {
+            return .guardrail
+        }
+        if desc.contains("context") || desc.contains("token") {
+            return .quota
+        }
+        if desc.contains("asset") || desc.contains("unavailable")
+            || desc.contains("language") || desc.contains("locale") {
+            return .modelAssetMissing
+        }
+        return .guardrail  // default to the safety-bucket so we never under-count refusals
+    }
+    #endif
 }

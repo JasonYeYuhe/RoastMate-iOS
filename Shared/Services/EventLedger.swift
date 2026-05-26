@@ -27,6 +27,12 @@ public final class EventLedger: @unchecked Sendable {
     private let defaults: UserDefaults
     private let queue = DispatchQueue(label: "yyh.roastmate.aprime.ledger")
 
+    /// Per-session flag — true once this app launch has recorded a
+    /// successful generation. Reset on cold launch via
+    /// `resetSessionMarkers()`. Not persisted (in-memory only) so the
+    /// counter increments at most once per session.
+    private var sessionGenerationRecorded: Bool = false
+
     public init(defaults: UserDefaults = EventLedger.defaultDefaults) {
         self.defaults = defaults
     }
@@ -77,6 +83,73 @@ public final class EventLedger: @unchecked Sendable {
 
     public func recordFeedbackTag(_ tag: FeedbackTag) {
         bump(tag.counter)
+    }
+
+    // MARK: - Schema v2 — α3 failure + paywall-source + return-to-tool (Phase 3 W2)
+    //
+    // schemaVersion stays at 2 — these are additive WITHIN v2 (the
+    // additive-only contract still holds). Keys appended end-of-enum.
+
+    public func recordFailure(_ category: FailureCategory) {
+        bump(category.counter)
+    }
+
+    public func recordPaywallImpression(source: PaywallSource) {
+        bump(.paywallImpressions)  // legacy v1 counter — keep bumping for back-compat
+        bump(source.counter)
+    }
+
+    /// Per-session "did this session produce at least one generation"
+    /// gate. Bumped once per process lifetime so `sessions_with_generation
+    /// / session_starts` is a clean return-to-tool proxy. Reset via
+    /// `resetSessionMarkers()` on cold launch.
+    public func recordFirstGenerationOfSession() {
+        let shouldBump: Bool = queue.sync {
+            guard !sessionGenerationRecorded else { return false }
+            sessionGenerationRecorded = true
+            return true
+        }
+        if shouldBump { bump(.sessionsWithGeneration) }
+    }
+
+    /// `RoastMateApp.bootstrap()` calls this on cold launch so the
+    /// per-session sessions_with_generation gate re-arms.
+    public func resetSessionMarkers() {
+        queue.sync { sessionGenerationRecorded = false }
+    }
+
+    public enum FailureCategory: String, CaseIterable, Sendable {
+        case guardrail          = "guardrail"
+        case network            = "network"
+        case quota              = "quota"
+        case safetyFilter       = "safety_filter"
+        case modelAssetMissing  = "model_asset_missing"
+
+        fileprivate var counter: Counter {
+            switch self {
+            case .guardrail:         return .generationsFailedGuardrail
+            case .network:           return .generationsFailedNetwork
+            case .quota:             return .generationsFailedQuota
+            case .safetyFilter:      return .generationsFailedSafetyFilter
+            case .modelAssetMissing: return .generationsFailedModelAssetMissing
+            }
+        }
+    }
+
+    public enum PaywallSource: String, CaseIterable, Sendable {
+        case lowCredits      = "low_credits"
+        case proTap          = "pro_tap"
+        case styleLocked     = "style_locked"
+        case intensityLocked = "intensity_locked"
+
+        fileprivate var counter: Counter {
+            switch self {
+            case .lowCredits:      return .paywallTriggerLowCredits
+            case .proTap:          return .paywallTriggerProTap
+            case .styleLocked:     return .paywallTriggerStyleLocked
+            case .intensityLocked: return .paywallTriggerIntensityLocked
+            }
+        }
     }
 
     /// Tag categories for a 👎 generation. Localized labels live in
@@ -166,6 +239,19 @@ public final class EventLedger: @unchecked Sendable {
         case feedbackTagDidntAddress    = "feedback_tag_didnt_address"
         case feedbackTagFactuallyWrong  = "feedback_tag_factually_wrong"
         case feedbackTagOther           = "feedback_tag_other"
+        // v2 α3 additions (Phase 3 W2). Still schemaVersion 2 — additive
+        // WITHIN v2. 5 failure categories + 4 paywall sources + 1
+        // sessions_with_generation gate. End-of-enum.
+        case generationsFailedGuardrail        = "generations_failed_guardrail"
+        case generationsFailedNetwork          = "generations_failed_network"
+        case generationsFailedQuota            = "generations_failed_quota"
+        case generationsFailedSafetyFilter     = "generations_failed_safety_filter"
+        case generationsFailedModelAssetMissing = "generations_failed_model_asset_missing"
+        case paywallTriggerLowCredits          = "paywall_trigger_low_credits"
+        case paywallTriggerProTap              = "paywall_trigger_pro_tap"
+        case paywallTriggerStyleLocked         = "paywall_trigger_style_locked"
+        case paywallTriggerIntensityLocked     = "paywall_trigger_intensity_locked"
+        case sessionsWithGeneration            = "sessions_with_generation"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

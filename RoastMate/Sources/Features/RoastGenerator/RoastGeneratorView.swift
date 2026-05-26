@@ -246,6 +246,7 @@ struct RoastGeneratorView: View {
                             isLocked: !isPro && style.tier == .pro
                         ) {
                             if !isPro && style.tier == .pro {
+                                EventLedger.shared.recordPaywallImpression(source: .styleLocked)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedStyleId = style.id
@@ -266,11 +267,13 @@ struct RoastGeneratorView: View {
             // they hit Generate, not after the model warms up.
             situationFocused = false
             if !isPro && viewModel.selectedIntensity.requiresPro {
+                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                 showPaywall = true
             } else if !isPro && settings?.canSpendNow() == false {
                 // Intent-triggered paywall: fire at the peak moment the
                 // user reaches for a generation with an empty wallet —
                 // not at onboarding.
+                EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }
@@ -309,6 +312,7 @@ struct RoastGeneratorView: View {
                             isLocked: !isPro && intensity.requiresPro
                         ) {
                             if !isPro && intensity.requiresPro {
+                                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedIntensity = intensity

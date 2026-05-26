@@ -222,4 +222,77 @@ final class EventLedgerTests: XCTestCase {
         XCTAssertGreaterThan(firstV2, lastV1,
                              "v2 counters must be appended at end of the enum.")
     }
+
+    // MARK: - Schema v2 — α3 failure + paywall + sessions_with_generation (Phase 3 W2)
+
+    func test_recordFailure_eachCategoryHasItsOwnCounter() {
+        ledger.setOptIn(true)
+        ledger.recordFailure(.guardrail)
+        ledger.recordFailure(.guardrail)
+        ledger.recordFailure(.network)
+        ledger.recordFailure(.quota)
+        ledger.recordFailure(.safetyFilter)
+        ledger.recordFailure(.modelAssetMissing)
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["generations_failed_guardrail"], 2)
+        XCTAssertEqual(s["generations_failed_network"], 1)
+        XCTAssertEqual(s["generations_failed_quota"], 1)
+        XCTAssertEqual(s["generations_failed_safety_filter"], 1)
+        XCTAssertEqual(s["generations_failed_model_asset_missing"], 1)
+    }
+
+    func test_recordPaywallImpression_sourceBumpsBothLegacyAndSource() {
+        ledger.setOptIn(true)
+        ledger.recordPaywallImpression(source: .lowCredits)
+        ledger.recordPaywallImpression(source: .lowCredits)
+        ledger.recordPaywallImpression(source: .proTap)
+        ledger.recordPaywallImpression(source: .styleLocked)
+        ledger.recordPaywallImpression(source: .intensityLocked)
+        let s = ledger.snapshot()
+        // Legacy counter accumulates ALL sourced bumps for back-compat.
+        XCTAssertEqual(s["paywall_impressions"], 5,
+                       "Sourced impression must also bump the legacy paywall_impressions counter.")
+        XCTAssertEqual(s["paywall_trigger_low_credits"], 2)
+        XCTAssertEqual(s["paywall_trigger_pro_tap"], 1)
+        XCTAssertEqual(s["paywall_trigger_style_locked"], 1)
+        XCTAssertEqual(s["paywall_trigger_intensity_locked"], 1)
+    }
+
+    func test_recordFirstGenerationOfSession_bumpsOnlyOncePerSession() {
+        ledger.setOptIn(true)
+        ledger.recordFirstGenerationOfSession()
+        ledger.recordFirstGenerationOfSession()
+        ledger.recordFirstGenerationOfSession()
+        XCTAssertEqual(ledger.snapshot()["sessions_with_generation"], 1,
+                       "Per-session gate must clamp to one bump per process lifetime until resetSessionMarkers().")
+        ledger.resetSessionMarkers()
+        ledger.recordFirstGenerationOfSession()
+        XCTAssertEqual(ledger.snapshot()["sessions_with_generation"], 2,
+                       "After resetSessionMarkers(), the next first-generation re-arms the counter.")
+    }
+
+    func test_α3Counters_areOptOutGated() {
+        // Opted out by default — every α3 record* call must be a no-op.
+        ledger.recordFailure(.guardrail)
+        ledger.recordPaywallImpression(source: .lowCredits)
+        ledger.recordFirstGenerationOfSession()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["generations_failed_guardrail"], 0)
+        XCTAssertEqual(s["paywall_impressions"], 0)
+        XCTAssertEqual(s["paywall_trigger_low_credits"], 0)
+        XCTAssertEqual(s["sessions_with_generation"], 0)
+    }
+
+    func test_α3Counters_areAppendedAfterε2Counters() {
+        // Sequence regression: α3 keys come AFTER the ε2 v2 keys, which
+        // come AFTER v1. Locks the on-the-wire ordering.
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let lastEpsilon2 = cases.firstIndex(of: "feedback_tag_other") ?? -1
+        let firstAlpha3  = cases.firstIndex(of: "generations_failed_guardrail") ?? -1
+        XCTAssertGreaterThan(firstAlpha3, lastEpsilon2,
+                             "α3 counters must follow the ε2 block at end of enum.")
+        // Last item must be sessions_with_generation (newest end-of-enum).
+        XCTAssertEqual(cases.last, "sessions_with_generation",
+                       "sessions_with_generation must remain end-of-enum until W3 adds α3 extensions.")
+    }
 }

@@ -52,10 +52,11 @@ struct PaywallView: View {
             .padding(24)
         }
         .frame(minWidth: 360, minHeight: 480)
-        .onAppear {
-            // A′ telemetry: paywall impression. No-op when opted out.
-            EventLedger.shared.recordPaywallImpression()
-        }
+        // α3: callers tag the impression with a source via
+        // `EventLedger.shared.recordPaywallImpression(source:)` at the
+        // trigger site BEFORE setting `showPaywall = true`. PaywallView
+        // itself no longer bumps the impression counter — that prevents
+        // double-counting and keeps the source attribution accurate.
         .task {
             installSettlerIfNeeded()
             await store.loadProducts()
