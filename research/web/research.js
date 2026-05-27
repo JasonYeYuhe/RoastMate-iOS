@@ -11,10 +11,10 @@
  */
 'use strict';
 
-// Replace this at deploy time with the actual Worker URL. Falls back to
-// "" which makes submit a no-op so dev preview doesn't accidentally POST
-// anywhere.
-const WORKER_ENDPOINT = window.RM_RESEARCH_WORKER_URL || '';
+// Deployed Cloudflare Worker endpoint. The `window.RM_RESEARCH_WORKER_URL`
+// override is for local previews / future deploys; baked-in value is the
+// production URL.
+const WORKER_ENDPOINT = window.RM_RESEARCH_WORKER_URL || 'https://roastmate-research.yyyyy-yeyuhe.workers.dev';
 
 const STRINGS = {
   'en': {

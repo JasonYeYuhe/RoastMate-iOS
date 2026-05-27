@@ -15,11 +15,11 @@ compatibility_date = "2025-01-01"
 # access in the same query surface.
 [[kv_namespaces]]
 binding = "RESEARCH_ANSWERS"
-id = "REPLACE_WITH_KV_ID_FROM_WRANGLER_CREATE"
+id = "149e6fc75bbf4608a652290ff69d6ec6"
 
 [[kv_namespaces]]
 binding = "RESEARCH_CONTACTS"
-id = "REPLACE_WITH_KV_ID_FROM_WRANGLER_CREATE"
+id = "2154ffa8f18f465abe92ff1b6c302da6"
 
 # CORS allow-list — only the GH Pages origin should be able to POST.
 [vars]
