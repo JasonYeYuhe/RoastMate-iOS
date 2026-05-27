@@ -58,6 +58,15 @@ public final class EventLedger: @unchecked Sendable {
 
     private static let optInKey = "aprime.opt_in"
 
+    /// P5 Tier-1 flag: has this user produced at least one successful
+    /// output (main app, share extension, watch, or keyboard handoff)
+    /// in their entire history? Set ONCE on first success, never reset
+    /// except via `resetCounters()`. Used by `recordPurchaseCompleted()`
+    /// to dispatch into `purchaseBeforeFirstOutput` vs
+    /// `purchaseAfterFirstOutput`. Not a Counter (boolean state, not
+    /// an event count).
+    private static let hasSuccessfulOutputFlagKey = "aprime.flags.has_successful_output_before_purchase"
+
     // MARK: - Event API (no-ops when opted out)
 
     public func recordPaywallImpression() { bump(.paywallImpressions) }
@@ -68,7 +77,15 @@ public final class EventLedger: @unchecked Sendable {
     }
 
     public func recordPurchaseAttempt() { bump(.purchaseAttempts) }
-    public func recordPurchaseCompleted() { bump(.purchasesCompleted) }
+    /// Bumps the legacy `purchases_completed` counter AND the P5 Tier-1
+    /// pay-timing pair (`purchase_before_first_output` /
+    /// `purchase_after_first_output`) based on whether the user has
+    /// produced at least one successful output before this purchase.
+    public func recordPurchaseCompleted() {
+        bump(.purchasesCompleted)
+        let hadOutput = queue.sync { defaults.bool(forKey: Self.hasSuccessfulOutputFlagKey) }
+        bump(hadOutput ? .purchaseAfterFirstOutput : .purchaseBeforeFirstOutput)
+    }
     public func recordShareTap() { bump(.shareTaps) }
     public func recordSessionStart() { bump(.sessionStarts) }
 
@@ -131,6 +148,44 @@ public final class EventLedger: @unchecked Sendable {
     public func recordFeatureUsageWatch() { bump(.featureUsageWatch) }
     public func recordFeatureUsageKeyboard() { bump(.featureUsageKeyboard) }
     public func recordFeatureUsageArgumentSimulator() { bump(.featureUsageArgumentSimulator) }
+
+    // MARK: - Schema v2 — P5 Tier-1 distribution-research counters (Phase 5 Q1 W1)
+    //
+    // Five distribution-research counters + one boolean flag. Still
+    // schemaVersion 2 — additive WITHIN v2 (same rationale as α3 / P5-
+    // strategic). Counters bump end-of-output; the boolean flag is the
+    // state input to `recordPurchaseCompleted()`'s pay-timing dispatch.
+    // See `docs/PHASE_5_RESEARCH_PROTOCOL_2026-09.md` §2 Tier-1 + §8 #5.
+
+    public func recordFeatureUsageShareExtension() { bump(.featureUsageShareExtension) }
+    public func recordAppOpenFromKeyboardHandoff() { bump(.appOpenFromKeyboardHandoff) }
+
+    /// Bumps BOTH the legacy v1 `share_taps` AND the P5 Tier-1
+    /// `output_destination_sent_share_tap`. Use ONLY at output-content
+    /// share sites (RoastCard, GeneratedRoastCard, ShareCardComposer),
+    /// NOT at non-output shares like the telemetry-JSON share in
+    /// Settings. The legacy counter audit (Codex Phase 4 §0.5 #5
+    /// Risk register) is fixed by this method's uniform coverage —
+    /// previously share_taps fired only from ShareCardComposer:64,
+    /// biasing the count toward image-sharers. With this method wired
+    /// at all three output-share sites, share_taps is now correct.
+    public func recordOutputShareTap() {
+        bump(.shareTaps)
+        bump(.outputDestinationSentShareTap)
+    }
+    public func recordOutputCopied() { bump(.outputDestinationCopied) }
+
+    /// Set the persistent App-Group boolean flag indicating the user
+    /// has produced at least one successful output. Called from the
+    /// success path of `RoastEngine.generate()` (covers main app, share
+    /// extension, watch, argument simulator, and any other caller).
+    /// Opt-out gated to match the rest of A′.
+    public func markSuccessfulOutput() {
+        queue.sync {
+            guard defaults.bool(forKey: Self.optInKey) else { return }
+            defaults.set(true, forKey: Self.hasSuccessfulOutputFlagKey)
+        }
+    }
 
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
@@ -214,6 +269,9 @@ public final class EventLedger: @unchecked Sendable {
             for c in Counter.allCases {
                 defaults.removeObject(forKey: c.storageKey)
             }
+            // P5 Tier-1 boolean flag — clear alongside counters so a
+            // re-opt-in starts from a fully fresh pay-timing baseline.
+            defaults.removeObject(forKey: Self.hasSuccessfulOutputFlagKey)
         }
     }
 
@@ -273,6 +331,17 @@ public final class EventLedger: @unchecked Sendable {
         case featureUsageWatch                 = "feature_usage_watch"
         case featureUsageKeyboard              = "feature_usage_keyboard"
         case featureUsageArgumentSimulator     = "feature_usage_argument_simulator"
+        // v2 P5 Tier-1 additions (Phase 5 Q1 W1 distribution research).
+        // Surface usage + output destination + pay-timing pair. Boolean
+        // flag `has_successful_output_before_purchase` lives separately
+        // (state, not event count) — see `hasSuccessfulOutputFlagKey`.
+        // Still schemaVersion 2 — additive WITHIN v2. End-of-enum.
+        case featureUsageShareExtension        = "feature_usage_share_extension"
+        case appOpenFromKeyboardHandoff        = "app_open_from_keyboard_handoff"
+        case outputDestinationSentShareTap     = "output_destination_sent_share_tap"
+        case outputDestinationCopied           = "output_destination_copied"
+        case purchaseBeforeFirstOutput         = "purchase_before_first_output"
+        case purchaseAfterFirstOutput          = "purchase_after_first_output"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

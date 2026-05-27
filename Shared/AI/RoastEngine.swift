@@ -114,6 +114,7 @@ actor RoastEngine {
                 let safe = try SafetyFilter.validateVentOutput(cloudText)
                 EventLedger.shared.recordGeneration(cloud: true)  // A′
                 EventLedger.shared.recordFirstGenerationOfSession()  // α3
+                EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
                 RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
                 return [safe]
             } catch let err as CloudVentError {
@@ -218,6 +219,7 @@ actor RoastEngine {
         }
         EventLedger.shared.recordGeneration(cloud: false)  // A′
         EventLedger.shared.recordFirstGenerationOfSession()  // α3
+        EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
         return Array(sanitized.prefix(effectiveVariantCount))
         #else

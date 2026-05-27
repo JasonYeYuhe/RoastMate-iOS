@@ -111,6 +111,27 @@ struct SettingsView: View {
                 }
             }
 
+            // P5 Q1 W1 — distribution-research recruit tile. Intentionally
+            // NOT gated by `telemetryOptedIn`: per App Review 2.2 and the
+            // research protocol §1, compensation cannot be conditional on
+            // data-consent. Opens a Safari link to the self-hosted form at
+            // roastmate.app/research (no embedded WebView, keeps the
+            // recruit channel out of the app's data surface).
+            Section(header: Text("settings.section.research")) {
+                Link(destination: URL(string: "https://roastmate.app/research")!) {
+                    HStack {
+                        Label("settings.research.tile", systemImage: "person.fill.questionmark")
+                        Spacer()
+                        Image(systemName: "arrow.up.right.square")
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .foregroundStyle(.primary)
+                Text("settings.research.footer")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             Section(header: Text("settings.section.appearance")) {
                 Picker("settings.language", selection: $languageManager.selectedLanguage) {
                     ForEach(AppLanguage.allCases) { lang in

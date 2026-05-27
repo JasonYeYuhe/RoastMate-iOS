@@ -296,18 +296,14 @@ final class EventLedgerTests: XCTestCase {
     // MARK: - Schema v2 — P5 strategic kill-list usage (Phase 5)
 
     func test_p5StrategicCounters_areAppendedAfterAlpha3Counters() {
-        // Sequence regression: P5 feature_usage_* keys come AFTER the α3
-        // block, which comes AFTER ε2, which comes AFTER v1. Locks the
-        // on-the-wire ordering.
+        // Sequence regression: P5-strategic feature_usage_* keys come
+        // AFTER the α3 block, which comes AFTER ε2, which comes AFTER v1.
+        // Locks the on-the-wire ordering.
         let cases = EventLedger.Counter.allCases.map(\.rawValue)
         let lastAlpha3 = cases.firstIndex(of: "sessions_with_generation") ?? -1
         let firstP5   = cases.firstIndex(of: "feature_usage_watch") ?? -1
         XCTAssertGreaterThan(firstP5, lastAlpha3,
                              "P5-strategic feature_usage_* counters must follow the α3 block at end of enum.")
-        // Last item must be feature_usage_argument_simulator (newest
-        // end-of-enum until the next additive wave).
-        XCTAssertEqual(cases.last, "feature_usage_argument_simulator",
-                       "feature_usage_argument_simulator must remain end-of-enum until the next P5-onward additive wave.")
     }
 
     func test_recordFeatureUsage_eachSurfaceHasItsOwnCounter() {
@@ -333,5 +329,115 @@ final class EventLedgerTests: XCTestCase {
         XCTAssertEqual(s["feature_usage_watch"], 0)
         XCTAssertEqual(s["feature_usage_keyboard"], 0)
         XCTAssertEqual(s["feature_usage_argument_simulator"], 0)
+    }
+
+    // MARK: - Schema v2 — P5 Tier-1 distribution-research (Phase 5 Q1 W1)
+
+    func test_p5Tier1Counters_areAppendedAfterP5StrategicCounters() {
+        // Sequence regression: P5 Tier-1 distribution-research keys come
+        // AFTER the P5-strategic block. Locks the on-the-wire ordering.
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let lastP5Strategic = cases.firstIndex(of: "feature_usage_argument_simulator") ?? -1
+        let firstTier1      = cases.firstIndex(of: "feature_usage_share_extension") ?? -1
+        XCTAssertGreaterThan(firstTier1, lastP5Strategic,
+                             "P5 Tier-1 counters must follow the P5-strategic block at end of enum.")
+        // Last item must be purchase_after_first_output (newest end-of-
+        // enum until the next additive wave).
+        XCTAssertEqual(cases.last, "purchase_after_first_output",
+                       "purchase_after_first_output must remain end-of-enum until the next additive wave.")
+    }
+
+    func test_recordTier1_eachCounterIncrementsCorrectly() {
+        ledger.setOptIn(true)
+        ledger.recordFeatureUsageShareExtension()
+        ledger.recordFeatureUsageShareExtension()
+        ledger.recordAppOpenFromKeyboardHandoff()
+        ledger.recordOutputCopied()
+        ledger.recordOutputCopied()
+        ledger.recordOutputCopied()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feature_usage_share_extension"], 2)
+        XCTAssertEqual(s["app_open_from_keyboard_handoff"], 1)
+        XCTAssertEqual(s["output_destination_copied"], 3)
+    }
+
+    func test_recordOutputShareTap_bumpsBothLegacyAndSourcedCounters() {
+        ledger.setOptIn(true)
+        ledger.recordOutputShareTap()
+        ledger.recordOutputShareTap()
+        let s = ledger.snapshot()
+        // Both the legacy v1 share_taps AND the new Tier-1 counter must
+        // increment on each call — back-compat with the existing
+        // share_taps consumers + clean uniform output-share signal.
+        XCTAssertEqual(s["share_taps"], 2,
+                       "Legacy v1 share_taps must also bump on every output share tap.")
+        XCTAssertEqual(s["output_destination_sent_share_tap"], 2)
+    }
+
+    func test_recordPurchaseCompleted_dispatchesToBeforeFirstOutput_whenFlagFalse() {
+        ledger.setOptIn(true)
+        // markSuccessfulOutput NOT called — boolean flag stays false.
+        ledger.recordPurchaseCompleted()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["purchases_completed"], 1,
+                       "Legacy purchases_completed must still bump on every purchase.")
+        XCTAssertEqual(s["purchase_before_first_output"], 1,
+                       "Without a prior successful output, the pay-timing dispatch must land in before-first-output.")
+        XCTAssertEqual(s["purchase_after_first_output"], 0,
+                       "After-first-output must remain 0 when no output has been recorded.")
+    }
+
+    func test_recordPurchaseCompleted_dispatchesToAfterFirstOutput_whenFlagTrue() {
+        ledger.setOptIn(true)
+        ledger.markSuccessfulOutput()  // Flag flips to true.
+        ledger.recordPurchaseCompleted()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["purchases_completed"], 1)
+        XCTAssertEqual(s["purchase_after_first_output"], 1,
+                       "With a prior successful output, the pay-timing dispatch must land in after-first-output.")
+        XCTAssertEqual(s["purchase_before_first_output"], 0,
+                       "Before-first-output must remain 0 when an output has been recorded.")
+    }
+
+    func test_markSuccessfulOutput_isOptOutGated() {
+        // Opted out by default — markSuccessfulOutput must not flip the
+        // flag, so a subsequent purchase still dispatches to before-
+        // first-output. Privacy posture parity with the counter API.
+        ledger.markSuccessfulOutput()
+        ledger.setOptIn(true)
+        ledger.recordPurchaseCompleted()
+        XCTAssertEqual(ledger.snapshot()["purchase_before_first_output"], 1,
+                       "Opted-out markSuccessfulOutput must be a no-op, so a later opted-in purchase still lands in before-first-output.")
+    }
+
+    func test_p5Tier1Counters_areOptOutGated() {
+        // Opted out by default — every Tier-1 record* call must be a no-op.
+        ledger.recordFeatureUsageShareExtension()
+        ledger.recordAppOpenFromKeyboardHandoff()
+        ledger.recordOutputShareTap()
+        ledger.recordOutputCopied()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feature_usage_share_extension"], 0)
+        XCTAssertEqual(s["app_open_from_keyboard_handoff"], 0)
+        XCTAssertEqual(s["share_taps"], 0)
+        XCTAssertEqual(s["output_destination_sent_share_tap"], 0)
+        XCTAssertEqual(s["output_destination_copied"], 0)
+    }
+
+    func test_resetCounters_clearsSuccessfulOutputFlag() {
+        ledger.setOptIn(true)
+        ledger.markSuccessfulOutput()
+        // Confirm the flag is set: a purchase now lands in after-first-output.
+        ledger.recordPurchaseCompleted()
+        XCTAssertEqual(ledger.snapshot()["purchase_after_first_output"], 1)
+        // Reset everything — including the boolean flag.
+        ledger.resetCounters()
+        // A subsequent purchase should now land in before-first-output
+        // (flag was cleared, so the pay-timing baseline is fresh).
+        ledger.recordPurchaseCompleted()
+        XCTAssertEqual(ledger.snapshot()["purchase_before_first_output"], 1,
+                       "resetCounters must clear the has_successful_output flag so a re-opt-in starts from a fresh pay-timing baseline.")
+        XCTAssertEqual(ledger.snapshot()["purchase_after_first_output"], 0,
+                       "After-first-output must have been cleared along with the flag.")
     }
 }

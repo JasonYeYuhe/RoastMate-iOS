@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>RoastMate — Research interview</title>
+  <link rel="stylesheet" href="research.css">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+</head>
+<body>
+  <main>
+    <nav aria-label="Language">
+      <button type="button" data-locale="en" lang="en">English</button>
+      <button type="button" data-locale="zh-Hans" lang="zh-Hans">简体中文</button>
+      <button type="button" data-locale="zh-Hant" lang="zh-Hant">繁體中文</button>
+      <button type="button" data-locale="ja" lang="ja">日本語</button>
+    </nav>
+
+    <header>
+      <h1 data-i18n="title"></h1>
+      <p class="intro" data-i18n="intro"></p>
+      <ul class="meta">
+        <li data-i18n="meta.compensation"></li>
+        <li data-i18n="meta.duration"></li>
+        <li data-i18n="meta.privacy"></li>
+      </ul>
+    </header>
+
+    <form id="research-form" novalidate>
+      <fieldset>
+        <legend data-i18n="q1.label"></legend>
+        <label><input type="radio" name="recency" value="this_week" required> <span data-i18n="q1.this_week"></span></label>
+        <label><input type="radio" name="recency" value="this_month"> <span data-i18n="q1.this_month"></span></label>
+        <label><input type="radio" name="recency" value="longer"> <span data-i18n="q1.longer"></span></label>
+        <label><input type="radio" name="recency" value="cant_remember"> <span data-i18n="q1.cant_remember"></span></label>
+        <label><input type="radio" name="recency" value="prefer_not_say"> <span data-i18n="q1.prefer_not_say"></span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="q2.label"></legend>
+        <label><input type="radio" name="available" value="yes" required> <span data-i18n="q2.yes"></span></label>
+        <label><input type="radio" name="available" value="no"> <span data-i18n="q2.no"></span></label>
+        <p class="field">
+          <label for="timezone" data-i18n="q2.timezone"></label>
+          <input id="timezone" type="text" name="timezone" maxlength="40" autocomplete="off">
+        </p>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="q3.label"></legend>
+        <p class="muted" data-i18n="q3.hint"></p>
+        <textarea name="locus" rows="3" maxlength="200" required></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="contact.label"></legend>
+        <input id="email" type="email" name="email" required maxlength="120" autocomplete="email">
+        <p class="muted" data-i18n="contact.note"></p>
+      </fieldset>
+
+      <button type="submit" data-i18n="submit"></button>
+      <p id="status" role="status" aria-live="polite"></p>
+    </form>
+
+    <footer>
+      <p>
+        <span data-i18n="footer.brand">RoastMate</span>
+        · <span data-i18n="footer.notrack">No third-party tracking on this page.</span>
+        · <a href="https://jasonyeyuhe.github.io/RoastMate/privacy.html" rel="noopener noreferrer" data-i18n="footer.privacy">Privacy</a>
+      </p>
+    </footer>
+  </main>
+  <script src="research.js"></script>
+</body>
+</html>

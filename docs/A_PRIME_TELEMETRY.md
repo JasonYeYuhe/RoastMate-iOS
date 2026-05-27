@@ -81,6 +81,30 @@ synthesis, these are the three 30/90 kill-list candidates. The rule:
 keep it in tree); 90 days → remove. Counter bumps fire on every entry,
 not per-session, so a freeze decision sees the true usage shape.
 
+### Counters added in schema v2 (P5 Tier-1 — Phase 5 Q1 W1 distribution research)
+| key | semantics |
+|---|---|
+| `feature_usage_share_extension` | `ShareViewController.viewDidLoad()` ran — share extension was invoked from a host app's Share Sheet |
+| `app_open_from_keyboard_handoff` | App foregrounded with a non-empty `LaunchRouter.consumeCapturedSituation()` payload (NOTE: drain consumer wire-up is dormant — keyboard target is currently un-embedded per `project_appstore_status` memory; counter remains 0 until both keyboard is re-embedded AND main-app drain wire-up lands) |
+| `output_destination_sent_share_tap` | The user tapped a Share button on a generated output (RoastCard, GeneratedRoastCard, ShareCardComposer). Bumped via `recordOutputShareTap()` which ALSO bumps the legacy v1 `share_taps` — this fixes the prior bias where `share_taps` only fired from `ShareCardComposer`, under-counting plain-text shares (Codex Phase 4 §0.5 #5 audit) |
+| `output_destination_copied` | The user tapped Copy on a generated output (RoastCard, GeneratedRoastCard, share-extension output card) |
+| `purchase_before_first_output` | A purchase completed BEFORE the user produced their first successful output (driven by App-Group boolean `has_successful_output_before_purchase` — see below) |
+| `purchase_after_first_output` | A purchase completed AFTER the user produced their first successful output |
+
+### State flag added in schema v2 (P5 Tier-1) — NOT a counter
+| key | semantics |
+|---|---|
+| `aprime.flags.has_successful_output_before_purchase` | App-Group boolean (not in `EventLedger.Counter`). Set to `true` ONCE on every successful `RoastEngine.generate()` (covers main app + share extension + watch + argument simulator — all funnel through RoastEngine). Drives `recordPurchaseCompleted()`'s pay-timing dispatch into the pre/post counter pair. Opt-out gated like the counters. Cleared by `resetCounters()` so a re-opt-in starts from a fresh pay-timing baseline. |
+
+Why these six counters + flag: per the Phase 5 strategic doc §9 advisor
+synthesis + the research protocol v2 §2 Tier-1 table. The earlier draft
+proposed using `sessions_with_generation` as a proxy for "first relief"
+in the pay-timing dispatch — Codex flagged that as broken (it under-
+counts share/keyboard/watch output flows where a user can get value
+without a main-app session generation, then buy and be mis-classified).
+The boolean flag set by every successful RoastEngine output is the
+correct proxy.
+
 Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
 forever; new counters land end-of-enum. No raw text or generation content
 is ever logged.

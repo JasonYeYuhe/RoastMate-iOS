@@ -21,6 +21,7 @@ struct RoastCard: View {
             HStack(spacing: 16) {
                 Button {
                     copyToPasteboard(text)
+                    EventLedger.shared.recordOutputCopied()  // P5 Tier-1
                     copied = true
                     Haptics.play(.selection)
                     Task {
@@ -41,6 +42,9 @@ struct RoastCard: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .simultaneousGesture(TapGesture().onEnded {
+                    EventLedger.shared.recordOutputShareTap()  // P5 Tier-1
+                })
             }
         }
         .padding(16)
@@ -125,6 +129,7 @@ struct GeneratedRoastCard: View {
             HStack(spacing: 12) {
                 Button {
                     copyToPasteboard(result.text)
+                    EventLedger.shared.recordOutputCopied()  // P5 Tier-1
                     copied = true
                     Haptics.play(.selection)
                     Task {
@@ -145,6 +150,9 @@ struct GeneratedRoastCard: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .simultaneousGesture(TapGesture().onEnded {
+                    EventLedger.shared.recordOutputShareTap()  // P5 Tier-1
+                })
 
                 // Share as image — sendable kinds only; the private vent
                 // draft itself is never offered as a shareable card.

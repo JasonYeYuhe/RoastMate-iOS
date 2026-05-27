@@ -60,8 +60,11 @@ struct ShareCardComposer: View {
                         }
                         .simultaneousGesture(TapGesture().onEnded {
                             // A′ telemetry: user opened the Share Sheet
-                            // from the share-card composer.
-                            EventLedger.shared.recordShareTap()
+                            // from the share-card composer. P5 Tier-1
+                            // recordOutputShareTap bumps both the legacy
+                            // share_taps counter AND the new
+                            // output_destination_sent_share_tap counter.
+                            EventLedger.shared.recordOutputShareTap()
                             // ε1: a successful share tap is one of the two
                             // triggers for the in-app App Store rating
                             // prompt. Service enforces at-most-once per

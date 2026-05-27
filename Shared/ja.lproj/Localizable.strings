@@ -510,3 +510,8 @@
 "settings.telemetry.prepare_export" = "匿名利用スナップショットを準備";
 "settings.telemetry.share" = "匿名利用スナップショットを共有";
 "settings.telemetry.reset" = "利用カウントをリセット";
+
+// P5 Q1 W1 — リサーチ募集タイル。利用統計への同意は不要。
+"settings.section.research" = "サービス改善にご協力ください";
+"settings.research.tile" = "有料 30 分インタビュー";
+"settings.research.footer" = "RoastMate の使い方について 30 分の有料インタビューに参加いただける方を 20 名募集しています。タップして詳細を確認してください。利用統計の許可は不要です。";

@@ -1,0 +1,29 @@
+# Cloudflare Worker config — RoastMate research recruit endpoint.
+# Deploy: `npx wrangler deploy` from this directory.
+# Requires a Cloudflare account + `npx wrangler login` first.
+
+name = "roastmate-research"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+# Two KV namespaces (created via `npx wrangler kv namespace create RESEARCH_ANSWERS`
+# and `... create RESEARCH_CONTACTS`). Replace the placeholder IDs below with
+# the IDs printed by wrangler at create time.
+#
+# Codex catch on v1 research protocol: answers and contact email MUST live
+# in separate tables so an analyst working with answers never has email
+# access in the same query surface.
+[[kv_namespaces]]
+binding = "RESEARCH_ANSWERS"
+id = "REPLACE_WITH_KV_ID_FROM_WRANGLER_CREATE"
+
+[[kv_namespaces]]
+binding = "RESEARCH_CONTACTS"
+id = "REPLACE_WITH_KV_ID_FROM_WRANGLER_CREATE"
+
+# CORS allow-list — only the GH Pages origin should be able to POST.
+[vars]
+ALLOWED_ORIGIN = "https://jasonyeyuhe.github.io"
+
+# Optional: a second allow-listed origin during local dev.
+# Add custom domain origin once roastmate.app is mapped.

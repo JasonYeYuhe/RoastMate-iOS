@@ -1,0 +1,188 @@
+/* P5 Q1 W1 — RoastMate research recruit form. Self-hosted, no third-party
+ * scripts / fonts / analytics. Mobile-first, dark-mode-aware. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+               "PingFang SC", "PingFang TC", "Hiragino Sans", sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  color: #1c1c1e;
+  background: #f5f5f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { color: #f2f2f7; background: #1c1c1e; }
+  fieldset { background: #2c2c2e; border-color: #3a3a3c; }
+  input[type="text"], input[type="email"], textarea {
+    background: #1c1c1e; color: inherit; border-color: #48484a;
+  }
+  button[type="submit"] {
+    background: #ff9500; color: #1c1c1e;
+  }
+  .muted { color: #98989d; }
+  a { color: #64d2ff; }
+  nav button[aria-pressed="true"] {
+    background: #ff9500; color: #1c1c1e; border-color: #ff9500;
+  }
+  nav button { background: #2c2c2e; color: inherit; border-color: #48484a; }
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+nav button {
+  font: inherit;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #d1d1d6;
+  background: white;
+  color: #1c1c1e;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+nav button[aria-pressed="true"] {
+  background: #ff9500;
+  color: white;
+  border-color: #ff9500;
+}
+
+h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.intro {
+  font-size: 16px;
+  margin: 0 0 16px;
+}
+
+ul.meta {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+  font-size: 14px;
+  color: #6c6c70;
+}
+ul.meta li { padding: 2px 0; }
+
+@media (prefers-color-scheme: dark) {
+  ul.meta { color: #98989d; }
+}
+
+fieldset {
+  border: 1px solid #d1d1d6;
+  border-radius: 12px;
+  margin: 0 0 16px;
+  padding: 16px 18px;
+  background: white;
+}
+
+legend {
+  font-weight: 600;
+  padding: 0 6px;
+}
+
+fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+  font: inherit;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d1d6;
+  background: white;
+  color: inherit;
+}
+
+textarea { resize: vertical; }
+
+.field { margin: 12px 0 0; }
+.field label { display: block; font-weight: 500; }
+
+.muted {
+  font-size: 13px;
+  color: #6c6c70;
+  margin-top: 6px;
+}
+
+button[type="submit"] {
+  font: inherit;
+  font-weight: 600;
+  font-size: 17px;
+  display: block;
+  width: 100%;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: #ff9500;
+  color: white;
+  cursor: pointer;
+  margin-top: 24px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button[type="submit"][disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#status {
+  margin: 16px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  min-height: 1.4em;
+}
+
+#status.ok {
+  background: rgba(52, 199, 89, 0.15);
+  color: #248a3d;
+}
+
+#status.error {
+  background: rgba(255, 59, 48, 0.15);
+  color: #d70015;
+}
+
+@media (prefers-color-scheme: dark) {
+  #status.ok { color: #30d158; }
+  #status.error { color: #ff453a; }
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #6c6c70;
+}
+
+a { color: #007aff; }

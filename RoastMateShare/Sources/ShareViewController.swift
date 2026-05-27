@@ -9,6 +9,7 @@ final class ShareViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        EventLedger.shared.recordFeatureUsageShareExtension()  // P5 Tier-1
         Task { await loadSharedText() }
     }
 

@@ -133,6 +133,7 @@ struct ShareRootView: View {
             HStack {
                 Button {
                     UIPasteboard.general.string = text
+                    EventLedger.shared.recordOutputCopied()  // P5 Tier-1
                     copied = true
                     Task {
                         try? await Task.sleep(nanoseconds: 1_200_000_000)

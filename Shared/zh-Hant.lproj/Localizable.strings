@@ -509,3 +509,8 @@
 "settings.telemetry.prepare_export" = "準備匿名使用快照";
 "settings.telemetry.share" = "分享匿名使用快照";
 "settings.telemetry.reset" = "重置使用計數";
+
+// P5 Q1 W1 — 使用者研究招募入口。不需要授權數據使用即可參與。
+"settings.section.research" = "幫我們做得更好";
+"settings.research.tile" = "付費 30 分鐘使用者訪談";
+"settings.research.footer" = "我們正在招募 20 位使用者做 30 分鐘的付費訪談,了解你怎麼用 RoastMate。點擊了解詳情。不需要授權數據使用。";

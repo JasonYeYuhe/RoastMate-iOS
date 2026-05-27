@@ -510,3 +510,9 @@
 "settings.telemetry.prepare_export" = "Prepare anonymized usage snapshot";
 "settings.telemetry.share" = "Share anonymized usage snapshot";
 "settings.telemetry.reset" = "Reset usage counts";
+
+// P5 Q1 W1 — distribution research recruit tile. NOT gated by
+// telemetryOptedIn (compensation cannot be conditional on data consent).
+"settings.section.research" = "Help us improve";
+"settings.research.tile" = "Paid 30-min research interview";
+"settings.research.footer" = "We're recruiting 20 people for a 30-minute paid interview about how you use RoastMate. Tap to learn more. Telemetry consent not required.";
