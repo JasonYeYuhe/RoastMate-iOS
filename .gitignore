@@ -51,3 +51,4 @@ metadata/screenshots/mac screenshots /
 
 # Claude Code local state (per-user; never commit)
 .claude/
+research/worker/.wrangler/
