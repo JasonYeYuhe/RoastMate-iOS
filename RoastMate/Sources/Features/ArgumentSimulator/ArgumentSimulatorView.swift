@@ -28,6 +28,7 @@ struct ArgumentSimulatorView: View {
             PaywallView(isPresented: $showPaywall)
         }
         .onAppear {
+            EventLedger.shared.recordFeatureUsageArgumentSimulator()
             if !isPro {
                 EventLedger.shared.recordPaywallImpression(source: .proTap)
                 showPaywall = true

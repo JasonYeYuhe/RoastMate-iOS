@@ -19,6 +19,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        EventLedger.shared.recordFeatureUsageKeyboard()
         configureSpikeBar()
     }
 

@@ -68,6 +68,19 @@ Codex/Gemini convergent post-launch advisor synthesis.
 | `paywall_trigger_intensity_locked` | user picked a Pro-only intensity (savage, etc.) while on Free |
 | `sessions_with_generation` | bumped ONCE per cold launch the first time a generation succeeds — `sessions_with_generation / session_starts` is the D7/D30 return-to-tool proxy |
 
+### Counters added in schema v2 (P5-strategic — Phase 5 kill-list 30/90)
+| key | semantics |
+|---|---|
+| `feature_usage_watch` | `WatchHomeView` appeared on watchOS (per appearance, not per session) |
+| `feature_usage_keyboard` | `KeyboardViewController.viewDidLoad()` ran in the keyboard extension (per host load) |
+| `feature_usage_argument_simulator` | `ArgumentSimulatorView` appeared on iOS (per appearance — fires regardless of Pro gating so the Pro-locked impression is also visible) |
+
+Why these three specifically: per the Phase 5 strategic doc §9 advisor
+synthesis, these are the three 30/90 kill-list candidates. The rule:
+30 days of clean low telemetry → freeze the feature (stop investing,
+keep it in tree); 90 days → remove. Counter bumps fire on every entry,
+not per-session, so a freeze decision sees the true usage shape.
+
 Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
 forever; new counters land end-of-enum. No raw text or generation content
 is ever logged.

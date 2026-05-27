@@ -291,8 +291,47 @@ final class EventLedgerTests: XCTestCase {
         let firstAlpha3  = cases.firstIndex(of: "generations_failed_guardrail") ?? -1
         XCTAssertGreaterThan(firstAlpha3, lastEpsilon2,
                              "α3 counters must follow the ε2 block at end of enum.")
-        // Last item must be sessions_with_generation (newest end-of-enum).
-        XCTAssertEqual(cases.last, "sessions_with_generation",
-                       "sessions_with_generation must remain end-of-enum until W3 adds α3 extensions.")
+    }
+
+    // MARK: - Schema v2 — P5 strategic kill-list usage (Phase 5)
+
+    func test_p5StrategicCounters_areAppendedAfterAlpha3Counters() {
+        // Sequence regression: P5 feature_usage_* keys come AFTER the α3
+        // block, which comes AFTER ε2, which comes AFTER v1. Locks the
+        // on-the-wire ordering.
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let lastAlpha3 = cases.firstIndex(of: "sessions_with_generation") ?? -1
+        let firstP5   = cases.firstIndex(of: "feature_usage_watch") ?? -1
+        XCTAssertGreaterThan(firstP5, lastAlpha3,
+                             "P5-strategic feature_usage_* counters must follow the α3 block at end of enum.")
+        // Last item must be feature_usage_argument_simulator (newest
+        // end-of-enum until the next additive wave).
+        XCTAssertEqual(cases.last, "feature_usage_argument_simulator",
+                       "feature_usage_argument_simulator must remain end-of-enum until the next P5-onward additive wave.")
+    }
+
+    func test_recordFeatureUsage_eachSurfaceHasItsOwnCounter() {
+        ledger.setOptIn(true)
+        ledger.recordFeatureUsageWatch()
+        ledger.recordFeatureUsageWatch()
+        ledger.recordFeatureUsageKeyboard()
+        ledger.recordFeatureUsageArgumentSimulator()
+        ledger.recordFeatureUsageArgumentSimulator()
+        ledger.recordFeatureUsageArgumentSimulator()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feature_usage_watch"], 2)
+        XCTAssertEqual(s["feature_usage_keyboard"], 1)
+        XCTAssertEqual(s["feature_usage_argument_simulator"], 3)
+    }
+
+    func test_p5StrategicCounters_areOptOutGated() {
+        // Opted out by default — every P5 record* call must be a no-op.
+        ledger.recordFeatureUsageWatch()
+        ledger.recordFeatureUsageKeyboard()
+        ledger.recordFeatureUsageArgumentSimulator()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["feature_usage_watch"], 0)
+        XCTAssertEqual(s["feature_usage_keyboard"], 0)
+        XCTAssertEqual(s["feature_usage_argument_simulator"], 0)
     }
 }

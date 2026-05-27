@@ -118,6 +118,20 @@ public final class EventLedger: @unchecked Sendable {
         queue.sync { sessionGenerationRecorded = false }
     }
 
+    // MARK: - Schema v2 — P5 strategic kill-list usage (Phase 5)
+    //
+    // 30/90 kill rule instrumentation. Each candidate surface (Watch app,
+    // Keyboard skeleton, Argument Simulator) bumps its own counter on
+    // entry. At 30 days clean low telemetry → freeze; at 90 → remove.
+    // schemaVersion stays at 2 — these are additive WITHIN v2 (same
+    // rationale as α3). Bumps fire on every appearance / viewDidLoad,
+    // not per-session, so a freeze/remove decision sees the true usage
+    // shape, not a clamp.
+
+    public func recordFeatureUsageWatch() { bump(.featureUsageWatch) }
+    public func recordFeatureUsageKeyboard() { bump(.featureUsageKeyboard) }
+    public func recordFeatureUsageArgumentSimulator() { bump(.featureUsageArgumentSimulator) }
+
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
         case network            = "network"
@@ -252,6 +266,13 @@ public final class EventLedger: @unchecked Sendable {
         case paywallTriggerStyleLocked         = "paywall_trigger_style_locked"
         case paywallTriggerIntensityLocked     = "paywall_trigger_intensity_locked"
         case sessionsWithGeneration            = "sessions_with_generation"
+        // v2 P5-strategic additions (Phase 5 kill-list 30/90 instrumentation).
+        // Per-feature usage counters for the three deprecation candidates
+        // (Watch app, Keyboard skeleton, Argument Simulator). Still
+        // schemaVersion 2 — additive WITHIN v2. End-of-enum.
+        case featureUsageWatch                 = "feature_usage_watch"
+        case featureUsageKeyboard              = "feature_usage_keyboard"
+        case featureUsageArgumentSimulator     = "feature_usage_argument_simulator"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

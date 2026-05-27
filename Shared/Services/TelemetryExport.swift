@@ -52,6 +52,8 @@ public enum TelemetryExport {
         TelemetrySnapshot(
             // schema v2 (ships in v1.0.2): adds feedback_thumbsup/down +
             // feedback_tag_* counters end-of-enum. v1 keys all preserved.
+            // v2 additive-within: α3 failure / paywall-source / return-to-
+            // tool (v1.0.3) and P5-strategic feature_usage_* (Phase 5).
             schemaVersion: 2,
             exportedAtWeek: isoWeek(now),
             appVersion: appVersion,

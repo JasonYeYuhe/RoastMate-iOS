@@ -22,6 +22,7 @@ struct WatchHomeView: View {
                 }
             }
             .navigationTitle("watch.home.title")
+            .onAppear { EventLedger.shared.recordFeatureUsageWatch() }
         }
     }
 }
