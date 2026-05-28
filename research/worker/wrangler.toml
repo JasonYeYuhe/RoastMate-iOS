@@ -21,9 +21,8 @@ id = "149e6fc75bbf4608a652290ff69d6ec6"
 binding = "RESEARCH_CONTACTS"
 id = "2154ffa8f18f465abe92ff1b6c302da6"
 
-# CORS allow-list — only the GH Pages origin should be able to POST.
+# CORS allow-list — comma-separated origins that can POST. The Worker
+# splits on `,` and matches exactly. Add the custom-domain origin once
+# roastmate.app is mapped to GH Pages; the Worker accepts both.
 [vars]
-ALLOWED_ORIGIN = "https://jasonyeyuhe.github.io"
-
-# Optional: a second allow-listed origin during local dev.
-# Add custom domain origin once roastmate.app is mapped.
+ALLOWED_ORIGIN = "https://jasonyeyuhe.github.io,https://roastmate.app"

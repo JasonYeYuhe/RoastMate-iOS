@@ -50,17 +50,29 @@ disjoint Fork B candidate sets. Gemini's catch from the v1 advisor review.
     (lost). Dormant cohort is the harder recruit and the more valuable
     answer — silent churn is the population most invisible to A′. See
     Arm C for the deeper silent-churn coverage.
-- **Compensation:** ~$3 USD equivalent in **cash** via the channel the
-  recruit already uses — PayPal / Wise / WeChat red packet / Alipay
-  transfer / Amazon gift code / LINE Pay. Delivered after the call. **NOT
-  Apple offer codes** — Apple offer codes only apply to auto-renewable
-  subscriptions, not to consumable IAPs like the 50-credit pack, so the
-  v2 protocol's earlier "IAP Offer Code" plan was structurally invalid
-  (discovered during Q1 W1 execution 2026-05-28 when probing the API).
-  Cash is also simpler and unifies Arm A with Arm C (which was already
-  cash). No public mention / review / social post conditional. No
-  material-connection disclosure required because we never ask for any
-  public mention.
+- **Compensation:** **1 year of RoastMate Pro free**, delivered as an
+  Apple Subscription Offer Code (one-time-use redeemable in App Store).
+  Created via the App Store Connect REST API at recruit-close time
+  (`POST /v1/subscriptionOfferCodes` + `POST /v1/subscriptionOfferCodeOneTimeUseCodes`).
+  No PII exchange beyond the recruit email already on file.
+  - Why subscription offer codes (NOT cash + NOT consumable IAP promo):
+    - **Sample quality.** Gemini audit catch 2026-05-28: $3 cash invites
+      pollution from incentive-chasers while being too low to matter for
+      the premium ICP we want to interview. 1-year Pro ($35 retail
+      value) is a status incentive aligned with engaged users; users
+      indifferent to Pro won't self-select in.
+    - **Apple-rule fit.** Subscription offer codes are the sanctioned
+      mechanism Apple provides for this exact use case (compensate
+      research participants without cash). Consumable IAPs do NOT have
+      offer codes — the v2 protocol's earlier "IAP Offer Code for the
+      50-credit pack" was structurally invalid (discovered Q1 W1
+      execution 2026-05-28 probing the API).
+    - **Privacy posture.** Offer code redemption happens entirely in
+      App Store — no PayPal / WeChat / friend-add required, no PII
+      exchanged beyond the recruit email already collected.
+  - No public mention / review / social post conditional on the code.
+    No material-connection disclosure required because we never ask for
+    any public mention.
 - **Recruit gating:** compensation must NOT be conditional on telemetry
   opt-in. Decouple.
 
@@ -138,8 +150,12 @@ preference dressed as distribution evidence.
 - **Recruit:** 10 native-zh and 5 native-ja non-users (no prior install,
   no exposure). Channels: an outbound message via WeChat / LINE friend
   network, or a Xiaohongshu post inviting a paid interview, or a friend-
-  of-friend bridge. Pay with cash or local equivalent (NOT App Store
-  offer codes — they would require installing the app first).
+  of-friend bridge. Compensation: **anonymity-preserving virtual gift
+  code** (Alipay scanned QR, JD e-card to email, Amazon gift code to
+  email), ~$3 / ¥30 / ¥500 equivalent. NOT WeChat red packet (forces
+  friend-add, destroys the anonymity promised in the recruit copy —
+  Gemini audit catch 2026-05-28). NOT Apple offer codes (Arm C
+  participants don't have the app installed).
 - **Duration:** 15 min. Three questions only:
   1. "When you can't send a message you want to send, what do you do?"
   2. "If a tool existed that helped — what would you call it / search
@@ -286,7 +302,7 @@ hours to self-host the form. Sustainable alongside Phase 4 tactical.
 |---|---|
 | Recruit skew toward engaged existing users | Force dormant-cohort split in Arm A pre-screen + run Arm C entirely on non-users (silent-churn coverage). |
 | TestFlight cohort overrepresents early-adopter type | Recruit Arm A also from App Store review surface (manual ASC outreach); Arm C is purely outside the install funnel. |
-| Apple App Review compensation rule violation | Recruit is decoupled from TestFlight participation; compensation is cash OUTSIDE the app (PayPal / WeChat / etc.) — Apple has no jurisdiction over off-app cash transfer; no review / social mention required. |
+| Apple App Review compensation rule violation | Recruit is decoupled from TestFlight participation; Arm A compensation = Apple Subscription Offer Code (sanctioned mechanism); Arm C compensation = anonymity-preserving virtual gift code (Alipay QR / Amazon / JD e-card, no friend-add); no review / social mention required. |
 | Google-style form leaks emotionally sensitive metadata | Self-host /research; coarse buckets instead of free text on screen; 30-day raw-data deletion; minimized server logs. |
 | `discovery_source_*` CloudKit drift | Stored as A′ App-Group counters, NOT on CloudKit-synced UserSettings. |
 | Findings shake Phase 4 work | Phase 4 ships per its own track; worst case Q2 pricing reframe absorbs findings. |
@@ -331,7 +347,7 @@ in v2:
 | 1 | Sample bias (silent churn missing) | Both | Arm C added; Arm A dormant-split forced. |
 | 2 | Surface forced-rank has no escape hatch + premature ranking framing | Both | "None / standalone-only" escape + §3 ternary outcomes. |
 | 3 | Google Form is a privacy leak | Codex P0 | Self-hosted /research form. |
-| 4 | "TestFlight interview + compensation" violates App Review 2.2 | Codex P0 | Recruit decoupled from TestFlight, off-app cash compensation (PayPal / WeChat / Alipay / LINE Pay / Amazon — see §1). Codex's original v2 fix proposed "IAP Offer Code" which was itself wrong: Apple offer codes are subscription-only, so the consumable 50-credit pack can't use them. Cash unifies Arm A with Arm C and eliminates the Apple-rule surface entirely. |
+| 4 | "TestFlight interview + compensation" violates App Review 2.2 | Codex P0 | Recruit decoupled from TestFlight. Arm A compensation evolved through three iterations as the picture clarified: (a) v2 protocol proposed "IAP Offer Code for 50-credit pack" — wrong, Apple offer codes are subscription-only; (b) discovery on 2026-05-28 → switched to off-app cash; (c) Gemini audit 2026-05-28 → switched again to **Subscription Offer Code (1-year Pro free)** which is the actually-correct Apple-sanctioned mechanism. Status incentive ($35 retail value) self-selects for engaged ICP instead of incentive-chasers. Arm C remains anonymity-preserving virtual gift code (no friend-add). |
 | 5 | `sessions_with_generation` is a broken proxy for first-relief (under-counts share/keyboard/watch) | Codex P0 | Replaced with App-Group `has_successful_output_before_purchase` set by every output path. |
 | 6 | `discoverySourceRaw` on CloudKit-synced UserSettings is a privacy leak across devices | Codex P0 | Moved to A′ App-Group counters (5 bucket-counters). |
 | 7 | Missing 6th unknown: Destination (did the user send the rewrite?) | Gemini decisive | Added as #3 in §0 + Block 3 of the interview script. |

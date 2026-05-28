@@ -1,0 +1,82 @@
+# Mirror research/web/*.{html,css,js} to the GitHub Pages repo
+# (JasonYeYuhe/RoastMate) whenever the source-of-truth files change.
+#
+# Why: research/web/ in THIS repo (RoastMate-iOS) is the source of truth.
+# The Pages repo just serves the static files at
+# https://jasonyeyuhe.github.io/RoastMate/research.html. Without this
+# Action, the two diverge — exact scenario Codex flagged in the
+# 2026-05-28 audit.
+#
+# One-time setup (do this before pushing this workflow):
+#   1. Go to https://github.com/settings/personal-access-tokens/new
+#   2. Create a FINE-GRAINED PAT:
+#      - Resource owner: JasonYeYuhe
+#      - Repository access: Select "Only select repositories" →
+#        JasonYeYuhe/RoastMate (the Pages repo, NOT RoastMate-iOS)
+#      - Permissions → Contents: Read and write
+#      - Expiration: 1 year
+#   3. Copy the token (starts with `github_pat_`).
+#   4. In THIS repo (RoastMate-iOS), go to
+#      Settings → Secrets and variables → Actions → New repository secret
+#      Name: PAGES_DEPLOY_TOKEN
+#      Value: the PAT from step 3.
+#   5. Done. Future pushes to v1.1 that touch research/web/ auto-sync.
+
+name: Mirror research form to Pages
+
+on:
+  push:
+    branches: [v1.1, main]
+    paths:
+      - "research/web/**"
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RoastMate-iOS (source of truth)
+        uses: actions/checkout@v4
+        with:
+          path: ios-repo
+
+      - name: Checkout JasonYeYuhe/RoastMate (Pages destination)
+        uses: actions/checkout@v4
+        with:
+          repository: JasonYeYuhe/RoastMate
+          path: pages-repo
+          token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+
+      - name: Copy research form files
+        run: |
+          cp ios-repo/research/web/research.html pages-repo/research.html
+          cp ios-repo/research/web/research.css  pages-repo/research.css
+          cp ios-repo/research/web/research.js   pages-repo/research.js
+
+      - name: Detect changes
+        id: changes
+        working-directory: pages-repo
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: pages-repo
+        run: |
+          git config user.email "yyyyy.yeyuhe@gmail.com"
+          git config user.name "JasonYeYuhe"
+          git add research.html research.css research.js
+          UPSTREAM_SHA="${{ github.sha }}"
+          UPSTREAM_REPO="${{ github.repository }}"
+          git commit -m "Mirror research form from $UPSTREAM_REPO@${UPSTREAM_SHA:0:8}
+
+          Auto-sync from research/web/ in the iOS app repo. Do not edit
+          these files here directly — edit upstream and let the workflow
+          mirror them. Source of truth: $UPSTREAM_REPO
+
+          Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
+          git push origin main

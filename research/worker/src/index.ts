@@ -30,7 +30,24 @@ interface Submission {
   locale?: string;
 }
 
-const TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
+// 60 days: covers the 6-week Phase 5 Q1 recruit + interview window with
+// ~2 weeks of buffer for scheduling-back-and-forth. Codex audit catch
+// from v1: 30 days expired contacts WHILE interviews were still being
+// scheduled.
+const TTL_SECONDS = 60 * 24 * 60 * 60;
+
+// CORS origin allow-list. Comma-separated values in env.ALLOWED_ORIGIN
+// are split + matched exactly. Future-proofs the custom-domain move
+// (roastmate.app) without code change.
+function isAllowedOrigin(env: Env, origin: string): boolean {
+  if (!origin) return false;
+  const allowed = env.ALLOWED_ORIGIN.split(',').map(s => s.trim()).filter(Boolean);
+  return allowed.includes(origin);
+}
+
+function corsAllowOrigin(env: Env, origin: string): string {
+  return isAllowedOrigin(env, origin) ? origin : '';
+}
 
 const RECENCY_BUCKETS = new Set([
   'this_week', 'this_month', 'longer', 'cant_remember', 'prefer_not_say'
@@ -38,9 +55,9 @@ const RECENCY_BUCKETS = new Set([
 const AVAIL_BUCKETS = new Set(['yes', 'no']);
 const LOCALES = new Set(['en', 'zh-Hans', 'zh-Hant', 'ja']);
 
-function corsHeaders(env: Env): Record<string, string> {
+function corsHeaders(env: Env, origin: string): Record<string, string> {
   return {
-    'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
+    'Access-Control-Allow-Origin': corsAllowOrigin(env, origin),
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
@@ -48,10 +65,10 @@ function corsHeaders(env: Env): Record<string, string> {
   };
 }
 
-function badRequest(env: Env, message: string): Response {
+function badRequest(env: Env, origin: string, message: string): Response {
   return new Response(JSON.stringify({ error: message }), {
     status: 400,
-    headers: { 'Content-Type': 'application/json', ...corsHeaders(env) }
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(env, origin) }
   });
 }
 
@@ -73,19 +90,22 @@ function newParticipantCode(): string {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const origin = request.headers.get('Origin') || '';
+
     // CORS preflight.
     if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders(env) });
+      return new Response(null, { status: 204, headers: corsHeaders(env, origin) });
     }
-    // Origin gate. Always allow same-host probes; reject everything else.
-    const origin = request.headers.get('Origin') || '';
-    if (origin && origin !== env.ALLOWED_ORIGIN) {
+    // Origin gate. Browser requests MUST carry an Origin matching the
+    // allow-list. Codex audit catch from v1: previously requests with no
+    // Origin header (e.g. curl, server-to-server) bypassed the gate.
+    if (!isAllowedOrigin(env, origin)) {
       return new Response('Forbidden', { status: 403 });
     }
     if (request.method !== 'POST') {
       return new Response('Method Not Allowed', {
         status: 405,
-        headers: corsHeaders(env)
+        headers: corsHeaders(env, origin)
       });
     }
 
@@ -93,21 +113,21 @@ export default {
     try {
       body = await request.json();
     } catch {
-      return badRequest(env, 'invalid_json');
+      return badRequest(env, origin, 'invalid_json');
     }
 
     // Field validation.
     if (!body.recency || !RECENCY_BUCKETS.has(body.recency)) {
-      return badRequest(env, 'invalid_recency');
+      return badRequest(env, origin, 'invalid_recency');
     }
     if (!body.available || !AVAIL_BUCKETS.has(body.available)) {
-      return badRequest(env, 'invalid_available');
+      return badRequest(env, origin, 'invalid_available');
     }
     if (!body.locus || typeof body.locus !== 'string' || body.locus.length < 2) {
-      return badRequest(env, 'invalid_locus');
+      return badRequest(env, origin, 'invalid_locus');
     }
     if (!body.email || typeof body.email !== 'string' || !validEmail(body.email)) {
-      return badRequest(env, 'invalid_email');
+      return badRequest(env, origin, 'invalid_email');
     }
     const locale = body.locale && LOCALES.has(body.locale) ? body.locale : 'en';
     const timezone = (body.timezone || '').slice(0, 40);
@@ -140,7 +160,7 @@ export default {
     } catch (err) {
       return new Response(JSON.stringify({ error: 'storage_failed' }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(env) }
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(env, origin) }
       });
     }
 
@@ -148,7 +168,7 @@ export default {
       JSON.stringify({ participant_code: code }),
       {
         status: 201,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders(env) }
+        headers: { 'Content-Type': 'application/json', ...corsHeaders(env, origin) }
       }
     );
   }

@@ -52,3 +52,7 @@ metadata/screenshots/mac screenshots /
 # Claude Code local state (per-user; never commit)
 .claude/
 research/worker/.wrangler/
+
+# Preflight Tier-A eval ephemeral outputs (date-prefixed eval reports
+# under evals/runs/ stay tracked; the run-* subdirs are local-only).
+evals/runs/run-*/

@@ -20,7 +20,7 @@ const STRINGS = {
   'en': {
     title: 'RoastMate research interview',
     intro: 'We are recruiting 20 people for a 30-minute paid research call about how you use RoastMate. Your participation helps us pick which surfaces to build next.',
-    'meta.compensation': 'Compensation: $3 via PayPal (or local equivalent via Wise / Alipay / WeChat / Amazon gift code, paid after the call).',
+    'meta.compensation': 'Compensation: 1 year of RoastMate Pro free, via Apple offer code (you redeem in App Store after the call — no PII exchange).',
     'meta.duration': 'Time: 30 minutes by FaceTime / Zoom / WeChat — your choice.',
     'meta.privacy': 'Privacy: audio only, no recordings, no vent content asked. Telemetry consent not required.',
     'q1.label': '1. When was the last time you wanted to send a message you could not?',
@@ -51,7 +51,7 @@ const STRINGS = {
   'zh-Hans': {
     title: 'RoastMate 用户访谈招募',
     intro: '我们正在招募 20 位用户做 30 分钟的付费访谈，聊聊你怎么用 RoastMate。你的参与会决定我们下一步做哪些产品形态。',
-    'meta.compensation': '报酬：¥21 微信红包或支付宝转账，访谈结束后立即发。',
+    'meta.compensation': '报酬：免费 1 年 RoastMate Pro 订阅，访谈结束后通过 Apple 兑换码发给你（App Store 里兑换，无需交换任何个人信息）。',
     'meta.duration': '时长：30 分钟，可用 FaceTime / 腾讯会议 / 微信视频，你选。',
     'meta.privacy': '隐私：仅音频通话，不录像，不会问你具体写过什么。无需授权使用统计。',
     'q1.label': '1. 你最近一次想发又没发出去的信息是什么时候的事？',
@@ -82,7 +82,7 @@ const STRINGS = {
   'zh-Hant': {
     title: 'RoastMate 使用者訪談招募',
     intro: '我們正在招募 20 位使用者做 30 分鐘的付費訪談,聊聊你怎麼用 RoastMate。你的參與會決定我們下一步做哪些產品形態。',
-    'meta.compensation': '報酬:NT$90 LINE Pay 或等值,訪談結束後立即發。',
+    'meta.compensation': '報酬:免費 1 年 RoastMate Pro 訂閱,訪談結束後透過 Apple 兌換碼發給你(在 App Store 兌換,無需交換任何個人資料)。',
     'meta.duration': '時長:30 分鐘,可用 FaceTime / LINE / Zoom,你選。',
     'meta.privacy': '隱私:僅音訊通話,不錄影,不會問你具體寫過什麼。不需要授權使用統計。',
     'q1.label': '1. 你最近一次想發又沒發出去的訊息是什麼時候的事?',
@@ -113,7 +113,7 @@ const STRINGS = {
   'ja': {
     title: 'RoastMate ユーザーインタビュー募集',
     intro: 'RoastMate の使い方について 30 分の有料インタビューに参加いただける方を 20 名募集しています。あなたの声が次に作る機能を決めます。',
-    'meta.compensation': '謝礼:500円分の Amazon ギフトコードまたは LINE Pay 送金。インタビュー終了後すぐにお送りします。',
+    'meta.compensation': '謝礼:RoastMate Pro 1 年無料サブスクリプション。インタビュー終了後に Apple オファーコードをお送りします(App Store で引き換え、個人情報のやり取りは不要)。',
     'meta.duration': '所要時間:30分。FaceTime / Zoom / LINE のいずれかで。',
     'meta.privacy': 'プライバシー:音声のみ・録音なし・実際の文面は伺いません。利用統計の許可は不要。',
     'q1.label': '1. 送りたかったけど送れなかったメッセージ — 直近はいつでしたか?',

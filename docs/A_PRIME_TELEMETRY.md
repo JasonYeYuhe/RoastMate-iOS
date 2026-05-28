@@ -86,7 +86,7 @@ not per-session, so a freeze decision sees the true usage shape.
 |---|---|
 | `feature_usage_share_extension` | `ShareViewController.viewDidLoad()` ran — share extension was invoked from a host app's Share Sheet |
 | `app_open_from_keyboard_handoff` | App foregrounded with a non-empty `LaunchRouter.consumeCapturedSituation()` payload (NOTE: drain consumer wire-up is dormant — keyboard target is currently un-embedded per `project_appstore_status` memory; counter remains 0 until both keyboard is re-embedded AND main-app drain wire-up lands) |
-| `output_destination_sent_share_tap` | The user tapped a Share button on a generated output (RoastCard, GeneratedRoastCard, ShareCardComposer). Bumped via `recordOutputShareTap()` which ALSO bumps the legacy v1 `share_taps` — this fixes the prior bias where `share_taps` only fired from `ShareCardComposer`, under-counting plain-text shares (Codex Phase 4 §0.5 #5 audit) |
+| `output_destination_sent_share_tap` | ⚠ **Semantic limit: this is intent-to-share, NOT a confirmed send.** Fires when the user taps a `ShareLink` on a generated output (RoastCard, GeneratedRoastCard, ShareCardComposer). The OS Share Sheet may then be cancelled by the user — the counter does NOT differentiate. Bumped via `recordOutputShareTap()` which ALSO bumps the legacy v1 `share_taps` — fixes the prior bias where `share_taps` only fired from `ShareCardComposer`, under-counting plain-text shares (Codex Phase 4 §0.5 #5 audit). Treat as a "user reached for Share" signal during synthesis; the qualitative interview Block 3 (Destination) is the actual answer to "did you SEND the rewrite?". TODO v1.0.5: replace `ShareLink` with `UIActivityViewController` + `completionWithItemsHandler` to upgrade to confirmed-send semantics. |
 | `output_destination_copied` | The user tapped Copy on a generated output (RoastCard, GeneratedRoastCard, share-extension output card) |
 | `purchase_before_first_output` | A purchase completed BEFORE the user produced their first successful output (driven by App-Group boolean `has_successful_output_before_purchase` — see below) |
 | `purchase_after_first_output` | A purchase completed AFTER the user produced their first successful output |
@@ -94,7 +94,7 @@ not per-session, so a freeze decision sees the true usage shape.
 ### State flag added in schema v2 (P5 Tier-1) — NOT a counter
 | key | semantics |
 |---|---|
-| `aprime.flags.has_successful_output_before_purchase` | App-Group boolean (not in `EventLedger.Counter`). Set to `true` ONCE on every successful `RoastEngine.generate()` (covers main app + share extension + watch + argument simulator — all funnel through RoastEngine). Drives `recordPurchaseCompleted()`'s pay-timing dispatch into the pre/post counter pair. Opt-out gated like the counters. Cleared by `resetCounters()` so a re-opt-in starts from a fresh pay-timing baseline. |
+| `aprime.flags.has_successful_output_before_purchase` | App-Group boolean (not in `EventLedger.Counter`). Set to `true` ONCE on every successful `RoastEngine.generate()` cloud or on-device path (covers main app + share extension + watch + argument simulator — all funnel through RoastEngine). Drives `recordPurchaseCompleted()`'s pay-timing dispatch into the pre/post counter pair. Opt-out gated like the counters. Cleared by `resetCounters()` so a re-opt-in starts from a fresh pay-timing baseline. **Known gap (TODO v1.0.5):** the curated-fallback path (`SafetyFilter.validateVentOutput` rejects every candidate → returns `FallbackRoasts.curated`, RoastEngine.swift line ~218) and the non-FoundationModels `#else` path (line ~226) return output to the user WITHOUT setting the flag. A user who only ever gets fallback output and then pays will be mis-classified as "before first output." Codex audit catch 2026-05-28. Honest tier-1 analysis should: (a) cite this gap explicitly when reporting pay-timing splits; (b) cross-check with the qualitative interview Block 5 (Pay timing) which is the source of truth. |
 
 Why these six counters + flag: per the Phase 5 strategic doc §9 advisor
 synthesis + the research protocol v2 §2 Tier-1 table. The earlier draft
@@ -103,7 +103,8 @@ in the pay-timing dispatch — Codex flagged that as broken (it under-
 counts share/keyboard/watch output flows where a user can get value
 without a main-app session generation, then buy and be mis-classified).
 The boolean flag set by every successful RoastEngine output is the
-correct proxy.
+correct proxy. Both audits should keep the interview as the canonical
+answer; treat A′ as hypothesis-check, not source-of-truth.
 
 Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
 forever; new counters land end-of-enum. No raw text or generation content
