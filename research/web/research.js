@@ -1,28 +1,26 @@
-/* P5 Q1 W1 — RoastMate research recruit form. No third-party deps.
- * Locale switcher (en / zh-Hans / zh-Hant / ja) + POST to Cloudflare
- * Worker endpoint. See research/worker/ for the server side.
+/* P5 Q1 W1 — RoastMate research recruit form, Step 1.
  *
- * Privacy posture:
- *   - No tracking pixels, no analytics, no cookies set by this page.
- *   - The email field is sent to the Worker, which stores it under a
- *     SEPARATE KV namespace from the answers (Codex catch on the v1
- *     research protocol).
- *   - Locale preference is held in memory only (no localStorage).
+ * Anonymous-first refactor (Gemini audit 2026-05-28): this page submits
+ * ONLY the three research questions. No email, no timezone, no PII. On
+ * success, the user is shown their participant_code and a link to the
+ * Step 2 page (research-book.html) where email + timezone are captured
+ * SEPARATELY. Locus context and email never travel in the same HTTP
+ * request.
+ *
+ * No tracking pixels, no analytics, no cookies, no localStorage.
  */
 'use strict';
 
-// Deployed Cloudflare Worker endpoint. The `window.RM_RESEARCH_WORKER_URL`
-// override is for local previews / future deploys; baked-in value is the
-// production URL.
 const WORKER_ENDPOINT = window.RM_RESEARCH_WORKER_URL || 'https://roastmate-research.yyyyy-yeyuhe.workers.dev';
 
 const STRINGS = {
   'en': {
+    'step.indicator': 'Step 1 of 2 — anonymous research questions',
     title: 'RoastMate research interview',
-    intro: 'We are recruiting 20 people for a 30-minute paid research call about how you use RoastMate. Your participation helps us pick which surfaces to build next.',
+    intro: 'We are recruiting 20 people for a 30-minute interview about how you use RoastMate. This step asks the research questions; the next step (booking) is on a separate page and captures your email + timezone independently.',
     'meta.compensation': 'Compensation: 1 year of RoastMate Pro free, via Apple offer code (you redeem in App Store after the call — no PII exchange).',
-    'meta.duration': 'Time: 30 minutes by FaceTime / Zoom / WeChat — your choice.',
-    'meta.privacy': 'Privacy: audio only, no recordings, no vent content asked. Telemetry consent not required.',
+    'meta.duration': 'Time: 30 minutes by FaceTime / Zoom / WeChat — your choice, scheduled on the next page.',
+    'meta.privacy_step1': 'Privacy: this page submits anonymously. Your email + timezone are captured separately on the next page so they never travel in the same payload as your answers.',
     'q1.label': '1. When was the last time you wanted to send a message you could not?',
     'q1.this_week': 'This week',
     'q1.this_month': 'This month',
@@ -32,28 +30,28 @@ const STRINGS = {
     'q2.label': '2. Available for a 30-minute video call in the next 2 weeks?',
     'q2.yes': 'Yes',
     'q2.no': 'No',
-    'q2.timezone': 'Your timezone (so we can find a slot)',
     'q3.label': '3. In which app or context were you typing when the moment hit?',
     'q3.hint': 'Just write it freely — no need to specify anything sensitive.',
-    'contact.label': 'Email (so we can schedule)',
-    'contact.note': 'Stored separately from your answers. Deleted within 30 days.',
-    submit: 'Submit',
+    submit_step1: 'Submit answers (anonymous)',
+    'success.heading': 'Got it. Thank you.',
+    'success.body': 'Your research answers were submitted anonymously. To schedule the interview, go to Step 2 — your reference code is below.',
+    'success.code_label': 'Your reference code:',
+    'success.book_cta': 'Step 2 — Book your interview slot →',
+    'success.privacy_note': 'Keep this reference code if you want to come back later. The code expires in 60 days.',
     'footer.brand': 'RoastMate',
     'footer.notrack': 'No third-party tracking on this page.',
     'footer.privacy': 'Privacy',
     'status.submitting': 'Submitting…',
-    'status.ok': 'Thanks. We will reach out within a week. Your reference: ',
     'status.error_validation': 'Please complete every required field.',
-    'status.error_network': 'Could not submit. Please try again in a moment.',
-    placeholder_timezone: 'e.g. UTC+8, JST, ET, PT',
-    placeholder_email: 'you@example.com'
+    'status.error_network': 'Could not submit. Please try again in a moment.'
   },
   'zh-Hans': {
+    'step.indicator': '第 1 步 / 共 2 步 — 匿名研究问题',
     title: 'RoastMate 用户访谈招募',
-    intro: '我们正在招募 20 位用户做 30 分钟的付费访谈，聊聊你怎么用 RoastMate。你的参与会决定我们下一步做哪些产品形态。',
+    intro: '我们在招募 20 位用户做 30 分钟的访谈，聊聊你怎么用 RoastMate。这一步只问研究问题；下一步（约时间）是单独的页面，分开收你的邮箱和时区。',
     'meta.compensation': '报酬：免费 1 年 RoastMate Pro 订阅，访谈结束后通过 Apple 兑换码发给你（App Store 里兑换，无需交换任何个人信息）。',
-    'meta.duration': '时长：30 分钟，可用 FaceTime / 腾讯会议 / 微信视频，你选。',
-    'meta.privacy': '隐私：仅音频通话，不录像，不会问你具体写过什么。无需授权使用统计。',
+    'meta.duration': '时长：30 分钟，可用 FaceTime / 腾讯会议 / 微信视频，下一步约时间。',
+    'meta.privacy_step1': '隐私：这个页面纯匿名提交，邮箱和时区在下一步单独收，确保它们和你的答案不会出现在同一个请求里。',
     'q1.label': '1. 你最近一次想发又没发出去的信息是什么时候的事？',
     'q1.this_week': '这一周',
     'q1.this_month': '这个月',
@@ -63,28 +61,28 @@ const STRINGS = {
     'q2.label': '2. 接下来两周里能空出 30 分钟做一次视频访谈吗？',
     'q2.yes': '能',
     'q2.no': '不能',
-    'q2.timezone': '你的时区（方便我们约时间）',
     'q3.label': '3. 那个想发又没发出去的瞬间，你当时在哪个 app 或场景里？',
     'q3.hint': '随便写就行 — 不需要写任何敏感内容。',
-    'contact.label': '邮箱（用于约时间）',
-    'contact.note': '邮箱和你的答案分开存。30 天后删除。',
-    submit: '提交',
+    submit_step1: '提交答案（匿名）',
+    'success.heading': '收到，谢谢你。',
+    'success.body': '你的研究答案已匿名提交。要约访谈时间，请进入第 2 步——下面是你的参考编号。',
+    'success.code_label': '参考编号：',
+    'success.book_cta': '第 2 步 — 约访谈时间 →',
+    'success.privacy_note': '如果想之后再约，把参考编号保留好。编号 60 天后过期。',
     'footer.brand': 'RoastMate',
     'footer.notrack': '本页面无任何第三方追踪。',
     'footer.privacy': '隐私政策',
     'status.submitting': '提交中……',
-    'status.ok': '谢谢。我们会在一周内联系你。你的参考编号：',
     'status.error_validation': '请把所有必填项填完。',
-    'status.error_network': '提交失败，请稍后重试。',
-    placeholder_timezone: '例如 UTC+8, 北京时间',
-    placeholder_email: 'you@example.com'
+    'status.error_network': '提交失败，请稍后重试。'
   },
   'zh-Hant': {
+    'step.indicator': '第 1 步 / 共 2 步 — 匿名研究問題',
     title: 'RoastMate 使用者訪談招募',
-    intro: '我們正在招募 20 位使用者做 30 分鐘的付費訪談,聊聊你怎麼用 RoastMate。你的參與會決定我們下一步做哪些產品形態。',
+    intro: '我們在招募 20 位使用者做 30 分鐘的訪談,聊聊你怎麼用 RoastMate。這一步只問研究問題;下一步(約時間)是獨立頁面,分開收你的電子郵件和時區。',
     'meta.compensation': '報酬:免費 1 年 RoastMate Pro 訂閱,訪談結束後透過 Apple 兌換碼發給你(在 App Store 兌換,無需交換任何個人資料)。',
-    'meta.duration': '時長:30 分鐘,可用 FaceTime / LINE / Zoom,你選。',
-    'meta.privacy': '隱私:僅音訊通話,不錄影,不會問你具體寫過什麼。不需要授權使用統計。',
+    'meta.duration': '時長:30 分鐘,可用 FaceTime / LINE / Zoom,下一步約時間。',
+    'meta.privacy_step1': '隱私:這個頁面純匿名提交,電子郵件和時區在下一步單獨收,確保它們和你的答案不會出現在同一個請求裡。',
     'q1.label': '1. 你最近一次想發又沒發出去的訊息是什麼時候的事?',
     'q1.this_week': '這一週',
     'q1.this_month': '這個月',
@@ -94,28 +92,28 @@ const STRINGS = {
     'q2.label': '2. 接下來兩週裡能空出 30 分鐘做一次視訊訪談嗎?',
     'q2.yes': '能',
     'q2.no': '不能',
-    'q2.timezone': '你的時區(方便我們約時間)',
     'q3.label': '3. 那個想發又沒發出去的瞬間,你當時在哪個 app 或場景裡?',
     'q3.hint': '隨便寫就行 — 不需要寫任何敏感內容。',
-    'contact.label': '電子郵件(用於約時間)',
-    'contact.note': '郵件和你的答案分開存。30 天後刪除。',
-    submit: '送出',
+    submit_step1: '送出答案(匿名)',
+    'success.heading': '收到,謝謝你。',
+    'success.body': '你的研究答案已匿名送出。要約訪談時間,請進入第 2 步——下方是你的參考編號。',
+    'success.code_label': '參考編號:',
+    'success.book_cta': '第 2 步 — 約訪談時間 →',
+    'success.privacy_note': '如果想之後再約,把參考編號保留好。編號 60 天後過期。',
     'footer.brand': 'RoastMate',
     'footer.notrack': '本頁面無任何第三方追蹤。',
     'footer.privacy': '隱私政策',
     'status.submitting': '送出中……',
-    'status.ok': '謝謝。我們會在一週內與你聯絡。你的參考編號:',
     'status.error_validation': '請把所有必填項填完。',
-    'status.error_network': '送出失敗,請稍後再試。',
-    placeholder_timezone: '例如 UTC+8, 台北時間',
-    placeholder_email: 'you@example.com'
+    'status.error_network': '送出失敗,請稍後再試。'
   },
   'ja': {
+    'step.indicator': 'ステップ 1/2 — 匿名のリサーチ質問',
     title: 'RoastMate ユーザーインタビュー募集',
-    intro: 'RoastMate の使い方について 30 分の有料インタビューに参加いただける方を 20 名募集しています。あなたの声が次に作る機能を決めます。',
+    intro: 'RoastMate の使い方について 30 分のインタビューに参加いただける方を 20 名募集しています。このステップではリサーチ質問のみ。次のステップ(予約)は別ページで、メールとタイムゾーンを独立に取得します。',
     'meta.compensation': '謝礼:RoastMate Pro 1 年無料サブスクリプション。インタビュー終了後に Apple オファーコードをお送りします(App Store で引き換え、個人情報のやり取りは不要)。',
-    'meta.duration': '所要時間:30分。FaceTime / Zoom / LINE のいずれかで。',
-    'meta.privacy': 'プライバシー:音声のみ・録音なし・実際の文面は伺いません。利用統計の許可は不要。',
+    'meta.duration': '所要時間:30分。FaceTime / Zoom / LINE のいずれかで、次のステップで日程調整。',
+    'meta.privacy_step1': 'プライバシー:このページは匿名送信。メールとタイムゾーンは次のステップで別途取得するため、回答と同じリクエストには載りません。',
     'q1.label': '1. 送りたかったけど送れなかったメッセージ — 直近はいつでしたか?',
     'q1.this_week': '今週',
     'q1.this_month': '今月',
@@ -125,21 +123,20 @@ const STRINGS = {
     'q2.label': '2. 今後 2 週間以内に 30 分のビデオ通話に参加できますか?',
     'q2.yes': 'はい',
     'q2.no': 'いいえ',
-    'q2.timezone': 'タイムゾーン(時間調整のため)',
     'q3.label': '3. その送れなかった瞬間 — どのアプリ・どんな場面で打っていましたか?',
     'q3.hint': '自由に書いてください。具体的な内容や個人情報は不要です。',
-    'contact.label': 'メールアドレス(日程調整用)',
-    'contact.note': '回答とは別に保管し、30 日以内に削除します。',
-    submit: '送信',
+    submit_step1: '回答を送信(匿名)',
+    'success.heading': '受け付けました。ありがとうございます。',
+    'success.body': '匿名で回答を送信しました。インタビュー日程の調整はステップ 2 へ。参照コードは下記。',
+    'success.code_label': '参照コード:',
+    'success.book_cta': 'ステップ 2 — インタビュー日程を調整 →',
+    'success.privacy_note': '後日また予約する場合は参照コードを保管してください。コードは 60 日で失効します。',
     'footer.brand': 'RoastMate',
     'footer.notrack': 'このページには第三者の追跡はありません。',
     'footer.privacy': 'プライバシー',
     'status.submitting': '送信中……',
-    'status.ok': 'ありがとうございます。1 週間以内にご連絡します。参照番号:',
     'status.error_validation': '必須項目をすべて入力してください。',
-    'status.error_network': '送信できませんでした。少し時間をおいてお試しください。',
-    placeholder_timezone: '例:JST, UTC+9',
-    placeholder_email: 'you@example.com'
+    'status.error_network': '送信できませんでした。少し時間をおいてお試しください。'
   }
 };
 
@@ -165,12 +162,6 @@ function applyLocale(locale) {
     const key = el.getAttribute('data-i18n');
     if (dict[key] !== undefined) el.textContent = dict[key];
   });
-  // Placeholders aren't in [data-i18n]; set explicitly.
-  const tz = document.getElementById('timezone');
-  if (tz) tz.placeholder = dict.placeholder_timezone || '';
-  const em = document.getElementById('email');
-  if (em) em.placeholder = dict.placeholder_email || '';
-  // ARIA-pressed mirror on locale buttons.
   document.querySelectorAll('nav button[data-locale]').forEach(btn => {
     btn.setAttribute('aria-pressed', btn.dataset.locale === locale ? 'true' : 'false');
   });
@@ -193,21 +184,14 @@ async function submitForm(event) {
   const dict = STRINGS[currentLocale] || STRINGS.en;
   const form = event.currentTarget;
   const data = new FormData(form);
-  // Bare-bones validation; native required attr already covers most.
-  if (!data.get('recency') || !data.get('available') || !data.get('locus') || !data.get('email')) {
+  if (!data.get('recency') || !data.get('available') || !data.get('locus')) {
     setStatus(dict['status.error_validation'], 'error');
-    return;
-  }
-  if (!WORKER_ENDPOINT) {
-    setStatus(dict['status.error_network'] + ' (no endpoint configured)', 'error');
     return;
   }
   const payload = {
     recency: data.get('recency'),
     available: data.get('available'),
-    timezone: (data.get('timezone') || '').slice(0, 40),
     locus: (data.get('locus') || '').slice(0, 200),
-    email: (data.get('email') || '').slice(0, 120),
     locale: currentLocale
   };
   const submit = form.querySelector('button[type="submit"]');
@@ -223,13 +207,21 @@ async function submitForm(event) {
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const body = await res.json();
-    const code = body.participant_code || '?';
-    setStatus(dict['status.ok'] + code, 'ok');
-    form.reset();
+    const code = body.participant_code;
+    showSuccess(code);
   } catch (err) {
     setStatus(dict['status.error_network'], 'error');
     submit.disabled = false;
   }
+}
+
+function showSuccess(code) {
+  document.getElementById('research-form').hidden = true;
+  document.getElementById('status').textContent = '';
+  document.getElementById('success-code').textContent = code;
+  const link = document.getElementById('book-link');
+  link.href = `research-book.html?code=${encodeURIComponent(code)}&locale=${encodeURIComponent(currentLocale)}`;
+  document.getElementById('success').hidden = false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

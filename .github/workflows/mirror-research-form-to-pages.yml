@@ -7,20 +7,14 @@
 # Action, the two diverge — exact scenario Codex flagged in the
 # 2026-05-28 audit.
 #
-# One-time setup (do this before pushing this workflow):
-#   1. Go to https://github.com/settings/personal-access-tokens/new
-#   2. Create a FINE-GRAINED PAT:
-#      - Resource owner: JasonYeYuhe
-#      - Repository access: Select "Only select repositories" →
-#        JasonYeYuhe/RoastMate (the Pages repo, NOT RoastMate-iOS)
-#      - Permissions → Contents: Read and write
-#      - Expiration: 1 year
-#   3. Copy the token (starts with `github_pat_`).
-#   4. In THIS repo (RoastMate-iOS), go to
-#      Settings → Secrets and variables → Actions → New repository secret
-#      Name: PAGES_DEPLOY_TOKEN
-#      Value: the PAT from step 3.
-#   5. Done. Future pushes to v1.1 that touch research/web/ auto-sync.
+# Auth: a single-purpose SSH Deploy Key on JasonYeYuhe/RoastMate (write
+# scope, repo-scoped — safer than a broad classic PAT). One-time setup
+# was done 2026-05-28 via the gh CLI:
+#   - keypair generated, public added as Deploy Key on the Pages repo
+#   - private key set as Actions secret PAGES_DEPLOY_SSH_KEY on
+#     RoastMate-iOS
+#   - both /tmp copies of the private key shredded
+# To rotate: delete the Deploy Key on the Pages repo, re-run the setup.
 
 name: Mirror research form to Pages
 
@@ -45,13 +39,20 @@ jobs:
         with:
           repository: JasonYeYuhe/RoastMate
           path: pages-repo
-          token: ${{ secrets.PAGES_DEPLOY_TOKEN }}
+          ssh-key: ${{ secrets.PAGES_DEPLOY_SSH_KEY }}
 
       - name: Copy research form files
         run: |
           cp ios-repo/research/web/research.html pages-repo/research.html
           cp ios-repo/research/web/research.css  pages-repo/research.css
           cp ios-repo/research/web/research.js   pages-repo/research.js
+          # Step-2 booking page (anonymous-first refactor).
+          if [ -f ios-repo/research/web/research-book.html ]; then
+            cp ios-repo/research/web/research-book.html  pages-repo/research-book.html
+          fi
+          if [ -f ios-repo/research/web/research-book.js ]; then
+            cp ios-repo/research/web/research-book.js  pages-repo/research-book.js
+          fi
 
       - name: Detect changes
         id: changes
@@ -69,7 +70,9 @@ jobs:
         run: |
           git config user.email "yyyyy.yeyuhe@gmail.com"
           git config user.name "JasonYeYuhe"
-          git add research.html research.css research.js
+          git add research.html research.css research.js \
+                  $([ -f research-book.html ] && echo research-book.html) \
+                  $([ -f research-book.js ] && echo research-book.js)
           UPSTREAM_SHA="${{ github.sha }}"
           UPSTREAM_REPO="${{ github.repository }}"
           git commit -m "Mirror research form from $UPSTREAM_REPO@${UPSTREAM_SHA:0:8}

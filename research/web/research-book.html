@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>RoastMate — Book your interview (Step 2 of 2)</title>
+  <link rel="stylesheet" href="research.css">
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+</head>
+<body>
+  <main>
+    <nav aria-label="Language">
+      <button type="button" data-locale="en" lang="en">English</button>
+      <button type="button" data-locale="zh-Hans" lang="zh-Hans">简体中文</button>
+      <button type="button" data-locale="zh-Hant" lang="zh-Hant">繁體中文</button>
+      <button type="button" data-locale="ja" lang="ja">日本語</button>
+    </nav>
+
+    <header>
+      <p class="stepbar" data-i18n="step.indicator"></p>
+      <h1 data-i18n="title"></h1>
+      <p class="intro" data-i18n="intro"></p>
+      <p data-i18n="codeprompt"></p>
+      <p><strong data-i18n="codelabel"></strong> <code id="participant-code">—</code></p>
+    </header>
+
+    <form id="book-form" novalidate>
+      <fieldset>
+        <legend data-i18n="contact.label"></legend>
+        <input id="email" type="email" name="email" required maxlength="120" autocomplete="email">
+        <p class="muted" data-i18n="contact.note"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="tz.label"></legend>
+        <input id="timezone" type="text" name="timezone" maxlength="40" autocomplete="off">
+        <p class="muted" data-i18n="tz.hint"></p>
+      </fieldset>
+
+      <button type="submit" data-i18n="submit"></button>
+      <p id="status" role="status" aria-live="polite"></p>
+    </form>
+
+    <section id="booked" hidden>
+      <h2 data-i18n="booked.heading"></h2>
+      <p data-i18n="booked.body"></p>
+      <p class="muted" data-i18n="booked.privacy_note"></p>
+    </section>
+
+    <footer>
+      <p>
+        <span data-i18n="footer.brand">RoastMate</span>
+        · <span data-i18n="footer.notrack">No third-party tracking on this page.</span>
+        · <a href="https://jasonyeyuhe.github.io/RoastMate/privacy.html" rel="noopener noreferrer" data-i18n="footer.privacy">Privacy</a>
+      </p>
+    </footer>
+  </main>
+  <script src="research-book.js"></script>
+</body>
+</html>

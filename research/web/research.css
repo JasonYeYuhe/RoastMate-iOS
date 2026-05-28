@@ -89,6 +89,75 @@ ul.meta li { padding: 2px 0; }
   ul.meta { color: #98989d; }
 }
 
+.stepbar {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6c6c70;
+  margin: 0 0 12px;
+  padding: 4px 10px;
+  display: inline-block;
+  border: 1px solid #d1d1d6;
+  border-radius: 999px;
+  background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .stepbar { color: #98989d; border-color: #48484a; background: #2c2c2e; }
+}
+
+#success, #booked {
+  margin-top: 32px;
+  padding: 24px 22px;
+  border-radius: 16px;
+  background: rgba(52, 199, 89, 0.10);
+  border: 1px solid rgba(52, 199, 89, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  #success, #booked { background: rgba(48, 209, 88, 0.14); }
+}
+
+#success h2, #booked h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+#success code {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 17px;
+  letter-spacing: 0.04em;
+}
+
+#participant-code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 17px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  #success code, #participant-code { background: rgba(255, 255, 255, 0.10); }
+}
+
+.cta {
+  display: inline-block;
+  padding: 12px 18px;
+  margin: 8px 0 0;
+  background: #ff9500;
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cta:hover, .cta:focus { background: #e58500; color: white; }
+
 fieldset {
   border: 1px solid #d1d1d6;
   border-radius: 12px;
