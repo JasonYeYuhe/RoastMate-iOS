@@ -50,13 +50,17 @@ disjoint Fork B candidate sets. Gemini's catch from the v1 advisor review.
     (lost). Dormant cohort is the harder recruit and the more valuable
     answer — silent churn is the population most invisible to A′. See
     Arm C for the deeper silent-churn coverage.
-- **Compensation:** **IAP Offer Code** for the 50-credit pack (Apple
-  imposes 1M redemptions / app / quarter; min batch 500). NOT App Store
-  promo codes (those are version-bound, limited 100/version/platform, and
-  block the user from reviewing the app — both wrong for this use). The
-  offer code is delivered after the interview, no public mention / review
-  / social post conditional on it. No material-connection disclosure
-  required because we never ask for any public mention.
+- **Compensation:** ~$3 USD equivalent in **cash** via the channel the
+  recruit already uses — PayPal / Wise / WeChat red packet / Alipay
+  transfer / Amazon gift code / LINE Pay. Delivered after the call. **NOT
+  Apple offer codes** — Apple offer codes only apply to auto-renewable
+  subscriptions, not to consumable IAPs like the 50-credit pack, so the
+  v2 protocol's earlier "IAP Offer Code" plan was structurally invalid
+  (discovered during Q1 W1 execution 2026-05-28 when probing the API).
+  Cash is also simpler and unifies Arm A with Arm C (which was already
+  cash). No public mention / review / social post conditional. No
+  material-connection disclosure required because we never ask for any
+  public mention.
 - **Recruit gating:** compensation must NOT be conditional on telemetry
   opt-in. Decouple.
 
@@ -282,7 +286,7 @@ hours to self-host the form. Sustainable alongside Phase 4 tactical.
 |---|---|
 | Recruit skew toward engaged existing users | Force dormant-cohort split in Arm A pre-screen + run Arm C entirely on non-users (silent-churn coverage). |
 | TestFlight cohort overrepresents early-adopter type | Recruit Arm A also from App Store review surface (manual ASC outreach); Arm C is purely outside the install funnel. |
-| Apple App Review compensation rule violation | Recruit is decoupled from TestFlight participation; compensation via IAP offer code (not promo code or cash within app); no review / social mention required. |
+| Apple App Review compensation rule violation | Recruit is decoupled from TestFlight participation; compensation is cash OUTSIDE the app (PayPal / WeChat / etc.) — Apple has no jurisdiction over off-app cash transfer; no review / social mention required. |
 | Google-style form leaks emotionally sensitive metadata | Self-host /research; coarse buckets instead of free text on screen; 30-day raw-data deletion; minimized server logs. |
 | `discovery_source_*` CloudKit drift | Stored as A′ App-Group counters, NOT on CloudKit-synced UserSettings. |
 | Findings shake Phase 4 work | Phase 4 ships per its own track; worst case Q2 pricing reframe absorbs findings. |
@@ -327,7 +331,7 @@ in v2:
 | 1 | Sample bias (silent churn missing) | Both | Arm C added; Arm A dormant-split forced. |
 | 2 | Surface forced-rank has no escape hatch + premature ranking framing | Both | "None / standalone-only" escape + §3 ternary outcomes. |
 | 3 | Google Form is a privacy leak | Codex P0 | Self-hosted /research form. |
-| 4 | "TestFlight interview + compensation" violates App Review 2.2 | Codex P0 | Recruit decoupled from TestFlight, IAP offer code (not promo). |
+| 4 | "TestFlight interview + compensation" violates App Review 2.2 | Codex P0 | Recruit decoupled from TestFlight, off-app cash compensation (PayPal / WeChat / Alipay / LINE Pay / Amazon — see §1). Codex's original v2 fix proposed "IAP Offer Code" which was itself wrong: Apple offer codes are subscription-only, so the consumable 50-credit pack can't use them. Cash unifies Arm A with Arm C and eliminates the Apple-rule surface entirely. |
 | 5 | `sessions_with_generation` is a broken proxy for first-relief (under-counts share/keyboard/watch) | Codex P0 | Replaced with App-Group `has_successful_output_before_purchase` set by every output path. |
 | 6 | `discoverySourceRaw` on CloudKit-synced UserSettings is a privacy leak across devices | Codex P0 | Moved to A′ App-Group counters (5 bucket-counters). |
 | 7 | Missing 6th unknown: Destination (did the user send the rewrite?) | Gemini decisive | Added as #3 in §0 + Block 3 of the interview script. |
