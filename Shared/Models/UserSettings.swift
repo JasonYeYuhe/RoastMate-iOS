@@ -134,6 +134,19 @@ final class UserSettings {
     /// current `creditBalance`. Idempotent: writes once.
     var legacyBalanceBaselineRaw: Int?
 
+    // MARK: - Echoes Feral cloud consent (Phase 5 Q2 — Echoes feature)
+
+    /// Phase 5 / Echoes feature 5.1.2(i) explicit consent for the cloud
+    /// (third-party-AI) path **specific to the Echoes Feral squad
+    /// transcript**. Separate from `cloudAIConsentRaw` because the
+    /// existing consent was granted for "vent/feral translation" only;
+    /// silently reusing it for a multi-voice squad pile-on transcript
+    /// would be purpose creep (Codex audit 2026-05-28, same class of
+    /// breach as the dropped α2′ catch on Phase 4 plan). Casual Echoes
+    /// always stays on-device regardless. Nullable for CloudKit-safe
+    /// migration; nil = never asked.
+    var echoesFeralCloudConsentRaw: String?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -157,6 +170,20 @@ final class UserSettings {
         self.telemetryOptInDate = nil
         self.proLastVerifiedAt = nil
         self.legacyBalanceBaselineRaw = nil
+        self.echoesFeralCloudConsentRaw = nil
+    }
+
+    /// 5.1.2(i) explicit consent for the Echoes Feral cloud path.
+    /// Independent of `cloudConsent` — the user MUST grant separately
+    /// (or it stays `.notAsked` and the Echoes Feral tone falls back
+    /// to on-device, which still works but produces tamer output).
+    var echoesFeralConsent: CloudConsent {
+        get {
+            if let raw = echoesFeralCloudConsentRaw,
+               let c = CloudConsent(rawValue: raw) { return c }
+            return .notAsked
+        }
+        set { echoesFeralCloudConsentRaw = newValue.rawValue }
     }
 
     /// 5.1.2(i) explicit consent for the cloud (third-party-AI) path.

@@ -89,6 +89,15 @@ struct RoastGeneratorView: View {
                     }
                 }
             }
+            // Echoes Bridge-to-Action drain (Phase 5 Q2). If the user
+            // tapped a bridge CTA in EchoesView, EchoBridgeStore was
+            // staged with the original grievance + suggested intensity.
+            // Drain destructively here so the next foreground doesn't
+            // double-consume. Pre-selects the recommended intensity.
+            if let bridge = EchoBridgeStore.shared.consume() {
+                viewModel.situation = bridge.situation
+                viewModel.selectedIntensity = bridge.suggestedIntensity
+            }
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

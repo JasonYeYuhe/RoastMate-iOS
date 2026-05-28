@@ -24,7 +24,7 @@ struct RootView: View {
                     .tabItem { Label("tab.generator", systemImage: "flame") }
                     .tag(AppSection.generator)
 
-                NavigationStack { ExploreView() }
+                NavigationStack { ExploreView(onContinueGenerator: { selection = .generator }) }
                     .tabItem { Label("tab.library", systemImage: "books.vertical") }
                     .tag(AppSection.library)
 

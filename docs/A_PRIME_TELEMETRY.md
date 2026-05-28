@@ -106,6 +106,29 @@ The boolean flag set by every successful RoastEngine output is the
 correct proxy. Both audits should keep the interview as the canonical
 answer; treat A′ as hypothesis-check, not source-of-truth.
 
+### Counters added in schema v2 (Echoes / 替你出气 — Phase 5 Q2, v1.0.6)
+| key | semantics |
+|---|---|
+| `echoes_session_started` | User landed on EchoesView (tile tap on Generator / Library) |
+| `echoes_completed` | Transcript fully revealed to the final `.bridge` message |
+| `echoes_bridge_tap` | User tapped the Bridge-to-Action CTA on the final bubble — opens RoastGenerator pre-filled. **Strategic core metric: `echoes_bridge_tap / echoes_completed` is the v1 conversion measurement** (per v2 plan §7) |
+| `echoes_regenerated` | User used the one-per-session regenerate |
+| `echoes_share_sheet_opened` | UIActivityViewController presented for the transcript card (intent — currently unused; transcript share UX deferred to v0.2) |
+| `echoes_share_sheet_completed` | `completionWithItemsHandler` reported `completed && !activityError` — confirmed share (same semantics as v1.0.5 `output_destination_sent_share_tap` upgrade) |
+| `echoes_parse_fallback` | Combined-prompt parser rejected the FM output; fell back to curated static transcript per `FallbackRoasts.curatedEchoTranscript`. Tracks parser robustness — if this is >5% of `echoes_session_started`, the prompt or token budget needs tuning |
+| `echoes_feral_cloud_consent_granted` | First-time grant of the NEW feature-specific Feral cloud consent (separate from existing `cloudAIConsentRaw` — Codex audit P0 catch on v2 plan) |
+| `echoes_feral_cloud_consent_denied` | First-time denial of same |
+| `echoes_paywall_hit` | Free user landed on EchoesView → paywall opened |
+
+Why this whole block exists: Echoes is the v2 plan's regulation-tool +
+Bridge-to-Action play. The Bridge-to-Action mechanic is meant to turn
+Echoes from a regulation dead-end into a conversion engine for the
+existing rewrite tool. The strategic claim is testable ONLY by reading
+`echoes_bridge_tap / echoes_completed` (the conversion rate). If
+bridge-tap is low, the feature is theater and we cut it; if high, it
+validates the v0.2 expansion into other locales and the consumable
+SKU evaluation.
+
 Note: the schema-v2 contract is additive only. v1 keys above stay verbatim
 forever; new counters land end-of-enum. No raw text or generation content
 is ever logged.

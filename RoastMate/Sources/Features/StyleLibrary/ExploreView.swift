@@ -5,6 +5,13 @@ import SwiftUI
 /// the full style library grid. Replaces the older pure StyleLibraryView
 /// so the four extra modes are discoverable without a 5th tab.
 struct ExploreView: View {
+    /// Optional closure passed in from RootView. When the Echoes
+    /// Bridge-to-Action CTA fires, the EchoesView calls this to ask
+    /// the parent tab container to switch to the Generator tab so the
+    /// pre-filled RoastGenerator picks up the staged
+    /// `EchoBridgeStore.pending` payload in its `.onAppear`.
+    var onContinueGenerator: (() -> Void)?
+
     @State private var search: String = ""
 
     private var allStyles: [StylePreset] { StyleCatalog.shared.all }
@@ -42,6 +49,15 @@ struct ExploreView: View {
                         config: FeatureGeneratorConfigs.argumentSimulator,
                         destination: AnyView(ArgumentSimulatorView())
                     )
+                    // Echoes / 替你出气 — v1 zh-Hans only per v2 plan §8.
+                    // Other locales don't see the tile; v0.2 adds en /
+                    // zh-Hant / ja persona catalogs and removes this gate.
+                    if isZhHansLocale() {
+                        toolCard(
+                            config: FeatureGeneratorConfigs.echoes,
+                            destination: AnyView(EchoesView(onBridgeTap: { onContinueGenerator?() }))
+                        )
+                    }
                     toolCard(
                         config: FeatureGeneratorConfigs.socialRoast,
                         destination: AnyView(FeatureGeneratorView(config: FeatureGeneratorConfigs.socialRoast))
@@ -91,6 +107,21 @@ struct ExploreView: View {
         }
         .navigationTitle(AppLocalization.string("tab.library"))
         .searchable(text: $search)
+    }
+
+    /// Echoes v1 is zh-Hans-only — tile only shows when the resolved
+    /// locale resolves to zh-Hans. Mirrors how the app picks the
+    /// underlying generation locale.
+    private func isZhHansLocale() -> Bool {
+        // If user explicitly picked a language, honor it; otherwise fall
+        // back to the system locale.
+        let id: String
+        if let l = LanguageManager.shared.locale {
+            id = l.identifier.lowercased()
+        } else {
+            id = Locale.current.identifier.lowercased()
+        }
+        return id.contains("hans") || id.hasPrefix("zh-cn") || id == "zh"
     }
 
     private func toolCard(config: FeatureGeneratorConfig, destination: AnyView) -> some View {

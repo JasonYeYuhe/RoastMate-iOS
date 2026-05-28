@@ -336,15 +336,14 @@ final class EventLedgerTests: XCTestCase {
     func test_p5Tier1Counters_areAppendedAfterP5StrategicCounters() {
         // Sequence regression: P5 Tier-1 distribution-research keys come
         // AFTER the P5-strategic block. Locks the on-the-wire ordering.
+        // The "last item" assertion moved to
+        // test_echoesCounters_areAppendedAfterP5Tier1Counters now that
+        // Echoes counters occupy end-of-enum (v1.0.6).
         let cases = EventLedger.Counter.allCases.map(\.rawValue)
         let lastP5Strategic = cases.firstIndex(of: "feature_usage_argument_simulator") ?? -1
         let firstTier1      = cases.firstIndex(of: "feature_usage_share_extension") ?? -1
         XCTAssertGreaterThan(firstTier1, lastP5Strategic,
                              "P5 Tier-1 counters must follow the P5-strategic block at end of enum.")
-        // Last item must be purchase_after_first_output (newest end-of-
-        // enum until the next additive wave).
-        XCTAssertEqual(cases.last, "purchase_after_first_output",
-                       "purchase_after_first_output must remain end-of-enum until the next additive wave.")
     }
 
     func test_recordTier1_eachCounterIncrementsCorrectly() {
@@ -439,5 +438,59 @@ final class EventLedgerTests: XCTestCase {
                        "resetCounters must clear the has_successful_output flag so a re-opt-in starts from a fresh pay-timing baseline.")
         XCTAssertEqual(ledger.snapshot()["purchase_after_first_output"], 0,
                        "After-first-output must have been cleared along with the flag.")
+    }
+
+    // MARK: - Schema v2 — Echoes / 替你出气 (Phase 5 Q2 — v1.0.6)
+
+    func test_echoesCounters_areAppendedAfterP5Tier1Counters() {
+        // Sequence regression: Echoes counters end-of-enum, AFTER all
+        // P5 Tier-1 counters. Locks the on-the-wire ordering.
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let lastTier1 = cases.firstIndex(of: "purchase_after_first_output") ?? -1
+        let firstEchoes = cases.firstIndex(of: "echoes_session_started") ?? -1
+        XCTAssertGreaterThan(firstEchoes, lastTier1,
+                             "Echoes counters must follow the P5 Tier-1 block.")
+        XCTAssertEqual(cases.last, "echoes_paywall_hit",
+                       "echoes_paywall_hit must remain end-of-enum until the next additive wave.")
+    }
+
+    func test_echoesCounters_eachIncrementsCorrectly() {
+        ledger.setOptIn(true)
+        ledger.recordEchoesSessionStarted()
+        ledger.recordEchoesCompleted()
+        ledger.recordEchoesBridgeTap()
+        ledger.recordEchoesBridgeTap()  // double-tap counted once each
+        ledger.recordEchoesRegenerated()
+        ledger.recordEchoesShareSheetOpened()
+        ledger.recordEchoesShareSheetCompleted()
+        ledger.recordEchoesParseFallback()
+        ledger.recordEchoesFeralCloudConsentGranted()
+        ledger.recordEchoesFeralCloudConsentDenied()
+        ledger.recordEchoesPaywallHit()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["echoes_session_started"], 1)
+        XCTAssertEqual(s["echoes_completed"], 1)
+        XCTAssertEqual(s["echoes_bridge_tap"], 2,
+                       "Bridge taps count each press — strategic conversion metric.")
+        XCTAssertEqual(s["echoes_regenerated"], 1)
+        XCTAssertEqual(s["echoes_share_sheet_opened"], 1)
+        XCTAssertEqual(s["echoes_share_sheet_completed"], 1)
+        XCTAssertEqual(s["echoes_parse_fallback"], 1)
+        XCTAssertEqual(s["echoes_feral_cloud_consent_granted"], 1)
+        XCTAssertEqual(s["echoes_feral_cloud_consent_denied"], 1)
+        XCTAssertEqual(s["echoes_paywall_hit"], 1)
+    }
+
+    func test_echoesCounters_areOptOutGated() {
+        // Default opt-out — every Echoes record* must be a no-op.
+        ledger.recordEchoesSessionStarted()
+        ledger.recordEchoesCompleted()
+        ledger.recordEchoesBridgeTap()
+        ledger.recordEchoesPaywallHit()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["echoes_session_started"], 0)
+        XCTAssertEqual(s["echoes_completed"], 0)
+        XCTAssertEqual(s["echoes_bridge_tap"], 0)
+        XCTAssertEqual(s["echoes_paywall_hit"], 0)
     }
 }

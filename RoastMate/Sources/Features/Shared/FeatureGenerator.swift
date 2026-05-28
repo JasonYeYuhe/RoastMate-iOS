@@ -457,4 +457,20 @@ enum FeatureGeneratorConfigs {
         proGated: false,
         defaultStyleId: "tweet_short"
     )
+
+    /// Echoes / 替你出气 (Phase 5 Q2). Pro-gated. Distinct from the
+    /// other tool configs: doesn't use FeatureGeneratorView under the
+    /// hood — has its own EchoesView (chat-style transcript reveal).
+    /// Config is here only so the tile copy / icon / Pro-gating is
+    /// consistent with the other Explore tools.
+    static let echoes = FeatureGeneratorConfig(
+        mode: .roast,  // unused — EchoesView has its own engine
+        titleKey: "feature.echoes.title",
+        promptPlaceholderKey: "feature.echoes.placeholder",
+        emptyTitleKey: "feature.echoes.empty_title",
+        emptySubtitleKey: "feature.echoes.empty_subtitle",
+        icon: "text.bubble.fill",
+        proGated: true,
+        defaultStyleId: "savage"
+    )
 }

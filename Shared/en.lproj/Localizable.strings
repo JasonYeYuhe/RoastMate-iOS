@@ -516,3 +516,43 @@
 "settings.section.research" = "Help us improve";
 "settings.research.tile" = "Paid 30-min research interview";
 "settings.research.footer" = "We're recruiting 20 people for a 30-minute paid interview about how you use RoastMate. Tap to learn more. Telemetry consent not required.";
+
+// MARK: - Echoes / 替你出气 (Phase 5 Q2 — zh-Hans only in v1; en strings
+// kept here as bilingual fallbacks for dev / debug. End-user en tile is
+// gated off in ExploreView; these strings won't reach the App Store
+// surface until v0.2's per-locale persona catalogs land.)
+
+"feature.echoes.title" = "Echoes";
+"feature.echoes.placeholder" = "Write what got you mad — Echoes will vent it out for you.";
+"feature.echoes.empty_title" = "Echoes";
+"feature.echoes.empty_subtitle" = "Two synthetic voices back you up about whatever just happened — then bridge you to the rewrite tool with one tap.";
+
+"echoes.title" = "Echoes";
+"echoes.generating" = "Rallying the Echoes…";
+"echoes.setup.intro" = "Write what's got you mad. Two synthetic voices will back you up — then point you at a one-tap rewrite. Read-only; you don't reply.";
+"echoes.setup.situation_label" = "What happened?";
+"echoes.setup.tone_label" = "Register";
+"echoes.setup.voice_count_label" = "How many Echoes?";
+"echoes.setup.privacy_banner" = "Echoes are synthetic. RoastMate doesn't have other users.";
+"echoes.tone.casual" = "Casual";
+"echoes.tone.feral" = "Feral";
+"echoes.tone.casual.blurb" = "Sharp register, light snark. On-device only.";
+"echoes.tone.feral.blurb" = "Fully open register, cursing OK. Cloud routing requires separate consent.";
+"echoes.voice_count.1" = "1";
+"echoes.voice_count.2" = "2";
+"echoes.transcript.banner" = "Echoes are synthetic voices · not real people · on-device";
+"echoes.action.generate" = "Let it out →";
+"echoes.action.regenerate" = "Try another angle";
+"echoes.action.new" = "New session";
+"echoes.action.back" = "Back";
+"echoes.error.generic" = "Echoes couldn't be generated right now. Try again in a moment.";
+
+"echoes.consent.title" = "Send your grievance to the cloud for the Feral squad?";
+"echoes.consent.body" = "Feral tone optionally routes to RoastMate's cloud model (Cloudflare proxy → Groq / OpenRouter) for a stronger register. Casual stays on-device.";
+"echoes.consent.notice" = "Separate from the Vent cloud consent — your prior Vent grant does NOT auto-apply here. Change anytime in Settings → Echoes Feral Cloud.";
+"echoes.consent.allow" = "Allow Feral on the cloud";
+"echoes.consent.deny" = "Stay on-device";
+"echoes.consent.cancel" = "Cancel";
+
+"settings.echoes_feral_cloud" = "Echoes Feral on the cloud";
+"settings.echoes_feral_cloud.footer" = "Whether Feral-tone Echoes can route the grievance text to RoastMate's cloud for stronger output. Casual always stays on this device. Separate consent from the Vent cloud setting.";

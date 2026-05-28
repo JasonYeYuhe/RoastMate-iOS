@@ -187,6 +187,25 @@ public final class EventLedger: @unchecked Sendable {
         }
     }
 
+    // MARK: - Schema v2 — Echoes / 替你出气 (Phase 5 Q2 Tier-2 feature telemetry)
+    //
+    // Counters added end-of-enum, schema stays v2 (additive within v2,
+    // same rationale as α3 / P5-strategic / P5-Tier-1 blocks). The core
+    // strategic metric is `echoesBridgeTap / echoesCompleted` — the
+    // Bridge-to-Action conversion rate (Gemini decisive insight v2
+    // plan §1). See `docs/A_PRIME_TELEMETRY.md`.
+
+    public func recordEchoesSessionStarted() { bump(.echoesSessionStarted) }
+    public func recordEchoesCompleted() { bump(.echoesCompleted) }
+    public func recordEchoesBridgeTap() { bump(.echoesBridgeTap) }
+    public func recordEchoesRegenerated() { bump(.echoesRegenerated) }
+    public func recordEchoesShareSheetOpened() { bump(.echoesShareSheetOpened) }
+    public func recordEchoesShareSheetCompleted() { bump(.echoesShareSheetCompleted) }
+    public func recordEchoesParseFallback() { bump(.echoesParseFallback) }
+    public func recordEchoesFeralCloudConsentGranted() { bump(.echoesFeralCloudConsentGranted) }
+    public func recordEchoesFeralCloudConsentDenied() { bump(.echoesFeralCloudConsentDenied) }
+    public func recordEchoesPaywallHit() { bump(.echoesPaywallHit) }
+
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
         case network            = "network"
@@ -342,6 +361,20 @@ public final class EventLedger: @unchecked Sendable {
         case outputDestinationCopied           = "output_destination_copied"
         case purchaseBeforeFirstOutput         = "purchase_before_first_output"
         case purchaseAfterFirstOutput          = "purchase_after_first_output"
+        // v2 Echoes additions (Phase 5 Q2 — 替你出气 feature). End-of-enum.
+        // Still schemaVersion 2 — additive WITHIN v2. The core strategic
+        // metric is `echoes_bridge_tap / echoes_completed` (Bridge-to-Action
+        // conversion). See v2 plan §7 + docs/A_PRIME_TELEMETRY.md.
+        case echoesSessionStarted                 = "echoes_session_started"
+        case echoesCompleted                      = "echoes_completed"
+        case echoesBridgeTap                      = "echoes_bridge_tap"
+        case echoesRegenerated                    = "echoes_regenerated"
+        case echoesShareSheetOpened               = "echoes_share_sheet_opened"
+        case echoesShareSheetCompleted            = "echoes_share_sheet_completed"
+        case echoesParseFallback                  = "echoes_parse_fallback"
+        case echoesFeralCloudConsentGranted       = "echoes_feral_cloud_consent_granted"
+        case echoesFeralCloudConsentDenied        = "echoes_feral_cloud_consent_denied"
+        case echoesPaywallHit                     = "echoes_paywall_hit"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

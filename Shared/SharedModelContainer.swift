@@ -21,7 +21,9 @@ enum SharedModelContainer {
             SavedSituation.self,
             UserSettings.self,
             SituationThread.self,
-            CreditLedgerEntry.self
+            CreditLedgerEntry.self,
+            EchoTranscriptRecord.self,
+            EchoMessageRecord.self
         ])
         // Default-location configuration is required for SwiftData's
         // automatic CloudKit mirroring. CloudKit picks the iCloud

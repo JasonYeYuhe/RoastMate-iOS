@@ -72,6 +72,20 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
+                // Echoes Feral cloud consent — SEPARATE from cloud_vent
+                // per Codex 2026-05-28 audit catch (purpose creep). Same
+                // class of breach as the dropped α2′ from Phase 4 plan.
+                Toggle("settings.echoes_feral_cloud", isOn: Binding(
+                    get: { settings?.echoesFeralConsent == .granted },
+                    set: { newValue in
+                        settings?.echoesFeralConsent = newValue ? .granted : .denied
+                        try? context.save()
+                    }
+                ))
+                Text("settings.echoes_feral_cloud.footer")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 Button {
                     showAbout = true
                 } label: {

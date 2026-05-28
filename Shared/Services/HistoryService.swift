@@ -331,4 +331,62 @@ enum HistoryService {
         try? context.save()
         return new
     }
+
+    // MARK: - Echoes / 替你出气 (Phase 5 Q2)
+
+    /// Persist a completed Echoes transcript. Mirrors the
+    /// `RoastSession`/`GeneratedRoast` parent-child save pattern but
+    /// uses the dedicated `EchoTranscriptRecord` / `EchoMessageRecord`
+    /// models (Codex audit catch — RoastSession.results' String text
+    /// is too lossy for the structured-transcript shape).
+    @discardableResult
+    static func saveEchoTranscript(
+        _ transcript: EchoTranscript,
+        context: ModelContext,
+        isPro: Bool
+    ) -> EchoTranscriptRecord {
+        let bridgeIntensity = transcript.messages.first { $0.role == .bridge }?.bridgeIntensity
+        let record = EchoTranscriptRecord(
+            situation: transcript.situation,
+            locale: transcript.locale.identifier,
+            tone: transcript.tone,
+            voiceCount: transcript.voiceCount,
+            bridgeIntensity: bridgeIntensity,
+            cloudUsed: transcript.cloudUsed
+        )
+        for (idx, msg) in transcript.messages.enumerated() {
+            let m = EchoMessageRecord(
+                echoIndex: msg.echoIndex,
+                role: msg.role,
+                text: msg.text,
+                deliveryDelayMs: msg.deliveryDelayMs,
+                orderIndex: idx,
+                bridgeIntensity: msg.bridgeIntensity
+            )
+            record.messages?.append(m)
+        }
+        context.insert(record)
+        do {
+            try context.save()
+        } catch {
+            logger.error("Failed to save EchoTranscriptRecord: \(error.localizedDescription)")
+        }
+        if !isPro {
+            pruneFreeTierEchoes(context: context)
+        }
+        return record
+    }
+
+    /// Free-tier Echoes retention: keep at most the last 5 transcripts.
+    /// Mirrors `pruneFreeTierHistory` in spirit (older records dropped).
+    private static func pruneFreeTierEchoes(context: ModelContext) {
+        let descriptor = FetchDescriptor<EchoTranscriptRecord>(
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        guard let all = try? context.fetch(descriptor), all.count > 5 else { return }
+        for stale in all.dropFirst(5) {
+            context.delete(stale)
+        }
+        try? context.save()
+    }
 }

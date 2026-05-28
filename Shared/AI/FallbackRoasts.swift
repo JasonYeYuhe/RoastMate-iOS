@@ -48,4 +48,41 @@ enum FallbackRoasts {
     private static let defaultPool = [
         "Sometimes the most powerful response is a long, deeply unimpressed pause."
     ]
+
+    /// Curated Echoes transcript used when the parser rejects the model
+    /// output or Foundation Models is unavailable. Always returns the
+    /// required 4-role structure: validate → escalate → deescalate →
+    /// bridge. Pure-text fallback; safe to ship to App Review on a
+    /// device without FM.
+    ///
+    /// zh-Hans v1 ships canned text in mandarin; other locales fall
+    /// through to a slightly-softer zh-Hans variant (until v0.2's
+    /// per-locale catalogs land).
+    static func curatedEchoTranscript(
+        tone: EchoTone,
+        voiceCount: EchoVoiceCount,
+        personas: [EchoSpec]
+    ) -> [EchoMessage] {
+        let bridgeIntensity: Intensity = (tone == .feral) ? .savage : .sharp
+        let bridgeText = (tone == .feral)
+            ? "把这事用 Savage 给他怼回去 →"
+            : "用 Sharp 回他一句吧 →"
+
+        if voiceCount == .one {
+            return [
+                EchoMessage(echoIndex: 0, role: .validate,   text: "你气成这样完全合理。"),
+                EchoMessage(echoIndex: 0, role: .escalate,   text: "这种事儿换我得气一天。"),
+                EchoMessage(echoIndex: 0, role: .deescalate, text: "但你别因为这事毁今晚。"),
+                EchoMessage(echoIndex: 0, role: .bridge,     text: bridgeText, bridgeIntensity: bridgeIntensity)
+            ]
+        } else {
+            return [
+                EchoMessage(echoIndex: 0, role: .validate,   text: "你气成这样完全合理。"),
+                EchoMessage(echoIndex: 1, role: .escalate,   text: "这种事儿换我得气一天。"),
+                EchoMessage(echoIndex: 0, role: .escalate,   text: "而且他这不是第一次了吧。"),
+                EchoMessage(echoIndex: 1, role: .deescalate, text: "但你别因为这事毁今晚。"),
+                EchoMessage(echoIndex: 0, role: .bridge,     text: bridgeText, bridgeIntensity: bridgeIntensity)
+            ]
+        }
+    }
 }
