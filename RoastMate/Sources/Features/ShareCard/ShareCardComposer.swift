@@ -55,22 +55,20 @@ struct ShareCardComposer: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if let url = exportURL {
-                        ShareLink(item: url) {
+                        // OutputShareButton fires recordOutputShareTap +
+                        // notifySuccessfulShare ONLY on confirmed
+                        // completion (iOS) — was previously tap-only, so
+                        // a cancelled share still bumped both counters
+                        // and triggered the rating prompt. v1.0.5 upgrade
+                        // per Codex/Gemini audit 2026-05-28.
+                        OutputShareButton(
+                            item: url,
+                            onConfirmedShare: {
+                                RatingPromptService.shared.notifySuccessfulShare()
+                            }
+                        ) {
                             Label("sharecard.share", systemImage: "square.and.arrow.up")
                         }
-                        .simultaneousGesture(TapGesture().onEnded {
-                            // A′ telemetry: user opened the Share Sheet
-                            // from the share-card composer. P5 Tier-1
-                            // recordOutputShareTap bumps both the legacy
-                            // share_taps counter AND the new
-                            // output_destination_sent_share_tap counter.
-                            EventLedger.shared.recordOutputShareTap()
-                            // ε1: a successful share tap is one of the two
-                            // triggers for the in-app App Store rating
-                            // prompt. Service enforces at-most-once per
-                            // session itself.
-                            RatingPromptService.shared.notifySuccessfulShare()
-                        })
                     } else {
                         ProgressView()
                     }

@@ -9,6 +9,20 @@ struct SettingsView: View {
     @State private var showPaywall = false
     @State private var preparedTelemetryURL: URL?
 
+    /// Sunset date for the Phase 5 Q1 research recruit tile.
+    /// 2026-11-01 00:00 UTC = end of Phase 5 Q1 (Oct 5) + ~4 weeks buffer
+    /// for slow-rolling interview tails. After this date the tile auto-
+    /// hides without needing a new app ship. To run another research
+    /// wave, bump this constant + re-ship.
+    static let researchRecruitDeadline: Date = {
+        var comps = DateComponents()
+        comps.year = 2026
+        comps.month = 11
+        comps.day = 1
+        comps.timeZone = TimeZone(identifier: "UTC")
+        return Calendar(identifier: .iso8601).date(from: comps) ?? .distantFuture
+    }()
+
     private var settings: UserSettings? { settingsQuery.first }
     private var version: String {
         let s = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
@@ -117,19 +131,29 @@ struct SettingsView: View {
             // data-consent. Opens a Safari link to the self-hosted form at
             // roastmate.app/research (no embedded WebView, keeps the
             // recruit channel out of the app's data surface).
-            Section(header: Text("settings.section.research")) {
-                Link(destination: URL(string: "https://roastmate.app/research")!) {
-                    HStack {
-                        Label("settings.research.tile", systemImage: "person.fill.questionmark")
-                        Spacer()
-                        Image(systemName: "arrow.up.right.square")
-                            .foregroundStyle(.tertiary)
+            //
+            // v1.0.5 addition: auto-hide after Self.researchRecruitDeadline
+            // (currently 2026-11-01 UTC = end of Phase 5 Q1 + 1 month
+            // buffer). Both advisors flagged a permanent-UX-for-2-week-
+            // sprint smell in the 2026-05-28 audit; rather than ship a
+            // remote feature-flag service for one tile, hardcode a sunset
+            // date and re-ship a new cutoff (or remove the tile) when the
+            // next research wave is scoped.
+            if Date() < Self.researchRecruitDeadline {
+                Section(header: Text("settings.section.research")) {
+                    Link(destination: URL(string: "https://roastmate.app/research")!) {
+                        HStack {
+                            Label("settings.research.tile", systemImage: "person.fill.questionmark")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundStyle(.tertiary)
+                        }
                     }
+                    .foregroundStyle(.primary)
+                    Text("settings.research.footer")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
-                .foregroundStyle(.primary)
-                Text("settings.research.footer")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
 
             Section(header: Text("settings.section.appearance")) {

@@ -51,6 +51,7 @@
 		172431F3355F7D6772D253FB /* FeatureGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */; };
 		17BE752B80E9E9A023EC0D22 /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		17C053B5043E6956F54BDBF2 /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
+		18527FA5F4B4198A3BC6CBF2 /* OutputShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD2244A3C37BA744460E949 /* OutputShareButton.swift */; };
 		18793CE5245B2F733082C7F1 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		18EBBE05718EA03924507496 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
@@ -358,6 +359,7 @@
 		C90F2CB6E956CC1CACC2D2DE /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
 		C9BC71222E2EA7613F16DC92 /* RoastMateControls.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 647D38906DFEF1F6AF1CC2E2 /* RoastMateControls.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C9F8E1695EEAC0445DB50D2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
+		CA3CDA11099E1DE863DBE52B /* OutputShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD2244A3C37BA744460E949 /* OutputShareButton.swift */; };
 		CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		CACFB3F2643DBF8DA4D6B8EA /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		CADA5AAA6AF88F2D92751EF2 /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
@@ -620,6 +622,7 @@
 		D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentSheet.swift; sourceTree = "<group>"; };
 		D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ForbiddenTerms.json; sourceTree = "<group>"; };
 		D292AA9CB572696DF122016F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		DCD2244A3C37BA744460E949 /* OutputShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputShareButton.swift; sourceTree = "<group>"; };
 		DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWallet.swift; sourceTree = "<group>"; };
 		E5055590FEF248BD7CBA0B09 /* SituationThread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SituationThread.swift; sourceTree = "<group>"; };
 		E77A26B509F3B0F4D63F638D /* RewriteCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -699,6 +702,7 @@
 		27E3A4D5CF957D5A3D5FC331 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				DCD2244A3C37BA744460E949 /* OutputShareButton.swift */,
 				31277B6E9CF593725FAFC384 /* RoastCard.swift */,
 				7237F29F7B891C23EAEF31D3 /* StyleChip.swift */,
 			);
@@ -1768,6 +1772,7 @@
 				1F62D4AAD9284EA165600424 /* LaunchRouter.swift in Sources */,
 				5E511C0310481BD18F0DFA1F /* MacMenuBarContent.swift in Sources */,
 				3C8CC6EAFB5430164C82A5FC /* OnboardingView.swift in Sources */,
+				CA3CDA11099E1DE863DBE52B /* OutputShareButton.swift in Sources */,
 				1E491BDEE96196B31E8E8F7F /* PaywallView.swift in Sources */,
 				BE445CE5EAC402AA49FFF03C /* PromptBuilder.swift in Sources */,
 				305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */,
@@ -1846,6 +1851,7 @@
 				A50453236C33115558205278 /* LanguageManager.swift in Sources */,
 				CBEEF6B2EB57D9DC67F0910F /* LaunchRouter.swift in Sources */,
 				19F5524619680F3746F33362 /* OnboardingView.swift in Sources */,
+				18527FA5F4B4198A3BC6CBF2 /* OutputShareButton.swift in Sources */,
 				7A78E7FA8936D1C1BA02B1A7 /* PaywallView.swift in Sources */,
 				FD4BC00795E0FBFCBD79C307 /* PromptBuilder.swift in Sources */,
 				EB4C08900A59D8F799C26E3B /* QuickVentIntent.swift in Sources */,
@@ -2124,7 +2130,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2139,7 +2145,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2367,7 +2373,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2388,7 +2394,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

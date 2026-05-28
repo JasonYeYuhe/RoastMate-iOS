@@ -53,6 +53,21 @@ actor RoastEngine {
         #endif
     }
 
+    /// Curated-fallback exit path. Fires the P5 Tier-1
+    /// `markSuccessfulOutput` flag because the user still PERCEIVES this
+    /// as a successful generation — they see roast text, get relief,
+    /// and may pay shortly after. v1.0.4 left this gap (Codex audit
+    /// 2026-05-28): only the FM-success path set the flag, so a user
+    /// who only ever saw curated fallbacks then paid would mis-classify
+    /// as `purchase_before_first_output`. v1.0.5 fixes by funneling
+    /// every fallback through here.
+    private func curatedFallback(
+        style: StylePreset, locale: Locale, count: Int
+    ) -> [String] {
+        EventLedger.shared.markSuccessfulOutput()
+        return FallbackRoasts.curated(for: style, locale: locale, count: count)
+    }
+
     /// Generates `variantCount` variants for the given input.
     ///
     /// - `mode` controls how the input is wrapped (roast / reply / etc.).
@@ -132,7 +147,7 @@ actor RoastEngine {
         guard SystemLanguageModel.default.availability == .available else {
             logger.notice("Foundation Models unavailable; using curated fallback.")
             EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
-            return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
+            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         }
 
         let key = "\(style.id)|\(locale.identifier)|\(mode.rawValue)|\(intensity.rawValue)"
@@ -148,7 +163,7 @@ actor RoastEngine {
             currentSessionKey = key
         }
         guard let session = currentSession else {
-            return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
+            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         }
 
         let user = PromptBuilder.userPrompt(
@@ -180,7 +195,7 @@ actor RoastEngine {
         } catch let genErr as LanguageModelSession.GenerationError {
             logger.warning("Foundation Models generation error: \(String(describing: genErr))")
             EventLedger.shared.recordFailure(Self.failureCategory(for: genErr))  // α3
-            return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
+            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         } catch {
             throw RoastError.generationFailed(underlying: error)
         }
@@ -215,7 +230,7 @@ actor RoastEngine {
 
         if sanitized.isEmpty {
             EventLedger.shared.recordFailure(.safetyFilter)  // α3 — every candidate tripped safety
-            return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
+            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         }
         EventLedger.shared.recordGeneration(cloud: false)  // A′
         EventLedger.shared.recordFirstGenerationOfSession()  // α3
@@ -223,7 +238,7 @@ actor RoastEngine {
         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
         return Array(sanitized.prefix(effectiveVariantCount))
         #else
-        return FallbackRoasts.curated(for: style, locale: locale, count: effectiveVariantCount)
+        return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         #endif
     }
 

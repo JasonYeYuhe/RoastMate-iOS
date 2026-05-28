@@ -36,15 +36,12 @@ struct RoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
-                ShareLink(item: text) {
+                OutputShareButton(item: text) {
                     Label("result.share", systemImage: "square.and.arrow.up")
                         .font(.callout)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .simultaneousGesture(TapGesture().onEnded {
-                    EventLedger.shared.recordOutputShareTap()  // P5 Tier-1
-                })
             }
         }
         .padding(16)
@@ -144,15 +141,12 @@ struct GeneratedRoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
-                ShareLink(item: result.text) {
+                OutputShareButton(item: result.text) {
                     Label("result.share", systemImage: "square.and.arrow.up")
                         .font(.callout)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .simultaneousGesture(TapGesture().onEnded {
-                    EventLedger.shared.recordOutputShareTap()  // P5 Tier-1
-                })
 
                 // Share as image — sendable kinds only; the private vent
                 // draft itself is never offered as a shareable card.
