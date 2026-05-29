@@ -1,0 +1,8 @@
+{
+  "_comment": "RoastMate remote kill-switch. Edit a value + commit; it propagates to clients on their next launch (~1-2 min after GitHub Pages rebuilds). RESTRICT-only: flags can disable a feature or force on-device, but NEVER send user text to cloud without the in-app 5.1.2(i) consent grant. Source of truth: research/web/roastmate-config.json in JasonYeYuhe/RoastMate-iOS; mirrored to the Pages repo by .github/workflows/mirror-research-form-to-pages.yml. See Shared/Services/RemoteConfig.swift + docs/HEALTH_AUDIT_2026-05-29.md §4.",
+  "config_version": 1,
+  "echoes_enabled": true,
+  "force_local_only": false,
+  "vent_cloud_enabled": true,
+  "min_supported_build": 0
+}

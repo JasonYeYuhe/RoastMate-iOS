@@ -76,6 +76,12 @@ struct RoastMateApp: App {
         // gate re-arms on cold launch. sessions_with_generation /
         // session_starts is the D7/D30 return-to-tool proxy.
         EventLedger.shared.resetSessionMarkers()
+        // Remote kill-switch (health audit 2026-05-29 §4): fire-and-forget
+        // fetch of the static config JSON. Non-blocking — the GET suspends
+        // without holding up the rest of bootstrap, and on any failure the
+        // last good (or baked-in all-enabled) config stands. Sends ZERO
+        // user data.
+        Task { await RemoteConfig.shared.refresh() }
         // ε1: per-session rating-prompt counters start fresh on cold
         // launch so the 3-successful-generations gate resets each session.
         RatingPromptService.shared.resetSession()

@@ -126,7 +126,13 @@ final class RoastGeneratorViewModel {
                 intensity: selectedIntensity,
                 safeMode: settings.safeModeEnabled,
                 priorContext: pendingPriorContext,
-                cloudVentEnabled: cloudGate.allowsCloud
+                // RESTRICT-only remote kill-switch: AND the consent gate
+                // (source of truth) with the remote flags so a fetched
+                // `vent_cloud_enabled:false` / `force_local_only:true` can
+                // force this generation on-device. Can only subtract from
+                // the consent grant, never route to cloud without it.
+                // (Health audit 2026-05-29 §4.)
+                cloudVentEnabled: RemoteConfig.shared.current.cloudAllowed(consentAllowsCloud: cloudGate.allowsCloud)
             )
             currentSession = HistoryService.saveSession(
                 situation: text,

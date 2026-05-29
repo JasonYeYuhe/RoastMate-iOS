@@ -89,6 +89,11 @@ final class EchoesViewModel {
         visibleMessages = []
 
         do {
+            // Pass the RAW dedicated-Feral consent. EchoesEngine applies the
+            // remote kill-switch gate (`force_local_only` / `vent_cloud_enabled`)
+            // against its OWN single config snapshot, so the feature guard and
+            // the cloud decision can't read mismatched snapshots (no TOCTOU —
+            // Gemini review 2026-05-29). Still RESTRICT-only end to end.
             let granted = (currentFeralConsent == .granted)
             let transcript = try await EchoesEngine.shared.generate(
                 situation: situation,
@@ -108,6 +113,12 @@ final class EchoesViewModel {
             switch err {
             case .consentDenied:
                 phase = .setup
+            case .featureDisabled:
+                // Remote kill-switch disabled Echoes (the tile is also
+                // hidden, so this is the rare in-flight case). Not a
+                // warning — surface the generic error rather than silently
+                // bouncing to setup, which would read as a no-op bug.
+                phase = .error(String(localized: "echoes.error.generic"))
             default:
                 logger.warning("Echoes generation error: \(String(describing: err))")
                 phase = .error(String(localized: "echoes.error.generic"))

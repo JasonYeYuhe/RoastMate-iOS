@@ -52,7 +52,16 @@ struct ExploreView: View {
                     // Echoes / 替你出气 — v1 zh-Hans only per v2 plan §8.
                     // Other locales don't see the tile; v0.2 adds en /
                     // zh-Hant / ja persona catalogs and removes this gate.
-                    if isZhHansLocale() {
+                    // Also gated by the remote kill-switch: a fetched
+                    // `echoes_enabled:false` hides the tile (the primary
+                    // gate; EchoesEngine is guarded too). Reading the
+                    // @Observable singleton's `current` in body registers a
+                    // dependency, so a kill applied by the launch refresh
+                    // takes effect immediately (the tile disappears that
+                    // session) and persists across relaunch via the cached
+                    // config. Immediate effect is the goal for a disaster
+                    // kill-switch. (Health audit 2026-05-29 §4.)
+                    if isZhHansLocale() && RemoteConfig.shared.current.echoesEnabled {
                         toolCard(
                             config: FeatureGeneratorConfigs.echoes,
                             destination: AnyView(EchoesView(onBridgeTap: { onContinueGenerator?() }))

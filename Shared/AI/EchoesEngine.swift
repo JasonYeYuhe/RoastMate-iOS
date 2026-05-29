@@ -36,13 +36,33 @@ actor EchoesEngine {
         locale: Locale,
         feralCloudGranted: Bool
     ) async throws -> EchoTranscript {
+        // Remote kill-switch (health audit 2026-05-29 §4): read ONE config
+        // snapshot at entry and let it govern BOTH the feature guard and the
+        // cloud-routing gate, so there is no split-snapshot TOCTOU between
+        // the view-model's read and the engine's (Gemini review 2026-05-29).
+        // Lock-free App-Group read — no main-actor hop from this actor.
+        let remoteConfig = RemoteConfigValues.cached()
+        // Defense-in-depth: the Explore tile is hidden when echoes is
+        // disabled remotely, so this guard only fires for an in-flight /
+        // mid-session flip.
+        guard remoteConfig.echoesEnabled else {
+            throw EchoesGenerationError.featureDisabled
+        }
+
         // Input safety pass — reuse the existing strict filter; same
         // rules as the rewrite tool.
         try SafetyFilter.validateInput(situation)
 
         let personas = EchoesPersonaCatalog.selectPersonas(locale: locale, voiceCount: voiceCount)
 
-        let cloudPath = (tone == .feral) && feralCloudGranted && CloudConfig.isConfigured
+        // RESTRICT-only remote gate folded into the cloud decision from the
+        // SAME snapshot above: feral tone + dedicated consent + worker
+        // configured + kill-switch allows cloud. `feralCloudGranted` is the
+        // raw consent bool; `cloudAllowed` ANDs in `vent_cloud_enabled` /
+        // `!force_local_only` (can only subtract, never expand).
+        let cloudPath = (tone == .feral)
+            && remoteConfig.cloudAllowed(consentAllowsCloud: feralCloudGranted)
+            && CloudConfig.isConfigured
         // v1 keeps cloud OFF until the dedicated CloudVent path is
         // extended for the transcript-shape output. Feral falls back to
         // on-device which still produces stronger output than Casual
@@ -61,7 +81,9 @@ actor EchoesEngine {
         let user = EchoesPromptBuilder.userPrompt(situation: situation)
 
         var messages: [EchoMessage] = []
-        var cloudUsed = false
+        // v1: cloud routing is gated off (useCloud=false), so this never
+        // flips. Kept (with `|| useCloud`) so v0.2's cloud wire-up sets it.
+        let cloudUsed = false
 
         #if canImport(FoundationModels)
         if SystemLanguageModel.default.availability == .available {

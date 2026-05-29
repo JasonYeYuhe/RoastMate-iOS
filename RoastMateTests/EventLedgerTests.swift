@@ -450,8 +450,14 @@ final class EventLedgerTests: XCTestCase {
         let firstEchoes = cases.firstIndex(of: "echoes_session_started") ?? -1
         XCTAssertGreaterThan(firstEchoes, lastTier1,
                              "Echoes counters must follow the P5 Tier-1 block.")
-        XCTAssertEqual(cases.last, "echoes_model_unavailable",
-                       "echoes_model_unavailable must remain end-of-enum until the next additive wave.")
+        // The kill-switch wave (health audit 2026-05-29 §4) appended
+        // remote_config_kill_applied AFTER the Echoes block — it is now the
+        // end-of-enum tail until the next additive wave.
+        let echoesModelUnavailable = cases.firstIndex(of: "echoes_model_unavailable") ?? -1
+        XCTAssertGreaterThan(echoesModelUnavailable, firstEchoes,
+                             "echoes_model_unavailable stays within/after the Echoes block.")
+        XCTAssertEqual(cases.last, "remote_config_kill_applied",
+                       "remote_config_kill_applied must remain end-of-enum until the next additive wave.")
     }
 
     func test_echoesCounters_eachIncrementsCorrectly() {

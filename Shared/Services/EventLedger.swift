@@ -211,6 +211,14 @@ public final class EventLedger: @unchecked Sendable {
     /// parse the output of. Keeps the parse-failure rate honest.
     public func recordEchoesModelUnavailable() { bump(.echoesModelUnavailable) }
 
+    // MARK: - Schema v2 — Remote kill-switch (health audit 2026-05-29 §4)
+
+    /// Bumped (opt-in gated) when a freshly-fetched `RemoteConfig` actually
+    /// disabled something relative to the all-enabled baseline — so an A′
+    /// export confirms a remote kill propagated to this device. See
+    /// `RemoteConfig.apply(fetchedData:)`.
+    public func recordRemoteConfigKillApplied() { bump(.remoteConfigKillApplied) }
+
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
         case network            = "network"
@@ -387,6 +395,11 @@ public final class EventLedger: @unchecked Sendable {
         // RATE (parse_fallback / sessions-where-model-was-available) isn't
         // polluted by AI-off devices. (Health audit 2026-05-29.)
         case echoesModelUnavailable               = "echoes_model_unavailable"
+        // Remote kill-switch (health audit 2026-05-29 §4). Bumped once per
+        // launch refresh whose fetched config disabled something
+        // (echoes off / force-local-only / vent-cloud off). Still
+        // schemaVersion 2 — additive WITHIN v2. End-of-enum.
+        case remoteConfigKillApplied              = "remote_config_kill_applied"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

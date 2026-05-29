@@ -97,4 +97,9 @@ enum EchoesGenerationError: Error, Sendable {
     case engineFailure(underlying: Error)
     case consentDenied
     case safetyTrippedAllVariants
+    /// The remote kill-switch (`RemoteConfig.echoesEnabled == false`)
+    /// disabled Echoes. The Explore tile is also hidden when this is set,
+    /// so this is the rare in-flight / mid-session case. See RemoteConfig
+    /// + the 2026-05-29 health audit §4.
+    case featureDisabled
 }

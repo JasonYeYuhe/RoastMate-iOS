@@ -53,6 +53,15 @@ jobs:
           if [ -f ios-repo/research/web/research-book.js ]; then
             cp ios-repo/research/web/research-book.js  pages-repo/research-book.js
           fi
+          # Remote kill-switch config (NOT a research-form file). The app
+          # fetches this static JSON on launch to remotely disable a feature
+          # / force on-device generation without an Apple review cycle. It's
+          # served from the Pages root → jasonyeyuhe.github.io/RoastMate/roastmate-config.json.
+          # Source of truth: research/web/ here. See RemoteConfig.swift +
+          # docs/HEALTH_AUDIT_2026-05-29.md §4.
+          if [ -f ios-repo/research/web/roastmate-config.json ]; then
+            cp ios-repo/research/web/roastmate-config.json  pages-repo/roastmate-config.json
+          fi
 
       - name: Detect changes
         id: changes
@@ -72,7 +81,8 @@ jobs:
           git config user.name "JasonYeYuhe"
           git add research.html research.css research.js \
                   $([ -f research-book.html ] && echo research-book.html) \
-                  $([ -f research-book.js ] && echo research-book.js)
+                  $([ -f research-book.js ] && echo research-book.js) \
+                  $([ -f roastmate-config.json ] && echo roastmate-config.json)
           UPSTREAM_SHA="${{ github.sha }}"
           UPSTREAM_REPO="${{ github.repository }}"
           git commit -m "Mirror research form from $UPSTREAM_REPO@${UPSTREAM_SHA:0:8}
