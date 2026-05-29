@@ -99,14 +99,19 @@ actor EchoesEngine {
                 )
             }
         } else {
+            // Model UNAVAILABLE (AI off / unsupported device) — this is NOT
+            // a parse failure; we never attempted a generation. Counting it
+            // as parse_fallback would falsely trip the kill-criterion on
+            // every AI-off device. (Health audit 2026-05-29.)
             logger.notice("Foundation Models unavailable — using curated Echoes fallback.")
-            EventLedger.shared.recordEchoesParseFallback()
+            EventLedger.shared.recordEchoesModelUnavailable()
             messages = FallbackRoasts.curatedEchoTranscript(
                 tone: tone, voiceCount: voiceCount, personas: personas
             )
         }
         #else
-        EventLedger.shared.recordEchoesParseFallback()
+        // Non-FoundationModels build — same "no model to parse" case.
+        EventLedger.shared.recordEchoesModelUnavailable()
         messages = FallbackRoasts.curatedEchoTranscript(
             tone: tone, voiceCount: voiceCount, personas: personas
         )

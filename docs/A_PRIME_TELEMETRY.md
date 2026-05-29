@@ -115,7 +115,8 @@ answer; treat A′ as hypothesis-check, not source-of-truth.
 | `echoes_regenerated` | User used the one-per-session regenerate |
 | `echoes_share_sheet_opened` | UIActivityViewController presented for the transcript card (intent — currently unused; transcript share UX deferred to v0.2) |
 | `echoes_share_sheet_completed` | `completionWithItemsHandler` reported `completed && !activityError` — confirmed share (same semantics as v1.0.5 `output_destination_sent_share_tap` upgrade) |
-| `echoes_parse_fallback` | Combined-prompt parser rejected the FM output; fell back to curated static transcript per `FallbackRoasts.curatedEchoTranscript`. Tracks parser robustness — if this is >5% of `echoes_session_started`, the prompt or token budget needs tuning |
+| `echoes_parse_fallback` | The on-device model RAN but its output failed the parser (or the generation call errored), so we fell back to curated lines. This is the genuine parser-robustness signal. **Kill-criterion (health audit 2026-05-29): `echoes_parse_fallback / (echoes_session_started − echoes_model_unavailable) > 35%` over a 7-day window → the empathy illusion is broken; force the cloud path or disable + retune.** Denominator excludes model-unavailable sessions so AI-off devices don't pollute the rate. |
+| `echoes_model_unavailable` | The on-device model was UNAVAILABLE (Apple Intelligence off / unsupported device / non-FM build) — curated lines served without a generation attempt. NOT a parse failure; tracked separately so the kill-criterion rate stays honest. |
 | `echoes_feral_cloud_consent_granted` | First-time grant of the NEW feature-specific Feral cloud consent (separate from existing `cloudAIConsentRaw` — Codex audit P0 catch on v2 plan) |
 | `echoes_feral_cloud_consent_denied` | First-time denial of same |
 | `echoes_paywall_hit` | Free user landed on EchoesView → paywall opened |

@@ -205,6 +205,11 @@ public final class EventLedger: @unchecked Sendable {
     public func recordEchoesFeralCloudConsentGranted() { bump(.echoesFeralCloudConsentGranted) }
     public func recordEchoesFeralCloudConsentDenied() { bump(.echoesFeralCloudConsentDenied) }
     public func recordEchoesPaywallHit() { bump(.echoesPaywallHit) }
+    /// On-device model was unavailable (AI off / unsupported / non-FM
+    /// build) — curated lines served without a generation attempt. Use
+    /// this, NOT recordEchoesParseFallback, when there was no model to
+    /// parse the output of. Keeps the parse-failure rate honest.
+    public func recordEchoesModelUnavailable() { bump(.echoesModelUnavailable) }
 
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
@@ -375,6 +380,13 @@ public final class EventLedger: @unchecked Sendable {
         case echoesFeralCloudConsentGranted       = "echoes_feral_cloud_consent_granted"
         case echoesFeralCloudConsentDenied        = "echoes_feral_cloud_consent_denied"
         case echoesPaywallHit                     = "echoes_paywall_hit"
+        // Distinct from echoes_parse_fallback: the on-device model was
+        // UNAVAILABLE (Apple Intelligence off / unsupported device / non-FM
+        // build), so we served curated lines without ever attempting a
+        // generation. Kept separate so the kill-criterion parse-failure
+        // RATE (parse_fallback / sessions-where-model-was-available) isn't
+        // polluted by AI-off devices. (Health audit 2026-05-29.)
+        case echoesModelUnavailable               = "echoes_model_unavailable"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

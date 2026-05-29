@@ -450,8 +450,8 @@ final class EventLedgerTests: XCTestCase {
         let firstEchoes = cases.firstIndex(of: "echoes_session_started") ?? -1
         XCTAssertGreaterThan(firstEchoes, lastTier1,
                              "Echoes counters must follow the P5 Tier-1 block.")
-        XCTAssertEqual(cases.last, "echoes_paywall_hit",
-                       "echoes_paywall_hit must remain end-of-enum until the next additive wave.")
+        XCTAssertEqual(cases.last, "echoes_model_unavailable",
+                       "echoes_model_unavailable must remain end-of-enum until the next additive wave.")
     }
 
     func test_echoesCounters_eachIncrementsCorrectly() {
@@ -467,6 +467,7 @@ final class EventLedgerTests: XCTestCase {
         ledger.recordEchoesFeralCloudConsentGranted()
         ledger.recordEchoesFeralCloudConsentDenied()
         ledger.recordEchoesPaywallHit()
+        ledger.recordEchoesModelUnavailable()
         let s = ledger.snapshot()
         XCTAssertEqual(s["echoes_session_started"], 1)
         XCTAssertEqual(s["echoes_completed"], 1)
@@ -479,6 +480,8 @@ final class EventLedgerTests: XCTestCase {
         XCTAssertEqual(s["echoes_feral_cloud_consent_granted"], 1)
         XCTAssertEqual(s["echoes_feral_cloud_consent_denied"], 1)
         XCTAssertEqual(s["echoes_paywall_hit"], 1)
+        XCTAssertEqual(s["echoes_model_unavailable"], 1,
+                       "model-unavailable counter is distinct from parse_fallback (kill-criterion integrity).")
     }
 
     func test_echoesCounters_areOptOutGated() {

@@ -57,6 +57,17 @@ final class EchoesViewModel {
         modelContext: ModelContext,
         isPro: Bool
     ) async {
+        // Re-entrancy guard: a second tap (or a tap racing the consent
+        // grant on a large/iPad layout where the setup button stays
+        // tappable behind the sheet) could launch two concurrent
+        // EchoesEngine runs → two transcripts, double `echoes_completed`
+        // + double `markSuccessfulOutput`. Block any call while a
+        // generation/reveal is in flight. (Codex audit 2026-05-29 #1.)
+        // The consent re-call path is safe: it returns at the gate with
+        // phase still `.setup` before this guard matters.
+        if case .generating = phase { return }
+        if case .revealing = phase { return }
+
         // Resolve consent for Feral.
         if tone == .feral {
             let gate = EchoesFeralConsentGate.decide(
