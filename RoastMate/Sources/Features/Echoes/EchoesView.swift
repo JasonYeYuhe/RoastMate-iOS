@@ -16,8 +16,11 @@ struct EchoesView: View {
     @Query private var settingsQuery: [UserSettings]
 
     @State private var viewModel = EchoesViewModel()
-    @State private var showPaywall = false
-    @State private var showFeralConsent = false
+
+    // Sheet presentation is owned by the VM (`viewModel.activeSheet`) so
+    // there's no `.onChange` mirror race — see EchoesViewModel.ActiveSheet.
+    // A SINGLE `.sheet(item:)` drives both modals (paywall + feralConsent);
+    // two stacked `.sheet(isPresented:)` silently drop the second.
 
     /// Called when the bridge CTA is tapped. RootView typically sets
     /// `selectedTab = .generator` in response.
@@ -46,39 +49,35 @@ struct EchoesView: View {
             if !isPro {
                 EventLedger.shared.recordEchoesPaywallHit()
                 EventLedger.shared.recordPaywallImpression(source: .proTap)
-                showPaywall = true
+                viewModel.activeSheet = .paywall
             }
         }
-        .onChange(of: viewModel.pendingFeralConsentRequest) { _, requested in
-            if requested {
-                showFeralConsent = true
-            }
-        }
-        .sheet(isPresented: $showPaywall) {
-            PaywallView(isPresented: $showPaywall)
-        }
-        .sheet(isPresented: $showFeralConsent, onDismiss: {
-            viewModel.pendingFeralConsentRequest = false
-        }) {
-            EchoesFeralConsentSheet { choice in
-                guard let settings else { return }
-                settings.echoesFeralConsent = choice
-                try? context.save()
-                // Resume generation if the user granted; otherwise stay
-                // in setup so they can pick Casual or cancel.
-                if choice == .granted {
-                    Task {
-                        await viewModel.generate(
-                            locale: locale,
-                            currentFeralConsent: .granted,
-                            cloudConfigured: CloudConfig.isConfigured,
-                            modelContext: context,
-                            isPro: isPro
-                        )
+        .sheet(item: $viewModel.activeSheet) { sheet in
+            switch sheet {
+            case .paywall:
+                PaywallView(isPresented: Binding(
+                    get: { viewModel.activeSheet == .paywall },
+                    set: { if !$0 { viewModel.activeSheet = nil } }
+                ))
+            case .feralConsent:
+                EchoesFeralConsentSheet { choice in
+                    guard let settings else { return }
+                    settings.echoesFeralConsent = choice
+                    try? context.save()
+                    if choice == .granted {
+                        Task {
+                            await viewModel.generate(
+                                locale: locale,
+                                currentFeralConsent: .granted,
+                                cloudConfigured: CloudConfig.isConfigured,
+                                modelContext: context,
+                                isPro: isPro
+                            )
+                        }
                     }
                 }
+                .presentationDetents([.medium])
             }
-            .presentationDetents([.medium])
         }
     }
 
@@ -273,6 +272,7 @@ private struct EchoBubble: View {
                         bubbleText
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("echoes.bridge")
                 } else {
                     bubbleText
                 }

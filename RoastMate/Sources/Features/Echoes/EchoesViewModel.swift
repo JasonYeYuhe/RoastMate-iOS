@@ -28,8 +28,20 @@ final class EchoesViewModel {
     var visibleMessages: [EchoMessage] = []
     var hasRegenerated: Bool = false  // single regenerate per session — v2 plan §2 anti-slot-machine
 
-    // Consent sheet flag (driven from view).
-    var pendingFeralConsentRequest: Bool = false
+    /// Which modal the view should present. The VM owns this directly so
+    /// there is NO `.onChange` mirror race: `generate()` sets
+    /// `activeSheet = .feralConsent` synchronously on the main actor, and
+    /// the view's single `.sheet(item:)` reacts to it. (An earlier
+    /// design mirrored a `pendingFeralConsentRequest` Bool into a view
+    /// `@State` via `.onChange`, which SwiftUI dropped when the mutation
+    /// landed in the same render pass — the consent sheet never showed.
+    /// Caught by EchoesFlowUITests 2026-05-29.)
+    enum ActiveSheet: Identifiable, Equatable {
+        case paywall
+        case feralConsent
+        var id: Int { hashValue }
+    }
+    var activeSheet: ActiveSheet?
 
     // Telemetry hook — fires once per generation session.
     func startSession() {
@@ -53,10 +65,11 @@ final class EchoesViewModel {
                 consent: currentFeralConsent
             )
             if gate == .needsConsent {
-                // Hand off to the view's consent sheet. The view rewrites
-                // `currentFeralConsent` on user choice + re-calls
-                // `generate()` with the new state.
-                pendingFeralConsentRequest = true
+                // Present the consent sheet directly via VM-owned state —
+                // synchronous on the main actor, no .onChange mirror. The
+                // view rewrites `currentFeralConsent` on the user's choice
+                // and re-calls `generate()` with the new state.
+                activeSheet = .feralConsent
                 return
             }
         }

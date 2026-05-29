@@ -83,18 +83,35 @@ final class EchoesFlowUITests: XCTestCase {
         //    message-by-message reveal (curated fallback = ~5 msgs ×
         //    600ms). Generous timeout covers generation + reveal.
         let bridge = element(app, "echoes.bridge")
-        XCTAssertTrue(bridge.waitForExistence(timeout: 25),
+        // The message-by-message reveal animation keeps the app from
+        // reporting "idle", so waitForExistence stalls mid-reveal. Poll
+        // bridge.exists once a second (re-queries each tick) up to 30s.
+        var revealTries = 0
+        while !bridge.exists && revealTries < 30 {
+            sleep(1)
+            revealTries += 1
+        }
+        XCTAssertTrue(bridge.exists,
                       "Bridge-to-Action bubble must appear at the end of the transcript reveal.")
 
         // 4. Tap the bridge → app switches to Generator tab + pre-fills.
         bridge.tap()
 
-        let generatorSituation = element(app, "generator.situation")
+        // The Generator's situation editor has identifier
+        // "situation_editor" (verified in RoastGeneratorView.swift). After
+        // the bridge deep-link, the tab switches and EchoBridgeStore
+        // pre-fills the original grievance. Poll for the editor + its
+        // pre-filled content (the tab transition isn't instant).
+        let generatorSituation = app.textViews["situation_editor"]
         XCTAssertTrue(generatorSituation.waitForExistence(timeout: 10),
-                      "Tapping the bridge must land on the Generator tab (its situation field must exist).")
-        // The deep-link pre-fills the original grievance. Assert non-empty
-        // value containing our typed text.
-        let value = (generatorSituation.value as? String) ?? ""
+                      "Tapping the bridge must land on the Generator tab (its situation editor must exist).")
+        var prefillTries = 0
+        var value = (generatorSituation.value as? String) ?? ""
+        while !(value.contains("室友") || value.contains("外放")) && prefillTries < 10 {
+            sleep(1)
+            value = (generatorSituation.value as? String) ?? ""
+            prefillTries += 1
+        }
         XCTAssertTrue(value.contains("室友") || value.contains("外放"),
                       "Bridge deep-link must pre-fill the Generator situation with the original grievance. Got: \(value)")
     }
@@ -109,21 +126,38 @@ final class EchoesFlowUITests: XCTestCase {
         XCTAssertTrue(tile.waitForExistence(timeout: 10))
         tile.tap()
 
-        let situation = element(app, "echoes.situation")
+        let situation = app.textViews.firstMatch
         XCTAssertTrue(situation.waitForExistence(timeout: 10))
         situation.tap()
         situation.typeText("同事又把我的方案抢去邀功")
 
-        // Switch tone to Feral (狂怒) — the second segment of the tone picker.
-        // Segmented controls surface their segments as buttons.
-        let feralSegment = app.buttons["狂怒"]
-        if feralSegment.waitForExistence(timeout: 3) {
-            feralSegment.tap()
+        // CRITICAL ORDERING: dismiss the keyboard BEFORE tapping the tone
+        // segment. The tone picker sits just below the text editor; with
+        // the keyboard up, a tap on 狂怒 lands on the keyboard instead,
+        // tone stays Casual, no consent is needed, and the sheet never
+        // shows — which is the bug that made this test fail repeatedly.
+        app.navigationBars.firstMatch.tap()
+
+        // Switch tone to Feral (狂怒). Segmented-control segments can
+        // surface as plain buttons or under the segmentedControls query
+        // depending on iOS version; prefer the segmented query.
+        let feralInSeg = app.segmentedControls.buttons["狂怒"]
+        let feralPlain = app.buttons["狂怒"]
+        if feralInSeg.waitForExistence(timeout: 3) {
+            feralInSeg.tap()
+        } else if feralPlain.waitForExistence(timeout: 2) {
+            feralPlain.tap()
         }
+        XCTAssertTrue(feralInSeg.exists || feralPlain.exists,
+                      "Feral (狂怒) tone segment must be present to select.")
+        // Confirm the tone actually flipped: the setup blurb switches to
+        // the feral copy. If this is missing, the tap missed and the rest
+        // of the test would fail confusingly downstream.
+        XCTAssertTrue((feralInSeg.isSelected || feralPlain.isSelected),
+                      "狂怒 segment must read as selected after the tap.")
 
         let generate = element(app, "echoes.generate")
         XCTAssertTrue(generate.waitForExistence(timeout: 5))
-        app.navigationBars.firstMatch.tap()  // dismiss keyboard safely
         var scrollTries = 0
         while !generate.isHittable && scrollTries < 4 {
             app.swipeUp()
@@ -131,14 +165,19 @@ final class EchoesFlowUITests: XCTestCase {
         }
         generate.tap()
 
-        // The first Feral generation must present the dedicated consent
-        // sheet (5.1.2(i) — separate from the Vent cloud consent).
-        // Match on a distinctive substring of the sheet's body/buttons.
+        // The first Feral generation presents the dedicated consent
+        // sheet (5.1.2(i) — separate from the Vent cloud consent). The
+        // sheet presents during the generation kick-off which keeps the
+        // app non-"idle", so waitForExistence stalls — poll .exists
+        // instead (same fix as the bridge bubble in test 1).
         let denyButton = app.buttons["只用本机生成"]
         let allowButton = app.buttons["允许 Feral 走云端"]
-        let sheetAppeared = denyButton.waitForExistence(timeout: 10)
-            || allowButton.waitForExistence(timeout: 2)
-        XCTAssertTrue(sheetAppeared,
+        var sheetTries = 0
+        while !(denyButton.exists || allowButton.exists) && sheetTries < 15 {
+            sleep(1)
+            sheetTries += 1
+        }
+        XCTAssertTrue(denyButton.exists || allowButton.exists,
                       "First Feral selection must present the dedicated Echoes Feral cloud-consent sheet.")
 
         // Deny → should still generate on-device without crashing.

@@ -204,6 +204,7 @@ struct RoastGeneratorView: View {
                 .font(.headline)
             TextEditor(text: $viewModel.situation)
                 .focused($situationFocused)
+                .accessibilityIdentifier("situation_editor")
                 .frame(minHeight: 110)
                 .padding(8)
                 .background(
