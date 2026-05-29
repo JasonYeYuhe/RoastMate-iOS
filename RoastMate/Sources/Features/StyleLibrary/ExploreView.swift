@@ -57,6 +57,7 @@ struct ExploreView: View {
                             config: FeatureGeneratorConfigs.echoes,
                             destination: AnyView(EchoesView(onBridgeTap: { onContinueGenerator?() }))
                         )
+                        .accessibilityIdentifier("echoes.tile")
                     }
                     toolCard(
                         config: FeatureGeneratorConfigs.socialRoast,

@@ -124,6 +124,7 @@ struct EchoesView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.secondary.opacity(0.3))
                     )
+                    .accessibilityIdentifier("echoes.situation")
 
                 Text("echoes.setup.tone_label").font(.headline)
                 Picker("echoes.setup.tone_label", selection: $viewModel.tone) {
@@ -168,6 +169,7 @@ struct EchoesView: View {
                         .padding(.vertical, 6)
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("echoes.generate")
                 .disabled(viewModel.situation.trimmingCharacters(in: .whitespacesAndNewlines).count < 3 || !isPro)
             }
             .padding(16)
