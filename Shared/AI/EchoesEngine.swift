@@ -94,20 +94,14 @@ actor EchoesEngine {
                     to: user,
                     options: GenerationOptions(temperature: tone == .feral ? 0.95 : 0.85, maximumResponseTokens: 600)
                 )
-                if let parsed = EchoesParser.parse(response.content) {
-                    // The model no longer tags the bridge with a register
-                    // suffix; inject the tone-derived intensity so the
-                    // Bridge-to-Action deep link still carries a register.
-                    messages = parsed.map { msg in
-                        guard msg.role == .bridge, msg.bridgeIntensity == nil else { return msg }
-                        return EchoMessage(
-                            id: msg.id, echoIndex: msg.echoIndex, role: msg.role,
-                            text: msg.text, deliveryDelayMs: msg.deliveryDelayMs,
-                            bridgeIntensity: tone.bridgeIntensity
-                        )
-                    }
+                if let parsed = EchoesParser.parse(response.content),
+                   let safe = Self.safetyFilter(parsed, tone: tone) {
+                    messages = safe
                 } else {
-                    logger.warning("Echoes parser rejected model output — falling back to curated transcript.")
+                    // Parser rejected the output OR a line tripped the safety
+                    // hard-rail — either way the model output is unusable, so
+                    // fall back to the curated transcript.
+                    logger.warning("Echoes model output unusable (parse or safety) — falling back to curated transcript.")
                     EventLedger.shared.recordEchoesParseFallback()
                     messages = FallbackRoasts.curatedEchoTranscript(
                         tone: tone, voiceCount: voiceCount, personas: personas
@@ -153,5 +147,33 @@ actor EchoesEngine {
             cloudUsed: cloudUsed || useCloud,
             locale: locale
         )
+    }
+
+    /// Safety + bridge-intensity pass over parsed Echoes messages — parity
+    /// with RoastEngine's OUTPUT contract (input is already filtered by
+    /// `SafetyFilter.validateInput`; this filters the model's *output* too).
+    /// Each line goes through `SafetyFilter.validateVentOutput`: the
+    /// savage/profane venting register is allowed, but the self-harm /
+    /// explicit-violence hard-rail is not. Returns `nil` if ANY line trips
+    /// the hard-rail, so the caller drops the whole transcript to the curated
+    /// fallback (same handling as a parse rejection). Also injects the
+    /// tone-derived bridge intensity (the model no longer tags it).
+    /// Codex pre-ship audit 2026-05-29.
+    static func safetyFilter(_ parsed: [EchoMessage], tone: EchoTone) -> [EchoMessage]? {
+        var out: [EchoMessage] = []
+        out.reserveCapacity(parsed.count)
+        for msg in parsed {
+            guard let safeText = try? SafetyFilter.validateVentOutput(msg.text) else {
+                return nil
+            }
+            let intensity = (msg.role == .bridge && msg.bridgeIntensity == nil)
+                ? tone.bridgeIntensity : msg.bridgeIntensity
+            out.append(EchoMessage(
+                id: msg.id, echoIndex: msg.echoIndex, role: msg.role,
+                text: safeText, deliveryDelayMs: msg.deliveryDelayMs,
+                bridgeIntensity: intensity
+            ))
+        }
+        return out
     }
 }

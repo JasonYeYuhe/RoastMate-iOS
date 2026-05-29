@@ -14,10 +14,10 @@
 // MARK: - Onboarding
 
 "onboarding.welcome.title" = "Say what you really mean.";
-"onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression. Most modes run on Apple's on-device AI; Vent and Feral private drafts route through our cloud proxy for stronger output — you can switch them to local in Settings.";
+"onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression. Most modes run on Apple's on-device AI. Vent and Feral private drafts can use our cloud proxy for stronger output — but only after you explicitly allow it; until then they stay on-device.";
 
 "onboarding.privacy.title" = "Private by design.";
-"onboarding.privacy.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on-device with Apple's Foundation Models — your text stays on the phone. Vent and Feral drafts default to our developer-owned cloud proxy to a third-party LLM for stronger output. You can disable cloud routing in Settings → AI & Privacy.";
+"onboarding.privacy.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on-device with Apple's Foundation Models — your text stays on the phone. Vent and Feral drafts also stay on-device unless you explicitly grant permission to use our developer-owned cloud proxy (a third-party LLM) for stronger output. You can review or revoke that permission anytime in Settings → AI & Privacy.";
 
 "onboarding.safety.title" = "For self-expression, not harassment.";
 "onboarding.safety.body" = "RoastMate is for venting your own feelings — not for targeting specific people. We strip names, threats, and slurs automatically.";

@@ -48,6 +48,13 @@ final class RoastGeneratorViewModel {
     }
 
     func generate(context: ModelContext, locale: Locale) async {
+        // Re-entry guard: a rapid double-tap (or a tap that races the Generate
+        // button's `.disabled(state == .loading)` before it propagates to the
+        // view) must not spend a second credit or launch a second generation.
+        // `state` flips to `.loading` synchronously below — before the first
+        // `await` — so a second concurrent call returns here. (Codex pre-ship
+        // audit 2026-05-29; mirrors EchoesViewModel's re-entrancy guard.)
+        if state == .loading { return }
         let text = situation.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         // Self-harm handoff (two-tier). `.hard` intercepts BEFORE quota /

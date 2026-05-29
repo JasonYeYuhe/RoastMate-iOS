@@ -157,4 +157,39 @@ final class EchoesParserTests: XCTestCase {
         XCTAssertEqual(bridge?.bridgeIntensity, .savage,
                        "Unknown intensity hint must fall back to .savage (most-conservative default).")
     }
+
+    // MARK: - Output safety filter (EchoesEngine.safetyFilter — Codex pre-ship audit 2026-05-29)
+
+    func test_safetyFilter_rejectsHardRailOutput_dropsToFallback() {
+        // Structurally valid, but a line carries a self-harm hard-rail term.
+        // The parser accepts it (structure only); the OUTPUT safety pass must
+        // reject the whole transcript so the caller serves the curated
+        // fallback instead of rendering unsafe model output.
+        let raw = """
+        [VALIDATE/A] 你被气到完全合理。
+        [ESCALATE/B] 这种人真的该去死。
+        [DEESCALATE/B] 但你别因为这事毁今晚。
+        [BRIDGE/A] 用狠话怼回去 →
+        """
+        let parsed = EchoesParser.parse(raw)
+        XCTAssertNotNil(parsed, "Structurally valid → parser accepts it.")
+        XCTAssertNil(EchoesEngine.safetyFilter(parsed!, tone: .feral),
+                     "A self-harm hard-rail line in MODEL OUTPUT must drop the whole transcript (→ curated fallback).")
+    }
+
+    func test_safetyFilter_passesCleanOutput_andInjectsBridgeIntensity() {
+        let raw = """
+        [VALIDATE/A] 你被气到完全合理。
+        [ESCALATE/B] 这事换谁都火大。
+        [DEESCALATE/B] 但你别因为这事毁今晚。
+        [BRIDGE/A] 用狠话怼回去 →
+        """
+        let parsed = EchoesParser.parse(raw)!
+        let safe = EchoesEngine.safetyFilter(parsed, tone: .feral)
+        XCTAssertNotNil(safe, "Clean venting output must pass the safety filter.")
+        XCTAssertEqual(safe?.count, parsed.count)
+        XCTAssertEqual(safe?.last?.role, .bridge)
+        XCTAssertEqual(safe?.last?.bridgeIntensity, EchoTone.feral.bridgeIntensity,
+                       "A parsed bridge with no intensity suffix must get the tone-derived intensity injected.")
+    }
 }

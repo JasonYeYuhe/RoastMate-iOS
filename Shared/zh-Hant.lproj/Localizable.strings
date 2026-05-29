@@ -14,10 +14,10 @@
 // MARK: - Onboarding
 
 "onboarding.welcome.title" = "把心裡那句話寫出來。";
-"onboarding.welcome.body" = "「幫你罵」把你的不爽變成俏皮、安全、可以發出去的話。多數模式跑在 Apple 本地 AI 上;「發洩」與「痛罵」預設走雲端代理以獲得更猛的輸出 — 設定裡隨時切回全本地。";
+"onboarding.welcome.body" = "「幫你罵」把你的不爽變成俏皮、安全、可以發出去的話。多數模式跑在 Apple 本地 AI 上;「發洩」與「痛罵」可以走雲端代理獲得更猛的輸出 — 但僅在你明確同意後才會,在此之前一律留在本地。";
 
 "onboarding.privacy.title" = "預設私密。";
-"onboarding.privacy.body" = "「體面 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 本地 Foundation Models — 內容不出裝置。「發洩」與「痛罵」預設透過我們自有的雲端代理呼叫第三方 LLM 以獲得更強輸出。可以在「設定 → AI 與隱私」中關閉雲端路由。";
+"onboarding.privacy.body" = "「體面 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 本地 Foundation Models — 內容不出裝置。「發洩」與「痛罵」同樣預設留在本地,只有在你明確授權後,才會透過我們自有的雲端代理呼叫第三方 LLM 以獲得更強輸出。可隨時在「設定 → AI 與隱私」中查看或撤銷該授權。";
 
 "onboarding.safety.title" = "為自我表達,而非攻擊他人。";
 "onboarding.safety.body" = "「幫你罵」幫你說出自己的感受,不用於針對具體的人。我們會自動去掉姓名、威脅和侮辱性詞彙。";
