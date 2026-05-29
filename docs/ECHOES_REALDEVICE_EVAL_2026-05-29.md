@@ -78,11 +78,18 @@ Recording table (fill as you go):
    PASS/FAIL verdict vs the 35% criterion (with a small-sample caveat under
    ~10 attempts).
 3. **Decision:**
-   - **PASS (≤35%)** → ship Echoes **enabled** in v1.0.6 (keep/flip the live
-     `echoes_enabled:true`).
-   - **FAIL (>35%)** → ship **dark** (`echoes_enabled:false` live) and either
-     tune the prompt/model or wire the cloud path before flipping on. The
-     kill-switch means this needs **no Apple review cycle**.
+   - **PASS (≤35%)** → ship Echoes **enabled** in v1.0.6 (`echoes_enabled:true`
+     live at review). The reviewer must actually see it — set the device to
+     zh-Hans (see the v1.0.6 Apple review notes). The kill-switch is then the
+     **production safety-net**: if real-world telemetry later shows >35%,
+     DISABLE it remotely — restricting an already-reviewed feature, clean, no
+     review cycle.
+   - **FAIL (>35%)** → do NOT ship Echoes in v1.0.6. Tune the prompt/model (or
+     wire the cloud path), then ship it **enabled** in a later build so it
+     gets reviewed. **Avoid "ship dark, then flip on later"** for a
+     never-reviewed feature: Apple 2.3.1 (hidden/dormant features) makes
+     activating unreviewed functionality post-approval a gray area. The
+     kill-switch's clean direction is DISABLE-in-prod, not enable-post-approval.
    - Also eyeball the manual table: if the rate passes but the DEESCALATE
      beat is consistently cringe, that's a prompt-tuning task even on a PASS.
 
