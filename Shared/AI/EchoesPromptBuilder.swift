@@ -47,7 +47,14 @@ enum EchoesPromptBuilder {
             ? "There is ONE Echo (A) speaking the whole transcript."
             : "There are TWO Echoes (A and B) trading messages."
 
-        let bridgeRegister: String = (tone == .feral) ? "savage" : "sharp"
+        // The bridge's suggested rewrite register is a deterministic
+        // function of tone — the app injects it after parsing, so the
+        // model never has to emit a `:register` tag suffix. That schema
+        // shift (the last tag changing shape) was the #1 parse-failure
+        // trigger for the small on-device model (Gemini eval 2026-05-29).
+        // The register word still appears in the message BODY so the CTA
+        // reads naturally.
+        let bridgeWord: String = (tone == .feral) ? "Savage" : "Sharp"
 
         return """
         You are generating a 4–6 message group-chat transcript in mandarin Chinese (zh-Hans), where one or two synthetic voices ("Echoes") back the user up about a grievance they just typed. The user does NOT speak in this transcript; they only read it.
@@ -63,15 +70,15 @@ enum EchoesPromptBuilder {
         Required transcript structure (in order):
         1. [VALIDATE/A] one short message acknowledging the user is right to be upset.
         2. [ESCALATE/<A or B>] one or two short messages doubling down on the grievance.
-        3. [DEESCALATE/<A or B>] one short message offering a path out of the anger — DO NOT skip this; without it the user feels worse after closing.
-        4. [BRIDGE/<A or B>:\(bridgeRegister)] one CTA message ending in an arrow `→`, suggesting they use the rewrite tool with the "\(bridgeRegister)" register. Example phrasing: "把这事用 \(bridgeRegister == "savage" ? "Savage" : "Sharp") 给他怼回去 →".
+        3. [DEESCALATE/<A or B>] one short message that does NOT switch to calm-therapist mode — stay the snarky friend, but redirect the anger toward a next move. e.g. start with "与其在这干生气…".
+        4. [BRIDGE/<A or B>] the PAYOFF of message 3 — a CTA ending in an arrow `→` that turns "stop stewing" into "say it", naming the rewrite tool. e.g. "…不如用 \(bridgeWord) 把话甩回去 →". Messages 3 and 4 must read as ONE continuous beat (don't-just-suffer → here's-how-to-hit-back), not a calm-down followed by a separate ad.
 
         Output format (NO JSON, NO markdown):
         - Each message on its own line.
-        - Tag prefix EXACTLY: `[ROLE/IDX]` for VALIDATE / ESCALATE / DEESCALATE; `[BRIDGE/IDX:register]` for BRIDGE.
+        - Tag prefix EXACTLY `[ROLE/IDX]` for ALL FOUR roles (VALIDATE / ESCALATE / DEESCALATE / BRIDGE). Put NOTHING after the IDX.
         - IDX is A or B (A for 1-voice mode).
         - Total messages: 4 minimum, 6 maximum. Last MUST be a BRIDGE.
-        - Each message ≤ 45 Chinese characters. No emoji.
+        - Keep each message short — aim for ≤ 40 Chinese characters. No emoji.
         - Do NOT include any commentary, headers, or explanations outside the tagged lines.
         """
     }

@@ -124,8 +124,13 @@ final class EchoesViewModel {
     /// the deep-link payload on EchoBridgeStore and tells the parent
     /// to switch to the Generator tab.
     func tapBridge(message: EchoMessage) {
-        guard message.role == .bridge,
-              let intensity = message.bridgeIntensity else { return }
+        guard message.role == .bridge else { return }
+        // Default to .sharp rather than no-op'ing if the intensity is
+        // somehow nil — a bridge bubble must never be a dead tap. (The
+        // engine injects tone-derived intensity after parsing, and the
+        // curated fallback sets it too, so nil shouldn't happen — but a
+        // silent dead bridge would be the worst failure mode.)
+        let intensity = message.bridgeIntensity ?? .sharp
         EchoBridgeStore.shared.pending = EchoBridgeStore.Payload(
             situation: situation,
             suggestedIntensity: intensity

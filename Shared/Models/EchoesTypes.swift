@@ -8,6 +8,12 @@ enum EchoTone: String, CaseIterable, Sendable, Codable {
     case feral     // full register, on-device first, cloud via dedicated consent
 
     var requiresFeralConsentForCloud: Bool { self == .feral }
+
+    /// Deterministic rewrite register the Bridge-to-Action CTA deep-links
+    /// into. The model no longer emits this in the tag (it was the #1
+    /// parse-failure trigger for the small on-device model — Gemini eval
+    /// 2026-05-29); the engine injects it from tone after parsing.
+    var bridgeIntensity: Intensity { self == .feral ? .savage : .sharp }
 }
 
 /// 1 or 2 voices in v1. 3-voice mode deferred to v0.2.

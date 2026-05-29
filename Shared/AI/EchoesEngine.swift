@@ -73,7 +73,17 @@ actor EchoesEngine {
                     options: GenerationOptions(temperature: tone == .feral ? 0.95 : 0.85, maximumResponseTokens: 600)
                 )
                 if let parsed = EchoesParser.parse(response.content) {
-                    messages = parsed
+                    // The model no longer tags the bridge with a register
+                    // suffix; inject the tone-derived intensity so the
+                    // Bridge-to-Action deep link still carries a register.
+                    messages = parsed.map { msg in
+                        guard msg.role == .bridge, msg.bridgeIntensity == nil else { return msg }
+                        return EchoMessage(
+                            id: msg.id, echoIndex: msg.echoIndex, role: msg.role,
+                            text: msg.text, deliveryDelayMs: msg.deliveryDelayMs,
+                            bridgeIntensity: tone.bridgeIntensity
+                        )
+                    }
                 } else {
                     logger.warning("Echoes parser rejected model output — falling back to curated transcript.")
                     EventLedger.shared.recordEchoesParseFallback()
