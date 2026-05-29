@@ -74,6 +74,46 @@ final class ScreenshotTests: XCTestCase {
         }
     }
 
+    /// Captures the credit/Pro paywall for App Store IAP review
+    /// screenshots. Pinned to English; StoreKit-config products render
+    /// because the scheme now carries `Configuration.storekit`.
+    func test_paywall() {
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-uitest",
+            "-uitestLang", "en",
+            "-AppleLanguages", "(en)",
+            "-AppleLocale", "en_US"
+        ]
+        app.launch()
+
+        // Settings is the 4th tab (index 3); it hosts the paywall entry.
+        let settingsTab = app.tabBars.buttons.element(boundBy: 3)
+        if settingsTab.waitForExistence(timeout: 8) {
+            settingsTab.tap()
+        }
+
+        // "Get more credits" is in the Subscription section, below the
+        // fold — scroll the Settings form until it's hittable.
+        let buy = app.buttons["Get more credits"]
+        var tries = 0
+        while !buy.isHittable && tries < 8 {
+            app.swipeUp()
+            tries += 1
+        }
+        if buy.isHittable {
+            buy.tap()
+        } else if app.staticTexts["Get more credits"].isHittable {
+            app.staticTexts["Get more credits"].tap()
+        }
+
+        // Credit-pack consumables resolve slower than subscriptions in
+        // the StoreKit-config environment — wait generously so the packs
+        // render (not "Loading…") for the IAP review screenshot.
+        sleep(18)
+        capture(app: app, name: "07-paywall")
+    }
+
     // MARK: - Helpers
 
     /// Maps the screenshots.sh `LOCALE` env var to the app's
