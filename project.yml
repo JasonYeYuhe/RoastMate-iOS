@@ -62,13 +62,11 @@ targets:
         embed: true
       - target: RoastMateControls
         embed: true
-      # RoastMateKeyboard intentionally NOT embedded in v1.1: spike 14f3e6e +
-      # decision 2026-05-19 Option B (re-rank) → keyboard skeleton stays
-      # committed but DORMANT, not shipped. Its App-Group entitlement has no
-      # provisioning profile, so embedding it breaks the release archive.
-      # Re-add this embed only if the keyboard is ever revived (Option A/C).
-      # - target: RoastMateKeyboard
-      #   embed: true
+      # RoastMateKeyboard removed 2026-05-29 (health audit §2 — structural
+      # KILL): the ~50MB keyboard-extension memory ceiling makes on-device
+      # inference unviable, and the skeleton had been dormant + un-embedded
+      # since v1.1. Revive from git history only with a fundamentally
+      # different (server-side or tiny-model) approach.
     scheme:
       testTargets:
         - RoastMateTests
@@ -175,31 +173,6 @@ targets:
         PRODUCT_NAME: RoastMateControls
         INFOPLIST_FILE: RoastMateControls/Info.plist
         CODE_SIGN_ENTITLEMENTS: RoastMateControls/RoastMateControls.entitlements
-        GENERATE_INFOPLIST_FILE: NO
-        TARGETED_DEVICE_FAMILY: "1"
-        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) APP_EXTENSION"
-      configs:
-        debug:
-          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
-        release:
-          SWIFT_OPTIMIZATION_LEVEL: "-O"
-
-  RoastMateKeyboard:
-    type: app-extension
-    platform: iOS
-    sources:
-      - RoastMateKeyboard/Sources
-      - path: RoastMateKeyboard/Info.plist
-        buildPhase: none
-      - Shared
-      - path: Shared/Resources
-        buildPhase: resources
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.keyboard
-        PRODUCT_NAME: RoastMateKeyboard
-        INFOPLIST_FILE: RoastMateKeyboard/Info.plist
-        CODE_SIGN_ENTITLEMENTS: RoastMateKeyboard/RoastMateKeyboard.entitlements
         GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) APP_EXTENSION"
