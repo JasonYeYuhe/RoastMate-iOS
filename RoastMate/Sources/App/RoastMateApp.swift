@@ -35,9 +35,12 @@ struct RoastMateApp: App {
         #if os(macOS)
         .windowStyle(.titleBar)
         .defaultSize(width: 980, height: 720)
-        .commands {
-            CommandGroup(replacing: .newItem) { }
-        }
+        // Keep the default "New Window" (⌘N) command. Removing it (the old
+        // `CommandGroup(replacing: .newItem) {}`) left NO menu item to reopen
+        // the main window after closing it — Apple rejected macOS v1.0.1 under
+        // Guideline 4 (Design) for exactly that. The app is menu-bar-resident
+        // (MenuBarExtra) so it must NOT quit on window close; instead File →
+        // New Window (and the Dock icon) reopen the window.
         #endif
 
         #if os(macOS)

@@ -48,7 +48,9 @@ struct OutputShareButton<Item: Transferable, Content: View>: View {
         // `recordOutputShareTap()` on tap intent (overcounts by ~the
         // cancellation rate). Analysts must treat the counter as
         // intent-only on macOS, confirmed on iOS.
-        ShareLink(item: item) { label() }
+        // A generic `Transferable` item requires a SharePreview on macOS —
+        // the bare `ShareLink(item:label:)` only accepts concrete String/URL.
+        ShareLink(item: item, preview: SharePreview(Text(verbatim: "RoastMate"))) { label() }
             .simultaneousGesture(TapGesture().onEnded {
                 EventLedger.shared.recordOutputShareTap()  // intent-only on macOS
                 onConfirmedShare?()

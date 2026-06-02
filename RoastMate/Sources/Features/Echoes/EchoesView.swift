@@ -35,7 +35,7 @@ struct EchoesView: View {
             content
                 .navigationTitle("echoes.title")
                 .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .primaryAction) {  // cross-platform (.topBarTrailing is iOS-only)
                         if case .done = viewModel.phase {
                             Button("echoes.action.new") {
                                 viewModel.reset()
