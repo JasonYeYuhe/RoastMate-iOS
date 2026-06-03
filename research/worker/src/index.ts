@@ -31,6 +31,10 @@ interface Env {
   RESEARCH_ANSWERS: KVNamespace;
   RESEARCH_CONTACTS: KVNamespace;
   ALLOWED_ORIGIN: string;
+  // Optional Datadog observability (Wrangler secret). When unset, ddLog is
+  // a no-op. Only operational metadata is ever sent — never form content.
+  DD_API_KEY?: string;
+  DD_SITE?: string;
 }
 
 interface AnswerSubmission {
@@ -181,7 +185,8 @@ async function handleBook(request: Request, env: Env, origin: string): Promise<R
 // --- entry -----------------------------------------------------------
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const t0 = Date.now();
     const origin = request.headers.get('Origin') || '';
 
     // CORS preflight.
@@ -190,6 +195,7 @@ export default {
     }
     // Origin gate (no-Origin requests are rejected — Codex audit catch).
     if (!isAllowedOrigin(env, origin)) {
+      ddLog(env, ctx, { endpoint: 'gate', status: 403, latency_ms: Date.now() - t0 });
       return new Response('Forbidden', { status: 403 });
     }
     if (request.method !== 'POST') {
@@ -200,7 +206,36 @@ export default {
     }
 
     const url = new URL(request.url);
-    if (url.pathname === '/book') return handleBook(request, env, origin);
-    return handleAnswer(request, env, origin);
+    const endpoint = url.pathname === '/book' ? 'book' : 'answer';
+    const resp = endpoint === 'book'
+      ? await handleBook(request, env, origin)
+      : await handleAnswer(request, env, origin);
+    // Log endpoint + HTTP status + latency only — never the form content.
+    ddLog(env, ctx, { endpoint, status: resp.status, latency_ms: Date.now() - t0 });
+    return resp;
   }
 };
+
+/// Privacy-safe Datadog log shipper — operational metadata ONLY (endpoint,
+/// HTTP status, latency). NEVER the answers, locus context, email, timezone,
+/// or participant_code. Fire-and-forget via ctx.waitUntil + fail-silent, so
+/// it can never slow or break the form. No-op unless DD_API_KEY (a Wrangler
+/// secret) is set; site defaults to US5.
+function ddLog(env: Env, ctx: ExecutionContext, fields: Record<string, unknown>): void {
+  if (!env.DD_API_KEY || !ctx || typeof ctx.waitUntil !== 'function') return;
+  const site = env.DD_SITE || 'us5.datadoghq.com';
+  const payload = [{
+    ddsource: 'cloudflare-worker',
+    service: 'roastmate-research',
+    ddtags: 'service:roastmate-research,worker:research',
+    message: `research ${String(fields.endpoint || '')} ${String(fields.status || '')}`.trim(),
+    ...fields
+  }];
+  ctx.waitUntil(
+    fetch(`https://http-intake.logs.${site}/api/v2/logs`, {
+      method: 'POST',
+      headers: { 'DD-API-KEY': env.DD_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {})
+  );
+}

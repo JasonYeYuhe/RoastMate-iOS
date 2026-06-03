@@ -59,7 +59,8 @@ const MODEL_OVERRIDE_ALLOWLIST = new Set([
 ]);
 
 export default {
-  async fetch(req, env) {
+  async fetch(req, env, ctx) {
+    const t0 = Date.now();
     if (req.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders() });
     }
@@ -90,6 +91,7 @@ export default {
     const rlKey = `rl:${deviceId}:${day}`;
     const used = parseInt((await env.RATE_LIMITS.get(rlKey)) || "0", 10);
     if (used >= limit) {
+      ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit, remaining: 0 }, 429);
     }
 
@@ -202,6 +204,9 @@ export default {
     }
 
     if (!text) {
+      // Log provider:status only — never the upstream detail body.
+      ddLog(env, ctx, { outcome: "upstream_error", status: 502, intensity, locale,
+        attempts: attempts.map((a) => a.split(":").slice(0, 2).join(":")), latency_ms: Date.now() - t0 });
       return json(
         { error: "upstream_error", detail: attempts.join(" | ").slice(0, 300) },
         502
@@ -212,6 +217,8 @@ export default {
     // back — failed upstream calls should not eat the user's daily quota.
     await env.RATE_LIMITS.put(rlKey, String(used + 1), { expirationTtl: 86400 * 2 });
 
+    ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale,
+      provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
     return json({
       text,
       model: modelUsed,
@@ -220,6 +227,31 @@ export default {
     }, 200);
   }
 };
+
+/// Privacy-safe Datadog log shipper. Sends ONLY operational metadata
+/// (outcome, HTTP status, latency, intensity, locale, provider, model) —
+/// NEVER the situation text, the generated output, or the deviceId. Logged
+/// fire-and-forget via ctx.waitUntil and fail-silent (.catch), so it can
+/// never slow down or break a vent. No-op unless DD_API_KEY (a Wrangler
+/// secret) is set; site defaults to US5 (env.DD_SITE to override).
+function ddLog(env, ctx, fields) {
+  if (!env || !env.DD_API_KEY || !ctx || typeof ctx.waitUntil !== "function") return;
+  const site = env.DD_SITE || "us5.datadoghq.com";
+  const payload = [{
+    ddsource: "cloudflare-worker",
+    service: "roastmate-vent",
+    ddtags: "service:roastmate-vent,worker:vent",
+    message: `vent ${fields.outcome || ""} ${fields.status || ""}`.trim(),
+    ...fields
+  }];
+  ctx.waitUntil(
+    fetch(`https://http-intake.logs.${site}/api/v2/logs`, {
+      method: "POST",
+      headers: { "DD-API-KEY": env.DD_API_KEY, "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }).catch(() => {})
+  );
+}
 
 /// OpenAI-compatible chat completion call. Both OpenRouter and Groq
 /// accept the same request shape, so we share one helper. Returns
