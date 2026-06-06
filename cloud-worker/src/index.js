@@ -83,7 +83,7 @@ export default {
     if (validation.error) {
       return json({ error: validation.error }, 400);
     }
-    const { situation, styleName, intensity, locale, deviceId, modelOverride } = validation.value;
+    const { situation, styleName, intensity, locale, deviceId, modelOverride, mode } = validation.value;
 
     // Per-device daily rate limit.
     const limit = parseInt(env.DAILY_LIMIT_PER_DEVICE || "30", 10);
@@ -98,8 +98,13 @@ export default {
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional
     // register as the local path would attempt.
-    const systemPrompt = buildSystemPrompt(intensity, locale, styleName);
-    const userPrompt = buildUserPrompt(situation, locale);
+    const isRoommate = mode === "roommate";
+    const systemPrompt = isRoommate
+      ? buildRoommateSystemPrompt(intensity, locale)
+      : buildSystemPrompt(intensity, locale, styleName);
+    const userPrompt = isRoommate
+      ? buildRoommateUserPrompt(situation, locale)
+      : buildUserPrompt(situation, locale);
 
     // Decision after smoke testing: Groq is primary because OpenRouter's
     // :free model pool is consistently rate-limited upstream (all the
@@ -383,6 +388,10 @@ function validate(body) {
     }
     modelOverride = model;
   }
+  // Optional generation mode: "vent" (default, 1–3-sentence private draft)
+  // or "roommate" (the 虚拟舍友群 8–10-line group-chat transcript). The
+  // tone still rides on `intensity` (vent = casual register, feral = open).
+  const mode = body.mode === "roommate" ? "roommate" : "vent";
   return {
     value: {
       situation,
@@ -390,7 +399,8 @@ function validate(body) {
       intensity,
       locale,
       deviceId,
-      modelOverride
+      modelOverride,
+      mode
     }
   };
 }
@@ -491,6 +501,77 @@ function buildUserPrompt(situation, locale) {
     "",
     "Write 1 private vent draft. Raw, immediate, and emotionally specific. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly — no numbering, no preface, no commentary.",
     reminder
+  ].join("\n");
+}
+
+// --- 虚拟舍友群 (roommate group, Echoes vNext — Option A cloud path) ---------
+// Apple's on-device FM blocks the harsh group-roast (guardrailViolation,
+// 2026-06-06 eval). The cloud models (Groq Qwen3-32B / OpenRouter) have no such
+// guardrail, so the roommate scene routes here. Builds the 8–10-line, 3-voice
+// `[ROLE/IDX]` transcript that the app's EchoesParser(scene:.roommateGroup)
+// consumes. zh-Hans v1.
+function buildRoommateSystemPrompt(intensity, locale) {
+  const feral = intensity === "feral";
+  const bridgeWord = feral ? "Savage" : "Sharp";
+
+  const registerLine = feral
+    ? "语气:火力全开,可以用中文网络发泄式脏话(狗东西/神经病/操——但绝不歧视词、绝不威胁),像朋友在私聊群里真实开骂。"
+    : "语气:犀利、损但不狠,可以阴阳怪气,但别到爆粗的程度。";
+
+  const safety = [
+    "安全规则(永远适用):",
+    "- 绝不用真实全名点名;situation 里出现的名字一律换成角色(室友/同事/房东)。",
+    "- 绝不产出歧视词、威胁暴力,绝不攻击受保护属性(种族/性别/性取向/残障/外貌/家庭)。",
+    "- 火力对准对方的行为和选择,别攻击身份。",
+    "- 若 situation 透露自伤/暴力倾向,全员收住,温和建议求助,不要嘲讽。"
+  ].join("\n");
+
+  const personas = [
+    "三个室友(固定角色,各自保持人设):",
+    "A 护短室友:第一时间无条件站用户这边,不质疑不讲道理,一句话先接住委屈。",
+    "B 毒舌室友:火力担当,专挑对方行为荒谬处开炮,负责笑点,短句有梗。",
+    "C 清醒室友:接住前面的梗后收尾,不灌鸡汤不当心理咨询师,先把怒气落到「别替他背锅」,最后一条给出 Bridge。"
+  ].join("\n");
+
+  const example = [
+    "示例(不同的事,照这个「形状」写:8 行、A/B/C 互相接梗、最后一条是 C 的 BRIDGE):",
+    "[VALIDATE/A] 等等,这事儿真不怪你,先别自我怀疑。",
+    "[ESCALATE/B] 他这操作我也是服气的,理直气壮得有点好笑。",
+    "[ESCALATE/A] 就是,换谁碰上都得无语一下。",
+    "[ESCALATE/C] 我在旁边听着都替你觉得离谱。",
+    "[ESCALATE/B] 这事要写进段子里都没人信。",
+    "[ESCALATE/A] 反正你这边一点毛病没有。",
+    "[DEESCALATE/C] 好啦,气也陪你撒完了,别让这事占用你太多心情。",
+    `[BRIDGE/C] 与其干生气,不如用 ${bridgeWord} 把话说清楚甩回去 →`
+  ].join("\n");
+
+  const rules = [
+    "硬规则(全部都要满足):",
+    "- 输出 8 到 10 行,绝不少于 8 行。4 行是错的——室友们要持续接力开炮。",
+    "- 这是群聊,所以大多数行(5–7 行)是 ESCALATE:室友互相接梗、每行回应上一行,B(毒舌)负责最狠的笑点。",
+    "- A、B、C 每个室友至少说 2 次,相邻两行尽量是不同室友。",
+    `- 恰好一条 VALIDATE(第一行,A);恰好一条 DEESCALATE(C,靠后,收住情绪并指向下一步,别鸡汤);恰好一条 BRIDGE(最后一行,C):一句以 → 结尾、点名工具的 CTA,例如「…不如用 ${bridgeWord} 把话甩回去 →」。`,
+    "- 每行都用 [ROLE/IDX] 开头——ROLE 取 VALIDATE/ESCALATE/DEESCALATE/BRIDGE,IDX 是字母 A、B 或 C(绝不用数字、绝不用名字),IDX 后面什么都不加。",
+    "- 每行 ≤ 30 个汉字。不要 emoji、不要时间戳、不要「我们永远陪你」这种依赖性话。除了带标签的行,什么都别输出。"
+  ].join("\n");
+
+  return [
+    "你在写一段 zh-Hans 群聊记录:三个合成的大学室友 A(护短)、B(毒舌)、C(清醒)一起进群,替用户骂刚刚惹到 ta 的人/事。用户不在群里说话,只看。这些是合成角色,不是真人。",
+    safety,
+    personas,
+    registerLine,
+    example,
+    rules,
+    languageDirective(locale)
+  ].join("\n\n");
+}
+
+function buildRoommateUserPrompt(situation, locale) {
+  return [
+    `事情:${situation}`,
+    "",
+    "把这事发进你们的舍友群,三个室友一起接住情绪、替 ta 出气。严格按上面的格式输出 8–10 行带标签的群聊,最后一条是 C 的 BRIDGE。只输出带标签的行,别加任何前言或解说。",
+    userLanguageReminder(locale)
   ].join("\n");
 }
 

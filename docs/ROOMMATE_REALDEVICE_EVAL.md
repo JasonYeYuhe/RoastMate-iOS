@@ -65,3 +65,25 @@ the text comes from. Only the generation call changes.
 **Do NOT build the roommate UI (increment 3) until the path is chosen** — it
 would be built on a feature that currently shows the curated fallback 100% of
 the time.
+
+## 2026-06-06 (cont.): Option A chosen + VALIDATED — cloud, 10% parse-fallback
+The Worker gained a `mode:"roommate"` branch (server-side roommate prompt; the
+cloud Groq Qwen3-32B / OpenRouter models have **no Apple guardrail**). Ran the
+same 20 zh-Hans scenarios against it (12 s spacing to stay under Groq's
+free-tier TPM):
+
+- **20/20 got a model response; parse-fallback = 2/20 = 10 %** → **under the
+  < 15 % enable bar, far under the 35 % kill line.** Both on-device walls are
+  gone: the cloud model nails the 8-line A/B/C structure AND the roast register.
+- Quality is genuinely on-brand (护短/毒舌/清醒 dynamics, funny, cathartic —
+  e.g. "借钱时喊爸爸，分手后喊渣滓，真·情感诈骗模板").
+- Caveat (ops, NOT viability): a rapid 20-request BURST hits Groq's free-tier
+  per-minute rate limit (429 → the Worker's OpenRouter fallback, itself a shared
+  `:free` pool). Production traffic is spread out; if bursts matter, a paid Groq
+  tier covers it. Reproduce: `python3 scripts/roommate_cloud_eval.py`.
+
+**Verdict: Option A works.** Roommate generation routes through the cloud Worker
+(`mode=roommate`), 5.1.2(i)-consent-gated like Echoes feral. Next: wire the
+Swift client (EchoesEngine → cloud for the roommate scene + the consent gate),
+re-eval end-to-end, then the UI. Increments 1–2 (parser / flag / telemetry /
+persistence) apply unchanged.
