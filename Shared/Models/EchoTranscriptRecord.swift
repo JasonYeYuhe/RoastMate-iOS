@@ -15,6 +15,12 @@ final class EchoTranscriptRecord {
     var localeRaw: String = ""
     var toneRaw: String = EchoTone.casual.rawValue
     var voiceCountRaw: Int = 1
+    /// Which Echoes scene this transcript is (`classic` / `roommateGroup`).
+    /// OPTIONAL for additive, non-destructive migration: every record
+    /// written before the roommate-group feature has no `sceneRaw`, and a
+    /// nil value decodes as `.classic`. CloudKit also requires new model
+    /// properties to be optional or defaulted.
+    var sceneRaw: String?
     /// Pre-bridge intensity hint embedded by the model for the
     /// Bridge-to-Action deep link. Optional because curated-fallback
     /// transcripts may not set one.
@@ -34,6 +40,7 @@ final class EchoTranscriptRecord {
         locale: String = Locale.current.identifier,
         tone: EchoTone = .casual,
         voiceCount: EchoVoiceCount = .two,
+        scene: EchoScene = .classic,
         bridgeIntensity: Intensity? = nil,
         cloudUsed: Bool = false,
         isSampleData: Bool = false
@@ -44,6 +51,7 @@ final class EchoTranscriptRecord {
         self.localeRaw = locale
         self.toneRaw = tone.rawValue
         self.voiceCountRaw = voiceCount.rawValue
+        self.sceneRaw = scene.rawValue
         self.bridgeIntensityRaw = bridgeIntensity?.rawValue
         self.cloudUsed = cloudUsed
         self.isSampleData = isSampleData
@@ -52,6 +60,8 @@ final class EchoTranscriptRecord {
 
     var tone: EchoTone { EchoTone(rawValue: toneRaw) ?? .casual }
     var voiceCount: EchoVoiceCount { EchoVoiceCount(rawValue: voiceCountRaw) ?? .one }
+    /// nil `sceneRaw` (legacy records) and any unknown value decode as `.classic`.
+    var scene: EchoScene { sceneRaw.flatMap(EchoScene.init(rawValue:)) ?? .classic }
     var bridgeIntensity: Intensity? {
         guard let raw = bridgeIntensityRaw else { return nil }
         return Intensity(rawValue: raw)

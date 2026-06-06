@@ -16,10 +16,28 @@ enum EchoTone: String, CaseIterable, Sendable, Codable {
     var bridgeIntensity: Intensity { self == .feral ? .savage : .sharp }
 }
 
-/// 1 or 2 voices in v1. 3-voice mode deferred to v0.2.
+/// Number of synthetic voices in a transcript. 1–2 = the classic 替你出气
+/// experience; 3 = the 虚拟舍友群 roommate-group scene (Echoes vNext). Raw
+/// values are stable and `.three` is purely additive, so old persisted
+/// `voiceCountRaw` values (1 / 2) keep decoding with no migration.
 enum EchoVoiceCount: Int, CaseIterable, Sendable, Codable {
     case one = 1
     case two = 2
+    case three = 3
+}
+
+/// Which Echoes experience a transcript belongs to. `.classic` = the
+/// shipped 1–2 voice 替你出气. `.roommateGroup` = the 3-voice 虚拟舍友群
+/// (Echoes vNext). Persisted as an OPTIONAL raw string on
+/// `EchoTranscriptRecord` — a nil `sceneRaw` decodes as `.classic`, so
+/// every pre-existing record stays valid with no destructive migration.
+enum EchoScene: String, CaseIterable, Sendable, Codable {
+    case classic
+    case roommateGroup
+
+    /// The voice count this scene is generated with. Classic transcripts
+    /// carry their own 1/2 selection; the roommate group is always 3.
+    var fixedVoiceCount: EchoVoiceCount? { self == .roommateGroup ? .three : nil }
 }
 
 /// Required message-role structure for every Echoes transcript. Order
@@ -27,7 +45,9 @@ enum EchoVoiceCount: Int, CaseIterable, Sendable, Codable {
 /// `bridge` role is mandatory and always last — it is the single most
 /// important strategic feature (Bridge to Action — Gemini decisive
 /// catch in 2026-05-28 review). Without it, Echoes is a regulation
-/// dead-end.
+/// dead-end. The roommate-group scene reuses these same four roles
+/// (multiple `escalate` messages carry the group pile-on / banter,
+/// `deescalate` is the reframe) so there is NO new persisted role case.
 enum EchoMessageRole: String, CaseIterable, Sendable, Codable {
     case validate    // "you're right to be this mad"
     case escalate    // "honestly that's worse than you're making it sound"
@@ -40,7 +60,7 @@ enum EchoMessageRole: String, CaseIterable, Sendable, Codable {
 /// `EchoTranscriptRecord`).
 struct EchoMessage: Identifiable, Sendable {
     let id: UUID
-    let echoIndex: Int               // 0 or 1 in v1 (matches EchoVoiceCount)
+    let echoIndex: Int               // 0/1 classic, 0/1/2 roommate (matches EchoVoiceCount)
     let role: EchoMessageRole
     let text: String
     let deliveryDelayMs: Int         // for the chat-style type-out animation
@@ -83,10 +103,31 @@ struct EchoTranscript: Sendable {
     let situation: String
     let tone: EchoTone
     let voiceCount: EchoVoiceCount
-    let echoes: [EchoSpec]      // 1 or 2 entries; matches voiceCount
-    let messages: [EchoMessage] // 4–6 ordered; last is always .bridge
+    let scene: EchoScene        // .classic (1–2 voice) or .roommateGroup (3 voice)
+    let echoes: [EchoSpec]      // entries match voiceCount
+    let messages: [EchoMessage] // classic 4–6 / roommate 8–10; last is always .bridge
     let cloudUsed: Bool         // true iff feral-cloud-consent granted AND cloud succeeded
     let locale: Locale
+
+    init(
+        situation: String,
+        tone: EchoTone,
+        voiceCount: EchoVoiceCount,
+        scene: EchoScene = .classic,
+        echoes: [EchoSpec],
+        messages: [EchoMessage],
+        cloudUsed: Bool,
+        locale: Locale
+    ) {
+        self.situation = situation
+        self.tone = tone
+        self.voiceCount = voiceCount
+        self.scene = scene
+        self.echoes = echoes
+        self.messages = messages
+        self.cloudUsed = cloudUsed
+        self.locale = locale
+    }
 }
 
 /// Errors surfaced from EchoesEngine. Most paths fall back to a curated

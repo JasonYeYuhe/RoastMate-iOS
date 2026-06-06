@@ -85,4 +85,30 @@ enum FallbackRoasts {
             ]
         }
     }
+
+    /// Curated 虚拟舍友群 (3-voice) transcript used when the roommate-scene
+    /// parser rejects the model output or Foundation Models is unavailable.
+    /// Deterministic and structurally identical to a real one — 3 voices
+    /// (护短 A / 毒舌 B / 清醒 C), each speaking ≥2×, validate → group
+    /// pile-on → reframe → single bridge last — so it satisfies the strict
+    /// roommate contract and renders the same as a model success. Shown to
+    /// the user normally; the caller records it as a parse fallback (it is
+    /// NOT passed off as model-quality output). zh-Hans v1.
+    static func curatedRoommateTranscript(
+        tone: EchoTone,
+        personas: [EchoSpec]
+    ) -> [EchoMessage] {
+        let bridgeIntensity: Intensity = (tone == .feral) ? .savage : .sharp
+        let bridgeWord = (tone == .feral) ? "Savage" : "Sharp"
+        return [
+            EchoMessage(echoIndex: 0, role: .validate,   text: "等等，这锅凭什么甩你头上。"),
+            EchoMessage(echoIndex: 1, role: .escalate,   text: "他甩锅这速度，改行扔铁饼能拿奖。"),
+            EchoMessage(echoIndex: 0, role: .escalate,   text: "就是，这事真赖不到你。"),
+            EchoMessage(echoIndex: 1, role: .escalate,   text: "脸皮厚到能当防弹衣，我服。"),
+            EchoMessage(echoIndex: 2, role: .escalate,   text: "行，气也帮你撒到位了。"),
+            EchoMessage(echoIndex: 1, role: .escalate,   text: "反正他一句占理的都没有。"),
+            EchoMessage(echoIndex: 2, role: .deescalate, text: "别替他背锅，把时间线留好。"),
+            EchoMessage(echoIndex: 2, role: .bridge,     text: "与其干生气，不如用 \(bridgeWord) 把话甩回去 →", bridgeIntensity: bridgeIntensity)
+        ]
+    }
 }

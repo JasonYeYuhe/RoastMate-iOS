@@ -192,4 +192,156 @@ final class EchoesParserTests: XCTestCase {
         XCTAssertEqual(safe?.last?.bridgeIntensity, EchoTone.feral.bridgeIntensity,
                        "A parsed bridge with no intensity suffix must get the tone-derived intensity injected.")
     }
+
+    // MARK: - Roommate-group scene (3 voices, 8–10 msgs, strict)
+
+    /// Canonical valid roommate transcript: A/B/C each speak ≥2×,
+    /// validate first, a deescalate (reframe) before a single bridge last.
+    static let validRoommate = """
+    [VALIDATE/A] 这锅凭什么甩你头上。
+    [ESCALATE/B] 他甩锅的速度能去练铁饼。
+    [ESCALATE/A] 就是，这事真不赖你。
+    [ESCALATE/B] 脸皮厚到能当防弹衣。
+    [ESCALATE/C] 行，气也帮你撒到位了。
+    [ESCALATE/B] 反正他一句占理的都没有。
+    [DEESCALATE/C] 别替他背锅，把时间线留好。
+    [BRIDGE/C] 与其干生气不如把话甩回去 →
+    """
+
+    func test_roommate_parsesValidEightMessageTranscript() {
+        let result = EchoesParser.parse(Self.validRoommate, scene: .roommateGroup)
+        XCTAssertNotNil(result)
+        XCTAssertEqual(result?.count, 8)
+        XCTAssertEqual(result?.first?.role, .validate)
+        XCTAssertEqual(result?.last?.role, .bridge)
+        // C (index 2) present → proves the third voice parsed.
+        XCTAssertTrue(result?.contains { $0.echoIndex == 2 } ?? false)
+    }
+
+    func test_roommate_parsesTenMessageBoundary() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/C] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [ESCALATE/C] 六。
+        [ESCALATE/A] 七。
+        [ESCALATE/B] 八。
+        [DEESCALATE/C] 九。
+        [BRIDGE/C] 十 →
+        """
+        XCTAssertEqual(EchoesParser.parse(raw, scene: .roommateGroup)?.count, 10)
+    }
+
+    func test_roommate_rejectsBelowEight() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/C] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [DEESCALATE/C] 六。
+        [BRIDGE/C] 七 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "7 messages — roommate minimum is 8.")
+    }
+
+    func test_roommate_rejectsAboveTen() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/C] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [ESCALATE/C] 六。
+        [ESCALATE/A] 七。
+        [ESCALATE/B] 八。
+        [ESCALATE/C] 九。
+        [DEESCALATE/A] 十。
+        [BRIDGE/C] 十一 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "11 messages — roommate maximum is 10.")
+    }
+
+    func test_roommate_rejectsVoiceSpeakingOnce() {
+        // C speaks exactly once → not a group → reject.
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/A] 三。
+        [ESCALATE/B] 四。
+        [ESCALATE/A] 五。
+        [ESCALATE/B] 六。
+        [DEESCALATE/C] 七。
+        [BRIDGE/A] 八 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "Every voice (A/B/C) must speak ≥2×.")
+    }
+
+    func test_roommate_rejectsLastNotBridge() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/C] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [DEESCALATE/C] 六。
+        [BRIDGE/C] 七 →
+        [ESCALATE/B] 八。
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "Last must be a BRIDGE.")
+    }
+
+    func test_roommate_rejectsMissingDeescalateReframe() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/C] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [ESCALATE/C] 六。
+        [ESCALATE/A] 七。
+        [BRIDGE/C] 八 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "Must contain a DEESCALATE (reframe).")
+    }
+
+    func test_roommate_rejectsTwoBridges() {
+        let raw = """
+        [VALIDATE/A] 一。
+        [BRIDGE/B] 中间桥 →
+        [ESCALATE/A] 三。
+        [ESCALATE/B] 四。
+        [ESCALATE/C] 五。
+        [ESCALATE/C] 六。
+        [DEESCALATE/C] 七。
+        [BRIDGE/A] 八 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "Exactly one BRIDGE allowed.")
+    }
+
+    func test_roommate_rejectsOutOfRangeIndexD_strict() {
+        // A malformed tagged line (index D) must HARD-reject the whole
+        // transcript in strict roommate mode — not silently drop the line.
+        let raw = """
+        [VALIDATE/A] 一。
+        [ESCALATE/B] 二。
+        [ESCALATE/D] 三。
+        [ESCALATE/A] 四。
+        [ESCALATE/B] 五。
+        [ESCALATE/C] 六。
+        [DEESCALATE/C] 七。
+        [BRIDGE/C] 八 →
+        """
+        XCTAssertNil(EchoesParser.parse(raw, scene: .roommateGroup), "Index D must reject the whole roommate transcript.")
+    }
+
+    func test_classic_defaultStillRejectsVoiceC() {
+        // Regression: the default (classic) contract is unchanged — C is
+        // not a valid voice there, so the roommate transcript must NOT
+        // parse under the classic contract.
+        XCTAssertNil(EchoesParser.parse(Self.validRoommate),
+                     "Roommate transcript must not parse under the classic contract.")
+    }
 }
