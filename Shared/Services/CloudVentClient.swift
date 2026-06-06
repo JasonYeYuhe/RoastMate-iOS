@@ -38,6 +38,21 @@ struct CloudVentRequest: Encodable, Sendable {
     let intensity: String     // "vent" or "feral"
     let locale: String
     let deviceId: String
+    /// nil / "vent" → the 1–3-sentence private draft; "roommate" → the
+    /// 虚拟舍友群 8–10-line group-chat transcript (Echoes vNext, Option A).
+    /// Synthesized `encodeIfPresent` omits it when nil, so existing vent
+    /// call sites are unchanged on the wire.
+    let mode: String?
+
+    init(situation: String, styleName: String?, intensity: String,
+         locale: String, deviceId: String, mode: String? = nil) {
+        self.situation = situation
+        self.styleName = styleName
+        self.intensity = intensity
+        self.locale = locale
+        self.deviceId = deviceId
+        self.mode = mode
+    }
 }
 
 struct CloudVentResponse: Decodable, Sendable {

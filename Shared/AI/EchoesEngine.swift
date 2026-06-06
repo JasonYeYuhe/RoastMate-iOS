@@ -24,10 +24,17 @@ actor EchoesEngine {
     static let shared = EchoesEngine()
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "EchoesEngine")
+    /// Cloud Worker client — the 虚拟舍友群 scene routes through it (Apple's
+    /// on-device FM blocks the harsh group-roast). Injectable for tests.
+    private let cloudClient: CloudVentService
 
     #if canImport(FoundationModels)
     private var session: LanguageModelSession?
     #endif
+
+    init(cloudClient: CloudVentService = CloudVentClient.shared) {
+        self.cloudClient = cloudClient
+    }
 
     /// Caller-provided contract. The view layer decides tone / voiceCount /
     /// locale / scene and passes the resolved consent state. The engine does
@@ -70,6 +77,18 @@ actor EchoesEngine {
         let personas = EchoesPersonaCatalog.selectPersonas(
             locale: locale, voiceCount: effectiveVoiceCount, scene: scene
         )
+
+        // 虚拟舍友群 is CLOUD-ONLY: Apple's on-device FM blocks the harsh
+        // group-roast (guardrailViolation — 2026-06-06 eval; cloud validated at
+        // 10% parse-fallback). Route it through the Worker (mode=roommate).
+        // Classic Echoes stays on-device below.
+        if scene == .roommateGroup {
+            return try await generateRoommateViaCloud(
+                situation: situation, tone: tone, locale: locale,
+                personas: personas, feralCloudGranted: feralCloudGranted,
+                remoteConfig: remoteConfig
+            )
+        }
 
         // RESTRICT-only remote gate folded into the cloud decision from the
         // SAME snapshot above: feral tone + dedicated consent + worker
@@ -158,6 +177,73 @@ actor EchoesEngine {
             messages: messages,
             cloudUsed: cloudUsed || useCloud,
             locale: locale
+        )
+    }
+
+    /// 虚拟舍友群 (Option A): generate the 3-voice transcript via the cloud
+    /// Worker (`mode=roommate`). Cloud consent is REQUIRED (no on-device
+    /// fallback for this scene); the UI obtains it before calling, so a missing
+    /// grant throws `.consentDenied` → the view shows the consent sheet. Any
+    /// cloud failure degrades to the curated transcript so the user is never
+    /// blocked. Only a cloud response that fails the strict parser counts as a
+    /// parse-fallback (network/capacity errors don't pollute the rate).
+    private func generateRoommateViaCloud(
+        situation: String,
+        tone: EchoTone,
+        locale: Locale,
+        personas: [EchoSpec],
+        feralCloudGranted: Bool,
+        remoteConfig: RemoteConfigValues
+    ) async throws -> EchoTranscript {
+        guard feralCloudGranted else {
+            throw EchoesGenerationError.consentDenied
+        }
+        // Consent granted. If the Worker isn't configured or the remote
+        // kill-switch forces local / disables cloud, we can't do a real
+        // generation — serve the curated transcript rather than block.
+        let cloudReachable = CloudConfig.isConfigured
+            && remoteConfig.cloudAllowed(consentAllowsCloud: true)
+
+        var messages: [EchoMessage]
+        var cloudUsed = false
+        if cloudReachable {
+            do {
+                let req = CloudVentRequest(
+                    situation: situation,
+                    styleName: nil,
+                    intensity: (tone == .feral) ? "feral" : "vent",
+                    locale: locale.identifier,
+                    deviceId: DeviceID.current(),
+                    mode: "roommate"
+                )
+                let resp = try await cloudClient.generate(req)
+                if let parsed = EchoesParser.parse(resp.text, scene: .roommateGroup),
+                   let safe = Self.safetyFilter(parsed, tone: tone) {
+                    messages = safe
+                    cloudUsed = true
+                } else {
+                    // Cloud returned text but it failed the strict contract —
+                    // a real parse fallback (the metric that gates the feature).
+                    logger.warning("Roommate cloud output unusable (parse or safety) — curated fallback.")
+                    EventLedger.shared.recordRoommateGroupParseFallback()
+                    messages = FallbackRoasts.curatedRoommateTranscript(tone: tone, personas: personas)
+                }
+            } catch {
+                // Network / rate-limit / cloud error (no text) — a connectivity
+                // / capacity issue, NOT a parse failure. Curated fallback,
+                // WITHOUT polluting the parse-fallback rate.
+                logger.warning("Roommate cloud error — curated fallback: \(error.localizedDescription, privacy: .public)")
+                messages = FallbackRoasts.curatedRoommateTranscript(tone: tone, personas: personas)
+            }
+        } else {
+            logger.notice("Roommate cloud unreachable (config/remote) — curated fallback.")
+            messages = FallbackRoasts.curatedRoommateTranscript(tone: tone, personas: personas)
+        }
+
+        EventLedger.shared.markSuccessfulOutput()
+        return EchoTranscript(
+            situation: situation, tone: tone, voiceCount: .three, scene: .roommateGroup,
+            echoes: personas, messages: messages, cloudUsed: cloudUsed, locale: locale
         )
     }
 
