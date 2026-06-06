@@ -35,6 +35,11 @@ final class EchoesViewModel {
     var phase: Phase = .setup
     var visibleMessages: [EchoMessage] = []
     var hasRegenerated: Bool = false  // single regenerate per session — v2 plan §2 anti-slot-machine
+    /// `startSession()` is wired to the view's `.onAppear`, which can fire more
+    /// than once for a single feature-open (SwiftUI re-appear). Guard so the
+    /// `*_started` counter — the conversion-funnel denominator — bumps at most
+    /// once per VM instance. (Review 2026-06.)
+    private var sessionStarted = false
 
     init(scene: EchoScene = .classic) {
         self.scene = scene
@@ -58,6 +63,8 @@ final class EchoesViewModel {
 
     // Telemetry hook — fires once per generation session.
     func startSession() {
+        guard !sessionStarted else { return }
+        sessionStarted = true
         if scene == .roommateGroup {
             EventLedger.shared.recordRoommateGroupStarted()
         } else {
@@ -94,7 +101,14 @@ final class EchoesViewModel {
                 cloudConfigured: cloudConfigured,
                 consent: currentFeralConsent
             )
-            if gate == .needsConsent {
+            // Roommate is cloud-ONLY: if consent isn't granted (notAsked OR a
+            // prior deny), RE-present the sheet rather than letting the engine
+            // throw .consentDenied → a silent bounce to setup (dead Generate
+            // button forever). Classic feral keeps gate semantics (deny →
+            // on-device, no re-prompt). (Review 2026-06.)
+            let roommateNeedsConsent = scene == .roommateGroup
+                && cloudConfigured && currentFeralConsent != .granted
+            if gate == .needsConsent || roommateNeedsConsent {
                 // Present the consent sheet directly via VM-owned state —
                 // synchronous on the main actor, no .onChange mirror. The
                 // view rewrites `currentFeralConsent` on the user's choice

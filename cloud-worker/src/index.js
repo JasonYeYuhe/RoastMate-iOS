@@ -163,7 +163,10 @@ export default {
         modelUsed = groqPrimaryModel;
         providerUsed = "groq";
       } else {
-        const summary = `groq:${groqResult.status || "?"}:${(groqResult.detail || "fail").slice(0, 300)}`;
+        // Privacy: keep provider:status ONLY. An upstream error BODY can echo
+        // the user's prompt (esp. a model policy rejection), which would then
+        // land in Cloudflare logs + the wire 502 `detail`. (Review 2026-06.)
+        const summary = `groq:${groqResult.status || "?"}`;
         attempts.push(summary);
         console.log("Groq primary failed:", summary);
       }
@@ -202,7 +205,7 @@ export default {
         modelUsed = orModel;
         providerUsed = "openrouter";
       } else {
-        const summary = `openrouter:${orResult.status || "?"}:${(orResult.detail || "fail").slice(0, 300)}`;
+        const summary = `openrouter:${orResult.status || "?"}`;  // provider:status only — never the body (privacy)
         attempts.push(summary);
         console.log("OpenRouter fallback failed:", summary);
       }
