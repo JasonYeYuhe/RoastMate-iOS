@@ -212,13 +212,14 @@ final class RemoteConfigTests: XCTestCase {
 
     // MARK: - 虚拟舍友群 dark-by-default flag
 
-    func test_roommateGroup_shipsDarkByDefault() {
-        XCTAssertFalse(RemoteConfigValues.safeDefault.roommateGroupEnabled,
-                       "The roommate group must ship dark (false) until its real-device eval passes.")
-        XCTAssertFalse(RemoteConfigValues.safeDefault.roommateGroupAllowed,
-                       "Dark by default → not allowed even though echoes is enabled.")
-        // Dark default must NOT make the baseline look restrictive (that would
-        // falsely trip remote_config_kill_applied on every launch).
+    func test_roommateGroup_enabledByDefaultAfterEval() {
+        // The cloud path (Option A) validated at 10% parse-fallback (2026-06-06),
+        // so the roommate group now ships ENABLED; the remote
+        // `roommate_group_enabled:false` is the production kill-switch.
+        XCTAssertTrue(RemoteConfigValues.safeDefault.roommateGroupEnabled)
+        XCTAssertTrue(RemoteConfigValues.safeDefault.roommateGroupAllowed,
+                      "Enabled + echoes on → allowed.")
+        // The all-enabled baseline is still not restrictive.
         XCTAssertFalse(RemoteConfigValues.safeDefault.isRestrictive)
     }
 
@@ -234,15 +235,17 @@ final class RemoteConfigTests: XCTestCase {
                        "Killing echoes must also kill the roommate group (AND gate).")
     }
 
-    func test_roommateGroup_enabledByExplicitPatch_notReDarkenedByOmission() {
+    func test_roommateGroup_remoteKill_notReEnabledByOmission() {
         let rc = RemoteConfig(defaults: defaults)
-        XCTAssertFalse(rc.current.roommateGroupAllowed, "Fresh = dark.")
-        rc.apply(fetchedData: Data(#"{ "roommate_group_enabled": true }"#.utf8))
-        XCTAssertTrue(rc.current.roommateGroupAllowed, "Explicit enable applies.")
-        // A later partial patch that omits it must keep it on (merge semantics).
+        XCTAssertTrue(rc.current.roommateGroupAllowed, "Fresh = enabled (post-eval default).")
+        // Remote KILL — the production safety net if the live parse-fallback spikes.
+        rc.apply(fetchedData: Data(#"{ "roommate_group_enabled": false }"#.utf8))
+        XCTAssertFalse(rc.current.roommateGroupAllowed, "Explicit false kills it.")
+        // A later partial patch that omits it must keep it KILLED (merge semantics) —
+        // an omitted key can never re-enable a killed feature.
         rc.apply(fetchedData: Data(#"{ "vent_cloud_enabled": false }"#.utf8))
-        XCTAssertTrue(rc.current.roommateGroupEnabled,
-                      "An omitted key keeps its prior value (no re-darken by omission).")
+        XCTAssertFalse(rc.current.roommateGroupEnabled,
+                       "An omitted key keeps its prior (killed) value — no re-enable by omission.")
     }
 
     // MARK: - refresh(): request shape + network failure (Codex review 2026-05-29)

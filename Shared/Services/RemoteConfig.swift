@@ -27,12 +27,11 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     var configVersion: Int
     /// `false` → hide the Echoes tile + block `EchoesEngine.generate`.
     var echoesEnabled: Bool
-    /// `false` (the baked DEFAULT) → hide the 虚拟舍友群 entry + block
-    /// roommate-scene generation. Ships DARK: the feature is enabled by
-    /// flipping this baked default to `true` in the real-device-eval-gated
-    /// release; the remote config then serves only as its post-launch
-    /// kill-switch. Always gated together with `echoesEnabled` —
-    /// see `roommateGroupAllowed`.
+    /// `true` (the baked DEFAULT, post-2026-06-06 cloud eval @ 10% fallback) →
+    /// the 虚拟舍友群 entry is visible + the roommate scene generates via the
+    /// cloud Worker. The remote `roommate_group_enabled:false` is the
+    /// production kill-switch (if the live parse-fallback ever spikes). Always
+    /// gated together with `echoesEnabled` — see `roommateGroupAllowed`.
     var roommateGroupEnabled: Bool
     /// `true` → force ALL generation on-device (disables the rewrite
     /// cloud-vent path AND any Echoes-feral cloud), regardless of user
@@ -43,18 +42,18 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
-    /// Baked-in safe defaults. Everything enabled EXCEPT the roommate group,
-    /// which ships dark (unvalidated, stricter parse contract than classic
-    /// Echoes — enable only after its real-device eval passes). Used on a
-    /// fresh first launch with no cache + no network: a privacy-first app
-    /// must work fully offline and cannot hard-depend on a network fetch.
+    /// Baked-in safe defaults: everything enabled (the roommate group too, now
+    /// that its cloud path validated at 10% parse-fallback — the remote
+    /// kill-switch is the safety net). Used on a fresh first launch with no
+    /// cache + no network: a privacy-first app must work fully offline and
+    /// cannot hard-depend on a network fetch.
     static let safeDefault = RemoteConfigValues(
         configVersion: 1,
         echoesEnabled: true,
         forceLocalOnly: false,
         ventCloudEnabled: true,
         minSupportedBuild: 0,
-        roommateGroupEnabled: false
+        roommateGroupEnabled: true
     )
 
     enum CodingKeys: String, CodingKey {
@@ -66,12 +65,11 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case minSupportedBuild   = "min_supported_build"
     }
 
-    /// `roommateGroupEnabled` is the LAST parameter with a `false` default so
-    /// existing 5-arg call sites keep compiling and a config that never
-    /// mentions the roommate group keeps it dark.
+    /// `roommateGroupEnabled` is the LAST parameter (default `true`, the shipped
+    /// state) so existing 5-arg call sites keep compiling.
     init(configVersion: Int, echoesEnabled: Bool, forceLocalOnly: Bool,
          ventCloudEnabled: Bool, minSupportedBuild: Int,
-         roommateGroupEnabled: Bool = false) {
+         roommateGroupEnabled: Bool = true) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
         self.roommateGroupEnabled = roommateGroupEnabled

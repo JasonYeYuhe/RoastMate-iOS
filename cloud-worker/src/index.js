@@ -553,7 +553,7 @@ function buildRoommateSystemPrompt(intensity, locale) {
     "- 输出 8 到 10 行,绝不少于 8 行。4 行是错的——室友们要持续接力开炮。",
     "- 这是群聊,所以大多数行(5–7 行)是 ESCALATE:室友互相接梗、每行回应上一行,B(毒舌)负责最狠的笑点。",
     "- A、B、C 每个室友至少说 2 次,相邻两行尽量是不同室友。",
-    `- 恰好一条 VALIDATE(第一行,A);恰好一条 DEESCALATE(C,靠后,收住情绪并指向下一步,别鸡汤);恰好一条 BRIDGE(最后一行,C):一句以 → 结尾、点名工具的 CTA,例如「…不如用 ${bridgeWord} 把话甩回去 →」。`,
+    `- 恰好一条 VALIDATE(第一行,A);恰好一条 DEESCALATE(C,靠后,收住情绪并指向下一步,别鸡汤);恰好一条 BRIDGE(最后一行,C):以 → 结尾的 CTA,且**必须原样包含「${bridgeWord}」这个英文词**(它是 App 里的改写模式名,别自己编别的工具名),例如「…不如用 ${bridgeWord} 把话甩回去 →」。`,
     "- 每行都用 [ROLE/IDX] 开头——ROLE 取 VALIDATE/ESCALATE/DEESCALATE/BRIDGE,IDX 是字母 A、B 或 C(绝不用数字、绝不用名字),IDX 后面什么都不加。",
     "- 每行 ≤ 30 个汉字。不要 emoji、不要时间戳、不要「我们永远陪你」这种依赖性话。除了带标签的行,什么都别输出。"
   ].join("\n");
