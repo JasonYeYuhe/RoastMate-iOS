@@ -27,6 +27,13 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     var configVersion: Int
     /// `false` → hide the Echoes tile + block `EchoesEngine.generate`.
     var echoesEnabled: Bool
+    /// `false` (the baked DEFAULT) → hide the 虚拟舍友群 entry + block
+    /// roommate-scene generation. Ships DARK: the feature is enabled by
+    /// flipping this baked default to `true` in the real-device-eval-gated
+    /// release; the remote config then serves only as its post-launch
+    /// kill-switch. Always gated together with `echoesEnabled` —
+    /// see `roommateGroupAllowed`.
+    var roommateGroupEnabled: Bool
     /// `true` → force ALL generation on-device (disables the rewrite
     /// cloud-vent path AND any Echoes-feral cloud), regardless of user
     /// consent. The "cloud is misbehaving / costing too much" lever.
@@ -36,29 +43,38 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
-    /// Baked-in safe defaults: everything enabled. Used on a fresh first
-    /// launch with no cache + no network — a privacy-first app must work
-    /// fully offline and cannot hard-depend on a network fetch to function.
+    /// Baked-in safe defaults. Everything enabled EXCEPT the roommate group,
+    /// which ships dark (unvalidated, stricter parse contract than classic
+    /// Echoes — enable only after its real-device eval passes). Used on a
+    /// fresh first launch with no cache + no network: a privacy-first app
+    /// must work fully offline and cannot hard-depend on a network fetch.
     static let safeDefault = RemoteConfigValues(
         configVersion: 1,
         echoesEnabled: true,
         forceLocalOnly: false,
         ventCloudEnabled: true,
-        minSupportedBuild: 0
+        minSupportedBuild: 0,
+        roommateGroupEnabled: false
     )
 
     enum CodingKeys: String, CodingKey {
-        case configVersion     = "config_version"
-        case echoesEnabled     = "echoes_enabled"
-        case forceLocalOnly    = "force_local_only"
-        case ventCloudEnabled  = "vent_cloud_enabled"
-        case minSupportedBuild = "min_supported_build"
+        case configVersion       = "config_version"
+        case echoesEnabled       = "echoes_enabled"
+        case roommateGroupEnabled = "roommate_group_enabled"
+        case forceLocalOnly      = "force_local_only"
+        case ventCloudEnabled    = "vent_cloud_enabled"
+        case minSupportedBuild   = "min_supported_build"
     }
 
+    /// `roommateGroupEnabled` is the LAST parameter with a `false` default so
+    /// existing 5-arg call sites keep compiling and a config that never
+    /// mentions the roommate group keeps it dark.
     init(configVersion: Int, echoesEnabled: Bool, forceLocalOnly: Bool,
-         ventCloudEnabled: Bool, minSupportedBuild: Int) {
+         ventCloudEnabled: Bool, minSupportedBuild: Int,
+         roommateGroupEnabled: Bool = false) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
+        self.roommateGroupEnabled = roommateGroupEnabled
         self.forceLocalOnly = forceLocalOnly
         self.ventCloudEnabled = ventCloudEnabled
         self.minSupportedBuild = minSupportedBuild
@@ -66,8 +82,10 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
 
     /// Decoder for the PERSISTED CACHE (always written in full via `persist`)
     /// and a forward-compat safety net: every key is optional and falls back
-    /// to the SAFE (enabled) default when absent, so a future-added key never
-    /// breaks decoding an older cache blob.
+    /// to the SAFE default when absent, so a future-added key never breaks
+    /// decoding an older cache blob. `roommateGroupEnabled` falls back to its
+    /// dark (`false`) baked default — an old cache that predates the feature
+    /// keeps it off.
     ///
     /// NOTE: the LIVE wire payload does NOT use this defaulting path — it
     /// decodes into `RemoteConfigPatch` and MERGES only the present keys over
@@ -77,11 +95,12 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         let d = RemoteConfigValues.safeDefault
-        configVersion     = try c.decodeIfPresent(Int.self,  forKey: .configVersion)     ?? d.configVersion
-        echoesEnabled     = try c.decodeIfPresent(Bool.self, forKey: .echoesEnabled)     ?? d.echoesEnabled
-        forceLocalOnly    = try c.decodeIfPresent(Bool.self, forKey: .forceLocalOnly)    ?? d.forceLocalOnly
-        ventCloudEnabled  = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)  ?? d.ventCloudEnabled
-        minSupportedBuild = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild) ?? d.minSupportedBuild
+        configVersion        = try c.decodeIfPresent(Int.self,  forKey: .configVersion)        ?? d.configVersion
+        echoesEnabled        = try c.decodeIfPresent(Bool.self, forKey: .echoesEnabled)        ?? d.echoesEnabled
+        roommateGroupEnabled = try c.decodeIfPresent(Bool.self, forKey: .roommateGroupEnabled) ?? d.roommateGroupEnabled
+        forceLocalOnly       = try c.decodeIfPresent(Bool.self, forKey: .forceLocalOnly)       ?? d.forceLocalOnly
+        ventCloudEnabled     = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)     ?? d.ventCloudEnabled
+        minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
 
     // MARK: - The RESTRICT-only combinator (load-bearing safety logic)
@@ -97,9 +116,17 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         consentAllowsCloud && ventCloudEnabled && !forceLocalOnly
     }
 
+    /// Whether the 虚拟舍友群 scene may run: its own flag AND the Echoes
+    /// master switch. Killing Echoes also kills the roommate group.
+    var roommateGroupAllowed: Bool {
+        roommateGroupEnabled && echoesEnabled
+    }
+
     /// True if this config disables anything relative to the all-enabled
     /// baseline — drives the `remote_config_kill_applied` telemetry bump so
-    /// an A′ export confirms a kill actually reached the device.
+    /// an A′ export confirms a kill actually reached the device. Note:
+    /// `roommateGroupEnabled` is intentionally EXCLUDED — it is dark by
+    /// default, so its `false` is the baseline, not a kill.
     var isRestrictive: Bool {
         !echoesEnabled || forceLocalOnly || !ventCloudEnabled
     }
@@ -112,11 +139,12 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// killed feature by omission). Codex review 2026-05-29.
     func merging(_ patch: RemoteConfigPatch) -> RemoteConfigValues {
         RemoteConfigValues(
-            configVersion:     patch.configVersion     ?? configVersion,
-            echoesEnabled:     patch.echoesEnabled     ?? echoesEnabled,
-            forceLocalOnly:    patch.forceLocalOnly    ?? forceLocalOnly,
-            ventCloudEnabled:  patch.ventCloudEnabled  ?? ventCloudEnabled,
-            minSupportedBuild: patch.minSupportedBuild ?? minSupportedBuild
+            configVersion:        patch.configVersion        ?? configVersion,
+            echoesEnabled:        patch.echoesEnabled        ?? echoesEnabled,
+            forceLocalOnly:       patch.forceLocalOnly       ?? forceLocalOnly,
+            ventCloudEnabled:     patch.ventCloudEnabled     ?? ventCloudEnabled,
+            minSupportedBuild:    patch.minSupportedBuild    ?? minSupportedBuild,
+            roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled
         )
     }
 }
@@ -127,16 +155,18 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
 struct RemoteConfigPatch: Decodable, Sendable {
     var configVersion: Int?
     var echoesEnabled: Bool?
+    var roommateGroupEnabled: Bool?
     var forceLocalOnly: Bool?
     var ventCloudEnabled: Bool?
     var minSupportedBuild: Int?
 
     enum CodingKeys: String, CodingKey {
-        case configVersion     = "config_version"
-        case echoesEnabled     = "echoes_enabled"
-        case forceLocalOnly    = "force_local_only"
-        case ventCloudEnabled  = "vent_cloud_enabled"
-        case minSupportedBuild = "min_supported_build"
+        case configVersion       = "config_version"
+        case echoesEnabled       = "echoes_enabled"
+        case roommateGroupEnabled = "roommate_group_enabled"
+        case forceLocalOnly      = "force_local_only"
+        case ventCloudEnabled    = "vent_cloud_enabled"
+        case minSupportedBuild   = "min_supported_build"
     }
 }
 

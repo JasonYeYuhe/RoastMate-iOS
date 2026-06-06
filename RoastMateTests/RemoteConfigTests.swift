@@ -210,6 +210,41 @@ final class RemoteConfigTests: XCTestCase {
                                          ventCloudEnabled: false, minSupportedBuild: 0).isRestrictive)
     }
 
+    // MARK: - 虚拟舍友群 dark-by-default flag
+
+    func test_roommateGroup_shipsDarkByDefault() {
+        XCTAssertFalse(RemoteConfigValues.safeDefault.roommateGroupEnabled,
+                       "The roommate group must ship dark (false) until its real-device eval passes.")
+        XCTAssertFalse(RemoteConfigValues.safeDefault.roommateGroupAllowed,
+                       "Dark by default → not allowed even though echoes is enabled.")
+        // Dark default must NOT make the baseline look restrictive (that would
+        // falsely trip remote_config_kill_applied on every launch).
+        XCTAssertFalse(RemoteConfigValues.safeDefault.isRestrictive)
+    }
+
+    func test_roommateGroupAllowed_requiresBothFlags() {
+        let onWithEchoes = RemoteConfigValues(configVersion: 1, echoesEnabled: true, forceLocalOnly: false,
+                                              ventCloudEnabled: true, minSupportedBuild: 0,
+                                              roommateGroupEnabled: true)
+        XCTAssertTrue(onWithEchoes.roommateGroupAllowed)
+        let echoesKilled = RemoteConfigValues(configVersion: 1, echoesEnabled: false, forceLocalOnly: false,
+                                              ventCloudEnabled: true, minSupportedBuild: 0,
+                                              roommateGroupEnabled: true)
+        XCTAssertFalse(echoesKilled.roommateGroupAllowed,
+                       "Killing echoes must also kill the roommate group (AND gate).")
+    }
+
+    func test_roommateGroup_enabledByExplicitPatch_notReDarkenedByOmission() {
+        let rc = RemoteConfig(defaults: defaults)
+        XCTAssertFalse(rc.current.roommateGroupAllowed, "Fresh = dark.")
+        rc.apply(fetchedData: Data(#"{ "roommate_group_enabled": true }"#.utf8))
+        XCTAssertTrue(rc.current.roommateGroupAllowed, "Explicit enable applies.")
+        // A later partial patch that omits it must keep it on (merge semantics).
+        rc.apply(fetchedData: Data(#"{ "vent_cloud_enabled": false }"#.utf8))
+        XCTAssertTrue(rc.current.roommateGroupEnabled,
+                      "An omitted key keeps its prior value (no re-darken by omission).")
+    }
+
     // MARK: - refresh(): request shape + network failure (Codex review 2026-05-29)
 
     func test_refresh_requestIsBareGET_noQueryNoCookies() async {

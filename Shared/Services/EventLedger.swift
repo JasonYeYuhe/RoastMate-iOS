@@ -219,6 +219,21 @@ public final class EventLedger: @unchecked Sendable {
     /// `RemoteConfig.apply(fetchedData:)`.
     public func recordRemoteConfigKillApplied() { bump(.remoteConfigKillApplied) }
 
+    // MARK: - Schema v2 — 虚拟舍友群 / roommate group (Echoes vNext)
+    //
+    // Counters appended end-of-enum, schema stays v2 (additive within v2,
+    // same rationale as the Echoes / kill-switch blocks). The core metric is
+    // `roommate_group_bridge_tapped / roommate_group_completed` (the
+    // Bridge-to-Action conversion); `roommate_group_parse_fallback` feeds the
+    // <15%-to-enable / 35%-kill real-device criterion. Aggregate counts only —
+    // NEVER the situation text or generated messages.
+
+    public func recordRoommateGroupStarted() { bump(.roommateGroupStarted) }
+    public func recordRoommateGroupCompleted() { bump(.roommateGroupCompleted) }
+    public func recordRoommateGroupParseFallback() { bump(.roommateGroupParseFallback) }
+    public func recordRoommateGroupBridgeTapped() { bump(.roommateGroupBridgeTapped) }
+    public func recordRoommateGroupRegenerated() { bump(.roommateGroupRegenerated) }
+
     public enum FailureCategory: String, CaseIterable, Sendable {
         case guardrail          = "guardrail"
         case network            = "network"
@@ -400,6 +415,14 @@ public final class EventLedger: @unchecked Sendable {
         // (echoes off / force-local-only / vent-cloud off). Still
         // schemaVersion 2 — additive WITHIN v2. End-of-enum.
         case remoteConfigKillApplied              = "remote_config_kill_applied"
+        // v2 虚拟舍友群 / roommate-group additions (Echoes vNext). End-of-enum,
+        // still schemaVersion 2 — additive WITHIN v2 (same rationale as the
+        // Echoes / kill-switch blocks). See docs/A_PRIME_TELEMETRY.md.
+        case roommateGroupStarted                 = "roommate_group_started"
+        case roommateGroupCompleted               = "roommate_group_completed"
+        case roommateGroupParseFallback           = "roommate_group_parse_fallback"
+        case roommateGroupBridgeTapped            = "roommate_group_bridge_tapped"
+        case roommateGroupRegenerated             = "roommate_group_regenerated"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

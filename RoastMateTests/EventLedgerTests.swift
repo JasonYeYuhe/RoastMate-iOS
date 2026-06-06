@@ -456,8 +456,9 @@ final class EventLedgerTests: XCTestCase {
         let echoesModelUnavailable = cases.firstIndex(of: "echoes_model_unavailable") ?? -1
         XCTAssertGreaterThan(echoesModelUnavailable, firstEchoes,
                              "echoes_model_unavailable stays within/after the Echoes block.")
-        XCTAssertEqual(cases.last, "remote_config_kill_applied",
-                       "remote_config_kill_applied must remain end-of-enum until the next additive wave.")
+        let killSwitch = cases.firstIndex(of: "remote_config_kill_applied") ?? -1
+        XCTAssertGreaterThan(killSwitch, echoesModelUnavailable,
+                             "remote_config_kill_applied follows the Echoes block (the roommate-group wave now occupies end-of-enum).")
     }
 
     func test_echoesCounters_eachIncrementsCorrectly() {
@@ -501,5 +502,44 @@ final class EventLedgerTests: XCTestCase {
         XCTAssertEqual(s["echoes_completed"], 0)
         XCTAssertEqual(s["echoes_bridge_tap"], 0)
         XCTAssertEqual(s["echoes_paywall_hit"], 0)
+    }
+
+    // MARK: - Schema v2 — 虚拟舍友群 / roommate group (Echoes vNext)
+
+    func test_roommateGroupCounters_areAppendedAfterKillSwitch() {
+        // Sequence regression: roommate-group counters land at end-of-enum,
+        // AFTER the kill-switch counter (the prior tail).
+        let cases = EventLedger.Counter.allCases.map(\.rawValue)
+        let killSwitch = cases.firstIndex(of: "remote_config_kill_applied") ?? -1
+        let firstRoommate = cases.firstIndex(of: "roommate_group_started") ?? -1
+        XCTAssertGreaterThan(firstRoommate, killSwitch,
+                             "Roommate-group counters must follow the kill-switch counter.")
+        XCTAssertEqual(cases.last, "roommate_group_regenerated",
+                       "roommate_group_regenerated is the new end-of-enum tail until the next additive wave.")
+    }
+
+    func test_roommateGroupCounters_eachIncrementsCorrectly() {
+        ledger.setOptIn(true)
+        ledger.recordRoommateGroupStarted()
+        ledger.recordRoommateGroupCompleted()
+        ledger.recordRoommateGroupParseFallback()
+        ledger.recordRoommateGroupBridgeTapped()
+        ledger.recordRoommateGroupBridgeTapped()
+        ledger.recordRoommateGroupRegenerated()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["roommate_group_started"], 1)
+        XCTAssertEqual(s["roommate_group_completed"], 1)
+        XCTAssertEqual(s["roommate_group_parse_fallback"], 1)
+        XCTAssertEqual(s["roommate_group_bridge_tapped"], 2,
+                       "Bridge taps count each press — the strategic conversion metric.")
+        XCTAssertEqual(s["roommate_group_regenerated"], 1)
+    }
+
+    func test_roommateGroupCounters_areOptOutGated() {
+        ledger.recordRoommateGroupStarted()
+        ledger.recordRoommateGroupParseFallback()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["roommate_group_started"], 0)
+        XCTAssertEqual(s["roommate_group_parse_fallback"], 0)
     }
 }

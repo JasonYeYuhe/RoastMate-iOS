@@ -351,6 +351,7 @@ enum HistoryService {
             locale: transcript.locale.identifier,
             tone: transcript.tone,
             voiceCount: transcript.voiceCount,
+            scene: transcript.scene,
             bridgeIntensity: bridgeIntensity,
             cloudUsed: transcript.cloudUsed
         )
