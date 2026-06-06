@@ -15,7 +15,8 @@ struct EchoesView: View {
     @Environment(\.locale) private var locale
     @Query private var settingsQuery: [UserSettings]
 
-    @State private var viewModel = EchoesViewModel()
+    @State private var viewModel: EchoesViewModel
+    private let scene: EchoScene
 
     // Sheet presentation is owned by the VM (`viewModel.activeSheet`) so
     // there's no `.onChange` mirror race — see EchoesViewModel.ActiveSheet.
@@ -26,6 +27,18 @@ struct EchoesView: View {
     /// `selectedTab = .generator` in response.
     var onBridgeTap: () -> Void
 
+    /// `scene` = `.classic` (替你出气) or `.roommateGroup` (虚拟舍友群). The
+    /// roommate scene reuses this entire view + the cloud engine path; only
+    /// the setup copy + the (hidden) voice picker differ.
+    init(scene: EchoScene = .classic, onBridgeTap: @escaping () -> Void) {
+        self.scene = scene
+        self.onBridgeTap = onBridgeTap
+        _viewModel = State(initialValue: EchoesViewModel(scene: scene))
+    }
+
+    private var isRoommate: Bool { scene == .roommateGroup }
+    private var titleKey: LocalizedStringKey { isRoommate ? "roommate.title" : "echoes.title" }
+
     private var settings: UserSettings? { settingsQuery.first }
     private var isPro: Bool { StoreService.shared.isPro }
     private var feralConsent: CloudConsent { settings?.echoesFeralConsent ?? .notAsked }
@@ -33,7 +46,7 @@ struct EchoesView: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle("echoes.title")
+                .navigationTitle(titleKey)
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {  // cross-platform (.topBarTrailing is iOS-only)
                         if case .done = viewModel.phase {
@@ -110,11 +123,11 @@ struct EchoesView: View {
     private var setupView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("echoes.setup.intro")
+                Text(isRoommate ? "roommate.setup.intro" : "echoes.setup.intro")
                     .font(.callout)
                     .foregroundStyle(.secondary)
 
-                Text("echoes.setup.situation_label")
+                Text(isRoommate ? "roommate.setup.situation_label" : "echoes.setup.situation_label")
                     .font(.headline)
                 TextEditor(text: $viewModel.situation)
                     .frame(minHeight: 120)
@@ -135,14 +148,16 @@ struct EchoesView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Text("echoes.setup.voice_count_label").font(.headline)
-                Picker("echoes.setup.voice_count_label", selection: $viewModel.voiceCount) {
-                    Text("echoes.voice_count.1").tag(EchoVoiceCount.one)
-                    Text("echoes.voice_count.2").tag(EchoVoiceCount.two)
+                if !isRoommate {
+                    Text("echoes.setup.voice_count_label").font(.headline)
+                    Picker("echoes.setup.voice_count_label", selection: $viewModel.voiceCount) {
+                        Text("echoes.voice_count.1").tag(EchoVoiceCount.one)
+                        Text("echoes.voice_count.2").tag(EchoVoiceCount.two)
+                    }
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
 
-                Text("echoes.setup.privacy_banner")
+                Text(isRoommate ? "roommate.setup.privacy_banner" : "echoes.setup.privacy_banner")
                     .font(.caption)
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -162,7 +177,7 @@ struct EchoesView: View {
                         )
                     }
                 } label: {
-                    Text("echoes.action.generate")
+                    Text(isRoommate ? "roommate.action.generate" : "echoes.action.generate")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 6)
@@ -181,7 +196,7 @@ struct EchoesView: View {
         VStack(spacing: 0) {
             // Persistent synthetic-voices banner — required for the
             // App Review 4.0 mitigation (v2 plan §6).
-            Text("echoes.transcript.banner")
+            Text(isRoommate ? "roommate.transcript.banner" : "echoes.transcript.banner")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 16)

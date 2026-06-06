@@ -515,3 +515,15 @@
 "settings.section.research" = "サービス改善にご協力ください";
 "settings.research.tile" = "有料 30 分インタビュー";
 "settings.research.footer" = "RoastMate の使い方について 30 分の有料インタビューに参加いただける方を 20 名募集しています。タップして詳細を確認してください。利用統計の許可は不要です。";
+
+/* ルームメイト集合 (roommate group, Echoes vNext) */
+"feature.roommate.title" = "ルームメイト集合";
+"feature.roommate.placeholder" = "何があったの？";
+"feature.roommate.empty_title" = "グループに投げる";
+"feature.roommate.empty_subtitle" = "3人の合成ルームメイトが一緒に味方してくれる。";
+"roommate.title" = "ルームメイト";
+"roommate.setup.intro" = "ムカついたことを書いて。3人の合成ルームメイトが一緒にツッコんで、最後に送れる一言に整える。読むだけ、返信は不要。";
+"roommate.setup.situation_label" = "何があったの？";
+"roommate.setup.privacy_banner" = "3人のルームメイトはAIの合成キャラで、実在しません。このグループチャットの生成のため、同意の上でクラウドに送信されます。";
+"roommate.action.generate" = "グループに送る →";
+"roommate.transcript.banner" = "ルームメイト集合 · 合成キャラ · 実在しません";

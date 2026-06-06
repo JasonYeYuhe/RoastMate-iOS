@@ -68,6 +68,18 @@ struct ExploreView: View {
                         )
                         .accessibilityIdentifier("echoes.tile")
                     }
+                    // 虚拟舍友群 (Echoes vNext) — cloud-generated 3-roommate group
+                    // chat (Apple's on-device FM blocks the harsh roast). DARK by
+                    // default (roommate_group_enabled:false): the tile appears only
+                    // once the flag is flipped AND echoes is on (roommateGroupAllowed).
+                    // zh-Hans v1, like classic Echoes.
+                    if isZhHansLocale() && RemoteConfig.shared.current.roommateGroupAllowed {
+                        toolCard(
+                            config: FeatureGeneratorConfigs.roommateGroup,
+                            destination: AnyView(EchoesView(scene: .roommateGroup, onBridgeTap: { onContinueGenerator?() }))
+                        )
+                        .accessibilityIdentifier("roommate.tile")
+                    }
                     toolCard(
                         config: FeatureGeneratorConfigs.socialRoast,
                         destination: AnyView(FeatureGeneratorView(config: FeatureGeneratorConfigs.socialRoast))

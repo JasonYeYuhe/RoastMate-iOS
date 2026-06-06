@@ -514,3 +514,15 @@
 "settings.section.research" = "幫我們做得更好";
 "settings.research.tile" = "付費 30 分鐘使用者訪談";
 "settings.research.footer" = "我們正在招募 20 位使用者做 30 分鐘的付費訪談,了解你怎麼用 RoastMate。點擊了解詳情。不需要授權數據使用。";
+
+/* 虛擬室友群 (roommate group, Echoes vNext) */
+"feature.roommate.title" = "虛擬室友群";
+"feature.roommate.placeholder" = "發生什麼了？";
+"feature.roommate.empty_title" = "把事發進室友群";
+"feature.roommate.empty_subtitle" = "三個合成室友一起替你出氣。";
+"roommate.title" = "室友群";
+"roommate.setup.intro" = "把讓你不爽的事發進來。三個合成室友會進群一起替你吐槽，最後幫你把話整理成能發出去的。讀完就行，不用回他們。";
+"roommate.setup.situation_label" = "發生什麼了？";
+"roommate.setup.privacy_banner" = "三個室友是 AI 合成的角色、不是真人。為了生成這段群聊，這件事會在你同意後傳送到雲端處理。";
+"roommate.action.generate" = "發到室友群 →";
+"roommate.transcript.banner" = "虛擬室友群 · 合成角色 · 非真人";

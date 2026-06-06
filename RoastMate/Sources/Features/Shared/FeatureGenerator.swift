@@ -473,4 +473,15 @@ enum FeatureGeneratorConfigs {
         proGated: true,
         defaultStyleId: "savage"
     )
+
+    static let roommateGroup = FeatureGeneratorConfig(
+        mode: .roast,  // unused — EchoesView(scene:.roommateGroup) has its own (cloud) engine
+        titleKey: "feature.roommate.title",
+        promptPlaceholderKey: "feature.roommate.placeholder",
+        emptyTitleKey: "feature.roommate.empty_title",
+        emptySubtitleKey: "feature.roommate.empty_subtitle",
+        icon: "person.3.fill",
+        proGated: true,
+        defaultStyleId: "savage"
+    )
 }

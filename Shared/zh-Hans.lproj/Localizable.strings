@@ -556,3 +556,15 @@
 // Settings entry to manage the consent state
 "settings.echoes_feral_cloud" = "Echoes Feral 走云端";
 "settings.echoes_feral_cloud.footer" = "Feral 档是否能把你写的内容发到云端生成更冲的输出。日常档永远只在本机。和 Vent 云端是分开的授权。";
+
+/* 虚拟舍友群 (roommate group, Echoes vNext) */
+"feature.roommate.title" = "虚拟舍友群";
+"feature.roommate.placeholder" = "发生什么了？";
+"feature.roommate.empty_title" = "把事发进舍友群";
+"feature.roommate.empty_subtitle" = "三个合成舍友一起替你出气。";
+"roommate.title" = "舍友群";
+"roommate.setup.intro" = "把让你不爽的事发进来。三个合成舍友会进群一起替你吐槽，最后帮你把话整理成能发出去的。读完就行，不用回他们。";
+"roommate.setup.situation_label" = "发生什么了？";
+"roommate.setup.privacy_banner" = "三个室友是 AI 合成的角色、不是真人。为了生成这段群聊，这件事会在你同意后发送到云端处理。";
+"roommate.action.generate" = "发到舍友群 →";
+"roommate.transcript.banner" = "虚拟舍友群 · 合成角色 · 非真人";

@@ -556,3 +556,15 @@
 
 "settings.echoes_feral_cloud" = "Echoes Feral on the cloud";
 "settings.echoes_feral_cloud.footer" = "Whether Feral-tone Echoes can route the grievance text to RoastMate's cloud for stronger output. Casual always stays on this device. Separate consent from the Vent cloud setting.";
+
+/* Roommate group (Echoes vNext) */
+"feature.roommate.title" = "Roommate Group";
+"feature.roommate.placeholder" = "What happened?";
+"feature.roommate.empty_title" = "Drop it in the group";
+"feature.roommate.empty_subtitle" = "Three synthetic roommates pile in to back you up.";
+"roommate.title" = "Roommates";
+"roommate.setup.intro" = "Drop what's got you mad in here. Three synthetic roommates jump in to roast it with you, then hand you a sendable line. Read-only; you don't reply.";
+"roommate.setup.situation_label" = "What happened?";
+"roommate.setup.privacy_banner" = "The three roommates are synthetic AI characters, not real people. To generate the group chat, this is sent to the cloud (with your consent).";
+"roommate.action.generate" = "Send to the group →";
+"roommate.transcript.banner" = "Roommate group · synthetic characters · not real people";
