@@ -26,6 +26,11 @@ GROQ_FALLBACK_MODEL = "llama-3.3-70b-versatile"
 # (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves.
 DAILY_LIMIT_PER_DEVICE = "30"
 
+# Stricter PER-IP daily cap applied ONLY to the public web demo (requests
+# with an Origin from jasonyeyuhe.github.io). The native app carries no
+# browser Origin and is unaffected. Bounds token cost if the demo is scraped.
+WEB_DAILY_LIMIT_PER_IP = "8"
+
 # OpenRouter referrer + product name so OpenRouter's dashboard shows
 # attribution. Not secret; safe in vars.
 OPENROUTER_REFERER = "https://github.com/JasonYeYuhe/RoastMate-iOS"

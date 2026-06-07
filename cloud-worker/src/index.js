@@ -95,6 +95,27 @@ export default {
       return json({ error: "rate_limit_exceeded", limit, remaining: 0 }, 429);
     }
 
+    // Web-demo abuse gate: requests from the public landing page (browser
+    // Origin) get an ADDITIONAL, stricter PER-IP daily cap. The per-device
+    // limit above is weak for the web demo (deviceId is a fresh random UUID
+    // each browser session). Native-app requests carry no browser Origin and
+    // are unaffected by this gate.
+    const webOrigin = req.headers.get("Origin") || "";
+    if (webOrigin.includes("jasonyeyuhe.github.io")) {
+      const ipLimit = parseInt(env.WEB_DAILY_LIMIT_PER_IP || "8", 10);
+      const ip = req.headers.get("CF-Connecting-IP") || "unknown";
+      const ipKey = `webip:${ip}:${day}`;
+      const ipUsed = parseInt((await env.RATE_LIMITS.get(ipKey)) || "0", 10);
+      if (ipUsed >= ipLimit) {
+        ddLog(env, ctx, { outcome: "web_ip_rate_limited", status: 429, intensity, locale, latency_ms: Date.now() - t0 });
+        return json({ error: "rate_limit_exceeded", limit: ipLimit, remaining: 0, web: true }, 429);
+      }
+      // Charge up-front (before generation) so a flood of failing calls still
+      // counts against the cap — abuse-bounding matters more for a public demo
+      // than the rare lost try on an upstream error.
+      await env.RATE_LIMITS.put(ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 });
+    }
+
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional
     // register as the local path would attempt.
