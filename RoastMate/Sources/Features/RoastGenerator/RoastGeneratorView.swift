@@ -418,7 +418,11 @@ struct RoastGeneratorView: View {
                     .padding(.top, 4)
                 ForEach(cats, id: \.self) { cat in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(LocalizedStringKey("scenario.cat.\(cat)"))
+                        // NSLocalizedString, NOT LocalizedStringKey: an interpolated
+                        // literal inside LocalizedStringKey(...) compiles to the format
+                        // pattern "scenario.cat.%@" (never in the table), so the raw
+                        // key would render on-screen.
+                        Text(NSLocalizedString("scenario.cat.\(cat)", comment: "Scenario category header"))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
                         ScrollView(.horizontal, showsIndicators: false) {

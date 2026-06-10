@@ -53,4 +53,27 @@ final class ScenarioCatalogTests: XCTestCase {
             XCTAssertEqual(s.categoryKey, "scenario.cat.\(s.category)")
         }
     }
+
+    /// Every curated category header must RESOLVE in every shipped locale —
+    /// not just exist as a convention. `localizedString(forKey:)` returns the
+    /// key itself when the table misses, which is exactly the raw
+    /// "scenario.cat.boss" regression this pins against.
+    func testCategoryHeadersResolveInEveryLocale() {
+        // Bundle.main is the xctest runner here (see ResourceBundle) — resolve
+        // the app bundle via a type compiled into the RoastMate module.
+        let appBundle = Bundle(for: ScenarioCatalog.self)
+        for code in ["en", "zh-Hans", "zh-Hant", "ja"] {
+            guard let path = appBundle.path(forResource: code, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else {
+                XCTFail("Missing \(code).lproj in app bundle")
+                continue
+            }
+            for cat in ScenarioCatalog.categoryOrder {
+                let key = "scenario.cat.\(cat)"
+                let value = bundle.localizedString(forKey: key, value: nil, table: nil)
+                XCTAssertNotEqual(value, key, "\(code): '\(key)' does not resolve")
+                XCTAssertFalse(value.isEmpty, "\(code): '\(key)' resolves to empty")
+            }
+        }
+    }
 }
