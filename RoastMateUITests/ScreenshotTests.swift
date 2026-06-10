@@ -114,6 +114,167 @@ final class ScreenshotTests: XCTestCase {
         capture(app: app, name: "07-paywall")
     }
 
+    // MARK: - 小红书 marketing screenshots
+
+    /// 小红书 (Xiaohongshu) marketing captures — zh-Hans only. Unlike the
+    /// App Store set above, these capture FEATURE OUTPUT: the 虚拟舍友群
+    /// group-chat transcript, a 替你出气 transcript, and the bridge →
+    /// rewrite closing loop. The roommate scene generates via the REAL
+    /// cloud Worker (the consent sheet is accepted in-test) — run with
+    /// network. Driven by scripts/xiaohongshu-screenshots.sh, which also
+    /// resets app state so the consent sheet is deterministic.
+    func test_screenshots_xiaohongshu() {
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-uitest",
+            "-uitestLang", "zh-Hans",
+            "-AppleLanguages", "(zh-Hans)",
+            "-AppleLocale", "zh_Hans"
+        ]
+        app.launch()
+
+        // ── Scene 1: generator filled with a relatable grievance ──
+        let situationField = app.textViews.firstMatch
+        if situationField.waitForExistence(timeout: 8) {
+            var tries = 0
+            while !situationField.isHittable && tries < 10 { usleep(300_000); tries += 1 }
+            if situationField.isHittable {
+                situationField.tap()
+                situationField.typeText("同事把我做的方案署上他自己的名字交给老板，还在群里@我说谢谢配合")
+            }
+        }
+        // Keyboard stays visible in this capture (promo crops use the top
+        // 3:4 anyway). Root-level TextEditor keyboards can't be reliably
+        // dismissed in SwiftUI via nav-bar taps (that only works in the
+        // pushed Echoes views), and the keyboard covers the tab bar — so
+        // scene 2 onward uses a clean RELAUNCH instead of dismissal.
+        capture(app: app, name: "xhs-01-generator-filled")
+        app.terminate()
+        app.launch()
+
+        // ── Scene 2: Explore tab — 替你出气 + 虚拟舍友群 tiles visible ──
+        let exploreTab = app.tabBars.buttons.element(boundBy: 1)
+        guard exploreTab.waitForExistence(timeout: 10) && exploreTab.isHittable else { return }
+        exploreTab.tap()
+        // The tools section can sit below the fold (lazy grid) — scroll
+        // until the roommate tile exists so the capture shows both tiles.
+        let roommateTile = anyElement(app, "roommate.tile")
+        var exploreScrolls = 0
+        while !roommateTile.exists && exploreScrolls < 4 {
+            app.swipeUp()
+            exploreScrolls += 1
+        }
+        sleep(1)
+        capture(app: app, name: "xhs-02-explore-tiles")
+
+        // ── Scene 3: roommate group setup, filled ──
+        guard roommateTile.waitForExistence(timeout: 8) else { return }
+        if !roommateTile.isHittable { app.swipeUp() }
+        roommateTile.tap()
+
+        let situation = anyElement(app, "echoes.situation")
+        guard situation.waitForExistence(timeout: 8) else { return }
+        situation.tap()
+        situation.typeText("室友半夜两点开外放打游戏，说了三次都当耳旁风")
+        // Dismiss the keyboard so the full setup (banner + button) shows.
+        app.navigationBars.firstMatch.tap()
+        capture(app: app, name: "xhs-03-roommate-setup")
+
+        // ── Scene 4: generate → accept cloud consent → full group chat ──
+        let generate = anyElement(app, "echoes.generate")
+        guard generate.waitForExistence(timeout: 5) else { return }
+        var scrollTries = 0
+        while !generate.isHittable && scrollTries < 4 {
+            app.swipeUp()
+            scrollTries += 1
+        }
+        generate.tap()
+
+        // Roommate is cloud-only: the dedicated consent sheet appears when
+        // not yet granted (fresh install via the runner script). Accept it.
+        // If state carried over and it's already granted, the sheet just
+        // never shows — poll briefly, then move on either way.
+        let allow = app.buttons["允许 Feral 走云端"]
+        var consentTries = 0
+        while !allow.exists && consentTries < 10 {
+            sleep(1)
+            consentTries += 1
+        }
+        if allow.exists { allow.tap() }
+
+        // Cloud latency (2–8s) + 8–10-message reveal (~350–550ms each).
+        // The reveal animation keeps the app from reporting "idle", so
+        // poll .exists instead of waitForExistence (same as EchoesFlow).
+        let bridge = anyElement(app, "echoes.bridge")
+        var revealTries = 0
+        while !bridge.exists && revealTries < 60 {
+            sleep(1)
+            revealTries += 1
+        }
+        // Let the last bubble's animation finish before capturing.
+        sleep(1)
+        capture(app: app, name: "xhs-04-roommate-chat")
+
+        // ── Scene 5: scroll to the top of the group chat (opening msgs) ──
+        if bridge.exists {
+            app.swipeDown()
+            app.swipeDown()
+            capture(app: app, name: "xhs-05-roommate-chat-top")
+            // Return to the bottom so the bridge is tappable later if needed.
+            app.swipeUp()
+            app.swipeUp()
+        }
+
+        // ── Scene 6: classic 替你出气 transcript ──
+        let back = app.navigationBars.buttons.firstMatch
+        if back.exists { back.tap() }
+        let echoesTile = anyElement(app, "echoes.tile")
+        guard echoesTile.waitForExistence(timeout: 8) else { return }
+        echoesTile.tap()
+
+        let echoesSituation = anyElement(app, "echoes.situation")
+        guard echoesSituation.waitForExistence(timeout: 8) else { return }
+        echoesSituation.tap()
+        echoesSituation.typeText("借我钱的时候喊我宝，催他还钱就已读不回，朋友圈还在晒新手机")
+        app.navigationBars.firstMatch.tap()
+
+        let echoesGenerate = anyElement(app, "echoes.generate")
+        guard echoesGenerate.waitForExistence(timeout: 5) else { return }
+        scrollTries = 0
+        while !echoesGenerate.isHittable && scrollTries < 4 {
+            app.swipeUp()
+            scrollTries += 1
+        }
+        echoesGenerate.tap()
+
+        // Casual tone = on-device / curated fallback — no consent sheet.
+        let echoesBridge = anyElement(app, "echoes.bridge")
+        revealTries = 0
+        while !echoesBridge.exists && revealTries < 45 {
+            sleep(1)
+            revealTries += 1
+        }
+        sleep(1)
+        capture(app: app, name: "xhs-06-echoes-chat")
+
+        // ── Scene 7: the closing loop — bridge → generator pre-filled ──
+        if echoesBridge.exists {
+            echoesBridge.tap()
+            let generatorSituation = app.textViews["situation_editor"]
+            if generatorSituation.waitForExistence(timeout: 10) {
+                // Give EchoBridgeStore a beat to pre-fill the grievance.
+                sleep(2)
+                capture(app: app, name: "xhs-07-bridge-rewrite")
+            }
+        }
+    }
+
+    /// Find an element by accessibility id across the element types a
+    /// SwiftUI control may surface as (same helper as EchoesFlowUITests).
+    private func anyElement(_ app: XCUIApplication, _ id: String) -> XCUIElement {
+        app.descendants(matching: .any).matching(identifier: id).firstMatch
+    }
+
     // MARK: - Helpers
 
     /// Maps the screenshots.sh `LOCALE` env var to the app's
