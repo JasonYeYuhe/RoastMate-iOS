@@ -195,6 +195,18 @@ actor EchoesEngine {
         feralCloudGranted: Bool,
         remoteConfig: RemoteConfigValues
     ) async throws -> EchoTranscript {
+        // Marketing-screenshot fixture: render an exact hand-picked transcript
+        // (the judged-best real cloud generation) instead of a live roll, so
+        // captures are deterministic. UI-test launch arg only; never set in
+        // production. Parsed by the same strict contract the cloud path uses.
+        if let fixture = AppLaunchEnvironment.uiTestRoommateFixture,
+           let parsed = EchoesParser.parse(fixture, scene: .roommateGroup) {
+            EventLedger.shared.markSuccessfulOutput()
+            return EchoTranscript(
+                situation: situation, tone: tone, voiceCount: .three, scene: .roommateGroup,
+                echoes: personas, messages: parsed, cloudUsed: true, locale: locale
+            )
+        }
         guard feralCloudGranted else {
             throw EchoesGenerationError.consentDenied
         }

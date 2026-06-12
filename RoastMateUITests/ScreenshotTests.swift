@@ -426,6 +426,57 @@ final class ScreenshotTests: XCTestCase {
         capture(app: app, name: "xhs-04-roommate-chat-alt")
     }
 
+    /// Deterministic roommate capture from an INJECTED transcript (the
+    /// judge-panel winner), passed via TEST_RUNNER_ROOMMATE_FIXTURE ->
+    /// the `-uitestRoommateFixture` launch arg. Generation is instant (no
+    /// cloud roll), so the exact hand-picked text renders every time.
+    func test_screenshot_roommate_fixture() {
+        guard let fixture = ProcessInfo.processInfo.environment["ROOMMATE_FIXTURE"],
+              !fixture.isEmpty else { return }
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-uitest", "-uitestLang", "zh-Hans",
+            "-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_Hans",
+            "-uitestRoommateFixture", fixture
+        ]
+        app.launch()
+
+        let exploreTab = app.tabBars.buttons.element(boundBy: 1)
+        guard exploreTab.waitForExistence(timeout: 10) && exploreTab.isHittable else { return }
+        exploreTab.tap()
+        let roommateTile = anyElement(app, "roommate.tile")
+        var s = 0
+        while !roommateTile.exists && s < 4 { app.swipeUp(); s += 1 }
+        guard roommateTile.waitForExistence(timeout: 8) else { return }
+        if !roommateTile.isHittable { app.swipeUp() }
+        roommateTile.tap()
+
+        let situation = anyElement(app, "echoes.situation")
+        guard situation.waitForExistence(timeout: 8) else { return }
+        situation.tap()
+        situation.typeText("室友半夜两点开外放打游戏，说了三次都当耳旁风")
+        app.navigationBars.firstMatch.tap()
+
+        let generate = anyElement(app, "echoes.generate")
+        guard generate.waitForExistence(timeout: 5) else { return }
+        var sc = 0
+        while !generate.isHittable && sc < 4 { app.swipeUp(); sc += 1 }
+        generate.tap()
+
+        // Roommate is cloud-only -> consent sheet first; accept it, then the
+        // fixture renders instantly (no network).
+        let allow = app.buttons["允许 Feral 走云端"]
+        var c = 0
+        while !allow.exists && c < 8 { sleep(1); c += 1 }
+        if allow.exists { allow.tap() }
+
+        let bridge = anyElement(app, "echoes.bridge")
+        var r = 0
+        while !bridge.exists && r < 25 { sleep(1); r += 1 }
+        sleep(1)
+        capture(app: app, name: "xhs-04-roommate-chat")
+    }
+
     /// Find an element by accessibility id across the element types a
     /// SwiftUI control may surface as (same helper as EchoesFlowUITests).
     private func anyElement(_ app: XCUIApplication, _ id: String) -> XCUIElement {

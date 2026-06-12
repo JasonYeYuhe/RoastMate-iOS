@@ -534,7 +534,7 @@ function buildUserPrompt(situation, locale) {
 // guardrail, so the roommate scene routes here. Builds the 8–10-line, 3-voice
 // `[ROLE/IDX]` transcript that the app's EchoesParser(scene:.roommateGroup)
 // consumes. zh-Hans v1.
-function buildRoommateSystemPrompt(intensity, locale) {
+function buildRoommateSystemPrompt(intensity, locale, variant = 0) {
   const feral = intensity === "feral";
   const bridgeWord = feral ? "Savage" : "Sharp";
 
@@ -557,7 +557,7 @@ function buildRoommateSystemPrompt(intensity, locale) {
     "C 清醒室友:接住前面的梗后收尾,不灌鸡汤不当心理咨询师,先把怒气落到「别替他背锅」,最后一条给出 Bridge。"
   ].join("\n");
 
-  const example = [
+  const genericExample = [
     "示例(不同的事,照这个「形状」写:8 行、A/B/C 互相接梗、最后一条是 C 的 BRIDGE):",
     "[VALIDATE/A] 等等,这事儿真不怪你,先别自我怀疑。",
     "[ESCALATE/B] 他这操作我也是服气的,理直气壮得有点好笑。",
@@ -569,6 +569,51 @@ function buildRoommateSystemPrompt(intensity, locale) {
     `[BRIDGE/C] 与其干生气,不如用 ${bridgeWord} 把话说清楚甩回去 →`
   ].join("\n");
 
+  const creditExample = [
+    "示例 ①(学的是「写法」不是内容——每条都死死咬住事情里的具体动作和原话,毒舌室友对着对方那个具体行为开炮):",
+    "(那件事:同事把你做的方案署上自己名字交给老板,还在群里@你说谢谢配合)",
+    "[VALIDATE/A] 等下,方案明明是你熬出来的,先别急着自我怀疑。",
+    "[ESCALATE/B] 把你名字划掉换成他自己,这操作比方案还有创意。",
+    "[ESCALATE/A] 还在群里@你说谢谢配合,真把你当背景板使了。",
+    "[ESCALATE/C] 「谢谢配合」翻译过来,就是「谢谢你白干」。",
+    "[ESCALATE/B] 偷了功还要你鼓掌,脸皮厚得能当方案封面。",
+    "[ESCALATE/A] 反正每一页都是你写的,这点谁都赖不掉。",
+    "[DEESCALATE/C] 行了,气也替你撒够了,这锅你真没必要背。",
+    `[BRIDGE/C] 与其在群里干瞪眼,不如用 ${bridgeWord} 把话挑明甩回去 →`
+  ].join("\n");
+
+  const borrowExample = [
+    "示例 ②(同样学写法:扣住具体细节、给有画面感的吐槽):",
+    "(那件事:借钱时叫你宝,催还钱就已读不回,朋友圈还在晒新手机)",
+    "[VALIDATE/A] 等等,借钱时叫得比谁都亲,这事真不怪你。",
+    "[ESCALATE/B] 借的时候喊宝,催的时候装死,变脸比翻书还快。",
+    "[ESCALATE/A] 你一发催款他立马已读不回,手速倒是挺快。",
+    "[ESCALATE/C] 朋友圈晒新手机那股劲,放还钱上早还清了。",
+    "[ESCALATE/B] 有钱换手机没钱还你,这账他算得比谁都精。",
+    "[ESCALATE/A] 反正你又没逼他,是他自己开的口。",
+    "[DEESCALATE/C] 好了,气也替你出够了,别让这点钱再耗你心情。",
+    `[BRIDGE/C] 与其干等已读,不如用 ${bridgeWord} 把话直接摆上桌 →`
+  ].join("\n");
+
+  const qualityRules = [
+    "写得好不好,全看这四条(务必照做):",
+    "- 【切题】每一条都要咬住「事情」里的具体动作、原话或细节,让读者一眼看出你们骂的就是这件事。绝不许只泛泛感慨「太离谱」「我也服了」「换谁都无语」这种放哪件事上都成立的空话。",
+    "- 【杀伤力】毒舌室友(B)别评论这事荒不荒谬,直接对着对方那个具体行为开炮:给个有画面感的具体吐槽、反差或比喻,要狠、要准、要让人想截图转发。",
+    "- 【通畅】用自然口语,像真人在群里打字。别为了显得有梗硬凑成语、比喻、谐音;只要有一句读起来卡壳或不知所云,宁可换成大白话。",
+    "- 【接力】每条顺着上一条的火往下接,但都各自咬住事情本身;不要变成室友互相寒暄、跑题闲聊。"
+  ].join("\n");
+
+  // Baked default = the judge-panel winner (2026-06-12): two concrete worked
+  // examples + the quality rules — i.e. the old "variant 3", which was the most
+  // consistent across a 25-way generate-and-judge run (杀伤力/通畅/切题).
+  // The single-example variants stay reachable for future A/B; genericExample
+  // is the pre-2026-06-12 baseline, kept for reference.
+  void genericExample;
+  let example = creditExample + "\n\n" + borrowExample;
+  let qualityBlock = qualityRules;
+  if (variant === 1) { example = creditExample; }
+  else if (variant === 2) { example = borrowExample; }
+
   const rules = [
     "硬规则(全部都要满足):",
     "- 输出 8 到 10 行,绝不少于 8 行。4 行是错的——室友们要持续接力开炮。",
@@ -579,15 +624,16 @@ function buildRoommateSystemPrompt(intensity, locale) {
     "- 每行 ≤ 30 个汉字。不要 emoji、不要时间戳、不要「我们永远陪你」这种依赖性话。除了带标签的行,什么都别输出。"
   ].join("\n");
 
-  return [
+  const parts = [
     "你在写一段 zh-Hans 群聊记录:三个合成的大学室友 A(护短)、B(毒舌)、C(清醒)一起进群,替用户骂刚刚惹到 ta 的人/事。用户不在群里说话,只看。这些是合成角色,不是真人。",
     safety,
     personas,
     registerLine,
-    example,
-    rules,
-    languageDirective(locale)
-  ].join("\n\n");
+    example
+  ];
+  if (qualityBlock) parts.push(qualityBlock);
+  parts.push(rules, languageDirective(locale));
+  return parts.join("\n\n");
 }
 
 function buildRoommateUserPrompt(situation, locale) {

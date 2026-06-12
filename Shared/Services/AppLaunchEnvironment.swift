@@ -25,4 +25,27 @@ enum AppLaunchEnvironment {
         let code = args[i + 1]
         return code.isEmpty ? nil : code
     }
+
+    /// A canned 虚拟舍友群 transcript (raw `[ROLE/IDX] …` tagged text)
+    /// injected for DETERMINISTIC marketing screenshots via
+    /// `-uitestRoommateFixture <text>`. When present, the roommate scene
+    /// renders this exact transcript instead of calling the cloud — so the
+    /// hand-picked best generation appears, not a lucky live roll. UI-test
+    /// only; nil in production (the arg is never passed by real users).
+    static var uiTestRoommateFixture: String? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-uitestRoommateFixture"), i + 1 < args.count else {
+            return nil
+        }
+        let raw = args[i + 1]
+        guard !raw.isEmpty else { return nil }
+        // Base64-encoded so the multi-line transcript survives the
+        // env-var → launch-argument chain intact (raw newlines get
+        // flattened in transit, which made the parser reject it).
+        if let data = Data(base64Encoded: raw),
+           let decoded = String(data: data, encoding: .utf8), !decoded.isEmpty {
+            return decoded
+        }
+        return raw
+    }
 }
