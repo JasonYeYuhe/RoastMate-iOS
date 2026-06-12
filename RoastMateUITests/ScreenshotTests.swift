@@ -350,6 +350,82 @@ final class ScreenshotTests: XCTestCase {
         capture(app: app, name: "xhs-08-generator-vent")
     }
 
+    /// Targeted re-roll of the roommate group chat ONLY — for when a cloud
+    /// generation's prose is clunky and needs another try WITHOUT
+    /// re-rolling the other (already approved) captures. Each run yields
+    /// TWO candidates: the first generation (xhs-04-roommate-chat) and an
+    /// in-app 换个角度 regenerate (xhs-04-roommate-chat-alt).
+    func test_screenshots_roommate_reroll() {
+        let app = XCUIApplication()
+        app.launchArguments += [
+            "-uitest",
+            "-uitestLang", "zh-Hans",
+            "-AppleLanguages", "(zh-Hans)",
+            "-AppleLocale", "zh_Hans"
+        ]
+        app.launch()
+
+        let exploreTab = app.tabBars.buttons.element(boundBy: 1)
+        guard exploreTab.waitForExistence(timeout: 10) && exploreTab.isHittable else { return }
+        exploreTab.tap()
+        let roommateTile = anyElement(app, "roommate.tile")
+        var exploreScrolls = 0
+        while !roommateTile.exists && exploreScrolls < 4 {
+            app.swipeUp()
+            exploreScrolls += 1
+        }
+        guard roommateTile.waitForExistence(timeout: 8) else { return }
+        if !roommateTile.isHittable { app.swipeUp() }
+        roommateTile.tap()
+
+        let situation = anyElement(app, "echoes.situation")
+        guard situation.waitForExistence(timeout: 8) else { return }
+        situation.tap()
+        situation.typeText("室友半夜两点开外放打游戏，说了三次都当耳旁风")
+        app.navigationBars.firstMatch.tap()
+
+        let generate = anyElement(app, "echoes.generate")
+        guard generate.waitForExistence(timeout: 5) else { return }
+        var scrollTries = 0
+        while !generate.isHittable && scrollTries < 4 {
+            app.swipeUp()
+            scrollTries += 1
+        }
+        generate.tap()
+
+        let allow = app.buttons["允许 Feral 走云端"]
+        var consentTries = 0
+        while !allow.exists && consentTries < 10 {
+            sleep(1)
+            consentTries += 1
+        }
+        if allow.exists { allow.tap() }
+
+        let bridge = anyElement(app, "echoes.bridge")
+        var revealTries = 0
+        while !bridge.exists && revealTries < 110 {
+            sleep(1)
+            revealTries += 1
+        }
+        sleep(1)
+        capture(app: app, name: "xhs-04-roommate-chat")
+
+        // Candidate 2 via the in-app regenerate (one per session). Pace
+        // past Groq's per-minute window first, same as the main flow.
+        let reroll = app.buttons["换个角度"]
+        guard reroll.waitForExistence(timeout: 5) else { return }
+        sleep(45)
+        reroll.tap()
+        sleep(3)
+        revealTries = 0
+        while !bridge.exists && revealTries < 110 {
+            sleep(1)
+            revealTries += 1
+        }
+        sleep(1)
+        capture(app: app, name: "xhs-04-roommate-chat-alt")
+    }
+
     /// Find an element by accessibility id across the element types a
     /// SwiftUI control may surface as (same helper as EchoesFlowUITests).
     private func anyElement(_ app: XCUIApplication, _ id: String) -> XCUIElement {
