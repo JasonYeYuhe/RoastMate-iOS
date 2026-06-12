@@ -238,6 +238,19 @@ final class ScreenshotTests: XCTestCase {
         echoesSituation.typeText("借我钱的时候喊我宝，催他还钱就已读不回，朋友圈还在晒新手机")
         app.navigationBars.firstMatch.tap()
 
+        // Switch tone to 狂怒 (feral) so this transcript comes from the
+        // CLOUD model — the casual register is on-device/curated and reads
+        // far too gentle for marketing. Consent was already granted in the
+        // roommate scene (same surface), so generation routes straight to
+        // the Worker. Keyboard must be down first (EchoesFlowUITests).
+        let feralInSeg = app.segmentedControls.buttons["狂怒"]
+        let feralPlain = app.buttons["狂怒"]
+        if feralInSeg.waitForExistence(timeout: 3) {
+            feralInSeg.tap()
+        } else if feralPlain.waitForExistence(timeout: 2) {
+            feralPlain.tap()
+        }
+
         let echoesGenerate = anyElement(app, "echoes.generate")
         guard echoesGenerate.waitForExistence(timeout: 5) else { return }
         scrollTries = 0
@@ -245,12 +258,28 @@ final class ScreenshotTests: XCTestCase {
             app.swipeUp()
             scrollTries += 1
         }
+        // Groq's free tier rate-limits per minute and the roommate scene
+        // just consumed the window — without this gap the feral call 429s
+        // into the (slow) OpenRouter fallback and the capture times out
+        // on the loading spinner (round-4 failure mode).
+        sleep(45)
         echoesGenerate.tap()
 
-        // Casual tone = on-device / curated fallback — no consent sheet.
+        // Belt-and-braces: if consent somehow wasn't granted, accept it.
+        let echoesAllow = app.buttons["允许 Feral 走云端"]
+        var echoesConsentTries = 0
+        while !echoesAllow.exists && echoesConsentTries < 4 {
+            sleep(1)
+            echoesConsentTries += 1
+        }
+        if echoesAllow.exists { echoesAllow.tap() }
+
+        // Generous poll: worst case is cloud latency + the app's ~60s
+        // request timeout + curated-fallback reveal — still ends in a
+        // bridge bubble eventually.
         let echoesBridge = anyElement(app, "echoes.bridge")
         revealTries = 0
-        while !echoesBridge.exists && revealTries < 45 {
+        while !echoesBridge.exists && revealTries < 110 {
             sleep(1)
             revealTries += 1
         }
@@ -258,15 +287,67 @@ final class ScreenshotTests: XCTestCase {
         capture(app: app, name: "xhs-06-echoes-chat")
 
         // ── Scene 7: the closing loop — bridge → generator pre-filled ──
-        if echoesBridge.exists {
-            echoesBridge.tap()
-            let generatorSituation = app.textViews["situation_editor"]
-            if generatorSituation.waitForExistence(timeout: 10) {
-                // Give EchoBridgeStore a beat to pre-fill the grievance.
-                sleep(2)
-                capture(app: app, name: "xhs-07-bridge-rewrite")
-            }
+        guard echoesBridge.exists else { return }
+        echoesBridge.tap()
+        let generatorSituation = app.textViews["situation_editor"]
+        guard generatorSituation.waitForExistence(timeout: 10) else { return }
+        // Give EchoBridgeStore a beat to pre-fill the grievance.
+        sleep(2)
+        capture(app: app, name: "xhs-07-bridge-rewrite")
+
+        // ── Scene 8: generator VENT output — the cloud roast itself ──
+        // 发泄 routes through the cloud Worker (after its own consent,
+        // separate from the Echoes one) — the on-device register is far
+        // too gentle for the marketing "先骂个爽" promise. The 发泄 chip
+        // sits past 体面/锐利/狠 in the horizontal intensity row: drag
+        // the row left using a visible chip as the anchor until hittable.
+        let ventChip = app.buttons.matching(
+            NSPredicate(format: "label BEGINSWITH '发泄'")).firstMatch
+        let anchorChip = app.buttons.matching(
+            NSPredicate(format: "label BEGINSWITH '锐利' OR label BEGINSWITH '狠'")).firstMatch
+        var chipTries = 0
+        while !ventChip.isHittable && anchorChip.exists && chipTries < 5 {
+            let start = anchorChip.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            let end = anchorChip.coordinate(withNormalizedOffset: CGVector(dx: -2.5, dy: 0.5))
+            start.press(forDuration: 0.05, thenDragTo: end)
+            chipTries += 1
         }
+        guard ventChip.exists else { return }
+        ventChip.tap()
+
+        let startGenerate = app.buttons["开始生成"].firstMatch
+        guard startGenerate.waitForExistence(timeout: 5) else { return }
+        var genScrolls = 0
+        while !startGenerate.isHittable && genScrolls < 3 {
+            app.swipeUp()
+            genScrolls += 1
+        }
+        // Same Groq per-minute window logic as the echoes scene above.
+        sleep(45)
+        startGenerate.tap()
+
+        // First vent generation presents the Vent/Feral cloud-consent
+        // sheet (separate surface from Echoes). Accept → cloud output.
+        let ventAllow = app.buttons["允许使用云端 AI"]
+        var ventConsentTries = 0
+        while !ventAllow.exists && ventConsentTries < 10 {
+            sleep(1)
+            ventConsentTries += 1
+        }
+        if ventAllow.exists { ventAllow.tap() }
+
+        // Wait for the output card: the private-draft actions (改成能发的
+        // rewrite CTA) appear under the generated text. Poll generously —
+        // cloud latency + streaming/typewriter render.
+        let sendable = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label CONTAINS '改成能发'")).firstMatch
+        var outputTries = 0
+        while !sendable.exists && outputTries < 90 {
+            sleep(1)
+            outputTries += 1
+        }
+        sleep(2)
+        capture(app: app, name: "xhs-08-generator-vent")
     }
 
     /// Find an element by accessibility id across the element types a
