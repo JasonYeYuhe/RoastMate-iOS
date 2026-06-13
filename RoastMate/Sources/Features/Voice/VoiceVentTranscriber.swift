@@ -14,6 +14,12 @@ import AVFoundation
 /// buffer (the engine reuses its own), forwards the copy through a
 /// BOUNDED `Sendable` stream, and never writes audio anywhere. Every
 /// error path and dismissal tears capture down.
+///
+/// `@available(iOS 26.0, *)`: this is built entirely on the iOS-26 Speech
+/// API (`SpeechAnalyzer` / `DictationTranscriber` / `AssetInventory`), which
+/// has no in-scope pre-26 equivalent. On iOS 18 the voice affordance is
+/// simply hidden (the gate query is skipped) and the user types instead.
+@available(iOS 26.0, *)
 @MainActor
 @Observable
 final class VoiceVentTranscriber {

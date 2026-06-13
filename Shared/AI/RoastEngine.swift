@@ -1,8 +1,5 @@
 import Foundation
 import os.log
-#if canImport(FoundationModels)
-import FoundationModels
-#endif
 
 enum RoastError: LocalizedError {
     case modelUnavailable(reason: String)
@@ -24,33 +21,34 @@ enum RoastError: LocalizedError {
     }
 }
 
-/// Wraps Apple's on-device `LanguageModelSession`. Keeps one session per
-/// (style, mode, intensity) so a vent draft and a regular sharp reply
-/// don't accidentally bleed into the same conversational context.
+/// Main roast engine. Talks to the on-device Apple model through an
+/// `(any FMBackend)?` (nil on iOS 18 / macOS 14 / watchOS / AI-off), which
+/// keeps all iOS-26-only Foundation Models symbols behind an `@available`
+/// boundary in `AppleFMBackend`. The backend keeps one session per
+/// (style, locale, mode, intensity) so a vent draft and a regular sharp
+/// reply don't bleed into the same conversational context.
 actor RoastEngine {
     static let shared = RoastEngine()
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "RoastEngine")
 
-    #if canImport(FoundationModels)
-    private var currentSession: LanguageModelSession?
-    private var currentSessionKey: String?
-    #endif
+    /// Apple on-device backend, or `nil` on devices without Foundation Models
+    /// (iOS 18 / macOS 14, AI off, unsupported hardware, watchOS). Immutable +
+    /// `Sendable`, so `nonisolated` lets `isOnDeviceModelAvailable` read it
+    /// synchronously without hopping onto the actor.
+    private nonisolated let fm: (any FMBackend)?
+
+    init() {
+        fm = FMBackendFactory.make()
+    }
 
     /// True when the on-device model is ready to use on this device + locale.
     static var isOnDeviceModelAvailable: Bool {
-        #if canImport(FoundationModels)
-        return SystemLanguageModel.default.availability == .available
-        #else
-        return false
-        #endif
+        shared.fm?.isAvailable ?? false
     }
 
-    func resetConversation() {
-        #if canImport(FoundationModels)
-        currentSession = nil
-        currentSessionKey = nil
-        #endif
+    func resetConversation() async {
+        await fm?.reset()
     }
 
     /// Curated-fallback exit path. Fires the P5 Tier-1
@@ -143,29 +141,20 @@ actor RoastEngine {
             }
         }
 
-        #if canImport(FoundationModels)
-        guard SystemLanguageModel.default.availability == .available else {
-            logger.notice("Foundation Models unavailable; using curated fallback.")
+        guard let fm, fm.isAvailable else {
+            logger.notice("On-device model unavailable; using curated fallback.")
             EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
             return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
         }
 
         let key = "\(style.id)|\(locale.identifier)|\(mode.rawValue)|\(intensity.rawValue)"
-        if !keepSession || currentSessionKey != key || currentSession == nil {
-            let instructions = PromptBuilder.systemPrompt(
-                style: style,
-                locale: locale,
-                mode: mode,
-                intensity: intensity,
-                safeMode: safeMode
-            )
-            currentSession = LanguageModelSession(instructions: instructions)
-            currentSessionKey = key
-        }
-        guard let session = currentSession else {
-            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
-        }
-
+        let instructions = PromptBuilder.systemPrompt(
+            style: style,
+            locale: locale,
+            mode: mode,
+            intensity: intensity,
+            safeMode: safeMode
+        )
         let user = PromptBuilder.userPrompt(
             situation: situation,
             styleName: style.displayName,
@@ -183,24 +172,31 @@ actor RoastEngine {
             ? min(style.temperature + 0.1, 1.0)
             : style.temperature
 
-        let response: LanguageModelSession.Response<String>
+        // The backend owns session reuse (keyed by `key` + `keepSession`) so
+        // the iOS-26-only `LanguageModelSession` never appears in this engine.
+        let content: String
         do {
-            response = try await session.respond(
+            content = try await fm.respondCached(
+                instructions: instructions,
                 to: user,
-                options: GenerationOptions(
-                    temperature: temperature,
-                    maximumResponseTokens: 600
-                )
+                temperature: temperature,
+                maxTokens: 600,
+                sessionKey: key,
+                keepSession: keepSession
             )
-        } catch let genErr as LanguageModelSession.GenerationError {
-            logger.warning("Foundation Models generation error: \(String(describing: genErr))")
-            EventLedger.shared.recordFailure(Self.failureCategory(for: genErr))  // α3
+        } catch FMBackendError.unavailable {
+            logger.notice("On-device model unavailable; using curated fallback.")
+            EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
             return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
-        } catch {
-            throw RoastError.generationFailed(underlying: error)
+        } catch FMBackendError.generation(let category) {
+            logger.warning("On-device generation error (\(String(describing: category), privacy: .public)).")
+            EventLedger.shared.recordFailure(category)  // α3
+            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
+        } catch FMBackendError.other(let underlying) {
+            throw RoastError.generationFailed(underlying: underlying)
         }
 
-        let split = PromptBuilder.splitVariants(response.content)
+        let split = PromptBuilder.splitVariants(content)
         guard !split.isEmpty else {
             throw RoastError.noVariantsParsed
         }
@@ -237,9 +233,6 @@ actor RoastEngine {
         EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
         return Array(sanitized.prefix(effectiveVariantCount))
-        #else
-        return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
-        #endif
     }
 
     /// Converts a private vent draft into a "sendable reply" the user could
@@ -262,9 +255,8 @@ actor RoastEngine {
     ) async throws -> String {
         // The output of this call is meant to go to another human — it must
         // pass the *strict* validator, not the vent one.
-        #if canImport(FoundationModels)
-        guard SystemLanguageModel.default.availability == .available else {
-            logger.notice("Foundation Models unavailable; falling back to curated sendable.")
+        guard let fm, fm.isAvailable else {
+            logger.notice("On-device model unavailable; falling back to curated sendable.")
             return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
                 ?? String(localized: "rewrite.fallback.unavailable")
         }
@@ -276,26 +268,29 @@ actor RoastEngine {
             locale: locale
         )
 
-        let session = LanguageModelSession(instructions: system)
-        let response: LanguageModelSession.Response<String>
+        // Fresh session (never the cached roast one): the rewriter must start
+        // cold with strict tone rules. Lower temperature: be deliberate.
+        let content: String
         do {
-            response = try await session.respond(
+            content = try await fm.respondFresh(
+                instructions: system,
                 to: user,
-                options: GenerationOptions(
-                    // Lower temperature: rewriter should be deliberate.
-                    temperature: max(0.4, style.temperature - 0.2),
-                    maximumResponseTokens: 250
-                )
+                temperature: max(0.4, style.temperature - 0.2),
+                maxTokens: 250
             )
-        } catch let genErr as LanguageModelSession.GenerationError {
-            logger.warning("Sendable rewrite generation error: \(String(describing: genErr))")
+        } catch FMBackendError.unavailable {
+            logger.notice("On-device model unavailable; falling back to curated sendable.")
             return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
                 ?? String(localized: "rewrite.fallback.unavailable")
-        } catch {
-            throw RoastError.generationFailed(underlying: error)
+        } catch FMBackendError.generation {
+            logger.warning("Sendable rewrite generation error.")
+            return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
+                ?? String(localized: "rewrite.fallback.unavailable")
+        } catch FMBackendError.other(let underlying) {
+            throw RoastError.generationFailed(underlying: underlying)
         }
 
-        let trimmed = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
         // Strip a stray leading "1." in case the model couldn't help itself.
         let cleaned = trimmed.replacingOccurrences(
             of: #"^\s*\d+\s*[.)、]\s*"#,
@@ -308,10 +303,6 @@ actor RoastEngine {
         } catch let err as SafetyError {
             throw RoastError.safety(err)
         }
-        #else
-        return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-            ?? String(localized: "rewrite.fallback.unavailable")
-        #endif
     }
 
     /// Helper that fronts `CloudVentClient.generate` so the engine's
@@ -335,28 +326,4 @@ actor RoastEngine {
         let resp = try await client.generate(req)
         return resp.text
     }
-
-    #if canImport(FoundationModels)
-    /// α3: map a Foundation Models `GenerationError` to an A′ failure
-    /// category. Done by string-introspection on the error description so
-    /// the mapping survives API additions — new cases fall through to
-    /// `.guardrail` (the conservative bucket) until we add a specific
-    /// branch. Tested via `RoastEngineFailureCategoryTests`.
-    fileprivate static func failureCategory(
-        for error: LanguageModelSession.GenerationError
-    ) -> EventLedger.FailureCategory {
-        let desc = String(describing: error).lowercased()
-        if desc.contains("guardrail") || desc.contains("safety") {
-            return .guardrail
-        }
-        if desc.contains("context") || desc.contains("token") {
-            return .quota
-        }
-        if desc.contains("asset") || desc.contains("unavailable")
-            || desc.contains("language") || desc.contains("locale") {
-            return .modelAssetMissing
-        }
-        return .guardrail  // default to the safety-bucket so we never under-count refusals
-    }
-    #endif
 }

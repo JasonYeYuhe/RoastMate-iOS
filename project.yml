@@ -2,8 +2,12 @@ name: RoastMate
 options:
   bundleIdPrefix: yyh.roastmate
   deploymentTarget:
-    iOS: "26.0"
-    macOS: "26.0"
+    # v1.2.0: lowered from 26.0 so the app installs on devices WITHOUT Apple
+    # Foundation Models (FM is optional — on-device when present, consent-gated
+    # cloud otherwise). watchOS stays 26.0 (no viable on-device/cloud path on
+    # Watch this cycle; FoundationModels isn't in the watchOS SDK anyway).
+    iOS: "18.0"
+    macOS: "14.0"
     watchOS: "26.0"
   xcodeVersion: "26.0"
   generateEmptyDirectories: true
@@ -52,6 +56,12 @@ targets:
         SUPPORTS_MACCATALYST: NO
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_ENTITLEMENTS: RoastMate/RoastMate.entitlements
+        # Defense-in-depth weak-link: FoundationModels is iOS-26-only and every
+        # symbol sits behind `@available` in AppleFMBackend, so Swift already
+        # auto-weak-links it. The explicit flag guarantees the binary loads
+        # clean on iOS 18 (dyld tolerates an absent weak dylib). NOT applied to
+        # the watch target — FoundationModels isn't in the watchOS SDK.
+        OTHER_LDFLAGS: "$(inherited) -weak_framework FoundationModels"
       configs:
         debug:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
@@ -96,6 +106,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_ENTITLEMENTS: RoastMateMac/RoastMateMac.entitlements
+        OTHER_LDFLAGS: "$(inherited) -weak_framework FoundationModels"  # see RoastMate note
       configs:
         debug:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
@@ -151,6 +162,7 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) APP_EXTENSION"
+        OTHER_LDFLAGS: "$(inherited) -weak_framework FoundationModels"  # see RoastMate note
       configs:
         debug:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
@@ -176,6 +188,7 @@ targets:
         GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) APP_EXTENSION"
+        OTHER_LDFLAGS: "$(inherited) -weak_framework FoundationModels"  # see RoastMate note
       configs:
         debug:
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
@@ -207,6 +220,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         TEST_HOST: ""
         BUNDLE_LOADER: ""
+        OTHER_LDFLAGS: "$(inherited) -weak_framework FoundationModels"  # see RoastMate note
 
   RoastMateUITests:
     type: bundle.ui-testing

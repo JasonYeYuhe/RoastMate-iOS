@@ -1,8 +1,5 @@
 import Foundation
 import os.log
-#if canImport(FoundationModels)
-import FoundationModels
-#endif
 
 /// Top-level engine for an Echoes transcript generation. Composes the
 /// existing `RoastEngine` for low-level on-device generation; routes
@@ -28,12 +25,14 @@ actor EchoesEngine {
     /// on-device FM blocks the harsh group-roast). Injectable for tests.
     private let cloudClient: CloudVentService
 
-    #if canImport(FoundationModels)
-    private var session: LanguageModelSession?
-    #endif
+    /// Apple on-device backend, or `nil` on devices without Foundation Models
+    /// (iOS 18 / macOS 14 / watchOS / AI off). Classic Echoes uses it; the
+    /// roommate scene is cloud-only and ignores it.
+    private nonisolated let fm: (any FMBackend)?
 
     init(cloudClient: CloudVentService = CloudVentClient.shared) {
         self.cloudClient = cloudClient
+        self.fm = FMBackendFactory.make()
     }
 
     /// Caller-provided contract. The view layer decides tone / voiceCount /
@@ -120,19 +119,19 @@ actor EchoesEngine {
         // flips. Kept (with `|| useCloud`) so v0.2's cloud wire-up sets it.
         let cloudUsed = false
 
-        #if canImport(FoundationModels)
-        if SystemLanguageModel.default.availability == .available {
+        if let fm, fm.isAvailable {
             do {
-                let s = LanguageModelSession(instructions: prompt)
-                session = s
                 // v1 keeps the 600-token cap for BOTH scenes per the roommate
                 // spec (§7: don't raise by guess — let the real-device eval
-                // decide if 8–10 messages need more headroom).
-                let response = try await s.respond(
+                // decide if 8–10 messages need more headroom). Fresh session
+                // each call (classic Echoes never reuses context).
+                let content = try await fm.respondFresh(
+                    instructions: prompt,
                     to: user,
-                    options: GenerationOptions(temperature: tone == .feral ? 0.95 : 0.85, maximumResponseTokens: 600)
+                    temperature: tone == .feral ? 0.95 : 0.85,
+                    maxTokens: 600
                 )
-                if let parsed = EchoesParser.parse(response.content, scene: scene),
+                if let parsed = EchoesParser.parse(content, scene: scene),
                    let safe = Self.safetyFilter(parsed, tone: tone) {
                     messages = safe
                 } else {
@@ -149,19 +148,14 @@ actor EchoesEngine {
                 messages = curatedFallback(scene: scene, tone: tone, voiceCount: effectiveVoiceCount, personas: personas)
             }
         } else {
-            // Model UNAVAILABLE (AI off / unsupported device) — this is NOT a
-            // parse failure; we never attempted a generation. Counting it as
-            // parse_fallback would falsely trip the kill-criterion on every
-            // AI-off device. (Health audit 2026-05-29.)
-            logger.notice("Foundation Models unavailable — using curated Echoes fallback.")
+            // Model UNAVAILABLE (AI off / unsupported device / iOS 18 with no
+            // FM backend) — this is NOT a parse failure; we never attempted a
+            // generation. Counting it as parse_fallback would falsely trip the
+            // kill-criterion on every AI-off device. (Health audit 2026-05-29.)
+            logger.notice("On-device model unavailable — using curated Echoes fallback.")
             EventLedger.shared.recordEchoesModelUnavailable()
             messages = curatedFallback(scene: scene, tone: tone, voiceCount: effectiveVoiceCount, personas: personas)
         }
-        #else
-        // Non-FoundationModels build — same "no model to parse" case.
-        EventLedger.shared.recordEchoesModelUnavailable()
-        messages = curatedFallback(scene: scene, tone: tone, voiceCount: effectiveVoiceCount, personas: personas)
-        #endif
 
         // Always mark a successful output — even curated fallback is
         // user-perceived relief. Same rule as `RoastEngine.curatedFallback`

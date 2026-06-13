@@ -5,6 +5,11 @@ import SwiftUI
 /// transcript and an explicit on-device/ephemeral disclosure at the
 /// moment of use. On stop, the transcript is handed back; the audio is
 /// already gone (the transcriber never persisted it).
+///
+/// `@available(iOS 26.0, *)` because it owns a `VoiceVentTranscriber`
+/// (iOS-26 Speech API). Presented only when the iOS-26 voice gate says so,
+/// so it never appears on iOS 18.
+@available(iOS 26.0, *)
 struct VoiceVentSheet: View {
     let appLocale: Locale
     let onComplete: (String) -> Void

@@ -61,6 +61,7 @@
 		17C053B5043E6956F54BDBF2 /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
 		18527FA5F4B4198A3BC6CBF2 /* OutputShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD2244A3C37BA744460E949 /* OutputShareButton.swift */; };
 		18793CE5245B2F733082C7F1 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
+		1894BD77503AF301BA32A924 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
 		18EBBE05718EA03924507496 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
 		19F5524619680F3746F33362 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEAE99564022D6C8CECBBBF /* OnboardingView.swift */; };
@@ -103,6 +104,7 @@
 		2EB1BDC620D6820CB50D572F /* ShareCardComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACFB0A16144FB99761AFC8C /* ShareCardComposer.swift */; };
 		2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		2FCE41884516B38427C922D0 /* RemoteConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35250F958AD0D7CB3559F1A7 /* RemoteConfigTests.swift */; };
+		3059FC45068DD7FA7E9CE898 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */; };
@@ -209,6 +211,7 @@
 		69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
 		69979D649F53923960FCC861 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		6B81B6A3961277AEA004EAB0 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EFF91CE10A108502250A16 /* RemoteConfig.swift */; };
+		6C3374BE50CF8AA617A7E5FB /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		6C8F1FE77228BACEF6A96775 /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
 		6CA721CD6B76BCE2535E7272 /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
 		6CFF337343C2F50EAE8C0AF2 /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
@@ -256,6 +259,7 @@
 		7EB0FE0706DCA7459668ABB3 /* AccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DAD9564C37433030E22769 /* AccountSection.swift */; };
 		7EECDE3789D0BEBCEFC706CD /* ShareRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963F633CF99333D82BDE3A4A /* ShareRootView.swift */; };
 		7F2C3FF78CFC399BF59B9AD7 /* RoastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31277B6E9CF593725FAFC384 /* RoastCard.swift */; };
+		7FA7E2BD251A4C255BF224D8 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		8038D6D0A6581B8EA114A1EA /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		8074C117A2C584717E29A5F9 /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		81917679E12D170CA1ACD91F /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
@@ -281,6 +285,7 @@
 		8D5B7AC20FC3C8D092FC89C8 /* EchoesFlowUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D4F109A599707C4DE3278C /* EchoesFlowUITests.swift */; };
 		8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		8E44449307DBAD23404217DB /* ThreadContinuationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C539EC580AA5A3F67886C4FE /* ThreadContinuationStore.swift */; };
+		90009DDC7C0C9903291E0F82 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		904A890AB98A866D9CE12415 /* SampleGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DE2596F74842B90AD49144 /* SampleGalleryView.swift */; };
 		90F7B75AD19AF4A1BDD1ACD4 /* RatingPromptServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00BE67E9E64AAAE71418A24 /* RatingPromptServiceTests.swift */; };
 		91B241D89DC65586D652339A /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
@@ -295,6 +300,7 @@
 		94E38E41351678483333ED73 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE5229B8E9B0B463C31B073 /* ArgumentSimulatorView.swift */; };
 		9659805CE4D386865F2C272E /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
+		96870DD806F23F8A173917B9 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		970C577C13CCDF1ADB753485 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
 		977C6BDD74B711051EA50850 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		9894E371418E345372B6068A /* EchoesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939F539F23ECC0CE06214CD8 /* EchoesParser.swift */; };
@@ -315,6 +321,7 @@
 		A1B6296B2BC3543338561D17 /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
 		A1F061CB240CD31930641CE9 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
 		A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
+		A3D27B4A2546B7F33F7425A4 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		A50453236C33115558205278 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		A5C0D08DE2F07F7855FFE85B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
@@ -328,6 +335,7 @@
 		A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		A94C5AC2373DF289C78225E5 /* EchoesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2F1EA4C85898A03E4AEB7 /* EchoesView.swift */; };
 		AAF4CA9DC81346C933FE0B15 /* VoiceVentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */; };
+		AB2205DA20B7754DDC378F24 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		AB4D8CF4B83A95FF6F7DD528 /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
 		ACDEC04B9B439D36E2800940 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		ADF20E86735BD6742466F6CE /* CrisisSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4033DDD59B2FB940AF7C3C67 /* CrisisSupportView.swift */; };
@@ -398,7 +406,9 @@
 		CF4553479B1E57F6EEB457B1 /* EchoesFeralConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A81179330CA48CC854629C /* EchoesFeralConsentGate.swift */; };
 		CFB4AEB5253285A56AB33792 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		CFEB321CD1E5D1FB3A2BA1E6 /* TelemetryExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F313D8BE3B58F3F19C2827CD /* TelemetryExportTests.swift */; };
+		D02FD195B46F943909A003BE /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		D09D84A21C3F3BA182C072C7 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
+		D0BEE6D8D9990EF93600A11D /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		D15939753D0304B1E8335C2C /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		D1AE0AA617539A84C903B5B4 /* StyleCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115B5C918D3BD5C5C8372636 /* StyleCatalogTests.swift */; };
 		D2AB30A279DAB598A71CFCFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
@@ -460,6 +470,7 @@
 		F2F0C1D46220A900EA21F2E2 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		F2FF341791CDA27193820D2E /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
 		F3DE9C73FDEA74606BB796D9 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
+		F3EBDE5B0145F781B0EC4E60 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		F3F6F14FA4BEF9E2216D8E57 /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
 		F3FCD59A7942E7B0B5956325 /* CloudVentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */; };
 		F52CC4A20F9184AE21772AF6 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EFF91CE10A108502250A16 /* RemoteConfig.swift */; };
@@ -467,6 +478,7 @@
 		F78639AE31EC2B76EE255D7E /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
 		F7B3D47A17C1738051DA328A /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		F7D29F37AE3E83FD9C7230B7 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
+		F852DB1B8B4E93628D1B2B87 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		F8564091DC2A58F6CD338CCF /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
 		F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		F9E5BE28B1F74F360EAA5994 /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
@@ -573,6 +585,7 @@
 		4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCatalog.swift; sourceTree = "<group>"; };
 		4C8869CA8D12F9544EFD87DE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4F762D491194741211677317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFMBackend.swift; sourceTree = "<group>"; };
 		53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoBridgeStore.swift; sourceTree = "<group>"; };
 		58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorViewModel.swift; sourceTree = "<group>"; };
 		58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "echoes-personas-zh-Hans.json"; sourceTree = "<group>"; };
@@ -652,6 +665,7 @@
 		C8D2F1EA4C85898A03E4AEB7 /* EchoesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesView.swift; sourceTree = "<group>"; };
 		C994C838B393F986EB67EDCA /* DeviceID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceID.swift; sourceTree = "<group>"; };
 		CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRouter.swift; sourceTree = "<group>"; };
+		CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMBackend.swift; sourceTree = "<group>"; };
 		D0A389CACC509693410FCD39 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
 		D0C5738122030F5026AA5822 /* CloudConsentSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentSheet.swift; sourceTree = "<group>"; };
 		D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ForbiddenTerms.json; sourceTree = "<group>"; };
@@ -1030,12 +1044,14 @@
 		AE42A9880A67D6381A05C466 /* AI */ = {
 			isa = PBXGroup;
 			children = (
+				53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */,
 				21D4AE8F01F86C70AB907869 /* CrisisResources.swift */,
 				17F16B2FBCFE9C5EE33D8F27 /* EchoesEngine.swift */,
 				939F539F23ECC0CE06214CD8 /* EchoesParser.swift */,
 				08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */,
 				BD0D3F3EC78E1B847C8ED2AD /* EchoesPromptBuilder.swift */,
 				FDB74A247001CF2C1093499E /* FallbackRoasts.swift */,
+				CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */,
 				87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */,
 				82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */,
 				3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */,
@@ -1457,6 +1473,7 @@
 			files = (
 				46FFA1CEDE7A1557B71D1FE3 /* AppLaunchEnvironment.swift in Sources */,
 				62F534881B1C940003515A70 /* AppLocalization.swift in Sources */,
+				96870DD806F23F8A173917B9 /* AppleFMBackend.swift in Sources */,
 				287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */,
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
 				9DE1FDA11303862B4FDC38A2 /* CloudConsentGate.swift in Sources */,
@@ -1483,6 +1500,7 @@
 				846A364A090220BAF6F73BBA /* EchoesTypes.swift in Sources */,
 				D3A505EF47A895139D820607 /* EventLedger.swift in Sources */,
 				64FEC08EC132479DF960EF54 /* EventLedgerTests.swift in Sources */,
+				F852DB1B8B4E93628D1B2B87 /* FMBackend.swift in Sources */,
 				63144714DE37F54D46572391 /* FallbackRoasts.swift in Sources */,
 				9FAFAA809A538B41EC3E06B7 /* GeneratedRoast.swift in Sources */,
 				35EC89B2E1708C44634ABBFF /* GeneratedRoastSourceIntensityTests.swift in Sources */,
@@ -1551,6 +1569,7 @@
 			files = (
 				E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */,
 				24D9C3B0147763A3B6C4AD98 /* AppLocalization.swift in Sources */,
+				3059FC45068DD7FA7E9CE898 /* AppleFMBackend.swift in Sources */,
 				BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
 				58999A2E7980947164A96920 /* CloudConsentGate.swift in Sources */,
@@ -1569,6 +1588,7 @@
 				8D0B4BFC5B18532BD2EAF5BA /* EchoesPromptBuilder.swift in Sources */,
 				BE307BF84526C12EB4F31994 /* EchoesTypes.swift in Sources */,
 				BC918E112E327A993F7887C7 /* EventLedger.swift in Sources */,
+				A3D27B4A2546B7F33F7425A4 /* FMBackend.swift in Sources */,
 				F22B539AFD4DD26A03EE2939 /* FallbackRoasts.swift in Sources */,
 				52DA49A90E5312160C42432A /* GeneratedRoast.swift in Sources */,
 				65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */,
@@ -1615,6 +1635,7 @@
 			files = (
 				696A50C08BAEADA6F9AD0D17 /* AppLaunchEnvironment.swift in Sources */,
 				FF358B9FA48E40DF12A3E154 /* AppLocalization.swift in Sources */,
+				D0BEE6D8D9990EF93600A11D /* AppleFMBackend.swift in Sources */,
 				127F44F5390D81E12A410DA9 /* AuthService.swift in Sources */,
 				A5D71BF4F9A5B628D3CB30D3 /* CloudConfig.swift in Sources */,
 				F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */,
@@ -1633,6 +1654,7 @@
 				56E3D1F6A19747911A5E24BC /* EchoesPromptBuilder.swift in Sources */,
 				94A6F8F5FD9C9ED599FF8F06 /* EchoesTypes.swift in Sources */,
 				D87091E3C656B52DAC53066B /* EventLedger.swift in Sources */,
+				6C3374BE50CF8AA617A7E5FB /* FMBackend.swift in Sources */,
 				571FF89781597F11FB6167FC /* FallbackRoasts.swift in Sources */,
 				46D3A08A2641F6DB1637C529 /* GeneratedRoast.swift in Sources */,
 				17BE752B80E9E9A023EC0D22 /* HandoffActivity.swift in Sources */,
@@ -1677,6 +1699,7 @@
 			files = (
 				EFA5C5D6B7F99734125AAFF9 /* AppLaunchEnvironment.swift in Sources */,
 				501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */,
+				90009DDC7C0C9903291E0F82 /* AppleFMBackend.swift in Sources */,
 				CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
 				62130181AC40B13F67A2D2C5 /* CloudConsentGate.swift in Sources */,
@@ -1695,6 +1718,7 @@
 				617E202C7F5603B9A39E6CC9 /* EchoesPromptBuilder.swift in Sources */,
 				C6D305FC9D71704F01E9F73C /* EchoesTypes.swift in Sources */,
 				41414496920250AC99411AFC /* EventLedger.swift in Sources */,
+				7FA7E2BD251A4C255BF224D8 /* FMBackend.swift in Sources */,
 				01BDB320FA391B912161AF3D /* FallbackRoasts.swift in Sources */,
 				86F4F2DD92B5AABB5D284FC4 /* GeneratedRoast.swift in Sources */,
 				78C7E4B48D65423CA81A267C /* HandoffActivity.swift in Sources */,
@@ -1741,6 +1765,7 @@
 				7EB0FE0706DCA7459668ABB3 /* AccountSection.swift in Sources */,
 				C8F4F165F8904B51E0D98DC1 /* AppLaunchEnvironment.swift in Sources */,
 				0ACFF8F674AC657C4A377ED8 /* AppLocalization.swift in Sources */,
+				D02FD195B46F943909A003BE /* AppleFMBackend.swift in Sources */,
 				9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */,
 				064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */,
 				8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */,
@@ -1767,6 +1792,7 @@
 				0FA13C9D677E535A5284853E /* EchoesViewModel.swift in Sources */,
 				0BA71F80510EC4EE33CD0922 /* EventLedger.swift in Sources */,
 				36C96C621D8EFC99ADF6490C /* ExploreView.swift in Sources */,
+				F3EBDE5B0145F781B0EC4E60 /* FMBackend.swift in Sources */,
 				9CCFB5603DAD5CF14695D8C8 /* FallbackRoasts.swift in Sources */,
 				DCA72479EBB511CAF69800D9 /* FeatureGenerator.swift in Sources */,
 				B0716C161DBB624C15512BD7 /* GenerateRoastIntent.swift in Sources */,
@@ -1833,6 +1859,7 @@
 				9CE91BCFCF3C1699753AD91F /* AccountSection.swift in Sources */,
 				1713A4CAC0A8813511767574 /* AppLaunchEnvironment.swift in Sources */,
 				A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */,
+				AB2205DA20B7754DDC378F24 /* AppleFMBackend.swift in Sources */,
 				6D1291FA64EA414BB5DE4196 /* ArgumentSimulatorView.swift in Sources */,
 				7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */,
 				8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */,
@@ -1859,6 +1886,7 @@
 				72C267E52BD8C5C345D4502B /* EchoesViewModel.swift in Sources */,
 				461316BE069D5ADB750BCF67 /* EventLedger.swift in Sources */,
 				19FCFCAD16046BD27AB0C31F /* ExploreView.swift in Sources */,
+				1894BD77503AF301BA32A924 /* FMBackend.swift in Sources */,
 				F08C4F07044B2138587D9C42 /* FallbackRoasts.swift in Sources */,
 				172431F3355F7D6772D253FB /* FeatureGenerator.swift in Sources */,
 				5E8DA45315E6553EF5E606F5 /* GenerateRoastIntent.swift in Sources */,
@@ -1968,6 +1996,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.controls;
 				PRODUCT_NAME = RoastMateControls;
 				SDKROOT = iphoneos;
@@ -1994,6 +2023,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
 				SDKROOT = macosx;
@@ -2035,6 +2065,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
 				SDKROOT = macosx;
@@ -2052,6 +2083,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2070,6 +2102,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.controls;
 				PRODUCT_NAME = RoastMateControls;
 				SDKROOT = iphoneos;
@@ -2090,6 +2123,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.share;
 				PRODUCT_NAME = RoastMateShare;
 				SDKROOT = iphoneos;
@@ -2147,8 +2181,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2184,6 +2218,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
 				SDKROOT = iphoneos;
@@ -2225,6 +2260,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.tests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2254,6 +2290,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app;
 				PRODUCT_NAME = RoastMate;
 				SDKROOT = iphoneos;
@@ -2296,6 +2333,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				OTHER_LDFLAGS = "$(inherited) -weak_framework FoundationModels";
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.share;
 				PRODUCT_NAME = RoastMateShare;
 				SDKROOT = iphoneos;
@@ -2376,8 +2414,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;

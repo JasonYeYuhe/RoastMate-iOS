@@ -55,6 +55,12 @@ final class RoommateEvalTests: XCTestCase {
 
     func test_roommateGroup_realDeviceParseFallbackRate() async throws {
         #if canImport(FoundationModels)
+        // The test target now deploys to iOS 18, but Foundation Models symbols
+        // are iOS-26-only — gate them at runtime so this compiles for the
+        // lowered target (skips on anything below 26, same as it skips the sim).
+        guard #available(iOS 26.0, macOS 26.0, *) else {
+            throw XCTSkip("Foundation Models requires iOS 26 / macOS 26.")
+        }
         try XCTSkipUnless(
             SystemLanguageModel.default.availability == .available,
             "Foundation Models unavailable (simulator / Apple Intelligence off). " +

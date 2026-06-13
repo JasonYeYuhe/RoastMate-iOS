@@ -120,13 +120,20 @@ struct RoastGeneratorView: View {
             )
         }
         #if os(iOS)
+        // Voice vent rides the iOS-26 Speech API (VoiceVentTranscriber). On
+        // iOS 18 the gate query is skipped → voiceGate stays nil → the
+        // affordance never shows and this sheet is never presented.
         .task(id: locale) {
-            voiceGate = await VoiceVentTranscriber.currentGate(appLocale: locale)
+            if #available(iOS 26.0, *) {
+                voiceGate = await VoiceVentTranscriber.currentGate(appLocale: locale)
+            }
         }
         .sheet(isPresented: $showVoiceSheet) {
-            VoiceVentSheet(appLocale: locale) { transcript in
-                viewModel.applyVoiceTranscript(transcript)
-                situationFocused = false
+            if #available(iOS 26.0, *) {
+                VoiceVentSheet(appLocale: locale) { transcript in
+                    viewModel.applyVoiceTranscript(transcript)
+                    situationFocused = false
+                }
             }
         }
         #endif
