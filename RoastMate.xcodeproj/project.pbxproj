@@ -211,6 +211,7 @@
 		69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
 		69979D649F53923960FCC861 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		6B81B6A3961277AEA004EAB0 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EFF91CE10A108502250A16 /* RemoteConfig.swift */; };
+		6C320FEFB30ADFAD20407591 /* ModernSpeechBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD8D3D62966EAA32CF98C3 /* ModernSpeechBackend.swift */; };
 		6C3374BE50CF8AA617A7E5FB /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		6C8F1FE77228BACEF6A96775 /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
 		6CA721CD6B76BCE2535E7272 /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
@@ -272,6 +273,7 @@
 		8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		86CB4D28876E189B706A51F9 /* PromptBuilderIntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE7038CDFBD6F1719D5F9 /* PromptBuilderIntensityTests.swift */; };
 		86F4F2DD92B5AABB5D284FC4 /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
+		88446ACD24BBD1DC14824575 /* SpeechRecognitionBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6396F27863728AF68657EF4 /* SpeechRecognitionBackend.swift */; };
 		8864D53AE7242F4E5A407C3B /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
 		8881A3F2472953724E55AA74 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		88DCA93C16D8F660DD755302 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39958DB5CEACCF264837538B /* Localizable.strings */; };
@@ -365,6 +367,7 @@
 		BC918E112E327A993F7887C7 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
 		BD8395A7FB499D2CFF64D6E6 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
 		BD84D453D82BEB9F5EDE223D /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
+		BE02A8EF36EAF5C1416C1AA8 /* SpeechRecognitionBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6396F27863728AF68657EF4 /* SpeechRecognitionBackend.swift */; };
 		BE307BF84526C12EB4F31994 /* EchoesTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EDC37F4F6EBE24E675E464 /* EchoesTypes.swift */; };
 		BE445CE5EAC402AA49FFF03C /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		BE7E3B00D1023297B6F91440 /* ThreadContinuationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */; };
@@ -383,6 +386,7 @@
 		C3FF3BBAFA063333EBC08E7B /* EchoesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F16B2FBCFE9C5EE33D8F27 /* EchoesEngine.swift */; };
 		C42063E72232619019568007 /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		C450C0EBA820611287B50FF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2ED4E06FE20675139E16E6DB /* Assets.xcassets */; };
+		C487CE962E7832D1ACC84780 /* ModernSpeechBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD8D3D62966EAA32CF98C3 /* ModernSpeechBackend.swift */; };
 		C4D46D6E74CA9C76B122324E /* RoastGeneratorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */; };
 		C5473B315D2E339D4297A72A /* UserSettingsQuotaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6224DA4F04F19B18E4969E96 /* UserSettingsQuotaTests.swift */; };
 		C59B5DD91EDF35570D37F8DC /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
@@ -551,6 +555,7 @@
 		11AC90C29CF54A9781B56A0F /* ThreadDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadDetailView.swift; sourceTree = "<group>"; };
 		133FB869CE2ABF6F610D85E8 /* SavedRepliesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedRepliesTests.swift; sourceTree = "<group>"; };
 		144EE7038CDFBD6F1719D5F9 /* PromptBuilderIntensityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilderIntensityTests.swift; sourceTree = "<group>"; };
+		14BD8D3D62966EAA32CF98C3 /* ModernSpeechBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModernSpeechBackend.swift; sourceTree = "<group>"; };
 		14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardModels.swift; sourceTree = "<group>"; };
 		1658B4101DE1A025BBCFB379 /* IntensityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntensityTests.swift; sourceTree = "<group>"; };
 		1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoTranscriptRecord.swift; sourceTree = "<group>"; };
@@ -652,6 +657,7 @@
 		B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStoreTests.swift; sourceTree = "<group>"; };
 		B4E99171A2C32D4676F4F488 /* RoastMateWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMateWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B53E960CCC8E57188D02B908 /* EchoesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesViewModel.swift; sourceTree = "<group>"; };
+		B6396F27863728AF68657EF4 /* SpeechRecognitionBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognitionBackend.swift; sourceTree = "<group>"; };
 		B74552485E60686386F9627C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B7C6C5BEEAFFFDB727D9CAC0 /* RoastMateApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastMateApp.swift; sourceTree = "<group>"; };
 		B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModelContainer.swift; sourceTree = "<group>"; };
@@ -707,13 +713,6 @@
 				621D1F985587ABFC8E6A2F3C /* Assets.xcassets */,
 			);
 			path = RoastMateWatch;
-			sourceTree = "<group>";
-		};
-		1200316F211CD167F528A3B9 /* EmotionTranslator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = EmotionTranslator;
 			sourceTree = "<group>";
 		};
 		18AA59627EB4E01671A4ECE4 /* RoastMateControls */ = {
@@ -780,6 +779,8 @@
 		4C602706C9D23E8D0F01D6D3 /* Voice */ = {
 			isa = PBXGroup;
 			children = (
+				14BD8D3D62966EAA32CF98C3 /* ModernSpeechBackend.swift */,
+				B6396F27863728AF68657EF4 /* SpeechRecognitionBackend.swift */,
 				F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */,
 				C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */,
 			);
@@ -1013,7 +1014,6 @@
 		A81357C9DD7F30A9E74DEFFC /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				FC606785608DD66B47D037CF /* Mac */,
 				CDEEE99F8F567810EA9DED02 /* MenuBar */,
 			);
 			name = Sources;
@@ -1026,15 +1026,12 @@
 				B15E768181AAFC81E22C1F54 /* ArgumentSimulator */,
 				7E6D21D0F35850DA8AB09946 /* Crisis */,
 				543C23823293EF47C5A2BE93 /* Echoes */,
-				1200316F211CD167F528A3B9 /* EmotionTranslator */,
 				44CC90220CCE8D00D015203B /* History */,
 				23F225FE8B69E870DD23B41C /* Paywall */,
-				CD3F2FCD141C955E75997AD2 /* ReplyHelper */,
 				F8D76D69CF7B443789C7C242 /* RoastGenerator */,
 				4FB9A199B9907933BC2E2F09 /* Settings */,
 				D64B89950218DC7EB068A7F1 /* ShareCard */,
 				317379F238F8382C50A0D043 /* Shared */,
-				C7A2058774F5BD598D69F665 /* SocialRoast */,
 				91CE7B4BE547A5BF3649CB0A /* StyleLibrary */,
 				4C602706C9D23E8D0F01D6D3 /* Voice */,
 			);
@@ -1103,20 +1100,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		C7A2058774F5BD598D69F665 /* SocialRoast */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SocialRoast;
-			sourceTree = "<group>";
-		};
-		CD3F2FCD141C955E75997AD2 /* ReplyHelper */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ReplyHelper;
-			sourceTree = "<group>";
-		};
 		CDEEE99F8F567810EA9DED02 /* MenuBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -1153,13 +1136,6 @@
 			);
 			name = Sources;
 			path = RoastMateShare/Sources;
-			sourceTree = "<group>";
-		};
-		FC606785608DD66B47D037CF /* Mac */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Mac;
 			sourceTree = "<group>";
 		};
 		FFF9018740E2C95528EAF32A /* RoastMateMac */ = {
@@ -1808,6 +1784,7 @@
 				8B17210C25B763468CF45B99 /* LanguageManager.swift in Sources */,
 				1F62D4AAD9284EA165600424 /* LaunchRouter.swift in Sources */,
 				5E511C0310481BD18F0DFA1F /* MacMenuBarContent.swift in Sources */,
+				6C320FEFB30ADFAD20407591 /* ModernSpeechBackend.swift in Sources */,
 				3C8CC6EAFB5430164C82A5FC /* OnboardingView.swift in Sources */,
 				CA3CDA11099E1DE863DBE52B /* OutputShareButton.swift in Sources */,
 				1E491BDEE96196B31E8E8F7F /* PaywallView.swift in Sources */,
@@ -1837,6 +1814,7 @@
 				DCD2A781A8F86D172094B3E6 /* ShareCardView.swift in Sources */,
 				91E564F424568FA53E3FD431 /* SharedModelContainer.swift in Sources */,
 				5F6F1EA9A4ED59FD3D8CB682 /* SituationThread.swift in Sources */,
+				BE02A8EF36EAF5C1416C1AA8 /* SpeechRecognitionBackend.swift in Sources */,
 				56CFA12ECCB16C04BF192264 /* StoreService.swift in Sources */,
 				5A6C26FD3A8CDCA3898A9198 /* StyleCatalog.swift in Sources */,
 				F0A97A1965D4E03B1ECD7952 /* StyleChip.swift in Sources */,
@@ -1901,6 +1879,7 @@
 				AEEE917CEDEFE01516080296 /* KeychainStore.swift in Sources */,
 				A50453236C33115558205278 /* LanguageManager.swift in Sources */,
 				CBEEF6B2EB57D9DC67F0910F /* LaunchRouter.swift in Sources */,
+				C487CE962E7832D1ACC84780 /* ModernSpeechBackend.swift in Sources */,
 				19F5524619680F3746F33362 /* OnboardingView.swift in Sources */,
 				18527FA5F4B4198A3BC6CBF2 /* OutputShareButton.swift in Sources */,
 				7A78E7FA8936D1C1BA02B1A7 /* PaywallView.swift in Sources */,
@@ -1930,6 +1909,7 @@
 				AFC8CB9F512AC129F9E7A7AF /* ShareCardView.swift in Sources */,
 				25674AAD6016CACA65C0A670 /* SharedModelContainer.swift in Sources */,
 				388F448B02D52272681946B5 /* SituationThread.swift in Sources */,
+				88446ACD24BBD1DC14824575 /* SpeechRecognitionBackend.swift in Sources */,
 				58F0BF079A48F3562111CCEC /* StoreService.swift in Sources */,
 				A65EF20116432016F2E67863 /* StyleCatalog.swift in Sources */,
 				00638E23DDF078201E154D4B /* StyleChip.swift in Sources */,
