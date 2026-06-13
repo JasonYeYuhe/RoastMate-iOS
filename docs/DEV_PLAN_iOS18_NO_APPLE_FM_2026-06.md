@@ -298,5 +298,15 @@ macOS/watch 范围、Share/Watch/Intents 的 a-or-b、Pro 收据校验形态、�
 - **`project.yml`**:iOS `18.0` / macOS `14.0`(watchOS 维持 `26.0`);5 个 FM-编译目标(RoastMate/Mac/Share/Controls/Tests)加 `-weak_framework FoundationModels` 兜底。实测产物里 FoundationModels **连 load command 都没有**(全被 dead-strip,纯弱),iOS 18 启动零负担。
 - **验收(全绿)**:① iOS 18.0 / macOS 14.0 / watchOS 26.0 三平台均编译通过;② 278 单测 + UITests 全绿、0 失败(1 个 device-only roommate eval 按设计 skip);③ **iOS 18.5 模拟器冷启动成功**(无 dyld「Symbol not found」,主界面完整渲染,进程稳定,语音入口已隐藏)。④ 无-FM→落罐头路径由那 278 个测试覆盖(模拟器上 model 本就 unavailable)。交互式「点 Generate」因 Simulator 控制授权弹窗未批准而跳过,不影响结论。
 
-### 增量 2-8 — 待开始
-下一个:增量 2(Worker 扩 `mode:"roast"` + rewrite,多变体 + 严格安全栏 + 双 prompt)。
+### 增量 2 — Worker sendable 云路径(设计已 Codex 会诊定稿,待实现)
+canonical 设计(Codex ratify 了原 Gemini P0 spec):
+- **Worker mode 分发**:新增 `mode:"roast"`,显式 `switch(mode)`;严格矩阵:`vent`→{vent,feral}/单条;`roommate`→{vent,feral}/忽略 count;`roast`→{calm,sharp,savage}/`variantCount` clamp 1–5。`mode:nil→vent` 保留。**本期不做 `rewrite` mode**(合同不同,留后)。
+- **变体合同**:响应仍单个 `text`(编号 1./2./3.),App 用现成 `PromptBuilder.splitVariants` 切 + 逐条 **strict** `validateOutput`(`try`+drop,全挂→curated)。**不**加 `variants:[]`。
+- **服务端 sendable prompt**(新 `buildRoastSystemPrompt/UserPrompt`):**为 Qwen3-32B 单独调优**(不照抄 Swift);复用 `universal` 安全块但**不**用私密草稿块;保 Calm/Sharp/Savage 寄存器;用「必须输出 N 条/每条点名具体行为/狠在具体不在脏话」(不要 vent 的「必须 N 个强烈词」)。**Worker 开始收 `styleId`**(不只 localized `styleName`)以便 drift test 证同源。
+- **安全对齐(§9#6)**:sendable 云输出全走 **strict** `validateOutput`(含 Savage,与本地 FM 一致);接受云 Savage 过滤后更温,不降栏。
+- **Drift test**:静态结构不变量(同 styleId/locale/intensity/clamped count/安全指纹 + 负断言:roast prompt 不含 `VENT DRAFT RULES`/粗口强化),**不**比 live 输出。eval(zh-Hans sendable 对标 vent 栏)扩 `evals/runner` `WorkerBackend`,留 CI 外。
+- **隐私/回归红线**:`mode` 不必填;`text` 不动;roast 绝不 fall through 到 `buildSystemPrompt`;model-override 错误分支(index.js:168)要 scrub 上游 detail;ddLog 只加 `mode`/`variantCount`。
+- **⚠️ 顺序安全闸(Codex)**:`CloudConsentGate` 现断言 Calm/Sharp/Savage 永不走云 → sendable 一旦真走云即 5.1.2(i) 违规。**故增量 2 只:扩 Worker + 加 `variantCount` 线 + App 云分支 fork 逻辑;但 sendable→云的触发保持关,直到增量 4**(同意门下沉=增量 3,先于路由)。
+
+### 增量 3-8 — 待开始
+3 同意门下沉引擎层(P0,先于路由)→ 4 无 FM→云路由 → 5 成本/滥用闸(+ Pro 收据)→ 6 合规文案+隐私标签 → 7 测试矩阵 → 8 DARK 灰度发布。
