@@ -94,6 +94,17 @@ struct RoastMateApp: App {
             settings.hasSeenOnboarding = true
             settings.hasAcknowledgedAgeGate = true
             settings.hasAcknowledgedContentNotice = true
+            // Reset BOTH cloud-consent surfaces to `.notAsked` so every
+            // UI-test run behaves like a freshly-erased simulator w.r.t.
+            // consent. Without this, the consent is persisted in the
+            // SwiftData store: once any prior run (or a manual launch) on
+            // the same sim answers it, the "first Feral selection" no
+            // longer presents the consent sheet and
+            // test_echoes_feral_triggers_consent_sheet fails — it passed
+            // only after `xcrun simctl erase`. Production never passes
+            // `-uitest`, so the real consent persistence is untouched.
+            settings.echoesFeralConsent = .notAsked
+            settings.cloudConsent = .notAsked
             try? context.save()
         }
         HistoryService.seedSamplesIfNeeded(context: context)

@@ -42,10 +42,21 @@ enum CloudConsentGate: Sendable, Equatable {
 
     static func decide(isPrivateDraft: Bool,
                         cloudConfigured: Bool,
-                        consent: CloudConsent) -> CloudConsentGate {
-        // Calm / Sharp / Savage and any pre-deploy build never touch the
-        // cloud regardless of consent — short-circuit to local.
-        guard isPrivateDraft, cloudConfigured else { return .useLocal }
+                        consent: CloudConsent,
+                        onDeviceModelAvailable: Bool = true,
+                        cloudSendableEnabled: Bool = false) -> CloudConsentGate {
+        // A generation is cloud-ELIGIBLE when either:
+        //   • it's a private draft (vent/feral) — the original cloud path; or
+        //   • it's a SENDABLE mode (calm/sharp/savage) AND this device has no
+        //     on-device model (iOS 18 / AI off) AND the sendable-cloud path is
+        //     remotely enabled (DARK / `false` by default).
+        // When the on-device model IS available, sendable stays local — the
+        // privacy/offline story on FM-capable devices is unchanged. The two new
+        // params default to (true, false) so the vent path and every existing
+        // caller behave exactly as before.
+        let cloudEligible = isPrivateDraft
+            || (!onDeviceModelAvailable && cloudSendableEnabled)
+        guard cloudEligible, cloudConfigured else { return .useLocal }
         switch consent {
         case .granted:  return .proceedCloud
         case .denied:   return .useLocal

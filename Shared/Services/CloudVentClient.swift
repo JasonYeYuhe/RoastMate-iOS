@@ -35,23 +35,34 @@ protocol CloudVentService: Sendable {
 struct CloudVentRequest: Encodable, Sendable {
     let situation: String
     let styleName: String?
-    let intensity: String     // "vent" or "feral"
+    let intensity: String     // private: "vent"/"feral"; sendable (mode=roast): "calm"/"sharp"/"savage"
     let locale: String
     let deviceId: String
     /// nil / "vent" → the 1–3-sentence private draft; "roommate" → the
-    /// 虚拟舍友群 8–10-line group-chat transcript (Echoes vNext, Option A).
-    /// Synthesized `encodeIfPresent` omits it when nil, so existing vent
-    /// call sites are unchanged on the wire.
+    /// 虚拟舍友群 8–10-line group-chat transcript (Echoes vNext, Option A);
+    /// "roast" → the sendable modes (calm/sharp/savage) as `variantCount`
+    /// numbered variants. Synthesized `encodeIfPresent` omits it when nil, so
+    /// existing vent call sites are unchanged on the wire.
     let mode: String?
+    /// Stable style identifier (e.g. "high_eq") — lets the Worker render the
+    /// matching style register AND lets the drift test prove both prompt sets
+    /// reference the same catalog entry. Omitted when nil (vent path).
+    let styleId: String?
+    /// Number of sendable variants to request (mode=roast only; Worker clamps
+    /// 1–5). Omitted when nil — vent/roommate always collapse to one body.
+    let variantCount: Int?
 
     init(situation: String, styleName: String?, intensity: String,
-         locale: String, deviceId: String, mode: String? = nil) {
+         locale: String, deviceId: String, mode: String? = nil,
+         styleId: String? = nil, variantCount: Int? = nil) {
         self.situation = situation
         self.styleName = styleName
         self.intensity = intensity
         self.locale = locale
         self.deviceId = deviceId
         self.mode = mode
+        self.styleId = styleId
+        self.variantCount = variantCount
     }
 }
 

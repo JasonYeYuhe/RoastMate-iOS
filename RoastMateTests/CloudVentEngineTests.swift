@@ -30,19 +30,49 @@ final class CloudVentEngineTests: XCTestCase {
                        "Each request must carry the per-install device UUID for rate limiting.")
     }
 
-    func testCloudClientNotCalledWhenIntensityIsSendable() async throws {
+    func testSendableRoutesToCloudWhenEnabled() async throws {
+        // Increment 4 (iOS 18 no-FM): the ViewModel resolves cloud consent for
+        // sendable modes too, so the engine routes sharp/calm/savage through
+        // mode="roast" — carrying the stable styleId + the requested variant
+        // count. (Pre-increment-4 this stayed local; the "stays local"
+        // guarantee now lives in the consent gate, not the engine.)
+        let recorder = RecordingCloudVentService(returning: "1. 你天天抢功,脸是真大。\n2. 方案我熬出来的,名字凭什么是你的。")
+        let result = try await RoastEngine.shared.generate(
+            situation: "同事抢我方案邀功。",
+            style: testStyle,
+            locale: Locale(identifier: "zh-Hans"),
+            variantCount: 2,
+            intensity: .sharp,
+            cloudVentEnabled: true,
+            cloudClient: recorder
+        )
+        XCTAssertEqual(recorder.calls.count, 1,
+                       "Sendable + cloud enabled must route through the cloud client (iOS 18 no-FM path).")
+        let req = try XCTUnwrap(recorder.calls.first)
+        XCTAssertEqual(req.mode, "roast", "Sendable cloud must use mode=roast, not the vent path.")
+        XCTAssertEqual(req.intensity, "sharp")
+        XCTAssertEqual(req.styleId, "test", "Worker needs the stable styleId for the style register + drift test.")
+        XCTAssertEqual(req.variantCount, 2, "The requested variant count must reach the Worker.")
+        XCTAssertEqual(result.count, 2,
+                       "Both numbered cloud variants should split + pass the strict validator.")
+    }
+
+    func testSendableStaysLocalWhenCloudDisabled() async throws {
+        // 5.1.2(i) guarantee: a surface that does NOT resolve consent
+        // (cloudVentEnabled defaults false — Share / Watch / App Intents) must
+        // NEVER send sendable text to the network.
         let recorder = RecordingCloudVentService(returning: "ignored")
         _ = try? await RoastEngine.shared.generate(
             situation: "X",
             style: testStyle,
             locale: Locale(identifier: "en_US"),
-            variantCount: 1,
+            variantCount: 3,
             intensity: .sharp,
-            cloudVentEnabled: true,
+            cloudVentEnabled: false,
             cloudClient: recorder
         )
         XCTAssertEqual(recorder.calls.count, 0,
-                       "Sharp intensity must always stay on-device, regardless of cloud toggle.")
+                       "Sendable with cloud NOT enabled must never reach the network.")
     }
 
     func testCloudClientNotCalledWhenUserDisabledIt() async throws {

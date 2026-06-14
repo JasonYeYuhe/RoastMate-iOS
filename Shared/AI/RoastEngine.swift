@@ -102,42 +102,80 @@ actor RoastEngine {
         // Private draft intensities always return a single draft; we ignore caller-supplied counts.
         let effectiveVariantCount = intensity.isPrivateDraft ? 1 : variantCount
 
-        // Cloud branch: only for private drafts (vent + feral), only when
-        // the developer has actually configured a Worker URL, and only
-        // when the user hasn't opted out. Any failure here falls through
-        // to the local path so a network blip never blocks a vent.
-        if intensity.isPrivateDraft,
-           cloudVentEnabled,
-           CloudConfig.isConfigured {
-            do {
-                let cloudText = try await runCloudVent(
-                    client: cloudClient,
-                    situation: situation,
-                    style: style,
-                    intensity: intensity,
-                    locale: locale
-                )
-                // Cloud output must clear the SAME vent safety bar as
-                // local output. Use `try` (not `try?`) so a hard-rail
-                // violation (slur / threat of violence / self-harm)
-                // throws and we fall through to the local path —
-                // never return raw unfiltered cloud text. The earlier
-                // `(try? …) ?? cloudText` form silently shipped
-                // disallowed content on a safety failure.
-                let safe = try SafetyFilter.validateVentOutput(cloudText)
-                EventLedger.shared.recordGeneration(cloud: true)  // A′
-                EventLedger.shared.recordFirstGenerationOfSession()  // α3
-                EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
-                RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
-                return [safe]
-            } catch let err as CloudVentError {
-                logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
-                // continue to local path below
-            } catch is SafetyError {
-                logger.notice("Cloud vent output tripped the safety filter — discarding it and falling back to local model.")
-                // continue to local path below
-            } catch {
-                logger.notice("Cloud vent unexpected error — falling back to local model.")
+        // Cloud branch: fires when the caller has resolved cloud consent for
+        // THIS generation (`cloudVentEnabled`) and a Worker is configured.
+        // `cloudVentEnabled` is the single gate — it defaults FALSE, and only
+        // the consent-resolving generator path ever passes TRUE (so the Share /
+        // Watch / App-Intents surfaces, which omit it, can never reach cloud).
+        // Private drafts (vent/feral) take the single-draft vent path; sendable
+        // modes (calm/sharp/savage, only reachable here on a no-FM device with
+        // the DARK flag flipped on) take mode=roast — N variants, each through
+        // the STRICT validator. Any failure falls through to the local path so
+        // a blip never blocks generation.
+        if cloudVentEnabled, CloudConfig.isConfigured {
+            if intensity.isPrivateDraft {
+                do {
+                    let cloudText = try await runCloudVent(
+                        client: cloudClient,
+                        situation: situation,
+                        style: style,
+                        intensity: intensity,
+                        locale: locale
+                    )
+                    // Cloud output must clear the SAME vent safety bar as
+                    // local output. Use `try` (not `try?`) so a hard-rail
+                    // violation (slur / threat of violence / self-harm)
+                    // throws and we fall through to the local path —
+                    // never return raw unfiltered cloud text.
+                    let safe = try SafetyFilter.validateVentOutput(cloudText)
+                    EventLedger.shared.recordGeneration(cloud: true)  // A′
+                    EventLedger.shared.recordFirstGenerationOfSession()  // α3
+                    EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
+                    RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
+                    return [safe]
+                } catch let err as CloudVentError {
+                    logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
+                    // continue to local path below
+                } catch is SafetyError {
+                    logger.notice("Cloud vent output tripped the safety filter — discarding it and falling back to local model.")
+                    // continue to local path below
+                } catch {
+                    logger.notice("Cloud vent unexpected error — falling back to local model.")
+                }
+            } else {
+                // Sendable cloud (iOS 18 / no on-device FM): mode=roast returns
+                // a numbered list; split it and run EACH variant through the
+                // STRICT output validator (parity with the local FM sendable
+                // path). Drop any failing variant; only if ALL fail (or the
+                // call errors) do we fall through to the local/curated path.
+                do {
+                    let cloudText = try await runCloudRoast(
+                        client: cloudClient,
+                        situation: situation,
+                        style: style,
+                        intensity: intensity,
+                        locale: locale,
+                        variantCount: effectiveVariantCount
+                    )
+                    var sanitized: [String] = []
+                    for candidate in PromptBuilder.splitVariants(cloudText) {
+                        if let safe = try? SafetyFilter.validateOutput(candidate) {
+                            sanitized.append(safe)
+                        }
+                    }
+                    if !sanitized.isEmpty {
+                        EventLedger.shared.recordGeneration(cloud: true)  // A′
+                        EventLedger.shared.recordFirstGenerationOfSession()  // α3
+                        EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1
+                        RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
+                        return Array(sanitized.prefix(effectiveVariantCount))
+                    }
+                    logger.notice("Cloud roast output all filtered — falling back to local model.")
+                } catch let err as CloudVentError {
+                    logger.notice("Cloud roast failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
+                } catch {
+                    logger.notice("Cloud roast unexpected error — falling back to local model.")
+                }
             }
         }
 
@@ -322,6 +360,32 @@ actor RoastEngine {
             intensity: intensity.rawValue,
             locale: locale.identifier,
             deviceId: DeviceID.current()
+        )
+        let resp = try await client.generate(req)
+        return resp.text
+    }
+
+    /// Helper that fronts the sendable cloud path (`mode:"roast"`). Sends the
+    /// stable `styleId` (for the Worker's style register + the drift test) and
+    /// the requested `variantCount`; returns the raw numbered-variant text the
+    /// caller splits + strict-validates. Throws CloudVentError on failure.
+    private func runCloudRoast(
+        client: CloudVentService,
+        situation: String,
+        style: StylePreset,
+        intensity: Intensity,
+        locale: Locale,
+        variantCount: Int
+    ) async throws -> String {
+        let req = CloudVentRequest(
+            situation: situation,
+            styleName: style.displayName,
+            intensity: intensity.rawValue,
+            locale: locale.identifier,
+            deviceId: DeviceID.current(),
+            mode: "roast",
+            styleId: style.id,
+            variantCount: variantCount
         )
         let resp = try await client.generate(req)
         return resp.text

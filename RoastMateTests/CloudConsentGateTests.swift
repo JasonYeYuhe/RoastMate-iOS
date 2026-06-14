@@ -28,10 +28,45 @@ final class CloudConsentGateTests: XCTestCase {
     }
 
     func testSendableIntensityNeverPromptsEvenWhenNotAsked() {
-        // Sharp/Calm/Savage are not private drafts → no cloud, no prompt.
+        // Sharp/Calm/Savage on an FM-capable device (the defaults) → no cloud,
+        // no prompt. The two new params default to (onDevice=true, dark=false).
         XCTAssertEqual(
             CloudConsentGate.decide(isPrivateDraft: false, cloudConfigured: true, consent: .notAsked),
             .useLocal)
+    }
+
+    // MARK: Sendable cloud (iOS 18 no-FM path, increment 4)
+
+    func testSendableNoFM_FlagOn_NotAsked_NeedsConsent() {
+        // iOS 18 (no on-device model) + DARK flag flipped on + never asked →
+        // the gate must PROMPT before any sendable text reaches the cloud.
+        XCTAssertEqual(
+            CloudConsentGate.decide(isPrivateDraft: false, cloudConfigured: true, consent: .notAsked,
+                                    onDeviceModelAvailable: false, cloudSendableEnabled: true),
+            .needsConsent)
+    }
+
+    func testSendableNoFM_FlagOn_Granted_ProceedCloud() {
+        let g = CloudConsentGate.decide(isPrivateDraft: false, cloudConfigured: true, consent: .granted,
+                                        onDeviceModelAvailable: false, cloudSendableEnabled: true)
+        XCTAssertEqual(g, .proceedCloud)
+        XCTAssertTrue(g.allowsCloud)
+    }
+
+    func testSendableNoFM_FlagOff_UseLocal() {
+        // DARK by default: even on a no-FM device with consent, sendable stays
+        // local until `cloud_sendable_enabled` is flipped on remotely.
+        let g = CloudConsentGate.decide(isPrivateDraft: false, cloudConfigured: true, consent: .granted,
+                                        onDeviceModelAvailable: false, cloudSendableEnabled: false)
+        XCTAssertEqual(g, .useLocal)
+    }
+
+    func testSendableWithFMAvailable_UseLocal_EvenIfFlagOnAndGranted() {
+        // On an FM-capable device, sendable always stays on-device — the cloud
+        // path is only the fallback for devices that have no local model.
+        let g = CloudConsentGate.decide(isPrivateDraft: false, cloudConfigured: true, consent: .granted,
+                                        onDeviceModelAvailable: true, cloudSendableEnabled: true)
+        XCTAssertEqual(g, .useLocal)
     }
 
     func testNotConfiguredNeverClouds_EvenIfGranted() {

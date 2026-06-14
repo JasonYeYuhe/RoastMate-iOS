@@ -94,10 +94,18 @@ final class RoastGeneratorViewModel {
         // consent sheet; `resolveCloudConsent` records the choice and
         // re-enters `generate`. Crisis handoff already ran above, so a
         // person in distress never reaches this prompt.
+        // Sendable modes (calm/sharp/savage) become cloud-eligible ONLY on a
+        // device with no on-device model (iOS 18 / AI off) AND when the DARK
+        // `cloud_sendable_enabled` flag is flipped on remotely. Private drafts
+        // (vent/feral) keep their existing cloud path. When the on-device model
+        // is present, sendable stays local (unchanged).
+        let remote = RemoteConfig.shared.current
         let cloudGate = CloudConsentGate.decide(
             isPrivateDraft: selectedIntensity.isPrivateDraft,
             cloudConfigured: CloudConfig.isConfigured,
-            consent: settings.cloudConsent
+            consent: settings.cloudConsent,
+            onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable,
+            cloudSendableEnabled: remote.cloudSendableEnabled
         )
         if cloudGate == .needsConsent {
             pendingCloudConsent = true
@@ -135,11 +143,13 @@ final class RoastGeneratorViewModel {
                 priorContext: pendingPriorContext,
                 // RESTRICT-only remote kill-switch: AND the consent gate
                 // (source of truth) with the remote flags so a fetched
-                // `vent_cloud_enabled:false` / `force_local_only:true` can
-                // force this generation on-device. Can only subtract from
-                // the consent grant, never route to cloud without it.
-                // (Health audit 2026-05-29 §4.)
-                cloudVentEnabled: RemoteConfig.shared.current.cloudAllowed(consentAllowsCloud: cloudGate.allowsCloud)
+                // `false` can force this generation on-device. Can only
+                // subtract from the consent grant, never route to cloud
+                // without it. (Health audit 2026-05-29 §4.) Private drafts AND
+                // `vent_cloud_enabled`; sendable modes AND `cloud_sendable_enabled`.
+                cloudVentEnabled: selectedIntensity.isPrivateDraft
+                    ? remote.cloudAllowed(consentAllowsCloud: cloudGate.allowsCloud)
+                    : remote.cloudSendableAllowed(consentAllowsCloud: cloudGate.allowsCloud)
             )
             currentSession = HistoryService.saveSession(
                 situation: text,

@@ -197,6 +197,43 @@ final class RemoteConfigTests: XCTestCase {
                       "Consent granted + all-enabled baseline → cloud permitted.")
     }
 
+    // MARK: - cloud_sendable_enabled (DARK-by-default, iOS 18 no-FM path)
+
+    func test_cloudSendable_darkByDefault() {
+        XCTAssertFalse(RemoteConfigValues.safeDefault.cloudSendableEnabled,
+                       "Sendable-cloud must ship DARK — flipped on remotely only after the eval.")
+        XCTAssertFalse(RemoteConfigValues.safeDefault.cloudSendableAllowed(consentAllowsCloud: true),
+                       "Even with consent, the baked default keeps sendable cloud OFF.")
+    }
+
+    func test_cloudSendableAllowed_restrictOnly_consentDeniedNeverClouds() {
+        // RESTRICT-only invariant for the sendable path: no flag combination
+        // routes sendable text to the cloud without a prior 5.1.2(i) grant.
+        let on = RemoteConfigValues(configVersion: 1, echoesEnabled: true, forceLocalOnly: false,
+                                    ventCloudEnabled: true, minSupportedBuild: 0,
+                                    roommateGroupEnabled: true, cloudSendableEnabled: true)
+        XCTAssertFalse(on.cloudSendableAllowed(consentAllowsCloud: false),
+                       "consent=false must be false regardless of the flag.")
+        XCTAssertTrue(on.cloudSendableAllowed(consentAllowsCloud: true),
+                      "flag on + consent → sendable cloud permitted.")
+        // force_local_only subtracts even when the sendable flag is on.
+        let forced = RemoteConfigValues(configVersion: 1, echoesEnabled: true, forceLocalOnly: true,
+                                        ventCloudEnabled: true, minSupportedBuild: 0,
+                                        roommateGroupEnabled: true, cloudSendableEnabled: true)
+        XCTAssertFalse(forced.cloudSendableAllowed(consentAllowsCloud: true),
+                       "force_local_only must kill the sendable cloud path too.")
+    }
+
+    func test_cloudSendable_remoteFlipOn_viaPatch() {
+        // The flip that ships post-eval: a patch that names only
+        // cloud_sendable_enabled:true must enable it without touching others.
+        let flipped = RemoteConfigValues.safeDefault.merging(
+            try! JSONDecoder().decode(RemoteConfigPatch.self,
+                                      from: Data(#"{ "cloud_sendable_enabled": true }"#.utf8)))
+        XCTAssertTrue(flipped.cloudSendableEnabled)
+        XCTAssertTrue(flipped.ventCloudEnabled, "Omitted keys keep their prior value.")
+    }
+
     // MARK: - isRestrictive (telemetry trigger)
 
     func test_isRestrictive_trueWhenAnythingDisabled() {

@@ -83,7 +83,7 @@ export default {
     if (validation.error) {
       return json({ error: validation.error }, 400);
     }
-    const { situation, styleName, intensity, locale, deviceId, modelOverride, mode } = validation.value;
+    const { situation, styleName, styleId, intensity, locale, deviceId, modelOverride, mode, variantCount } = validation.value;
 
     // Per-device daily rate limit.
     const limit = parseInt(env.DAILY_LIMIT_PER_DEVICE || "30", 10);
@@ -119,13 +119,20 @@ export default {
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional
     // register as the local path would attempt.
-    const isRoommate = mode === "roommate";
-    const systemPrompt = isRoommate
-      ? buildRoommateSystemPrompt(intensity, locale)
-      : buildSystemPrompt(intensity, locale, styleName);
-    const userPrompt = isRoommate
-      ? buildRoommateUserPrompt(situation, locale)
-      : buildUserPrompt(situation, locale);
+    let systemPrompt, userPrompt;
+    if (mode === "roommate") {
+      systemPrompt = buildRoommateSystemPrompt(intensity, locale);
+      userPrompt = buildRoommateUserPrompt(situation, locale);
+    } else if (mode === "roast") {
+      // Sendable modes (calm/sharp/savage) — multi-variant, strict-safety
+      // output the app splits + per-variant validates. A SEPARATE,
+      // Qwen-tuned prompt (NOT the private-vent prompt).
+      systemPrompt = buildRoastSystemPrompt(intensity, locale, styleName, styleId, variantCount);
+      userPrompt = buildRoastUserPrompt(situation, locale, variantCount);
+    } else {
+      systemPrompt = buildSystemPrompt(intensity, locale, styleName);
+      userPrompt = buildUserPrompt(situation, locale);
+    }
 
     // Decision after smoke testing: Groq is primary because OpenRouter's
     // :free model pool is consistently rate-limited upstream (all the
@@ -165,7 +172,10 @@ export default {
         modelUsed = modelOverride;
         providerUsed = "openrouter-override";
       } else {
-        attempts.push(`openrouter-override:${ovrResult.status || "?"}:${(ovrResult.detail || "fail").slice(0, 300)}`);
+        // Privacy: status only. An upstream error body can echo the user's
+        // prompt (esp. a policy rejection); keep it off the wire/logs — same
+        // posture as the Groq / OpenRouter branches below.
+        attempts.push(`openrouter-override:${ovrResult.status || "?"}`);
       }
     }
 
@@ -246,7 +256,7 @@ export default {
     // back — failed upstream calls should not eat the user's daily quota.
     await env.RATE_LIMITS.put(rlKey, String(used + 1), { expirationTtl: 86400 * 2 });
 
-    ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale,
+    ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount,
       provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
     return json({
       text,
@@ -387,11 +397,21 @@ function stripReasoningTrace(text) {
 
 function validate(body) {
   if (!body || typeof body !== "object") return { error: "invalid_body" };
-  const { situation, styleName, intensity, locale, deviceId, model } = body;
+  const { situation, styleName, styleId, intensity, locale, deviceId, model, variantCount } = body;
   if (typeof situation !== "string" || situation.length < 1 || situation.length > 1500) {
     return { error: "invalid_situation" };
   }
-  if (intensity !== "vent" && intensity !== "feral") {
+  // Mode decides which intensities are legal. nil / unknown → "vent" so existing
+  // native vent callers (which omit `mode`) are unchanged on the wire.
+  //   vent / roommate → private intensities {vent, feral}
+  //   roast           → sendable intensities {calm, sharp, savage}
+  const mode = body.mode === "roommate" ? "roommate"
+             : body.mode === "roast" ? "roast"
+             : "vent";
+  const legalIntensity = mode === "roast"
+    ? (intensity === "calm" || intensity === "sharp" || intensity === "savage")
+    : (intensity === "vent" || intensity === "feral");
+  if (!legalIntensity) {
     return { error: "invalid_intensity" };
   }
   if (typeof locale !== "string" || locale.length > 16) {
@@ -403,6 +423,9 @@ function validate(body) {
   if (styleName !== undefined && typeof styleName !== "string") {
     return { error: "invalid_style_name" };
   }
+  if (styleId !== undefined && typeof styleId !== "string") {
+    return { error: "invalid_style_id" };
+  }
   // Eval harness side door: optional `model` body field. Must be in the
   // allowlist to prevent abuse via cost-bombing arbitrary models.
   let modelOverride = "";
@@ -412,19 +435,24 @@ function validate(body) {
     }
     modelOverride = model;
   }
-  // Optional generation mode: "vent" (default, 1–3-sentence private draft)
-  // or "roommate" (the 虚拟舍友群 8–10-line group-chat transcript). The
-  // tone still rides on `intensity` (vent = casual register, feral = open).
-  const mode = body.mode === "roommate" ? "roommate" : "vent";
+  // variantCount is only meaningful for the sendable "roast" mode (Pro can
+  // ask for up to 3 variants). vent/roommate always collapse to a single body.
+  let vc = 1;
+  if (mode === "roast") {
+    const n = parseInt(variantCount, 10);
+    vc = Number.isFinite(n) ? Math.max(1, Math.min(5, n)) : 3;
+  }
   return {
     value: {
       situation,
       styleName: typeof styleName === "string" ? styleName.slice(0, 80) : "",
+      styleId: typeof styleId === "string" ? styleId.slice(0, 40) : "",
       intensity,
       locale,
       deviceId,
       modelOverride,
-      mode
+      mode,
+      variantCount: vc
     }
   };
 }
@@ -525,6 +553,70 @@ function buildUserPrompt(situation, locale) {
     "",
     "Write 1 private vent draft. Raw, immediate, and emotionally specific. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly — no numbering, no preface, no commentary.",
     reminder
+  ].join("\n");
+}
+
+// --- Sendable "roast" modes (calm / sharp / savage) -------------------------
+// The modes the user can actually SEND (unlike private vent drafts). On iOS 18
+// (no Apple FM) the app routes these here. Output = N numbered variants the app
+// splits with splitVariants() and validates EACH through the STRICT safety
+// filter — so this prompt aims for cutting PRECISION, not profanity (profane
+// variants would just get dropped). Tuned for Groq Qwen3-32B (zh primary), NOT
+// a copy of the Swift PromptBuilder — different model, different instruction
+// following (the "dual prompt, shared style catalog" decision).
+function buildRoastSystemPrompt(intensity, locale, styleName, styleId, variantCount) {
+  const n = Math.max(1, Math.min(5, parseInt(variantCount, 10) || 3));
+  const safety = [
+    "SAFETY RULES (always apply):",
+    "- Never target a real person by full name; replace any name with a generic role (\"the manager\", \"the roommate\").",
+    "- No slurs or hateful content; never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
+    "- No threats of physical violence, doxxing, sexual content, or self-harm content.",
+    "- Attack the behavior or the choice, never the person's identity.",
+    "- If the situation suggests self-harm, violence, or stalking, decline and respond with empathy + a suggestion to seek support."
+  ].join("\n");
+
+  const intensityLine = {
+    calm: "Intensity = Calm: composed and de-escalating. Make the point cleanly, keep the high ground, don't apologize for being upset. Witty is fine; cruel is not.",
+    sharp: "Intensity = Sharp: pointed and polished. One clean cut that lands — specific, a little dry, no melodrama, no profanity.",
+    savage: "Intensity = Savage: maximum precision. The cut is in how exactly it names the behavior, NOT in profanity or insults. Devastating but still something the user could actually send."
+  }[intensity] || "Intensity = Sharp.";
+
+  const styleLine = styleId
+    ? `Style: ${styleId}${styleName ? ` (${styleName})` : ""} — write in this style's register (keep its wit / persona). Unlike a private vent, the style's voice DOES apply here.`
+    : "Style: write in a witty, sendable register.";
+
+  // Qwen-tuned reinforcement: a concrete count + concrete "what good looks
+  // like" in the target locale reliably steers Qwen (same lesson as the vent
+  // prompt). For sendable we steer toward SPECIFICITY, not profanity.
+  const code = (locale || "").toLowerCase();
+  let reinforcement = "";
+  if (code.startsWith("zh")) {
+    reinforcement = code.includes("hant")
+      ? `中文 SENDABLE 強制指令:必須輸出 ${n} 條,每條獨立成段。每條都要咬住對方的「具體行為/原話」,狠在精準不在髒話(不許用髒字/侮辱詞——這是能直接發出去的話)。避免簡體字。`
+      : `中文 SENDABLE 强制指令:必须输出 ${n} 条,每条独立成段。每条都要咬住对方的「具体行为/原话」,狠在精准不在脏话(不许用脏字/侮辱词——这是能直接发出去的话)。`;
+  } else if (code.startsWith("ja")) {
+    reinforcement = `日本語 SENDABLE 強制ルール:必ず ${n} 個出力。各文は相手の「具体的な行動」を突くこと。鋭さは正確さで出す(罵り言葉や侮辱語は使わない——そのまま送れる文)。`;
+  }
+
+  const sections = [
+    "You are RoastMate, an AI that helps users turn frustration into a witty, sendable reply they could actually post or say.",
+    styleLine,
+    intensityLine,
+    safety,
+    `OUTPUT FORMAT: exactly ${n} variant(s). Number each on its own line starting at column 1 with "1." "2." "3." etc. No headings, no bullets, no markdown, and no commentary before or after the list. Keep each variant under 120 words.`
+  ];
+  if (reinforcement) sections.push(reinforcement);
+  sections.push(languageDirective(locale));
+  return sections.join("\n\n");
+}
+
+function buildRoastUserPrompt(situation, locale, variantCount) {
+  const n = Math.max(1, Math.min(5, parseInt(variantCount, 10) || 3));
+  return [
+    `Situation: ${situation}`,
+    "",
+    `Write ${n} sendable repl${n === 1 ? "y" : "ies"} the user could actually send about this. Each must hit the specific behavior in the situation. Number them "1." "2." etc., each on its own line. No preface, no commentary.`,
+    userLanguageReminder(locale)
   ].join("\n");
 }
 

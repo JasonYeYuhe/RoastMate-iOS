@@ -4,5 +4,6 @@
   "echoes_enabled": true,
   "force_local_only": false,
   "vent_cloud_enabled": true,
+  "cloud_sendable_enabled": false,
   "min_supported_build": 0
 }

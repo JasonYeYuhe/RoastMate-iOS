@@ -39,6 +39,13 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     var forceLocalOnly: Bool
     /// `false` → disable just the rewrite Vent/Feral cloud path.
     var ventCloudEnabled: Bool
+    /// `true` → allow the SENDABLE modes (calm/sharp/savage) to use the cloud
+    /// Worker when the device has NO on-device model (iOS 18 / AI off).
+    /// **DARK by default** (`false`): v1.2.0 ships with the code present but the
+    /// path off, so we can flip it on remotely after the zh-Hans quality eval —
+    /// no Apple cycle (the increment-8 DARK→eval→flip model). RESTRICT-only: it
+    /// still ANDs the 5.1.2(i) consent grant via `cloudSendableAllowed`.
+    var cloudSendableEnabled: Bool
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
@@ -53,7 +60,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         forceLocalOnly: false,
         ventCloudEnabled: true,
         minSupportedBuild: 0,
-        roommateGroupEnabled: true
+        roommateGroupEnabled: true,
+        cloudSendableEnabled: false  // DARK: flipped on remotely after the eval
     )
 
     enum CodingKeys: String, CodingKey {
@@ -62,19 +70,23 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case roommateGroupEnabled = "roommate_group_enabled"
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
+        case cloudSendableEnabled = "cloud_sendable_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 
-    /// `roommateGroupEnabled` is the LAST parameter (default `true`, the shipped
-    /// state) so existing 5-arg call sites keep compiling.
+    /// `roommateGroupEnabled` / `cloudSendableEnabled` are the LAST parameters
+    /// (defaults = the shipped state, the latter DARK) so existing call sites
+    /// keep compiling.
     init(configVersion: Int, echoesEnabled: Bool, forceLocalOnly: Bool,
          ventCloudEnabled: Bool, minSupportedBuild: Int,
-         roommateGroupEnabled: Bool = true) {
+         roommateGroupEnabled: Bool = true,
+         cloudSendableEnabled: Bool = false) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
         self.roommateGroupEnabled = roommateGroupEnabled
         self.forceLocalOnly = forceLocalOnly
         self.ventCloudEnabled = ventCloudEnabled
+        self.cloudSendableEnabled = cloudSendableEnabled
         self.minSupportedBuild = minSupportedBuild
     }
 
@@ -98,6 +110,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         roommateGroupEnabled = try c.decodeIfPresent(Bool.self, forKey: .roommateGroupEnabled) ?? d.roommateGroupEnabled
         forceLocalOnly       = try c.decodeIfPresent(Bool.self, forKey: .forceLocalOnly)       ?? d.forceLocalOnly
         ventCloudEnabled     = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)     ?? d.ventCloudEnabled
+        cloudSendableEnabled = try c.decodeIfPresent(Bool.self, forKey: .cloudSendableEnabled) ?? d.cloudSendableEnabled
         minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
 
@@ -112,6 +125,15 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// user text to the cloud without a prior explicit 5.1.2(i) grant.
     func cloudAllowed(consentAllowsCloud: Bool) -> Bool {
         consentAllowsCloud && ventCloudEnabled && !forceLocalOnly
+    }
+
+    /// Sendable-mode (calm/sharp/savage) cloud permission — the analogue of
+    /// `cloudAllowed` for the iOS-18 no-FM path. Same RESTRICT-only invariant:
+    /// `cloudSendableAllowed(consentAllowsCloud: false)` is `false` for every
+    /// flag combination, so no remote value routes sendable text to the cloud
+    /// without a prior explicit 5.1.2(i) grant. DARK until `cloudSendableEnabled`.
+    func cloudSendableAllowed(consentAllowsCloud: Bool) -> Bool {
+        consentAllowsCloud && cloudSendableEnabled && !forceLocalOnly
     }
 
     /// Whether the 虚拟舍友群 scene may run: its own flag AND the Echoes
@@ -142,7 +164,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             forceLocalOnly:       patch.forceLocalOnly       ?? forceLocalOnly,
             ventCloudEnabled:     patch.ventCloudEnabled     ?? ventCloudEnabled,
             minSupportedBuild:    patch.minSupportedBuild    ?? minSupportedBuild,
-            roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled
+            roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled,
+            cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled
         )
     }
 }
@@ -156,6 +179,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
     var roommateGroupEnabled: Bool?
     var forceLocalOnly: Bool?
     var ventCloudEnabled: Bool?
+    var cloudSendableEnabled: Bool?
     var minSupportedBuild: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -164,6 +188,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
         case roommateGroupEnabled = "roommate_group_enabled"
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
+        case cloudSendableEnabled = "cloud_sendable_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 }

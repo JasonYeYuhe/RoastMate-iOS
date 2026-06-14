@@ -308,5 +308,13 @@ canonical 设计(Codex ratify 了原 Gemini P0 spec):
 - **隐私/回归红线**:`mode` 不必填;`text` 不动;roast 绝不 fall through 到 `buildSystemPrompt`;model-override 错误分支(index.js:168)要 scrub 上游 detail;ddLog 只加 `mode`/`variantCount`。
 - **⚠️ 顺序安全闸(Codex)**:`CloudConsentGate` 现断言 Calm/Sharp/Savage 永不走云 → sendable 一旦真走云即 5.1.2(i) 违规。**故增量 2 只:扩 Worker + 加 `variantCount` 线 + App 云分支 fork 逻辑;但 sendable→云的触发保持关,直到增量 4**(同意门下沉=增量 3,先于路由)。
 
-### 增量 3-8 — 待开始
-3 同意门下沉引擎层(P0,先于路由)→ 4 无 FM→云路由 → 5 成本/滥用闸(+ Pro 收据)→ 6 合规文案+隐私标签 → 7 测试矩阵 → 8 DARK 灰度发布。
+### 增量 2+3+4 — cloud-sendable(DARK)✅ 完成 + 测试绿(2026-06-14)
+一并实现(都受 DARK `cloud_sendable_enabled` 保护,默认关):
+- **增量 2(Worker)**:`validate()` 按 mode 校验 intensity(`roast`→calm/sharp/savage,clamp `variantCount` 1–5,收 `styleId`);显式 `switch(mode)` 分发;新 `buildRoastSystemPrompt/UserPrompt`(Qwen 调优,steer 具体非脏话,复用安全块,语言指令置尾);ddLog 加 mode/variantCount;scrub override 错误分支。`node --check` 通过。**未部署**(等确认)。
+- **增量 3+4(同意门 + 路由)**:`CloudConsentGate.decide` 加 `onDeviceModelAvailable`+`cloudSendableEnabled`(默认 true/false → vent 与所有旧调用点行为不变);sendable 仅在「无本地模型 + DARK 开 + 同意」才 cloud-eligible,FM 在则恒本地。`RemoteConfig` 加 `cloudSendableEnabled`(DARK)+ `cloudSendableAllowed`(RESTRICT-only,consent=false 恒 false)。引擎云分支去掉 `isPrivateDraft` 闸,改 `if cloudVentEnabled`(单一门,默认 false → Share/Watch/Intents 恒不出网),内部按 isPrivateDraft 分叉:private→vent 单条/`validateVentOutput`;sendable→`mode:roast`/`splitVariants`+逐条 strict `validateOutput`/全挂落本地。`CloudVentRequest` 加 `styleId`+`variantCount`(optional,vent 调用点不变)。ViewModel 按模式 AND 正确的远程组合子。仅主 generator 接入(FeatureGenerator/ArgumentSimulator 暂留本地,flip 前补)。
+- **测试**:286 单测、0 真失败(1 个 EventLedger 并发 timeout 是 CPU 争用 flake,隔离重跑通过;1 个 roommate eval 按设计 skip)。新增 8 个:CloudConsentGate sendable-no-FM 矩阵、RemoteConfig DARK+RESTRICT+flip-via-patch、引擎 sendable→`mode:roast`(断言 styleId/variantCount/strict 切分)、**「未同意不出网」**(`cloudVentEnabled=false`→0 网络调用,5.1.2(i) 红线)。
+- **顺序闸满足**:sendable→云的实际触发受 DARK flag 关 + consent gate;Apple 审到的二进制 flag=off(sendable 不出网),无 5.1.2(i) 暴露;post-eval 远程 flip 前再验。
+- 仍待:Worker 部署(等确认)+ zh-Hans sendable 质量 eval(扩 `evals/runner`,CI 外)+ flip 前补 FeatureGenerator/ArgumentSimulator + 增量 6 隐私标签复核(situation+deviceId 类型已被 vent cloud 声明,sendable 不新增类型)。
+
+### 增量 5-8 — 待开始
+5 成本/滥用闸(+ Pro 收据)→ 6 合规文案+隐私标签复核 → 7 双模拟器矩阵 → 8 DARK→eval→远程 flip 全量。
