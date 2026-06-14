@@ -159,7 +159,6 @@
 		52B95A8E3271A10DAB210303 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		52DA49A90E5312160C42432A /* GeneratedRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */; };
 		534C64B50E316BFC06BC825C /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
-		534E942E5D168282F078A9FB /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		539053C7FB5CF2D6108BD141 /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
 		53A549ADC335301851EEECE8 /* EchoesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F16B2FBCFE9C5EE33D8F27 /* EchoesEngine.swift */; };
 		53F8B611C90A8091F7F6893A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A98C51085AE0017313819226 /* Assets.xcassets */; };
@@ -249,7 +248,6 @@
 		79C9C9727259EB3F8214F0EC /* HistoryServiceSeedingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B083E28F113298B96278CC /* HistoryServiceSeedingTests.swift */; };
 		7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE713D8BAF11D2A4B568BD /* ArgumentSimulatorViewModel.swift */; };
 		7A78E7FA8936D1C1BA02B1A7 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D292AA9CB572696DF122016F /* PaywallView.swift */; };
-		7A8499220A6252E5288C0C4E /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		7A96DBBD69719B5C424CBE83 /* EchoesFeralConsentGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38225DA3C0C31F64135B7CCA /* EchoesFeralConsentGateTests.swift */; };
 		7AEAEED8FCB30779E0AFA81C /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		7B7D250AAA91725BDD8A538C /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
@@ -341,7 +339,6 @@
 		AAF4CA9DC81346C933FE0B15 /* VoiceVentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */; };
 		AB2205DA20B7754DDC378F24 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		AB4D8CF4B83A95FF6F7DD528 /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
-		ACA2DD76C4F00596A800C237 /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		ACDEC04B9B439D36E2800940 /* VoiceVent.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2B32D471683AE995D046C4 /* VoiceVent.swift */; };
 		ADF20E86735BD6742466F6CE /* CrisisSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4033DDD59B2FB940AF7C3C67 /* CrisisSupportView.swift */; };
 		AE0E7567106A6F8954381A2F /* TelemetryExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */; };
@@ -407,7 +404,6 @@
 		CBB8FEB79BFCD2877D30FA7B /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		CBEEF6B2EB57D9DC67F0910F /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		CD2EE9DE7B356CEEB5BC0B6E /* StylePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F37D7C4EDA50657292425 /* StylePreset.swift */; };
-		CD6CCE7B57D7A38E2B1EE839 /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		CE2DCD23C61F9BD9CDA9AB14 /* EchoesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939F539F23ECC0CE06214CD8 /* EchoesParser.swift */; };
 		CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		CEE99A195AF50DC6C642C096 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
@@ -452,7 +448,6 @@
 		E3C587646C8A8FBB783CAE04 /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
 		E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		E58A6536F3DC9C2BCC523364 /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
-		E68F856E95866671D7178121 /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		E843CD75F1E6701789296F28 /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
 		E8D0F20EA745EAC3911102D7 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		E92BBE0A25EDBA0277B43AE5 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
@@ -490,7 +485,6 @@
 		F852DB1B8B4E93628D1B2B87 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		F8564091DC2A58F6CD338CCF /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
 		F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
-		F8C7CB4537EE592BA2F81B24 /* RemoteConfig 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */; };
 		F9E5BE28B1F74F360EAA5994 /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		FB5DAEA18959F2CD19849571 /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
 		FB9C143C277B8DAD30DE6CBA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C8869CA8D12F9544EFD87DE /* SettingsView.swift */; };
@@ -659,7 +653,6 @@
 		A98C51085AE0017313819226 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9AA6E0D7D5DC5AF95585AE9 /* ShareCardRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardRenderer.swift; sourceTree = "<group>"; };
 		ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyFilter.swift; sourceTree = "<group>"; };
-		AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RemoteConfig 2.swift"; sourceTree = "<group>"; };
 		B0FE5AA3F349C337A93C6776 /* GeneratedRoast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedRoast.swift; sourceTree = "<group>"; };
 		B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadContinuationStoreTests.swift; sourceTree = "<group>"; };
 		B4E99171A2C32D4676F4F488 /* RoastMateWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoastMateWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -954,7 +947,6 @@
 				CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */,
 				75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */,
 				EA1A9BF2523442F3D7A2C243 /* Redactor.swift */,
-				AEF1CD30D2215D528078716C /* RemoteConfig 2.swift */,
 				F4EFF91CE10A108502250A16 /* RemoteConfig.swift */,
 				7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */,
 				5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */,
@@ -1509,7 +1501,6 @@
 				F3F6F14FA4BEF9E2216D8E57 /* RatingPromptService.swift in Sources */,
 				90F7B75AD19AF4A1BDD1ACD4 /* RatingPromptServiceTests.swift in Sources */,
 				9D6FD6497072B5CADE6A780E /* Redactor.swift in Sources */,
-				CD6CCE7B57D7A38E2B1EE839 /* RemoteConfig 2.swift in Sources */,
 				6B81B6A3961277AEA004EAB0 /* RemoteConfig.swift in Sources */,
 				2FCE41884516B38427C922D0 /* RemoteConfigTests.swift in Sources */,
 				74754F25B41BAD9383C689FD /* ResourceBundle.swift in Sources */,
@@ -1588,7 +1579,6 @@
 				600A4AEBCFFC40A9097043FC /* QuickVentIntent.swift in Sources */,
 				6CA721CD6B76BCE2535E7272 /* RatingPromptService.swift in Sources */,
 				08089FC83B60431AD0963327 /* Redactor.swift in Sources */,
-				7A8499220A6252E5288C0C4E /* RemoteConfig 2.swift in Sources */,
 				064D5ECF1D6C56FAA38BA4F4 /* RemoteConfig.swift in Sources */,
 				CBB8FEB79BFCD2877D30FA7B /* ResourceBundle.swift in Sources */,
 				8881A3F2472953724E55AA74 /* RewriteCoordinator.swift in Sources */,
@@ -1655,7 +1645,6 @@
 				534C64B50E316BFC06BC825C /* QuickVentIntent.swift in Sources */,
 				1FEDAD5B771F9815C6AD976E /* RatingPromptService.swift in Sources */,
 				0D202788C7DF9C98430868BA /* Redactor.swift in Sources */,
-				E68F856E95866671D7178121 /* RemoteConfig 2.swift in Sources */,
 				F52CC4A20F9184AE21772AF6 /* RemoteConfig.swift in Sources */,
 				C2363D7F46054DBFCBE52DD4 /* ResourceBundle.swift in Sources */,
 				29640E771496DD713346CB0E /* RewriteCoordinator.swift in Sources */,
@@ -1720,7 +1709,6 @@
 				0F81F9D0DFE01120BA060599 /* QuickVentIntent.swift in Sources */,
 				D8FFCDA5940BC474CAF380A6 /* RatingPromptService.swift in Sources */,
 				C42063E72232619019568007 /* Redactor.swift in Sources */,
-				F8C7CB4537EE592BA2F81B24 /* RemoteConfig 2.swift in Sources */,
 				F109EE6756768E5265DA50F1 /* RemoteConfig.swift in Sources */,
 				C0A6FC2783099F125B950333 /* ResourceBundle.swift in Sources */,
 				F3DE9C73FDEA74606BB796D9 /* RewriteCoordinator.swift in Sources */,
@@ -1804,7 +1792,6 @@
 				305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */,
 				5D3D20436C302683D2370A53 /* RatingPromptService.swift in Sources */,
 				6F3735A69072E3949912D26D /* Redactor.swift in Sources */,
-				534E942E5D168282F078A9FB /* RemoteConfig 2.swift in Sources */,
 				76BFF5B6BB760DD2AE8ADBAC /* RemoteConfig.swift in Sources */,
 				674B28B74075E04EE0586A0E /* ResourceBundle.swift in Sources */,
 				CFB4AEB5253285A56AB33792 /* RewriteCoordinator.swift in Sources */,
@@ -1900,7 +1887,6 @@
 				EB4C08900A59D8F799C26E3B /* QuickVentIntent.swift in Sources */,
 				40D47F00221F2E902E88089C /* RatingPromptService.swift in Sources */,
 				7AEAEED8FCB30779E0AFA81C /* Redactor.swift in Sources */,
-				ACA2DD76C4F00596A800C237 /* RemoteConfig 2.swift in Sources */,
 				201713A271175393F3D48829 /* RemoteConfig.swift in Sources */,
 				C2EF3E50DC95CD99854F7DA2 /* ResourceBundle.swift in Sources */,
 				252B6511F524321110F035A0 /* RewriteCoordinator.swift in Sources */,
@@ -2162,7 +2148,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2389,7 +2375,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

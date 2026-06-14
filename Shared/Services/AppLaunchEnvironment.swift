@@ -7,7 +7,11 @@ import Foundation
 ///
 /// Launch arguments (set by RoastMateUITests):
 /// - `-uitest`            : enables UI-test mode (skips onboarding/age
-///                          gate, makes sample data deterministic)
+///                          gate, makes sample data deterministic, and
+///                          resets both cloud-consent surfaces to
+///                          `.notAsked` so every run starts from the
+///                          freshly-erased-sim consent state — see
+///                          RoastMateApp.bootstrap())
 /// - `-uitestLang <code>` : forces the app UI language. `<code>` is one
 ///                          of `en`, `zh-Hans`, `zh-Hant`, `ja`.
 enum AppLaunchEnvironment {

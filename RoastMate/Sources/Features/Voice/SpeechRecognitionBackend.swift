@@ -66,6 +66,7 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
     private var tapInstalled = false
     private var stopContinuation: CheckedContinuation<String, Never>?
     private var timeoutTask: Task<Void, Never>?
+    private var isStopping = false
 
     static func isLocaleSupported(_ appLocale: Locale) async -> Bool {
         SFSpeechRecognizer(locale: appLocale)?.supportsOnDeviceRecognition == true
@@ -126,6 +127,15 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
     @discardableResult
     func stop() async -> String {
         guard task != nil || tapInstalled || engine.isRunning else { return lastText }
+        // Re-entrancy guard: stop() suspends on the continuation below, and
+        // because this type is @MainActor a SECOND stop() (a double-tap on Stop,
+        // or Stop racing the sheet's onDisappear teardown) can run during that
+        // suspension. It must NOT overwrite `stopContinuation` — that would
+        // strand the first continuation forever and hang its caller. Bail with
+        // the last transcript; the in-flight stop delivers the real final.
+        // The check + set are atomic here (no await between them on @MainActor).
+        if isStopping { return lastText }
+        isStopping = true
         if tapInstalled { engine.inputNode.removeTap(onBus: 0); tapInstalled = false }
         if engine.isRunning { engine.stop() }
 
@@ -147,6 +157,7 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
         task = nil
         request = nil
         onPartial = nil
+        isStopping = false
         return final
     }
 
