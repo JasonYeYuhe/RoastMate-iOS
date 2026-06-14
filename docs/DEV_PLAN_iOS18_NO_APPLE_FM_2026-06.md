@@ -318,3 +318,9 @@ canonical 设计(Codex ratify 了原 Gemini P0 spec):
 
 ### 增量 5-8 — 待开始
 5 成本/滥用闸(+ Pro 收据)→ 6 合规文案+隐私标签复核 → 7 双模拟器矩阵 → 8 DARK→eval→远程 flip 全量。
+
+### 发布状态 — v1.2.0 / build 17 已提交审核(2026-06-14)
+- **提交前 Codex 对抗式评审 = 隐私/5.1.2(i)/App-Review 全部干净**;修了 2 个非审核问题 →(a)`LegacySpeechBackend.stop()` 重入(`isStopping` 闸,iOS 18-25 连点停止挂起);(b)pbxproj 去掉 14 处对已删 `RemoteConfig 2.swift`(iCloud 重复)的引用 → HEAD 可复现。`CURRENT_PROJECT_VERSION 16→17`,286 单测 0 失败。commit `beb48e8`,tag `v1.2.0`。
+- **iOS + macOS v1.2.0(build 17)均经 Chrome 在 ASC 提交 → WAITING_FOR_REVIEW**(≤48h)。版本/What's New×4/build17/reviewer-notes 齐;cloud-sendable 仍 DARK。
+- 分支 `feature/ios18-no-apple-fm` + tag 已 push 到 `JasonYeYuhe/RoastMate-iOS`。
+- **审核后 TODO**:① iOS 18 真机 TestFlight 烟测(尤其 SFSpeechRecognizer 语音,模拟器无法验);② zh-Hans sendable eval 通过后远程 flip `cloud_sendable_enabled:true` + **部署 Worker `mode:roast`**(已提交未部署);③ flip 前补 FeatureGenerator/ArgumentSimulator 的 sendable→云。
