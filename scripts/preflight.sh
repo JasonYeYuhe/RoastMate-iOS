@@ -176,6 +176,53 @@ build_target "RoastMateShare" "generic/platform=iOS Simulator"      "-sdk iphone
 build_target "RoastMateControls" "generic/platform=iOS Simulator"   "-sdk iphonesimulator"
 
 # ─────────────────────────────────────────────────────────────────────
+# Reads the BUILT bundle, not project.yml — that distinction is the whole
+# point of this section. With GENERATE_INFOPLIST_FILE=YES, Xcode maps only
+# a fixed allowlist of INFOPLIST_KEY_* names into the generated Info.plist
+# and drops every other name SILENTLY: no warning, no error, BUILD
+# SUCCEEDED, key absent. NSUserActivityTypes is not on that allowlist, so
+# `INFOPLIST_KEY_NSUserActivityTypes` in project.yml shipped Handoff as a
+# no-op in builds 1.0.0(5) through 1.2.0(17) — three targets, ~3 months,
+# invisible from source because the setting was right there in the project
+# file. Nothing but the built artifact can tell you. It now lives in each
+# target's explicit Info.plist; this step is the trap that keeps it there.
+#
+# Runs after "Builds" and reuses that output (no -derivedDataPath, same as
+# build_target, so BUILT_PRODUCTS_DIR resolves to the same place).
+section "Built Info.plist keys (INFOPLIST_KEY_* allowlist trap)"
+require_built_plist_key() {
+  local scheme="$1" destination="$2" key="$3" expected="$4"
+  local settings built_dir plist_rel plist
+  settings=$(xcodebuild -project "$PROJECT" -scheme "$scheme" \
+      -configuration Debug -destination "$destination" \
+      -showBuildSettings 2>/dev/null)
+  built_dir=$(echo "$settings" | awk -F' = ' '/ BUILT_PRODUCTS_DIR = /{print $2; exit}')
+  plist_rel=$(echo "$settings" | awk -F' = ' '/ INFOPLIST_PATH = /{print $2; exit}')
+  plist="$built_dir/$plist_rel"
+  if [ ! -f "$plist" ]; then
+    fail "$scheme: no built Info.plist at ${plist:-<unresolved>}"
+    return
+  fi
+  if /usr/libexec/PlistBuddy -c "Print :$key" "$plist" 2>/dev/null | grep -qF "$expected"; then
+    ok "$scheme built plist: $key contains $expected"
+  else
+    fail "$scheme built plist: $key MISSING $expected — a non-allowlisted INFOPLIST_KEY_* was dropped"
+  fi
+}
+# Must equal HandoffActivity.typeRoastSession (Shared/Services).
+HANDOFF_TYPE="yyh.roastmate.app.handoff.session"
+require_built_plist_key "RoastMate"      "generic/platform=iOS Simulator"     NSUserActivityTypes "$HANDOFF_TYPE"
+require_built_plist_key "RoastMateMac"   "generic/platform=macOS"             NSUserActivityTypes "$HANDOFF_TYPE"
+require_built_plist_key "RoastMateWatch" "generic/platform=watchOS Simulator" NSUserActivityTypes "$HANDOFF_TYPE"
+
+# The Swift constant and the three plists must not drift apart.
+if grep -q "typeRoastSession = \"$HANDOFF_TYPE\"" "$PROJECT_DIR/Shared/Services/HandoffActivity.swift"; then
+  ok "HandoffActivity.typeRoastSession matches the declared activity type"
+else
+  fail "HandoffActivity.typeRoastSession no longer matches $HANDOFF_TYPE"
+fi
+
+# ─────────────────────────────────────────────────────────────────────
 section "Unit tests"
 # xcodegen only emits schemes for app/extension targets — there is no
 # "RoastMateTests" scheme (this step silently failed since the v1.0

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- This file exists solely to carry NSUserActivityTypes; everything else
+	     for this target is still generated (GENERATE_INFOPLIST_FILE stays YES
+	     and merges its allowlisted keys under these).
+
+	     NSUserActivityTypes cannot be expressed as an INFOPLIST_KEY_* build
+	     setting: Xcode maps only a fixed allowlist of those names into the
+	     generated plist and drops any other name SILENTLY — no warning, no
+	     error, the build succeeds. project.yml carried
+	     INFOPLIST_KEY_NSUserActivityTypes here since the first commit and it
+	     never once reached a built bundle, so RootView's
+	     .onContinueUserActivity handler was registered for a type the OS had
+	     no record of and could never route. Nothing observable failed.
+
+	     Must stay equal to HandoffActivity.typeRoastSession (Shared/Services).
+	     Verify against the BUILT Info.plist; the project file cannot tell you. -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>yyh.roastmate.app.handoff.session</string>
+	</array>
+</dict>
+</plist>

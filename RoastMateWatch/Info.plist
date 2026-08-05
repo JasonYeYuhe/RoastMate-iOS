@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- This file exists solely to carry NSUserActivityTypes; everything the
+	     watch target needs (WKApplication, WKCompanionAppBundleIdentifier,
+	     CFBundleDisplayName…) is still generated — GENERATE_INFOPLIST_FILE
+	     stays YES and merges its allowlisted keys under these.
+
+	     NSUserActivityTypes cannot be expressed as an INFOPLIST_KEY_* build
+	     setting: Xcode maps only a fixed allowlist of those names into the
+	     generated plist and drops any other name SILENTLY — no warning, no
+	     error, the build succeeds. This is the ORIGINATING side: without the
+	     type declared, the activity WatchQuickPromptView publishes is never
+	     advertised for Handoff, so the iPhone banner simply never appears and
+	     there is no error path to notice.
+
+	     Must stay equal to HandoffActivity.typeRoastSession (Shared/Services).
+	     Verify against the BUILT Info.plist; the project file cannot tell you. -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>yyh.roastmate.app.handoff.session</string>
+	</array>
+</dict>
+</plist>

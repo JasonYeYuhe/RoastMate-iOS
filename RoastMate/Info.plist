@@ -20,5 +20,20 @@
 	</array>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
+	<!-- Handoff continuation (watch → iPhone), read by the OS, not by us.
+	     This MUST live here and not as INFOPLIST_KEY_NSUserActivityTypes in
+	     project.yml: with GENERATE_INFOPLIST_FILE=YES Xcode maps only a fixed
+	     allowlist of INFOPLIST_KEY_* names into the generated plist, and
+	     NSUserActivityTypes is not on it. A non-allowlisted name is dropped
+	     SILENTLY — no warning, no error, the build succeeds — so the key was
+	     absent from every shipped build 1.0.0(5) through 1.2.0(17) while
+	     project.yml claimed otherwise. Keys in THIS file are merged over the
+	     generated ones, which is why UIBackgroundModes et al. survive.
+	     Must stay equal to HandoffActivity.typeRoastSession (Shared/Services).
+	     Verify against the BUILT Info.plist; the project file cannot tell you. -->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>yyh.roastmate.app.handoff.session</string>
+	</array>
 </dict>
 </plist>

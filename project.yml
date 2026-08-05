@@ -46,7 +46,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_CFBundleDisplayName: RoastMate
-        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        # NSUserActivityTypes is NOT settable here — see RoastMate/Info.plist.
+        # Xcode's INFOPLIST_KEY_* allowlist silently drops unknown names.
         INFOPLIST_KEY_NSMicrophoneUsageDescription: "The mic is used only to transcribe your spoken vent on-device. Your voice audio is never recorded, saved, or sent anywhere."
         INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Speech recognition runs on-device to turn your spoken vent into editable text. Your voice audio never leaves your phone."
         INFOPLIST_FILE: RoastMate/Info.plist
@@ -77,6 +78,28 @@ targets:
       # inference unviable, and the skeleton had been dormant + un-embedded
       # since v1.1. Revive from git history only with a fundamentally
       # different (server-side or tiny-model) approach.
+      #
+      # NOT LISTED, DELIBERATELY UNRESOLVED: RoastMateWatch. It compiles and
+      # has a scheme, but it has never been embedded here, so it is in no
+      # shipped bundle — verified against the artifacts: no Watch/ directory
+      # in any IPA 1.0.0(5)…1.0.6(14), and 1.2.0(17)'s RoastMate.app carries
+      # only the two .appex plugins. WatchQuickPromptView is the ONLY thing
+      # that originates the Handoff activity (iOS and macOS merely continue
+      # it), so Handoff is still dead in the field for users even now that
+      # NSUserActivityTypes reaches the built plists. Adding
+      # `- target: RoastMateWatch / embed: true` here is the code fix, but it
+      # is a release decision, not a build one: it puts a never-reviewed
+      # watchOS app on the App Store listing, needs a provisioning profile
+      # for yyh.roastmate.app.watchkitapp, and imposes watchOS 26 (Series 6+).
+      # Until that is decided, these user-facing claims are FALSE of every
+      # binary a customer or App Review has ever received:
+      #   metadata/en-US/release_notes.txt:5, metadata/review_notes.txt:81-82,
+      #   docs/site/support.html:45, README.md:38,
+      #   docs/APP_STORE_SUBMISSION.md:76.
+      # (README.md:26 "watchOS target — Builds" stays true; it only builds.)
+      # docs/APP_STORE_SUBMISSION.md:177 is the manual watch→iPhone Handoff
+      # test — it could never have passed on a shipped build, and is still
+      # unchecked.
     scheme:
       testTargets:
         - RoastMateTests
@@ -102,7 +125,9 @@ targets:
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.lifestyle"
         INFOPLIST_KEY_LSUIElement: NO
         INFOPLIST_KEY_CFBundleDisplayName: RoastMate
-        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        # NSUserActivityTypes is NOT settable here — see RoastMateMac/Info.plist.
+        # Xcode's INFOPLIST_KEY_* allowlist silently drops unknown names.
+        INFOPLIST_FILE: RoastMateMac/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_ENTITLEMENTS: RoastMateMac/RoastMateMac.entitlements
@@ -130,7 +155,9 @@ targets:
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: yyh.roastmate.app
         INFOPLIST_KEY_CFBundleDisplayName: RoastMate
-        INFOPLIST_KEY_NSUserActivityTypes: yyh.roastmate.app.handoff.session
+        # NSUserActivityTypes is NOT settable here — see RoastMateWatch/Info.plist.
+        # Xcode's INFOPLIST_KEY_* allowlist silently drops unknown names.
+        INFOPLIST_FILE: RoastMateWatch/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_ENTITLEMENTS: RoastMateWatch/RoastMateWatch.entitlements

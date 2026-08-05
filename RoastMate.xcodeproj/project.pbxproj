@@ -1994,11 +1994,11 @@
 				CODE_SIGN_ENTITLEMENTS = RoastMateMac/RoastMateMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMateMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_LSUIElement = NO;
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2036,11 +2036,11 @@
 				CODE_SIGN_ENTITLEMENTS = RoastMateMac/RoastMateMac.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMateMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_LSUIElement = NO;
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -2189,7 +2189,6 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The mic is used only to transcribe your spoken vent on-device. Your voice audio is never recorded, saved, or sent anywhere.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs on-device to turn your spoken vent into editable text. Your voice audio never leaves your phone.";
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -2216,9 +2215,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RoastMateWatch/RoastMateWatch.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMateWatch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = yyh.roastmate.app;
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.watchkitapp;
 				PRODUCT_NAME = RoastMate;
@@ -2261,7 +2260,6 @@
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The mic is used only to transcribe your spoken vent on-device. Your voice audio is never recorded, saved, or sent anywhere.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Speech recognition runs on-device to turn your spoken vent into editable text. Your voice audio never leaves your phone.";
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -2288,9 +2286,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = RoastMateWatch/RoastMateWatch.entitlements;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RoastMateWatch/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = RoastMate;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_NSUserActivityTypes = yyh.roastmate.app.handoff.session;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = yyh.roastmate.app;
 				PRODUCT_BUNDLE_IDENTIFIER = yyh.roastmate.app.watchkitapp;
 				PRODUCT_NAME = RoastMate;
