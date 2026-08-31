@@ -24,6 +24,8 @@
 // Note: ":free" tier returns 402 ("Out of credits") when the provider's
 // global free quota is exhausted (NOT user-specific); 429 = upstream
 // rate-limit. Account top-up does not unlock the :free pool.
+import { resolveVentLane } from "./lane.js";
+
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
   // Full sweep per user direction "都测试一下". Slurs are explicitly
@@ -123,13 +125,24 @@ export default {
       return json({ error: "mode_unavailable" }, 403);
     }
 
-    // Per-device daily rate limit.
-    const limit = parseInt(env.DAILY_LIMIT_PER_DEVICE || "30", 10);
-    const day = new Date().toISOString().slice(0, 10);
-    const rlKey = `rl:${deviceId}:${day}`;
+    // Track M M.1 v2: resolve the lane. An Authorization: Bearer <session token>
+    // (from /v1/auth) → the Pro lane, quota keyed on the account (sub), Pro cap.
+    // No token → the legacy per-device lane (build 17 + free), unchanged. A
+    // present-but-invalid token → 401 so the client re-auths (never a silent
+    // downgrade). Until SESSION_SIGNING_KEY is provisioned, tokens fail closed
+    // (401) and the tokenless legacy path is unaffected.
+    const lane = await resolveVentLane({
+      authorization: req.headers.get("Authorization"),
+      deviceId, env,
+    });
+    if (lane.error) {
+      ddLog(env, ctx, { outcome: "token_invalid", status: lane.status, intensity, locale, latency_ms: Date.now() - t0 });
+      return json({ error: lane.error, reason: lane.reason }, lane.status);
+    }
+    const { rlKey, limit, day } = lane;
     const used = parseInt((await env.RATE_LIMITS.get(rlKey)) || "0", 10);
     if (used >= limit) {
-      ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, latency_ms: Date.now() - t0 });
+      ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, lane: lane.lane, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit, remaining: 0 }, 429);
     }
 
@@ -316,7 +329,7 @@ export default {
     // back — failed upstream calls should not eat the user's daily quota.
     await env.RATE_LIMITS.put(rlKey, String(used + 1), { expirationTtl: 86400 * 2 });
 
-    ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount,
+    ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,
       provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
     return json({
       text,

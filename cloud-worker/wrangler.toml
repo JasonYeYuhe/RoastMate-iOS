@@ -36,9 +36,15 @@ GROQ_FALLBACK_MODEL = "qwen/qwen3.6-27b"
 CLOUD_DISABLED = "false"
 ROAST_MODE_ENABLED = "false"
 
-# Per-device rate limit. The Worker counts each successful request against
-# (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves.
+# Per-device rate limit (LEGACY / free lane — no session token). Counted against
+# (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves. M.2 will
+# tighten this for pure-cloud free users.
 DAILY_LIMIT_PER_DEVICE = "30"
+
+# PRO lane daily cap (Track M M.1 v2): requests with a valid /v1/auth session
+# token are counted against (account-sub, YYYY-MM-DD), so one Pro subscription
+# shares one bucket across the user's devices.
+PRO_DAILY_LIMIT = "200"
 
 # Stricter PER-IP daily cap applied ONLY to the public web demo (requests
 # with an Origin from jasonyeyuhe.github.io). The native app carries no
