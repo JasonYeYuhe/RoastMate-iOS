@@ -57,7 +57,13 @@ const MODEL_OVERRIDE_ALLOWLIST = new Set([
   "poolside/laguna-xs.2:free",           // code-tuned
   "qwen/qwen3-coder:free",               // code-tuned
   "qwen/qwen3-next-80b-a3b-instruct:free",
-  "z-ai/glm-4.5-air:free"
+  "z-ai/glm-4.5-air:free",
+  // v1.3 (2026-08-31): fast NON-reasoning instruct candidates for the fallback
+  // (the old GLM-5.3-flash fallback is a reasoning model → 17-31s stalls). Kept
+  // in the allowlist so they can be A/B'd via the model-override path.
+  "qwen/qwen3-30b-a3b-instruct-2507",
+  "deepseek/deepseek-chat",
+  "meta-llama/llama-3.3-70b-instruct"
 ]);
 
 export default {
@@ -286,7 +292,7 @@ export default {
     // CURRENT, stable PAID model (z-ai/glm-5.3-flash: strong zh, cheap, own
     // quota — not a shared :free pool). env.DEFAULT_MODEL still wins if set.
     if (!text && env.OPENROUTER_API_KEY) {
-      const orModel = env.DEFAULT_MODEL || "z-ai/glm-5.3-flash";
+      const orModel = env.DEFAULT_MODEL || "qwen/qwen3-30b-a3b-instruct-2507";
       const orResult = await callOpenAICompatible({
         endpoint: "https://openrouter.ai/api/v1/chat/completions",
         apiKey: env.OPENROUTER_API_KEY,

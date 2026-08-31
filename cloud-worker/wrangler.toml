@@ -10,11 +10,15 @@ compatibility_flags = ["nodejs_compat"]
 # CURRENT, stable model with its OWN quota — NOT a `:free` variant (the
 # shared :free pool 402s/404s when the provider retires the tier, which is
 # exactly what took the cloud path down on 2026-08-31: the old
-# `hermes-3-llama-3.1-405b:free` had been retired → 404). GLM-5.3-flash:
-# strong Chinese, cheap, non-:free. Change candidates: deepseek/deepseek-v4-flash,
-# qwen/qwen3.7-flash (verify against https://openrouter.ai/api/v1/models).
+# `hermes-3-llama-3.1-405b:free` had been retired → 404). MUST ALSO be a
+# NON-REASONING (instruct) model: the previous GLM-5.3-flash was a hybrid
+# reasoning model that "thought" for 17-31s on these prompts, so whenever Groq
+# missed the fallback stalled. qwen3-30b-a3b-INSTRUCT-2507 is the non-thinking
+# Qwen (same family as the Groq primary → the Qwen-tuned prompt transfers, strong
+# zh vent, no <think>). Alternates: deepseek/deepseek-chat, meta-llama/llama-3.3-
+# 70b-instruct (Llama over-moralizes zh — test first). Never a *-thinking model.
 [vars]
-DEFAULT_MODEL = "z-ai/glm-5.3-flash"
+DEFAULT_MODEL = "qwen/qwen3-30b-a3b-instruct-2507"
 
 # Groq is PRIMARY (lower latency, isolated quota). Routed by locale. Verified
 # against the live Groq catalog 2026-08-31: the old primaries both died —
