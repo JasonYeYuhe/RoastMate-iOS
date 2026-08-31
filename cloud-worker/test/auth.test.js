@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { handleAuth } from "../src/auth.js";
-import { verifySessionToken, sha256Hex } from "../src/session.js";
+import { verifySessionToken, hmacHex } from "../src/session.js";
 
 const NOW = 1_800_000_000_000;
 const ENV = { SESSION_SIGNING_KEY: "unit-test-secret" };
@@ -14,6 +14,7 @@ function proTx(overrides = {}) {
     originalTransactionId: OTX,
     expiresDate: NOW + 30 * 24 * 60 * 60 * 1000,
     type: "Auto-Renewable Subscription",
+    environment: "Production",
     ...overrides,
   };
 }
@@ -43,7 +44,21 @@ test("valid Pro JWS → 200 + a token bound to hash(originalTransactionId)", asy
   const v = await verifySessionToken(token, ENV.SESSION_SIGNING_KEY, NOW);
   assert.equal(v.valid, true);
   assert.equal(v.claims.pro, true);
-  assert.equal(v.claims.sub, await sha256Hex(OTX)); // hashed, never the raw id
+  assert.equal(v.claims.sub, await hmacHex(OTX, ENV.SESSION_SIGNING_KEY)); // keyed hash, never raw
+});
+
+test("SANDBOX transaction is rejected in production (P0 free-Pro bypass)", async () => {
+  const tx = proTx({ environment: "Sandbox" });
+  const res = await handleAuth(authReq({ jws: JWS }), ENV, null, okVerifier(tx), NOW);
+  assert.equal(res.status, 403);
+  assert.equal((await bodyOf(res)).error, "environment_not_allowed");
+});
+
+test("SANDBOX transaction is accepted when ALLOW_SANDBOX_RECEIPTS=true (dev worker)", async () => {
+  const tx = proTx({ environment: "Sandbox" });
+  const env = { ...ENV, ALLOW_SANDBOX_RECEIPTS: "true" };
+  const res = await handleAuth(authReq({ jws: JWS }), env, null, okVerifier(tx), NOW);
+  assert.equal(res.status, 200);
 });
 
 test("token expiry is min(sub expiry, +1h)", async () => {

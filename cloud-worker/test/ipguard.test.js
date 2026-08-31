@@ -50,6 +50,12 @@ test("missing IP falls back to a stable 'unknown' bucket", async () => {
   assert.equal(g.ipKey, g2.ipKey);
 });
 
+test("uses a keyed hash (HMAC) when SESSION_SIGNING_KEY is present", async () => {
+  const withKey = await resolveIpAttemptCap({ origin: null, ip: "9.9.9.9", env: { ...ENV, SESSION_SIGNING_KEY: "sek" }, nowMs: NOW });
+  const noKey = await resolveIpAttemptCap({ origin: null, ip: "9.9.9.9", env: ENV, nowMs: NOW });
+  assert.notEqual(withKey.ipKey, noKey.ipKey, "same IP hashes differently with vs without the HMAC key");
+});
+
 test("defaults apply when env is empty (8 web / 200 app)", async () => {
   const web = await resolveIpAttemptCap({ origin: "https://jasonyeyuhe.github.io", ip: "1.1.1.1", env: {}, nowMs: NOW });
   const app = await resolveIpAttemptCap({ origin: null, ip: "1.1.1.1", env: {}, nowMs: NOW });

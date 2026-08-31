@@ -38,10 +38,22 @@ async function hmacKey(secret) {
   );
 }
 
-/** Hex SHA-256 of a string (used to hash the Apple originalTransactionId). */
+/** Hex SHA-256 of a string. */
 export async function sha256Hex(str) {
   const digest = await crypto.subtle.digest("SHA-256", enc.encode(str));
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/**
+ * Keyed hash (HMAC-SHA256 → hex) — for hashing identifiers (Apple
+ * originalTransactionId, client IP) into KV keys WITHOUT them being
+ * rainbow-table-reversible. Plain SHA-256 of an IPv4 (4B space) or a numeric
+ * Apple id is trivially reversed; keying it with the server secret is not.
+ */
+export async function hmacHex(message, secret) {
+  const key = await hmacKey(secret);
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", key, enc.encode(message)));
+  return [...sig].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 /**

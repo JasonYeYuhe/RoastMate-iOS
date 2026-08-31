@@ -363,7 +363,17 @@ actor RoastEngine {
         do {
             return try await client.generate(req, authToken: token)
         } catch CloudVentError.tokenInvalid {
+            // Token rejected (typically expired mid-session). Re-authenticate
+            // ONCE with a fresh token so a Pro user isn't silently downgraded to
+            // the free cap; only if that ALSO fails do we fall to the free lane.
             await auth.invalidate()
+            if let fresh = await auth.proSessionToken(), fresh != token {
+                do {
+                    return try await client.generate(req, authToken: fresh)
+                } catch CloudVentError.tokenInvalid {
+                    // fresh token also rejected → fall through to the free lane
+                }
+            }
             return try await client.generate(req, authToken: nil)
         }
     }

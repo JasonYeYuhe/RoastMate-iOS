@@ -21,7 +21,7 @@ test("no Authorization header → free lane keyed on deviceId", async () => {
   const r = await resolveVentLane({ authorization: null, deviceId: DEVICE, env: ENV, nowMs: NOW });
   assert.equal(r.lane, "free");
   assert.equal(r.isPro, false);
-  assert.equal(r.rlKey, `rl:${DEVICE}:${DAY}`);
+  assert.equal(r.rlKey, `rl:free:${DEVICE}:${DAY}`);
   assert.equal(r.limit, 30);
   assert.equal(r.day, DAY);
 });
@@ -62,7 +62,7 @@ test("valid token that is not a Pro grant → free lane (defensive)", async () =
   const token = await mintSessionToken({ sub: "abc", pro: false, exp: NOW + 60_000 }, SECRET);
   const r = await resolveVentLane({ authorization: `Bearer ${token}`, deviceId: DEVICE, env: ENV, nowMs: NOW });
   assert.equal(r.lane, "free");
-  assert.equal(r.rlKey, `rl:${DEVICE}:${DAY}`);
+  assert.equal(r.rlKey, `rl:free:${DEVICE}:${DAY}`);
 });
 
 test("env caps are respected", async () => {

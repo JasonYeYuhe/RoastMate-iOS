@@ -46,7 +46,9 @@ export async function resolveVentLane({ authorization, deviceId, env, nowMs = Da
   return {
     lane: "free",
     isPro: false,
-    rlKey: `rl:${deviceId}:${day}`,
+    // Namespaced `rl:free:` so a chosen deviceId can never collide with a Pro
+    // key `rl:pro:<sub>` and eat a legit Pro user's quota (P2).
+    rlKey: `rl:free:${deviceId}:${day}`,
     limit: parseInt(env?.DAILY_LIMIT_PER_DEVICE || "30", 10),
     day,
   };

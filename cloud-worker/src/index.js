@@ -85,6 +85,17 @@ export default {
     // even under CLOUD_DISABLED (it does no LLM work; a token is inert if vent
     // is off). Requires the SESSION_SIGNING_KEY secret; without it, 500s.
     if (url.pathname === "/v1/auth") {
+      // DoS guard (P2): /v1/auth runs heavy signature + x5c-chain crypto. Cap
+      // attempts per IP (pre-charged) — shares the app IP bucket with /v1/vent,
+      // so a flood of garbage JWS can't burn Worker CPU / billing unbounded.
+      const g = await resolveIpAttemptCap({
+        origin: req.headers.get("Origin"),
+        ip: req.headers.get("CF-Connecting-IP"),
+        env,
+      });
+      const u = parseInt((await env.RATE_LIMITS.get(g.ipKey)) || "0", 10);
+      if (u >= g.ipLimit) return json({ error: "rate_limit_exceeded" }, 429);
+      await env.RATE_LIMITS.put(g.ipKey, String(u + 1), { expirationTtl: 86400 * 2 });
       try {
         const [{ handleAuth }, { buildVerifier }] = await Promise.all([
           import("./auth.js"),

@@ -15,12 +15,14 @@
 // raw-IP web key. (Plain SHA-256; an HMAC-with-rotating-secret is a later
 // hardening if the KV substrate ever needed it.)
 
-const enc = new TextEncoder();
+import { hmacHex, sha256Hex } from "./session.js";
 
-async function hashIp(ip) {
-  const digest = await crypto.subtle.digest("SHA-256", enc.encode(ip || "unknown"));
-  // 64 bits is plenty to bucket an IP without collisions.
-  return [...new Uint8Array(digest)].slice(0, 8).map((b) => b.toString(16).padStart(2, "0")).join("");
+// Keyed hash when the server secret is available (HMAC — an IPv4's 4B space is
+// trivially rainbow-reversed from a plain SHA-256); plain-hash fallback so the
+// cap still works if the secret is ever absent (the web demo needs no auth).
+async function hashIp(ip, secret) {
+  const full = secret ? await hmacHex(ip || "unknown", secret) : await sha256Hex(ip || "unknown");
+  return full.slice(0, 16); // 64 bits — plenty to bucket an IP
 }
 
 /**
@@ -32,6 +34,6 @@ export async function resolveIpAttemptCap({ origin, ip, env, nowMs = Date.now() 
   const ipLimit = isWeb
     ? parseInt(env?.WEB_DAILY_LIMIT_PER_IP || "8", 10)
     : parseInt(env?.APP_DAILY_LIMIT_PER_IP || "200", 10);
-  const h = await hashIp(ip);
+  const h = await hashIp(ip, env?.SESSION_SIGNING_KEY);
   return { ipKey: `ipa:${isWeb ? "web" : "app"}:${h}:${day}`, ipLimit, isWeb, day };
 }

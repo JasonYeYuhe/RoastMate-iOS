@@ -10,7 +10,7 @@
 // `verifyAndDecodeTransaction(jws)` contract. This keeps the handler's
 // entitlement/token logic unit-testable without a real Apple JWS.
 
-import { mintSessionToken, sha256Hex } from "./session.js";
+import { mintSessionToken, hmacHex } from "./session.js";
 
 // Pro product IDs — must stay in sync with StoreService.swift
 // (monthlyProductId / yearlyProductId).
@@ -64,6 +64,14 @@ export async function handleAuth(request, env, _ctx, verifier, nowMs = Date.now(
   }
 
   // Entitlement checks on the VERIFIED payload.
+  // SECURITY (P0): reject non-Production transactions unless this Worker is a
+  // dev/test one that opts in (ALLOW_SANDBOX_RECEIPTS). A sandbox purchase is
+  // FREE, so accepting it in prod would mint real Pro tokens for $0. (Defense in
+  // depth — verifier.js also withholds the sandbox verifier unless allowed.)
+  const allowSandbox = (env && env.ALLOW_SANDBOX_RECEIPTS || "false").toLowerCase() === "true";
+  if (tx.environment !== "Production" && !allowSandbox) {
+    return authJson({ error: "environment_not_allowed" }, 403);
+  }
   if (!PRO_PRODUCT_IDS.has(tx.productId)) {
     return authJson({ error: "not_pro" }, 403);
   }
@@ -85,7 +93,9 @@ export async function handleAuth(request, env, _ctx, verifier, nowMs = Date.now(
   // Key Pro quota on a HASH of the Apple account identity (originalTransactionId),
   // NOT the spoofable deviceId → replaying one JWS across cloned devices shares
   // one quota bucket. The raw Apple id never leaves this function.
-  const sub = await sha256Hex(originalTransactionId);
+  // Keyed hash (not plain SHA-256) so the account id can't be rainbow-reversed
+  // from a KV key. Deterministic → same account → same quota bucket.
+  const sub = await hmacHex(originalTransactionId, secret);
   const exp = Math.min(expiresMs, nowMs + SESSION_MAX_MS);
   const token = await mintSessionToken({ sub, pro: true, iat: nowMs, exp }, secret);
   return authJson({ token, expiresAt: exp }, 200);

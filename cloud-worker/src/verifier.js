@@ -37,14 +37,25 @@ export function buildVerifier(env) {
   const enableOnlineChecks = false; // no OCSP/CRL round-trip at the edge
 
   const prod = new SignedDataVerifier(roots, enableOnlineChecks, Environment.PRODUCTION, bundleId, appAppleId);
-  const sandbox = new SignedDataVerifier(roots, enableOnlineChecks, Environment.SANDBOX, bundleId, appAppleId);
+
+  // SECURITY (P0): a SANDBOX purchase is FREE (TestFlight / a dev Apple ID), so
+  // accepting a sandbox JWS in production = a free-Pro bypass. The sandbox
+  // verifier is therefore OFF by default and enabled only on a dedicated
+  // test/dev Worker via ALLOW_SANDBOX_RECEIPTS="true". In production only the
+  // PRODUCTION verifier runs, so a sandbox JWS fails verification → 401.
+  const allowSandbox = (env && env.ALLOW_SANDBOX_RECEIPTS || "false").toLowerCase() === "true";
+  const sandbox = allowSandbox
+    ? new SignedDataVerifier(roots, enableOnlineChecks, Environment.SANDBOX, bundleId, appAppleId)
+    : null;
 
   cached = {
+    allowSandbox,
     async verifyAndDecodeTransaction(jws) {
       try {
         return await prod.verifyAndDecodeTransaction(jws);
-      } catch (_e) {
-        return await sandbox.verifyAndDecodeTransaction(jws);
+      } catch (e) {
+        if (sandbox) return await sandbox.verifyAndDecodeTransaction(jws);
+        throw e;
       }
     },
   };

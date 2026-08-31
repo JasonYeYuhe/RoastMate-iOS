@@ -63,6 +63,19 @@ final class CloudVentEngineTests: XCTestCase {
         XCTAssertEqual(result, ["free-lane-ok"])
     }
 
+    func testToken401ReauthsWithFreshTokenBeforeFreeLane() async throws {
+        // Adversarial-review P1 fix: a 401 (expired token) must re-auth ONCE with
+        // a fresh token — not silently downgrade a Pro user to the free cap.
+        let client = AcceptsOnlyFreshCloudVentService()
+        let result = try await RoastEngine.shared.generate(
+            situation: "室友半夜打游戏。", style: testStyle,
+            locale: Locale(identifier: "zh-Hans"), variantCount: 1, intensity: .vent,
+            cloudVentEnabled: true, cloudClient: client, auth: RotatingAuth(["stale", "fresh"]))
+        XCTAssertEqual(client.tokens, ["stale", "fresh"],
+                       "On 401 the engine re-auths with a fresh token before any free-lane fallback.")
+        XCTAssertEqual(result, ["pro-ok"])
+    }
+
     func testSendableRoutesToCloudWhenEnabled() async throws {
         // Increment 4 (iOS 18 no-FM): the ViewModel resolves cloud consent for
         // sendable modes too, so the engine routes sharp/calm/savage through
@@ -196,5 +209,25 @@ final class TokenRejectingCloudVentService: CloudVentService, @unchecked Sendabl
         tokens.append(authToken)
         if authToken != nil { throw CloudVentError.tokenInvalid }
         return CloudVentResponse(text: "free-lane-ok", model: "m", remaining: 5)
+    }
+}
+
+/// Auth provider that yields tokens in sequence (e.g. a stale one, then a fresh
+/// one after invalidate) — for the 401 re-auth path.
+final class RotatingAuth: CloudAuthProviding, @unchecked Sendable {
+    private var queue: [String?]
+    init(_ tokens: [String?]) { self.queue = tokens }
+    func proSessionToken() async -> String? { queue.isEmpty ? nil : queue.removeFirst() }
+    func invalidate() async {}
+}
+
+/// Cloud service that accepts only the token "fresh"; anything else → 401.
+/// Verifies the engine re-auths (stale → fresh) rather than downgrading.
+final class AcceptsOnlyFreshCloudVentService: CloudVentService, @unchecked Sendable {
+    private(set) var tokens: [String?] = []
+    func generate(_ req: CloudVentRequest, authToken: String?) async throws -> CloudVentResponse {
+        tokens.append(authToken)
+        if authToken == "fresh" { return CloudVentResponse(text: "pro-ok", model: "m", remaining: 5) }
+        throw CloudVentError.tokenInvalid
     }
 }
