@@ -30,6 +30,39 @@ final class CloudVentEngineTests: XCTestCase {
                        "Each request must carry the per-install device UUID for rate limiting.")
     }
 
+    // MARK: - Track M v2: Pro-token wiring
+
+    func testProTokenRidesOnCloudRequest() async throws {
+        let recorder = RecordingCloudVentService(returning: "卧槽,真离谱。")
+        _ = try? await RoastEngine.shared.generate(
+            situation: "室友半夜打游戏。", style: testStyle,
+            locale: Locale(identifier: "zh-Hans"), variantCount: 1, intensity: .vent,
+            cloudVentEnabled: true, cloudClient: recorder, auth: StubAuth(token: "pro-tok"))
+        XCTAssertEqual(recorder.tokens, ["pro-tok"],
+                       "A verified-Pro session token must ride on the cloud request (v2 lane).")
+    }
+
+    func testTokenlessWhenNotPro() async throws {
+        let recorder = RecordingCloudVentService(returning: "卧槽。")
+        _ = try? await RoastEngine.shared.generate(
+            situation: "室友半夜打游戏。", style: testStyle,
+            locale: Locale(identifier: "zh-Hans"), variantCount: 1, intensity: .vent,
+            cloudVentEnabled: true, cloudClient: recorder, auth: StubAuth(token: nil))
+        XCTAssertEqual(recorder.tokens, [nil],
+                       "Non-Pro (no token) uses the tokenless free/legacy lane.")
+    }
+
+    func testToken401RetriesTokenlessAndNeverBlocks() async throws {
+        let rejecting = TokenRejectingCloudVentService()
+        let result = try await RoastEngine.shared.generate(
+            situation: "室友半夜打游戏。", style: testStyle,
+            locale: Locale(identifier: "zh-Hans"), variantCount: 1, intensity: .vent,
+            cloudVentEnabled: true, cloudClient: rejecting, auth: StubAuth(token: "stale-tok"))
+        XCTAssertEqual(rejecting.tokens, ["stale-tok", nil],
+                       "A 401 drops the token and retries once on the free lane — never blocks the vent.")
+        XCTAssertEqual(result, ["free-lane-ok"])
+    }
+
     func testSendableRoutesToCloudWhenEnabled() async throws {
         // Increment 4 (iOS 18 no-FM): the ViewModel resolves cloud consent for
         // sendable modes too, so the engine routes sharp/calm/savage through
@@ -143,5 +176,25 @@ final class RecordingCloudVentService: CloudVentService, @unchecked Sendable {
         calls.append(req)
         tokens.append(authToken)
         return CloudVentResponse(text: stubbedText, model: "fake-model", remaining: 99)
+    }
+}
+
+/// Stub Pro-auth provider (Track M v2). Returns a fixed token (or nil for
+/// non-Pro); `invalidate()` is a no-op — the engine's 401 retry explicitly sends
+/// no token, so the stub never needs to change what it returns.
+struct StubAuth: CloudAuthProviding {
+    let token: String?
+    func proSessionToken() async -> String? { token }
+    func invalidate() async {}
+}
+
+/// Fake cloud service that rejects any tokened request (401 → .tokenInvalid) and
+/// succeeds only on the tokenless retry. Verifies the engine's degrade path.
+final class TokenRejectingCloudVentService: CloudVentService, @unchecked Sendable {
+    private(set) var tokens: [String?] = []
+    func generate(_ req: CloudVentRequest, authToken: String?) async throws -> CloudVentResponse {
+        tokens.append(authToken)
+        if authToken != nil { throw CloudVentError.tokenInvalid }
+        return CloudVentResponse(text: "free-lane-ok", model: "m", remaining: 5)
     }
 }

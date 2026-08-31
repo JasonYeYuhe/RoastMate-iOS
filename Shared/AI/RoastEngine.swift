@@ -91,7 +91,8 @@ actor RoastEngine {
         // silently route the user's text to the third-party cloud. Only
         // the consent-gated generator path passes `true`.
         cloudVentEnabled: Bool = false,
-        cloudClient: CloudVentService = CloudVentClient.shared
+        cloudClient: CloudVentService = CloudVentClient.shared,
+        auth: CloudAuthProviding = CloudAuthClient.shared
     ) async throws -> [String] {
         do {
             try SafetyFilter.validateInput(situation)
@@ -117,6 +118,7 @@ actor RoastEngine {
                 do {
                     let cloudText = try await runCloudVent(
                         client: cloudClient,
+                        auth: auth,
                         situation: situation,
                         style: style,
                         intensity: intensity,
@@ -151,6 +153,7 @@ actor RoastEngine {
                 do {
                     let cloudText = try await runCloudRoast(
                         client: cloudClient,
+                        auth: auth,
                         situation: situation,
                         style: style,
                         intensity: intensity,
@@ -343,12 +346,35 @@ actor RoastEngine {
         }
     }
 
+    /// Track M v2: best-effort authenticated cloud call. Fetches a Pro session
+    /// token (nil for non-Pro / any auth failure → the free/legacy lane), sends
+    /// it; if the Worker rejects it (401 → `.tokenInvalid`), drops the cached
+    /// token and retries once on the tokenless free lane. A broken auth path
+    /// therefore never blocks a vent — it just falls back to the free cap.
+    private func generateWithAuth(
+        _ req: CloudVentRequest,
+        client: CloudVentService,
+        auth: CloudAuthProviding
+    ) async throws -> CloudVentResponse {
+        let token = await auth.proSessionToken()
+        guard let token else {
+            return try await client.generate(req, authToken: nil)
+        }
+        do {
+            return try await client.generate(req, authToken: token)
+        } catch CloudVentError.tokenInvalid {
+            await auth.invalidate()
+            return try await client.generate(req, authToken: nil)
+        }
+    }
+
     /// Helper that fronts `CloudVentClient.generate` so the engine's
     /// branching logic stays compact. Returns the raw text on success;
     /// throws CloudVentError on any failure (the caller falls back to
     /// the local Foundation Models path).
     private func runCloudVent(
         client: CloudVentService,
+        auth: CloudAuthProviding,
         situation: String,
         style: StylePreset,
         intensity: Intensity,
@@ -361,7 +387,7 @@ actor RoastEngine {
             locale: locale.identifier,
             deviceId: DeviceID.current()
         )
-        let resp = try await client.generate(req)
+        let resp = try await generateWithAuth(req, client: client, auth: auth)
         return resp.text
     }
 
@@ -371,6 +397,7 @@ actor RoastEngine {
     /// caller splits + strict-validates. Throws CloudVentError on failure.
     private func runCloudRoast(
         client: CloudVentService,
+        auth: CloudAuthProviding,
         situation: String,
         style: StylePreset,
         intensity: Intensity,
@@ -387,7 +414,7 @@ actor RoastEngine {
             styleId: style.id,
             variantCount: variantCount
         )
-        let resp = try await client.generate(req)
+        let resp = try await generateWithAuth(req, client: client, auth: auth)
         return resp.text
     }
 }
