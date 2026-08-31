@@ -2,25 +2,35 @@ name = "roastmate-vent"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
 
-# Primary upstream. Dolphin Mistral 24B Venice Edition is an uncensored
-# fine-tune designed to follow instructions without "be polite" RLHF
-# pulling output back to safe sarcasm. Chosen after DeepSeek V4 Flash
-# turned out to be a reasoning model that leaked chain-of-thought into
-# the response (200 OK but content was a multi-page internal monologue).
-# If Dolphin's quality drops or it's retired, candidates in priority
-# order: nousresearch/hermes-3-llama-3.1-405b:free, z-ai/glm-4.5-air:free
-# (better for Chinese), qwen/qwen3-next-80b-a3b-instruct:free.
+# OpenRouter FALLBACK model (Groq is primary; see below). Must be a
+# CURRENT, stable model with its OWN quota — NOT a `:free` variant (the
+# shared :free pool 402s/404s when the provider retires the tier, which is
+# exactly what took the cloud path down on 2026-08-31: the old
+# `hermes-3-llama-3.1-405b:free` had been retired → 404). GLM-5.3-flash:
+# strong Chinese, cheap, non-:free. Change candidates: deepseek/deepseek-v4-flash,
+# qwen/qwen3.7-flash (verify against https://openrouter.ai/api/v1/models).
 [vars]
-DEFAULT_MODEL = "nousresearch/hermes-3-llama-3.1-405b:free"
+DEFAULT_MODEL = "z-ai/glm-5.3-flash"
 
-# Groq is now PRIMARY (OpenRouter's :free pool is consistently
-# upstream-rate-limited). The Worker routes by locale:
-# - zh-* requests → GROQ_CHINESE_MODEL (Qwen3 32B, Alibaba-trained,
-#   much weaker politeness-RLHF on Chinese than Llama, which means it
-#   actually vents instead of moralizing)
-# - everything else → GROQ_FALLBACK_MODEL (Llama 3.3 70B Versatile)
-GROQ_CHINESE_MODEL = "qwen/qwen3-32b"
-GROQ_FALLBACK_MODEL = "llama-3.3-70b-versatile"
+# Groq is PRIMARY (lower latency, isolated quota). Routed by locale. Verified
+# against the live Groq catalog 2026-08-31: the old primaries both died —
+# `qwen/qwen3-32b` was DEPRECATED and `llama-3.3-70b-versatile` became
+# Enterprise-only ("Contact Sales"), so a standard key 404s both. Moved to
+# qwen/qwen3.6-27b: current, non-Enterprise, defined dev limits (250K TPM /
+# 1K RPM), Chinese-strong, low enough politeness-RLHF to actually vent (the
+# GPT-OSS alternatives would neuter it; no Llama is on the dev plan). Same
+# model both locales for now. qwen3.8-27b is the newer Preview option (undefined
+# limits) once validated. Smoke-verified through the live Worker after deploy;
+# any Groq 404 still falls through to the OpenRouter fallback above.
+GROQ_CHINESE_MODEL = "qwen/qwen3.6-27b"
+GROQ_FALLBACK_MODEL = "qwen/qwen3.6-27b"
+
+# Track M edge breakers (v1.3). Both default OFF (behavior unchanged).
+# CLOUD_DISABLED="true" → 503 on every /v1/vent (global kill-switch).
+# ROAST_MODE_ENABLED gates the sendable mode:"roast" cloud path; stays
+# "false" until the Track M dam + zh-Hans sendable eval clear it.
+CLOUD_DISABLED = "false"
+ROAST_MODE_ENABLED = "false"
 
 # Per-device rate limit. The Worker counts each successful request against
 # (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves.

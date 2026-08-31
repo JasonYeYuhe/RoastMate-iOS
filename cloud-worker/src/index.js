@@ -72,6 +72,15 @@ export default {
       return json({ error: "not_found" }, 404);
     }
 
+    // Edge kill-switch (Track M dam, v1.3): an authoritative server-side breaker
+    // that stops ALL cloud generation instantly — independent of the client
+    // RemoteConfig flag, which is launch-fetched, cached, fail-open, and can't
+    // stop old builds / curl / spoofed requests. Set CLOUD_DISABLED="true" to
+    // trip it (returns 503 before any upstream call or KV read).
+    if ((env.CLOUD_DISABLED || "false").toLowerCase() === "true") {
+      return json({ error: "service_unavailable" }, 503);
+    }
+
     let body;
     try {
       body = await req.json();
@@ -84,6 +93,16 @@ export default {
       return json({ error: validation.error }, 400);
     }
     const { situation, styleName, styleId, intensity, locale, deviceId, modelOverride, mode, variantCount } = validation.value;
+
+    // mode:"roast" (sendable calm/sharp/savage cloud path) is committed but
+    // gated OFF at the edge until the Track M dam + the zh-Hans sendable eval
+    // clear it. The client keeps it DARK (cloud_sendable_enabled=false), but the
+    // client flag does NOT protect this public endpoint — a crafted request
+    // could otherwise reach uncapped sendable generation. Reject unless the
+    // server explicitly enables it. (vent / roommate are unaffected.)
+    if (mode === "roast" && (env.ROAST_MODE_ENABLED || "false").toLowerCase() !== "true") {
+      return json({ error: "mode_unavailable" }, 403);
+    }
 
     // Per-device daily rate limit.
     const limit = parseInt(env.DAILY_LIMIT_PER_DEVICE || "30", 10);
@@ -148,9 +167,16 @@ export default {
 
     const localePrefix = (locale || "").toLowerCase();
     const isChinese = localePrefix.startsWith("zh");
+    // v1.3 outage fix (2026-08-31): the old Groq primaries died — `qwen/qwen3-32b`
+    // was fully deprecated and `llama-3.3-70b-versatile` moved to Enterprise-only
+    // ("Contact Sales"), so a standard key 404s both. Verified against the live
+    // Groq catalog: qwen/qwen3.6-27b is the current non-Enterprise, vent-appropriate
+    // model (GPT-OSS would neuter profane vent; no Llama on the dev plan). Qwen also
+    // matches the qwen-tuned prompt. Same model both locales for now; deployed env
+    // vars win. Smoke-verified through the live Worker after deploy.
     const groqPrimaryModel = isChinese
-      ? (env.GROQ_CHINESE_MODEL || "qwen/qwen3-32b")
-      : (env.GROQ_FALLBACK_MODEL || "llama-3.3-70b-versatile");
+      ? (env.GROQ_CHINESE_MODEL || "qwen/qwen3.6-27b")
+      : (env.GROQ_FALLBACK_MODEL || "qwen/qwen3.6-27b");
 
     // Model-override branch: eval harness explicitly asked for a specific
     // OpenRouter model. Skip Groq, go straight to OpenRouter so the test
@@ -187,7 +213,14 @@ export default {
         apiKey: env.GROQ_API_KEY,
         model: groqPrimaryModel,
         systemPrompt,
-        userPrompt
+        userPrompt,
+        // Groq's Qwen3 is a REASONING model: by default it burns the whole
+        // token budget on a <think> trace, so the answer comes back empty
+        // (stripped) and we waste a slow, billed generation before falling
+        // through. Disable thinking for direct output. If the provider rejects
+        // this param it 400s fast → OpenRouter fallback (still better than the
+        // slow-empty waste). (v1.3 outage fix, 2026-08-31.)
+        extraBody: { reasoning_effort: "none" }
       });
       if (groqResult.ok) {
         text = groqResult.text;
@@ -213,13 +246,15 @@ export default {
     // returned persistent 429 the same day). Groq Qwen3-32B is the
     // primary because it's ≤3s and our quota is isolated.
     //
-    // We override the historical DEFAULT_MODEL env var here because
-    // it pointed at Hermes-3-405B :free which has been returning 429
-    // on every attempt this day — the chain was effectively Groq-only
-    // by accident. Hard-coding GLM Air ensures the fallback is a
-    // model we've actually verified works today.
+    // v1.3 outage fix (2026-08-31): the OpenRouter fallback was DEAD — the
+    // env DEFAULT_MODEL pointed at `hermes-3-llama-3.1-405b:free` and the
+    // hardcoded default at `glm-4.5-air:free`, and OpenRouter has RETIRED both
+    // those `:free` variants (404). With Groq's primaries also decommissioned,
+    // BOTH tiers 404 → the whole cloud path was 502-ing. Fallback is now a
+    // CURRENT, stable PAID model (z-ai/glm-5.3-flash: strong zh, cheap, own
+    // quota — not a shared :free pool). env.DEFAULT_MODEL still wins if set.
     if (!text && env.OPENROUTER_API_KEY) {
-      const orModel = env.DEFAULT_MODEL || "z-ai/glm-4.5-air:free";
+      const orModel = env.DEFAULT_MODEL || "z-ai/glm-5.3-flash";
       const orResult = await callOpenAICompatible({
         endpoint: "https://openrouter.ai/api/v1/chat/completions",
         apiKey: env.OPENROUTER_API_KEY,
@@ -230,6 +265,12 @@ export default {
           "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
           "X-Title": env.OPENROUTER_TITLE || "RoastMate"
         }
+        // NOTE (v1.3): OpenRouter's GLM rejects `reasoning:{enabled:false}` with
+        // an error, which nuked the fallback (→ 502 whenever Groq missed). So the
+        // OR fallback is left as-is; it can occasionally leak CoT on the complex
+        // roommate prompt, but Groq (reasoning_effort:"none") now serves roommate
+        // cleanly so OR is rarely hit there. Proper per-model OR reasoning
+        // suppression is a Track 0.4 follow-up (needs per-model verification).
       });
       if (orResult.ok) {
         text = orResult.text;
@@ -296,7 +337,7 @@ function ddLog(env, ctx, fields) {
 /// accept the same request shape, so we share one helper. Returns
 /// `{ ok: true, text }` on success or `{ ok: false, status, detail }`
 /// on any failure (HTTP non-2xx, network error, or empty completion).
-async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders }) {
+async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders, extraBody }) {
   let res;
   try {
     res = await fetch(endpoint, {
@@ -313,7 +354,8 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
           { role: "user", content: userPrompt }
         ],
         temperature: 0.95,
-        max_tokens: 1200
+        max_tokens: 1200,
+        ...(extraBody || {})
       })
     });
   } catch (e) {
