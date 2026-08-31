@@ -46,17 +46,21 @@ ROAST_MODE_ENABLED = "false"
 # Worker to accept sandbox transactions for TestFlight testing.
 ALLOW_SANDBOX_RECEIPTS = "false"
 
-# --- KNOWN, ACCEPTED LIMITATIONS (adversarial review 2026-08-31) ---
-# 1. Quota counters use KV get-then-put (non-atomic): a burst of N parallel
-#    requests can over-grant (all read the same count). Bounded by concurrency
-#    + the edge kill-switch (CLOUD_DISABLED) as the hard backstop. The proper fix
-#    is an atomic substrate (Durable Object) — deferred with the consumable
-#    ledger (decision D2). Do NOT rely on these caps as a hard security boundary.
-# 2. Pro verification is OFFLINE (JWS signature only): a refund AFTER the JWS was
-#    minted is NOT detected until the sub's own expiresDate (yearly = up to a
-#    year of free Pro). REQUIRED pre-ship hardening: an App Store Server API
-#    subscription-status check at /v1/auth (the existing ASC key DMMFP6XTXX is
-#    already authorized for it — verified 2026-08-31).
+# Refund/revocation hardening (src/appstore_status.js). When "true", /v1/auth also
+# checks the App Store Server API for the sub's CURRENT status (rejects a refunded
+# / revoked sub the offline JWS can't see). FAIL-OPEN: if it can't run, the JWS
+# decision stands. To ENABLE: (a) decide the key scope — a DEDICATED In-App-Purchase
+# key (least privilege) is preferred over the broad Admin key DMMFP6XTXX on edge
+# infra; (b) `wrangler secret put ASC_SIGNING_KEY` (the .p8 PEM); (c) set
+# ASC_KEY_ID + ASC_ISSUER_ID (identifiers, not secret); (d) flip this to "true".
+ASS_API_ENABLED = "false"
+
+# --- KNOWN, ACCEPTED LIMITATION (adversarial review 2026-08-31) ---
+# Quota counters use KV get-then-put (non-atomic): a burst of N parallel requests
+# can over-grant (all read the same count). Bounded by concurrency + the edge
+# kill-switch (CLOUD_DISABLED) as the hard backstop. The proper fix is an atomic
+# substrate (Durable Object) — deferred with the consumable ledger (decision D2).
+# Do NOT rely on these caps as a hard security boundary.
 
 # Per-device rate limit (LEGACY / free lane — no session token). Counted against
 # (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves. M.2 will

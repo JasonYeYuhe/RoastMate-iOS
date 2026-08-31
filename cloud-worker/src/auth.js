@@ -11,6 +11,7 @@
 // entitlement/token logic unit-testable without a real Apple JWS.
 
 import { mintSessionToken, hmacHex } from "./session.js";
+import { checkSubscriptionActive } from "./appstore_status.js";
 
 // Pro product IDs — must stay in sync with StoreService.swift
 // (monthlyProductId / yearlyProductId).
@@ -44,7 +45,7 @@ function authJson(payload, status) {
  * @param {{verifyAndDecodeTransaction:(jws:string)=>Promise<object>}} verifier
  * @param {number} nowMs  - injectable clock for tests.
  */
-export async function handleAuth(request, env, _ctx, verifier, nowMs = Date.now()) {
+export async function handleAuth(request, env, _ctx, verifier, nowMs = Date.now(), statusChecker = checkSubscriptionActive) {
   let body;
   try { body = await request.json(); }
   catch { return authJson({ error: "invalid_json" }, 400); }
@@ -88,6 +89,18 @@ export async function handleAuth(request, env, _ctx, verifier, nowMs = Date.now(
   if (!secret) {
     // Never mint an unsigned/forgeable token — fail closed on misconfig.
     return authJson({ error: "server_misconfigured" }, 500);
+  }
+
+  // Refund/revocation hardening (gated + FAIL-OPEN): when enabled, confirm the
+  // sub is CURRENTLY active via the App Store Server API — closes the offline-JWS
+  // gap where a refunded sub keeps Pro until its expiresDate. An explicit
+  // revoked/expired (false) denies; null (Apple unreachable / not configured)
+  // keeps the JWS-verified decision so a legit Pro user is never blocked.
+  if ((env.ASS_API_ENABLED || "false").toLowerCase() === "true") {
+    const active = await statusChecker(originalTransactionId, env, _ctx);
+    if (active === false) {
+      return authJson({ error: "subscription_inactive" }, 403);
+    }
   }
 
   // Key Pro quota on a HASH of the Apple account identity (originalTransactionId),

@@ -122,6 +122,32 @@ test("missing SESSION_SIGNING_KEY → 500 (never mint an unsigned token)", async
   assert.equal((await bodyOf(res)).error, "server_misconfigured");
 });
 
+test("ASS-API enabled + REVOKED (refund) → 403 subscription_inactive", async () => {
+  const env = { ...ENV, ASS_API_ENABLED: "true" };
+  const res = await handleAuth(authReq({ jws: JWS }), env, null, okVerifier(), NOW, async () => false);
+  assert.equal(res.status, 403);
+  assert.equal((await bodyOf(res)).error, "subscription_inactive");
+});
+
+test("ASS-API enabled + active → 200", async () => {
+  const env = { ...ENV, ASS_API_ENABLED: "true" };
+  const res = await handleAuth(authReq({ jws: JWS }), env, null, okVerifier(), NOW, async () => true);
+  assert.equal(res.status, 200);
+});
+
+test("ASS-API enabled but Apple unreachable (null) → 200 (fail-open, never block a Pro user)", async () => {
+  const env = { ...ENV, ASS_API_ENABLED: "true" };
+  const res = await handleAuth(authReq({ jws: JWS }), env, null, okVerifier(), NOW, async () => null);
+  assert.equal(res.status, 200);
+});
+
+test("ASS-API disabled → status never consulted (200)", async () => {
+  let called = false;
+  const res = await handleAuth(authReq({ jws: JWS }), ENV, null, okVerifier(), NOW, async () => { called = true; return false; });
+  assert.equal(res.status, 200);
+  assert.equal(called, false, "the status checker must not run when ASS_API_ENABLED is off");
+});
+
 test("a yearly Pro sub is also accepted", async () => {
   const tx = proTx({ productId: "yyh.roastmate.app.pro.yearly" });
   const res = await handleAuth(authReq({ jws: JWS }), ENV, null, okVerifier(tx), NOW);
