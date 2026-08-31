@@ -170,6 +170,7 @@
 		55114B9A8F79E60731F4269F /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
 		558A54C297993516247A3D1C /* EchoesFeralConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A81179330CA48CC854629C /* EchoesFeralConsentGate.swift */; };
 		55D479DE2BD7CB282DF464C4 /* RoastGeneratorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */; };
+		5643872E339E23A6FED01CDC /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		566F3AFAE0BF796DC27670A1 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
 		56CFA12ECCB16C04BF192264 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
 		56E3D1F6A19747911A5E24BC /* EchoesPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D3F3EC78E1B847C8ED2AD /* EchoesPromptBuilder.swift */; };
@@ -296,9 +297,11 @@
 		937D30AE0D38DD43B7656396 /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
 		9393227E7656F563044AD9C0 /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
 		93ACC0BDE61190EA0A7B521E /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
+		93D115A743B97078CF4CA3A8 /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		944F5C1BCC7D9DD10DDA6C45 /* Scenarios.json in Resources */ = {isa = PBXBuildFile; fileRef = 79FA1A22CDF8D4E34A99B7C7 /* Scenarios.json */; };
 		94A6F8F5FD9C9ED599FF8F06 /* EchoesTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EDC37F4F6EBE24E675E464 /* EchoesTypes.swift */; };
 		94D8FC3A06656FE5EE2C4CC3 /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
+		94E254894416B7E0B08549CF /* CloudAuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357E1D3E00077CECC96D19F1 /* CloudAuthTests.swift */; };
 		94E38E41351678483333ED73 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE5229B8E9B0B463C31B073 /* ArgumentSimulatorView.swift */; };
 		9659805CE4D386865F2C272E /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
@@ -334,7 +337,9 @@
 		A75CE5E1A1EE82A462BD9B27 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		A7D0EA62E689636A866C0605 /* IntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B4101DE1A025BBCFB379 /* IntensityTests.swift */; };
 		A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
+		A860D9A2CDF9EF01B380984A /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
+		A9372D7913E98D2592C4AEED /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		A94C5AC2373DF289C78225E5 /* EchoesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2F1EA4C85898A03E4AEB7 /* EchoesView.swift */; };
 		AAF4CA9DC81346C933FE0B15 /* VoiceVentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C8F2A6E0AAA9BC254601BC /* VoiceVentTests.swift */; };
 		AB2205DA20B7754DDC378F24 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
@@ -400,6 +405,7 @@
 		CA3CDA11099E1DE863DBE52B /* OutputShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD2244A3C37BA744460E949 /* OutputShareButton.swift */; };
 		CAC0E31CCD2EB0ED4EE76235 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		CACFB3F2643DBF8DA4D6B8EA /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
+		CB11C358C29EEC1B98324D07 /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		CB9EDE709DEC67E49D65E07E /* LaunchRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3B29BB3A69E439F54708D5 /* LaunchRouterTests.swift */; };
 		CBB8FEB79BFCD2877D30FA7B /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		CBEEF6B2EB57D9DC67F0910F /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
@@ -492,6 +498,7 @@
 		FE5E92C02A43A989F4D9A4C8 /* CreditLedgerEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 821758A737FDC0FC2EF0344F /* CreditLedgerEntry.swift */; };
 		FE611C568490F86ECC0F3352 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77042C1003F6305E9448D814 /* KeychainStore.swift */; };
 		FF358B9FA48E40DF12A3E154 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
+		FF47B01D0FA3B4AA99EFF422 /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -576,6 +583,7 @@
 		31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudConsentGate.swift; sourceTree = "<group>"; };
 		3361A33F1F5E649C0F3F0B85 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		35250F958AD0D7CB3559F1A7 /* RemoteConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigTests.swift; sourceTree = "<group>"; };
+		357E1D3E00077CECC96D19F1 /* CloudAuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAuthTests.swift; sourceTree = "<group>"; };
 		3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySessionDetailView.swift; sourceTree = "<group>"; };
 		38225DA3C0C31F64135B7CCA /* EchoesFeralConsentGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesFeralConsentGateTests.swift; sourceTree = "<group>"; };
 		3A75DD3D3294393867B93031 /* WatchQuickPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQuickPromptView.swift; sourceTree = "<group>"; };
@@ -586,6 +594,7 @@
 		41186941221FDE0CCE720C6E /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
 		4236421FE8592A838FACBD94 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		434EC05E005AD4A3A40ED171 /* StylePresets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = StylePresets.json; sourceTree = "<group>"; };
+		45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudAuthService.swift; sourceTree = "<group>"; };
 		4A3B29BB3A69E439F54708D5 /* LaunchRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRouterTests.swift; sourceTree = "<group>"; };
 		4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCatalog.swift; sourceTree = "<group>"; };
 		4C8869CA8D12F9544EFD87DE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -847,6 +856,7 @@
 		5C4A3CFD63E4A053DF196425 /* RoastMateTests */ = {
 			isa = PBXGroup;
 			children = (
+				357E1D3E00077CECC96D19F1 /* CloudAuthTests.swift */,
 				9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */,
 				09E1152E436517DE7D09884D /* CloudVentEngineTests.swift */,
 				1839C5000FA21206EB9DC1B0 /* CreditWalletLedgerTests.swift */,
@@ -929,6 +939,7 @@
 				708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */,
 				C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */,
 				05F375B44B7ED51C03E8B6DA /* AuthService.swift */,
+				45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */,
 				8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */,
 				31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */,
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
@@ -1451,6 +1462,8 @@
 				62F534881B1C940003515A70 /* AppLocalization.swift in Sources */,
 				96870DD806F23F8A173917B9 /* AppleFMBackend.swift in Sources */,
 				287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */,
+				A860D9A2CDF9EF01B380984A /* CloudAuthService.swift in Sources */,
+				94E254894416B7E0B08549CF /* CloudAuthTests.swift in Sources */,
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
 				9DE1FDA11303862B4FDC38A2 /* CloudConsentGate.swift in Sources */,
 				31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */,
@@ -1547,6 +1560,7 @@
 				24D9C3B0147763A3B6C4AD98 /* AppLocalization.swift in Sources */,
 				3059FC45068DD7FA7E9CE898 /* AppleFMBackend.swift in Sources */,
 				BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */,
+				FF47B01D0FA3B4AA99EFF422 /* CloudAuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
 				58999A2E7980947164A96920 /* CloudConsentGate.swift in Sources */,
 				00FD06B70E90D21329E949C5 /* CloudVentClient.swift in Sources */,
@@ -1613,6 +1627,7 @@
 				FF358B9FA48E40DF12A3E154 /* AppLocalization.swift in Sources */,
 				D0BEE6D8D9990EF93600A11D /* AppleFMBackend.swift in Sources */,
 				127F44F5390D81E12A410DA9 /* AuthService.swift in Sources */,
+				93D115A743B97078CF4CA3A8 /* CloudAuthService.swift in Sources */,
 				A5D71BF4F9A5B628D3CB30D3 /* CloudConfig.swift in Sources */,
 				F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */,
 				A69BCCA022A00C12CB41E52D /* CloudVentClient.swift in Sources */,
@@ -1677,6 +1692,7 @@
 				501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */,
 				90009DDC7C0C9903291E0F82 /* AppleFMBackend.swift in Sources */,
 				CE8C58B2BFAAB7E4687CC36B /* AuthService.swift in Sources */,
+				CB11C358C29EEC1B98324D07 /* CloudAuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
 				62130181AC40B13F67A2D2C5 /* CloudConsentGate.swift in Sources */,
 				708349AE97476576726DD82C /* CloudVentClient.swift in Sources */,
@@ -1745,6 +1761,7 @@
 				9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */,
 				064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */,
 				8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */,
+				5643872E339E23A6FED01CDC /* CloudAuthService.swift in Sources */,
 				85AA70766AD83FA3F082F502 /* CloudConfig.swift in Sources */,
 				A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */,
 				DB9EF4657F48B0B06E9A9B47 /* CloudConsentSheet.swift in Sources */,
@@ -1841,6 +1858,7 @@
 				6D1291FA64EA414BB5DE4196 /* ArgumentSimulatorView.swift in Sources */,
 				7A491CF550733870AFC7C7EC /* ArgumentSimulatorViewModel.swift in Sources */,
 				8D63D3DCB64D612CAB8C6129 /* AuthService.swift in Sources */,
+				A9372D7913E98D2592C4AEED /* CloudAuthService.swift in Sources */,
 				BD84D453D82BEB9F5EDE223D /* CloudConfig.swift in Sources */,
 				595B0FB65B8BF1A963DCFB7B /* CloudConsentGate.swift in Sources */,
 				48BF363AAE71A9FD8F260002 /* CloudConsentSheet.swift in Sources */,

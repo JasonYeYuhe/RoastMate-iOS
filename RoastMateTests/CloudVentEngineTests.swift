@@ -132,14 +132,16 @@ final class CloudVentEngineTests: XCTestCase {
 /// network. Lets us verify the engine's routing decisions deterministically.
 final class RecordingCloudVentService: CloudVentService, @unchecked Sendable {
     private(set) var calls: [CloudVentRequest] = []
+    private(set) var tokens: [String?] = []
     private let stubbedText: String
 
     init(returning text: String) {
         self.stubbedText = text
     }
 
-    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse {
+    func generate(_ req: CloudVentRequest, authToken: String?) async throws -> CloudVentResponse {
         calls.append(req)
+        tokens.append(authToken)
         return CloudVentResponse(text: stubbedText, model: "fake-model", remaining: 99)
     }
 }

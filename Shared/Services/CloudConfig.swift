@@ -18,6 +18,12 @@ enum CloudConfig {
     /// Resolved URL the client posts to.
     static let ventEndpoint: URL = URL(string: "\(ventEndpointString)/v1/vent")!
 
+    /// Track M M.1 (v1.3): the Pro-auth exchange. The client POSTs its active
+    /// Pro subscription's Apple-signed JWS here; the Worker verifies it and
+    /// returns a short-lived session token to send on subsequent vent requests
+    /// (the authenticated "Pro lane"). Same host as the vent endpoint.
+    static let authEndpoint: URL = URL(string: "\(ventEndpointString)/v1/auth")!
+
     /// True once the developer has replaced the placeholder host with a
     /// real Worker URL. The `RoastEngine` falls back to fully-local
     /// Foundation Models when this is false, regardless of the user's

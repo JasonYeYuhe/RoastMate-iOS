@@ -12,6 +12,9 @@ enum CloudVentError: Error, LocalizedError {
     case decode
     case empty
     case transport(Error)
+    /// v2 (Track M): the /v1/auth session token was rejected (expired/invalid).
+    /// The caller drops the cached token and retries on the free/legacy path.
+    case tokenInvalid
 
     var errorDescription: String? {
         switch self {
@@ -21,7 +24,7 @@ enum CloudVentError: Error, LocalizedError {
             return String(localized: "cloud.error.disabled")
         case .rateLimited:
             return String(localized: "cloud.error.rate_limited")
-        case .http, .decode, .empty, .transport:
+        case .http, .decode, .empty, .transport, .tokenInvalid:
             return String(localized: "cloud.error.unavailable")
         }
     }
@@ -29,7 +32,17 @@ enum CloudVentError: Error, LocalizedError {
 
 /// Protocol so the engine can swap in a fake in unit tests.
 protocol CloudVentService: Sendable {
-    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse
+    /// `authToken` (Track M v2): a /v1/auth session token that upgrades the
+    /// request to the authenticated Pro lane. Nil → the tokenless free/legacy
+    /// path (build-17 behavior).
+    func generate(_ req: CloudVentRequest, authToken: String?) async throws -> CloudVentResponse
+}
+
+extension CloudVentService {
+    /// Back-compat convenience for the tokenless (free/legacy) path.
+    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse {
+        try await generate(req, authToken: nil)
+    }
 }
 
 struct CloudVentRequest: Encodable, Sendable {
@@ -88,7 +101,7 @@ final class CloudVentClient: CloudVentService, @unchecked Sendable {
         self.endpoint = endpoint
     }
 
-    func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse {
+    func generate(_ req: CloudVentRequest, authToken: String?) async throws -> CloudVentResponse {
         guard CloudConfig.isConfigured else {
             throw CloudVentError.notConfigured
         }
@@ -96,6 +109,9 @@ final class CloudVentClient: CloudVentService, @unchecked Sendable {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("RoastMate-iOS", forHTTPHeaderField: "User-Agent")
+        if let authToken, !authToken.isEmpty {
+            request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        }
         do {
             request.httpBody = try JSONEncoder().encode(req)
         } catch {
@@ -113,6 +129,11 @@ final class CloudVentClient: CloudVentService, @unchecked Sendable {
 
         guard let http = response as? HTTPURLResponse else {
             throw CloudVentError.http(status: -1, body: nil)
+        }
+        if http.statusCode == 401 {
+            // v2 lane: the session token was rejected. Signal the caller to drop
+            // it and retry on the free/legacy path — never surfaced to the user.
+            throw CloudVentError.tokenInvalid
         }
         if http.statusCode == 429 {
             let parsed = try? JSONDecoder().decode([String: AnyCodable].self, from: data)

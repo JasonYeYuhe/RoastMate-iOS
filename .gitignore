@@ -46,8 +46,9 @@ cloud-worker/dist/
 # Catch-all: wrangler local cache wherever it lands (e.g. repo root)
 .wrangler/
 
-# iCloud-rename dups (do not track copies)
-RoastMate 2.xcodeproj/
+# iCloud/Finder-rename dups (do not track copies) — these also break xcodebuild
+# (multiple .xcodeproj in the dir), so keep them ignored + delete when they appear
+RoastMate [0-9]*.xcodeproj/
 metadata/screenshots/iphone screenshots/
 metadata/screenshots/mac screenshots /
 

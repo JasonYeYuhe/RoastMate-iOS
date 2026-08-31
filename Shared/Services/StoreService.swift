@@ -182,6 +182,23 @@ final class StoreService {
         #endif
     }
 
+    /// Track M M.1 (v1.3): the active Pro subscription's Apple-signed JWS
+    /// (`VerificationResult.jwsRepresentation`), which the Worker verifies at
+    /// /v1/auth to mint a session token. Returns nil when there is no verified
+    /// active Pro entitlement — including DEBUG builds, which force `isPro`
+    /// without a real StoreKit transaction, so a DEBUG build can never
+    /// authenticate to the real Worker (matching the Worker's DEBUG stance).
+    func currentProTransactionJWS() async -> String? {
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result else { continue }
+            if transaction.productID == Self.monthlyProductId
+                || transaction.productID == Self.yearlyProductId {
+                return result.jwsRepresentation
+            }
+        }
+        return nil
+    }
+
     /// β2: optimistically grant Pro at launch from a CloudKit-synced
     /// `UserSettings.proLastVerifiedAt`. Stale grants outside the grace
     /// window are ignored; `refreshSubscriptionStatus()` then runs in
