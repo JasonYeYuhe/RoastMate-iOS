@@ -25,6 +25,7 @@
 // global free quota is exhausted (NOT user-specific); 429 = upstream
 // rate-limit. Account top-up does not unlock the :free pool.
 import { resolveVentLane } from "./lane.js";
+import { resolveIpAttemptCap } from "./ipguard.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
@@ -145,33 +146,29 @@ export default {
       ddLog(env, ctx, { outcome: "token_invalid", status: lane.status, intensity, locale, latency_ms: Date.now() - t0 });
       return json({ error: lane.error, reason: lane.reason }, lane.status);
     }
-    const { rlKey, limit, day } = lane;
+    const { rlKey, limit } = lane;
     const used = parseInt((await env.RATE_LIMITS.get(rlKey)) || "0", 10);
     if (used >= limit) {
       ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, lane: lane.lane, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit, remaining: 0 }, 429);
     }
 
-    // Web-demo abuse gate: requests from the public landing page (browser
-    // Origin) get an ADDITIONAL, stricter PER-IP daily cap. The per-device
-    // limit above is weak for the web demo (deviceId is a fresh random UUID
-    // each browser session). Native-app requests carry no browser Origin and
-    // are unaffected by this gate.
-    const webOrigin = req.headers.get("Origin") || "";
-    if (webOrigin.includes("jasonyeyuhe.github.io")) {
-      const ipLimit = parseInt(env.WEB_DAILY_LIMIT_PER_IP || "8", 10);
-      const ip = req.headers.get("CF-Connecting-IP") || "unknown";
-      const ipKey = `webip:${ip}:${day}`;
-      const ipUsed = parseInt((await env.RATE_LIMITS.get(ipKey)) || "0", 10);
-      if (ipUsed >= ipLimit) {
-        ddLog(env, ctx, { outcome: "web_ip_rate_limited", status: 429, intensity, locale, latency_ms: Date.now() - t0 });
-        return json({ error: "rate_limit_exceeded", limit: ipLimit, remaining: 0, web: true }, 429);
-      }
-      // Charge up-front (before generation) so a flood of failing calls still
-      // counts against the cap — abuse-bounding matters more for a public demo
-      // than the rare lost try on an upstream error.
-      await env.RATE_LIMITS.put(ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 });
+    // Track M M.2: per-IP attempt cap (PRE-charged, non-refundable) on EVERY
+    // request — a coarse abuse backstop over the rotatable deviceId, and a
+    // retry-flood bound during a provider outage (each attempt counts, success
+    // or fail). Web demo = strict cap; native app = generous (CGNAT-safe). The
+    // IP is hashed, never stored raw.
+    const ipGuard = await resolveIpAttemptCap({
+      origin: req.headers.get("Origin"),
+      ip: req.headers.get("CF-Connecting-IP"),
+      env,
+    });
+    const ipUsed = parseInt((await env.RATE_LIMITS.get(ipGuard.ipKey)) || "0", 10);
+    if (ipUsed >= ipGuard.ipLimit) {
+      ddLog(env, ctx, { outcome: "ip_rate_limited", status: 429, intensity, locale, lane: lane.lane, web: ipGuard.isWeb, latency_ms: Date.now() - t0 });
+      return json({ error: "rate_limit_exceeded", limit: ipGuard.ipLimit, remaining: 0, web: ipGuard.isWeb }, 429);
     }
+    await env.RATE_LIMITS.put(ipGuard.ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 });
 
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional

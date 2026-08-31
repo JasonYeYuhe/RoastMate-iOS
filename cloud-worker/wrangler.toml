@@ -50,10 +50,16 @@ DAILY_LIMIT_PER_DEVICE = "30"
 # shares one bucket across the user's devices.
 PRO_DAILY_LIMIT = "200"
 
-# Stricter PER-IP daily cap applied ONLY to the public web demo (requests
-# with an Origin from jasonyeyuhe.github.io). The native app carries no
-# browser Origin and is unaffected. Bounds token cost if the demo is scraped.
+# PER-IP daily ATTEMPT cap (Track M M.2): pre-charged (non-refundable) on every
+# request as a coarse abuse backstop over the rotatable deviceId + a retry-flood
+# bound. Two tiers by request Origin:
+# - WEB demo (jasonyeyuhe.github.io): strict — abuse-prone, browsers rarely share
+#   an IP the way mobile does.
+# - Native APP: GENEROUS — carrier-grade NAT (CGNAT) puts many legit mobile users
+#   behind one IP, so this must not block them; it only bounds a single home-IP
+#   abuser (~$1/day at 200). Tune up if legit CGNAT users hit `ip_rate_limited`.
 WEB_DAILY_LIMIT_PER_IP = "8"
+APP_DAILY_LIMIT_PER_IP = "200"
 
 # OpenRouter referrer + product name so OpenRouter's dashboard shows
 # attribution. Not secret; safe in vars.
