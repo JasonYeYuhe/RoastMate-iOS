@@ -68,6 +68,25 @@ export default {
       return json({ error: "method_not_allowed" }, 405);
     }
     const url = new URL(req.url);
+
+    // Track M M.1 (v1.3): exchange an Apple-signed Pro transaction JWS for a
+    // short-lived session token. Dynamically imported so the Apple verification
+    // library (Buffer / node:crypto via nodejs_compat) is only evaluated on the
+    // first /v1/auth call — the hot /v1/vent path never touches it. Available
+    // even under CLOUD_DISABLED (it does no LLM work; a token is inert if vent
+    // is off). Requires the SESSION_SIGNING_KEY secret; without it, 500s.
+    if (url.pathname === "/v1/auth") {
+      try {
+        const [{ handleAuth }, { buildVerifier }] = await Promise.all([
+          import("./auth.js"),
+          import("./verifier.js"),
+        ]);
+        return handleAuth(req, env, ctx, buildVerifier(env));
+      } catch (_e) {
+        return json({ error: "server_error" }, 500);
+      }
+    }
+
     if (url.pathname !== "/v1/vent") {
       return json({ error: "not_found" }, 404);
     }

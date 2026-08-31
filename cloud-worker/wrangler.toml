@@ -1,6 +1,10 @@
 name = "roastmate-vent"
 main = "src/index.js"
 compatibility_date = "2025-01-01"
+# nodejs_compat: needed by the /v1/auth Apple-JWS verifier (Buffer + node:crypto
+# via @apple/app-store-server-library). Additive — the existing vent/roommate
+# paths use only Web APIs and are unaffected. (Track M M.1, v1.3.)
+compatibility_flags = ["nodejs_compat"]
 
 # OpenRouter FALLBACK model (Groq is primary; see below). Must be a
 # CURRENT, stable model with its OWN quota — NOT a `:free` variant (the
