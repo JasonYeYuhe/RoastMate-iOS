@@ -233,7 +233,8 @@ struct GeneratedRoastCard: View {
         .sheet(isPresented: $showShareCard) {
             ShareCardComposer(
                 sentText: result.text,
-                styleName: style?.displayName
+                styleName: style?.displayName,
+                kind: result.kind
             )
         }
     }

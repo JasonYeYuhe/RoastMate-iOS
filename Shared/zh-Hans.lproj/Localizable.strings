@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "「帮你骂」把你的不爽变成俏皮、安全、可以发出去的话。多数模式跑在 Apple 本地 AI 上;「发泄」和「痛骂」可以走云端代理获得更猛的输出 — 但仅在你明确同意后才会,在此之前一律留在本地。";
 
 "onboarding.privacy.title" = "默认私密。";
-"onboarding.privacy.body" = "「体面 / 锐利 / 狠」三档强度和「改成能发的」改写,都用 Apple 本地 Foundation Models — 内容不出设备。「发泄」和「痛骂」同样默认留在本地,只有在你明确授权后,才会通过我们自有的云端代理调第三方 LLM 以获得更强输出。可随时在「设置 → AI 与隐私」里查看或撤销该授权。";
+"onboarding.privacy.body" = "「体面 / 锐利 / 狠」三档强度和「改成能发的」改写,都用 Apple 本地 Foundation Models 运行。「发泄」和「痛骂」在支持该模型的设备上同样留在本地;否则(以及为了更强的输出)会通过我们自有的云端代理调第三方 LLM —— 但仅在你明确授权后。无论哪种方式,我们都不会保留副本。你的历史记录通过你自己的 iCloud 账户同步,我们无法读取。可随时在「设置 → AI 与隐私」里查看或撤销该授权。";
 
 "onboarding.safety.title" = "为自我表达,而非攻击他人。";
 "onboarding.safety.body" = "「帮你骂」帮你说出自己的感受,不用于针对具体的人。我们会自动去掉姓名、威胁和侮辱性词汇。";
@@ -133,7 +133,7 @@
 "cloud.consent.footnote" = "「体面 / 锐利 / 狠」始终本地运行,从不使用云端。";
 
 "settings.about_ai.title" = "关于 AI";
-"settings.about_ai.body" = "「体面 / 锐利 / 狠 / 改成能发的」用 Apple 本地 Foundation Models 框架运行 — 这些路径上你的内容永远不会离开设备。「发泄 / 痛骂」可以通过我们自有的云端代理转发给第三方 LLM 提供商以获得更强的发泄效果,但仅在你首次明确同意后(由你选择,且随时可在此更改)。";
+"settings.about_ai.body" = "「体面 / 锐利 / 狠 / 改成能发的」用 Apple 本地 Foundation Models 框架运行 —— 这些内容我们永远看不到。「发泄 / 痛骂」可以通过我们自有的云端代理转发给第三方 LLM 提供商以获得更强的发泄效果,但仅在你首次明确同意后(由你选择,且随时可在此更改)。另外,你保存的历史记录会通过你自己的私人 iCloud 账户在各设备间同步 —— 那是 Apple 的存储,不是我们的,我们无法读取。";
 
 "settings.subscription.upgrade" = "升级到 Pro";
 "settings.subscription.manage" = "管理订阅";
@@ -473,7 +473,7 @@
 "crisis.dismiss" = "返回修改我写的内容";
 
 /* === Trust / About AI (Pillar D) === */
-"settings.about_ai.ondevice_label" = "默认在设备本地运行——Apple 基础模型；你的文字留在手机上";
+"settings.about_ai.ondevice_label" = "默认在设备本地运行——Apple 基础模型；这些内容我们看不到";
 "settings.about_ai.cloud_label" = "更强的草稿可选用开发者自有云代理——可随时关闭";
 "settings.about_ai.no_bigai_label" = "不使用 OpenAI / Anthropic / Google";
 "trust.not_companion.title" = "是工具，不是陪伴";

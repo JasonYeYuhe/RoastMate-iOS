@@ -1,9 +1,5 @@
-First release.
+Your private drafts are now genuinely private.
 
-• 20+ on-device writing styles
-• 5 generation modes: Roast, Reply, Translate, Argument, Social
-• Apple Watch quick roast with iPhone handoff
-• macOS menu bar quick access
-• iOS Share Extension
-• Siri & Shortcuts via App Intents
-• Available in English, 简体中文, 繁體中文, 日本語
+• Removed every way to accidentally share a Vent or Feral draft: no share sheet, no share-to-image, no text selection on a private draft. Copy is still there when you want it.
+• The shareable image card now only ever shows your polished, sendable reply — and its text can no longer be edited before sharing.
+• Corrected our Privacy Policy and in-app privacy text to describe iCloud sync accurately: your history syncs through your own private iCloud account, which we cannot read.

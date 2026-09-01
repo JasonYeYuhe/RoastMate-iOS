@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "RoastMateは、あなたのモヤモヤを上品で安全な言葉に変えます。多くのモードはAppleのオンデバイスAIで動作します。「吐き出し」と「罵倒」のプライベート下書きは、より強い表現のため当方のクラウドプロキシを利用できますが、あなたが明示的に許可した場合のみです — それまでは端末内で処理されます。";
 
 "onboarding.privacy.title" = "プライバシー優先。";
-"onboarding.privacy.body" = "「冷静 / 鋭利 / 容赦なし」と「送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作し、内容は端末から出ません。「吐き出し」と「罵倒」も、あなたが明示的に許可しない限り端末内で処理されます。許可した場合のみ、より強い出力のため当方のクラウドプロキシ経由で第三者LLMに送信されます。この許可は「設定 → AIとプライバシー」でいつでも確認・取り消しできます。";
+"onboarding.privacy.body" = "「冷静 / 鋭利 / 容赦なし」と「送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作します。「吐き出し」と「罵倒」も、そのモデルが使える端末では端末内で処理されます。それ以外の場合、およびより強い出力のためには、当方のクラウドプロキシ経由で第三者LLMに送信されますが、あなたが明示的に許可した場合のみです。いずれの場合も当方が控えを保持することはありません。履歴はあなた自身のiCloudアカウントで同期され、当方は読み取れません。この許可は「設定 → AIとプライバシー」でいつでも確認・取り消しできます。";
 
 "onboarding.safety.title" = "嫌がらせのためではなく、自己表現のために。";
 "onboarding.safety.body" = "RoastMateは自分の気持ちを言葉にするためのツールです。個人を標的にする目的ではありません。固有名、脅迫、差別的表現は自動的に除去されます。";
@@ -133,7 +133,7 @@
 "cloud.consent.footnote" = "冷静 / 鋭利 / 容赦なしは常にオンデバイスで動作し、クラウドは使いません。";
 
 "settings.about_ai.title" = "AIについて";
-"settings.about_ai.body" = "「冷静 / 鋭利 / 容赦なし / 送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作し、これらの経路では内容が端末から出ることはありません。「吐き出し / 罵倒」は、あなたが初回に明示的に許可した場合に限り、当方のクラウドプロキシ経由で第三者LLMに転送され、より強いカタルシス出力を生成します(選ぶのはあなたで、ここでいつでも変更できます)。";
+"settings.about_ai.body" = "「冷静 / 鋭利 / 容赦なし / 送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作し、その内容を当方が見ることはありません。「吐き出し / 罵倒」は、あなたが初回に明示的に許可した場合に限り、当方のクラウドプロキシ経由で第三者LLMに転送され、より強いカタルシス出力を生成します(選ぶのはあなたで、ここでいつでも変更できます)。なお、保存された履歴はあなた自身のプライベートなiCloudアカウントで各端末に同期されます。これはAppleのストレージであり当方のものではなく、当方は読み取れません。";
 
 "settings.subscription.upgrade" = "Proにアップグレード";
 "settings.subscription.manage" = "サブスクリプションを管理";
@@ -473,7 +473,7 @@
 "crisis.dismiss" = "戻って内容を編集する";
 
 /* === Trust / About AI (Pillar D) === */
-"settings.about_ai.ondevice_label" = "標準で端末内処理——Apple Foundation Models。文章は端末内にとどまります";
+"settings.about_ai.ondevice_label" = "標準で端末内処理——Apple Foundation Models。その内容を当方が見ることはありません";
 "settings.about_ai.cloud_label" = "より強い下書きは任意の開発者運営クラウドプロキシを利用——いつでもオフにできます";
 "settings.about_ai.no_bigai_label" = "OpenAI / Anthropic / Google は不使用";
 "trust.not_companion.title" = "相棒ではなく、道具";

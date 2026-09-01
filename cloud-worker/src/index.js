@@ -394,7 +394,7 @@ function ddLog(env, ctx, fields) {
   const payload = [{
     ddsource: "cloudflare-worker",
     service: "roastmate-vent",
-    ddtags: "service:roastmate-vent,worker:vent",
+    ddtags: `service:roastmate-vent,worker:vent,endpoint:${fields.endpoint || "vent"}`,
     message: `${fields.endpoint || "vent"} ${fields.outcome || ""} ${fields.status || ""}`.trim(),
     endpoint: "vent",
     ...fields

@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "「幫你罵」把你的不爽變成俏皮、安全、可以發出去的話。多數模式跑在 Apple 本地 AI 上;「發洩」與「痛罵」可以走雲端代理獲得更猛的輸出 — 但僅在你明確同意後才會,在此之前一律留在本地。";
 
 "onboarding.privacy.title" = "預設私密。";
-"onboarding.privacy.body" = "「體面 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 本地 Foundation Models — 內容不出裝置。「發洩」與「痛罵」同樣預設留在本地,只有在你明確授權後,才會透過我們自有的雲端代理呼叫第三方 LLM 以獲得更強輸出。可隨時在「設定 → AI 與隱私」中查看或撤銷該授權。";
+"onboarding.privacy.body" = "「體面 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 本地 Foundation Models 執行。「發洩」與「痛罵」在支援該模型的裝置上同樣留在本地;否則(以及為了更強的輸出)會透過我們自有的雲端代理呼叫第三方 LLM —— 但僅在你明確授權後。無論哪種方式,我們都不會保留副本。你的歷史記錄透過你自己的 iCloud 帳戶同步,我們無法讀取。可隨時在「設定 → AI 與隱私」中查看或撤銷該授權。";
 
 "onboarding.safety.title" = "為自我表達,而非攻擊他人。";
 "onboarding.safety.body" = "「幫你罵」幫你說出自己的感受,不用於針對具體的人。我們會自動去掉姓名、威脅和侮辱性詞彙。";
@@ -133,7 +133,7 @@
 "cloud.consent.footnote" = "「體面 / 銳利 / 狠」始終本地運行,從不使用雲端。";
 
 "settings.about_ai.title" = "關於 AI";
-"settings.about_ai.body" = "「體面 / 銳利 / 狠 / 改成能發的」用 Apple 本地 Foundation Models 框架運行 — 這些路徑上你的內容永遠不會離開裝置。「發洩 / 痛罵」可透過我們自有的雲端代理轉發給第三方 LLM 提供商以獲得更強的發洩效果,但僅在你首次明確同意後(由你選擇,且隨時可在此變更)。";
+"settings.about_ai.body" = "「體面 / 銳利 / 狠 / 改成能發的」用 Apple 本地 Foundation Models 框架運行 —— 這些內容我們永遠看不到。「發洩 / 痛罵」可透過我們自有的雲端代理轉發給第三方 LLM 提供商以獲得更強的發洩效果,但僅在你首次明確同意後(由你選擇,且隨時可在此變更)。另外,你儲存的歷史記錄會透過你自己的私人 iCloud 帳戶在各裝置間同步 —— 那是 Apple 的儲存空間,不是我們的,我們無法讀取。";
 
 "settings.subscription.upgrade" = "升級到 Pro";
 "settings.subscription.manage" = "管理訂閱";
@@ -473,7 +473,7 @@
 "crisis.dismiss" = "返回修改我寫的內容";
 
 /* === Trust / About AI (Pillar D) === */
-"settings.about_ai.ondevice_label" = "預設在裝置本機執行——Apple 基礎模型；你的文字留在手機上";
+"settings.about_ai.ondevice_label" = "預設在裝置本機執行——Apple 基礎模型；這些內容我們看不到";
 "settings.about_ai.cloud_label" = "更強的草稿可選用開發者自有雲端代理——可隨時關閉";
 "settings.about_ai.no_bigai_label" = "不使用 OpenAI / Anthropic / Google";
 "trust.not_companion.title" = "是工具，不是陪伴";

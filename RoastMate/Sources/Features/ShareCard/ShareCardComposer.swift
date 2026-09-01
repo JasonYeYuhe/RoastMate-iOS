@@ -17,14 +17,28 @@ struct ShareCardComposer: View {
     /// generation time (`RoastEngine`), and not user-editable here.
     private let sentText: String
     private let styleName: String?
+    /// The kind `sentText` came from. Required, and checked below: the type
+    /// system stops a vent being rendered ALONGSIDE a sendable (there is no
+    /// vent field), but nothing stopped a caller passing a vent draft AS the
+    /// sendable. Same fail-open shape we removed from `RoastCard.kind`, so it
+    /// gets the same treatment.
+    private let kind: GeneratedRoastKind
 
     @State private var format: ShareCardFormat = .portrait45
     @State private var exportURL: URL?
-    @State private var rendering = false
 
-    init(sentText: String, styleName: String?) {
+    init(sentText: String, styleName: String?, kind: GeneratedRoastKind) {
         self.sentText = sentText
         self.styleName = styleName
+        self.kind = kind
+    }
+
+    /// Only sendable output may be rendered onto a shareable image.
+    private var isShareable: Bool {
+        switch kind {
+        case .normalRoast, .sendableReply: return true
+        case .ventDraft, .rewrite: return false
+        }
     }
 
     private var content: ShareCardContent {
@@ -68,6 +82,7 @@ struct ShareCardComposer: View {
             }
         }
         .task(id: renderKey) { await render() }
+        .opacity(isShareable ? 1 : 0)
     }
 
     private var renderKey: String { format.rawValue }
@@ -96,8 +111,12 @@ struct ShareCardComposer: View {
 
     @MainActor
     private func render() async {
-        rendering = true
+        guard isShareable else {
+            // Loud in debug, inert in production — never a silent leak.
+            assertionFailure("ShareCardComposer got a non-sendable kind: \(kind)")
+            exportURL = nil
+            return
+        }
         exportURL = ShareCardRenderer.renderPNG(content, format: format, locale: locale)
-        rendering = false
     }
 }

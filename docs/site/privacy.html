@@ -27,7 +27,7 @@
   <ul class="checks">
     <li><strong>Calm / Sharp / Savage / Make-it-sendable rewrite</strong> — 100% on-device via Apple's Foundation Models, always. Works in Airplane Mode.</li>
     <li><strong>Vent / Feral</strong> — by default the situation text you type, the intensity, the locale, and an opaque per-install UUID are sent to our Cloudflare Worker, which forwards to a third-party LLM provider for inference. Our proxy does not retain a copy of the text. Upstream providers may temporarily retain inputs per their own policies.</li>
-    <li>Your history, threads, and saved replies stay on-device.</li>
+    <li>Your history, threads, and saved replies are never sent to us. They are stored on your device and, if you are signed in to iCloud, mirrored through Apple's CloudKit into your own private iCloud database so your history follows you across your devices. We have no access to it.</li>
     <li>No analytics SDKs, no advertising IDs, no device fingerprinting.</li>
     <li>Toggle Cloud AI off in Settings → AI &amp; Privacy to keep the entire app local.</li>
   </ul>
@@ -65,7 +65,7 @@
     <li><strong>Subscription state.</strong> Whether you have an active Pro subscription, derived from Apple's StoreKit framework.</li>
     <li><strong>Optional account state.</strong> If you use Sign in with Apple, the Apple-issued user identifier and any shared name/email are stored locally in Keychain.</li>
   </ul>
-  <p>On the same device, app-family targets can use the App Group <code>group.yyh.roastmate.app</code> as a local shared container where supported. Cross-device iCloud sync is not part of the current 1.0 release; if added later, it will be opt-in and clearly described.</p>
+  <p>On the same device, app-family targets can use the App Group <code>group.yyh.roastmate.app</code> as a local shared container where supported. Cross-device iCloud sync IS active: roast history (including private Vent and Feral drafts), threads, saved situations, settings and credit-ledger entries are mirrored via SwiftData + CloudKit into the private iCloud database of the Apple Account signed in on the device (container <code>iCloud.yyh.roastmate.app</code>). That is your own iCloud storage — it never reaches our servers and we cannot read it. It follows your device's iCloud state.</p>
 
   <h2>Children</h2>
   <p>RoastMate is rated <strong>17+</strong> for mature humor and sarcasm. It is not intended for children under 17. We do not knowingly collect data from anyone — including children.</p>
