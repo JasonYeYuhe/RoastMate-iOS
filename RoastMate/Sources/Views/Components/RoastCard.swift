@@ -3,11 +3,11 @@ import SwiftUI
 struct RoastCard: View {
     let text: String
     let style: StylePreset?
-    /// The kind of result being shown, when the caller knows it. A
-    /// `.ventDraft` is a private draft and gets no share affordance
-    /// (v1.3.1); `nil` means "caller didn't say", treated as sendable to
-    /// keep existing sendable-only call sites unchanged.
-    var kind: GeneratedRoastKind? = nil
+    /// The kind of result being shown. REQUIRED (no default): a defaulted
+    /// value here would fail OPEN — a future call site that forgot to pass
+    /// it would silently re-expose share affordances on a private draft.
+    /// Making the compiler demand it is the point.
+    let kind: GeneratedRoastKind
 
     @State private var copied = false
 
@@ -18,10 +18,20 @@ struct RoastCard: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
             }
-            Text(text)
-                .font(.body)
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            // No `.textSelection` on a private draft: the system selection
+            // menu carries its own Share item, which would reopen the egress
+            // path this release closes. Copy stays available as an explicit,
+            // user-driven button below.
+            if kind == .ventDraft {
+                Text(text)
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Text(text)
+                    .font(.body)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             HStack(spacing: 16) {
                 Button {
@@ -122,10 +132,18 @@ struct GeneratedRoastCard: View {
                     )
             }
 
-            Text(result.text)
-                .font(.body)
-                .textSelection(.enabled)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            // See the note in RoastCard: the system text-selection menu has
+            // its own Share, so private drafts are not selectable.
+            if result.kind == .ventDraft {
+                Text(result.text)
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Text(result.text)
+                    .font(.body)
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             HStack(spacing: 12) {
                 Button {

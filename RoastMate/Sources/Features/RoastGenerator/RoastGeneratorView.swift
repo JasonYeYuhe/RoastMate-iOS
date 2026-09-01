@@ -365,7 +365,7 @@ struct RoastGeneratorView: View {
                             result: result,
                             style: StyleCatalog.shared.style(id: result.styleId),
                             isRewriting: viewModel.rewritingDraftId == result.id,
-                            hasSendableReply: hasSendableReply(for: result, in: session),
+                            hasSendableReply: hasSendableReply(for: result, in: session)
                         ) {
                             Task {
                                 await viewModel.rewriteAsSendable(

@@ -21,15 +21,19 @@ default in production to make the feature actually work).
 - ⚠️ Vent and Feral intensities — by default route through our private
   Cloudflare Worker proxy to a third-party LLM provider, because
   Apple's on-device model refuses to produce real vent output. The
-  current upstream is Groq (Qwen3 32B for Chinese / Llama 3.3 70B for
-  other locales) with OpenRouter as fallback; we may swap to a
+  current upstream is Groq (Qwen3.6 27B) with OpenRouter as a
+  fallback; we may swap to a
   different provider in the future without further notice if quality
   or availability requires it. You can turn this off in Settings →
   AI & Privacy → "Stronger Vent / Feral (Cloud AI)" to keep
   everything local.
-- ✅ Your history, threads, and saved replies stay on-device. Cloud
-  requests for Vent / Feral are stateless on our side — we do not
-  store a copy of the text on our proxy. Upstream providers may
+- ✅ Your history, threads, and saved replies are never sent to us. They
+  are stored on your device and, if you are signed in to iCloud, mirrored
+  through Apple's CloudKit into **your own private iCloud database** so
+  your history follows you across your devices. That data belongs to your
+  Apple Account — we have no access to it and it never reaches our
+  servers. Cloud requests for Vent / Feral are stateless on our side — we
+  do not store a copy of the text on our proxy. Upstream providers may
   process or temporarily retain requests according to their own
   policies; see "Information we collect" below.
 - ✅ No analytics SDKs, no advertising IDs, no device fingerprinting.
@@ -119,8 +123,16 @@ sandbox / App Group container:
 
 On the same device, app-family targets can use the App Group
 `group.yyh.roastmate.app` as a local shared container where supported.
-Cross-device iCloud sync is not part of the current 1.0 release; if
-added later, it will be opt-in and clearly described.
+
+**Cross-device iCloud sync.** Roast history (including private Vent and
+Feral drafts), threads, saved situations, settings and credit ledger
+entries are mirrored via SwiftData + CloudKit into the private iCloud
+database of the Apple Account signed in on the device (container
+`iCloud.yyh.roastmate.app`). This is what makes your history available on
+your other devices. It is **your** iCloud storage: RoastMate's developer
+cannot read it, and it is never sent to our servers or to any third
+party. It follows your device's iCloud state — signing out of iCloud, or
+turning off iCloud Drive for RoastMate in iOS Settings, stops it.
 
 ---
 
