@@ -1,9 +1,17 @@
 import Foundation
 
-/// On-device PII masking for text the user *explicitly opts in* to
-/// share publicly (the vent side of a Vent→Sent card). Runs locally;
-/// nothing is sent anywhere. Errs toward over-masking — a false mask
-/// is harmless, a leaked email/phone is not.
+/// On-device PII masking. Runs locally; nothing is sent anywhere. Errs
+/// toward over-masking — a false mask is harmless, a leaked email/phone is not.
+///
+/// ⚠️ **Currently has no production call site.** Its only caller was the
+/// share-card vent reveal, removed in v1.3.1. It is retained because v1.4
+/// (Track B.2) will expand it — `NLTagger(.nameType)` NER plus Chinese
+/// contact/name patterns — and run it on the *sendable* text.
+///
+/// Do not treat this as an active control, and do not reintroduce it as a
+/// *sole* one: these four ASCII regexes miss Chinese PII almost entirely —
+/// 2-character names (张伟), titles (张总), WeChat/QQ handles (vx: / v信 /
+/// 企鹅号), and Chinese-numeral phone runs all pass through untouched.
 enum Redactor {
     private static let rules: [(pattern: String, replacement: String)] = [
         // Email

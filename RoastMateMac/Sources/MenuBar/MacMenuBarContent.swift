@@ -83,7 +83,9 @@ struct MacMenuBarContent: View {
                 }
                 if let session = viewModel.currentSession {
                     ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
-                        RoastCard(text: result.text, style: StyleCatalog.shared.style(id: result.styleId))
+                        RoastCard(text: result.text,
+                                  style: StyleCatalog.shared.style(id: result.styleId),
+                                  kind: result.kind)
                     }
                 }
             }

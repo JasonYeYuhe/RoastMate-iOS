@@ -489,17 +489,7 @@
 "sharecard.format_label" = "尺寸";
 "sharecard.format.portrait" = "竖版 4:5";
 "sharecard.format.story" = "全屏 9:16";
-"sharecard.include_vent" = "包含我的发泄原文";
-"sharecard.include_vent.hint" = "默认关闭。发泄稿是私密的——只有你确认后才会出现在图片里。";
-"sharecard.edit_label" = "公开前可编辑（已自动隐去隐私信息）";
-"sharecard.warn.title" = "确定要公开发泄原文吗？";
-"sharecard.warn.body" = "这段文字本来只属于你。公开前请逐字检查；我们已自动隐去邮箱、电话和链接，你也可以继续编辑。";
-"sharecard.warn.confirm" = "包含它";
-"sharecard.warn.cancel" = "保持私密";
 "sharecard.comeback_eyebrow" = "我的回击";
-"sharecard.before_label" = "我差点发出去的";
-"sharecard.after_label" = "我最后说的";
-"sharecard.vent_hidden" = "私密发泄 · 已隐藏";
 "sharecard.watermark" = "先骂个痛快，再发会赢的版本";
 
 /* A′ 上线后埋点 — 隐私友好的聚合计数。详见 docs/A_PRIME_TELEMETRY.md。 */

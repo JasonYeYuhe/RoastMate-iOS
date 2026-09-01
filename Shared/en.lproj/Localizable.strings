@@ -489,17 +489,7 @@
 "sharecard.format_label" = "Size";
 "sharecard.format.portrait" = "Portrait 4:5";
 "sharecard.format.story" = "Full 9:16";
-"sharecard.include_vent" = "Include my original vent";
-"sharecard.include_vent.hint" = "Off by default. Your vent is private — it only appears in the image after you confirm.";
-"sharecard.edit_label" = "Editable before sharing (private info auto-removed)";
-"sharecard.warn.title" = "Make your vent public?";
-"sharecard.warn.body" = "This text was just for you. Check every word before sharing — we've auto-removed emails, phone numbers, and links; you can keep editing.";
-"sharecard.warn.confirm" = "Include it";
-"sharecard.warn.cancel" = "Keep it private";
 "sharecard.comeback_eyebrow" = "MY COMEBACK";
-"sharecard.before_label" = "What I almost sent";
-"sharecard.after_label" = "What I actually said";
-"sharecard.vent_hidden" = "Private vent · hidden";
 "sharecard.watermark" = "Vent first, then send the version that wins";
 
 /* A′ post-launch instrumentation — privacy-compatible aggregate counts.

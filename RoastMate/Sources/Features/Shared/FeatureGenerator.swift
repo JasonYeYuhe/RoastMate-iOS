@@ -369,7 +369,6 @@ struct FeatureGeneratorView: View {
                             style: StyleCatalog.shared.style(id: result.styleId),
                             isRewriting: viewModel.rewritingDraftId == result.id,
                             hasSendableReply: hasSendableReply(for: result, in: session),
-                            pairedVentText: session.sourceVentText(for: result)
                         ) {
                             Task {
                                 await viewModel.rewriteAsSendable(

@@ -1,11 +1,16 @@
 import XCTest
 @testable import RoastMate
 
-/// Pillar A: share artifact. Pins the load-bearing privacy invariants
-/// (vent obscured by default; PII stripped before any opt-in reveal).
+/// Pillar A: share artifact. Pins the v1.3.1 contract — a share card carries
+/// the sendable line and nothing else, and a private vent draft has no share
+/// affordance at all.
 final class ShareCardTests: XCTestCase {
 
     // MARK: - Redactor
+    //
+    // Retained for v1.4 Track B.2, which will expand this (NER + Chinese
+    // patterns) and run it on the sendable text. It has no production call
+    // site today — see Redactor.swift.
 
     func testRedactsEmail() {
         let out = Redactor.redact("reach me at a.b+x@mail.example.com please")
@@ -27,32 +32,41 @@ final class ShareCardTests: XCTestCase {
         XCTAssertEqual(Redactor.redact(s), s)
     }
 
-    // MARK: - Privacy invariant
+    // MARK: - Privacy invariant: the card renders the sendable line ONLY
+    //
+    // These are the regression guards for the v1.3.1 purge. `ShareCardContent`
+    // deliberately has no vent field, so "the card can't carry the vent" is
+    // enforced by the type system; what these pin is that the rendered content
+    // is exactly the sendable text and is not derived from anything else.
 
-    func testVentObscuredByDefault() {
-        let c = ShareCardContent(styleName: "Sharp",
-                                 sentText: "Noted, and corrected.",
-                                 ventText: "raw private rage here")
-        XCTAssertFalse(c.revealVent, "vent must be obscured unless explicitly revealed")
-        XCTAssertTrue(c.hasVentPairing)
+    func testContentCarriesOnlyTheSendableLine() {
+        let c = ShareCardContent(styleName: "Sharp", sentText: "Noted, and corrected.")
+        XCTAssertEqual(c.sentText, "Noted, and corrected.")
+        XCTAssertEqual(c.styleName, "Sharp")
     }
 
-    func testNoPairingWhenVentEmpty() {
-        let c = ShareCardContent(styleName: nil, sentText: "x", ventText: "   ")
-        XCTAssertFalse(c.hasVentPairing)
+    func testContentIsValueEqualByRenderedText() {
+        // Guards the composer's render key: two contents that render the same
+        // pixels must compare equal, so a re-render isn't silently skipped.
+        let a = ShareCardContent(styleName: "Sharp", sentText: "same")
+        let b = ShareCardContent(styleName: "Sharp", sentText: "same")
+        let c = ShareCardContent(styleName: "Sharp", sentText: "different")
+        XCTAssertEqual(a, b)
+        XCTAssertNotEqual(a, c)
     }
 
-    // MARK: - Vent↔Sent pairing resolution
+    func testStyleNameIsOptional() {
+        let c = ShareCardContent(styleName: nil, sentText: "x")
+        XCTAssertNil(c.styleName)
+        XCTAssertEqual(c.sentText, "x")
+    }
 
-    func testPairingResolvesSourceVent() {
-        let vent = GeneratedRoast(text: "the raw vent", styleId: "high_eq",
-                                  kind: .ventDraft, sourceIntensity: .vent)
-        let sendable = GeneratedRoast(text: "the polished line", styleId: "high_eq",
-                                      kind: .sendableReply, sourceVentDraftId: vent.id)
-        let pool = [vent, sendable]
-        XCTAssertEqual(ShareCardPairing.ventText(for: sendable, in: pool), "the raw vent")
+    // MARK: - Format
 
-        let normal = GeneratedRoast(text: "plain", styleId: "high_eq", kind: .normalRoast)
-        XCTAssertNil(ShareCardPairing.ventText(for: normal, in: pool))
+    func testExportFormatsAreExactPixelSizes() {
+        // ImageRenderer exports at these exact sizes; 小红书/IG 4:5 and 抖音 9:16.
+        XCTAssertEqual(ShareCardFormat.portrait45.pixelSize, CGSize(width: 1080, height: 1350))
+        XCTAssertEqual(ShareCardFormat.story916.pixelSize, CGSize(width: 1080, height: 1920))
+        XCTAssertEqual(ShareCardFormat.allCases.count, 2)
     }
 }

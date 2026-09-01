@@ -23,38 +23,16 @@ enum ShareCardFormat: String, CaseIterable, Identifiable {
     }
 }
 
-/// What a card renders. The vent ("before") side is privacy-load-bearing:
-/// `revealVent` defaults **false**, and when false the rendered image
-/// never contains the vent text at all — only an obscured placeholder.
-/// The composer flips it to true only after an explicit, warned opt-in,
-/// and feeds back the locally PII-redacted / user-edited text.
+/// What a card renders: the sendable line, and nothing else.
+///
+/// This type deliberately has **no** field for the private vent draft. The
+/// v1.3.1 purge removed `ventText` / `revealVent` (and the `ShareCardPairing`
+/// helper that resolved a reply back to its source draft) so that no code path
+/// — present or future — can put the user's private text onto a shareable,
+/// RoastMate-branded image. `sentText` is `SafetyFilter`-validated upstream at
+/// generation time and is never user-editable before render.
 struct ShareCardContent: Equatable {
     var styleName: String?
-    /// The polished, sendable line — always shown.
+    /// The polished, sendable line — the only text the card renders.
     var sentText: String
-    /// Optional "before" vent text. Only legible in the export if
-    /// `revealVent` is true (composer-controlled).
-    var ventText: String?
-    var revealVent: Bool = false
-
-    var hasVentPairing: Bool {
-        guard let v = ventText else { return false }
-        return !v.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-}
-
-/// Resolves the `.ventDraft` a `.sendableReply` was rewritten from, so
-/// the share card can offer the Vent→Sent layout.
-enum ShareCardPairing {
-    static func ventText(for result: GeneratedRoast, in pool: [GeneratedRoast]) -> String? {
-        guard result.kind == .sendableReply,
-              let srcId = result.sourceVentDraftId else { return nil }
-        return pool.first { $0.id == srcId && $0.kind == .ventDraft }?.text
-    }
-}
-
-extension RoastSession {
-    func sourceVentText(for result: GeneratedRoast) -> String? {
-        ShareCardPairing.ventText(for: result, in: results ?? [])
-    }
 }

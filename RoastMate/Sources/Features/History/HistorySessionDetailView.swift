@@ -34,7 +34,6 @@ struct HistorySessionDetailView: View {
                         style: StyleCatalog.shared.style(id: result.styleId),
                         isRewriting: rewritingDraftId == result.id,
                         hasSendableReply: hasSendableReply(for: result),
-                        pairedVentText: ShareCardPairing.ventText(for: result, in: orderedResults),
                         onRewrite: result.kind == .ventDraft && !hasSendableReply(for: result)
                             ? { triggerRewrite(draft: result) }
                             : nil

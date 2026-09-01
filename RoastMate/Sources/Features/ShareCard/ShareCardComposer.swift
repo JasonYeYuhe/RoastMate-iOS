@@ -1,41 +1,34 @@
 import SwiftUI
 
-/// The share-as-image sheet. Enforces the locked privacy model: the
-/// vent ("before") side is obscured by default; including the real
-/// text requires an explicit, warned opt-in, after which the text is
-/// locally PII-redacted and remains user-editable, with a live preview
-/// before anything leaves the app.
+/// The share-as-image sheet. Renders ONLY the sendable line — the polished
+/// comeback the user could actually send.
+///
+/// The private vent draft is deliberately unreachable from here. There is no
+/// opt-in, no redaction preview, and no editable field: the rendered text is
+/// **immutable**, so the only way to change what appears on the card is to
+/// edit the draft and re-generate, which re-runs `SafetyFilter`. That keeps a
+/// branded RoastMate image from ever carrying either the user's private vent
+/// or arbitrary free-typed text.
 struct ShareCardComposer: View {
     @Environment(\.locale) private var locale
     @Environment(\.dismiss) private var dismiss
 
-    /// The polished line + optional source vent (the raw draft text).
+    /// The polished, sendable line. Already `SafetyFilter`-validated at
+    /// generation time (`RoastEngine`), and not user-editable here.
     private let sentText: String
     private let styleName: String?
-    private let sourceVent: String?
 
     @State private var format: ShareCardFormat = .portrait45
-    @State private var includeVent = false
-    @State private var showVentWarning = false
-    @State private var editableVent = ""
     @State private var exportURL: URL?
     @State private var rendering = false
 
-    init(sentText: String, styleName: String?, sourceVent: String?) {
+    init(sentText: String, styleName: String?) {
         self.sentText = sentText
         self.styleName = styleName
-        self.sourceVent = sourceVent?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private var hasVent: Bool { !(sourceVent ?? "").isEmpty }
-
     private var content: ShareCardContent {
-        ShareCardContent(
-            styleName: styleName,
-            sentText: sentText,
-            ventText: hasVent ? (includeVent ? editableVent : sourceVent) : nil,
-            revealVent: includeVent
-        )
+        ShareCardContent(styleName: styleName, sentText: sentText)
     }
 
     var body: some View {
@@ -44,7 +37,6 @@ struct ShareCardComposer: View {
                 VStack(spacing: 18) {
                     preview
                     formatPicker
-                    if hasVent { ventControls }
                 }
                 .padding()
             }
@@ -76,24 +68,13 @@ struct ShareCardComposer: View {
             }
         }
         .task(id: renderKey) { await render() }
-        .alert("sharecard.warn.title", isPresented: $showVentWarning) {
-            Button("sharecard.warn.cancel", role: .cancel) { includeVent = false }
-            Button("sharecard.warn.confirm", role: .destructive) {
-                editableVent = Redactor.redact(sourceVent ?? "")
-                includeVent = true
-            }
-        } message: {
-            Text("sharecard.warn.body")
-        }
     }
 
-    private var renderKey: String {
-        "\(format.rawValue)|\(includeVent)|\(editableVent.hashValue)"
-    }
+    private var renderKey: String { format.rawValue }
 
     private var preview: some View {
         GeometryReader { geo in
-            let scale = geo.size.width / content.cardPixelWidth(format)
+            let scale = geo.size.width / format.pixelSize.width
             ShareCardView(content: content, pixelSize: format.pixelSize)
                 .frame(width: format.pixelSize.width, height: format.pixelSize.height)
                 .scaleEffect(scale, anchor: .topLeading)
@@ -113,49 +94,10 @@ struct ShareCardComposer: View {
         .pickerStyle(.segmented)
     }
 
-    private var ventControls: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Toggle("sharecard.include_vent", isOn: Binding(
-                get: { includeVent },
-                set: { newValue in
-                    if newValue { showVentWarning = true }
-                    else { includeVent = false }
-                }
-            ))
-            Text("sharecard.include_vent.hint")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            if includeVent {
-                Text("sharecard.edit_label")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                TextEditor(text: $editableVent)
-                    .frame(minHeight: 120)
-                    .padding(8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.secondary.opacity(0.08))
-                    )
-            }
-        }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.pink.opacity(0.07))
-        )
-    }
-
     @MainActor
     private func render() async {
         rendering = true
         exportURL = ShareCardRenderer.renderPNG(content, format: format, locale: locale)
         rendering = false
-    }
-}
-
-private extension ShareCardContent {
-    func cardPixelWidth(_ format: ShareCardFormat) -> CGFloat {
-        format.pixelSize.width
     }
 }

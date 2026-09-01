@@ -1,11 +1,12 @@
 import SwiftUI
 
 /// The rendered artifact. Laid out for a fixed pixel canvas (passed in)
-/// so `ImageRenderer` produces an exact-size export. Two layouts:
-/// Comeback Card (single line) and Vent→Sent (before/after). The vent
-/// panel only shows real text when `content.revealVent` is true; when
-/// false it renders an obscured placeholder, so a non-opted-in export
-/// can never carry the private draft.
+/// so `ImageRenderer` produces an exact-size export.
+///
+/// ONE layout: the Comeback Card — the sendable line only. The former
+/// Vent→Sent (before/after) layout was removed in v1.3.1: rendering the
+/// user's private draft onto a branded, shareable image contradicts the
+/// "your vent stays private" contract the rest of the app makes.
 struct ShareCardView: View {
     let content: ShareCardContent
     let pixelSize: CGSize
@@ -28,11 +29,7 @@ struct ShareCardView: View {
                         .tracking(2 * s)
                 }
 
-                if content.hasVentPairing {
-                    ventVsSent
-                } else {
-                    comeback
-                }
+                comeback
 
                 Spacer(minLength: 0)
                 watermark
@@ -53,61 +50,6 @@ struct ShareCardView: View {
                 .foregroundStyle(.white)
                 .lineSpacing(8 * s)
                 .minimumScaleFactor(0.4)
-        }
-    }
-
-    private var ventVsSent: some View {
-        VStack(alignment: .leading, spacing: 28 * s) {
-            panel(labelKey: "sharecard.before_label",
-                  accent: .pink,
-                  body: ventBody,
-                  obscured: !content.revealVent)
-            Image(systemName: "arrow.down")
-                .font(.system(size: 40 * s, weight: .bold))
-                .foregroundStyle(.white.opacity(0.4))
-                .frame(maxWidth: .infinity)
-            panel(labelKey: "sharecard.after_label",
-                  accent: .green,
-                  body: content.sentText,
-                  obscured: false)
-        }
-    }
-
-    private var ventBody: String { content.ventText ?? "" }
-
-    private func panel(labelKey: LocalizedStringKey,
-                       accent: Color,
-                       body: String,
-                       obscured: Bool) -> some View {
-        VStack(alignment: .leading, spacing: 14 * s) {
-            Text(labelKey)
-                .font(.system(size: 28 * s, weight: .bold, design: .rounded))
-                .foregroundStyle(accent)
-            if obscured {
-                HStack(spacing: 12 * s) {
-                    Image(systemName: "lock.fill")
-                    Text("sharecard.vent_hidden")
-                        .font(.system(size: 30 * s, weight: .semibold, design: .rounded))
-                }
-                .foregroundStyle(.white.opacity(0.5))
-                .frame(maxWidth: .infinity, minHeight: 150 * s)
-                .background(
-                    RoundedRectangle(cornerRadius: 22 * s)
-                        .fill(.white.opacity(0.06))
-                )
-            } else {
-                Text(body)
-                    .font(.system(size: 40 * s, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.92))
-                    .lineSpacing(6 * s)
-                    .minimumScaleFactor(0.4)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(24 * s)
-                    .background(
-                        RoundedRectangle(cornerRadius: 22 * s)
-                            .fill(.white.opacity(0.06))
-                    )
-            }
         }
     }
 

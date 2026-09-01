@@ -3,6 +3,11 @@ import SwiftUI
 struct RoastCard: View {
     let text: String
     let style: StylePreset?
+    /// The kind of result being shown, when the caller knows it. A
+    /// `.ventDraft` is a private draft and gets no share affordance
+    /// (v1.3.1); `nil` means "caller didn't say", treated as sendable to
+    /// keep existing sendable-only call sites unchanged.
+    var kind: GeneratedRoastKind? = nil
 
     @State private var copied = false
 
@@ -36,12 +41,14 @@ struct RoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
-                OutputShareButton(item: text) {
-                    Label("result.share", systemImage: "square.and.arrow.up")
-                        .font(.callout)
+                if kind != .ventDraft {
+                    OutputShareButton(item: text) {
+                        Label("result.share", systemImage: "square.and.arrow.up")
+                            .font(.callout)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
             }
         }
         .padding(16)
@@ -66,9 +73,6 @@ struct GeneratedRoastCard: View {
     let style: StylePreset?
     let isRewriting: Bool
     let hasSendableReply: Bool
-    /// For a `.sendableReply`, the text of its source `.ventDraft`, so the
-    /// share card can offer the Vent→Sent layout. nil otherwise.
-    var pairedVentText: String? = nil
     let onRewrite: (() -> Void)?
 
     @Environment(\.modelContext) private var modelContext
@@ -141,12 +145,19 @@ struct GeneratedRoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
-                OutputShareButton(item: result.text) {
-                    Label("result.share", systemImage: "square.and.arrow.up")
-                        .font(.callout)
+                // Share (system share sheet) — sendable kinds ONLY. A
+                // `.ventDraft` is a private draft the UI explicitly labels
+                // "don't send"; offering one-tap egress directly beneath that
+                // label contradicted it. Copy stays: it is a local action the
+                // user drives, not an outbound share. (v1.3.1)
+                if result.kind != .ventDraft {
+                    OutputShareButton(item: result.text) {
+                        Label("result.share", systemImage: "square.and.arrow.up")
+                            .font(.callout)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
 
                 // Share as image — sendable kinds only; the private vent
                 // draft itself is never offered as a shareable card.
@@ -204,8 +215,7 @@ struct GeneratedRoastCard: View {
         .sheet(isPresented: $showShareCard) {
             ShareCardComposer(
                 sentText: result.text,
-                styleName: style?.displayName,
-                sourceVent: result.kind == .sendableReply ? pairedVentText : nil
+                styleName: style?.displayName
             )
         }
     }

@@ -489,17 +489,7 @@
 "sharecard.format_label" = "サイズ";
 "sharecard.format.portrait" = "縦 4:5";
 "sharecard.format.story" = "全画面 9:16";
-"sharecard.include_vent" = "吐き出した原文を含める";
-"sharecard.include_vent.hint" = "標準ではオフ。吐き出し文は非公開です——確認した場合のみ画像に表示されます。";
-"sharecard.edit_label" = "共有前に編集できます（個人情報は自動で伏せ字）";
-"sharecard.warn.title" = "吐き出した原文を公開しますか？";
-"sharecard.warn.body" = "この文章はあなただけのものでした。共有前に一語ずつ確認してください。メール・電話・リンクは自動で伏せています。編集も可能です。";
-"sharecard.warn.confirm" = "含める";
-"sharecard.warn.cancel" = "非公開のまま";
 "sharecard.comeback_eyebrow" = "私の返し";
-"sharecard.before_label" = "送りそうになった言葉";
-"sharecard.after_label" = "実際に言った言葉";
-"sharecard.vent_hidden" = "非公開の吐き出し · 非表示";
 "sharecard.watermark" = "まず吐き出し、勝てる方を送る";
 
 /* A′ ローンチ後の計測 — プライバシー両立の集計カウント。
