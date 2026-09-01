@@ -55,12 +55,15 @@ ALLOW_SANDBOX_RECEIPTS = "false"
 # ASC_KEY_ID + ASC_ISSUER_ID (identifiers, not secret); (d) flip this to "true".
 ASS_API_ENABLED = "false"
 
-# --- KNOWN, ACCEPTED LIMITATION (adversarial review 2026-08-31) ---
-# Quota counters use KV get-then-put (non-atomic): a burst of N parallel requests
-# can over-grant (all read the same count). Bounded by concurrency + the edge
-# kill-switch (CLOUD_DISABLED) as the hard backstop. The proper fix is an atomic
-# substrate (Durable Object) — deferred with the consumable ledger (decision D2).
-# Do NOT rely on these caps as a hard security boundary.
+# --- DESIGN NOTE: these caps are COST controls, not a security boundary ---
+# The counters below are best-effort daily budget guards backed by KV. They are
+# NOT transactional and must not be treated as an authorization mechanism or a
+# hard spend ceiling. The real backstops are the edge kill-switch
+# (CLOUD_DISABLED) and provider-side spend limits configured at Groq /
+# OpenRouter — set those, and keep them set.
+# Accuracy limits, the measured behaviour under concurrency, and the atomic
+# substrate options are tracked internally (v1.4 decision D2); this is a public
+# repo, so the analysis lives in the private notes rather than here.
 
 # Per-device rate limit (LEGACY / free lane — no session token). Counted against
 # (deviceId, YYYY-MM-DD) in KV. Tune as cost / abuse picture evolves. M.2 will
