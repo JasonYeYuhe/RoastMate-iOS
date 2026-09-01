@@ -22,7 +22,7 @@ struct RoastCard: View {
             // menu carries its own Share item, which would reopen the egress
             // path this release closes. Copy stays available as an explicit,
             // user-driven button below.
-            if kind == .ventDraft {
+            if !kind.isShareable {
                 Text(text)
                     .font(.body)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -51,7 +51,7 @@ struct RoastCard: View {
                 .buttonStyle(.bordered)
                 .controlSize(.small)
 
-                if kind != .ventDraft {
+                if kind.isShareable {
                     OutputShareButton(item: text) {
                         Label("result.share", systemImage: "square.and.arrow.up")
                             .font(.callout)
@@ -134,7 +134,7 @@ struct GeneratedRoastCard: View {
 
             // See the note in RoastCard: the system text-selection menu has
             // its own Share, so private drafts are not selectable.
-            if result.kind == .ventDraft {
+            if !result.kind.isShareable {
                 Text(result.text)
                     .font(.body)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -168,7 +168,7 @@ struct GeneratedRoastCard: View {
                 // "don't send"; offering one-tap egress directly beneath that
                 // label contradicted it. Copy stays: it is a local action the
                 // user drives, not an outbound share. (v1.3.1)
-                if result.kind != .ventDraft {
+                if result.kind.isShareable {
                     OutputShareButton(item: result.text) {
                         Label("result.share", systemImage: "square.and.arrow.up")
                             .font(.callout)
@@ -179,7 +179,7 @@ struct GeneratedRoastCard: View {
 
                 // Share as image — sendable kinds only; the private vent
                 // draft itself is never offered as a shareable card.
-                if result.kind == .normalRoast || result.kind == .sendableReply {
+                if result.kind.isShareable {
                     Button {
                         showShareCard = true
                     } label: {

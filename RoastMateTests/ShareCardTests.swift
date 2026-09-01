@@ -61,6 +61,38 @@ final class ShareCardTests: XCTestCase {
         XCTAssertEqual(c.sentText, "x")
     }
 
+    // MARK: - Shareability rule (the v1.3.1 contract)
+    //
+    // GeneratedRoastKind.isShareable is the single gate for EVERY outbound
+    // affordance: the system share sheet, text selection (whose menu carries
+    // its own Share), and the share-as-image card. If this regresses, a
+    // private draft becomes shareable again.
+
+    func testVentDraftIsNeverShareable() {
+        XCTAssertFalse(GeneratedRoastKind.ventDraft.isShareable,
+                       "a private vent draft must never get a share affordance")
+    }
+
+    func testSendableKindsAreShareable() {
+        XCTAssertTrue(GeneratedRoastKind.normalRoast.isShareable)
+        XCTAssertTrue(GeneratedRoastKind.sendableReply.isShareable)
+        XCTAssertTrue(GeneratedRoastKind.rewrite.isShareable)
+    }
+
+    func testExactlyOneKindIsUnshareable() {
+        // Pins the allow-list shape: if a case is added to the enum, this
+        // fails and forces an explicit decision instead of failing open.
+        let all: [GeneratedRoastKind] = [.normalRoast, .ventDraft, .sendableReply, .rewrite]
+        XCTAssertEqual(all.filter { !$0.isShareable }, [.ventDraft])
+    }
+
+    func testIsPrivateVentAndIsShareableStayInverse() {
+        for k in [GeneratedRoastKind.normalRoast, .ventDraft, .sendableReply] {
+            XCTAssertNotEqual(k.isPrivateVent, k.isShareable,
+                              "\(k): the private-draft label and the share gate must not disagree")
+        }
+    }
+
     // MARK: - Format
 
     func testExportFormatsAreExactPixelSizes() {

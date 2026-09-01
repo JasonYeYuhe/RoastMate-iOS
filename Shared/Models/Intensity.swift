@@ -89,4 +89,19 @@ enum GeneratedRoastKind: String, Codable, Sendable {
     /// True if this output should be labelled "for yourself only" in the UI
     /// and accompanied by a rewrite-as-sendable button.
     var isPrivateVent: Bool { self == .ventDraft }
+
+    /// May this output be given an outbound share affordance — the system
+    /// share sheet, text selection (whose menu carries its own Share), or the
+    /// share-as-image card?
+    ///
+    /// Deliberately an explicit ALLOW-list over an exhaustive switch, not
+    /// `!= .ventDraft`: adding a case to this enum should fail to compile
+    /// here and force a decision, rather than silently granting the new kind
+    /// a share button. Private drafts must never fail open. (v1.3.1)
+    var isShareable: Bool {
+        switch self {
+        case .normalRoast, .sendableReply, .rewrite: return true
+        case .ventDraft: return false
+        }
+    }
 }

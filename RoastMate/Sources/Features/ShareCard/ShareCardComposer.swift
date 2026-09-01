@@ -34,12 +34,8 @@ struct ShareCardComposer: View {
     }
 
     /// Only sendable output may be rendered onto a shareable image.
-    private var isShareable: Bool {
-        switch kind {
-        case .normalRoast, .sendableReply: return true
-        case .ventDraft, .rewrite: return false
-        }
-    }
+    /// Single source of truth: `GeneratedRoastKind.isShareable`.
+    private var isShareable: Bool { kind.isShareable }
 
     private var content: ShareCardContent {
         ShareCardContent(styleName: styleName, sentText: sentText)
