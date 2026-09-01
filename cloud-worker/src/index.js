@@ -85,6 +85,12 @@ export default {
     // even under CLOUD_DISABLED (it does no LLM work; a token is inert if vent
     // is off). Requires the SESSION_SIGNING_KEY secret; without it, 500s.
     if (url.pathname === "/v1/auth") {
+      // Observability (v1.4 M-a): /v1/auth had NO logging, so "verified Pro
+      // sessions" and "auth crypto 500s" — both explicit v1.4 launch-gate
+      // criteria — were unmeasurable. Logged fields are operational only: the
+      // outcome, the error CODE, HTTP status, latency. Never the JWS, the
+      // transaction id, or any account identity.
+      const tAuth = Date.now();
       // DoS guard (P2): /v1/auth runs heavy signature + x5c-chain crypto. Cap
       // attempts per IP (pre-charged) — shares the app IP bucket with /v1/vent,
       // so a flood of garbage JWS can't burn Worker CPU / billing unbounded.
@@ -94,15 +100,37 @@ export default {
         env,
       });
       const u = parseInt((await env.RATE_LIMITS.get(g.ipKey)) || "0", 10);
-      if (u >= g.ipLimit) return json({ error: "rate_limit_exceeded" }, 429);
+      if (u >= g.ipLimit) {
+        ddLog(env, ctx, { endpoint: "auth", outcome: "ip_rate_limited", status: 429,
+                          web: g.isWeb, latency_ms: Date.now() - tAuth });
+        return json({ error: "rate_limit_exceeded" }, 429);
+      }
       await env.RATE_LIMITS.put(g.ipKey, String(u + 1), { expirationTtl: 86400 * 2 });
       try {
         const [{ handleAuth }, { buildVerifier }] = await Promise.all([
           import("./auth.js"),
           import("./verifier.js"),
         ]);
-        return handleAuth(req, env, ctx, buildVerifier(env));
+        const resp = await handleAuth(req, env, ctx, buildVerifier(env));
+        // Peek at the error code via a clone so the real body stays unread.
+        let reason;
+        try {
+          const peek = await resp.clone().json();
+          if (peek && typeof peek.error === "string") reason = peek.error;
+        } catch (_e) { /* non-JSON body: leave reason undefined */ }
+        ddLog(env, ctx, {
+          endpoint: "auth",
+          outcome: resp.status === 200 ? "verified" : "rejected",
+          reason,
+          status: resp.status,
+          latency_ms: Date.now() - tAuth,
+        });
+        return resp;
       } catch (_e) {
+        // The gate cares specifically about this bucket: a crypto/library
+        // fault here is the "0 crypto 500s" criterion.
+        ddLog(env, ctx, { endpoint: "auth", outcome: "server_error", status: 500,
+                          latency_ms: Date.now() - tAuth });
         return json({ error: "server_error" }, 500);
       }
     }
@@ -367,7 +395,8 @@ function ddLog(env, ctx, fields) {
     ddsource: "cloudflare-worker",
     service: "roastmate-vent",
     ddtags: "service:roastmate-vent,worker:vent",
-    message: `vent ${fields.outcome || ""} ${fields.status || ""}`.trim(),
+    message: `${fields.endpoint || "vent"} ${fields.outcome || ""} ${fields.status || ""}`.trim(),
+    endpoint: "vent",
     ...fields
   }];
   ctx.waitUntil(
