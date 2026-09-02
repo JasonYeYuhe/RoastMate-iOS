@@ -25,13 +25,22 @@ actor EchoesEngine {
     /// on-device FM blocks the harsh group-roast). Injectable for tests.
     private let cloudClient: CloudVentService
 
+    /// Pro session-token provider (Track M). Without this the roommate cloud
+    /// call went out TOKENLESS, so a paying Pro user's roommate generations
+    /// were charged against the FREE per-device cap (30/day) instead of the
+    /// Pro cap (200/day) — and could hit `ip_rate_limited`. That is a
+    /// billing/churn bug, not cleanup. Injectable for tests. (v1.4 M-b)
+    private let auth: CloudAuthProviding
+
     /// Apple on-device backend, or `nil` on devices without Foundation Models
     /// (iOS 18 / macOS 14 / watchOS / AI off). Classic Echoes uses it; the
     /// roommate scene is cloud-only and ignores it.
     private nonisolated let fm: (any FMBackend)?
 
-    init(cloudClient: CloudVentService = CloudVentClient.shared) {
+    init(cloudClient: CloudVentService = CloudVentClient.shared,
+         auth: CloudAuthProviding = CloudAuthClient.shared) {
         self.cloudClient = cloudClient
+        self.auth = auth
         self.fm = FMBackendFactory.make()
     }
 
@@ -222,7 +231,11 @@ actor EchoesEngine {
                     deviceId: DeviceID.current(),
                     mode: "roommate"
                 )
-                let resp = try await cloudClient.generate(req)
+                // Route through the SHARED authed path so a Pro subscriber
+                // draws the Pro cap, not the free one. Best-effort: a
+                // non-Pro user, or any auth failure, falls back to the
+                // tokenless lane exactly as before. (v1.4 M-b)
+                let resp = try await cloudClient.generate(req, auth: auth)
                 if let parsed = EchoesParser.parse(resp.text, scene: .roommateGroup),
                    let safe = Self.safetyFilter(parsed, tone: tone) {
                     messages = safe

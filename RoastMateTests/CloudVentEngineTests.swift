@@ -231,3 +231,85 @@ final class AcceptsOnlyFreshCloudVentService: CloudVentService, @unchecked Senda
         throw CloudVentError.tokenInvalid
     }
 }
+
+
+// MARK: - v1.4 M-b: the SHARED authed cloud path
+//
+// `CloudVentService.generate(_:auth:)` is now the single place the Pro-token
+// dance lives. It used to be private to RoastEngine, which is precisely why
+// the Echoes roommate path shipped tokenless and billed paying Pro users
+// against the FREE per-device cap. These pin the contract for every caller.
+
+/// Records invalidate() calls so we can prove the 401 path re-authenticates.
+final class CountingAuth: CloudAuthProviding, @unchecked Sendable {
+    private var queue: [String?]
+    private(set) var invalidateCount = 0
+    private(set) var tokenRequests = 0
+    init(_ tokens: [String?]) { self.queue = tokens }
+    func proSessionToken() async -> String? {
+        tokenRequests += 1
+        return queue.isEmpty ? nil : queue.removeFirst()
+    }
+    func invalidate() async { invalidateCount += 1 }
+}
+
+final class SharedAuthedCloudPathTests: XCTestCase {
+
+    private func req() -> CloudVentRequest {
+        CloudVentRequest(situation: "s", styleName: nil, intensity: "vent",
+                         locale: "zh-Hans", deviceId: "d", mode: "roommate")
+    }
+
+    func testProTokenIsSentWhenAvailable() async throws {
+        let svc = RecordingCloudVentService(returning: "ok")
+        _ = try await svc.generate(req(), auth: StubAuth(token: "pro-token"))
+        XCTAssertEqual(svc.tokens, ["pro-token"],
+                       "a Pro subscriber must reach the Pro lane, not the free cap")
+    }
+
+    func testNonProGoesTokenlessWithoutAnExtraCall() async throws {
+        let svc = RecordingCloudVentService(returning: "ok")
+        _ = try await svc.generate(req(), auth: StubAuth(token: nil))
+        XCTAssertEqual(svc.tokens, [nil])
+        XCTAssertEqual(svc.calls.count, 1, "non-Pro must not pay a retry round-trip")
+    }
+
+    func testStaleTokenReAuthenticatesRatherThanDowngrading() async throws {
+        let svc = AcceptsOnlyFreshCloudVentService()
+        let auth = CountingAuth(["stale", "fresh"])
+        let resp = try await svc.generate(req(), auth: auth)
+        XCTAssertEqual(resp.text, "pro-ok")
+        XCTAssertEqual(svc.tokens, ["stale", "fresh"],
+                       "an expired token must be refreshed, not silently downgraded")
+        XCTAssertEqual(auth.invalidateCount, 1)
+    }
+
+    func testFallsBackToFreeLaneWhenAuthKeepsFailing() async throws {
+        let svc = TokenRejectingCloudVentService()
+        let auth = CountingAuth(["t1", "t2"])
+        let resp = try await svc.generate(req(), auth: auth)
+        XCTAssertEqual(resp.text, "free-lane-ok",
+                       "a broken auth path must never block generation")
+        // Full sequence: stale -> re-auth -> still rejected -> tokenless.
+        XCTAssertEqual(svc.tokens, ["t1", "t2", nil])
+        XCTAssertEqual(auth.invalidateCount, 1)
+    }
+
+    func testDoesNotRetryWhenReAuthReturnsTheSameToken() async throws {
+        // Guards an infinite-ish retry: if invalidate() yields the same token,
+        // retrying it would just 401 again, so we go straight to the free lane.
+        let svc = TokenRejectingCloudVentService()
+        let auth = CountingAuth(["same", "same"])
+        _ = try await svc.generate(req(), auth: auth)
+        XCTAssertEqual(svc.tokens, ["same", nil],
+                       "an identical re-auth token must not be retried")
+    }
+
+    func testEchoesEngineAcceptsAnInjectedAuthProvider() {
+        // Compile-level proof of the M-b wiring: before the fix EchoesEngine
+        // had no auth dependency at all, so its roommate cloud call could only
+        // ever go out tokenless.
+        _ = EchoesEngine(cloudClient: RecordingCloudVentService(returning: "x"),
+                         auth: StubAuth(token: "pro-token"))
+    }
+}

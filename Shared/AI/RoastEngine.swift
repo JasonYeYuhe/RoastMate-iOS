@@ -346,36 +346,16 @@ actor RoastEngine {
         }
     }
 
-    /// Track M v2: best-effort authenticated cloud call. Fetches a Pro session
-    /// token (nil for non-Pro / any auth failure → the free/legacy lane), sends
-    /// it; if the Worker rejects it (401 → `.tokenInvalid`), drops the cached
-    /// token and retries once on the tokenless free lane. A broken auth path
-    /// therefore never blocks a vent — it just falls back to the free cap.
+    /// Track M: delegates to the shared `CloudVentService.generate(_:auth:)`.
+    /// The token dance used to live here, privately, which is exactly why the
+    /// Echoes roommate path never got it (v1.4 M-b). Kept as a thin shim so
+    /// this engine's call sites stay readable.
     private func generateWithAuth(
         _ req: CloudVentRequest,
         client: CloudVentService,
         auth: CloudAuthProviding
     ) async throws -> CloudVentResponse {
-        let token = await auth.proSessionToken()
-        guard let token else {
-            return try await client.generate(req, authToken: nil)
-        }
-        do {
-            return try await client.generate(req, authToken: token)
-        } catch CloudVentError.tokenInvalid {
-            // Token rejected (typically expired mid-session). Re-authenticate
-            // ONCE with a fresh token so a Pro user isn't silently downgraded to
-            // the free cap; only if that ALSO fails do we fall to the free lane.
-            await auth.invalidate()
-            if let fresh = await auth.proSessionToken(), fresh != token {
-                do {
-                    return try await client.generate(req, authToken: fresh)
-                } catch CloudVentError.tokenInvalid {
-                    // fresh token also rejected → fall through to the free lane
-                }
-            }
-            return try await client.generate(req, authToken: nil)
-        }
+        try await client.generate(req, auth: auth)
     }
 
     /// Helper that fronts `CloudVentClient.generate` so the engine's

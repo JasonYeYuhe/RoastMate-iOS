@@ -43,6 +43,40 @@ extension CloudVentService {
     func generate(_ req: CloudVentRequest) async throws -> CloudVentResponse {
         try await generate(req, authToken: nil)
     }
+
+    /// Track M: best-effort AUTHENTICATED cloud call — the single place the
+    /// Pro-token dance lives.
+    ///
+    /// Fetches a Pro session token (nil for non-Pro, or any auth failure →
+    /// the free/legacy lane) and sends it. If the Worker rejects it
+    /// (401 → `.tokenInvalid`, typically an expiry mid-session) it drops the
+    /// cached token and retries ONCE with a fresh one, so a Pro user is never
+    /// silently downgraded to the free cap by a stale token; only if that also
+    /// fails does it fall through to the tokenless lane. A broken auth path
+    /// therefore never blocks generation — it just costs the free cap.
+    ///
+    /// This was previously private to `RoastEngine`, which is why the Echoes
+    /// roommate path shipped without it and charged paying Pro users against
+    /// the FREE per-device cap (v1.4 M-b). Every cloud caller must route
+    /// through here.
+    func generate(_ req: CloudVentRequest, auth: CloudAuthProviding) async throws -> CloudVentResponse {
+        guard let token = await auth.proSessionToken() else {
+            return try await generate(req, authToken: nil)
+        }
+        do {
+            return try await generate(req, authToken: token)
+        } catch CloudVentError.tokenInvalid {
+            await auth.invalidate()
+            if let fresh = await auth.proSessionToken(), fresh != token {
+                do {
+                    return try await generate(req, authToken: fresh)
+                } catch CloudVentError.tokenInvalid {
+                    // fresh token also rejected → fall through to the free lane
+                }
+            }
+            return try await generate(req, authToken: nil)
+        }
+    }
 }
 
 struct CloudVentRequest: Encodable, Sendable {
