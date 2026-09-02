@@ -10,6 +10,11 @@ struct RunConfig {
     let locale: String
     /// Override style — if nil, use each scenario's defaultStyleId.
     let styleOverride: String?
+    /// "vent" (default) or "roast" — the sendable calm/sharp/savage path.
+    /// The Worker gates "roast" behind ROAST_MODE_ENABLED. (Track 0.2)
+    var mode: String = "vent"
+    /// Variants requested when mode == "roast".
+    var variantCount: Int = 3
 }
 
 enum Runner {
@@ -22,13 +27,20 @@ enum Runner {
             let style = cfg.styleOverride ?? sc.defaultStyleId
             // Build the per-call worker payload (the WorkerBackend
             // reuses this as its "userPrompt" parameter).
-            let payload: [String: Any] = [
+            var payload: [String: Any] = [
                 "situation": sit,
                 "styleName": style,
                 "intensity": cfg.intensity,
                 "locale": cfg.locale,
                 "deviceId": "eval-runner-\(Int(Date().timeIntervalSince1970))-\(sc.id.prefix(15))"
             ]
+            if cfg.mode == "roast" {
+                // The sendable path needs the STABLE styleId (the Worker keys
+                // its style register on it) plus the variant count.
+                payload["mode"] = "roast"
+                payload["styleId"] = style
+                payload["variantCount"] = cfg.variantCount
+            }
             guard let body = try? JSONSerialization.data(withJSONObject: payload),
                   let bodyStr = String(data: body, encoding: .utf8) else {
                 continue

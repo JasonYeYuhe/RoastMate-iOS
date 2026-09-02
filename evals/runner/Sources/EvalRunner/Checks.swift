@@ -10,7 +10,15 @@ struct CheckResult: Sendable, Encodable {
     var charCount: Int
     var safetyFlags: [String]   // empty = clean
     var politeSarcasmOpen: Bool
-    var ventStrongWordCount: Int  // ≥1 expected when intensity ∈ {vent, feral}
+    /// Count of strong/profane words. The EXPECTATION flips by intensity:
+    /// vent/feral want ≥1 (catharsis), sendable wants exactly 0 — a sendable
+    /// reply with profanity in it is not sendable. Populated for every
+    /// intensity as of the 0.2 sendable eval; previously vent/feral only, and
+    /// the computation is unchanged for those, so old runs stay comparable.
+    var ventStrongWordCount: Int
+    /// mode:"roast" returns N numbered variants in one payload; the client
+    /// splits them. 1 for the vent path (single draft).
+    var variantsParsed: Int = 1
 }
 
 enum DeterministicChecks {
@@ -43,16 +51,21 @@ enum DeterministicChecks {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         let politeOpen = politeOpenings.contains { trimmed.hasPrefix($0) }
 
-        // Vent strong-word density — relevant only for vent/feral
+        // Strong-word density. Counted for ALL intensities now: vent/feral
+        // want it high, sendable wants it at zero.
         var strongCount = 0
-        if intensity == "vent" || intensity == "feral" {
+        do {
             if isZh {
                 let zhStrong = isHant
                     ? ["他媽的", "他媽", "老子", "特麼", "服了", "裝什麼裝",
                        "煩死了", "尼瑪", "傻逼", "操", "幹", "媽的"]
                     : ["他妈的", "他妈", "老子", "特么", "服了", "装什么装",
                        "烦死了", "尼玛", "傻逼", "操", "卧槽", "妈的"]
-                for w in zhStrong { strongCount += text.components(separatedBy: w).count - 1 }
+                for w in zhStrong {
+                    strongCount += (w == "操" || w == "干" || w == "幹")
+                        ? countProfaneCoarseVerb(w, in: text)
+                        : text.components(separatedBy: w).count - 1
+                }
             } else if isJa {
                 let jaStrong = ["クソ", "うるせえ", "ふざけ", "マジで",
                                 "ばかやろう", "あり得ない"]
@@ -67,7 +80,43 @@ enum DeterministicChecks {
         return CheckResult(languageMatch: langMatch, lengthInRange: lenOK,
                            charCount: count, safetyFlags: flags,
                            politeSarcasmOpen: politeOpen,
-                           ventStrongWordCount: strongCount)
+                           ventStrongWordCount: strongCount,
+                           variantsParsed: Self.countVariants(text))
+    }
+
+    /// Single-character coarse verbs (操 / 干) are profane ONLY in specific
+    /// constructions. In ordinary use they are extremely common and neutral.
+    ///
+    /// This matches the PROFANE constructions explicitly rather than trying to
+    /// exclude benign ones, because the benign set is unbounded and defeats
+    /// adjacency rules: 操心 can be split by an infix (少操这份闲心), and 干
+    /// appears mid-idiom (一干二净). Both slipped past a denylist on 2026-09-03
+    /// and produced false sendable-bar failures.
+    ///
+    /// Profane: the verb followed by a person-object (操你 / 干他 / 操蛋), or
+    /// standing alone as an exclamation bounded by punctuation.
+    static func countProfaneCoarseVerb(_ w: String, in text: String) -> Int {
+        let objects = "你您他她它我们妈娘丫蛋逼"
+        let patterns = [
+            "\(w)[\(objects)]",
+            // Standalone exclamation: not adjacent to any other Han character.
+            "(?<![\\u4e00-\\u9fa5])\(w)(?![\\u4e00-\\u9fa5])"
+        ]
+        var n = 0
+        for pat in patterns {
+            guard let re = try? NSRegularExpression(pattern: pat) else { continue }
+            n += re.numberOfMatches(in: text, range: NSRange(text.startIndex..., in: text))
+        }
+        return n
+    }
+
+    /// Mirrors the client's numbered-variant split ("1. …\n\n2. …").
+    /// A sendable response that does not parse into the requested number of
+    /// variants is a contract failure, not a style opinion.
+    static func countVariants(_ text: String) -> Int {
+        let re = try? NSRegularExpression(pattern: "(?m)^\\s*\\d+[.、)]\\s+")
+        let n = re?.numberOfMatches(in: text, range: NSRange(text.startIndex..., in: text)) ?? 0
+        return max(1, n)
     }
 
     // Coarse language sniffer: check whether the text contains characters

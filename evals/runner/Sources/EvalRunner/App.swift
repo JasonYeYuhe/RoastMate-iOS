@@ -14,6 +14,14 @@ struct App {
         var outDir: URL = URL(fileURLWithPath: "evals/runs")
         var label: String?  // optional run label for the output dir name
         var tierA: Bool = false  // α4 — preflight smoke preset, strict exit
+        /// Track 0.2: "vent" (default) or "roast" (sendable calm/sharp/savage).
+        var mode: String = "vent"
+        var variantCount: Int = 3
+        /// Point at a non-production Worker. The sendable path is gated OFF in
+        /// prod (ROAST_MODE_ENABLED=false), so the 0.2 eval runs against a
+        /// `wrangler dev --remote --var ROAST_MODE_ENABLED:true` instance
+        /// rather than opening that path publicly.
+        var endpoint: URL = URL(string: "https://roastmate-vent.yyyyy-yeyuhe.workers.dev/v1/vent")!
     }
 
     static let usage = """
@@ -41,6 +49,12 @@ struct App {
       # cross-test default + GLM Air on zh-Hant vent
       eval-runner --locale zh-Hant --model z-ai/glm-4.5-air:free
 
+      # Track 0.2 — zh-Hans SENDABLE eval against a dev Worker with the
+      # roast path enabled (prod keeps ROAST_MODE_ENABLED=false):
+      #   npx wrangler dev --remote --var ROAST_MODE_ENABLED:true --port 8799
+      eval-runner --mode roast --intensity calm,sharp,savage --locale zh-Hans \\
+          --endpoint http://127.0.0.1:8799/v1/vent --label 0.2-sendable-zh
+
       # α4 preflight smoke (1 scenario × vent+feral × 4 locales = 8 cells,
       # ≤2 min, exits non-zero on any cell failure). When /v1/sharp lands
       # in α2 (W3), this expands to include sharp+calm = 16 cells.
@@ -63,6 +77,9 @@ struct App {
             case "--out":       i += 1; a.outDir = URL(fileURLWithPath: argv[i])
             case "--label":     i += 1; a.label = argv[i]
             case "--tier-a":    a.tierA = true
+            case "--mode":      i += 1; a.mode = argv[i]
+            case "--variants":  i += 1; a.variantCount = Int(argv[i]) ?? 3
+            case "--endpoint":  i += 1; a.endpoint = URL(string: argv[i])!
             case "--help", "-h": print(usage); exit(0)
             default:
                 FileHandle.standardError.write("Unknown arg: \(k)\n".data(using: .utf8)!)
@@ -103,10 +120,10 @@ struct App {
 
             var backends: [any Backend] = []
             if args.includeDefault {
-                backends.append(WorkerBackend(modelOverride: nil))
+                backends.append(WorkerBackend(endpoint: args.endpoint, modelOverride: nil))
             }
             for m in args.models {
-                backends.append(WorkerBackend(modelOverride: m))
+                backends.append(WorkerBackend(endpoint: args.endpoint, modelOverride: m))
             }
             if backends.isEmpty {
                 FileHandle.standardError.write(
@@ -130,7 +147,8 @@ struct App {
                     let cfg = RunConfig(
                         scenarios: scenarios, backends: backends,
                         intensity: intensity, locale: locale,
-                        styleOverride: args.styleOverride
+                        styleOverride: args.styleOverride,
+                        mode: args.mode, variantCount: args.variantCount
                     )
                     let subset = await Runner.run(cfg)
                     let okHere = subset.filter(\.ok).count
