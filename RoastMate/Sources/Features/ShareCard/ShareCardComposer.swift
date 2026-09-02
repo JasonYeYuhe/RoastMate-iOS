@@ -26,6 +26,10 @@ struct ShareCardComposer: View {
 
     @State private var format: ShareCardFormat = .portrait45
     @State private var exportURL: URL?
+    /// Counted once per presentation, not per re-render — switching the format
+    /// picker re-renders the card and would otherwise inflate the denominator
+    /// of the generated-vs-shared ratio B.8 exists to measure.
+    @State private var didCountGeneration = false
 
     init(sentText: String, styleName: String?, kind: GeneratedRoastKind) {
         self.sentText = sentText
@@ -37,8 +41,27 @@ struct ShareCardComposer: View {
     /// Single source of truth: `GeneratedRoastKind.isShareable`.
     private var isShareable: Bool { kind.isShareable }
 
-    private var content: ShareCardContent {
-        ShareCardContent(styleName: styleName, sentText: sentText)
+    /// B.2 defense-in-depth, applied in this order and no other:
+    ///   1. `Redactor.redactForPublicShare` — structured PII + CJK contact
+    ///      forms + an on-device NER pass.
+    ///   2. `SafetyFilter.validateOutput` (the STRICT validator) runs LAST,
+    ///      immediately before render. A public share is a stricter register
+    ///      than a private draft, so a failure BLOCKS the export rather than
+    ///      falling back to raw text.
+    ///
+    /// `nil` means "do not render" — the composer shows the block notice
+    /// instead of a card. There is deliberately no path that renders
+    /// unredacted or unvalidated text.
+    private var safeText: String? {
+        let redacted = Redactor.redactForPublicShare(sentText, locale: locale)
+        return try? SafetyFilter.validateOutput(redacted)
+    }
+
+    private var content: ShareCardContent? {
+        guard let safeText else { return nil }
+        return ShareCardContent(styleName: styleName,
+                                sentText: safeText,
+                                showsGrowthBadge: RemoteConfigValues.cached().shareCardEnabled)
     }
 
     var body: some View {
@@ -47,6 +70,7 @@ struct ShareCardComposer: View {
                 VStack(spacing: 18) {
                     preview
                     formatPicker
+                    privacyNote
                 }
                 .padding()
             }
@@ -56,7 +80,11 @@ struct ShareCardComposer: View {
                     Button("sharecard.cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    if let url = exportURL {
+                    if content == nil {
+                        // Safety gate refused the line — no share affordance at
+                        // all, rather than a spinner that never resolves.
+                        EmptyView()
+                    } else if let url = exportURL {
                         // OutputShareButton fires recordOutputShareTap +
                         // notifySuccessfulShare ONLY on confirmed
                         // completion (iOS) — was previously tap-only, so
@@ -66,6 +94,7 @@ struct ShareCardComposer: View {
                         OutputShareButton(
                             item: url,
                             onConfirmedShare: {
+                                EventLedger.shared.recordShareCardShared()
                                 RatingPromptService.shared.notifySuccessfulShare()
                             }
                         ) {
@@ -81,19 +110,57 @@ struct ShareCardComposer: View {
         .opacity(isShareable ? 1 : 0)
     }
 
-    private var renderKey: String { format.rawValue }
+    private var renderKey: String { "\(format.rawValue)|\(safeText?.hashValue ?? 0)" }
 
+    @ViewBuilder
     private var preview: some View {
-        GeometryReader { geo in
-            let scale = geo.size.width / format.pixelSize.width
-            ShareCardView(content: content, pixelSize: format.pixelSize)
-                .frame(width: format.pixelSize.width, height: format.pixelSize.height)
-                .scaleEffect(scale, anchor: .topLeading)
-                .frame(width: geo.size.width,
-                       height: format.pixelSize.height * scale)
+        if let content {
+            GeometryReader { geo in
+                let scale = geo.size.width / format.pixelSize.width
+                ShareCardView(content: content, pixelSize: format.pixelSize)
+                    .frame(width: format.pixelSize.width, height: format.pixelSize.height)
+                    .scaleEffect(scale, anchor: .topLeading)
+                    .frame(width: geo.size.width,
+                           height: format.pixelSize.height * scale)
+            }
+            .frame(height: format == .portrait45 ? 360 : 480)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+        } else {
+            blockedNotice
         }
-        .frame(height: format == .portrait45 ? 360 : 480)
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+    }
+
+    /// Shown when the safety gate refuses the line. Rare by construction —
+    /// `sentText` already passed `validateOutput` at generation — but the
+    /// redaction pass can change the text, so it is re-validated here and the
+    /// result has to be honoured.
+    private var blockedNotice: some View {
+        VStack(spacing: 10) {
+            Image(systemName: "exclamationmark.shield")
+                .font(.largeTitle)
+                .foregroundStyle(.secondary)
+            Text("sharecard.blocked")
+                .font(.callout)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, minHeight: 200)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 14).fill(Color.secondary.opacity(0.08))
+        )
+    }
+
+    /// B.9. The card is the one place the app asks a privacy-anxious user to
+    /// produce something public, so it should say plainly what is and is not
+    /// happening — on the screen where the worry actually occurs, not buried in
+    /// Settings.
+    private var privacyNote: some View {
+        Label("sharecard.privacy_note", systemImage: "lock.fill")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var formatPicker: some View {
@@ -113,6 +180,19 @@ struct ShareCardComposer: View {
             exportURL = nil
             return
         }
+        guard let content else {
+            // Safety gate refused post-redaction. No card, no fallback.
+            exportURL = nil
+            if !didCountGeneration {
+                didCountGeneration = true
+                EventLedger.shared.recordShareCardBlocked()
+            }
+            return
+        }
         exportURL = ShareCardRenderer.renderPNG(content, format: format, locale: locale)
+        if exportURL != nil, !didCountGeneration {
+            didCountGeneration = true
+            EventLedger.shared.recordShareCardGenerated()
+        }
     }
 }

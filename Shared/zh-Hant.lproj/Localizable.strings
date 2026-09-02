@@ -490,6 +490,9 @@
 "sharecard.format.portrait" = "直式 4:5";
 "sharecard.format.story" = "全螢幕 9:16";
 "sharecard.comeback_eyebrow" = "我的回擊";
+"sharecard.blocked" = "這句暫時不能做成卡片。可以重新產生一則試試。";
+"sharecard.privacy_note" = "整張圖都在你的手機上產生。你原本的發洩內容始終私密,不會被上傳。";
+"sharecard.findus" = "App Store 搜尋 RoastMate";
 "sharecard.watermark" = "先罵個痛快，再發會贏的版本";
 
 /* A′ 上線後埋點 — 隱私友善的彙總計數。詳見 docs/A_PRIME_TELEMETRY.md。 */

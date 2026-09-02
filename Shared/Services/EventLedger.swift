@@ -175,6 +175,13 @@ public final class EventLedger: @unchecked Sendable {
     }
     public func recordOutputCopied() { bump(.outputDestinationCopied) }
 
+    /// A card was successfully rendered and shown to the user.
+    public func recordShareCardGenerated() { bump(.shareCardGenerated) }
+    /// The user actually completed a share of that card.
+    public func recordShareCardShared() { bump(.shareCardShared) }
+    /// The strict validator refused the redacted line, so no card was offered.
+    public func recordShareCardBlocked() { bump(.shareCardBlocked) }
+
     /// Set the persistent App-Group boolean flag indicating the user
     /// has produced at least one successful output. Called from the
     /// success path of `RoastEngine.generate()` (covers main app, share
@@ -423,6 +430,19 @@ public final class EventLedger: @unchecked Sendable {
         case roommateGroupParseFallback           = "roommate_group_parse_fallback"
         case roommateGroupBridgeTapped            = "roommate_group_bridge_tapped"
         case roommateGroupRegenerated             = "roommate_group_regenerated"
+
+        // --- Share card (v1.4 Track B.8) ---
+        // The pair that matters is GENERATED vs SHARED. A card that renders but
+        // is never shared is the signal that safety scrubbing has over-masked
+        // the line into something with no punch — which would kill the growth
+        // loop silently, and look identical to "nobody wanted to share" unless
+        // both halves are counted.
+        case shareCardGenerated                   = "share_card_generated"
+        case shareCardShared                      = "share_card_shared"
+        // Rendering refused by the strict validator AFTER redaction. A rising
+        // rate here means the redaction pass is mangling text into something
+        // the safety filter then rejects.
+        case shareCardBlocked                     = "share_card_blocked"
 
         public var storageKey: String { "aprime.counters.\(rawValue)" }
     }

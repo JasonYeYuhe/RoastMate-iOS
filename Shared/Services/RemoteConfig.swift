@@ -46,6 +46,20 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// no Apple cycle (the increment-8 DARK→eval→flip model). RESTRICT-only: it
     /// still ANDs the 5.1.2(i) consent grant via `cloudSendableAllowed`.
     var cloudSendableEnabled: Bool
+    /// `true` → the share card may carry its GROWTH layer: the QR code, the
+    /// "search RoastMate" badge, and the campaign-tagged link.
+    ///
+    /// Scope note, because this differs from what the v1.4 plan assumed. The
+    /// plan said to ship "the Comeback Card" dark. It was written believing the
+    /// card was unshipped — it is not: a card has been live since v1.0.5, and
+    /// v1.3.1 made it sendable-only and immutable. Gating the whole card would
+    /// therefore REMOVE a shipped, now-safe feature from users.
+    ///
+    /// So this flag gates the growth layer only — the parts that turn a private
+    /// nicety into an acquisition surface, and therefore into a traffic surge.
+    /// That preserves the plan's actual intent (no viral floodgate before the
+    /// dam is proven) with no user-visible regression. DARK by default.
+    var shareCardEnabled: Bool
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
@@ -61,7 +75,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         ventCloudEnabled: true,
         minSupportedBuild: 0,
         roommateGroupEnabled: true,
-        cloudSendableEnabled: false  // DARK: flipped on remotely after the eval
+        cloudSendableEnabled: false, // DARK: flipped on remotely after the eval
+        shareCardEnabled: false      // DARK: flipped after the §2 quantitative gate
     )
 
     enum CodingKeys: String, CodingKey {
@@ -71,6 +86,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
         case cloudSendableEnabled = "cloud_sendable_enabled"
+        case shareCardEnabled    = "share_card_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 
@@ -80,13 +96,15 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     init(configVersion: Int, echoesEnabled: Bool, forceLocalOnly: Bool,
          ventCloudEnabled: Bool, minSupportedBuild: Int,
          roommateGroupEnabled: Bool = true,
-         cloudSendableEnabled: Bool = false) {
+         cloudSendableEnabled: Bool = false,
+         shareCardEnabled: Bool = false) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
         self.roommateGroupEnabled = roommateGroupEnabled
         self.forceLocalOnly = forceLocalOnly
         self.ventCloudEnabled = ventCloudEnabled
         self.cloudSendableEnabled = cloudSendableEnabled
+        self.shareCardEnabled = shareCardEnabled
         self.minSupportedBuild = minSupportedBuild
     }
 
@@ -111,6 +129,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         forceLocalOnly       = try c.decodeIfPresent(Bool.self, forKey: .forceLocalOnly)       ?? d.forceLocalOnly
         ventCloudEnabled     = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)     ?? d.ventCloudEnabled
         cloudSendableEnabled = try c.decodeIfPresent(Bool.self, forKey: .cloudSendableEnabled) ?? d.cloudSendableEnabled
+        shareCardEnabled     = try c.decodeIfPresent(Bool.self, forKey: .shareCardEnabled)     ?? d.shareCardEnabled
         minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
 
@@ -165,7 +184,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             ventCloudEnabled:     patch.ventCloudEnabled     ?? ventCloudEnabled,
             minSupportedBuild:    patch.minSupportedBuild    ?? minSupportedBuild,
             roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled,
-            cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled
+            cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled,
+            shareCardEnabled: patch.shareCardEnabled ?? shareCardEnabled
         )
     }
 }
@@ -180,6 +200,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
     var forceLocalOnly: Bool?
     var ventCloudEnabled: Bool?
     var cloudSendableEnabled: Bool?
+    var shareCardEnabled: Bool?
     var minSupportedBuild: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -189,6 +210,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
         case cloudSendableEnabled = "cloud_sendable_enabled"
+        case shareCardEnabled    = "share_card_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 }

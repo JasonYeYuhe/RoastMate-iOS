@@ -35,4 +35,10 @@ struct ShareCardContent: Equatable {
     var styleName: String?
     /// The polished, sendable line — the only text the card renders.
     var sentText: String
+    /// Growth layer (B.4/B.5): the QR + "search RoastMate" badge. Gated by the
+    /// `share_card_enabled` RemoteConfig flag, DARK by default. When false the
+    /// card still renders — it just carries the plain wordmark, exactly as it
+    /// does today — so flipping this on adds an acquisition surface rather than
+    /// restoring a removed one.
+    var showsGrowthBadge: Bool = false
 }

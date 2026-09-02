@@ -591,6 +591,7 @@ function buildSystemPrompt(intensity, locale, styleName) {
   const universal = [
     "SAFETY RULES (always apply, regardless of intensity / mode):",
     "- Never target a specific real person by full name. If a name appears in the user's situation, replace it with a generic role (\"the manager\", \"the roommate\").",
+    "- NEVER echo identifying details back, even if the user typed them: no real names, no company or school names, no addresses, no phone numbers, no email addresses, and no contact handles (WeChat/vx/QQ). Replace them with a generic role or reference — in Chinese use 「对方」/「你的同事」/「那家公司」; in English: them / your coworker / that company. The output may be rendered onto a shareable image, so treat every specific identifier as something that must not survive into it.",
     "- Never produce slurs, racist, sexist, ableist, homophobic, transphobic, or hateful content.",
     "- Never produce threats of physical violence, doxxing, sexual content, or self-harm content.",
     "- Never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
@@ -698,6 +699,7 @@ function buildRoastSystemPrompt(intensity, locale, styleName, styleId, variantCo
   const safety = [
     "SAFETY RULES (always apply):",
     "- Never target a real person by full name; replace any name with a generic role (\"the manager\", \"the roommate\").",
+    "- NEVER echo identifying details back, even if the user typed them: no real names, no company or school names, no addresses, no phone numbers, no email addresses, and no contact handles (WeChat/vx/QQ). Replace them with a generic role or reference — in Chinese use 「对方」/「你的同事」/「那家公司」; in English: them / your coworker / that company. The output may be rendered onto a shareable image, so treat every specific identifier as something that must not survive into it.",
     "- No slurs or hateful content; never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
     "- No threats of physical violence, doxxing, sexual content, or self-harm content.",
     "- Attack the behavior or the choice, never the person's identity.",

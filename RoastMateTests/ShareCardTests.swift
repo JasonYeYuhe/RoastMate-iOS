@@ -93,6 +93,141 @@ final class ShareCardTests: XCTestCase {
         }
     }
 
+    // MARK: - B.2 strict redaction for public sharing
+    //
+    // Structured PII is caught with confidence; free-form Chinese names are
+    // NOT, and these tests say so explicitly rather than pretending otherwise.
+    // The primary defense is the Worker prompt telling the model never to echo
+    // names/contacts; this layer is defense in depth.
+
+    func testRedactsChineseContactHandles() {
+        for raw in ["加我vx: abc_123", "微信号：zhangsan88", "QQ 1234567", "扣扣:998877xy", "v信 wangwang2024"] {
+            let out = Redactor.redactForPublicShare(raw)
+            XCTAssertTrue(out.contains("[联系方式]"), "should mask contact in: \(raw) -> \(out)")
+        }
+    }
+
+    func testRedactsChineseNumeralPhone() {
+        let out = Redactor.redactForPublicShare("打一三八零零一三八零零零")
+        XCTAssertTrue(out.contains("[号码]"), out)
+        XCTAssertFalse(out.contains("一三八"), out)
+    }
+
+    func testRedactsIDCard() {
+        let out = Redactor.redactForPublicShare("身份证 11010519900307561X 都发群里了")
+        XCTAssertTrue(out.contains("[身份证]"), out)
+        XCTAssertFalse(out.contains("11010519900307561X"), out)
+    }
+
+    func testRedactsSurnamePlusTitle() {
+        let zh = Locale(identifier: "zh-Hans")
+        for raw in ["张总又画饼了", "李经理说这是机会", "王主管让我背锅"] {
+            let out = Redactor.redactForPublicShare(raw, locale: zh)
+            XCTAssertTrue(out.contains("[对方]"), "\(raw) -> \(out)")
+        }
+    }
+
+    func testRedactsRolePrefixedNickname() {
+        let out = Redactor.redactForPublicShare("PM老王又改需求", locale: Locale(identifier: "zh-Hans"))
+        XCTAssertTrue(out.contains("[对方]"), out)
+    }
+
+    func testStrictPassStillCatchesTheAsciiCases() {
+        let out = Redactor.redactForPublicShare("mail me a@b.com or https://x.example")
+        XCTAssertTrue(out.contains("[email]"))
+        XCTAssertTrue(out.contains("[link]"))
+    }
+
+    func testDoesNotMangleAnOrdinaryComeback() {
+        // Over-masking is the safer error but NOT a free one: a scrubbed line
+        // has no punch and will not be shared. An ordinary comeback with no PII
+        // must survive completely intact.
+        let line = "我不是不会做，我只是不打算替你把锅也一起背了。"
+        XCTAssertEqual(Redactor.redactForPublicShare(line), line)
+    }
+
+    func testOrdinaryEnglishComebackSurvives() {
+        let line = "Noted. I'll be sure to document who actually wrote it next time."
+        XCTAssertEqual(Redactor.redactForPublicShare(line), line)
+    }
+
+    func testCompanyAndPlaceAreDeliberatelyNotMasked() {
+        // Organisations/places are usually the joke, not the identifier.
+        let line = "北京的房租比我的尊严还高。"
+        XCTAssertEqual(Redactor.redactForPublicShare(line), line)
+    }
+
+    /// Real model output captured from the live Worker on 2026-09-03, after the
+    /// B.2.1 prompt containment was deployed. The prompt told the model not to
+    /// echo identifying details; it did anyway in 2 of 3 runs. That measurement
+    /// is why the client-side pass is a PRIMARY control here, not a backstop —
+    /// see the note in Redactor.swift.
+    func testRedactsNamesThatSurvivedThePromptContainment() {
+        let zh = Locale(identifier: "zh-Hans")
+        let leaked = "张伟，你他妈脸皮是有多厚？最恶心的是你们那个李经理，为了捧你连基本事实都不要了。"
+        let out = Redactor.redactForPublicShare(leaked, locale: zh)
+        XCTAssertFalse(out.contains("李经理"), "surname+title must be masked: \(out)")
+        XCTAssertTrue(out.contains("[对方]"), out)
+    }
+
+    func testCatchesBareTwoCharChineseName() {
+        // A bare 2-character name has no structural shape, so this depends
+        // entirely on NLTagger. Measured 2026-09-03: it DOES catch this one.
+        // Pinned so a regression is visible — but note this is one sample, not
+        // a guarantee across all names, which is why the layered design stands.
+        let zh = Locale(identifier: "zh-Hans")
+        let out = Redactor.redactForPublicShare("张伟，你他妈脸皮是有多厚？", locale: zh)
+        XCTAssertFalse(out.contains("张伟"), out)
+        XCTAssertTrue(out.contains("[对方]"), out)
+    }
+
+    func testRedactsContactAndPhoneFromARealSituation() {
+        let zh = Locale(identifier: "zh-Hans")
+        let raw = "我同事（微信 zhangwei_888，手机 13800138000）在群里甩锅"
+        let out = Redactor.redactForPublicShare(raw, locale: zh)
+        XCTAssertFalse(out.contains("zhangwei_888"), out)
+        XCTAssertFalse(out.contains("13800138000"), out)
+    }
+
+    // MARK: - B.3 Feral is structurally barred, not separately gated
+
+    func testFeralTextCannotReachTheCardBecauseItIsAVentDraft() {
+        // The plan asked to "bar Feral from the composer". That is now
+        // structural rather than a separate check: feral output IS a
+        // .ventDraft, and .ventDraft is not shareable. A sendable reply
+        // rewritten FROM a feral draft is, by construction, sendable text that
+        // passed the strict validator.
+        XCTAssertFalse(GeneratedRoastKind.ventDraft.isShareable)
+        XCTAssertTrue(Intensity.feral.isPrivateDraft,
+                      "feral must remain a private-draft register")
+        XCTAssertTrue(Intensity.vent.isPrivateDraft)
+        XCTAssertFalse(Intensity.sharp.isPrivateDraft)
+    }
+
+    // MARK: - B.4/B.5 growth layer is DARK by default
+
+    func testGrowthBadgeIsOffByDefault() {
+        let c = ShareCardContent(styleName: nil, sentText: "x")
+        XCTAssertFalse(c.showsGrowthBadge,
+                       "the QR/badge layer must default DARK until share_card_enabled flips")
+    }
+
+    func testRemoteConfigShareCardFlagDefaultsDark() {
+        XCTAssertFalse(RemoteConfigValues.safeDefault.shareCardEnabled)
+    }
+
+    func testCampaignURLCarriesTheAttributionToken() {
+        let url = ShareCardBadge.campaignURL.absoluteString
+        XCTAssertTrue(url.contains("ct=sharecard_v14"), url)
+        XCTAssertTrue(url.contains(ShareCardBadge.appStoreID), url)
+    }
+
+    func testQRRendersAtTheRequestedScale() {
+        let img = ShareCardBadge.qrImage(sidePixels: 264)
+        XCTAssertNotNil(img, "QR generation must not fail on-device")
+        if let img { XCTAssertGreaterThanOrEqual(img.width, 200) }
+    }
+
     // MARK: - Format
 
     func testExportFormatsAreExactPixelSizes() {

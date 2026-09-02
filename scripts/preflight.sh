@@ -105,7 +105,23 @@ for locale in "${LOCALES[@]}"; do
     fail "$locale: missing Localizable.strings"
   fi
 done
-# All counts should match within ±2 (allow minor drift for plural forms)
+# Counts should match within a small delta, EXCLUDING keys for features that
+# are deliberately shipped to one locale only.
+#
+# Echoes (替你出气 / 虚拟舍友群) is zh-Hans-only by design — ExploreView gates the
+# tile on isZhHansLocale() — so its ~31 keys are intentionally absent from
+# zh-Hant and ja. Counting them made this check fail on EVERY run, which is
+# worse than not having it: a permanently-red check trains you to skim past
+# preflight, and that is exactly how a real regression slips through. So the
+# comparison now ignores the zh-Hans-only prefixes and still fails on anything
+# genuinely missing.
+LOCALE_ONLY_PREFIXES='^"(echoes\.|feature\.echoes\.|settings\.echoes_feral_cloud)'
+COUNTS=()
+for locale in "${LOCALES[@]}"; do
+  f="Shared/${locale}.lproj/Localizable.strings"
+  [ -f "$f" ] || continue
+  COUNTS+=("$(grep -E '^"' "$f" | grep -vE "$LOCALE_ONLY_PREFIXES" | wc -l | tr -d ' ')")
+done
 if [ "${#COUNTS[@]}" -eq 4 ]; then
   min=${COUNTS[0]}
   max=${COUNTS[0]}
@@ -115,7 +131,7 @@ if [ "${#COUNTS[@]}" -eq 4 ]; then
   done
   diff=$((max - min))
   if [ "$diff" -le 3 ]; then
-    ok "localization key counts roughly aligned (delta=$diff)"
+    ok "localization key counts aligned excluding zh-Hans-only features (delta=$diff)"
   else
     fail "localization key counts diverge by $diff — one locale is missing keys"
   fi

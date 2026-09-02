@@ -490,6 +490,9 @@
 "sharecard.format.portrait" = "竖版 4:5";
 "sharecard.format.story" = "全屏 9:16";
 "sharecard.comeback_eyebrow" = "我的回击";
+"sharecard.blocked" = "这句暂时不能做成卡片。可以重新生成一条试试。";
+"sharecard.privacy_note" = "整张图都在你的手机上生成。你原本的发泄内容始终私密,不会被上传。";
+"sharecard.findus" = "App Store 搜索 RoastMate";
 "sharecard.watermark" = "先骂个痛快，再发会赢的版本";
 
 /* A′ 上线后埋点 — 隐私友好的聚合计数。详见 docs/A_PRIME_TELEMETRY.md。 */

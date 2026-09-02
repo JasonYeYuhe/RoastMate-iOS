@@ -490,6 +490,9 @@
 "sharecard.format.portrait" = "縦 4:5";
 "sharecard.format.story" = "全画面 9:16";
 "sharecard.comeback_eyebrow" = "私の返し";
+"sharecard.blocked" = "この一文はカードにできません。生成し直してみてください。";
+"sharecard.privacy_note" = "画像はすべて端末内で生成されます。元の吐き出しは非公開のまま、アップロードされません。";
+"sharecard.findus" = "App Storeで RoastMate を検索";
 "sharecard.watermark" = "まず吐き出し、勝てる方を送る";
 
 /* A′ ローンチ後の計測 — プライバシー両立の集計カウント。

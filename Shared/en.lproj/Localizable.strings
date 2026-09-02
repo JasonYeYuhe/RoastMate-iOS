@@ -490,6 +490,9 @@
 "sharecard.format.portrait" = "Portrait 4:5";
 "sharecard.format.story" = "Full 9:16";
 "sharecard.comeback_eyebrow" = "MY COMEBACK";
+"sharecard.blocked" = "This line can't be made into a card. Try regenerating it.";
+"sharecard.privacy_note" = "Rendered entirely on your device. Your original vent stays private and is never uploaded.";
+"sharecard.findus" = "Search RoastMate on the App Store";
 "sharecard.watermark" = "Vent first, then send the version that wins";
 
 /* A′ post-launch instrumentation — privacy-compatible aggregate counts.

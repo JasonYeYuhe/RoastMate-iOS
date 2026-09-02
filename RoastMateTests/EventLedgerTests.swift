@@ -514,8 +514,46 @@ final class EventLedgerTests: XCTestCase {
         let firstRoommate = cases.firstIndex(of: "roommate_group_started") ?? -1
         XCTAssertGreaterThan(firstRoommate, killSwitch,
                              "Roommate-group counters must follow the kill-switch counter.")
-        XCTAssertEqual(cases.last, "roommate_group_regenerated",
-                       "roommate_group_regenerated is the new end-of-enum tail until the next additive wave.")
+        // v1.4 Track B.8 appended the share-card counters after this block,
+        // so roommate_group_regenerated is no longer the tail — but it must
+        // still come after the kill-switch and before anything newer. The
+        // invariant being protected is APPEND-ONLY ordering, not one specific
+        // last element.
+        let lastRoommate = cases.firstIndex(of: "roommate_group_regenerated") ?? -1
+        XCTAssertGreaterThan(lastRoommate, firstRoommate)
+        let firstShareCard = cases.firstIndex(of: "share_card_generated") ?? -1
+        XCTAssertGreaterThan(firstShareCard, lastRoommate,
+                             "Share-card counters must be APPENDED after the roommate block, never inserted.")
+        XCTAssertEqual(cases.last, "share_card_blocked",
+                       "share_card_blocked is the new end-of-enum tail until the next additive wave.")
+    }
+
+    // MARK: - Schema v3 — share card (v1.4 Track B.8)
+
+    func test_shareCardCounters_measureGeneratedVsShared() {
+        // The PAIR is the point: a card generated but never shared is how we
+        // detect that safety scrubbing has over-masked the line into something
+        // with no punch. Counting only shares would make that invisible.
+        ledger.setOptIn(true)
+        ledger.recordShareCardGenerated()
+        ledger.recordShareCardGenerated()
+        ledger.recordShareCardShared()
+        ledger.recordShareCardBlocked()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["share_card_generated"], 2)
+        XCTAssertEqual(s["share_card_shared"], 1)
+        XCTAssertEqual(s["share_card_blocked"], 1)
+    }
+
+    func test_shareCardCounters_respectOptOut() {
+        // Default opt-out — the growth counters must be no-ops like every other.
+        ledger.recordShareCardGenerated()
+        ledger.recordShareCardShared()
+        ledger.recordShareCardBlocked()
+        let s = ledger.snapshot()
+        XCTAssertEqual(s["share_card_generated"], 0)
+        XCTAssertEqual(s["share_card_shared"], 0)
+        XCTAssertEqual(s["share_card_blocked"], 0)
     }
 
     func test_roommateGroupCounters_eachIncrementsCorrectly() {

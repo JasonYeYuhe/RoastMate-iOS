@@ -22,6 +22,7 @@
 		047D0F95610EF26228A3C3A5 /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
 		052A09AB349ED520BD97B894 /* SampleRoasts.json in Resources */ = {isa = PBXBuildFile; fileRef = 8DA6AEFDF0BD8EC431309ACA /* SampleRoasts.json */; };
 		058F11A97996A288869BCC46 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
+		05E468C4905CA74083889713 /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		06332213267CF17CBEED0C7C /* RoastMateApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C6C5BEEAFFFDB727D9CAC0 /* RoastMateApp.swift */; };
 		064342E384559CD89C6FFAB9 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		064808EE979B2DC8366D74AD /* ArgumentSimulatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE713D8BAF11D2A4B568BD /* ArgumentSimulatorViewModel.swift */; };
@@ -63,6 +64,7 @@
 		18793CE5245B2F733082C7F1 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		1894BD77503AF301BA32A924 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
+		18C750E5556DF9A5367E5189 /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		18EBBE05718EA03924507496 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
 		19F5524619680F3746F33362 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEAE99564022D6C8CECBBBF /* OnboardingView.swift */; };
 		19FCFCAD16046BD27AB0C31F /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F56C52CC38A6375FAC083A8 /* ExploreView.swift */; };
@@ -108,6 +110,7 @@
 		305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */; };
+		33708A0E71952826601432B7 /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		344B79E5E67F7AC0A9672BFF /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		3541E840D5FA220EFA44F8C6 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
@@ -168,6 +171,7 @@
 		54F091E1470ABB2BB31F644C /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		54F504E0AFC4519CA44D94F6 /* ShareCardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */; };
 		55114B9A8F79E60731F4269F /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
+		552C35231B77D6E07D11463A /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		558A54C297993516247A3D1C /* EchoesFeralConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97A81179330CA48CC854629C /* EchoesFeralConsentGate.swift */; };
 		55D479DE2BD7CB282DF464C4 /* RoastGeneratorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */; };
 		5643872E339E23A6FED01CDC /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
@@ -270,6 +274,7 @@
 		84E48496883E452E3B690F7C /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		854EFD62EF0FEC4C5366BFE2 /* ThreadDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AC90C29CF54A9781B56A0F /* ThreadDetailView.swift */; };
 		854F8376B8258F52CD672914 /* EchoesPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D3F3EC78E1B847C8ED2AD /* EchoesPromptBuilder.swift */; };
+		8591E6E80BDF3577AA5025FC /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		85AA70766AD83FA3F082F502 /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		8636FD8AA1B1F377F946AE60 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		86CB4D28876E189B706A51F9 /* PromptBuilderIntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE7038CDFBD6F1719D5F9 /* PromptBuilderIntensityTests.swift */; };
@@ -479,6 +484,7 @@
 		F22B539AFD4DD26A03EE2939 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
 		F2F0C1D46220A900EA21F2E2 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		F2FF341791CDA27193820D2E /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
+		F30D02EB8E652D3316B23B80 /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
 		F3DE9C73FDEA74606BB796D9 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		F3EBDE5B0145F781B0EC4E60 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
 		F3F6F14FA4BEF9E2216D8E57 /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
@@ -601,6 +607,7 @@
 		4F762D491194741211677317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFMBackend.swift; sourceTree = "<group>"; };
 		53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoBridgeStore.swift; sourceTree = "<group>"; };
+		5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardBadge.swift; sourceTree = "<group>"; };
 		58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorViewModel.swift; sourceTree = "<group>"; };
 		58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "echoes-personas-zh-Hans.json"; sourceTree = "<group>"; };
 		58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGenerator.swift; sourceTree = "<group>"; };
@@ -962,6 +969,7 @@
 				7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */,
 				5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */,
 				87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */,
+				5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */,
 				14DDE5DAE2F908B1DD3C9604 /* ShareCardModels.swift */,
 				5C70372E616B3C6B9A03229A /* StoreService.swift */,
 				3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */,
@@ -1530,6 +1538,7 @@
 				4A56B89B3E5D2C3ECB7D6BD7 /* SavedSituation.swift in Sources */,
 				0704F97EBC6DA4A24DA37C43 /* Scenario.swift in Sources */,
 				8C3C77F69C0EC22D3AB559ED /* ScenarioCatalogTests.swift in Sources */,
+				33708A0E71952826601432B7 /* ShareCardBadge.swift in Sources */,
 				18EBBE05718EA03924507496 /* ShareCardModels.swift in Sources */,
 				997087433748B46D4BA84311 /* ShareCardTests.swift in Sources */,
 				18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */,
@@ -1603,6 +1612,7 @@
 				E311AE14AB76A1FAB0CD30B8 /* SampleRoast.swift in Sources */,
 				9C80752CDF47F939708658CF /* SavedSituation.swift in Sources */,
 				344B79E5E67F7AC0A9672BFF /* Scenario.swift in Sources */,
+				8591E6E80BDF3577AA5025FC /* ShareCardBadge.swift in Sources */,
 				D09D84A21C3F3BA182C072C7 /* ShareCardModels.swift in Sources */,
 				54E0791E91EA585CDA059FD2 /* SharedModelContainer.swift in Sources */,
 				74268AC32FDB34B1378D20EC /* SituationThread.swift in Sources */,
@@ -1670,6 +1680,7 @@
 				937D30AE0D38DD43B7656396 /* SampleRoast.swift in Sources */,
 				501A202248DAEEE4A8712F2E /* SavedSituation.swift in Sources */,
 				7BDBC55E5E8CD9E6BC837F03 /* Scenario.swift in Sources */,
+				552C35231B77D6E07D11463A /* ShareCardBadge.swift in Sources */,
 				54F504E0AFC4519CA44D94F6 /* ShareCardModels.swift in Sources */,
 				258F9993B48AAE32F4BC619E /* SharedModelContainer.swift in Sources */,
 				51CA0DEBA2E24561879885DC /* SituationThread.swift in Sources */,
@@ -1734,6 +1745,7 @@
 				1CD9697F814E75C2DCBAA218 /* SampleRoast.swift in Sources */,
 				B80665A89A7DF1353696F5CC /* SavedSituation.swift in Sources */,
 				786AD5795CE740B5A69678EB /* Scenario.swift in Sources */,
+				05E468C4905CA74083889713 /* ShareCardBadge.swift in Sources */,
 				54458C90AD07ED5168D14827 /* ShareCardModels.swift in Sources */,
 				7EECDE3789D0BEBCEFC706CD /* ShareRootView.swift in Sources */,
 				52007EA29C96A1643AAE1DE8 /* ShareViewController.swift in Sources */,
@@ -1825,6 +1837,7 @@
 				8038D6D0A6581B8EA114A1EA /* SavedSituation.swift in Sources */,
 				DBE75C26FF2DB5D2462DE07E /* Scenario.swift in Sources */,
 				25CEB630C856C53F9AC7C269 /* SettingsView.swift in Sources */,
+				F30D02EB8E652D3316B23B80 /* ShareCardBadge.swift in Sources */,
 				4F9F10ACA09F95476DEE6E9B /* ShareCardComposer.swift in Sources */,
 				C3442101E76291E09EC23E5E /* ShareCardModels.swift in Sources */,
 				B291F34AD65F16F89BF453D3 /* ShareCardRenderer.swift in Sources */,
@@ -1921,6 +1934,7 @@
 				8074C117A2C584717E29A5F9 /* SavedSituation.swift in Sources */,
 				D8569BD522A033A47DCE711E /* Scenario.swift in Sources */,
 				FB9C143C277B8DAD30DE6CBA /* SettingsView.swift in Sources */,
+				18C750E5556DF9A5367E5189 /* ShareCardBadge.swift in Sources */,
 				2EB1BDC620D6820CB50D572F /* ShareCardComposer.swift in Sources */,
 				0CD6E722904237DC4347F4F5 /* ShareCardModels.swift in Sources */,
 				B5FE6AEFD5CA1AC76AC2FADD /* ShareCardRenderer.swift in Sources */,
