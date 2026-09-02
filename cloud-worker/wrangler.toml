@@ -91,6 +91,32 @@ APP_DAILY_LIMIT_PER_IP = "200"
 OPENROUTER_REFERER = "https://github.com/JasonYeYuhe/RoastMate-iOS"
 OPENROUTER_TITLE = "RoastMate"
 
+# --- Atomic quota counter (v1.4, decision D2) ---
+# QUOTA_BACKEND selects the substrate for every daily counter:
+#   "kv" = the legacy get-then-put counter. NOT atomic: a same-key concurrent
+#          burst has every request read the same pre-increment value. Measured
+#          2026-09-02 — 55 concurrent on one deviceId gave 52 successes against
+#          a cap of 30, all reporting remaining=29.
+#          (evals/runs/2026-09-02-d2-kv-quota-race.md)
+#   "do"  = the QuotaCounter Durable Object. One instance per counter key, and
+#          a DO serialises requests to an instance, so check-and-increment is
+#          genuinely atomic.
+# Flip back to "kv" and redeploy to roll back instantly; the DO path already
+# falls back to KV on its own if a call fails, so a DO outage degrades rather
+# than 500s.
+QUOTA_BACKEND = "do"
+
+[[durable_objects.bindings]]
+name = "QUOTA"
+class_name = "QuotaCounter"
+
+# SQLite storage backend — the one available on the Workers FREE plan
+# (100k requests/day, 100k row writes/day), far above current volume. The
+# key-value DO backend is paid-plans-only.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["QuotaCounter"]
+
 # KV namespace for per-device rate-limit counters. Replace the `id` after
 # `npx wrangler kv:namespace create rate_limits` (see README).
 [[kv_namespaces]]

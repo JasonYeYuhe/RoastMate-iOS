@@ -25,6 +25,8 @@
 // global free quota is exhausted (NOT user-specific); 429 = upstream
 // rate-limit. Account top-up does not unlock the :free pool.
 import { resolveVentLane } from "./lane.js";
+import { QuotaCounter } from "./quota_do.js";
+import { consumeQuota, refundQuota, quotaBackendIsDO } from "./quota.js";
 import { resolveIpAttemptCap } from "./ipguard.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
@@ -67,6 +69,8 @@ const MODEL_OVERRIDE_ALLOWLIST = new Set([
   "meta-llama/llama-3.3-70b-instruct"
 ]);
 
+export { QuotaCounter };
+
 export default {
   async fetch(req, env, ctx) {
     const t0 = Date.now();
@@ -99,13 +103,13 @@ export default {
         ip: req.headers.get("CF-Connecting-IP"),
         env,
       });
-      const u = parseInt((await env.RATE_LIMITS.get(g.ipKey)) || "0", 10);
-      if (u >= g.ipLimit) {
+      const authIp = await consumeQuota(
+        { env, ctx, key: g.ipKey, limit: g.ipLimit, label: "auth_ip" }, ddLog);
+      if (!authIp.allowed) {
         ddLog(env, ctx, { endpoint: "auth", outcome: "ip_rate_limited", status: 429,
-                          web: g.isWeb, latency_ms: Date.now() - tAuth });
+                          web: g.isWeb, backend: authIp.backend, latency_ms: Date.now() - tAuth });
         return json({ error: "rate_limit_exceeded" }, 429);
       }
-      await safePut(env, ctx, g.ipKey, String(u + 1), { expirationTtl: 86400 * 2 }, "auth_ip");
       try {
         const [{ handleAuth }, { buildVerifier }] = await Promise.all([
           import("./auth.js"),
@@ -186,11 +190,18 @@ export default {
       return json({ error: lane.error, reason: lane.reason }, lane.status);
     }
     const { rlKey, limit } = lane;
-    const used = parseInt((await env.RATE_LIMITS.get(rlKey)) || "0", 10);
-    if (used >= limit) {
-      ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, lane: lane.lane, latency_ms: Date.now() - t0 });
+    // D2: RESERVE the unit here rather than charging after the upstream call.
+    // The old shape checked here and charged ~2-3s later, which put the whole
+    // model call inside the check->charge window — the reason a concurrent
+    // burst all read the same count. Refunded below if the upstream fails, so
+    // a provider outage still does not eat the user's quota.
+    const quota = await consumeQuota(
+      { env, ctx, key: rlKey, limit, label: "vent_quota" }, ddLog);
+    if (!quota.allowed) {
+      ddLog(env, ctx, { outcome: "rate_limited", status: 429, intensity, locale, lane: lane.lane, backend: quota.backend, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit, remaining: 0 }, 429);
     }
+    const used = quota.used - 1; // pre-reservation count, for the response below
 
     // Track M M.2: per-IP attempt cap (PRE-charged, non-refundable) on EVERY
     // request — a coarse abuse backstop over the rotatable deviceId, and a
@@ -202,12 +213,12 @@ export default {
       ip: req.headers.get("CF-Connecting-IP"),
       env,
     });
-    const ipUsed = parseInt((await env.RATE_LIMITS.get(ipGuard.ipKey)) || "0", 10);
-    if (ipUsed >= ipGuard.ipLimit) {
-      ddLog(env, ctx, { outcome: "ip_rate_limited", status: 429, intensity, locale, lane: lane.lane, web: ipGuard.isWeb, latency_ms: Date.now() - t0 });
+    const ipQuota = await consumeQuota(
+      { env, ctx, key: ipGuard.ipKey, limit: ipGuard.ipLimit, label: "vent_ip" }, ddLog);
+    if (!ipQuota.allowed) {
+      ddLog(env, ctx, { outcome: "ip_rate_limited", status: 429, intensity, locale, lane: lane.lane, web: ipGuard.isWeb, backend: ipQuota.backend, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit: ipGuard.ipLimit, remaining: 0, web: ipGuard.isWeb }, 429);
     }
-    await safePut(env, ctx, ipGuard.ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 }, "vent_ip");
 
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional
@@ -359,6 +370,10 @@ export default {
 
     if (!text) {
       // Log provider:status only — never the upstream detail body.
+      // The unit was reserved before the call; hand it back so a provider
+      // outage does not consume the user's daily allowance. (The per-IP
+      // attempt cap is deliberately NOT refunded — it bounds retry floods.)
+      await refundQuota({ env, ctx, key: rlKey, backend: quota.backend, label: "vent_quota" }, ddLog);
       ddLog(env, ctx, { outcome: "upstream_error", status: 502, intensity, locale,
         attempts: attempts.map((a) => a.split(":").slice(0, 2).join(":")), latency_ms: Date.now() - t0 });
       return json(
@@ -367,11 +382,8 @@ export default {
       );
     }
 
-    // Only charge a request against the rate limit if we got real output
-    // back — failed upstream calls should not eat the user's daily quota.
-    await safePut(env, ctx, rlKey, String(used + 1), { expirationTtl: 86400 * 2 }, "vent_quota");
-
     ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,
+      quota_backend: quota.backend, quota_do_enabled: quotaBackendIsDO(env),
       provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
     return json({
       text,
@@ -381,38 +393,6 @@ export default {
     }, 200);
   }
 };
-
-/// Best-effort KV counter write.
-///
-/// Cloudflare KV allows only ~1 write per second TO THE SAME KEY, and returns
-/// 429 beyond that, which the SDK throws. These counters are all same-key by
-/// construction (one key per device/account/IP per day), so a burst makes the
-/// write throw — and an uncaught exception here 500s the whole request.
-/// Measured 2026-09-02: a 55-way same-key burst produced 4 HTTP 500s
-/// ("KV PUT failed: 429 Too Many Requests").
-///
-/// That is the wrong failure mode. The per-IP key in particular is SHARED —
-/// under CGNAT many legitimate mobile users write the same key — so a hot key
-/// would 500 real users who did nothing wrong.
-///
-/// These counters are already documented as best-effort and non-atomic (cost
-/// controls, not an authorization boundary), so a dropped increment is
-/// consistent with their contract and strictly better than a 500. The failure
-/// is logged so a hot key is visible rather than silent.
-async function safePut(env, ctx, key, value, opts, label) {
-  try {
-    await env.RATE_LIMITS.put(key, value, opts);
-    return true;
-  } catch (e) {
-    ddLog(env, ctx, {
-      endpoint: "kv",
-      outcome: "counter_write_failed",
-      counter: label,
-      detail: String((e && e.message) || e).slice(0, 120),
-    });
-    return false;
-  }
-}
 
 /// Privacy-safe Datadog log shipper. Sends ONLY operational metadata
 /// (outcome, HTTP status, latency, intensity, locale, provider, model) —

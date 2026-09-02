@@ -98,8 +98,46 @@ They cost nothing, cap the true worst case, and do not depend on our own code
 being correct. No amount of edge logic substitutes for a limit the provider
 enforces.
 
+## Outcome — DO built, deployed, and re-measured the same day
+
+`QuotaCounter` (SQLite-backed Durable Object, one instance per counter key)
+shipped behind `QUOTA_BACKEND`, deployed as version `85531706`. Re-ran the
+identical test:
+
+| N | HTTP 200 | 429 | cap | distinct `remaining` | over-grant |
+|---|---|---|---|---|---|
+| 40 | **30** | 10 | 30 | **30 / 30** | none |
+| 55 | **30** | 25 | 30 | **30 / 30** | none |
+| 70 | **30** | 40 | 30 | **30 / 30** | none |
+
+Exactly the cap at every burst size, and every granted unit received a
+**distinct** position (29 down to 0) instead of all reporting `remaining=29`.
+Zero 500s. Single-request latency unchanged (1.8s end-to-end, dominated by the
+model call — the DO hop is not measurable against it).
+
+### One design change the DO alone would not have fixed
+
+The old flow checked the quota up front but only charged it **after** the
+upstream call, so a failed generation would not eat a user's daily quota. Good
+intent, but it placed the entire ~2-3s model call inside the check→charge
+window — which is *why* every concurrent request read the same count. Making
+the counter atomic would not have closed that on its own.
+
+So the shape changed to **reserve-then-refund**: `consume()` reserves at check
+time, and `refundQuota()` returns the unit if every upstream fails. Same
+user-visible behaviour, no window. The per-IP attempt cap is deliberately *not*
+refunded — it exists to bound retry floods, so a failed attempt should still
+count.
+
+### Rollback
+
+`QUOTA_BACKEND = "kv"` and redeploy. The DO path also falls back to KV on its
+own if a call throws (covered by a test), so a Durable Objects outage degrades
+to the old racy-but-working behaviour rather than 500ing or blocking a paying
+user.
+
 ## Reproduce
 
-`scratchpad/race_test.py N` — set a browser-plausible User-Agent or Cloudflare
+`python3 evals/d2_race_test.py N` — set a browser-plausible User-Agent or Cloudflare
 1010s the client. Each run costs ~N Groq calls; it hits production, so keep N
 modest and use a fresh deviceId.
