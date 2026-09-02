@@ -1,23 +1,40 @@
 # RoastMate Vent Cloud Worker
 
-Tiny Cloudflare Worker that fronts two upstream LLM providers (OpenRouter
-primary, Groq fallback) for the Vent / Feral private-draft path in the
-iOS app. The Worker owns both API keys (they never ship in the iOS
-binary), enforces a per-device daily rate limit, and serves both the iOS
-production traffic and any future macOS / Android clients.
+Tiny Cloudflare Worker that fronts two upstream LLM providers (**Groq
+primary, OpenRouter fallback**) for the Vent / Feral private-draft path
+and the 虚拟舍友群 roommate scene. The Worker owns both API keys (they never
+ship in the app binary), enforces daily quotas, verifies Pro
+entitlement, and serves iOS + macOS production traffic.
+
+Endpoints:
+- `POST /v1/vent` — generation. Modes: `vent` (default), `roommate`, and
+  `roast` (sendable; gated off by `ROAST_MODE_ENABLED`).
+- `POST /v1/auth` — exchange an Apple StoreKit 2 transaction JWS for a
+  short-lived Pro session token (see "Pro lane" below).
 
 ## Why this exists
 
 Apple's on-device Foundation Models is too gentle for real venting — even
 with directive prompts, it returns "wise reframing" instead of raw anger.
-We route only the **Vent** and **Feral** intensities through a less
-RLHF'd model (DeepSeek V4 Flash free via OpenRouter, with Groq Llama 3.3
-70B as the fallback). Calm / Sharp / Savage stay 100% on-device.
+We route only the **Vent** and **Feral** intensities (plus the roommate
+scene, which the on-device model structurally refuses) through a less
+RLHF'd model. Calm / Sharp / Savage stay on-device where Foundation
+Models is available.
 
-The Worker tries OpenRouter first; on any non-2xx response or empty
-completion, it transparently retries on Groq. The client sees a single
-endpoint and (for now) a single response shape — only the new
-`provider` field tells you which upstream actually answered.
+**Current models — `wrangler.toml` is the source of truth, not this file.**
+As of 2026-09: Groq `qwen/qwen3.6-27b` for every locale, with OpenRouter
+`qwen/qwen3-30b-a3b-instruct-2507` as fallback. Both are current,
+non-reasoning (instruct) models — never a `*-thinking` variant, which
+stalls 17-31s on these prompts, and never a `:free` variant, whose shared
+pool 404s when the provider retires the tier. That is exactly what took
+the cloud path down on 2026-08-31, when the previous primaries
+(`qwen/qwen3-32b`, deprecated; `llama-3.3-70b-versatile`, moved to
+Enterprise) and the old `hermes-3-llama-3.1-405b:free` all died at once.
+
+The Worker tries **Groq first** (lower latency, isolated quota); on any
+non-2xx or empty completion it transparently retries on OpenRouter. The
+client sees one endpoint and one response shape — the `provider` field
+tells you which upstream actually answered.
 
 ## One-time setup (do this once, then forget)
 
@@ -105,41 +122,68 @@ Response (200):
 ```
 {
   "text": "凌晨两点打 fuck...",
-  "model": "deepseek/deepseek-chat-v3-0324:free",
-  "provider": "openrouter",      // or "groq" if primary failed
+  "model": "qwen/qwen3.6-27b",
+  "provider": "groq",            // or "openrouter" if the primary failed
   "remaining": 29
 }
 ```
 
 Errors:
 - 400 `invalid_*` — request validation failed
-- 429 `rate_limit_exceeded` — device hit daily cap (default 30/day)
+- 401 `token_invalid` — the Pro session token expired/was rejected; the
+  client drops it and retries on the free lane
+- 403 `mode_unavailable` — `mode:"roast"` while `ROAST_MODE_ENABLED=false`
+- 429 `rate_limit_exceeded` — hit a daily cap (free device 30/day, Pro
+  account 200/day, or the per-IP attempt backstop)
+- 503 `service_unavailable` — `CLOUD_DISABLED=true` (global kill-switch)
 - 502 `upstream_error` with a `detail` listing whichever upstream(s) the
   Worker tried (e.g. "openrouter:429 ... | groq:500 ..."). iOS falls
   back to local Apple Foundation Models in any error case.
 
-## Cost / limits (current tiers)
+## Pro lane, quotas and breakers (Track M, v1.3)
 
-- Cloudflare Workers: 100k requests/day free, plenty
-- KV: 100k reads + 1k writes/day free (we use ~30 writes per active user)
-- OpenRouter free account: 50 free-model requests/day total
-- OpenRouter pay-as-you-go account with at least $10 in credits:
-  1000 free-model requests/day total
-- DAILY_LIMIT_PER_DEVICE: 30 (controlled in wrangler.toml)
+`POST /v1/auth` takes `{"jws": "<StoreKit 2 transaction JWS>"}`, verifies
+Apple's signature offline (ECDSA P-256 over the x5c chain), and returns a
+short-lived session token. `POST /v1/vent` with
+`Authorization: Bearer <token>` resolves to the **Pro lane**, whose quota
+is keyed on a keyed HASH of the Apple account id — so one subscription
+shares one bucket across a user's devices and replaying one JWS on cloned
+devices does not multiply quota. No token → the legacy per-device lane.
 
-Math: the proxy host is not the bottleneck; the upstream model quota is.
-At 30 drafts/device/day, a pure free OpenRouter account supports only
-about one heavy user. A pay-as-you-go account with the 1000/day
-free-model allowance supports about 33 heavy users.
+Every cloud caller in the app must go through
+`CloudVentService.generate(_:auth:)`. Calling `generate(req)` directly
+sends the request tokenless, which silently bills a paying subscriber
+against the free cap — that shipped once already (v1.4 M-b).
 
-For product testing this is fine. If you outgrow it:
+Caps and switches, all in `wrangler.toml`:
 
-1. Keep a small OpenRouter credit balance so the account has the
-   1000/day free-model allowance
-2. Bump to a paid OpenRouter model when you need reliability
-3. Or switch to a different upstream provider / model in `wrangler.toml`
-4. Or gate cloud vent behind Pro entitlement (you'd send a signed
-   StoreKit transaction with each request and have the Worker validate it)
+| var | meaning |
+|---|---|
+| `DAILY_LIMIT_PER_DEVICE` | free lane, per deviceId (30) |
+| `PRO_DAILY_LIMIT` | Pro lane, per account (200) |
+| `APP_DAILY_LIMIT_PER_IP` | native per-IP attempt backstop (200) — generous, because CGNAT puts many legitimate mobile users behind one IP |
+| `WEB_DAILY_LIMIT_PER_IP` | the public web demo, strict (8) |
+| `CLOUD_DISABLED` | **global kill-switch** — 503s all generation |
+| `ROAST_MODE_ENABLED` | gates the sendable `mode:"roast"` path |
+| `ALLOW_SANDBOX_RECEIPTS` | keep FALSE in prod: a sandbox purchase is free, so accepting one would mint real Pro for $0 |
+| `ASS_API_ENABLED` | App Store Server API refund/revocation check (fail-open) |
+
+**These caps are cost controls, not a security boundary.** They are
+best-effort KV counters, not transactional. The real backstops are
+`CLOUD_DISABLED` and provider-side spend limits configured at Groq and
+OpenRouter — set those, and keep them set.
+
+## Cost / limits
+
+- Cloudflare Workers: 100k requests/day free
+- KV: 100k reads + 1k writes/day free
+- The proxy host is not the bottleneck; the upstream model quota is.
+  Groq's dev tier for `qwen/qwen3.6-27b` is 250K TPM / 1K RPM.
+
+If you outgrow it: raise the upstream tier, switch model in
+`wrangler.toml` (keep it current, non-reasoning, non-`:free`), or tighten
+the free cap. Pro entitlement gating is already built — that is the Pro
+lane above.
 
 ## Local development
 

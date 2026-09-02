@@ -105,7 +105,7 @@ export default {
                           web: g.isWeb, latency_ms: Date.now() - tAuth });
         return json({ error: "rate_limit_exceeded" }, 429);
       }
-      await env.RATE_LIMITS.put(g.ipKey, String(u + 1), { expirationTtl: 86400 * 2 });
+      await safePut(env, ctx, g.ipKey, String(u + 1), { expirationTtl: 86400 * 2 }, "auth_ip");
       try {
         const [{ handleAuth }, { buildVerifier }] = await Promise.all([
           import("./auth.js"),
@@ -207,7 +207,7 @@ export default {
       ddLog(env, ctx, { outcome: "ip_rate_limited", status: 429, intensity, locale, lane: lane.lane, web: ipGuard.isWeb, latency_ms: Date.now() - t0 });
       return json({ error: "rate_limit_exceeded", limit: ipGuard.ipLimit, remaining: 0, web: ipGuard.isWeb }, 429);
     }
-    await env.RATE_LIMITS.put(ipGuard.ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 });
+    await safePut(env, ctx, ipGuard.ipKey, String(ipUsed + 1), { expirationTtl: 86400 * 2 }, "vent_ip");
 
     // Build the system + user prompts. Mirrors the directive language in
     // the iOS PromptBuilder so the cloud path produces the same emotional
@@ -369,7 +369,7 @@ export default {
 
     // Only charge a request against the rate limit if we got real output
     // back — failed upstream calls should not eat the user's daily quota.
-    await env.RATE_LIMITS.put(rlKey, String(used + 1), { expirationTtl: 86400 * 2 });
+    await safePut(env, ctx, rlKey, String(used + 1), { expirationTtl: 86400 * 2 }, "vent_quota");
 
     ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,
       provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
@@ -381,6 +381,38 @@ export default {
     }, 200);
   }
 };
+
+/// Best-effort KV counter write.
+///
+/// Cloudflare KV allows only ~1 write per second TO THE SAME KEY, and returns
+/// 429 beyond that, which the SDK throws. These counters are all same-key by
+/// construction (one key per device/account/IP per day), so a burst makes the
+/// write throw — and an uncaught exception here 500s the whole request.
+/// Measured 2026-09-02: a 55-way same-key burst produced 4 HTTP 500s
+/// ("KV PUT failed: 429 Too Many Requests").
+///
+/// That is the wrong failure mode. The per-IP key in particular is SHARED —
+/// under CGNAT many legitimate mobile users write the same key — so a hot key
+/// would 500 real users who did nothing wrong.
+///
+/// These counters are already documented as best-effort and non-atomic (cost
+/// controls, not an authorization boundary), so a dropped increment is
+/// consistent with their contract and strictly better than a 500. The failure
+/// is logged so a hot key is visible rather than silent.
+async function safePut(env, ctx, key, value, opts, label) {
+  try {
+    await env.RATE_LIMITS.put(key, value, opts);
+    return true;
+  } catch (e) {
+    ddLog(env, ctx, {
+      endpoint: "kv",
+      outcome: "counter_write_failed",
+      counter: label,
+      detail: String((e && e.message) || e).slice(0, 120),
+    });
+    return false;
+  }
+}
 
 /// Privacy-safe Datadog log shipper. Sends ONLY operational metadata
 /// (outcome, HTTP status, latency, intensity, locale, provider, model) —
