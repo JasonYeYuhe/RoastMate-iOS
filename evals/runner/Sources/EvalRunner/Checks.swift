@@ -19,6 +19,11 @@ struct CheckResult: Sendable, Encodable {
     /// mode:"roast" returns N numbered variants in one payload; the client
     /// splits them. 1 for the vent path (single draft).
     var variantsParsed: Int = 1
+    /// Count of SIMPLIFIED-only characters found in zh-Hant output (0 for
+    /// every other locale). Non-zero means script bleed — the model answered a
+    /// Traditional request in Simplified, which reads as broken to a zh-Hant
+    /// user even though every other check passes.
+    var simplifiedBleed: Int = 0
 }
 
 enum DeterministicChecks {
@@ -81,7 +86,8 @@ enum DeterministicChecks {
                            charCount: count, safetyFlags: flags,
                            politeSarcasmOpen: politeOpen,
                            ventStrongWordCount: strongCount,
-                           variantsParsed: Self.countVariants(text))
+                           variantsParsed: Self.countVariants(text),
+                           simplifiedBleed: isHant ? Self.countSimplifiedBleed(text) : 0)
     }
 
     /// Single-character coarse verbs (操 / 干) are profane ONLY in specific
@@ -108,6 +114,27 @@ enum DeterministicChecks {
             n += re.numberOfMatches(in: text, range: NSRange(text.startIndex..., in: text))
         }
         return n
+    }
+
+    /// Characters that exist ONLY in Simplified Chinese. Finding any of these
+    /// in zh-Hant output means the model produced the wrong script.
+    ///
+    /// `checkLanguage` cannot catch this — it only asks "is this Han?", and
+    /// Simplified text passes that trivially. The file previously deferred
+    /// simplified/traditional bleed to "per-scenario manual rating", which
+    /// meant it was not actually being measured. It is the single biggest
+    /// zh-Hant risk, so it is measured here now.
+    ///
+    /// Deliberately EXCLUDES characters that are valid in both scripts with
+    /// different meanings — 里 (a unit; 裡 is "inside") and 后 (empress; 後 is
+    /// "after") both appear legitimately in Traditional text and would be
+    /// false positives.
+    static let simplifiedOnly: Set<Character> = Set(
+        "们说时这个会学电车门问关实认应发无与从众优传伤体让过还进边远连运达选适该详语请论谁讲谢识证议记计讨许设访词试话谈调变组织经给结统绝续维线练级约红纸细终编华亲义习书买卖东长马鸟鱼龙点热爱样现单双头难题类显图团园国圆声处备复够势医卫压厂厅历县参"
+    )
+
+    static func countSimplifiedBleed(_ text: String) -> Int {
+        text.reduce(0) { $0 + (simplifiedOnly.contains($1) ? 1 : 0) }
     }
 
     /// Mirrors the client's numbered-variant split ("1. …\n\n2. …").
