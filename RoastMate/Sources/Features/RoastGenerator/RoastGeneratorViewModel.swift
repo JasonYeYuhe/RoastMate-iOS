@@ -99,15 +99,13 @@ final class RoastGeneratorViewModel {
         // `cloud_sendable_enabled` flag is flipped on remotely. Private drafts
         // (vent/feral) keep their existing cloud path. When the on-device model
         // is present, sendable stays local (unchanged).
-        let remote = RemoteConfig.shared.current
-        let cloudGate = CloudConsentGate.decide(
-            isPrivateDraft: selectedIntensity.isPrivateDraft,
-            cloudConfigured: CloudConfig.isConfigured,
-            consent: settings.cloudConsent,
-            onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable,
-            cloudSendableEnabled: remote.cloudSendableEnabled
+        // Single resolution point — see CloudPermission. This logic used to
+        // live here and only here, which is why the other surfaces missed it.
+        let cloud = CloudPermission.resolve(
+            intensity: selectedIntensity,
+            consent: settings.cloudConsent
         )
-        if cloudGate == .needsConsent {
+        if cloud.needsConsent {
             pendingCloudConsent = true
             return
         }
@@ -147,9 +145,7 @@ final class RoastGeneratorViewModel {
                 // subtract from the consent grant, never route to cloud
                 // without it. (Health audit 2026-05-29 §4.) Private drafts AND
                 // `vent_cloud_enabled`; sendable modes AND `cloud_sendable_enabled`.
-                cloudVentEnabled: selectedIntensity.isPrivateDraft
-                    ? remote.cloudAllowed(consentAllowsCloud: cloudGate.allowsCloud)
-                    : remote.cloudSendableAllowed(consentAllowsCloud: cloudGate.allowsCloud)
+                cloudVentEnabled: cloud.cloudAllowed
             )
             currentSession = HistoryService.saveSession(
                 situation: text,

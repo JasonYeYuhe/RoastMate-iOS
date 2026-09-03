@@ -45,7 +45,8 @@ final class ArgumentSimulatorViewModel {
         defer { isThinking = false }
 
         await RoastEngine.shared.resetConversation()
-        let opening = await generateAIOpening(setup: setupText, style: style, locale: locale)
+        let consent = HistoryService.userSettings(context: context).cloudConsent
+        let opening = await generateAIOpening(setup: setupText, style: style, locale: locale, consent: consent)
         guard let opening else { return }
         turns = [ArgumentTurn(role: .ai, text: opening)]
         phase = .running
@@ -86,7 +87,8 @@ final class ArgumentSimulatorViewModel {
         isThinking = true
         defer { isThinking = false }
 
-        let response = await generateAIResponse(style: style, locale: locale)
+        let consent = HistoryService.userSettings(context: context).cloudConsent
+        let response = await generateAIResponse(style: style, locale: locale, consent: consent)
         if let response {
             turns.append(ArgumentTurn(role: .ai, text: response))
         }
@@ -100,7 +102,8 @@ final class ArgumentSimulatorViewModel {
 
     // MARK: - Generation
 
-    private func generateAIOpening(setup: String, style: StylePreset, locale: Locale) async -> String? {
+    private func generateAIOpening(setup: String, style: StylePreset, locale: Locale,
+                                   consent: CloudConsent) async -> String? {
         let opener = """
         I want to rehearse the following argument:
 
@@ -108,28 +111,38 @@ final class ArgumentSimulatorViewModel {
 
         Play the OTHER side. Give the first thing the other person would say to me in this argument. Keep it under 80 words. Stay in character. One reply only — no commentary, no quotation marks.
         """
-        return await runEngine(input: opener, style: style, locale: locale)
+        return await runEngine(input: opener, style: style, locale: locale, consent: consent)
     }
 
-    private func generateAIResponse(style: StylePreset, locale: Locale) async -> String? {
+    private func generateAIResponse(style: StylePreset, locale: Locale,
+                                    consent: CloudConsent) async -> String? {
         let myLast = turns.last { $0.role == .user }?.text ?? ""
         let input = """
         The other person (me) just said: "\(myLast)"
 
         Continue playing the OTHER side. Reply to my last line, in character, in the same style. Keep it under 80 words. One reply only — no commentary, no quotation marks.
         """
-        return await runEngine(input: input, style: style, locale: locale)
+        return await runEngine(input: input, style: style, locale: locale, consent: consent)
     }
 
-    private func runEngine(input: String, style: StylePreset, locale: Locale) async -> String? {
+    private func runEngine(input: String, style: StylePreset, locale: Locale,
+                           consent: CloudConsent) async -> String? {
         do {
+            // Track 0.2 fix: this surface never resolved cloud permission, so
+            // on an iOS-18 device with no on-device model it failed rather than
+            // falling back to cloud. `.argument` uses the default sendable
+            // intensity, so the sendable-cloud flag governs. No consent PROMPT
+            // here (that UI lives in the generator tab) — without a prior grant
+            // this resolves false and stays on-device, as before.
+            let cloud = CloudPermission.resolve(intensity: .sharp, consent: consent)
             let variants = try await RoastEngine.shared.generate(
                 situation: input,
                 style: style,
                 locale: locale,
                 variantCount: 1,
                 mode: .argument,
-                keepSession: true
+                keepSession: true,
+                cloudVentEnabled: cloud.cloudAllowed
             )
             let first = variants.first?
                 .trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))

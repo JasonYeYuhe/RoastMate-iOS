@@ -103,6 +103,7 @@
 		2D133C2CD8B00C3ED267983F /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
 		2D3C20D83FE907B6D2B1F0CD /* CloudVentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */; };
 		2D7135494714DD996B85C42B /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
+		2D8BB399EF0D9767379B91F3 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		2EB1BDC620D6820CB50D572F /* ShareCardComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACFB0A16144FB99761AFC8C /* ShareCardComposer.swift */; };
 		2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		2FCE41884516B38427C922D0 /* RemoteConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35250F958AD0D7CB3559F1A7 /* RemoteConfigTests.swift */; };
@@ -152,11 +153,13 @@
 		4C5947166420BF114079E296 /* LaunchRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */; };
 		4D68ACDAAF6C7D1B4D76FDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 621D1F985587ABFC8E6A2F3C /* Assets.xcassets */; };
 		4E0DB8484917C12A22147802 /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
+		4EC42BB6F05C4309E2B5F936 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		4F9F10ACA09F95476DEE6E9B /* ShareCardComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACFB0A16144FB99761AFC8C /* ShareCardComposer.swift */; };
 		501A202248DAEEE4A8712F2E /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		501BE08A5BA82F6D353CBB83 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		510D0AF60C52E996A225EEA9 /* RoastCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31277B6E9CF593725FAFC384 /* RoastCard.swift */; };
 		51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
+		51B1BF03DD5EBC7512D8C3AC /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		51CA0DEBA2E24561879885DC /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		52007EA29C96A1643AAE1DE8 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C3D48610D69A6E0E7F65B31 /* ShareViewController.swift */; };
 		52B95A8E3271A10DAB210303 /* StoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C70372E616B3C6B9A03229A /* StoreService.swift */; };
@@ -204,6 +207,7 @@
 		62B58DEA99677AD5C45BBEB5 /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
 		62F534881B1C940003515A70 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		63144714DE37F54D46572391 /* FallbackRoasts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB74A247001CF2C1093499E /* FallbackRoasts.swift */; };
+		633B6620171F369470920ABB /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		6366BF9557A72422E74306E4 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		6458642A25263FF5C675AE99 /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */; };
 		64FEC08EC132479DF960EF54 /* EventLedgerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB405F2612E72113E3E3F3DF /* EventLedgerTests.swift */; };
@@ -332,6 +336,7 @@
 		A1F061CB240CD31930641CE9 /* VoiceVentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AEC22AE883CA4D75EA6B3C /* VoiceVentSheet.swift */; };
 		A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		A3D27B4A2546B7F33F7425A4 /* FMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */; };
+		A3EC0851146D3D404353F852 /* CloudPermissionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874384E3BA68D0C03634B375 /* CloudPermissionTests.swift */; };
 		A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */; };
 		A50453236C33115558205278 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
 		A5C0D08DE2F07F7855FFE85B /* RoastEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */; };
@@ -366,6 +371,7 @@
 		B3D7C85BC37B521D732F14E2 /* CloudVentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */; };
 		B3E304030C34FF815C0F1D35 /* EchoesPromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD0D3F3EC78E1B847C8ED2AD /* EchoesPromptBuilder.swift */; };
 		B5FE6AEFD5CA1AC76AC2FADD /* ShareCardRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AA6E0D7D5DC5AF95585AE9 /* ShareCardRenderer.swift */; };
+		B6B2715CC9FC71FA5AA03C46 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		B80665A89A7DF1353696F5CC /* SavedSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB78C19F52FBD6F4E424AF3 /* SavedSituation.swift */; };
 		B8A7B85E722F2FBAA82D946D /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */; };
 		B8FD3A1C665BE724CD438984 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
@@ -455,6 +461,7 @@
 		E1058A3070AC421A57FBB0C8 /* StylePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F37D7C4EDA50657292425 /* StylePreset.swift */; };
 		E11814115BB939E0B0C6B07F /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		E17442043005D91C9E17F8E0 /* CrisisDetectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDC847798DC7EB609F0748B /* CrisisDetectionTests.swift */; };
+		E201B315582A448478333630 /* CloudPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */; };
 		E311AE14AB76A1FAB0CD30B8 /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
 		E3C587646C8A8FBB783CAE04 /* RoastGeneratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */; };
 		E53D4524E8B31234A8F7CB82 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
@@ -608,6 +615,7 @@
 		53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleFMBackend.swift; sourceTree = "<group>"; };
 		53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoBridgeStore.swift; sourceTree = "<group>"; };
 		5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardBadge.swift; sourceTree = "<group>"; };
+		575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudPermission.swift; sourceTree = "<group>"; };
 		58D12CEBED02DDBD443E1FFC /* RoastGeneratorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorViewModel.swift; sourceTree = "<group>"; };
 		58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "echoes-personas-zh-Hans.json"; sourceTree = "<group>"; };
 		58F9A16802E232D1E6E2F4BB /* FeatureGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureGenerator.swift; sourceTree = "<group>"; };
@@ -646,6 +654,7 @@
 		856D3677A6A03567BF704991 /* SafetyFilterVentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyFilterVentTests.swift; sourceTree = "<group>"; };
 		85F13681085C2C3B1300FFF9 /* RoastGeneratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastGeneratorView.swift; sourceTree = "<group>"; };
 		86D4F109A599707C4DE3278C /* EchoesFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesFlowUITests.swift; sourceTree = "<group>"; };
+		874384E3BA68D0C03634B375 /* CloudPermissionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudPermissionTests.swift; sourceTree = "<group>"; };
 		87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scenario.swift; sourceTree = "<group>"; };
 		87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilder.swift; sourceTree = "<group>"; };
 		8A048DA4A75153555CA47970 /* PromptBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptBuilderTests.swift; sourceTree = "<group>"; };
@@ -865,6 +874,7 @@
 			children = (
 				357E1D3E00077CECC96D19F1 /* CloudAuthTests.swift */,
 				9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */,
+				874384E3BA68D0C03634B375 /* CloudPermissionTests.swift */,
 				09E1152E436517DE7D09884D /* CloudVentEngineTests.swift */,
 				1839C5000FA21206EB9DC1B0 /* CreditWalletLedgerTests.swift */,
 				3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */,
@@ -949,6 +959,7 @@
 				45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */,
 				8CCAD3B09F8BA0684DECE42C /* CloudConfig.swift */,
 				31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */,
+				575D84BC13812AFFAE6EDE19 /* CloudPermission.swift */,
 				21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */,
 				4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */,
 				DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */,
@@ -1475,6 +1486,8 @@
 				51248A37A6D8B6C49949BA06 /* CloudConfig.swift in Sources */,
 				9DE1FDA11303862B4FDC38A2 /* CloudConsentGate.swift in Sources */,
 				31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */,
+				51B1BF03DD5EBC7512D8C3AC /* CloudPermission.swift in Sources */,
+				A3EC0851146D3D404353F852 /* CloudPermissionTests.swift in Sources */,
 				2D3C20D83FE907B6D2B1F0CD /* CloudVentClient.swift in Sources */,
 				EF4732F5DD6F12A6A6EBBB58 /* CloudVentEngineTests.swift in Sources */,
 				9C95C8A20AD90251958359FF /* CreditCatalog.swift in Sources */,
@@ -1572,6 +1585,7 @@
 				FF47B01D0FA3B4AA99EFF422 /* CloudAuthService.swift in Sources */,
 				8913E2632A8799D0277EED60 /* CloudConfig.swift in Sources */,
 				58999A2E7980947164A96920 /* CloudConsentGate.swift in Sources */,
+				E201B315582A448478333630 /* CloudPermission.swift in Sources */,
 				00FD06B70E90D21329E949C5 /* CloudVentClient.swift in Sources */,
 				2250DC4B03CAA509509E13E0 /* CreditCatalog.swift in Sources */,
 				FE5E92C02A43A989F4D9A4C8 /* CreditLedgerEntry.swift in Sources */,
@@ -1640,6 +1654,7 @@
 				93D115A743B97078CF4CA3A8 /* CloudAuthService.swift in Sources */,
 				A5D71BF4F9A5B628D3CB30D3 /* CloudConfig.swift in Sources */,
 				F865E79C0746FCD5BECCA19F /* CloudConsentGate.swift in Sources */,
+				B6B2715CC9FC71FA5AA03C46 /* CloudPermission.swift in Sources */,
 				A69BCCA022A00C12CB41E52D /* CloudVentClient.swift in Sources */,
 				E58A6536F3DC9C2BCC523364 /* CreditCatalog.swift in Sources */,
 				AB4D8CF4B83A95FF6F7DD528 /* CreditLedgerEntry.swift in Sources */,
@@ -1706,6 +1721,7 @@
 				CB11C358C29EEC1B98324D07 /* CloudAuthService.swift in Sources */,
 				A437BA4D7EE568B2B15DA17B /* CloudConfig.swift in Sources */,
 				62130181AC40B13F67A2D2C5 /* CloudConsentGate.swift in Sources */,
+				633B6620171F369470920ABB /* CloudPermission.swift in Sources */,
 				708349AE97476576726DD82C /* CloudVentClient.swift in Sources */,
 				F2FF341791CDA27193820D2E /* CreditCatalog.swift in Sources */,
 				42196334FCE8739A278B6DB0 /* CreditLedgerEntry.swift in Sources */,
@@ -1777,6 +1793,7 @@
 				85AA70766AD83FA3F082F502 /* CloudConfig.swift in Sources */,
 				A3201AB3A95EC80DCF87C57C /* CloudConsentGate.swift in Sources */,
 				DB9EF4657F48B0B06E9A9B47 /* CloudConsentSheet.swift in Sources */,
+				2D8BB399EF0D9767379B91F3 /* CloudPermission.swift in Sources */,
 				B3D7C85BC37B521D732F14E2 /* CloudVentClient.swift in Sources */,
 				A6FA1560F6FC63844713A097 /* CreditCatalog.swift in Sources */,
 				6C8F1FE77228BACEF6A96775 /* CreditLedgerEntry.swift in Sources */,
@@ -1875,6 +1892,7 @@
 				BD84D453D82BEB9F5EDE223D /* CloudConfig.swift in Sources */,
 				595B0FB65B8BF1A963DCFB7B /* CloudConsentGate.swift in Sources */,
 				48BF363AAE71A9FD8F260002 /* CloudConsentSheet.swift in Sources */,
+				4EC42BB6F05C4309E2B5F936 /* CloudPermission.swift in Sources */,
 				F3FCD59A7942E7B0B5956325 /* CloudVentClient.swift in Sources */,
 				62B58DEA99677AD5C45BBEB5 /* CreditCatalog.swift in Sources */,
 				213A781641F4AC6C31721B5A /* CreditLedgerEntry.swift in Sources */,

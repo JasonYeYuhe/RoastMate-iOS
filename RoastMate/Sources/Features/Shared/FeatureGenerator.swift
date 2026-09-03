@@ -105,6 +105,16 @@ final class FeatureGeneratorViewModel {
         currentSession = nil
         rewriteError = nil
         do {
+            // Track 0.2 fix: this surface never resolved cloud permission, so
+            // on an iOS-18 device with no on-device model it failed instead of
+            // falling back to cloud — even with consent granted and the flag
+            // on. It does NOT prompt for consent (that UI lives in the
+            // generator tab); without a prior grant this resolves to false and
+            // stays on-device, exactly as before.
+            let cloud = CloudPermission.resolve(
+                intensity: selectedIntensity,
+                consent: settings.cloudConsent
+            )
             let variants = try await RoastEngine.shared.generate(
                 situation: text,
                 style: style,
@@ -112,7 +122,8 @@ final class FeatureGeneratorViewModel {
                 variantCount: isPro ? 3 : 1,
                 mode: config.mode,
                 intensity: selectedIntensity,
-                safeMode: settings.safeModeEnabled
+                safeMode: settings.safeModeEnabled,
+                cloudVentEnabled: cloud.cloudAllowed
             )
             currentSession = HistoryService.saveSession(
                 situation: text,
