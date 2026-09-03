@@ -9,11 +9,13 @@ import XCTest
 /// iOS-18 device instead of falling back to cloud. Found by the Track 0.2 eval.
 final class CloudPermissionTests: XCTestCase {
 
-    private func config(sendable: Bool, vent: Bool = true, forceLocal: Bool = false) -> RemoteConfigValues {
+    private func config(sendable: Bool, vent: Bool = true, forceLocal: Bool = false,
+                        locales: [String]? = nil) -> RemoteConfigValues {
         RemoteConfigValues(configVersion: 1, echoesEnabled: true,
                            forceLocalOnly: forceLocal, ventCloudEnabled: vent,
                            minSupportedBuild: 0, roommateGroupEnabled: true,
-                           cloudSendableEnabled: sendable)
+                           cloudSendableEnabled: sendable,
+                           cloudSendableLocales: locales)
     }
 
     // MARK: - Consent is the source of truth, and it fails CLOSED
@@ -67,6 +69,73 @@ final class CloudPermissionTests: XCTestCase {
             remote: config(sendable: true), cloudConfigured: true,
             onDeviceModelAvailable: true)
         XCTAssertFalse(d.cloudAllowed)
+    }
+
+    // MARK: - Per-locale narrowing (Track 0.2)
+    //
+    // zh-Hans/ja/en cleared the sendable quality gate; zh-Hant did not. Without
+    // this, the only choices were "block all four" or "ship known-degraded
+    // output to zh-Hant readers".
+
+    func testLocaleListNarrowsTheSendablePath() {
+        let cfg = config(sendable: true, locales: ["zh-Hans", "ja", "en"])
+        func allowed(_ id: String) -> Bool {
+            CloudPermission.resolve(intensity: .sharp, consent: .granted,
+                                    locale: Locale(identifier: id), remote: cfg,
+                                    cloudConfigured: true,
+                                    onDeviceModelAvailable: false).cloudAllowed
+        }
+        XCTAssertTrue(allowed("zh-Hans"))
+        XCTAssertTrue(allowed("ja_JP"))
+        XCTAssertTrue(allowed("en_US"))
+        XCTAssertFalse(allowed("zh-Hant"), "zh-Hant failed the 0.2 gate and must stay off")
+        XCTAssertFalse(allowed("zh-Hant-TW"))
+    }
+
+    func testAbsentLocaleListMeansAllLocales() {
+        // Back-compat: an existing config with no list behaves exactly as before.
+        let cfg = config(sendable: true, locales: nil)
+        for id in ["zh-Hans", "zh-Hant", "ja", "en"] {
+            XCTAssertTrue(
+                CloudPermission.resolve(intensity: .sharp, consent: .granted,
+                                        locale: Locale(identifier: id), remote: cfg,
+                                        cloudConfigured: true,
+                                        onDeviceModelAvailable: false).cloudAllowed,
+                "\(id) must be allowed when no list is set")
+        }
+    }
+
+    func testLocaleListCannotWidenADisabledFlag() {
+        // RESTRICT-only: the list narrows, never widens.
+        let cfg = config(sendable: false, locales: ["zh-Hans", "zh-Hant", "ja", "en"])
+        XCTAssertFalse(
+            CloudPermission.resolve(intensity: .sharp, consent: .granted,
+                                    locale: Locale(identifier: "zh-Hans"), remote: cfg,
+                                    cloudConfigured: true,
+                                    onDeviceModelAvailable: false).cloudAllowed)
+    }
+
+    func testLocaleNarrowingDoesNotAffectPrivateDrafts() {
+        // Vent uses vent_cloud_enabled and must ignore the sendable locale list.
+        let cfg = config(sendable: true, locales: ["ja"])
+        XCTAssertTrue(
+            CloudPermission.resolve(intensity: .vent, consent: .granted,
+                                    locale: Locale(identifier: "zh-Hant"), remote: cfg,
+                                    cloudConfigured: true,
+                                    onDeviceModelAvailable: true).cloudAllowed,
+            "the sendable locale list must not gate the vent path")
+    }
+
+    func testContentBucketNormalisesRealDeviceLocales() {
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "zh_Hans_CN")), .simplifiedChinese)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "zh-Hant-TW")), .traditionalChinese)
+        // Traditional territories commonly omit the script subtag.
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "zh_TW")), .traditionalChinese)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "zh_HK")), .traditionalChinese)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "zh_CN")), .simplifiedChinese)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "ja_JP")), .japanese)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "en_GB")), .english)
+        XCTAssertEqual(AppLanguage.contentBucket(for: Locale(identifier: "fr_FR")), .english)
     }
 
     // MARK: - Private drafts use the OTHER flag

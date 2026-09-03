@@ -103,7 +103,8 @@ final class RoastGeneratorViewModel {
         // live here and only here, which is why the other surfaces missed it.
         let cloud = CloudPermission.resolve(
             intensity: selectedIntensity,
-            consent: settings.cloudConsent
+            consent: settings.cloudConsent,
+            locale: locale
         )
         if cloud.needsConsent {
             pendingCloudConsent = true

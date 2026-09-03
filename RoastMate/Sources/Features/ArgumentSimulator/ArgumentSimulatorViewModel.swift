@@ -134,7 +134,7 @@ final class ArgumentSimulatorViewModel {
             // intensity, so the sendable-cloud flag governs. No consent PROMPT
             // here (that UI lives in the generator tab) — without a prior grant
             // this resolves false and stays on-device, as before.
-            let cloud = CloudPermission.resolve(intensity: .sharp, consent: consent)
+            let cloud = CloudPermission.resolve(intensity: .sharp, consent: consent, locale: locale)
             let variants = try await RoastEngine.shared.generate(
                 situation: input,
                 style: style,

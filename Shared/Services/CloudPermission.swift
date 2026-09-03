@@ -47,6 +47,10 @@ enum CloudPermission {
     static func resolve(
         intensity: Intensity,
         consent: CloudConsent,
+        /// Needed for the optional per-locale narrowing of the sendable path
+        /// (Track 0.2: zh-Hans/ja/en cleared the quality gate, zh-Hant did
+        /// not). Defaults to `.current` so existing call sites are unchanged.
+        locale: Locale = .current,
         remote: RemoteConfigValues = RemoteConfigValues.cached(),
         cloudConfigured: Bool = CloudConfig.isConfigured,
         onDeviceModelAvailable: Bool = RoastEngine.isOnDeviceModelAvailable
@@ -62,7 +66,7 @@ enum CloudPermission {
         // grant. Neither can route text to cloud without it.
         let allowed = intensity.isPrivateDraft
             ? remote.cloudAllowed(consentAllowsCloud: gate.allowsCloud)
-            : remote.cloudSendableAllowed(consentAllowsCloud: gate.allowsCloud)
+            : remote.cloudSendableAllowed(consentAllowsCloud: gate.allowsCloud, locale: locale)
         return Decision(gate: gate, cloudAllowed: allowed)
     }
 }

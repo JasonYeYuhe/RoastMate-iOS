@@ -1,5 +1,6 @@
 {
   "_comment": "RoastMate remote kill-switch. Edit a value + commit; it propagates to clients on their next launch (~1-2 min after GitHub Pages rebuilds). RESTRICT-only: flags can disable a feature or force on-device, but NEVER send user text to cloud without the in-app 5.1.2(i) consent grant. Source of truth: research/web/roastmate-config.json in JasonYeYuhe/RoastMate-iOS; mirrored to the Pages repo by .github/workflows/mirror-research-form-to-pages.yml. See Shared/Services/RemoteConfig.swift + docs/HEALTH_AUDIT_2026-05-29.md §4.",
+  "_cloud_sendable_locales_note": "OPTIONAL. Omit for 'all locales'. Narrows cloud_sendable_enabled to specific content buckets. Track 0.2 (2026-09-03) cleared zh-Hans/ja/en but NOT zh-Hant (20/24, simplified-character bleed), so enabling all four would ship known-degraded output to zh-Hant readers. RESTRICT-only: this can only narrow, never widen.",
   "config_version": 1,
   "echoes_enabled": true,
   "roommate_group_enabled": true,

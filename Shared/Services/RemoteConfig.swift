@@ -46,6 +46,22 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// no Apple cycle (the increment-8 DARK→eval→flip model). RESTRICT-only: it
     /// still ANDs the 5.1.2(i) consent grant via `cloudSendableAllowed`.
     var cloudSendableEnabled: Bool
+    /// OPTIONAL per-locale narrowing for the sendable cloud path, as content
+    /// bucket codes ("zh-Hans", "zh-Hant", "ja", "en").
+    ///
+    /// `nil` (the key absent) means "all locales", so existing configs behave
+    /// exactly as before. RESTRICT-only like every other remote flag: this can
+    /// only NARROW `cloudSendableEnabled`, never widen it, and it cannot route
+    /// anything to cloud on its own.
+    ///
+    /// Why this exists: the Track 0.2 eval cleared zh-Hans (48/48), ja (24/24)
+    /// and en (24/24) but not zh-Hant (20/24, below the 85% gate — simplified
+    /// character bleed). With a single global boolean the only options were
+    /// "block all four" or "ship known-degraded output to zh-Hant readers".
+    /// This makes the third option — enable the locales that passed — possible.
+    /// WHICH locales to enable stays a product decision; this is only the
+    /// mechanism.
+    var cloudSendableLocales: [String]?
     /// `true` → the share card may carry its GROWTH layer: the QR code, the
     /// "search RoastMate" badge, and the campaign-tagged link.
     ///
@@ -76,6 +92,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         minSupportedBuild: 0,
         roommateGroupEnabled: true,
         cloudSendableEnabled: false, // DARK: flipped on remotely after the eval
+        cloudSendableLocales: nil,   // nil = all locales (back-compat)
         shareCardEnabled: false      // DARK: flipped after the §2 quantitative gate
     )
 
@@ -86,6 +103,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
         case cloudSendableEnabled = "cloud_sendable_enabled"
+        case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
@@ -97,6 +115,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
          ventCloudEnabled: Bool, minSupportedBuild: Int,
          roommateGroupEnabled: Bool = true,
          cloudSendableEnabled: Bool = false,
+         cloudSendableLocales: [String]? = nil,
          shareCardEnabled: Bool = false) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
@@ -104,6 +123,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         self.forceLocalOnly = forceLocalOnly
         self.ventCloudEnabled = ventCloudEnabled
         self.cloudSendableEnabled = cloudSendableEnabled
+        self.cloudSendableLocales = cloudSendableLocales
         self.shareCardEnabled = shareCardEnabled
         self.minSupportedBuild = minSupportedBuild
     }
@@ -130,6 +150,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         ventCloudEnabled     = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)     ?? d.ventCloudEnabled
         cloudSendableEnabled = try c.decodeIfPresent(Bool.self, forKey: .cloudSendableEnabled) ?? d.cloudSendableEnabled
         shareCardEnabled     = try c.decodeIfPresent(Bool.self, forKey: .shareCardEnabled)     ?? d.shareCardEnabled
+        cloudSendableLocales = try c.decodeIfPresent([String].self, forKey: .cloudSendableLocales)
         minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
 
@@ -153,6 +174,15 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// without a prior explicit 5.1.2(i) grant. DARK until `cloudSendableEnabled`.
     func cloudSendableAllowed(consentAllowsCloud: Bool) -> Bool {
         consentAllowsCloud && cloudSendableEnabled && !forceLocalOnly
+    }
+
+    /// Locale-aware form. Adds the optional per-locale narrowing on top of the
+    /// global switch; an absent/empty list means every locale, so this is
+    /// identical to the call above for existing configs.
+    func cloudSendableAllowed(consentAllowsCloud: Bool, locale: Locale) -> Bool {
+        guard cloudSendableAllowed(consentAllowsCloud: consentAllowsCloud) else { return false }
+        guard let allowed = cloudSendableLocales, !allowed.isEmpty else { return true }
+        return allowed.contains(AppLanguage.contentBucket(for: locale).rawValue)
     }
 
     /// Whether the 虚拟舍友群 scene may run: its own flag AND the Echoes
@@ -185,6 +215,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             minSupportedBuild:    patch.minSupportedBuild    ?? minSupportedBuild,
             roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled,
             cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled,
+            cloudSendableLocales: patch.cloudSendableLocales ?? cloudSendableLocales,
             shareCardEnabled: patch.shareCardEnabled ?? shareCardEnabled
         )
     }
@@ -200,6 +231,22 @@ struct RemoteConfigPatch: Decodable, Sendable {
     var forceLocalOnly: Bool?
     var ventCloudEnabled: Bool?
     var cloudSendableEnabled: Bool?
+    /// OPTIONAL per-locale narrowing for the sendable cloud path, as content
+    /// bucket codes ("zh-Hans", "zh-Hant", "ja", "en").
+    ///
+    /// `nil` (the key absent) means "all locales", so existing configs behave
+    /// exactly as before. RESTRICT-only like every other remote flag: this can
+    /// only NARROW `cloudSendableEnabled`, never widen it, and it cannot route
+    /// anything to cloud on its own.
+    ///
+    /// Why this exists: the Track 0.2 eval cleared zh-Hans (48/48), ja (24/24)
+    /// and en (24/24) but not zh-Hant (20/24, below the 85% gate — simplified
+    /// character bleed). With a single global boolean the only options were
+    /// "block all four" or "ship known-degraded output to zh-Hant readers".
+    /// This makes the third option — enable the locales that passed — possible.
+    /// WHICH locales to enable stays a product decision; this is only the
+    /// mechanism.
+    var cloudSendableLocales: [String]?
     var shareCardEnabled: Bool?
     var minSupportedBuild: Int?
 
@@ -210,6 +257,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
         case forceLocalOnly      = "force_local_only"
         case ventCloudEnabled    = "vent_cloud_enabled"
         case cloudSendableEnabled = "cloud_sendable_enabled"
+        case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
         case minSupportedBuild   = "min_supported_build"
     }

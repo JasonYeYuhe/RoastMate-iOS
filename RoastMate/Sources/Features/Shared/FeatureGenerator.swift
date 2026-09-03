@@ -113,7 +113,8 @@ final class FeatureGeneratorViewModel {
             // stays on-device, exactly as before.
             let cloud = CloudPermission.resolve(
                 intensity: selectedIntensity,
-                consent: settings.cloudConsent
+                consent: settings.cloudConsent,
+                locale: locale
             )
             let variants = try await RoastEngine.shared.generate(
                 situation: text,

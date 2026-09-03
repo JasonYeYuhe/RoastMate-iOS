@@ -9,6 +9,29 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
 
     var id: String { rawValue }
 
+    /// Maps an arbitrary `Locale` onto the four CONTENT buckets the app
+    /// actually generates for. Never returns `.system`.
+    ///
+    /// Needed because a device locale is not one of these strings — it is
+    /// `zh_Hans_CN`, `zh-Hant-TW`, `en_GB`, `ja_JP`. Anything that gates
+    /// behaviour per language has to normalise first, and doing that inline at
+    /// each site is how the zh-Hant/zh-Hans distinction gets fumbled.
+    static func contentBucket(for locale: Locale) -> AppLanguage {
+        let id = locale.identifier
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            // Script subtag is authoritative; fall back to region for the
+            // common Traditional territories, which often omit it.
+            if id.contains("Hant") { return .traditionalChinese }
+            if id.contains("Hans") { return .simplifiedChinese }
+            let region = locale.region?.identifier ?? ""
+            return ["TW", "HK", "MO"].contains(region) ? .traditionalChinese
+                                                       : .simplifiedChinese
+        case "ja": return .japanese
+        default:   return .english
+        }
+    }
+
     var displayName: String {
         switch self {
         case .system: return String(localized: "settings.language.system")
