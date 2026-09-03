@@ -244,13 +244,32 @@ section "Unit tests"
 # "RoastMateTests" scheme (this step silently failed since the v1.0
 # initial commit). Tests run via the RoastMate scheme's test action
 # (testTargets: RoastMateTests + RoastMateUITests).
-if xcodebuild -project "$PROJECT" -scheme RoastMate \
+# Capture to a file rather than piping into `grep -q`.
+#
+# The old form was `xcodebuild ... | grep -q "** TEST SUCCEEDED **"` under
+# `set -o pipefail`. `grep -q` exits the moment it matches, which closes the
+# pipe; xcodebuild then takes SIGPIPE writing the lines it emits AFTER that
+# banner (the .xcresult path and timing summary), and pipefail turns that into
+# a non-zero pipeline. Net effect: preflight reported "unit tests failed"
+# BECAUSE the tests succeeded. Racy, so it only showed up sometimes —
+# observed 2026-09-04 failing twice while the identical command passed 3/3
+# when run directly.
+#
+# (Lines above that use `| tail -N | grep -q` are unaffected: `tail` drains the
+# whole stream before emitting, so the producer is never writing into a closed
+# pipe. This step was the one without that accidental buffer.)
+#
+# Keeping the log also fixes the second half of the problem: the old form
+# discarded the output, so a real failure gave you no failing test name.
+TEST_LOG="${TMPDIR:-/tmp}/roastmate-preflight-tests.log"
+xcodebuild -project "$PROJECT" -scheme RoastMate \
     -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-    CODE_SIGNING_ALLOWED=NO test 2>&1 \
-    | grep -q "\*\* TEST SUCCEEDED \*\*"; then
+    CODE_SIGNING_ALLOWED=NO test > "$TEST_LOG" 2>&1 || true
+if grep -q "\*\* TEST SUCCEEDED \*\*" "$TEST_LOG"; then
   ok "unit tests pass"
 else
-  fail "unit tests failed"
+  fail "unit tests failed — see $TEST_LOG"
+  grep -E "error:|Failing tests:" "$TEST_LOG" | head -10 | sed 's/^/      /' || true
 fi
 
 # ─────────────────────────────────────────────────────────────────────
