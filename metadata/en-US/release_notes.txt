@@ -1,5 +1,5 @@
-Your private drafts are now genuinely private.
+Voice input is fixed.
 
-• Removed every way to accidentally share a Vent or Feral draft: no share sheet, no share-to-image, no text selection on a private draft. Copy is still there when you want it.
-• The shareable image card now only ever shows your polished, sendable reply — and its text can no longer be edited before sharing.
-• Corrected our Privacy Policy and in-app privacy text to describe iCloud sync accurately: your history syncs through your own private iCloud account, which we cannot read.
+• The microphone wasn't actually capturing anything — the audio session was never configured, so tapping the mic opened the sheet and no text ever appeared. Voice venting works now.
+• Pro subscribers using the roommate group are now correctly counted against the Pro allowance instead of the free one.
+• The shareable card is further hardened: it renders only your polished, sendable reply, its text can't be edited before sharing, and names, phone numbers, ID numbers and WeChat/QQ contacts are stripped on-device before anything is drawn.

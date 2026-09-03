@@ -1,9 +1,8 @@
-Reviewer notes — RoastMate v1.3.1
+Reviewer notes — RoastMate v1.4.0
 
 1. WHERE GENERATION RUNS.
 Calm / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
-Apple's Foundation Models (LanguageModelSession) where available; the
-rewrite is on-device only.
+Apple's Foundation Models where available; the rewrite is on-device only.
 
 Vent and Feral are different and we want to be explicit: Apple's on-device
 model refuses to produce genuine vent output, so these two modes send the
@@ -15,64 +14,64 @@ Settings > AI & Privacy. Our proxy is stateless; we do not retain text.
 The "roommate group" feature in the Echoes tab is cloud-only for the same
 reason, behind the same consent.
 
-NOTE: earlier versions of this document said the app was on-device only
-and suggested verifying in Airplane Mode. That stopped being accurate when
-the cloud Vent lane shipped, and is corrected here.
+NOTE: earlier versions of this document wrongly said the app was
+on-device only. Corrected here.
 
 2. POSITIONING.
 A creative-writing / emotional-expression tool, not a harassment tool.
-There is no field for a target person's name — only a description of a
-SITUATION. Safe Mode is on by default.
+No field for a target person's name — only a SITUATION. Safe Mode on by
+default. Vent and Feral produce PRIVATE drafts labelled "for yourself
+only", not presented as messages to send. A user-initiated "Rewrite as
+Sendable" runs a second on-device pass that strips profanity (no slurs,
+threats, sexual content, or doxxing).
 
-Vent and Feral produce PRIVATE drafts, labelled "for yourself only" and
-not presented as messages to send. A user-initiated "Rewrite as Sendable"
-runs a second on-device pass that strips profanity and produces an
-outward-facing reply (no slurs, threats, sexual content, or doxxing).
+TEST PATH: Roast Generator > Intensity "Vent" > type any situation >
+Generate. The card is labelled "Vent draft - for yourself only" with a
+do-not-send banner. Tap "Make it sendable" for the sendable version.
 
-TEST PATH: Roast Generator > Intensity "Vent" > type e.g. "My boss took
-credit for my work" > Generate. The card is labelled "Vent draft - for
-yourself only" with a do-not-send banner. Tap "Make it sendable" for the
-sendable version.
+3. WHAT'S NEW IN 1.4.0.
+- VOICE INPUT FIX. The app never configured its AVAudioSession, so the
+  microphone captured nothing — the sheet opened, no text appeared.
+  Fixed for both the iOS 18 (SFSpeechRecognizer) and iOS 26
+  (SpeechAnalyzer) paths. Transcription stays 100% on-device
+  (requiresOnDeviceRecognition = true); a locale with no on-device model
+  hides voice rather than using any network path.
+- Pro subscribers using the roommate group are now counted against the
+  Pro allowance rather than the free one.
+- Share card hardening. The card renders only the sendable reply and its
+  text is immutable — no free-text field reaches the renderer, so nothing
+  a user types can appear on a RoastMate-branded image. Before drawing,
+  the text is scrubbed on-device for names, phone numbers, ID numbers and
+  WeChat/QQ contacts, then re-validated by the safety filter; if that
+  refuses, no card is produced.
+- Private drafts remain unshareable (1.3.1): no share sheet, no
+  share-as-image, no text selection. Copy is kept as an explicit
+  user-initiated action.
+- Some capabilities ship DISABLED behind remote flags, not reachable in
+  this build.
 
-3. WHAT'S NEW IN 1.3.1 - PRIVATE DRAFTS ARE NOW UNSHAREABLE.
-This release removes every in-app way to share a private vent draft, so
-the "for yourself only" label is enforced rather than merely stated:
-- The share-as-image card previously offered an opt-in to include the raw
-  vent draft, editable before rendering. Removed. The card now renders
-  ONLY the sendable reply, and its text is immutable — there is no
-  free-text field in the compose path, so nothing a user types can be
-  rendered onto a RoastMate-branded image. Rendered text is always model
-  output that passed the app's on-device safety filter.
-- The system share sheet and text selection are no longer offered on
-  private drafts (both remain on sendable output).
-Copy is deliberately kept as an explicit user-initiated action.
-
-4. iCLOUD SYNC IS ACTIVE (described as "planned" in earlier versions of
-this document; corrected here). History, threads, saved situations,
-settings and credit-ledger entries mirror via SwiftData + CloudKit into
-the PRIVATE database of the Apple Account on the device (container
-iCloud.yyh.roastmate.app). This is the user's own iCloud storage: it never
-reaches our servers and we cannot read it. It follows the device's iCloud
-state.
+4. iCLOUD SYNC IS ACTIVE (earlier versions of this document said
+"planned"; corrected here). History, threads, saved situations, settings
+and credit-ledger entries mirror via SwiftData + CloudKit into the PRIVATE
+database of the Apple Account on the device (container
+iCloud.yyh.roastmate.app). That is the user's own iCloud storage: it never
+reaches our servers and we cannot read it.
 
 5. ACCOUNTS. Sign in with Apple is OPTIONAL and gates no feature; only the
-Apple-issued user ID and any shared name are stored locally in Keychain.
-No content is shared between users. No social features. No analytics SDK,
-no advertising IDs, no third-party SDKs.
+Apple user ID and any shared name are stored locally in Keychain. No
+content shared between users, no social features, no analytics SDK, no
+advertising IDs, no third-party SDKs.
 
-6. PURCHASES.
+6. PURCHASES (unchanged from 1.3.1).
 - yyh.roastmate.app.pro.monthly ($2.99/mo)
 - yyh.roastmate.app.pro.yearly ($19.99/yr, 7-day trial)
 - Consumable credit packs: .credits.10 / .70 / .160 / .380
-Pro entitlement is verified server-side: the app sends the StoreKit 2
-transaction JWS to our Worker, which validates Apple's signature and
-issues a short-lived token granting the higher cloud quota. The JWS
-carries no name, email, or payment detail. Any sandbox tester works.
+Pro is verified server-side: the app sends the StoreKit 2 transaction JWS
+to our Worker, which validates Apple's signature and issues a short-lived
+token granting the higher cloud quota. The JWS carries no name, email or
+payment detail.
 
-7. EXTENSIONS. Share Extension and App Intents expose only Calm / Sharp —
-neither can produce a private vent draft. watchOS quick roast + Handoff.
-macOS adds a MenuBarExtra.
-
-8. AGE GATE. 17+ for mature humor; first launch shows an age confirmation.
+7. Share Extension and App Intents expose only Calm / Sharp — neither can
+produce a private vent draft. 17+; first launch shows an age confirmation.
 
 Thank you for the review.
