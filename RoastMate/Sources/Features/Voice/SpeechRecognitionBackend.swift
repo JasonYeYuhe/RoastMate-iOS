@@ -84,6 +84,18 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
             throw VoiceVentError.localeUnsupported
         }
 
+        // MUST come before `engine.inputNode` is touched: iOS's default session
+        // category does not permit input, and the failure is silent (the tap
+        // delivers zeros and nothing ever transcribes). The input node's format
+        // is also derived from the active route.
+        try VoiceAudioSession.activate()
+
+        // Everything past activation runs inside a failure guard: if any step
+        // throws, the session must be released. `stop()` cannot be relied on
+        // here — its early-return guard (task/tap/engine all empty) would skip
+        // deactivation if the throw happened before the task was created,
+        // leaving the session active and other apps ducked.
+        do {
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.requiresOnDeviceRecognition = true   // hard requirement: never network
         request.shouldReportPartialResults = true
@@ -122,6 +134,17 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
         tapInstalled = true
         engine.prepare()
         try engine.start()
+        } catch {
+            // `self.` is required: the parameter `onPartial` and the local
+            // `request` shadow the stored properties inside start().
+            if tapInstalled { engine.inputNode.removeTap(onBus: 0); tapInstalled = false }
+            if engine.isRunning { engine.stop() }
+            self.task?.cancel(); self.task = nil
+            self.request = nil
+            self.onPartial = nil
+            VoiceAudioSession.deactivate()
+            throw error
+        }
     }
 
     @discardableResult
@@ -157,6 +180,7 @@ final class LegacySpeechBackend: SpeechRecognitionBackend {
         task = nil
         request = nil
         onPartial = nil
+        VoiceAudioSession.deactivate()
         isStopping = false
         return final
     }

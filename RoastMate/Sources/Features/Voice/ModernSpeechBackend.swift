@@ -104,6 +104,11 @@ final class ModernSpeechBackend: SpeechRecognitionBackend {
             //    first words aren't lost to startup latency.
             try await analyzer.prepareToAnalyze(in: format)
 
+            // See VoiceAudioSession: the default category does not permit
+            // input, and the failure is silent. Activate before touching
+            // `inputNode`, whose format depends on the active route.
+            try VoiceAudioSession.activate()
+
             let input = engine.inputNode
             let tapFormat = input.outputFormat(forBus: 0)
             input.installTap(onBus: 0, bufferSize: 4096, format: tapFormat) { buffer, _ in
@@ -128,6 +133,7 @@ final class ModernSpeechBackend: SpeechRecognitionBackend {
         guard analyzer != nil || tapInstalled || engine.isRunning else { return lastText }
         if tapInstalled { engine.inputNode.removeTap(onBus: 0); tapInstalled = false }
         if engine.isRunning { engine.stop() }
+        VoiceAudioSession.deactivate()
         inputContinuation?.finish()
         // Finalize publishes the last results; awaiting the reader task (the
         // stream ends after finalize) guarantees we consumed them BEFORE
@@ -142,6 +148,7 @@ final class ModernSpeechBackend: SpeechRecognitionBackend {
     private func teardown() async {
         if tapInstalled { engine.inputNode.removeTap(onBus: 0); tapInstalled = false }
         if engine.isRunning { engine.stop() }
+        VoiceAudioSession.deactivate()
         inputContinuation?.finish()
         resultsTask?.cancel()
         analyzer = nil
