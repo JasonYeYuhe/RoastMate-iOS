@@ -239,7 +239,7 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────
-section "Unit tests"
+section "Tests (unit + UI, reported separately)"
 # xcodegen only emits schemes for app/extension targets — there is no
 # "RoastMateTests" scheme (this step silently failed since the v1.0
 # initial commit). Tests run via the RoastMate scheme's test action
@@ -261,15 +261,71 @@ section "Unit tests"
 #
 # Keeping the log also fixes the second half of the problem: the old form
 # discarded the output, so a real failure gave you no failing test name.
+# REPORTING THE RIGHT CATEGORY (fixed 2026-09-06). The SIGPIPE bug above was
+# only half the problem. This step runs the SCHEME's test action, which is
+# RoastMateTests **and** RoastMateUITests — but the section was titled "Unit
+# tests" and the failure line said "unit tests failed". So a flaky XCUITest
+# reported as though the unit suite had broken.
+#
+# Measured 2026-09-05: preflight printed "✗ unit tests failed" when
+# RoastMateTests was 341 tests / 1 skipped / **0 failures** and the two
+# failures were ScreenshotTests losing keyboard focus to another agent's
+# simulator run. Both passed on re-run. Cost: you go hunting a defect inside
+# 341 passing tests.
+#
+# The gate was not reporting a RESULT, it was reporting a CATEGORY, and the
+# category was wrong. A gate may say "something failed"; it may not say WHICH
+# SUITE failed unless it actually knows. So parse the per-bundle verdicts.
+#
+# DEVICE: overridable, because this used to hardcode one shared simulator with
+# no -derivedDataPath, so any concurrent run (another agent, another project)
+# fought over the same device and manufactured failures that read like real
+# defects. Default is unchanged, so an unqualified run measures what it always
+# measured. To isolate:
+#   xcrun simctl create RoastMate-UITests "iPhone 17 Pro"
+#   ROASTMATE_TEST_DEVICE=RoastMate-UITests scripts/preflight.sh
 TEST_LOG="${TMPDIR:-/tmp}/roastmate-preflight-tests.log"
+TEST_DEVICE="${ROASTMATE_TEST_DEVICE:-iPhone 17 Pro}"
+echo "  device: $TEST_DEVICE (override with ROASTMATE_TEST_DEVICE)"
 xcodebuild -project "$PROJECT" -scheme RoastMate \
-    -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+    -destination "platform=iOS Simulator,name=$TEST_DEVICE" \
     CODE_SIGNING_ALLOWED=NO test > "$TEST_LOG" 2>&1 || true
-if grep -q "\*\* TEST SUCCEEDED \*\*" "$TEST_LOG"; then
-  ok "unit tests pass"
-else
-  fail "unit tests failed — see $TEST_LOG"
-  grep -E "error:|Failing tests:" "$TEST_LOG" | head -10 | sed 's/^/      /' || true
+
+# Per-bundle verdict. `Test Suite '<bundle>.xctest' passed|failed` is emitted
+# once per bundle with its own "Executed N tests" line on the NEXT line.
+bundle_verdict() {                    # $1 = bundle name, $2 = human label
+  local bundle="$1" label="$2" line counts
+  line=$(grep -E "^Test Suite '${bundle}\.xctest' (passed|failed)" "$TEST_LOG" | tail -1 || true)
+  counts=$(grep -A1 -E "^Test Suite '${bundle}\.xctest' (passed|failed)" "$TEST_LOG" \
+           | grep -E "Executed [0-9]+ test" | tail -1 | sed 's/^[[:space:]]*//' || true)
+  if [ -z "$line" ]; then
+    fail "$label — bundle never reported a verdict (build or launch failure?); see $TEST_LOG"
+    grep -E "error:" "$TEST_LOG" | head -5 | sed 's/^/      /' || true
+  elif echo "$line" | grep -q "passed"; then
+    ok "$label pass${counts:+ — $counts}"
+  else
+    fail "$label FAILED${counts:+ — $counts} — see $TEST_LOG"
+    grep -E "^.*: error: -\[" "$TEST_LOG" | head -8 | sed 's/^/      /' || true
+  fi
+}
+
+bundle_verdict "RoastMateTests"   "unit tests (RoastMateTests)"
+bundle_verdict "RoastMateUITests" "UI tests (RoastMateUITests)"
+
+# A UI-only failure is real but is very often the shared simulator rather than
+# the code. Say so at the point of failure instead of leaving the next reader to
+# rediscover it — the signature is the app being unreachable ("neither element
+# nor any descendant has keyboard focus"), not the property under test.
+if grep -q "neither element nor any descendant has keyboard focus" "$TEST_LOG" 2>/dev/null \
+   || grep -qi "Failed to synthesize event" "$TEST_LOG" 2>/dev/null; then
+  echo "      note: a 'failed to synthesize event' / lost-focus signature usually means"
+  echo "            ANOTHER process had the simulator foreground, not a real defect."
+  echo "            Re-run on a private clone of the SAME device before believing it:"
+  echo "              xcrun simctl create RoastMate-UITests \"$TEST_DEVICE\""
+  echo "              ROASTMATE_TEST_DEVICE=RoastMate-UITests scripts/preflight.sh"
+  echo "            Do NOT re-run on a different device model to check: these tests"
+  echo "            use isHittable + scroll-until-visible loops, so a larger screen"
+  echo "            is an EASIER instrument and a pass there transfers nothing."
 fi
 
 # ─────────────────────────────────────────────────────────────────────

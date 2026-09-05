@@ -18,9 +18,39 @@
 
 name: Mirror research form to Pages
 
+# TRIGGER (fixed 2026-09-06). This used to be `branches: [v1.1, main]` and that
+# silently broke the remote kill-switch for three months.
+#
+# What happened: `v1.1` was the publish branch until June and is dead now;
+# `main` is stale (2026-05-16) and contains neither this workflow nor a
+# `research/` directory at all. Every config change since 96901f4 landed on a
+# feature branch, so NOTHING triggered — the last real mirror ran 2026-05-29.
+# The served JSON stayed frozen at the v1.1-era payload, missing
+# roommate_group_enabled / cloud_sendable_enabled / share_card_enabled. The
+# roommate group is live-by-default in the binary, so its documented
+# parse-fallback kill would have reached ZERO devices.
+#
+# Why `branches: ['**']` rather than naming the current branch: naming a branch
+# is what decayed. The path filter is the first guard — this only fires when
+# `research/web/**` actually changes.
+#
+# The tradeoff a wildcard buys, stated plainly: ANY branch can now publish to
+# production config, so a WIP edit on a scratch branch goes live. That is
+# accepted deliberately, because the failure it replaces already happened (the
+# kill-switch was silently dead for three months) and is far worse than the one
+# it introduces. It is also bounded — the `Validate config` step below refuses
+# to publish a payload that is malformed or missing a key, so the realistic
+# accident (a half-written JSON) fails the job instead of shipping. A wrong-but-
+# valid value is still possible; it propagates on next launch and is fixed by
+# pushing again, which is the same recovery path the kill-switch itself uses.
+#
+# NOTE: `workflow_dispatch` below is NOT a usable fallback. GitHub only exposes
+# manual dispatch for workflows present on the DEFAULT branch, and `main` has no
+# `.github/` directory — `gh workflow run` returns HTTP 422. It is kept only for
+# the day `main` is refreshed. Do not reach for it as a recovery path.
 on:
   push:
-    branches: [v1.1, main]
+    branches: ['**']
     paths:
       - "research/web/**"
   workflow_dispatch:
@@ -40,6 +70,43 @@ jobs:
           repository: JasonYeYuhe/RoastMate
           path: pages-repo
           ssh-key: ${{ secrets.PAGES_DEPLOY_SSH_KEY }}
+
+      # Publishing a broken kill-switch is worse than not publishing. The app
+      # fails OPEN on a malformed fetch (RemoteConfig keeps its last good cache
+      # and falls back to baked defaults), so a bad payload does not brick the
+      # app — but it does silently retire the kill-switch again, which is the
+      # exact failure this workflow exists to prevent. Fail the job instead.
+      - name: Validate config before publishing
+        run: |
+          set -euo pipefail
+          CFG=ios-repo/research/web/roastmate-config.json
+          [ -f "$CFG" ] || { echo "::error::$CFG missing"; exit 1; }
+          python3 - "$CFG" <<'PY'
+          import json, sys
+          path = sys.argv[1]
+          try:
+              cfg = json.load(open(path))
+          except json.JSONDecodeError as e:
+              sys.exit(f"::error::{path} is not valid JSON: {e}")
+          # Every key the shipped binaries read. A key going MISSING is the
+          # silent-failure mode: RemoteConfig's decodeIfPresent falls back to the
+          # baked default, so the flag reads as if it were never set and a kill
+          # reaches nobody. Absence must be loud here because it is silent there.
+          required = [
+              "config_version", "echoes_enabled", "roommate_group_enabled",
+              "force_local_only", "vent_cloud_enabled", "cloud_sendable_enabled",
+              "share_card_enabled", "share_card_setup_enabled", "min_supported_build",
+          ]
+          if missing := [k for k in required if k not in cfg]:
+              sys.exit(f"::error::{path} is missing required key(s): {', '.join(missing)}")
+          bools = [k for k in required if k.endswith("_enabled") or k == "force_local_only"]
+          if bad := [k for k in bools if not isinstance(cfg[k], bool)]:
+              sys.exit(f"::error::{path} key(s) must be JSON booleans: {', '.join(bad)}")
+          for k in ("config_version", "min_supported_build"):
+              if not isinstance(cfg[k], int) or isinstance(cfg[k], bool):
+                  sys.exit(f"::error::{path} '{k}' must be an integer")
+          print(f"config OK — {len(required)} required keys present and well-typed")
+          PY
 
       - name: Copy research form files
         run: |
