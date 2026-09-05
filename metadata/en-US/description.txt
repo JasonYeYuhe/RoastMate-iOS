@@ -4,7 +4,7 @@ RoastMate is the emotional-expression tool you wish you'd had after the last arg
 
 Pick from 20+ writing styles — Polite, Passive-Aggressive, Japanese Keigo, Literary, Stand-up, MBA Buzzword, Shakespearean, Savage, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
 
-Composed, Sharp, and Savage intensities run 100% on your device using Apple's Foundation Models framework. Vent and Feral private drafts route through our developer-owned cloud proxy to a third-party LLM provider — Apple's on-device model is too gentle for real venting. You can toggle Cloud AI off in Settings to keep everything local; vent output will be much gentler. No tracking, no analytics, no advertising IDs. Per-device rate-limited so abuse can't drain shared free quota.
+Composed, Sharp, and Savage intensities run 100% on your device — using Apple's Foundation Models framework where Apple Intelligence is available, and curated built-in responses where it isn't. Vent and Feral private drafts route through our developer-owned cloud proxy to a third-party LLM provider — Apple's on-device model is too gentle for real venting. You can toggle Cloud AI off in Settings to keep everything local; vent output will be much gentler. No tracking, no analytics, no advertising IDs. Per-device rate-limited so abuse can't drain shared free quota.
 
 RoastMate is a creative writing and emotional expression tool. It is not designed to target or harass any individual — names, threats, and slurs are automatically removed by a built-in safety filter.
 
@@ -40,7 +40,7 @@ Payment is charged to your Apple ID at confirmation of purchase. Auto-renews at 
 
 PRIVACY
 
-Calm / Sharp / Savage / Rewrite — fully on-device with Apple's Foundation Models. Vent / Feral private drafts route through a developer-owned Cloudflare Worker that forwards to third-party LLM providers, stateless on our side and per-device rate-limited. You can disable cloud routing in Settings → AI & Privacy. Sign in with Apple is optional; when signed in, only an Apple-issued User ID is stored locally. No analytics, no advertising IDs, no fingerprinting.
+Calm / Sharp / Savage / Rewrite — fully on-device: Apple's Foundation Models where Apple Intelligence is available, curated built-in responses otherwise. Vent / Feral private drafts route through a developer-owned Cloudflare Worker that forwards to third-party LLM providers, stateless on our side and per-device rate-limited. You can disable cloud routing in Settings → AI & Privacy. Sign in with Apple is optional; when signed in, only an Apple-issued User ID is stored locally. No analytics, no advertising IDs, no fingerprinting.
 
 TERMS OF USE (EULA) & PRIVACY POLICY
 
