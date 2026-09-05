@@ -132,6 +132,78 @@ final class ShareCardTests: XCTestCase {
         XCTAssertTrue(out.contains("[对方]"), out)
     }
 
+    // MARK: - Traditional-script coverage (regression, fixed 2026-09-06)
+    //
+    // These pin a LIVE leak: 9 of the 13 title literals were Simplified-only,
+    // so a zh-Hant reader's card carried 李經理 / 張總 / 陳老師 / 劉醫生 /
+    // 孫組長 UNMASKED while the Simplified twins were masked and pinned green
+    // by `testRedactsSurnamePlusTitle` above. The suite reported coverage the
+    // shipped Traditional locale did not have — which is exactly why these are
+    // written as SCRIPT pairs rather than as more Simplified cases.
+
+    func testRedactsTraditionalSurnamePlusTitle() {
+        let hant = Locale(identifier: "zh-Hant")
+        for raw in ["李經理說這是機會", "張總又畫餅了", "陳老師又在酸我",
+                    "劉醫生說我沒事", "孫組長把鍋丟給我", "陳隊長又來了",
+                    "林老闆畫大餅", "王主管又加需求"] {
+            let out = Redactor.redactForPublicShare(raw, locale: hant)
+            XCTAssertTrue(out.contains("[對方]"), "\(raw) -> \(out)")
+        }
+    }
+
+    /// The patterns are script-agnostic on purpose: the script of the TEXT and
+    /// the locale of the READER are independent, so Traditional input must mask
+    /// even for a Simplified reader (and vice versa).
+    func testRedactsAcrossScriptLocaleMismatch() {
+        let hans = Locale(identifier: "zh-Hans")
+        let hant = Locale(identifier: "zh-Hant")
+        XCTAssertFalse(Redactor.redactForPublicShare("李經理說這是機會", locale: hans)
+            .contains("經理"), "Traditional text must mask for a Simplified reader")
+        XCTAssertFalse(Redactor.redactForPublicShare("李经理说这是机会", locale: hant)
+            .contains("经理"), "Simplified text must mask for a Traditional reader")
+    }
+
+    /// A Simplified 「[对方]」 stamped onto a Traditional card is itself a defect
+    /// the project treats as real, so the TOKEN follows the reader's script.
+    func testMaskTokenFollowsReaderScript() {
+        let hant = Redactor.redactForPublicShare("李經理說這是機會",
+                                                 locale: Locale(identifier: "zh-Hant"))
+        XCTAssertTrue(hant.contains("[對方]"), hant)
+        XCTAssertFalse(hant.contains("[对方]"), "Simplified token on a Traditional card: \(hant)")
+
+        let hans = Redactor.redactForPublicShare("李经理说这是机会",
+                                                 locale: Locale(identifier: "zh-Hans"))
+        XCTAssertTrue(hans.contains("[对方]"), hans)
+    }
+
+    /// `zh-TW` carries no explicit `Hant` subtag — it must still resolve as
+    /// Traditional, or every Taiwan reader gets the Simplified token.
+    func testRegionOnlyTraditionalLocaleResolves() {
+        for id in ["zh-TW", "zh-HK", "zh-MO"] {
+            let out = Redactor.redactForPublicShare("李經理說這是機會",
+                                                    locale: Locale(identifier: id))
+            XCTAssertTrue(out.contains("[對方]"), "\(id) -> \(out)")
+        }
+    }
+
+    func testRedactsTraditionalContactHandle() {
+        let out = Redactor.redactForPublicShare("微信號：zhangsan88",
+                                                locale: Locale(identifier: "zh-Hant"))
+        XCTAssertTrue(out.contains("[聯繫方式]"), out)
+        XCTAssertFalse(out.contains("zhangsan88"), out)
+    }
+
+    /// The bare-总/總 rule masks a surname but must not eat the adverb. The
+    /// Traditional continuations (總是 / 總共) need the same exclusions as the
+    /// Simplified ones, or the fix trades a leak for mangled copy.
+    func testBareZongRuleSparesTheAdverbInBothScripts() {
+        for (id, line) in [("zh-Hans", "我总是这样"), ("zh-Hans", "总共三个人"),
+                           ("zh-Hant", "我總是這樣"), ("zh-Hant", "總共三個人")] {
+            let out = Redactor.redactForPublicShare(line, locale: Locale(identifier: id))
+            XCTAssertEqual(out, line, "adverbial 总/總 must survive: \(line) -> \(out)")
+        }
+    }
+
     func testStrictPassStillCatchesTheAsciiCases() {
         let out = Redactor.redactForPublicShare("mail me a@b.com or https://x.example")
         XCTAssertTrue(out.contains("[email]"))

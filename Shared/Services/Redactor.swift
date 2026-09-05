@@ -57,32 +57,90 @@ enum Redactor {
     /// otherwise swallow them first and mislabel them ("QQ [number]", or an ID
     /// card reduced to "[number]X"). Specific patterns must claim their text
     /// before general ones get a turn.
-    private static let cjkRules: [(pattern: String, replacement: String)] = [
-        // Contact handles: vx / v信 / 微信 / 威信 / QQ / 扣扣 / 企鹅号.
-        // `(?<![A-Za-z])` stops "qq" matching inside an ordinary word.
-        ("(?<![A-Za-z])(?:vx|v信|微信号?|威信|weixin|wechat|qq号?|扣扣|企鹅号?)\\s*[:：=]?\\s*[A-Za-z0-9_\\-]{4,}",
-         "[联系方式]"),
-        // Mainland ID card: 18 chars (trailing X allowed) or 15.
-        ("(?<![0-9A-Za-z])(?:\\d{17}[\\dXx]|\\d{15})(?![0-9A-Za-z])", "[身份证]"),
-        // Phone numbers written in Chinese numerals — a 7+ run of 零〇一二三四五六七八九
-        // (with 两 as a common spoken variant). Invisible to any \\d pattern.
-        ("[零〇一二三四五六七八九两]{7,}", "[号码]"),
-        // Surname + UNAMBIGUOUS title: 李经理 / 王主管 / 陈老师.
-        // Deliberately NO trailing word-boundary lookahead: Chinese prose has no
-        // spaces, so "张总又画饼了" would never match one. The title itself is
-        // the signal, so the pattern is safe without it.
-        ("[\\u4e00-\\u9fa5]{1,2}(?:总监|总裁|经理|主管|老师|医生|律师|老板|董事|主任|教授|组长|队长)",
-         "[对方]"),
-        // Bare 总 (张总 / 李总) needs care: 总 is also a very common adverb.
-        // One surname character, and excluded before the adverbial continuations
-        // so "我总是这样" / "总共" are left alone.
-        ("[\\u4e00-\\u9fa5]总(?![是共结计之要算而算])", "[对方]"),
-        // Role-prefixed nickname: PM老王 / HR小李. Anchored to either
-        // 老/小/阿 + one character, or exactly two characters, so it cannot run
-        // on into the rest of the sentence.
-        ("(?:PM|HR|CEO|CTO|COO|VP|TL|PO)\\s*(?:[老小阿][\\u4e00-\\u9fa5]|[\\u4e00-\\u9fa5]{2})",
-         "[对方]")
-    ]
+    /// SCRIPT COVERAGE (fixed 2026-09-06). Every CJK literal below carries BOTH
+    /// its Simplified and Traditional form, and the patterns are matched
+    /// regardless of the reader's locale.
+    ///
+    /// Why script-agnostic patterns rather than a per-locale ruleset: the script
+    /// of the TEXT and the locale of the READER are independent. A zh-Hans user
+    /// can be venting about 陳經理, and a zh-Hant user's model output can come
+    /// back Simplified. Gating the patterns on locale would leak in both
+    /// directions, so only the replacement TOKEN is locale-dependent — see
+    /// `maskToken(_:for:)`.
+    ///
+    /// This was a real, shipped leak: before this fix 9 of the 13 title literals
+    /// were Simplified-only, so 李經理 / 張總 / 陳老師 / 劉醫生 / 孫組長 all
+    /// reached the share-card canvas UNMASKED for zh-Hant readers while their
+    /// Simplified twins were masked and pinned green by tests. Only the four
+    /// script-identical titles (主管/董事/主任/教授) happened to work.
+    private static func cjkRules(for locale: Locale) -> [(pattern: String, replacement: String)] {
+        let person = maskToken(.person, for: locale)
+        return [
+            // Contact handles: vx / v信 / 微信 / 威信 / QQ / 扣扣 / 企鹅号.
+            // `(?<![A-Za-z])` stops "qq" matching inside an ordinary word.
+            ("(?<![A-Za-z])(?:vx|v信|微信[号號]?|威信|weixin|wechat|qq[号號]?|扣扣|企[鹅鵝][号號]?)\\s*[:：=]?\\s*[A-Za-z0-9_\\-]{4,}",
+             maskToken(.contact, for: locale)),
+            // Mainland ID card: 18 chars (trailing X allowed) or 15.
+            ("(?<![0-9A-Za-z])(?:\\d{17}[\\dXx]|\\d{15})(?![0-9A-Za-z])",
+             maskToken(.idCard, for: locale)),
+            // Phone numbers written in Chinese numerals — a 7+ run of 零〇一二三四五六七八九
+            // (with 两/兩 as a common spoken variant). Invisible to any \\d pattern.
+            ("[零〇一二三四五六七八九两兩]{7,}", maskToken(.number, for: locale)),
+            // Surname + UNAMBIGUOUS title: 李经理 / 王主管 / 陈老师 / 李經理 / 陳老師.
+            // Deliberately NO trailing word-boundary lookahead: Chinese prose has no
+            // spaces, so "张总又画饼了" would never match one. The title itself is
+            // the signal, so the pattern is safe without it.
+            ("[\\u4e00-\\u9fa5]{1,2}(?:总监|總監|总裁|總裁|经理|經理|主管|老师|老師|医生|醫生|律师|律師|老板|老闆|董事|主任|教授|组长|組長|队长|隊長)",
+             person),
+            // Bare 总/總 (张总 / 李總) needs care: 总 is also a very common adverb.
+            // One surname character, and excluded before the adverbial continuations
+            // so "我总是这样" / "总共" / "總是" are left alone.
+            ("[\\u4e00-\\u9fa5][总總](?![是共结結计計之要算而])", person),
+            // Role-prefixed nickname: PM老王 / HR小李. Anchored to either
+            // 老/小/阿 + one character, or exactly two characters, so it cannot run
+            // on into the rest of the sentence.
+            ("(?:PM|HR|CEO|CTO|COO|VP|TL|PO)\\s*(?:[老小阿][\\u4e00-\\u9fa5]|[\\u4e00-\\u9fa5]{2})",
+             person)
+        ]
+    }
+
+    /// The kinds of thing a mask can stand in for. Exists so every token has
+    /// ONE home — previously the strings were inlined at each rule AND again in
+    /// `personReplacement`, which is how the Traditional forms went missing in
+    /// one place while looking correct in the other.
+    private enum MaskKind { case person, contact, idCard, number }
+
+    /// The mask token, in the READER's script. A Simplified 「[对方]」 stamped
+    /// onto a Traditional card is itself a defect the project already treats as
+    /// real, so the token follows the locale even though the patterns do not.
+    private static func maskToken(_ kind: MaskKind, for locale: Locale) -> String {
+        switch (kind, chineseScript(for: locale)) {
+        case (.person, .traditional):  return "[對方]"
+        case (.person, .simplified):   return "[对方]"
+        case (.person, .notChinese):   return personReplacement(for: locale)
+        case (.contact, .traditional): return "[聯繫方式]"
+        case (.contact, _):            return "[联系方式]"
+        case (.idCard, .traditional):  return "[身份證]"
+        case (.idCard, _):             return "[身份证]"
+        case (.number, .traditional):  return "[號碼]"
+        case (.number, _):             return "[号码]"
+        }
+    }
+
+    private enum ChineseScript { case simplified, traditional, notChinese }
+
+    /// Traditional is signalled either by an explicit `Hant` script subtag or by
+    /// a Traditional-using region, so both `zh-Hant` and `zh-TW` resolve
+    /// correctly. `maximalIdentifier` fills in the script Apple leaves implicit.
+    private static func chineseScript(for locale: Locale) -> ChineseScript {
+        guard locale.language.languageCode?.identifier == "zh" else { return .notChinese }
+        if locale.language.script?.identifier == "Hant" { return .traditional }
+        if let region = locale.region?.identifier, ["TW", "HK", "MO"].contains(region) {
+            return .traditional
+        }
+        return Locale(identifier: locale.identifier).language
+            .maximalIdentifier.contains("Hant") ? .traditional : .simplified
+    }
 
     /// The original cheap pass. Unchanged behaviour.
     static func redact(_ text: String) -> String {
@@ -97,7 +155,7 @@ enum Redactor {
         // CJK first — see the note on `cjkRules`. Then the ASCII sweep, then
         // NER last, so the name pass only ever sees text whose structured PII
         // has already been masked.
-        var out = apply(cjkRules, to: text)
+        var out = apply(cjkRules(for: locale), to: text)
         out = apply(rules, to: out)
         out = maskPersonalNames(in: out, locale: locale)
         return out
@@ -150,9 +208,12 @@ enum Redactor {
         return out
     }
 
+    /// The NER pass's replacement. Kept separate from `maskToken` only because
+    /// it also serves non-Chinese locales; the Chinese cases delegate so the
+    /// script rule stays in one place.
     private static func personReplacement(for locale: Locale) -> String {
         switch locale.language.languageCode?.identifier {
-        case "zh": return "[对方]"
+        case "zh": return chineseScript(for: locale) == .traditional ? "[對方]" : "[对方]"
         case "ja": return "[相手]"
         default:   return "[them]"
         }
