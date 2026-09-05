@@ -21,8 +21,8 @@ import FoundationModels
 ///        xcodebuild test -project RoastMate.xcodeproj -scheme RoastMate \
 ///          -destination 'platform=iOS,name=<your iPhone>' \
 ///          -only-testing:RoastMateTests/RoommateEvalTests/test_roommateGroup_realDeviceParseFallbackRate
-///      Enable < 15% (flip `roommate_group_enabled` baked default to true) /
-///      hard-kill ≥ 35% (the stricter 8–10-msg contract makes this the real
+///      Enable < 15% (already done — the baked default IS true since c37d393) /
+///      hard-kill ≥ 35% (set `roommate_group_enabled:false` in the served JSON) (the stricter 8–10-msg contract makes this the real
 ///      risk vs classic Echoes). See docs/ROOMMATE_REALDEVICE_EVAL.md.
 final class RoommateEvalTests: XCTestCase {
 

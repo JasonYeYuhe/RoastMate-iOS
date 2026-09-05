@@ -9,8 +9,10 @@ import os.log
 ///
 /// Two scenes (see `EchoScene`): `.classic` = the shipped 1–2 voice
 /// 替你出气; `.roommateGroup` = the 3-voice 虚拟舍友群 (Echoes vNext), gated
-/// behind its own dark-by-default `roommate_group_enabled` flag (ANDed with
-/// `echoes_enabled`).
+/// behind its own `roommate_group_enabled` flag (ANDed with `echoes_enabled`).
+/// That flag's baked default is **true** — the feature is LIVE, and the flag is
+/// the remote KILL-switch, not a dark launch. (It was dark-by-default until
+/// c37d393 flipped it; this comment said otherwise until 2026-09-06.)
 ///
 /// All exit paths return a complete `EchoTranscript`. On parse failure or
 /// model error, falls back to a curated static transcript (scene-matched)

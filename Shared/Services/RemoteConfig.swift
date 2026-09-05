@@ -76,6 +76,10 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// That preserves the plan's actual intent (no viral floodgate before the
     /// dam is proven) with no user-visible regression. DARK by default.
     var shareCardEnabled: Bool
+    /// A.1: gates the setup-chip picker in the composer. SEPARATE from
+    /// `shareCardEnabled` on purpose — that one gates the QR growth badge, and
+    /// flipping both at once makes the signal unreadable.
+    var shareCardSetupEnabled: Bool
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
@@ -93,7 +97,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         roommateGroupEnabled: true,
         cloudSendableEnabled: false, // DARK: flipped on remotely after the eval
         cloudSendableLocales: nil,   // nil = all locales (back-compat)
-        shareCardEnabled: false      // DARK: flipped after the §2 quantitative gate
+        shareCardEnabled: false,     // DARK: flipped after the §2 quantitative gate
+        shareCardSetupEnabled: false // DARK: A.1 setup chips, flip after a device look
     )
 
     enum CodingKeys: String, CodingKey {
@@ -105,6 +110,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case cloudSendableEnabled = "cloud_sendable_enabled"
         case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
+        case shareCardSetupEnabled = "share_card_setup_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 
@@ -116,7 +122,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
          roommateGroupEnabled: Bool = true,
          cloudSendableEnabled: Bool = false,
          cloudSendableLocales: [String]? = nil,
-         shareCardEnabled: Bool = false) {
+         shareCardEnabled: Bool = false,
+         shareCardSetupEnabled: Bool = false) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
         self.roommateGroupEnabled = roommateGroupEnabled
@@ -125,6 +132,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         self.cloudSendableEnabled = cloudSendableEnabled
         self.cloudSendableLocales = cloudSendableLocales
         self.shareCardEnabled = shareCardEnabled
+        self.shareCardSetupEnabled = shareCardSetupEnabled
         self.minSupportedBuild = minSupportedBuild
     }
 
@@ -132,8 +140,10 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// and a forward-compat safety net: every key is optional and falls back
     /// to the SAFE default when absent, so a future-added key never breaks
     /// decoding an older cache blob. `roommateGroupEnabled` falls back to its
-    /// dark (`false`) baked default — an old cache that predates the feature
-    /// keeps it off.
+    /// baked default, which is `true` (flipped by c37d393 when the feature went
+    /// live) — an old cache that predates the key therefore reads the feature as
+    /// ENABLED, matching a fresh install. This comment previously said the
+    /// default was dark/`false`; it had been wrong since that flip.
     ///
     /// NOTE: the LIVE wire payload does NOT use this defaulting path — it
     /// decodes into `RemoteConfigPatch` and MERGES only the present keys over
@@ -150,6 +160,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         ventCloudEnabled     = try c.decodeIfPresent(Bool.self, forKey: .ventCloudEnabled)     ?? d.ventCloudEnabled
         cloudSendableEnabled = try c.decodeIfPresent(Bool.self, forKey: .cloudSendableEnabled) ?? d.cloudSendableEnabled
         shareCardEnabled     = try c.decodeIfPresent(Bool.self, forKey: .shareCardEnabled)     ?? d.shareCardEnabled
+        shareCardSetupEnabled = try c.decodeIfPresent(Bool.self, forKey: .shareCardSetupEnabled) ?? d.shareCardSetupEnabled
         cloudSendableLocales = try c.decodeIfPresent([String].self, forKey: .cloudSendableLocales)
         minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
@@ -191,13 +202,32 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         roommateGroupEnabled && echoesEnabled
     }
 
-    /// True if this config disables anything relative to the all-enabled
-    /// baseline — drives the `remote_config_kill_applied` telemetry bump so
-    /// an A′ export confirms a kill actually reached the device. Note:
-    /// `roommateGroupEnabled` is intentionally EXCLUDED — it is dark by
-    /// default, so its `false` is the baseline, not a kill.
+    /// True if this config disables anything relative to its BAKED DEFAULT —
+    /// drives the `remote_config_kill_applied` telemetry bump so an A′ export
+    /// confirms a kill actually reached the device.
+    ///
+    /// `roommateGroupEnabled` was excluded here on the premise that it was dark
+    /// by default, so its `false` was the baseline rather than a kill. Commit
+    /// c37d393 falsified that premise when it flipped the baked default to
+    /// `true`, and the exclusion was not revisited — so a roommate-group kill
+    /// fired NO telemetry and an export could not confirm the kill had landed.
+    /// Fixed 2026-09-06.
+    ///
+    /// The comparison is against `safeDefault` rather than a hardcoded
+    /// all-enabled baseline, so this cannot go stale the same way again: flip a
+    /// default and this follows automatically. `cloudSendableEnabled` and
+    /// `shareCardEnabled` genuinely ARE dark by default, so their `false` is
+    /// correctly not a kill — but that now falls out of the comparison instead
+    /// of being asserted by a comment that can rot.
     var isRestrictive: Bool {
-        !echoesEnabled || forceLocalOnly || !ventCloudEnabled
+        let d = RemoteConfigValues.safeDefault
+        return (d.echoesEnabled && !echoesEnabled)
+            || (d.ventCloudEnabled && !ventCloudEnabled)
+            || (d.roommateGroupEnabled && !roommateGroupEnabled)
+            || (d.cloudSendableEnabled && !cloudSendableEnabled)
+            || (d.shareCardEnabled && !shareCardEnabled)
+            || (d.shareCardSetupEnabled && !shareCardSetupEnabled)
+            || (!d.forceLocalOnly && forceLocalOnly)
     }
 
     /// Merge a wire patch over self: each PRESENT key overrides; each ABSENT
@@ -216,7 +246,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             roommateGroupEnabled: patch.roommateGroupEnabled ?? roommateGroupEnabled,
             cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled,
             cloudSendableLocales: patch.cloudSendableLocales ?? cloudSendableLocales,
-            shareCardEnabled: patch.shareCardEnabled ?? shareCardEnabled
+            shareCardEnabled: patch.shareCardEnabled ?? shareCardEnabled,
+            shareCardSetupEnabled: patch.shareCardSetupEnabled ?? shareCardSetupEnabled
         )
     }
 }
@@ -248,6 +279,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
     /// mechanism.
     var cloudSendableLocales: [String]?
     var shareCardEnabled: Bool?
+    var shareCardSetupEnabled: Bool?
     var minSupportedBuild: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -259,6 +291,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
         case cloudSendableEnabled = "cloud_sendable_enabled"
         case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
+        case shareCardSetupEnabled = "share_card_setup_enabled"
         case minSupportedBuild   = "min_supported_build"
     }
 }

@@ -247,7 +247,50 @@ final class RemoteConfigTests: XCTestCase {
                                          ventCloudEnabled: false, minSupportedBuild: 0).isRestrictive)
     }
 
-    // MARK: - 虚拟舍友群 dark-by-default flag
+    // MARK: - Kill-confirmation telemetry (isRestrictive)
+    //
+    // `isRestrictive` is the SOLE trigger for `remote_config_kill_applied`, the
+    // counter an A′ export reads to confirm a kill actually reached devices.
+    // It used to compare against a hardcoded all-enabled baseline and excluded
+    // roommateGroupEnabled entirely, on the premise that the flag was dark by
+    // default. c37d393 flipped that default to true and the exclusion was never
+    // revisited — so the roommate-group kill, the one under active post-launch
+    // watch, fired NO telemetry. Fixed 2026-09-06 by comparing to safeDefault.
+
+    func test_isRestrictive_detectsRoommateGroupKill() {
+        var killed = RemoteConfigValues.safeDefault
+        killed = killed.merging(RemoteConfigPatch(roommateGroupEnabled: false))
+        XCTAssertFalse(killed.roommateGroupEnabled)
+        XCTAssertTrue(killed.isRestrictive,
+                      "A roommate-group kill MUST bump remote_config_kill_applied, "
+                      + "or an export cannot confirm the kill landed.")
+    }
+
+    func test_isRestrictive_detectsEveryLiveByDefaultKill() {
+        let d = RemoteConfigValues.safeDefault
+        let kills: [(String, RemoteConfigPatch)] = [
+            ("echoes",        RemoteConfigPatch(echoesEnabled: false)),
+            ("roommateGroup", RemoteConfigPatch(roommateGroupEnabled: false)),
+            ("ventCloud",     RemoteConfigPatch(ventCloudEnabled: false)),
+            ("forceLocalOnly", RemoteConfigPatch(forceLocalOnly: true)),
+        ]
+        for (name, patch) in kills {
+            XCTAssertTrue(d.merging(patch).isRestrictive, "\(name) kill must be restrictive")
+        }
+    }
+
+    /// Flags that are genuinely DARK by default: their `false` is the baseline,
+    /// not a kill, so they must NOT bump the counter. This falls out of the
+    /// safeDefault comparison rather than being asserted by a rotting comment.
+    func test_isRestrictive_ignoresDarkByDefaultFlags() {
+        let d = RemoteConfigValues.safeDefault
+        XCTAssertFalse(d.cloudSendableEnabled)
+        XCTAssertFalse(d.shareCardEnabled)
+        XCTAssertFalse(d.merging(RemoteConfigPatch(cloudSendableEnabled: false)).isRestrictive)
+        XCTAssertFalse(d.merging(RemoteConfigPatch(shareCardEnabled: false)).isRestrictive)
+    }
+
+    // MARK: - 虚拟舍友群 flag (LIVE by default; the flag is the kill-switch)
 
     func test_roommateGroup_enabledByDefaultAfterEval() {
         // The cloud path (Option A) validated at 10% parse-fallback (2026-06-06),
