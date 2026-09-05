@@ -519,3 +519,26 @@
 "roommate.setup.privacy_banner" = "三個室友是 AI 合成的角色、不是真人。為了生成這段群聊，這件事會在你同意後傳送到雲端處理。";
 "roommate.action.generate" = "發到室友群 →";
 "roommate.transcript.banner" = "虛擬室友群 · 合成角色 · 非真人";
+
+/* A.1 share-card setup chips. Authored per locale — never model output;
+   this is what makes the setup line PII-free by construction. Keep each
+   SHORT: it renders above the punchline on a fixed 1080-wide canvas. */
+"sharecard.setup_eyebrow" = "對方";
+"sharecard.scenario.after_hours_ping" = "半夜傳來工作訊息";
+"sharecard.scenario.last_minute_demand" = "快下班才甩來「急件」";
+"sharecard.scenario.credit_taken" = "我做的事,他領的功";
+"sharecard.scenario.blame_shifted" = "鍋甩給我";
+"sharecard.scenario.moving_goalposts" = "需求改了又改";
+"sharecard.scenario.group_chat_call_out" = "在群組裡點我的名";
+"sharecard.scenario.read_no_reply" = "已讀不回";
+"sharecard.scenario.backhanded_compliment" = "陰陽怪氣地「誇」我";
+"sharecard.scenario.unsolicited_advice" = "沒人問,他偏要教";
+"sharecard.scenario.broken_promise" = "答應的事沒做到";
+"sharecard.scenario.ex_resurfaced" = "前任又冒出來了";
+"sharecard.scenario.borrowed_not_returned" = "借了東西不還";
+"sharecard.scenario.chores_ignored" = "說了三次還是不做";
+"sharecard.scenario.noise_at_night" = "半夜還在吵";
+"sharecard.scenario.family_comparison" = "「你看看人家」";
+"sharecard.scenario.marriage_pressure" = "又開始催婚";
+"sharecard.setup_picker_title" = "加一句前情(可選,只從下面選)";
+"sharecard.setup_none" = "不加";

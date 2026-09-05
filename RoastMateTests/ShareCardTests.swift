@@ -132,6 +132,105 @@ final class ShareCardTests: XCTestCase {
         XCTAssertTrue(out.contains("[对方]"), out)
     }
 
+    // MARK: - A.1 setup-chip catalog
+    //
+    // The whole safety argument for A.1 is that the setup line is an AUTHORED
+    // CONSTANT, not model output — so these tests guard the properties that
+    // claim rests on. If any of them fails, the "PII-free by construction"
+    // claim is no longer true and the feature must not ship enabled.
+
+    func test_scenarioCatalog_hasAStringInEveryShippedLocale() {
+        // A missing key renders as the raw key ("sharecard.scenario.foo") on a
+        // branded, shareable image — visibly broken, and exactly the kind of
+        // thing a zh-Hans-only ship would leak into the other three locales.
+        for locale in ["zh-Hans", "zh-Hant", "ja", "en"] {
+            guard let path = Bundle(for: type(of: self))
+                    .path(forResource: locale, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else {
+                XCTFail("missing \(locale).lproj"); continue
+            }
+            for scenario in ShareCardScenario.allCases {
+                let value = bundle.localizedString(forKey: scenario.displayKey,
+                                                   value: "__MISSING__", table: nil)
+                XCTAssertNotEqual(value, "__MISSING__",
+                                  "\(locale) is missing \(scenario.displayKey)")
+                XCTAssertFalse(value.isEmpty, "\(locale) \(scenario.displayKey) is empty")
+            }
+        }
+    }
+
+    /// Raw values are a persistence/analytics contract. Renaming a CASE is fine;
+    /// changing a rawValue silently orphans anything keyed on the old one.
+    func test_scenarioCatalog_rawValuesAreStable() {
+        XCTAssertEqual(ShareCardScenario.afterHoursPing.rawValue, "after_hours_ping")
+        XCTAssertEqual(ShareCardScenario.creditTaken.rawValue, "credit_taken")
+        XCTAssertEqual(ShareCardScenario.marriagePressure.rawValue, "marriage_pressure")
+        XCTAssertEqual(Set(ShareCardScenario.allCases.map(\.rawValue)).count,
+                       ShareCardScenario.allCases.count, "duplicate rawValue")
+    }
+
+    /// `ordered` drives the picker. Every case must appear exactly once, or a
+    /// chip becomes unreachable in the UI while still existing in the enum.
+    func test_scenarioCatalog_orderedCoversEveryCaseExactlyOnce() {
+        XCTAssertEqual(Set(ShareCardScenario.ordered), Set(ShareCardScenario.allCases))
+        XCTAssertEqual(ShareCardScenario.ordered.count, ShareCardScenario.allCases.count)
+    }
+
+    /// The authored strings must survive the same gate `sentText` runs, in every
+    /// locale. A catalog entry that the redactor mangles (or the safety filter
+    /// rejects) would silently render no setup line at all.
+    func test_scenarioStrings_surviveTheRedactAndValidateGate() throws {
+        for locale in ["zh-Hans", "zh-Hant", "ja", "en"] {
+            guard let path = Bundle(for: type(of: self))
+                    .path(forResource: locale, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else { continue }
+            let loc = Locale(identifier: locale)
+            for scenario in ShareCardScenario.allCases {
+                let raw = bundle.localizedString(forKey: scenario.displayKey,
+                                                 value: nil, table: nil)
+                let redacted = Redactor.redactForPublicShare(raw, locale: loc)
+                XCTAssertEqual(redacted, raw,
+                               "\(locale)/\(scenario.rawValue): redactor altered an authored "
+                               + "constant (\(raw) -> \(redacted)) — rewrite the string")
+                XCTAssertNoThrow(try SafetyFilter.validateOutput(redacted),
+                                 "\(locale)/\(scenario.rawValue) failed validateOutput")
+            }
+        }
+    }
+
+    /// The setup line is context, never the punchline — it must stay short
+    /// enough that the joint ViewThatFits candidates do not collapse to the
+    /// smallest step on a fixed canvas.
+    func test_scenarioStrings_areShortEnoughForTheCanvas() {
+        for locale in ["zh-Hans", "zh-Hant", "ja", "en"] {
+            guard let path = Bundle(for: type(of: self))
+                    .path(forResource: locale, ofType: "lproj"),
+                  let bundle = Bundle(path: path) else { continue }
+            // CJK glyphs are ~2x the advance of a Latin char at the same point
+            // size, so the budgets differ by script rather than by count alone.
+            let cap = locale.hasPrefix("zh") ? 12 : (locale == "ja" ? 16 : 36)
+            for scenario in ShareCardScenario.allCases {
+                let raw = bundle.localizedString(forKey: scenario.displayKey,
+                                                 value: nil, table: nil)
+                XCTAssertLessThanOrEqual(raw.count, cap,
+                    "\(locale)/\(scenario.rawValue) is \(raw.count) chars (cap \(cap)): \(raw)")
+            }
+        }
+    }
+
+    /// A.1 must be DARK on a fresh install: the card a user gets without opting
+    /// in is exactly the shipped one.
+    func test_setupChips_areDarkByDefault() {
+        XCTAssertFalse(RemoteConfigValues.safeDefault.shareCardSetupEnabled)
+    }
+
+    /// `setupText` nil is the safe baseline, and it must be the DEFAULT so a
+    /// caller that forgets the parameter cannot accidentally render a setup.
+    func test_shareCardContent_defaultsToNoSetupLine() {
+        let c = ShareCardContent(styleName: nil, sentText: "x")
+        XCTAssertNil(c.setupText)
+    }
+
     // MARK: - Traditional-script coverage (regression, fixed 2026-09-06)
     //
     // These pin a LIVE leak: 9 of the 13 title literals were Simplified-only,

@@ -26,6 +26,12 @@ struct ShareCardComposer: View {
 
     @State private var format: ShareCardFormat = .portrait45
     @State private var exportURL: URL?
+    /// A.1. Composer-local on purpose: NOT persisted onto `GeneratedRoast`.
+    /// Adding a stored property to a CloudKit-mirrored SwiftData model is a
+    /// migration risk for every existing user, and the choice is only meaningful
+    /// while this sheet is open. Starts `nil` — the card renders exactly as it
+    /// does today until the user deliberately picks a setup.
+    @State private var selectedScenario: ShareCardScenario?
     /// Counted once per presentation, not per re-render — switching the format
     /// picker re-renders the card and would otherwise inflate the denominator
     /// of the generated-vs-shared ratio B.8 exists to measure.
@@ -57,10 +63,30 @@ struct ShareCardComposer: View {
         return try? SafetyFilter.validateOutput(redacted)
     }
 
+    /// A.1. The setup line is a LOCALIZED CONSTANT chosen from a closed catalog
+    /// by the user — never model output and never free text — so it cannot carry
+    /// PII onto the canvas. See `ShareCardScenario` for why that is the design.
+    ///
+    /// It still runs the same Redactor + strict SafetyFilter pass as `sentText`.
+    /// That is belt-and-braces on an authored constant and should always pass;
+    /// the point is that the rule has ONE home, so a future change to the
+    /// catalog cannot quietly bypass the gate. Failure here degrades the setup
+    /// line to `nil` — it must never block a card whose comeback is fine, which
+    /// is why this is separate from `safeText`'s all-or-nothing gate.
+    private var safeSetupText: String? {
+        guard setupEnabled, let scenario = selectedScenario else { return nil }
+        let raw = AppLocalization.string(scenario.displayKey)
+        let redacted = Redactor.redactForPublicShare(raw, locale: locale)
+        return try? SafetyFilter.validateOutput(redacted)
+    }
+
+    private var setupEnabled: Bool { RemoteConfigValues.cached().shareCardSetupEnabled }
+
     private var content: ShareCardContent? {
         guard let safeText else { return nil }
         return ShareCardContent(styleName: styleName,
                                 sentText: safeText,
+                                setupText: safeSetupText,
                                 showsGrowthBadge: RemoteConfigValues.cached().shareCardEnabled)
     }
 
@@ -70,6 +96,7 @@ struct ShareCardComposer: View {
                 VStack(spacing: 18) {
                     preview
                     formatPicker
+                    setupPicker
                     privacyNote
                 }
                 .padding()
@@ -110,7 +137,13 @@ struct ShareCardComposer: View {
         .opacity(isShareable ? 1 : 0)
     }
 
-    private var renderKey: String { "\(format.rawValue)|\(safeText?.hashValue ?? 0)" }
+    /// Everything the exported PNG depends on. The setup selection MUST be in
+    /// here: `.task(id:)` only re-fires when this changes, so omitting it would
+    /// leave the preview showing a new chip while the exported file silently
+    /// kept the old one — a wrong artifact rather than a missing one.
+    private var renderKey: String {
+        "\(format.rawValue)|\(safeText?.hashValue ?? 0)|\(selectedScenario?.rawValue ?? "-")"
+    }
 
     @ViewBuilder
     private var preview: some View {
@@ -161,6 +194,68 @@ struct ShareCardComposer: View {
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.leading)
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// A.1. A closed catalog of taps — no keyboard, no text field, no "other".
+    ///
+    /// This is the deliberate difference from the editable field v1.3.1 removed.
+    /// Selecting a case from a fixed enum cannot put user-typed bytes onto a
+    /// branded image, so the property that made the purge necessary is
+    /// preserved. And because several of these describe conduct — credit taken,
+    /// blame shifted, a promise broken — the person who knows what actually
+    /// happened is the one asserting it, not a classifier that guessed.
+    ///
+    /// Default is NO setup. The card a user gets without touching this is
+    /// exactly today's shipped card.
+    @ViewBuilder
+    private var setupPicker: some View {
+        if setupEnabled {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("sharecard.setup_picker_title")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        chip(title: AppLocalization.string("sharecard.setup_none"),
+                             isSelected: selectedScenario == nil) {
+                            selectedScenario = nil
+                        }
+                        ForEach(ShareCardScenario.ordered) { scenario in
+                            chip(title: AppLocalization.string(scenario.displayKey),
+                                 isSelected: selectedScenario == scenario) {
+                                // Tapping the active chip clears it, so removing a
+                                // setup is always one tap and never a hunt for the
+                                // "none" chip after scrolling.
+                                selectedScenario = (selectedScenario == scenario) ? nil : scenario
+                            }
+                            .accessibilityIdentifier("sharecard.scenario.\(scenario.rawValue)")
+                        }
+                    }
+                    .padding(.horizontal, 2)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func chip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.callout)
+                .lineLimit(1)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 7)
+                .background(
+                    Capsule().fill(isSelected
+                                   ? Color.accentColor.opacity(0.22)
+                                   : Color.secondary.opacity(0.12))
+                )
+                .overlay(
+                    Capsule().strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 1.5)
+                )
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private var formatPicker: some View {

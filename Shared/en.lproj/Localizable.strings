@@ -561,3 +561,26 @@
 "roommate.setup.privacy_banner" = "The three roommates are synthetic AI characters, not real people. To generate the group chat, this is sent to the cloud (with your consent).";
 "roommate.action.generate" = "Send to the group →";
 "roommate.transcript.banner" = "Roommate group · synthetic characters · not real people";
+
+/* A.1 share-card setup chips. Authored per locale — never model output;
+   this is what makes the setup line PII-free by construction. Keep each
+   SHORT: it renders above the punchline on a fixed 1080-wide canvas. */
+"sharecard.setup_eyebrow" = "THEY DID";
+"sharecard.scenario.after_hours_ping" = "Work messages at midnight";
+"sharecard.scenario.last_minute_demand" = "“Urgent” at clock-out";
+"sharecard.scenario.credit_taken" = "My work, their credit";
+"sharecard.scenario.blame_shifted" = "Blame landed on me";
+"sharecard.scenario.moving_goalposts" = "The brief changed again";
+"sharecard.scenario.group_chat_call_out" = "Called me out in the group";
+"sharecard.scenario.read_no_reply" = "Read, no reply";
+"sharecard.scenario.backhanded_compliment" = "A “compliment” with a knife in it";
+"sharecard.scenario.unsolicited_advice" = "Advice nobody asked for";
+"sharecard.scenario.broken_promise" = "Promised, then didn’t";
+"sharecard.scenario.ex_resurfaced" = "The ex resurfaced";
+"sharecard.scenario.borrowed_not_returned" = "Borrowed, never returned";
+"sharecard.scenario.chores_ignored" = "Asked three times";
+"sharecard.scenario.noise_at_night" = "Still loud at 2am";
+"sharecard.scenario.family_comparison" = "“Look at so-and-so”";
+"sharecard.scenario.marriage_pressure" = "The marriage talk again";
+"sharecard.setup_picker_title" = "Add context (optional — pick one)";
+"sharecard.setup_none" = "None";

@@ -520,3 +520,26 @@
 "roommate.setup.privacy_banner" = "3人のルームメイトはAIの合成キャラで、実在しません。このグループチャットの生成のため、同意の上でクラウドに送信されます。";
 "roommate.action.generate" = "グループに送る →";
 "roommate.transcript.banner" = "ルームメイト集合 · 合成キャラ · 実在しません";
+
+/* A.1 share-card setup chips. Authored per locale — never model output;
+   this is what makes the setup line PII-free by construction. Keep each
+   SHORT: it renders above the punchline on a fixed 1080-wide canvas. */
+"sharecard.setup_eyebrow" = "相手";
+"sharecard.scenario.after_hours_ping" = "深夜に仕事の連絡";
+"sharecard.scenario.last_minute_demand" = "退勤直前に「至急」";
+"sharecard.scenario.credit_taken" = "私の成果を横取り";
+"sharecard.scenario.blame_shifted" = "責任を押しつけられた";
+"sharecard.scenario.moving_goalposts" = "要件が何度も変わる";
+"sharecard.scenario.group_chat_call_out" = "グループで名指し";
+"sharecard.scenario.read_no_reply" = "既読スルー";
+"sharecard.scenario.backhanded_compliment" = "嫌みまじりの「褒め」";
+"sharecard.scenario.unsolicited_advice" = "頼んでない説教";
+"sharecard.scenario.broken_promise" = "約束を守らない";
+"sharecard.scenario.ex_resurfaced" = "元恋人が突然連絡";
+"sharecard.scenario.borrowed_not_returned" = "借りたまま返さない";
+"sharecard.scenario.chores_ignored" = "三回言ってもやらない";
+"sharecard.scenario.noise_at_night" = "夜中うるさい";
+"sharecard.scenario.family_comparison" = "「よその子は」";
+"sharecard.scenario.marriage_pressure" = "また結婚の話";
+"sharecard.setup_picker_title" = "状況を一言(任意・選択式)";
+"sharecard.setup_none" = "なし";

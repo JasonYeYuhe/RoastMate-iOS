@@ -33,8 +33,18 @@ enum ShareCardFormat: String, CaseIterable, Identifiable {
 /// generation time and is never user-editable before render.
 struct ShareCardContent: Equatable {
     var styleName: String?
-    /// The polished, sendable line — the only text the card renders.
+    /// The polished, sendable line — the only MODEL-DERIVED text the card
+    /// renders.
     var sentText: String
+    /// A.1: the optional setup line rendered ABOVE the comeback, restoring the
+    /// setup→punchline contrast v1.3.1 removed along with the raw vent.
+    ///
+    /// This is NOT model output and NOT user-typed. It is a localized constant
+    /// resolved from a `ShareCardScenario` the user explicitly tapped — see that
+    /// type for why the catalog is closed and why the user, not a classifier,
+    /// selects it. `nil` renders exactly today's card, which is the shipped and
+    /// safe baseline, so every failure and every "no thanks" degrades to it.
+    var setupText: String?
     /// Growth layer (B.4/B.5): the QR + "search RoastMate" badge. Gated by the
     /// `share_card_enabled` RemoteConfig flag, DARK by default. When false the
     /// card still renders — it just carries the plain wordmark, exactly as it
