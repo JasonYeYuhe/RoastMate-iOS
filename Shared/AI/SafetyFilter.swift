@@ -105,6 +105,15 @@ enum SafetyFilter {
         return trimmed
     }
 
+    /// Read-only view of the loaded denylist, for the script-parity test.
+    ///
+    /// Exposed because the rule worth guarding is "every CJK term carries both
+    /// script forms", and that can only be checked against the whole list. The
+    /// three-instance version of the test would pass again the moment someone
+    /// adds a fourth Simplified-only term — which is exactly how the Redactor
+    /// leak survived for months behind green tests.
+    static func denylistTermsForTesting() throws -> [String] { denylist }
+
     /// Returns the first denylist substring matched, lowercased, if any.
     private static func matchedDenylistTerm(in text: String) -> String? {
         let lower = text.lowercased()

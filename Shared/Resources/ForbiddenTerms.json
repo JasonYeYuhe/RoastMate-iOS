@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "notes": "Terms that, if found in user input or model output, are blocked. Lowercase-matched as substrings. Intentionally conservative; extend over time. Categories: explicit slurs, threats/violence, self-harm, sexual content, doxxing patterns. Kept terse on purpose so model outputs are not subtly steered.",
+  "version": 2,
+  "notes": "Terms that, if found in user input or model output, are blocked. Lowercase-matched as substrings. Intentionally conservative; extend over time. Categories: explicit slurs, threats/violence, self-harm, sexual content, doxxing patterns. Kept terse on purpose so model outputs are not subtly steered. SCRIPT COVERAGE (2026-09-06): every CJK term must carry BOTH its Simplified and Traditional form. 強姦 / 自殘 / 我要殺 were missing while their Simplified twins were present, so this denylist — which guards user input AND the share-card render — was weaker for zh-Hant than for zh-Hans. Same defect class as the Redactor leak fixed in 500ffdb. When adding a term, add both forms.",
   "terms": [
     "kill yourself",
     "kys",
@@ -36,6 +36,9 @@
     "弄死",
     "死ね",
     "殺す",
-    "自殺"
+    "自殺",
+    "我要殺",
+    "自殘",
+    "強姦"
   ]
 }
