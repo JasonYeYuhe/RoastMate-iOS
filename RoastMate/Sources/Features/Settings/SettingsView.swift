@@ -142,9 +142,16 @@ struct SettingsView: View {
             // P5 Q1 W1 — distribution-research recruit tile. Intentionally
             // NOT gated by `telemetryOptedIn`: per App Review 2.2 and the
             // research protocol §1, compensation cannot be conditional on
-            // data-consent. Opens a Safari link to the self-hosted form at
-            // roastmate.app/research (no embedded WebView, keeps the
-            // recruit channel out of the app's data surface).
+            // data-consent. Opens a Safari link to the form (no embedded
+            // WebView, keeps the recruit channel out of the app's data
+            // surface).
+            //
+            // 2026-09-06: this pointed at https://roastmate.app/research for
+            // every shipped build since v1.0.5. That domain has never been
+            // registered — RDAP 404, DNS NXDOMAIN — so the tile was a dead link
+            // in production, and credits.md's claim that it is held at Name.com
+            // is wrong. Repointed to the GitHub Pages form, which is the page
+            // the mirror workflow actually publishes and which returns 200.
             //
             // v1.0.5 addition: auto-hide after Self.researchRecruitDeadline
             // (currently 2026-11-01 UTC = end of Phase 5 Q1 + 1 month
@@ -155,7 +162,7 @@ struct SettingsView: View {
             // next research wave is scoped.
             if Date() < Self.researchRecruitDeadline {
                 Section(header: Text("settings.section.research")) {
-                    Link(destination: URL(string: "https://roastmate.app/research")!) {
+                    Link(destination: URL(string: "https://jasonyeyuhe.github.io/RoastMate/research.html")!) {
                         HStack {
                             Label("settings.research.tile", systemImage: "person.fill.questionmark")
                             Spacer()
