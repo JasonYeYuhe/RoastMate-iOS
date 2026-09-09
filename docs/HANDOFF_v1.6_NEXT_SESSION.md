@@ -2,153 +2,179 @@
 
 You are picking up **RoastMate** (帮你骂 / `~/Documents/RoastMate`) — Swift 6,
 iOS/macOS/watchOS, plus a Cloudflare Worker in `cloud-worker/`. Chinese-language-
-first. Solo developer (Jason). Branch `feature/v1.4-track-b`, HEAD `ab67b34` or later,
-12 commits ahead of the `v1.4.0` tag, working tree clean, everything pushed.
+first. Solo developer (Jason). Branch `feature/v1.4-track-b`, working tree clean.
 
-## Read first
+## Status in one line
 
-1. `docs/DEV_PLAN_v1.6_2026-09.md` — the plan. Reviewed by Gemini 3.1 Pro and
-   3.8 Flash; both returned a harsher verdict than the first draft and the plan
-   was rewritten around it. §6 is the synthesis. **§2 Phase 1 is your whole job.**
-2. `docs/DEV_PLAN_v1.5_2026-09.md` — the previous wave, mostly superseded.
-
-## The one-line version
-
-Ship **one honest binary** (v1.5.0 / build 21), then stop writing code and go
-find out whether anyone wants this app. It has **23 lifetime downloads**.
+**Phase 1 code is DONE and green. v1.5.0 / build 21 is cut but NOT built, NOT
+uploaded, NOT submitted, and NOT pushed.** What remains is the outward-facing
+half: ship it, then paste metadata, then stop writing code.
 
 ## VERIFY BEFORE YOU ACT
 
-The last two sessions found **nine** claims in this repo's own docs and comments
-that contradicted the code. Two of them were in the handoff telling the session
-what was true. Do not trust this document either.
+The previous session re-checked every claim in this repo's docs against the
+code before writing anything. ~31 assertions held; **12 did not**, including
+two that had been adopted from an advisor and written into both the plan and
+this handoff as settled fact. See `docs/DEV_PLAN_v1.6_2026-09.md` §7 for the
+list. Do not trust this document either.
 
-Cheap checks:
-- **git:** `git rev-list --count v1.4.0..HEAD` (should be ≥12).
+Cheap checks, corrected:
+- **git:** `git rev-list --count v1.4.0..HEAD` — should be ≥15.
+- **Version:** `sed -n '20,21p' project.yml` → `1.5.0` / `21`. The committed
+  pbxproj carries its own copies (4 occurrences, all project-level); they are
+  in sync, so `xcodegen generate` should produce a **zero**-line diff now.
 - **Live flags:** `curl -s https://jasonyeyuhe.github.io/RoastMate/roastmate-config.json`
-  — should carry **9 keys**, all at baked defaults. The mirror works again as of
-  2026-09-06; it had been dead since May.
-- **Prod Worker:** `POST /v1/vent` with a browser-plausible User-Agent (or
-  Cloudflare 1010s you). Schema is `situation` + `intensity` + `locale` +
-  `deviceId` + `mode`. `mode:"roast"` should 403 `mode_unavailable`.
-  **Space probes 5–8s apart** — Groq's limit is 8K TPM and back-to-back probes
-  self-inflict a fallback that looks like an outage. This fooled the last session.
+  — **11 top-level keys: 9 flags + 2 `_comment` keys.** The old handoff said 9
+  and a naive `keys|length` therefore reads as a failure. NOTE: the served file
+  does not yet carry `share_card_visible`; `research/web/roastmate-config.json`
+  does, and the mirror Action deploys it **on any branch push**.
+- **Prod Worker:** UP (200 in 1.6s off Groq, 2026-09-09). To probe:
+  `mode:"roast"` 403s **only when paired with a sendable intensity** —
+  `intensity` is mode-coupled (`vent`/`feral` for vent, `calm`/`sharp`/`savage`
+  for roast) and `validate()` runs before the roast gate, so
+  `{mode:"roast", intensity:"vent"}` returns **400 invalid_intensity** and
+  looks like an outage. `deviceId` has an 8-char minimum. A misspelled `mode`
+  silently coerces to `"vent"`. Space probes 5–8s apart (Groq is 8K TPM).
 - **ASC:** key `DMMFP6XTXX`, issuer `c5671c11-49ec-47d9-bd38-5e3c1a249416`,
-  app `6769317103`, key at `~/private_keys/AuthKey_DMMFP6XTXX.p8`. v1.4.0 build
-  20 is READY_FOR_SALE on both platforms.
+  app `6769317103`, key at `~/private_keys/AuthKey_DMMFP6XTXX.p8`. **iOS AND
+  macOS v1.4.0 build 20 are both READY_FOR_SALE** (cleared review 2026-09-03 —
+  auto-memory saying WAITING_FOR_REVIEW is stale). Nothing is in an editable
+  state, so 1.5.0 is a CREATE, which `asc_bind_version.py` handles itself.
+  ⚠️ `READY_FOR_SALE` is not a discriminator — all 17 historical records read
+  it, back to v1.0.
 
-## Phase 1 — the whole job, in order
+## What is already done (commits `4a392c4`, `76a8672`)
 
-Everything below ships in ONE binary. Do not defer any of it to a second review
-cycle; that costs a week to save a few lines.
+- **P1.1** — credit is spent AFTER generation, only for `.model` output.
+  `RoastEngine.generateDetailed` returns `GeneratedOutput{texts, provenance}`.
+  Both spend sites fixed: `RoastGeneratorViewModel` and **`FeatureGenerator`**
+  (Reply Helper / Emotion Translator / Social Roast) — *not*
+  `ArgumentSimulatorViewModel`, which spends nothing.
+- **P1.2** — `CuratedNoticeBanner` on all three renderers (iOS generator,
+  FeatureGenerator, macOS menu bar), reusing the already-translated
+  `roast.error.unavailable`.
+- **P1.3** — `FallbackRoasts` routes through `AppLanguage.contentBucket` and
+  has a `zhHant` pool.
+- **P0 (found in the sweep)** — `SafetyFilter`'s `ventHardRail`,
+  `defaultDenylist`, `softSelfHarmPhrases` and `hardSelfHarmPhrases` script
+  gaps, plus a bidirectional parity test over `matchingListsForTesting()`.
+- **P1.4** — reviewer notes rewritten (3,947/4,000); onboarding + Settings copy
+  no longer claims unconditional on-device generation.
+- **P1.5** — `share_card_visible`, threaded through both structs,
+  `isRestrictive`, the served JSON, and the CI validator.
+- preflight now gates the reviewer-notes file that actually ships, on
+  **characters** (CJK), against the 4000 cap.
 
-1. **P1.1 Stop charging for canned output.** `RoastGeneratorViewModel` spends the
-   credit before the engine runs, and the curated path reports success — so a
-   user on a device without Apple Foundation Models pays for one of five
-   hardcoded strings. **`ArgumentSimulatorViewModel` has the identical flaw.**
-   Decide with Jason: refund after, or check `RoastEngine.isOnDeviceModelAvailable`
-   before charging (§5 decision 1).
-2. **P1.2 Say when output is curated.** Trap: `roast.error.unavailable` reads
-   "Showing curated responses instead", but its only caller is
-   `RoastError.modelUnavailable`, which the view model catches into an `.error`
-   state that renders **zero cards**. The copy promises curated output; the
-   wiring suppresses it. You need a non-error surface.
-3. **P1.3 `FallbackRoasts` has no zh-Hant pool** — `case "zh": return zh` sends
-   Traditional users the Simplified array. Third instance of this bug class in a
-   week (see the guardrail below).
-4. **P1.4 App Review hazard.** A reviewer on a non-Apple-Intelligence device sees
-   canned text ignoring their prompt — Guideline 2.1 / 4.0 risk. P1.1–P1.3 are
-   the mitigation; also say plainly in the reviewer notes what each device gets.
-5. **P1.5 Share-card kill-switch** (`share_card_visible`), ~20 lines. The card
-   renders model-derived text onto a branded public image and currently has no
-   off switch — `share_card_enabled` gates only the QR badge.
-6. **P1.6 Ship.** `project.yml:20-21` → `1.5.0` / `21`, then `xcodegen generate`
-   (the committed pbxproj carries its own copies). Then `build-upload-asc.sh` →
-   `asc_bind_version.py` → `asc_submit_review.py`.
-7. **P1.7 Paste the ASO copy by hand** into ASC — 4 locales × 4 fields, ~10 min.
-   **`415d78f` ships nothing until you do this**; no script pushes metadata.
+**Gate:** `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh` →
+80 pass, 0 fail; 373 unit + 7 UI tests; all 5 targets build.
 
-Then **Phase 2 is a code moratorium.** Read §2 before writing anything.
+## What remains, in order
+
+1. **Push the branch.** ⚠️ This deploys `research/web/roastmate-config.json`
+   to GitHub Pages (the mirror Action triggers on **any** branch), adding
+   `share_card_visible: true` to the live config. Shipped v1.4.0 binaries
+   ignore the unknown key, so this is safe — but it IS a live change.
+2. **Build + upload, TWICE.** The path in the plan is iOS-only and will
+   silently leave macOS on 1.4.0; every release since v1.1.0 shipped both.
+   - `scripts/build-upload-asc.sh` takes **no CLI args** — it is configured by
+     env vars, and defaults to `SCHEME=RoastMate`,
+     `DESTINATION=generic/platform=iOS`.
+   - **Re-probe codesign first.** It worked under a locked console on
+     2026-09-09 (`codesign -f -s "Apple Distribution: Yuhe Ye (KHMK6Q3L3K)"`
+     on a throwaway binary, exit 0), but that has failed before and the check
+     costs a second. The ASC `.p8` half is lock-immune; only codesign is not.
+3. **Bind + submit, twice** (`--platform IOS`, then `MAC_OS`):
+   `python3 scripts/asc_bind_version.py --version 1.5.0 --notes build/v1.5.0-release-notes.md`
+   then `python3 scripts/asc_submit_review.py --version 1.5.0`.
+   ⚠️ `asc_bind_version.py` hardcodes `releaseType=AFTER_APPROVAL`; v1.1.0 and
+   v1.2.0 shipped MANUAL. Patch it if 1.5.0 wants a manual release gate.
+4. **Paste reviewer notes by hand** — `metadata/review_notes_asc_short.txt`.
+   Nothing in `scripts/` writes `appStoreReviewDetail`.
+5. **P1.7, AFTER the version record exists** (it is version-scoped and cannot
+   be edited on a live version): paste `description` + `keywords` only —
+   `name`, `subtitle`, `promotionalText` and `whatsNew` are already live and
+   identical. **2 fields × 4 locales × 2 platforms = 16.**
+
+Then **Phase 2 is a code moratorium.** Read §2 of the plan before writing
+anything.
 
 ## Hard-won gotchas
 
-- **Run preflight with an isolated simulator:**
+- **Isolated simulator for preflight:**
   `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh`. The device
-  `RoastMate-UITests` (`0A2F860D`) already exists — an `iPhone 17 Pro` clone. The
-  default device is shared and another agent's run will manufacture UI failures
-  that read exactly like real defects (measured with a peer session 2026-09-05).
-  Do NOT re-run a failing UI test on a *different* device model to check: these
-  tests use `isHittable` + scroll-until-visible loops, so a bigger screen is a
-  strictly easier instrument and a pass there transfers nothing.
-- **preflight now reports unit and UI suites separately.** It used to say "unit
-  tests failed" when the unit suite was green and a UI test was flaky. If it says
-  a suite failed, it now actually knows.
-- **New files need `xcodegen generate`** (project.yml globs; pbxproj enumerates).
-  Don't run it while a build/test is in flight — it rewrites the project under it.
-- **The unit-test bundle is HOSTLESS** (`link: false`, deliberate). App-target
-  types (`ShareCardRenderer`, `ShareCardComposer`, every view) can never be
-  imported. `@testable import RoastMate` is present in all 35 test files and
-  resolves nothing. Put anything you want tested in `Shared/`.
-- **To look at a share card**, compile the view standalone and render a PNG:
-  `swiftc -O -parse-as-library Shared/Services/ShareCard{Models,Badge,Scenario}.swift
-  RoastMate/Sources/Features/ShareCard/ShareCardView.swift main.swift` then
-  `ImageRenderer` on macOS. Localized `Text("key")` shows the raw key there (no
-  bundle) — fine for geometry, and conservative since keys are longer.
-- **`RemoteConfig.swift` has two parallel structs** (Values + Patch) with
-  near-identical lines. Edit by line number, and check BOTH. A careless insert
-  put a parameter after the closing paren last session.
+  is `0A2F860D-FAF1-40A9-872B-F1D607E06349` (the old handoff's short id does
+  not resolve — `xcrun simctl list devices | grep RoastMate-UITests`). The
+  default device is shared and another agent's run manufactures UI failures
+  that read exactly like real defects. Do NOT re-run a failing UI test on a
+  *bigger* device to check: these tests use `isHittable` + scroll-to-visible,
+  so a larger screen is a strictly easier instrument.
+- **The unit-test bundle is HOSTLESS** (`link: false`, deliberate).
+  `@testable import RoastMate` is in all 35 test files and resolves nothing.
+  View models, views, `ShareCardRenderer`/`Composer` cannot be tested. Put
+  anything you want covered in `Shared/`, which IS compiled in. (project.yml's
+  comment used to claim the opposite; corrected in `4a392c4`.)
+- **New files need `xcodegen generate`.** Don't run it while a build is in
+  flight — it rewrites the project under it.
+- **`RemoteConfig.swift` has two parallel structs** (Values + Patch), each with
+  its own `CodingKeys`. A new flag has **ten** threading points, and
+  `isRestrictive` is the one people forget — omitting it is what made the
+  roommate-group kill fire zero telemetry.
+- **The config CI validator types its bool/int lists explicitly now.** It used
+  to derive them with `endswith("_enabled")`. If you add a flag, add it to the
+  right list in `.github/workflows/mirror-research-form-to-pages.yml`.
 - **watchOS has no CoreImage** and `Shared/` is globbed into the watch target.
-  Guard with `#if canImport(CoreImage)`. Only preflight's 5-target sweep catches it.
-- **ASC review notes cap at 4000 chars.** The submitted file is
-  `metadata/review_notes_asc_short.txt` (3,944 chars — 56 to spare). preflight
-  validates the *wrong* file (the 6,991-char `review_notes.txt`); fixing that
-  gate is a fine warm-up task.
+  Guard with `#if canImport(CoreImage)`. To compile-check watchOS without a
+  provisioning profile: add `CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+  CODE_SIGN_IDENTITY=""` — otherwise you get six entitlement errors that look
+  like build failures and are not.
 - **Never flip `ROAST_MODE_ENABLED` on prod to test.** Use
-  `npx wrangler dev --remote --var ROAST_MODE_ENABLED:true --port 8799` and point
-  `eval-runner --endpoint` at it. Confirm prod still 403s before and after.
-- **Editing `docs/site/` deploys nothing** — the live marketing site is a
-  separate repo (`JasonYeYuhe/RoastMate`). `research/web/*` is mirrored to it by
-  the Action, and that Action now triggers on **any** branch.
+  `npx wrangler dev --remote --var ROAST_MODE_ENABLED:true --port 8799`.
+- **Editing `docs/site/` deploys nothing** — the live site is a separate repo
+  (`JasonYeYuhe/RoastMate`). `research/web/*` is what gets mirrored.
 
 ## Design rules (do not regress)
 
 - Never render the raw vent on a shareable image.
-- `RoastEngine.generate(cloudVentEnabled:)` stays defaulted **false**. Fail closed.
+- `RoastEngine.generate(cloudVentEnabled:)` stays defaulted **false**.
+- **Anything that spends a credit must call `generateDetailed` and check
+  provenance.** The `generate` shim exists for surfaces with no wallet and no
+  banner; using it at a charging site silently reintroduces P1.1.
 - One home per rule: `CloudPermission`, `CloudVentService.generate(_:auth:)`,
-  `GeneratedRoastKind.isShareable`, `Redactor.maskToken`.
-- **Any list of CJK literals must carry BOTH script forms, and the test must
-  guard the RULE, not the instances.** Simplified-only lists have now shipped in
-  `Redactor`, `ForbiddenTerms.json` and `FallbackRoasts`. Assume a fourth exists;
-  if you find it, fix it the same way (`SafetyFilterTests`
-  `testEveryCJKDenylistTermHasBothScriptForms` is the pattern).
+  `GeneratedRoastKind.isShareable`, `Redactor.maskToken`,
+  `AppLanguage.contentBucket`, `CuratedNoticeBanner`.
+- **The CJK rule, restated after the sweep: the bug class is an UNPAIRED term,
+  not a Simplified-only one.** `了結自己` shipped Traditional-only. Any list of
+  CJK literals used for MATCHING must carry both forms, the test must guard the
+  rule (`SafetyFilter.matchingListsForTesting()`), and a new list must be added
+  to that accessor in the same commit.
+- **Still open, same class:** `PromptBuilder` (4 sites), `SampleRoast`,
+  `Scenario` and `EchoesPersonaCatalog` gate Traditional on
+  `locale.identifier.contains("Hant")`, which is FALSE for `zh_TW` / `zh_HK` —
+  what a real Taiwan/HK device actually reports. This hits the **model** path,
+  so it is higher-impact than P1.3 was. `contentBucket` is the fix. It is
+  deliberately NOT in this binary: it changes prompts, and Phase 1 was scoped
+  to the honesty defect. Do it first if the moratorium ever lifts.
 - No third-party SDK. Zero-tracking is the moat.
 - Fix checks that cry wolf; never learn to skim a red gate.
 
 ## Jason's, not yours
 
-1. **Provider spend — mostly already capped; one thing to confirm.** Groq is the
-   **free tier** ($0; over-limit returns 429, it does not bill). OpenRouter is
-   **paid** ($0.0481/1M in, $0.1930/1M out — the config avoids `:free` variants
-   on purpose, see the `wrangler.toml` comment) but is **prepaid at $10**, which
-   caps it by construction: roughly 30k–115k vents against 23 lifetime downloads.
-   **Only open question: is OpenRouter auto-topup on?** If yes the cap is not
-   real; if no, there is nothing to do. Do not repeat the earlier "$33/day"
-   framing — it assumed uncapped billing and was wrong.
-2. **The dedicated In-App-Purchase key**, only if refunds ever bite.
-3. **Minting the ASC provider token** (P2.1) — web UI only, no API surface.
+1. **OpenRouter auto-topup** — the only real spend question. Groq is free tier
+   ($0, 429s over limit). OpenRouter is prepaid at $10, which is a hard ceiling
+   *unless* auto-topup is on. 30-second check in the account.
+2. **The dedicated IAP key**, only if refunds ever bite.
+3. **Minting the ASC provider token** (P2.1) — web UI only.
 4. **Confirm the App Privacy label lists Purchases** — not exposed on the API.
 
 ## House workflow
 
-- Consult **both** advisors on major decisions — Gemini via
-  `mcp__gemini__ask_gemini` (models `pro` = `gemini-3.1-pro-high`, and
-  `gemini-3.8-flash-high`) and Codex via `codex:codex-rescue` — then synthesize.
-  **Verify their claims against real code**: this wave, Pro missed that the app
-  ships to iOS 18 where its recommendation was impossible, and Flash caught four
-  real errors in a plan Pro had called "exceptionally accurate". They disagree
-  usefully; neither is authoritative.
+- Consult **both** advisors on major decisions — Gemini
+  (`mcp__gemini__ask_gemini`, `gemini-3.1-pro-preview`) and Codex
+  (`codex:codex-rescue`) — then synthesize. **Then verify their claims against
+  real code.** This wave, Pro asserted a credit bug in a file that charges
+  nothing, and the claim survived two reviews and two documents because nobody
+  opened the file. They disagree usefully; neither is authoritative; neither
+  has read the code you are about to change.
 - Full delegation on reversible steps; verify-then-report before anything
   outward-facing (ASC submit, git push, flipping a live flag).
 - Update `docs/` and auto-memory as increments land.
-
-Start by verifying the state above, then work §2 Phase 1 in order.
