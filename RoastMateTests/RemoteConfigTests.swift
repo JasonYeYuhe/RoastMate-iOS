@@ -329,6 +329,23 @@ final class RemoteConfigTests: XCTestCase {
         XCTAssertFalse(values.shareCardVisible, "RemoteConfigValues CodingKeys missing the key")
     }
 
+    /// The App-Group cache persists via JSONEncoder. `RemoteConfigValues` has a
+    /// CUSTOM `init(from:)` but a SYNTHESIZED `encode(to:)`, so the encode side
+    /// silently depends on CodingKeys being complete. A missing case there
+    /// would drop the flag on every relaunch — the kill would apply once and
+    /// then evaporate, which is the worst possible failure for a kill-switch.
+    func test_shareCardVisible_survivesPersistRoundTrip() throws {
+        let killed = RemoteConfigValues.safeDefault.merging(RemoteConfigPatch(shareCardVisible: false))
+        let data = try JSONEncoder().encode(killed)
+        // The wire name must appear in the ENCODED payload, not just decode from it.
+        let raw = String(decoding: data, as: UTF8.self)
+        XCTAssertTrue(raw.contains("share_card_visible"),
+                      "encoded cache payload is missing the key — CodingKeys incomplete")
+        let restored = try JSONDecoder().decode(RemoteConfigValues.self, from: data)
+        XCTAssertFalse(restored.shareCardVisible, "the kill did not survive a cache round-trip")
+        XCTAssertEqual(restored, killed, "cache round-trip is lossy")
+    }
+
     // MARK: - 虚拟舍友群 flag (LIVE by default; the flag is the kill-switch)
 
     func test_roommateGroup_enabledByDefaultAfterEval() {

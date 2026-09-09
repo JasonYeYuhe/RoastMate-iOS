@@ -237,17 +237,22 @@ struct GeneratedRoastCard: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(backgroundColor)
         )
-        .sheet(isPresented: $showShareCard) {
-            // Second gate on purpose: the button above is the only entry point
-            // today, but a kill-switch that depends on one call site is the
-            // shape that keeps failing here.
-            if RemoteConfigValues.cached().shareCardVisible {
-                ShareCardComposer(
-                    sentText: result.text,
-                    styleName: style?.displayName,
-                    kind: result.kind
-                )
-            }
+        // Second gate on purpose: the button above is the only entry point
+        // today, but a kill-switch that depends on one call site is the shape
+        // that keeps failing in this repo.
+        //
+        // It gates the PRESENTATION, not the content. Wrapping the content in
+        // an `if` instead would present an empty sheet whenever the flag is
+        // off — a blank modal is a worse failure than the one being prevented.
+        .sheet(isPresented: Binding(
+            get: { showShareCard && RemoteConfigValues.cached().shareCardVisible },
+            set: { showShareCard = $0 }
+        )) {
+            ShareCardComposer(
+                sentText: result.text,
+                styleName: style?.displayName,
+                kind: result.kind
+            )
         }
     }
 
