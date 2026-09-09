@@ -2,8 +2,8 @@
 
 You are picking up **RoastMate** (帮你骂 / `~/Documents/RoastMate`) — Swift 6,
 iOS/macOS/watchOS, plus a Cloudflare Worker in `cloud-worker/`. Chinese-language-
-first. Solo developer (Jason). Branch `feature/v1.4-track-b`, HEAD `96eb8d0`,
-11 commits ahead of the `v1.4.0` tag, working tree clean, everything pushed.
+first. Solo developer (Jason). Branch `feature/v1.4-track-b`, HEAD `ab67b34` or later,
+12 commits ahead of the `v1.4.0` tag, working tree clean, everything pushed.
 
 ## Read first
 
@@ -24,7 +24,7 @@ that contradicted the code. Two of them were in the handoff telling the session
 what was true. Do not trust this document either.
 
 Cheap checks:
-- **git:** `git rev-list --count v1.4.0..HEAD` (should be 11 + whatever you add).
+- **git:** `git rev-list --count v1.4.0..HEAD` (should be ≥12).
 - **Live flags:** `curl -s https://jasonyeyuhe.github.io/RoastMate/roastmate-config.json`
   — should carry **9 keys**, all at baked defaults. The mirror works again as of
   2026-09-06; it had been dead since May.
