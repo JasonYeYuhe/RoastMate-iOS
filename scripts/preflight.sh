@@ -151,7 +151,26 @@ for locale in en-US zh-Hans zh-Hant ja; do
     fi
   done
 done
+# Reviewer notes. Two separate things, and this gate used to check only the
+# WRONG one: `review_notes.txt` (long-form, ~7k chars) is a working document
+# that is never submitted, while `review_notes_asc_short.txt` is what actually
+# gets pasted into App Store Connect — and ASC hard-caps that field at 4000
+# CHARACTERS. Nothing validated the cap, so the first thing to discover an
+# over-long file was the ASC paste itself, at submit time.
+#
+# Count characters, not bytes: the file is CJK-heavy, so `wc -c` overstates it
+# by ~10 and would fail a file that is actually fine.
 require_nonempty "$PROJECT_DIR/metadata/review_notes.txt"
+ASC_NOTES="$PROJECT_DIR/metadata/review_notes_asc_short.txt"
+require_nonempty "$ASC_NOTES"
+if [ -s "$ASC_NOTES" ]; then
+  notes_chars=$(python3 -c 'import sys;print(len(open(sys.argv[1],encoding="utf-8").read()))' "$ASC_NOTES")
+  if [ "$notes_chars" -le 4000 ]; then
+    ok "review_notes_asc_short.txt within ASC cap ($notes_chars/4000 chars)"
+  else
+    fail "review_notes_asc_short.txt is $notes_chars chars — ASC caps reviewer notes at 4000"
+  fi
+fi
 
 # ─────────────────────────────────────────────────────────────────────
 section "Static site for GitHub Pages"

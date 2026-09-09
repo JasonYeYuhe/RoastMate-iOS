@@ -290,6 +290,45 @@ final class RemoteConfigTests: XCTestCase {
         XCTAssertFalse(d.merging(RemoteConfigPatch(shareCardEnabled: false)).isRestrictive)
     }
 
+    // MARK: - share_card_visible (LIVE by default; the flag is the kill-switch)
+
+    /// The card has shipped since v1.0.5, so unlike the two growth flags this
+    /// one defaults TRUE and turning it off is a real kill.
+    func test_shareCardVisible_isLiveByDefault() {
+        XCTAssertTrue(RemoteConfigValues.safeDefault.shareCardVisible,
+                      "the card is a shipped feature; defaulting it dark would remove it from users")
+    }
+
+    /// The exact bug fixed for roommateGroupEnabled on 2026-09-06: a
+    /// live-by-default flag left out of `isRestrictive` kills the feature but
+    /// fires no telemetry, so no export can confirm the kill reached devices.
+    func test_shareCardVisible_killCountsAsRestrictive() {
+        let d = RemoteConfigValues.safeDefault
+        XCTAssertTrue(d.merging(RemoteConfigPatch(shareCardVisible: false)).isRestrictive,
+                      "a share-card kill must bump remote_config_kill_applied")
+        XCTAssertFalse(d.merging(RemoteConfigPatch(shareCardVisible: true)).isRestrictive)
+    }
+
+    /// RESTRICT-only: the flag must never be able to widen anything, and an
+    /// omitted key must leave a prior kill in place.
+    func test_shareCardVisible_mergeSemantics() throws {
+        let killed = RemoteConfigValues.safeDefault.merging(RemoteConfigPatch(shareCardVisible: false))
+        XCTAssertFalse(killed.shareCardVisible)
+        // An unrelated later patch must not resurrect the killed surface.
+        XCTAssertFalse(killed.merging(RemoteConfigPatch(echoesEnabled: true)).shareCardVisible,
+                       "an omitted key must keep its prior value, not revert to the default")
+    }
+
+    /// Wire-name check. Both `RemoteConfigValues` and `RemoteConfigPatch`
+    /// carry their own CodingKeys; editing only one is the documented trap.
+    func test_shareCardVisible_decodesFromWireName() throws {
+        let json = Data(#"{"share_card_visible": false}"#.utf8)
+        let patch = try JSONDecoder().decode(RemoteConfigPatch.self, from: json)
+        XCTAssertEqual(patch.shareCardVisible, false, "RemoteConfigPatch CodingKeys missing the key")
+        let values = try JSONDecoder().decode(RemoteConfigValues.self, from: json)
+        XCTAssertFalse(values.shareCardVisible, "RemoteConfigValues CodingKeys missing the key")
+    }
+
     // MARK: - 虚拟舍友群 flag (LIVE by default; the flag is the kill-switch)
 
     func test_roommateGroup_enabledByDefaultAfterEval() {

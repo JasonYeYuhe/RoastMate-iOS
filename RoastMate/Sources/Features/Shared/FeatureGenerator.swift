@@ -39,6 +39,10 @@ final class FeatureGeneratorViewModel {
     var rewriteError: String?
     /// Soft self-harm signal: results still shown, plus a supportive banner.
     var crisisBanner: Bool = false
+    /// True when the results on screen came from `FallbackRoasts`, not a
+    /// model. Same contract as `RoastGeneratorViewModel.curatedNotice` — a
+    /// non-error note, never an `.error` state.
+    var curatedNotice: Bool = false
 
     init(config: FeatureGeneratorConfig) {
         self.config = config
@@ -50,6 +54,12 @@ final class FeatureGeneratorViewModel {
     }
 
     func generate(context: ModelContext, locale: Locale) async {
+        // Re-entry guard, mirroring RoastGeneratorViewModel: `state` flips to
+        // `.loading` before the first `await`, so a double-tap that races the
+        // button's `.disabled` returns here instead of launching a second
+        // generation. This matters more since P1.1 moved the spend after the
+        // await, which widens the window.
+        if state == .loading { return }
         let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         // Self-harm handoff (two-tier). `.hard` intercepts BEFORE quota /
@@ -92,18 +102,22 @@ final class FeatureGeneratorViewModel {
         if !isPro {
             // Credits add quantity only; the Pro-only guards above are
             // unchanged. View intent-triggers the paywall first — this
-            // is the safety net. β3: pass context so the spend lands as
-            // a CreditLedgerEntry, not a creditBalanceRaw decrement.
-            guard settings.spendOneCredit(context: context) else {
+            // is the safety net.
+            //
+            // P1.1: PEEK only — the charge moved to after generation so a
+            // curated fallback is never billed. See RoastGeneratorViewModel
+            // for the full rationale; this surface backs Reply Helper,
+            // Emotion Translator and Social Roast, so it had the same leak.
+            guard settings.canSpendNow() else {
                 state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
             }
-            try? context.save()
         }
 
         state = .loading
         currentSession = nil
         rewriteError = nil
+        curatedNotice = false
         do {
             // Track 0.2 fix: this surface never resolved cloud permission, so
             // on an iOS-18 device with no on-device model it failed instead of
@@ -116,7 +130,7 @@ final class FeatureGeneratorViewModel {
                 consent: settings.cloudConsent,
                 locale: locale
             )
-            let variants = try await RoastEngine.shared.generate(
+            let output = try await RoastEngine.shared.generateDetailed(
                 situation: text,
                 style: style,
                 locale: locale,
@@ -126,12 +140,20 @@ final class FeatureGeneratorViewModel {
                 safeMode: settings.safeModeEnabled,
                 cloudVentEnabled: cloud.cloudAllowed
             )
+            // P1.1: spend LAST, and only for model-written output. The
+            // predicate is provenance, not `isOnDeviceModelAvailable` — see
+            // GenerationProvenance.
+            if !isPro, output.provenance == .model {
+                _ = settings.spendOneCredit(context: context)
+                try? context.save()
+            }
+            curatedNotice = output.isCurated
             currentSession = HistoryService.saveSession(
                 situation: text,
                 mode: config.mode,
                 styleId: style.id,
                 locale: locale,
-                variants: variants,
+                variants: output.texts,
                 context: context,
                 isPro: isPro,
                 intensity: selectedIntensity
@@ -162,16 +184,19 @@ final class FeatureGeneratorViewModel {
         rewritingDraftId = draft.id
         rewriteError = nil
         do {
-            let rewritten = try await RoastEngine.shared.rewriteAsSendable(
+            let rewritten = try await RoastEngine.shared.rewriteAsSendableDetailed(
                 ventDraft: draft.text,
                 originalSituation: session.situation,
                 style: style,
                 locale: locale
             )
+            // A curated "rewrite" is a random roast line, not a rewrite of the
+            // user's draft — label it the same way the generator does.
+            if rewritten.provenance == .curated { curatedNotice = true }
             HistoryService.appendSendableReply(
                 toSession: session,
                 sourceVentDraft: draft,
-                rewrittenText: rewritten,
+                rewrittenText: rewritten.text,
                 context: context
             )
             currentSession = session
@@ -361,6 +386,9 @@ struct FeatureGeneratorView: View {
             VStack(alignment: .leading, spacing: 12) {
                 if viewModel.crisisBanner {
                     CrisisBanner()
+                }
+                if viewModel.curatedNotice {
+                    CuratedNoticeBanner()
                 }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {

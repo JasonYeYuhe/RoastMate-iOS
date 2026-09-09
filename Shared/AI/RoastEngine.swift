@@ -21,6 +21,45 @@ enum RoastError: LocalizedError {
     }
 }
 
+/// What actually produced the text the engine returned.
+///
+/// Exists because `generate` used to return a bare `[String]`, which made a
+/// curated fallback indistinguishable from real model output. Two shipped
+/// defects came out of that single ambiguity: the caller charged a credit for
+/// one of five hardcoded strings (there is no refund path — see
+/// `CreditLedgerEntry.Kind`), and the UI presented canned text as if the model
+/// had written it.
+///
+/// The predicate the callers need is **"did a model write this"**, NOT "does
+/// this device have Foundation Models". They are not the same question: a
+/// device with no on-device model is exactly the device that becomes
+/// cloud-eligible (`CloudConsentGate.decide`), so gating a charge on FM
+/// availability would stop billing precisely when real provider cost starts.
+enum GenerationProvenance: Sendable, Equatable {
+    /// A model wrote it — on-device Foundation Models, or the consented cloud.
+    case model
+    /// One of the hardcoded `FallbackRoasts` strings. It does not read the
+    /// user's input. Never charge for it; always label it.
+    case curated
+}
+
+/// `generate`'s full result: the text plus who wrote it.
+struct GeneratedOutput: Sendable, Equatable {
+    var texts: [String]
+    var provenance: GenerationProvenance
+
+    var isCurated: Bool { provenance == .curated }
+}
+
+/// `rewriteAsSendable`'s full result. Same rationale as `GeneratedOutput`:
+/// on a device with no on-device model the rewrite returns a random *roast*
+/// line dressed as a polished rewrite of the user's vent draft, and it gets a
+/// Share button. That has to be labelled.
+struct SendableRewrite: Sendable, Equatable {
+    var text: String
+    var provenance: GenerationProvenance
+}
+
 /// Main roast engine. Talks to the on-device Apple model through an
 /// `(any FMBackend)?` (nil on iOS 18 / macOS 14 / watchOS / AI-off), which
 /// keeps all iOS-26-only Foundation Models symbols behind an `@available`
@@ -75,8 +114,11 @@ actor RoastEngine {
     ///   same SituationThread (when the caller is doing "continue this
     ///   event"); pass `nil` for one-shot calls.
     ///
-    /// Returns curated fallback content if Foundation Models is unavailable.
-    func generate(
+    /// Returns curated fallback content if Foundation Models is unavailable —
+    /// tagged `.curated`, so the caller can decline to charge for it and can
+    /// label it. Callers that need neither can use the `generate` wrapper
+    /// below, which is the unchanged `[String]` shape.
+    func generateDetailed(
         situation: String,
         style: StylePreset,
         locale: Locale,
@@ -93,7 +135,7 @@ actor RoastEngine {
         cloudVentEnabled: Bool = false,
         cloudClient: CloudVentService = CloudVentClient.shared,
         auth: CloudAuthProviding = CloudAuthClient.shared
-    ) async throws -> [String] {
+    ) async throws -> GeneratedOutput {
         do {
             try SafetyFilter.validateInput(situation)
         } catch let err as SafetyError {
@@ -134,7 +176,7 @@ actor RoastEngine {
                     EventLedger.shared.recordFirstGenerationOfSession()  // α3
                     EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
                     RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
-                    return [safe]
+                    return GeneratedOutput(texts: [safe], provenance: .model)
                 } catch let err as CloudVentError {
                     logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
                     // continue to local path below
@@ -171,7 +213,10 @@ actor RoastEngine {
                         EventLedger.shared.recordFirstGenerationOfSession()  // α3
                         EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1
                         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
-                        return Array(sanitized.prefix(effectiveVariantCount))
+                        return GeneratedOutput(
+                            texts: Array(sanitized.prefix(effectiveVariantCount)),
+                            provenance: .model
+                        )
                     }
                     logger.notice("Cloud roast output all filtered — falling back to local model.")
                 } catch let err as CloudVentError {
@@ -185,7 +230,10 @@ actor RoastEngine {
         guard let fm, fm.isAvailable else {
             logger.notice("On-device model unavailable; using curated fallback.")
             EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
-            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
+            return GeneratedOutput(
+                texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
+                provenance: .curated
+            )
         }
 
         let key = "\(style.id)|\(locale.identifier)|\(mode.rawValue)|\(intensity.rawValue)"
@@ -228,11 +276,17 @@ actor RoastEngine {
         } catch FMBackendError.unavailable {
             logger.notice("On-device model unavailable; using curated fallback.")
             EventLedger.shared.recordFailure(.modelAssetMissing)  // α3
-            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
+            return GeneratedOutput(
+                texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
+                provenance: .curated
+            )
         } catch FMBackendError.generation(let category) {
             logger.warning("On-device generation error (\(String(describing: category), privacy: .public)).")
             EventLedger.shared.recordFailure(category)  // α3
-            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
+            return GeneratedOutput(
+                texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
+                provenance: .curated
+            )
         } catch FMBackendError.other(let underlying) {
             throw RoastError.generationFailed(underlying: underlying)
         }
@@ -267,13 +321,57 @@ actor RoastEngine {
 
         if sanitized.isEmpty {
             EventLedger.shared.recordFailure(.safetyFilter)  // α3 — every candidate tripped safety
-            return curatedFallback(style: style, locale: locale, count: effectiveVariantCount)
+            return GeneratedOutput(
+                texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
+                provenance: .curated
+            )
         }
         EventLedger.shared.recordGeneration(cloud: false)  // A′
         EventLedger.shared.recordFirstGenerationOfSession()  // α3
         EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
-        return Array(sanitized.prefix(effectiveVariantCount))
+        return GeneratedOutput(
+            texts: Array(sanitized.prefix(effectiveVariantCount)),
+            provenance: .model
+        )
+    }
+
+    /// Text-only shim over `generateDetailed`, for the surfaces that have
+    /// neither a wallet to protect nor a banner to show (Share extension,
+    /// Siri intent, Watch, Argument Simulator). Signature and behaviour are
+    /// unchanged from before provenance existed, so those call sites did not
+    /// have to move.
+    ///
+    /// Anything that spends a credit MUST use `generateDetailed` instead —
+    /// see `GenerationProvenance`.
+    func generate(
+        situation: String,
+        style: StylePreset,
+        locale: Locale,
+        variantCount: Int = 3,
+        mode: RoastMode = .roast,
+        intensity: Intensity = .sharp,
+        safeMode: Bool = true,
+        priorContext: String? = nil,
+        keepSession: Bool = false,
+        cloudVentEnabled: Bool = false,
+        cloudClient: CloudVentService = CloudVentClient.shared,
+        auth: CloudAuthProviding = CloudAuthClient.shared
+    ) async throws -> [String] {
+        try await generateDetailed(
+            situation: situation,
+            style: style,
+            locale: locale,
+            variantCount: variantCount,
+            mode: mode,
+            intensity: intensity,
+            safeMode: safeMode,
+            priorContext: priorContext,
+            keepSession: keepSession,
+            cloudVentEnabled: cloudVentEnabled,
+            cloudClient: cloudClient,
+            auth: auth
+        ).texts
     }
 
     /// Converts a private vent draft into a "sendable reply" the user could
@@ -288,18 +386,21 @@ actor RoastEngine {
     /// Throws `RoastError.safety` if the rewrite came back with disallowed
     /// content (in which case the caller should surface a curated fallback,
     /// not retry).
-    func rewriteAsSendable(
+    func rewriteAsSendableDetailed(
         ventDraft: String,
         originalSituation: String,
         style: StylePreset,
         locale: Locale
-    ) async throws -> String {
+    ) async throws -> SendableRewrite {
         // The output of this call is meant to go to another human — it must
         // pass the *strict* validator, not the vent one.
         guard let fm, fm.isAvailable else {
             logger.notice("On-device model unavailable; falling back to curated sendable.")
-            return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                ?? String(localized: "rewrite.fallback.unavailable")
+            return SendableRewrite(
+                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
+                    ?? String(localized: "rewrite.fallback.unavailable"),
+                provenance: .curated
+            )
         }
 
         let (system, user) = PromptBuilder.rewriteAsSendablePrompt(
@@ -321,12 +422,18 @@ actor RoastEngine {
             )
         } catch FMBackendError.unavailable {
             logger.notice("On-device model unavailable; falling back to curated sendable.")
-            return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                ?? String(localized: "rewrite.fallback.unavailable")
+            return SendableRewrite(
+                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
+                    ?? String(localized: "rewrite.fallback.unavailable"),
+                provenance: .curated
+            )
         } catch FMBackendError.generation {
             logger.warning("Sendable rewrite generation error.")
-            return FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                ?? String(localized: "rewrite.fallback.unavailable")
+            return SendableRewrite(
+                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
+                    ?? String(localized: "rewrite.fallback.unavailable"),
+                provenance: .curated
+            )
         } catch FMBackendError.other(let underlying) {
             throw RoastError.generationFailed(underlying: underlying)
         }
@@ -340,10 +447,29 @@ actor RoastEngine {
         )
 
         do {
-            return try SafetyFilter.validateOutput(cleaned)
+            return SendableRewrite(
+                text: try SafetyFilter.validateOutput(cleaned),
+                provenance: .model
+            )
         } catch let err as SafetyError {
             throw RoastError.safety(err)
         }
+    }
+
+    /// Text-only shim over `rewriteAsSendableDetailed`, kept so callers that
+    /// do not surface the curated label compile unchanged.
+    func rewriteAsSendable(
+        ventDraft: String,
+        originalSituation: String,
+        style: StylePreset,
+        locale: Locale
+    ) async throws -> String {
+        try await rewriteAsSendableDetailed(
+            ventDraft: ventDraft,
+            originalSituation: originalSituation,
+            style: style,
+            locale: locale
+        ).text
     }
 
     /// Track M: delegates to the shared `CloudVentService.generate(_:auth:)`.

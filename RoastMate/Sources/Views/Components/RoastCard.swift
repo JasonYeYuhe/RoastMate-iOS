@@ -179,7 +179,14 @@ struct GeneratedRoastCard: View {
 
                 // Share as image — sendable kinds only; the private vent
                 // draft itself is never offered as a shareable card.
-                if result.kind.isShareable {
+                //
+                // `share_card_visible` is the remote kill-switch for the whole
+                // surface (RemoteConfig). It ANDs with `isShareable`, so it can
+                // only ever take the card away, never offer it for a kind that
+                // was not already shareable — the raw-vent rule is unaffected.
+                // `shareCardEnabled` / `shareCardSetupEnabled` gate what goes
+                // ON the card; this gates whether there is a card at all.
+                if result.kind.isShareable, RemoteConfigValues.cached().shareCardVisible {
                     Button {
                         showShareCard = true
                     } label: {
@@ -231,11 +238,16 @@ struct GeneratedRoastCard: View {
                 .fill(backgroundColor)
         )
         .sheet(isPresented: $showShareCard) {
-            ShareCardComposer(
-                sentText: result.text,
-                styleName: style?.displayName,
-                kind: result.kind
-            )
+            // Second gate on purpose: the button above is the only entry point
+            // today, but a kill-switch that depends on one call site is the
+            // shape that keeps failing here.
+            if RemoteConfigValues.cached().shareCardVisible {
+                ShareCardComposer(
+                    sentText: result.text,
+                    styleName: style?.displayName,
+                    kind: result.kind
+                )
+            }
         }
     }
 

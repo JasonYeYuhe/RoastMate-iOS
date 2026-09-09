@@ -346,6 +346,9 @@ struct RoastGeneratorView: View {
                 if viewModel.crisisBanner {
                     CrisisBanner()
                 }
+                if viewModel.curatedNotice {
+                    CuratedNoticeBanner()
+                }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {
                         Image(systemName: "exclamationmark.triangle")

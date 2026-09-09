@@ -5,19 +5,31 @@ import Foundation
 /// Keeps the app functional end-to-end for App Store reviewers.
 enum FallbackRoasts {
     static func curated(for style: StylePreset, locale: Locale, count: Int) -> [String] {
-        let language = locale.language.languageCode?.identifier ?? "en"
-        let pool = pool(language: language)
+        let pool = pool(for: AppLanguage.contentBucket(for: locale))
         if pool.isEmpty {
             return defaultPool
         }
         return Array(pool.shuffled().prefix(max(1, count)))
     }
 
-    private static func pool(language: String) -> [String] {
+    /// Routes through `AppLanguage.contentBucket(for:)` rather than switching
+    /// on `locale.language.languageCode` inline.
+    ///
+    /// The inline form is what shipped before, and it collapsed BOTH Chinese
+    /// scripts onto one `case "zh"`, so every Traditional reader was served the
+    /// Simplified pool. `contentBucket` is the single normalizer for this
+    /// question — and note it also handles the case a script-subtag check
+    /// misses: a real Taiwan/HK/Macau device usually reports `zh_TW` / `zh_HK`
+    /// with NO `Hant` subtag, so `identifier.contains("Hant")` is not a valid
+    /// substitute. Its own doc comment says it: "doing that inline at each site
+    /// is how the zh-Hant/zh-Hans distinction gets fumbled."
+    private static func pool(for language: AppLanguage) -> [String] {
         switch language {
-        case "zh": return zh
-        case "ja": return ja
-        default: return en
+        case .simplifiedChinese: return zhHans
+        case .traditionalChinese: return zhHant
+        case .japanese: return ja
+        // `contentBucket` never returns `.system`; English is the developmentLanguage.
+        case .english, .system: return en
         }
     }
 
@@ -29,12 +41,23 @@ enum FallbackRoasts {
         "Bold of you to assume I'd let this slide. But for now — noted."
     ]
 
-    private static let zh = [
+    private static let zhHans = [
         "你这份坚持,真的是不分时间地点。建议你拿来干点别的。",
         "我没生气,只是开始重新评估我们之间能聊的范围。",
         "如果你这份用心放在自己身上,可能现在已经飞黄腾达了。",
         "感谢你每天都提醒我:有些底线是要靠别人来反复测试的。",
         "你这么活着,确实自由。"
+    ]
+
+    /// Traditional-script pool. NOT a cosmetic duplicate of `zhHans`: without
+    /// it every zh-Hant reader saw Simplified characters in the one place the
+    /// app promises curated, human-authored text.
+    private static let zhHant = [
+        "你這份堅持,真的是不分時間地點。建議你拿來幹點別的。",
+        "我沒生氣,只是開始重新評估我們之間能聊的範圍。",
+        "如果你這份用心放在自己身上,可能現在已經飛黃騰達了。",
+        "感謝你每天都提醒我:有些底線是要靠別人來反覆測試的。",
+        "你這麼活著,確實自由。"
     ]
 
     private static let ja = [

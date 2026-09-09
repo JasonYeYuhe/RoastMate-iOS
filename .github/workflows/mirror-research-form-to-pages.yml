@@ -92,17 +92,25 @@ jobs:
           # silent-failure mode: RemoteConfig's decodeIfPresent falls back to the
           # baked default, so the flag reads as if it were never set and a kill
           # reaches nobody. Absence must be loud here because it is silent there.
-          required = [
-              "config_version", "echoes_enabled", "roommate_group_enabled",
-              "force_local_only", "vent_cloud_enabled", "cloud_sendable_enabled",
-              "share_card_enabled", "share_card_setup_enabled", "min_supported_build",
+          # Typed explicitly. This used to derive the bool set with
+          # `k.endswith("_enabled") or k == "force_local_only"`, which silently
+          # skipped type-checking for any flag not named `*_enabled` — and an
+          # untyped value is not a small bug: RemoteConfig decodes the WHOLE
+          # payload into one patch via `try?`, so a single `"true"`-as-string
+          # makes every flag in the file fail to apply, and every kill-switch
+          # in it reaches nobody. Add new keys to the right list by hand.
+          bools = [
+              "echoes_enabled", "roommate_group_enabled", "force_local_only",
+              "vent_cloud_enabled", "cloud_sendable_enabled",
+              "share_card_enabled", "share_card_setup_enabled", "share_card_visible",
           ]
+          ints = ["config_version", "min_supported_build"]
+          required = bools + ints
           if missing := [k for k in required if k not in cfg]:
               sys.exit(f"::error::{path} is missing required key(s): {', '.join(missing)}")
-          bools = [k for k in required if k.endswith("_enabled") or k == "force_local_only"]
           if bad := [k for k in bools if not isinstance(cfg[k], bool)]:
               sys.exit(f"::error::{path} key(s) must be JSON booleans: {', '.join(bad)}")
-          for k in ("config_version", "min_supported_build"):
+          for k in ints:
               if not isinstance(cfg[k], int) or isinstance(cfg[k], bool):
                   sys.exit(f"::error::{path} '{k}' must be an integer")
           print(f"config OK — {len(required)} required keys present and well-typed")

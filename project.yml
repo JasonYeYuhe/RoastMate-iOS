@@ -231,8 +231,15 @@ targets:
       - path: Shared/Resources
         buildPhase: resources
     # Hostless bundle (TEST_HOST/BUNDLE_LOADER empty): logic under test
-    # lives in Shared (compiled in directly) and app-target types are
-    # reached via `@testable import RoastMate`. `link: false` makes the
+    # lives in Shared, which is compiled into this bundle directly.
+    #
+    # App-target types are NOT reachable. Every test file carries
+    # `@testable import RoastMate` and it resolves nothing — without a
+    # BUNDLE_LOADER there is no app binary to import symbols from, so view
+    # models, views, ShareCardRenderer and ShareCardComposer cannot be
+    # tested here at all. (This comment used to claim the opposite, which
+    # cost a session.) If you want something covered, put it in Shared/.
+    # `link: false` makes the
     # app a build-ORDER dependency only — it guarantees RoastMate's
     # testing-enabled .swiftmodule exists before these tests compile
     # (cold/parallel builds otherwise race, surfacing as "unable to

@@ -80,6 +80,20 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
     /// `shareCardEnabled` on purpose — that one gates the QR growth badge, and
     /// flipping both at once makes the signal unreadable.
     var shareCardSetupEnabled: Bool
+    /// `false` → hide the share card entirely: the entry button on every roast
+    /// card, and therefore the composer and the renderer behind it.
+    ///
+    /// This is the card's ONLY off switch. `shareCardEnabled` gates the growth
+    /// layer (QR + "search RoastMate" badge + campaign link) and
+    /// `shareCardSetupEnabled` gates the setup-chip picker; neither can take
+    /// the surface down. The card renders model-derived text onto a branded,
+    /// shareable image, and two defects landed on it in one week with no way to
+    /// mitigate either without an Apple review cycle.
+    ///
+    /// LIVE by default (`true`) — unlike the two flags above, this one is not
+    /// a dark launch. Turning it off is a genuine kill, which is why
+    /// `isRestrictive` counts it.
+    var shareCardVisible: Bool
     /// Soft "please update" floor — advisory only in v1 (never hard-blocks).
     var minSupportedBuild: Int
 
@@ -98,7 +112,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         cloudSendableEnabled: false, // DARK: flipped on remotely after the eval
         cloudSendableLocales: nil,   // nil = all locales (back-compat)
         shareCardEnabled: false,     // DARK: flipped after the §2 quantitative gate
-        shareCardSetupEnabled: false // DARK: A.1 setup chips, flip after a device look
+        shareCardSetupEnabled: false, // DARK: A.1 setup chips, flip after a device look
+        shareCardVisible: true       // LIVE: the card has shipped since v1.0.5; this is a kill-switch, not a dark launch
     )
 
     enum CodingKeys: String, CodingKey {
@@ -111,6 +126,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
         case shareCardSetupEnabled = "share_card_setup_enabled"
+        case shareCardVisible    = "share_card_visible"
         case minSupportedBuild   = "min_supported_build"
     }
 
@@ -123,7 +139,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
          cloudSendableEnabled: Bool = false,
          cloudSendableLocales: [String]? = nil,
          shareCardEnabled: Bool = false,
-         shareCardSetupEnabled: Bool = false) {
+         shareCardSetupEnabled: Bool = false,
+         shareCardVisible: Bool = true) {
         self.configVersion = configVersion
         self.echoesEnabled = echoesEnabled
         self.roommateGroupEnabled = roommateGroupEnabled
@@ -133,6 +150,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         self.cloudSendableLocales = cloudSendableLocales
         self.shareCardEnabled = shareCardEnabled
         self.shareCardSetupEnabled = shareCardSetupEnabled
+        self.shareCardVisible = shareCardVisible
         self.minSupportedBuild = minSupportedBuild
     }
 
@@ -161,6 +179,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         cloudSendableEnabled = try c.decodeIfPresent(Bool.self, forKey: .cloudSendableEnabled) ?? d.cloudSendableEnabled
         shareCardEnabled     = try c.decodeIfPresent(Bool.self, forKey: .shareCardEnabled)     ?? d.shareCardEnabled
         shareCardSetupEnabled = try c.decodeIfPresent(Bool.self, forKey: .shareCardSetupEnabled) ?? d.shareCardSetupEnabled
+        shareCardVisible     = try c.decodeIfPresent(Bool.self, forKey: .shareCardVisible)     ?? d.shareCardVisible
         cloudSendableLocales = try c.decodeIfPresent([String].self, forKey: .cloudSendableLocales)
         minSupportedBuild    = try c.decodeIfPresent(Int.self,  forKey: .minSupportedBuild)    ?? d.minSupportedBuild
     }
@@ -227,6 +246,7 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             || (d.cloudSendableEnabled && !cloudSendableEnabled)
             || (d.shareCardEnabled && !shareCardEnabled)
             || (d.shareCardSetupEnabled && !shareCardSetupEnabled)
+            || (d.shareCardVisible && !shareCardVisible)
             || (!d.forceLocalOnly && forceLocalOnly)
     }
 
@@ -247,7 +267,8 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
             cloudSendableEnabled: patch.cloudSendableEnabled ?? cloudSendableEnabled,
             cloudSendableLocales: patch.cloudSendableLocales ?? cloudSendableLocales,
             shareCardEnabled: patch.shareCardEnabled ?? shareCardEnabled,
-            shareCardSetupEnabled: patch.shareCardSetupEnabled ?? shareCardSetupEnabled
+            shareCardSetupEnabled: patch.shareCardSetupEnabled ?? shareCardSetupEnabled,
+            shareCardVisible: patch.shareCardVisible ?? shareCardVisible
         )
     }
 }
@@ -280,6 +301,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
     var cloudSendableLocales: [String]?
     var shareCardEnabled: Bool?
     var shareCardSetupEnabled: Bool?
+    var shareCardVisible: Bool?
     var minSupportedBuild: Int?
 
     enum CodingKeys: String, CodingKey {
@@ -292,6 +314,7 @@ struct RemoteConfigPatch: Decodable, Sendable {
         case cloudSendableLocales = "cloud_sendable_locales"
         case shareCardEnabled    = "share_card_enabled"
         case shareCardSetupEnabled = "share_card_setup_enabled"
+        case shareCardVisible    = "share_card_visible"
         case minSupportedBuild   = "min_supported_build"
     }
 }

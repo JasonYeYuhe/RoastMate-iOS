@@ -81,6 +81,12 @@ struct MacMenuBarContent: View {
                 if viewModel.crisisBanner {
                     CrisisBanner()
                 }
+                // macOS deploys to 14.0 while AppleFMBackend is iOS/macOS 26+,
+                // so on any Mac below 26 EVERY generation is curated. This is
+                // the surface where the label matters most.
+                if viewModel.curatedNotice {
+                    CuratedNoticeBanner()
+                }
                 if let session = viewModel.currentSession {
                     ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                         RoastCard(text: result.text,
