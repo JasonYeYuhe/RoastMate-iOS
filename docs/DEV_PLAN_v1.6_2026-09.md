@@ -376,6 +376,26 @@ any code was written. ~31 assertions held. These did not:
 | 11 | v1.4.0 is WAITING_FOR_REVIEW (auto-memory) | READY_FOR_SALE on both platforms since 2026-09-03. |
 | 12 | project.yml: app types reachable via `@testable import` | False — the bundle is hostless. The comment contradicted its own config. Fixed. |
 
+### Self-review of the Phase 1 diff
+
+The change itself was then reviewed across five lenses (money, safety,
+kill-switch, UI/l10n, shippability) with every finding adversarially verified.
+Twelve survived; ten are fixed in `36271e7`. Four of them were the *same class
+of defect this wave exists to remove* — the new copy promised behaviour the
+code did not have: labelling that four surfaces did not do, free output that
+was still paywalled, a banner claiming the model was unavailable on paths where
+it was available and had merely refused, and a screen-level flag labelling a
+paid cloud draft as canned.
+
+That is worth recording plainly. Writing the honest copy is the easy half;
+making every surface actually behave the way the copy says is the half that
+takes a review pass. A fix to an honesty defect can itself ship an honesty
+defect.
+
+One finding is deliberately unfixed — the wallet peek is not a reservation. See
+the handoff's "Known, deliberately unfixed" section for why the obvious fix is
+wrong and what the correct one is.
+
 **Two dead ends this pass avoided by checking first:** routing P1.2 through
 `.error` (renders zero cards → blocks the default action on every no-FM device,
 Guideline 2.1 — worse than the bug), and persisting provenance on

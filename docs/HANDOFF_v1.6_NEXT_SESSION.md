@@ -98,6 +98,29 @@ Cheap checks, corrected:
 Then **Phase 2 is a code moratorium.** Read §2 of the plan before writing
 anything.
 
+## Known, deliberately unfixed in v1.5.0
+
+**The wallet peek is not a reservation.** `canSpendNow()` is a pure read, so
+two generator surfaces sharing one `UserSettings` can both pass it against the
+last credit before either charges, and the loser's `spendOneCredit` failure is
+discarded by `_ =`. Reachable by starting a generation on the Roast tab and
+another in Explore → Reply Helper while it is in flight; on macOS the menu-bar
+popover and the main window each hold their own view model.
+
+Bounded: non-Pro only, calm/sharp only, FM-capable device only (a no-FM device
+produces `.curated`, which is correctly free), at most one unbilled generation
+per wallet exhaustion, and it fails in the user's favour.
+
+**Do not "fix" it by honouring the discarded result** (`guard spendOneCredit
+else { state = .error(...) }`). That is correct only while every billable
+free-tier generation is on-device. The moment `cloud_sendable_enabled` flips,
+that branch shows "out of credits" for text already sent to the Worker and
+already paid for — the exact shape P1.1's own reasoning rejects, since there is
+no refund primitive. The correct fix is a `reserve` / `commit` / `release`
+trio on the wallet, with the peek reading `canSpendNow()` minus in-flight
+reservations. That is real scope; it was not landed the night before a
+submission.
+
 ## Hard-won gotchas
 
 - **Isolated simulator for preflight:**
