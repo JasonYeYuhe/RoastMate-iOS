@@ -17,6 +17,16 @@ import os.log
 /// second code path.
 @MainActor
 enum RewriteCoordinator {
+
+    /// The appended row plus who wrote it. Callers must surface `.curated`
+    /// — see `GenerationProvenance`.
+    struct Outcome {
+        let row: GeneratedRoast?
+        let provenance: GenerationProvenance
+
+        var isCurated: Bool { provenance == .curated }
+    }
+
     private static let logger = Logger(subsystem: "yyh.roastmate.app", category: "RewriteCoordinator")
 
     /// Engine + persistence in one call. Idempotent at the model layer —
@@ -28,7 +38,7 @@ enum RewriteCoordinator {
         session: RoastSession,
         context: ModelContext,
         locale: Locale
-    ) async throws -> GeneratedRoast? {
+    ) async throws -> Outcome? {
         guard draft.kind == .ventDraft else {
             return nil
         }
@@ -42,17 +52,25 @@ enum RewriteCoordinator {
             logger.warning("Rewrite skipped — style not found: \(draft.styleId, privacy: .public)")
             return nil
         }
-        let rewritten = try await RoastEngine.shared.rewriteAsSendable(
+        // `rewriteAsSendableDetailed`, not the text-only shim: without an
+        // on-device model this returns a random curated ROAST line that never
+        // read the user's draft, and `appendSendableReply` persists it as a
+        // `.sendableReply` — which `GeneratedRoastKind.isShareable` allows, so
+        // it gets a share-as-image button. Unlabelled canned text on a
+        // shareable card is the exact defect this wave exists to remove, so the
+        // provenance has to reach the caller.
+        let rewritten = try await RoastEngine.shared.rewriteAsSendableDetailed(
             ventDraft: draft.text,
             originalSituation: session.situation,
             style: style,
             locale: locale
         )
-        return HistoryService.appendSendableReply(
+        let row = HistoryService.appendSendableReply(
             toSession: session,
             sourceVentDraft: draft,
-            rewrittenText: rewritten,
+            rewrittenText: rewritten.text,
             context: context
         )
+        return Outcome(row: row, provenance: rewritten.provenance)
     }
 }

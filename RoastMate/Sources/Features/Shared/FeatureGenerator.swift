@@ -43,6 +43,12 @@ final class FeatureGeneratorViewModel {
     /// model. Same contract as `RoastGeneratorViewModel.curatedNotice` — a
     /// non-error note, never an `.error` state.
     var curatedNotice: Bool = false
+    /// True when the "make it sendable" rewrite returned curated text.
+    /// SEPARATE from `curatedNotice` on purpose: on a no-FM device with cloud
+    /// consent, the vent draft above it can be real, PAID, model-written cloud
+    /// output while the rewrite (which has no cloud path at all) is canned.
+    /// Reusing one screen-level flag would label that paid draft as canned.
+    var rewriteCurated: Bool = false
 
     init(config: FeatureGeneratorConfig) {
         self.config = config
@@ -99,7 +105,21 @@ final class FeatureGeneratorViewModel {
             return
         }
 
-        if !isPro {
+        // Track 0.2 fix: this surface never resolved cloud permission, so on an
+        // iOS-18 device with no on-device model it failed instead of falling
+        // back to cloud — even with consent granted and the flag on. It does
+        // NOT prompt for consent (that UI lives in the generator tab); without
+        // a prior grant this resolves to false and stays on-device.
+        //
+        // Resolved BEFORE the wallet gate because the gate needs it: see
+        // `willBeCurated`.
+        let cloud = CloudPermission.resolve(
+            intensity: selectedIntensity,
+            consent: settings.cloudConsent,
+            locale: locale
+        )
+        // Curated output is free — see CloudPermission.Decision.willBeCurated.
+        if !isPro, !cloud.willBeCurated {
             // Credits add quantity only; the Pro-only guards above are
             // unchanged. View intent-triggers the paywall first — this
             // is the safety net.
@@ -118,18 +138,8 @@ final class FeatureGeneratorViewModel {
         currentSession = nil
         rewriteError = nil
         curatedNotice = false
+        rewriteCurated = false
         do {
-            // Track 0.2 fix: this surface never resolved cloud permission, so
-            // on an iOS-18 device with no on-device model it failed instead of
-            // falling back to cloud — even with consent granted and the flag
-            // on. It does NOT prompt for consent (that UI lives in the
-            // generator tab); without a prior grant this resolves to false and
-            // stays on-device, exactly as before.
-            let cloud = CloudPermission.resolve(
-                intensity: selectedIntensity,
-                consent: settings.cloudConsent,
-                locale: locale
-            )
             let output = try await RoastEngine.shared.generateDetailed(
                 situation: text,
                 style: style,
@@ -183,6 +193,7 @@ final class FeatureGeneratorViewModel {
 
         rewritingDraftId = draft.id
         rewriteError = nil
+        rewriteCurated = false
         do {
             let rewritten = try await RoastEngine.shared.rewriteAsSendableDetailed(
                 ventDraft: draft.text,
@@ -192,7 +203,7 @@ final class FeatureGeneratorViewModel {
             )
             // A curated "rewrite" is a random roast line, not a rewrite of the
             // user's draft — label it the same way the generator does.
-            if rewritten.provenance == .curated { curatedNotice = true }
+            rewriteCurated = (rewritten.provenance == .curated)
             HistoryService.appendSendableReply(
                 toSession: session,
                 sourceVentDraft: draft,
@@ -329,8 +340,16 @@ struct FeatureGeneratorView: View {
             if !isPro && viewModel.selectedIntensity.requiresPro {
                 EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                 showPaywall = true
-            } else if !isPro && settings?.canSpendNow() == false {
-                // Intent-triggered paywall at the peak moment.
+            } else if !isPro && settings?.canSpendNow() == false
+                        && !CloudPermission.resolve(
+                            intensity: viewModel.selectedIntensity,
+                            consent: settings?.cloudConsent ?? .notAsked,
+                            locale: locale
+                        ).willBeCurated {
+                // Intent-triggered paywall at the peak moment — but not for a
+                // generation that can only return free curated text. Same
+                // predicate as the view model; see
+                // CloudPermission.Decision.willBeCurated.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {
@@ -389,6 +408,9 @@ struct FeatureGeneratorView: View {
                 }
                 if viewModel.curatedNotice {
                     CuratedNoticeBanner()
+                }
+                if viewModel.rewriteCurated {
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
                 }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {

@@ -29,6 +29,21 @@ enum CloudPermission {
         let gate: CloudConsentGate
         /// Pass straight into `RoastEngine.generate(cloudVentEnabled:)`.
         let cloudAllowed: Bool
+        /// True when this generation can reach NO model — no on-device model
+        /// and no permitted cloud path — so the engine will return curated
+        /// fallback text.
+        ///
+        /// Curated output is free (see `GenerationProvenance`), so BOTH the
+        /// wallet gate in the view model AND the intent-triggered paywall in
+        /// the view must skip it. They read this one property rather than
+        /// re-deriving it, because a paywall the view shows and the view model
+        /// does not is invisible in testing and total for the user.
+        ///
+        /// Note this is deliberately NOT bare `!isOnDeviceModelAvailable`: it
+        /// ANDs in `cloudAllowed`, so when `cloud_sendable_enabled` flips those
+        /// same devices start producing real, billable output and the gate
+        /// re-arms itself with no code change.
+        let willBeCurated: Bool
 
         var needsConsent: Bool { gate == .needsConsent }
     }
@@ -67,6 +82,10 @@ enum CloudPermission {
         let allowed = intensity.isPrivateDraft
             ? remote.cloudAllowed(consentAllowsCloud: gate.allowsCloud)
             : remote.cloudSendableAllowed(consentAllowsCloud: gate.allowsCloud, locale: locale)
-        return Decision(gate: gate, cloudAllowed: allowed)
+        return Decision(
+            gate: gate,
+            cloudAllowed: allowed,
+            willBeCurated: !onDeviceModelAvailable && !allowed
+        )
     }
 }

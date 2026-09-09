@@ -10,6 +10,10 @@ struct ShareRootView: View {
 
     @State private var selectedStyleId: String = StyleCatalog.shared.defaultStyleId
     @State private var output: String? = nil
+    /// The output is curated fallback text, not a model response. The
+    /// extension target does not compile the app's Views/Components tree, so
+    /// it renders the notice inline rather than via `CuratedNoticeBanner`.
+    @State private var outputCurated = false
     @State private var isLoading = false
     @State private var error: String? = nil
     @State private var mode: RoastMode = .reply
@@ -126,6 +130,15 @@ struct ShareRootView: View {
 
     private func outputCard(_ text: String) -> some View {
         VStack(alignment: .leading, spacing: 10) {
+            // App Review reaches this surface from Safari -> Share on any iOS 18
+            // device, where every result is curated. Unlabelled, it reads as a
+            // response to the shared text; it is not.
+            if outputCurated {
+                Text("roast.notice.curated")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             Text(text)
                 .font(.body)
                 .textSelection(.enabled)
@@ -170,7 +183,7 @@ struct ShareRootView: View {
             return
         }
         do {
-            let variants = try await RoastEngine.shared.generate(
+            let result = try await RoastEngine.shared.generateDetailed(
                 situation: sharedText,
                 style: style,
                 locale: Locale.current,
@@ -178,7 +191,8 @@ struct ShareRootView: View {
                 mode: mode,
                 intensity: intensity
             )
-            output = variants.first
+            outputCurated = result.isCurated
+            output = result.texts.first
         } catch let err as RoastError {
             error = err.errorDescription
         } catch {

@@ -29,6 +29,10 @@ final class ArgumentSimulatorViewModel {
     var turns: [ArgumentTurn] = []
     var isThinking: Bool = false
     var error: String? = nil
+    /// True when the opponent's turns are curated fallback text rather than
+    /// model output. This surface is Pro-gated, so an unlabelled canned
+    /// "opponent" is a paying user being handed one of five hardcoded lines.
+    var curatedNotice: Bool = false
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "ArgumentSim")
     private let maxTurns = 12
@@ -135,7 +139,7 @@ final class ArgumentSimulatorViewModel {
             // here (that UI lives in the generator tab) — without a prior grant
             // this resolves false and stays on-device, as before.
             let cloud = CloudPermission.resolve(intensity: .sharp, consent: consent, locale: locale)
-            let variants = try await RoastEngine.shared.generate(
+            let output = try await RoastEngine.shared.generateDetailed(
                 situation: input,
                 style: style,
                 locale: locale,
@@ -144,7 +148,8 @@ final class ArgumentSimulatorViewModel {
                 keepSession: true,
                 cloudVentEnabled: cloud.cloudAllowed
             )
-            let first = variants.first?
+            curatedNotice = output.isCurated
+            let first = output.texts.first?
                 .trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             if first == nil || first?.isEmpty == true {

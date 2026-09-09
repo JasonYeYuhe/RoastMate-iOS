@@ -49,23 +49,33 @@ struct OnboardingView: View {
     }
 
     private func onboardingPage(icon: String, title: LocalizedStringResource, body: LocalizedStringResource) -> some View {
-        VStack(spacing: 24) {
-            Image(systemName: icon)
-                .font(.system(size: 56))
-                .foregroundStyle(.orange)
-                .padding(.top, 48)
-            Text(title)
-                .font(.title)
-                .bold()
-                .multilineTextAlignment(.center)
-            Text(body)
-                .font(.body)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-                .padding(.horizontal)
-            Spacer()
+        // Scrollable, because this page is not optional reading: the privacy
+        // page's last sentence is the Guideline 5.1.2(i) disclosure of how to
+        // revoke third-party-AI consent. On a 375x667pt iPhone SE — still a
+        // supported device at the iOS 18 floor — the un-scrollable VStack
+        // truncated exactly that sentence, and ja lost more than en. Larger
+        // Dynamic Type sizes overflowed on every device.
+        ScrollView {
+            VStack(spacing: 24) {
+                Image(systemName: icon)
+                    .font(.system(size: 56))
+                    .foregroundStyle(.orange)
+                    .padding(.top, 48)
+                Text(title)
+                    .font(.title)
+                    .bold()
+                    .multilineTextAlignment(.center)
+                Text(body)
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal)
+                Spacer(minLength: 0)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
         }
-        .padding()
     }
 
     private var ageGatePage: some View {

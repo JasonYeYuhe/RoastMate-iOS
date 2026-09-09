@@ -1,5 +1,5 @@
 An honesty fix.
 
-• If your device doesn't have Apple Intelligence, some modes were quietly showing you a canned example instead of a real response — and still spending one of your credits for it. Those responses are now clearly labelled, and they never cost a credit.
+• If your device doesn't have Apple Intelligence, some modes were quietly showing you a canned example instead of a real response — and still spending one of your credits for it. Those responses are now labelled wherever they appear, they never cost a credit, and an empty wallet no longer blocks them.
 • Traditional Chinese: the built-in example responses now come in Traditional characters. They were being shown in Simplified.
 • The safety filter was missing the Traditional-character forms of several self-harm and violence phrases. Traditional and Simplified are now screened the same way.

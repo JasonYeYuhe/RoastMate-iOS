@@ -63,7 +63,7 @@ struct GenerateRoastIntent: AppIntent {
         // it does not spend wallet credits. Credits gate the in-app /
         // cloud (Vent/Feral) path where the real variable cost lives.
         let locale = Locale.current
-        let variants = try await RoastEngine.shared.generate(
+        let output = try await RoastEngine.shared.generateDetailed(
             situation: situation,
             style: style,
             locale: locale,
@@ -71,7 +71,14 @@ struct GenerateRoastIntent: AppIntent {
             mode: .roast,
             intensity: intensity.resolved
         )
-        let response = variants.first ?? String(localized: "roast.error.no_variants")
+        let text = output.texts.first ?? String(localized: "roast.error.no_variants")
+        // Siri has no banner to hang a label on, and it SPEAKS the result — so
+        // on a device with no on-device model it would read out one of five
+        // hardcoded lines as if it had answered the user. Prefix the notice
+        // into the value itself; it is the only surface available here.
+        let response = output.isCurated
+            ? String(localized: "roast.notice.curated") + "\n\n" + text
+            : text
         return .result(value: response, dialog: IntentDialog(stringLiteral: response))
     }
 }

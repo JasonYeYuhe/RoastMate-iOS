@@ -87,6 +87,9 @@ struct MacMenuBarContent: View {
                 if viewModel.curatedNotice {
                     CuratedNoticeBanner()
                 }
+                if viewModel.rewriteCurated {
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
+                }
                 if let session = viewModel.currentSession {
                     ForEach((session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }, id: \.id) { result in
                         RoastCard(text: result.text,

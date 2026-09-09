@@ -235,6 +235,10 @@ struct RoastGeneratorView: View {
                                 .background(Circle().fill(Color.orange.opacity(0.14)))
                         }
                         .buttonStyle(.plain)
+                        // Affordance matches the invariant: the view model now
+                        // refuses to clobber an in-flight run, and the button
+                        // should not look available while one is running.
+                        .disabled(viewModel.state == .loading)
                         .accessibilityLabel(Text("voice.button"))
                         .padding(10)
                     }
@@ -282,10 +286,21 @@ struct RoastGeneratorView: View {
             if !isPro && viewModel.selectedIntensity.requiresPro {
                 EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
                 showPaywall = true
-            } else if !isPro && settings?.canSpendNow() == false {
+            } else if !isPro && settings?.canSpendNow() == false
+                        && !CloudPermission.resolve(
+                            intensity: viewModel.selectedIntensity,
+                            consent: settings?.cloudConsent ?? .notAsked,
+                            locale: locale
+                        ).willBeCurated {
                 // Intent-triggered paywall: fire at the peak moment the
                 // user reaches for a generation with an empty wallet —
                 // not at onboarding.
+                //
+                // ...but NOT when the generation can only return curated text.
+                // That output is free, and this is the surface where charging
+                // for it would be most visible: the app has just told the user
+                // in their own language that example responses cost nothing.
+                // Same predicate the view model uses, so the two cannot drift.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {
@@ -348,6 +363,9 @@ struct RoastGeneratorView: View {
                 }
                 if viewModel.curatedNotice {
                     CuratedNoticeBanner()
+                }
+                if viewModel.rewriteCurated {
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
                 }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {

@@ -4,6 +4,14 @@ import SwiftUI
 /// model — the device has no on-device model, the model errored, or every
 /// candidate tripped the safety filter.
 ///
+/// **Why not `roast.error.unavailable`.** That string opens with "On-device AI
+/// isn't available right now", which is only true for the FIRST of those three
+/// causes. The other two fire on devices where the model IS available and just
+/// refused this particular request — Apple FM guardrails reject vent/feral
+/// content at a measured 100% rate, so a Pro user on an iPhone 16 can see this
+/// banner sitting directly above three drafts the same model wrote seconds
+/// earlier. `roast.notice.curated` states only what is true in all three cases.
+///
 /// **Why a banner and not an error.** `roast.error.unavailable` has always
 /// carried exactly the right copy ("On-device AI isn't available right now.
 /// Showing curated responses instead."), correctly translated in all four
@@ -22,12 +30,17 @@ import SwiftUI
 /// One home for the rule: every surface that renders engine output shows
 /// THIS view. Do not re-implement the copy inline.
 struct CuratedNoticeBanner: View {
+    /// Which claim to make. Defaults to the whole-results case; the rewrite
+    /// passes its own key, because on a no-FM device with cloud consent the
+    /// drafts above can be real paid output while only the rewrite is canned.
+    var messageKey: LocalizedStringKey = "roast.notice.curated"
+
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "text.quote")
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
-            Text("roast.error.unavailable")
+            Text(messageKey)
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

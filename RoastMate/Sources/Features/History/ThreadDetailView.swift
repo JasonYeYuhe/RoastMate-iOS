@@ -25,6 +25,10 @@ struct ThreadDetailView: View {
     /// instance has its own independent loading state.
     @State private var rewritingDraftId: UUID?
     @State private var rewriteError: String?
+    /// The rewrite returned curated text — label it. Without an on-device
+    /// model this row is a random canned roast that never read the draft, and
+    /// it gets a share-as-image button.
+    @State private var rewriteCurated = false
 
     private var orderedSessions: [RoastSession] {
         (thread.sessions ?? []).sorted { $0.createdAt < $1.createdAt }
@@ -58,6 +62,11 @@ struct ThreadDetailView: View {
                     Text(rewriteError)
                         .font(.caption)
                         .foregroundStyle(.orange)
+                        .padding(.horizontal, 4)
+                }
+
+                if rewriteCurated {
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
                         .padding(.horizontal, 4)
                 }
 
@@ -206,15 +215,17 @@ struct ThreadDetailView: View {
         guard rewritingDraftId == nil else { return }
         rewritingDraftId = draft.id
         rewriteError = nil
+        rewriteCurated = false
         Task {
             defer { rewritingDraftId = nil }
             do {
-                _ = try await RewriteCoordinator.rewriteAsSendable(
+                let outcome = try await RewriteCoordinator.rewriteAsSendable(
                     draft: draft,
                     session: session,
                     context: context,
                     locale: locale
                 )
+                rewriteCurated = outcome?.isCurated ?? false
                 Haptics.play(.generated)
             } catch let err as RoastError {
                 rewriteError = err.errorDescription

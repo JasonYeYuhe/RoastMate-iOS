@@ -16,6 +16,10 @@ struct HistorySessionDetailView: View {
 
     @State private var rewritingDraftId: UUID?
     @State private var rewriteError: String?
+    /// The rewrite returned curated text — label it. Without an on-device
+    /// model this row is a random canned roast that never read the draft, and
+    /// it gets a share-as-image button.
+    @State private var rewriteCurated = false
 
     private var orderedResults: [GeneratedRoast] {
         (session.results ?? []).sorted { $0.generatedAt < $1.generatedAt }
@@ -27,6 +31,10 @@ struct HistorySessionDetailView: View {
                 Text(session.situation)
                     .font(.body)
                     .padding(.bottom)
+
+                if rewriteCurated {
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
+                }
 
                 ForEach(orderedResults, id: \.id) { result in
                     GeneratedRoastCard(
@@ -71,15 +79,17 @@ struct HistorySessionDetailView: View {
         guard rewritingDraftId == nil else { return }
         rewritingDraftId = draft.id
         rewriteError = nil
+        rewriteCurated = false
         Task {
             defer { rewritingDraftId = nil }
             do {
-                _ = try await RewriteCoordinator.rewriteAsSendable(
+                let outcome = try await RewriteCoordinator.rewriteAsSendable(
                     draft: draft,
                     session: session,
                     context: context,
                     locale: locale
                 )
+                rewriteCurated = outcome?.isCurated ?? false
                 Haptics.play(.generated)
             } catch let err as RoastError {
                 rewriteError = err.errorDescription

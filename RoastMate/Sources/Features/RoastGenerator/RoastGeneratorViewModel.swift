@@ -30,6 +30,12 @@ final class RoastGeneratorViewModel {
     /// `.error` would render zero cards and block the default action on every
     /// device without an on-device model (App Review 2.1 risk).
     var curatedNotice: Bool = false
+    /// True when the "make it sendable" rewrite returned curated text.
+    /// SEPARATE from `curatedNotice` on purpose: on a no-FM device with cloud
+    /// consent, the vent draft above it can be real, PAID, model-written cloud
+    /// output while the rewrite (which has no cloud path at all) is canned.
+    /// Reusing one screen-level flag would label that paid draft as canned.
+    var rewriteCurated: Bool = false
 
     /// Drives the one-time 5.1.2(i) cloud-AI consent sheet. Set when a
     /// Vent/Feral generation needs explicit permission before any
@@ -117,7 +123,10 @@ final class RoastGeneratorViewModel {
             return
         }
 
-        if !isPro {
+        // Curated output is free, so it must not be gated by the wallet — see
+        // CloudPermission.Decision.willBeCurated. The view's intent-triggered
+        // paywall reads the same property.
+        if !isPro, !cloud.willBeCurated {
             // Credits are a quantity knob only — the Pro-only intensity
             // and style guards above are unchanged, so spending a credit
             // never unlocks a capability. The View intent-triggers the
@@ -126,8 +135,9 @@ final class RoastGeneratorViewModel {
             // P1.1: PEEK only. The charge itself moved to after generation
             // (below) so curated fallback text — which never reads the user's
             // input — is never billed. `canSpendNow` is a documented read-only
-            // probe, so paywall behaviour is unchanged: an empty wallet still
-            // stops here, before anything is generated.
+            // probe. An empty wallet still stops a BILLABLE generation here,
+            // before anything runs; a curated-only one no longer reaches this
+            // block at all.
             guard settings.canSpendNow() else {
                 state = .error(String(localized: "paywall.out_of_credits.body"))
                 return
@@ -138,6 +148,7 @@ final class RoastGeneratorViewModel {
         currentSession = nil
         rewriteError = nil
         curatedNotice = false
+        rewriteCurated = false
         do {
             let output = try await RoastEngine.shared.generateDetailed(
                 situation: text,
@@ -222,6 +233,7 @@ final class RoastGeneratorViewModel {
 
         rewritingDraftId = draft.id
         rewriteError = nil
+        rewriteCurated = false
         do {
             let rewritten = try await RoastEngine.shared.rewriteAsSendableDetailed(
                 ventDraft: draft.text,
@@ -232,7 +244,7 @@ final class RoastGeneratorViewModel {
             // Without an on-device model this "rewrite" is a random curated
             // ROAST line, not a rewrite of the user's draft — and it gets a
             // Share button. Label it with the same note the generator uses.
-            if rewritten.provenance == .curated { curatedNotice = true }
+            rewriteCurated = (rewritten.provenance == .curated)
             HistoryService.appendSendableReply(
                 toSession: session,
                 sourceVentDraft: draft,
@@ -259,6 +271,16 @@ final class RoastGeneratorViewModel {
     func applyVoiceTranscript(_ text: String) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        // Never clobber an in-flight run. This used to reset `state` to `.idle`
+        // unconditionally, which re-enabled the Generate button mid-generation
+        // and walked straight past the `state == .loading` re-entrancy guard —
+        // two concurrent runs, racing on `currentSession`. Keep the prefill,
+        // leave the state alone. `generate()` captured its own copy of the text
+        // before its first `await`, so mutating `situation` here is safe.
+        guard state != .loading else {
+            situation = trimmed
+            return
+        }
         situation = trimmed
         currentSession = nil
         rewriteError = nil

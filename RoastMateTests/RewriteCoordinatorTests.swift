@@ -40,7 +40,7 @@ final class RewriteCoordinatorTests: XCTestCase {
 
         // The coordinator must return the newly-persisted sendable reply,
         // not nil — there was no prior pairing on this session.
-        let appended = try XCTUnwrap(reply, "Rewrite should return the appended sendable reply.")
+        let appended = try XCTUnwrap(reply?.row, "Rewrite should return the appended sendable reply.")
         XCTAssertEqual(appended.kind, .sendableReply)
         XCTAssertEqual(appended.sourceVentDraftId, draft.id,
                        "Sendable reply must link back to its source vent draft.")
@@ -72,7 +72,7 @@ final class RewriteCoordinatorTests: XCTestCase {
         session: RoastSession,
         context: ModelContext,
         locale: Locale
-    ) async throws -> GeneratedRoast? {
+    ) async throws -> RewriteCoordinator.Outcome? {
         do {
             return try await RewriteCoordinator.rewriteAsSendable(
                 draft: draft, session: session, context: context, locale: locale)
@@ -104,7 +104,7 @@ final class RewriteCoordinatorTests: XCTestCase {
             context: context,
             locale: Locale(identifier: "en_US")
         )
-        let appended = try XCTUnwrap(reply)
+        let appended = try XCTUnwrap(reply?.row)
         XCTAssertEqual(appended.kind, .sendableReply)
         XCTAssertEqual(appended.sourceVentDraftId, draft.id)
         XCTAssertEqual(session.results?.count, 2)

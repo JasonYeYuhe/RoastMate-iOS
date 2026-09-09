@@ -124,6 +124,11 @@ struct ArgumentSimulatorView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
+                    // Pro-gated surface: an unlabelled canned "opponent" is a
+                    // paying user being handed one of five hardcoded lines.
+                    if viewModel.curatedNotice {
+                        CuratedNoticeBanner()
+                    }
                     ForEach(viewModel.turns) { turn in
                         turnBubble(turn)
                             .id(turn.id)
