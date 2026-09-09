@@ -126,9 +126,14 @@ Then **Phase 2 is a code moratorium.** Read §2 before writing anything.
 
 ## Jason's, not yours
 
-1. **Provider spend ceilings at Groq + OpenRouter.** There is no global spend
-   counter in the Worker; every cap is per-device/per-IP. Worst case on
-   Cloudflare's free 100k req/day is roughly **$33/day**.
+1. **Provider spend — mostly already capped; one thing to confirm.** Groq is the
+   **free tier** ($0; over-limit returns 429, it does not bill). OpenRouter is
+   **paid** ($0.0481/1M in, $0.1930/1M out — the config avoids `:free` variants
+   on purpose, see the `wrangler.toml` comment) but is **prepaid at $10**, which
+   caps it by construction: roughly 30k–115k vents against 23 lifetime downloads.
+   **Only open question: is OpenRouter auto-topup on?** If yes the cap is not
+   real; if no, there is nothing to do. Do not repeat the earlier "$33/day"
+   framing — it assumed uncapped billing and was wrong.
 2. **The dedicated In-App-Purchase key**, only if refunds ever bite.
 3. **Minting the ASC provider token** (P2.1) — web UI only, no API surface.
 4. **Confirm the App Privacy label lists Purchases** — not exposed on the API.

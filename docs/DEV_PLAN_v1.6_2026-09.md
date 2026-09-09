@@ -184,9 +184,20 @@ criterion repeats the exact mistake its own plan diagnosed.
    had weaker safety lists until this week, has no canned-text pool, and scores
    18/24 on the sendable eval — yet it has its own ASO keywords and a live
    listing. Either invest or say plainly it is metadata-only.
-3. **Provider spend ceilings** — still yours, still open. No global spend counter
-   exists in the Worker; worst case on Cloudflare's free 100k req/day is roughly
-   **$33/day**.
+3. **Provider spend ceilings — largely a non-issue, corrected 2026-09-09.**
+   Groq is the **free tier** ($0, rate-limited: exceeding 8K TPM / 200K TPD
+   returns 429, it does not bill). OpenRouter is **not** free —
+   `qwen/qwen3-30b-a3b-instruct-2507` costs $0.0481/1M in, $0.1930/1M out, and
+   the config deliberately avoids `:free` variants because the shared free pool
+   402s/404s when a tier retires (that is what took the cloud path down on
+   2026-08-31). But it is **prepaid at $10**, which is a hard ceiling by
+   construction — that buys roughly **30,000–115,000 vents** depending on length,
+   against 23 lifetime downloads.
+   **The only thing to check is whether OpenRouter auto-topup is enabled.** If it
+   is, the $10 stops being a ceiling; if not, there is nothing to do here. A
+   30-second check in the account, not a work item. An earlier draft called this
+   a "$33/day worst case" and treated it as urgent — that assumed uncapped
+   billing and was wrong.
 4. **The dedicated IAP key** — only needed if refunds ever bite.
 
 ---
