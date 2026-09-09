@@ -1,8 +1,15 @@
-Reviewer notes — RoastMate v1.4.0
+Reviewer notes — RoastMate v1.5.0
 
-1. WHERE GENERATION RUNS.
+1. WHERE GENERATION RUNS, AND WHAT A DEVICE WITHOUT APPLE INTELLIGENCE GETS.
 Calm / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
-Apple's Foundation Models where available; the rewrite is on-device only.
+Apple's Foundation Models. The app also supports iOS 18 / macOS 14, where
+Foundation Models does not exist. On such a device — or with Apple
+Intelligence off, or while its assets are still downloading — those modes
+return a small set of CURATED EXAMPLE responses instead of a model answer.
+The app says so on the results screen ("On-device AI isn't available right
+now. Showing curated responses instead."), and NO credit is charged for that
+output. This is intended behaviour, not a failure. If your test device has
+Apple Intelligence enabled you will see real, input-specific responses.
 
 Vent and Feral are different and we want to be explicit: Apple's on-device
 model refuses to produce genuine vent output, so these two modes send the
@@ -11,48 +18,37 @@ third-party LLM provider (currently Groq, OpenRouter as fallback). This
 happens ONLY after a separate, explicit in-app consent (Guideline
 5.1.2(i)) shown before any text leaves the device, revocable anytime in
 Settings > AI & Privacy. Our proxy is stateless; we do not retain text.
-The "roommate group" feature in the Echoes tab is cloud-only for the same
-reason, behind the same consent.
-
-NOTE: earlier versions of this document wrongly said the app was
-on-device only. Corrected here.
+Because they use that path, Vent and Feral produce real input-specific
+output on ANY device, including one with no Apple Intelligence. The
+"roommate group" in the Echoes tab is cloud-only for the same reason,
+behind the same consent.
 
 2. POSITIONING.
 A creative-writing / emotional-expression tool, not a harassment tool.
 No field for a target person's name — only a SITUATION. Safe Mode on by
 default. Vent and Feral produce PRIVATE drafts labelled "for yourself
 only", not presented as messages to send. A user-initiated "Rewrite as
-Sendable" runs a second on-device pass that strips profanity (no slurs,
-threats, sexual content, or doxxing).
+Sendable" runs a second pass that strips profanity (no slurs, threats,
+sexual content, or doxxing).
 
 TEST PATH: Roast Generator > Intensity "Vent" > type any situation >
 Generate. The card is labelled "Vent draft - for yourself only" with a
 do-not-send banner. Tap "Make it sendable" for the sendable version.
 
-3. WHAT'S NEW IN 1.4.0.
-- VOICE INPUT FIX. The app never configured its AVAudioSession, so the
-  microphone captured nothing — the sheet opened, no text appeared.
-  Fixed for both the iOS 18 (SFSpeechRecognizer) and iOS 26
-  (SpeechAnalyzer) paths. Transcription stays 100% on-device
-  (requiresOnDeviceRecognition = true); a locale with no on-device model
-  hides voice rather than using any network path.
-- Pro subscribers using the roommate group are now counted against the
-  Pro allowance rather than the free one.
-- Share card hardening. The card renders only the sendable reply and its
-  text is immutable — no free-text field reaches the renderer, so nothing
-  a user types can appear on a RoastMate-branded image. Before drawing,
-  the text is scrubbed on-device for names, phone numbers, ID numbers and
-  WeChat/QQ contacts, then re-validated by the safety filter; if that
-  refuses, no card is produced.
-- Private drafts remain unshareable (1.3.1): no share sheet, no
-  share-as-image, no text selection. Copy is kept as an explicit
-  user-initiated action.
-- Some capabilities ship DISABLED behind remote flags, not reachable in
-  this build.
+3. WHAT'S NEW IN 1.5.0.
+- Devices without Apple Intelligence now label curated example output
+  plainly, and are never charged a credit for it. Previously that output
+  was presented without a label and did cost a credit.
+- Traditional Chinese: the curated examples now have a Traditional-script
+  set. zh-Hant users previously saw Simplified characters.
+- Safety filter: added the missing Traditional-script forms of several
+  self-harm and violence phrases, so zh-Hant input and output are screened
+  identically to zh-Hans, in both directions.
+- Some capabilities ship DISABLED behind remote flags and are not
+  reachable in this build.
 
-4. iCLOUD SYNC IS ACTIVE (earlier versions of this document said
-"planned"; corrected here). History, threads, saved situations, settings
-and credit-ledger entries mirror via SwiftData + CloudKit into the PRIVATE
+4. iCLOUD SYNC IS ACTIVE. History, threads, saved situations, settings and
+credit-ledger entries mirror via SwiftData + CloudKit into the PRIVATE
 database of the Apple Account on the device (container
 iCloud.yyh.roastmate.app). That is the user's own iCloud storage: it never
 reaches our servers and we cannot read it.
