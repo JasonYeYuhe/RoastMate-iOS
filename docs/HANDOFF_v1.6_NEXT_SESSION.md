@@ -43,30 +43,46 @@ Cheap checks, corrected:
   ⚠️ `READY_FOR_SALE` is not a discriminator — all 17 historical records read
   it, back to v1.0.
 
-## What is already done (commits `4a392c4`, `76a8672`)
+## What is already done
+
+Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 
 - **P1.1** — credit is spent AFTER generation, only for `.model` output.
   `RoastEngine.generateDetailed` returns `GeneratedOutput{texts, provenance}`.
   Both spend sites fixed: `RoastGeneratorViewModel` and **`FeatureGenerator`**
   (Reply Helper / Emotion Translator / Social Roast) — *not*
   `ArgumentSimulatorViewModel`, which spends nothing.
-- **P1.2** — `CuratedNoticeBanner` on all three renderers (iOS generator,
-  FeatureGenerator, macOS menu bar), reusing the already-translated
-  `roast.error.unavailable`.
+- **P1.2** — `CuratedNoticeBanner` on **every** surface that can render curated
+  text: the iOS generator, FeatureGenerator, the macOS menu bar, the Argument
+  Simulator, History and Thread detail, the Share extension (inline — that
+  target does not compile the app's Views/Components tree) and the Siri intent
+  (prefixed into the spoken value). Two strings: `roast.notice.curated` and
+  `rewrite.notice.curated`, both cause-neutral. **Not**
+  `roast.error.unavailable` — its "On-device AI isn't available" opener is
+  false on two of the three curated causes.
 - **P1.3** — `FallbackRoasts` routes through `AppLanguage.contentBucket` and
   has a `zhHant` pool.
 - **P0 (found in the sweep)** — `SafetyFilter`'s `ventHardRail`,
   `defaultDenylist`, `softSelfHarmPhrases` and `hardSelfHarmPhrases` script
   gaps, plus a bidirectional parity test over `matchingListsForTesting()`.
-- **P1.4** — reviewer notes rewritten (3,947/4,000); onboarding + Settings copy
-  no longer claims unconditional on-device generation.
+- **P1.4** — reviewer notes rewritten (3,975/4,000); onboarding + Settings copy
+  states the real invariant (charged only for a real, input-specific response)
+  rather than a claim a remote flag flip could falsify. Onboarding pages are
+  now scrollable — the longer string truncated the 5.1.2(i) revoke sentence on
+  an iPhone SE.
 - **P1.5** — `share_card_visible`, threaded through both structs,
-  `isRestrictive`, the served JSON, and the CI validator.
-- preflight now gates the reviewer-notes file that actually ships, on
+  `isRestrictive`, the served JSON, the CI validator, and gated at the button
+  AND the sheet's *presentation* (not its content — that would show a blank
+  modal).
+- **The wallet no longer gates free output.** A generation that can reach no
+  model returns curated text, which costs nothing, so neither the view model's
+  gate nor the view's intent-triggered paywall fires for it. One predicate:
+  `CloudPermission.Decision.willBeCurated`.
+- preflight gates the reviewer-notes file that actually ships, on
   **characters** (CJK), against the 4000 cap.
 
 **Gate:** `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh` →
-80 pass, 0 fail; 373 unit + 7 UI tests; all 5 targets build.
+80 pass, 0 fail; **374 unit + 7 UI tests**; all 5 targets build.
 
 ## What remains, in order
 
