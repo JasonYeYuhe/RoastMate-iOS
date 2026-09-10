@@ -6,20 +6,28 @@ first. Solo developer (Jason). Branch `feature/v1.4-track-b`, working tree clean
 
 ## Status in one line
 
-**v1.5.0 / build 21 is UPLOADED and fully staged on BOTH platforms. It is NOT
-submitted for review, and the branch is NOT pushed.** Two commands and one
-decision remain.
+**v1.5.0 / build 21 is SUBMITTED and WAITING_FOR_REVIEW on BOTH platforms.**
+Phase 1 is closed. The branch is pushed and the live config carries the new
+kill-switch. **Phase 2 is a code moratorium — read §2 of the plan before
+writing anything.**
 
-Both `PREPARE_FOR_SUBMISSION`, verified by read-back 2026-09-10:
+Verified by read-back 2026-09-10:
 
 | | iOS | macOS |
 |---|---|---|
-| version record | `6784f0de-b1db-472c-a63b-14bff774194d` | `a0a87e79-ad23-4e7b-aa2d-c58963c4fe5e` |
+| version id | `6784f0de-b1db-472c-a63b-14bff774194d` | `a0a87e79-ad23-4e7b-aa2d-c58963c4fe5e` |
+| state | `WAITING_FOR_REVIEW` | `WAITING_FOR_REVIEW` |
 | build 21 attached | ✅ | ✅ |
-| What's New ×4 locales | ✅ | ✅ |
-| description + keywords ×4 | ✅ matches repo | ✅ matches repo |
-| reviewer notes (3,974 ch) | ✅ matches repo | ✅ matches repo |
+| reviewSubmission | `030c8edb-8db1-4f2d-b74f-444d50d2525d` | `15bc5d9e-400e-43ad-b375-c0a13989716a` |
+| What's New / description / keywords / reviewer notes | ✅ all match repo | ✅ all match repo |
 | releaseType | AFTER_APPROVAL | AFTER_APPROVAL |
+
+`AFTER_APPROVAL` means these go live automatically once approved. If that is
+not wanted, change it BEFORE approval.
+
+Live config now serves **12 top-level keys** (10 flags + 2 `_comment`), with
+`share_card_visible: true`. The mirror Action's hardened validator passed on
+the real payload ("config OK — 10 required keys present and well-typed").
 
 ## VERIFY BEFORE YOU ACT
 
@@ -95,30 +103,27 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 **Gate:** `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh` →
 80 pass, 0 fail; **374 unit + 7 UI tests**; all 5 targets build.
 
-## What remains, in order
+## What remains
 
-1. **Submit for review, twice.** This is the one-way door and was deliberately
-   left for an explicit go:
-   ```
-   python3 scripts/asc_submit_review.py --version 1.5.0 --platform IOS
-   python3 scripts/asc_submit_review.py --version 1.5.0 --platform MAC_OS
-   ```
-   Both versions are already `PREPARE_FOR_SUBMISSION` with everything attached,
-   which is the state that script requires. All 10 existing reviewSubmissions
-   are COMPLETE, so there is no stale one to cancel first.
-2. **Push the branch.** ⚠️ Deploys `research/web/roastmate-config.json` to
-   GitHub Pages (the mirror Action triggers on **any** branch), adding
-   `share_card_visible: true` to the live config. Shipped binaries ignore the
-   unknown key, so it is safe — but it IS a live change, and until it lands the
-   new kill-switch has no served value (the binary falls back to its baked
-   default, `true`, so the card stays visible either way).
-3. Nothing else. **Phase 2 is a code moratorium** — read §2 of the plan.
+**Nothing in Xcode.** Phase 1 shipped. What is left is Phase 2, which is
+distribution work, not code:
 
-## Screenshots are the one thing the API cannot do
+1. **Watch the review.** Both platforms are `WAITING_FOR_REVIEW`. The one
+   Guideline risk this binary was built to remove (2.1 / 4.0 — a reviewer on a
+   non-Apple-Intelligence device seeing canned text presented as a response) is
+   mitigated three ways: the output is labelled on every surface, it is never
+   charged, and the reviewer notes say plainly what each device gets.
+2. **P2.1** — mint a provider token in the ASC web UI, add the `pt=` to
+   `ShareCardBadge`. One line, and the only code edit Phase 2 allows.
+3. **P2.2** — creator access (TestFlight external group or promo codes with Pro
+   unlocked) BEFORE contacting anyone. Blocks P2.3.
+4. **P2.3 / P2.4** — outreach, then talk to 3–4 users.
 
-Version records inherit the previous version's screenshots automatically, so
-this is only a concern if the UI changed enough to need new ones. v1.5.0 adds a
-notice banner and does not change layout, so the inherited set is fine.
+**Kill-switches, now that they work.** If something goes wrong in production,
+edit `research/web/roastmate-config.json` and push — the mirror Action deploys
+to Pages on any branch and clients pick it up next launch. No Apple cycle.
+`share_card_visible:false` takes the card down; `echoes_enabled`,
+`roommate_group_enabled`, `vent_cloud_enabled`, `force_local_only` do the rest.
 
 ## Known, deliberately unfixed in v1.5.0
 
