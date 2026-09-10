@@ -6,9 +6,20 @@ first. Solo developer (Jason). Branch `feature/v1.4-track-b`, working tree clean
 
 ## Status in one line
 
-**Phase 1 code is DONE and green. v1.5.0 / build 21 is cut but NOT built, NOT
-uploaded, NOT submitted, and NOT pushed.** What remains is the outward-facing
-half: ship it, then paste metadata, then stop writing code.
+**v1.5.0 / build 21 is UPLOADED and fully staged on BOTH platforms. It is NOT
+submitted for review, and the branch is NOT pushed.** Two commands and one
+decision remain.
+
+Both `PREPARE_FOR_SUBMISSION`, verified by read-back 2026-09-10:
+
+| | iOS | macOS |
+|---|---|---|
+| version record | `6784f0de-b1db-472c-a63b-14bff774194d` | `a0a87e79-ad23-4e7b-aa2d-c58963c4fe5e` |
+| build 21 attached | ✅ | ✅ |
+| What's New ×4 locales | ✅ | ✅ |
+| description + keywords ×4 | ✅ matches repo | ✅ matches repo |
+| reviewer notes (3,974 ch) | ✅ matches repo | ✅ matches repo |
+| releaseType | AFTER_APPROVAL | AFTER_APPROVAL |
 
 ## VERIFY BEFORE YOU ACT
 
@@ -86,33 +97,28 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 
 ## What remains, in order
 
-1. **Push the branch.** ⚠️ This deploys `research/web/roastmate-config.json`
-   to GitHub Pages (the mirror Action triggers on **any** branch), adding
-   `share_card_visible: true` to the live config. Shipped v1.4.0 binaries
-   ignore the unknown key, so this is safe — but it IS a live change.
-2. **Build + upload, TWICE.** The path in the plan is iOS-only and will
-   silently leave macOS on 1.4.0; every release since v1.1.0 shipped both.
-   - `scripts/build-upload-asc.sh` takes **no CLI args** — it is configured by
-     env vars, and defaults to `SCHEME=RoastMate`,
-     `DESTINATION=generic/platform=iOS`.
-   - **Re-probe codesign first.** It worked under a locked console on
-     2026-09-09 (`codesign -f -s "Apple Distribution: Yuhe Ye (KHMK6Q3L3K)"`
-     on a throwaway binary, exit 0), but that has failed before and the check
-     costs a second. The ASC `.p8` half is lock-immune; only codesign is not.
-3. **Bind + submit, twice** (`--platform IOS`, then `MAC_OS`):
-   `python3 scripts/asc_bind_version.py --version 1.5.0 --notes build/v1.5.0-release-notes.md`
-   then `python3 scripts/asc_submit_review.py --version 1.5.0`.
-   ⚠️ `asc_bind_version.py` hardcodes `releaseType=AFTER_APPROVAL`; v1.1.0 and
-   v1.2.0 shipped MANUAL. Patch it if 1.5.0 wants a manual release gate.
-4. **Paste reviewer notes by hand** — `metadata/review_notes_asc_short.txt`.
-   Nothing in `scripts/` writes `appStoreReviewDetail`.
-5. **P1.7, AFTER the version record exists** (it is version-scoped and cannot
-   be edited on a live version): paste `description` + `keywords` only —
-   `name`, `subtitle`, `promotionalText` and `whatsNew` are already live and
-   identical. **2 fields × 4 locales × 2 platforms = 16.**
+1. **Submit for review, twice.** This is the one-way door and was deliberately
+   left for an explicit go:
+   ```
+   python3 scripts/asc_submit_review.py --version 1.5.0 --platform IOS
+   python3 scripts/asc_submit_review.py --version 1.5.0 --platform MAC_OS
+   ```
+   Both versions are already `PREPARE_FOR_SUBMISSION` with everything attached,
+   which is the state that script requires. All 10 existing reviewSubmissions
+   are COMPLETE, so there is no stale one to cancel first.
+2. **Push the branch.** ⚠️ Deploys `research/web/roastmate-config.json` to
+   GitHub Pages (the mirror Action triggers on **any** branch), adding
+   `share_card_visible: true` to the live config. Shipped binaries ignore the
+   unknown key, so it is safe — but it IS a live change, and until it lands the
+   new kill-switch has no served value (the binary falls back to its baked
+   default, `true`, so the card stays visible either way).
+3. Nothing else. **Phase 2 is a code moratorium** — read §2 of the plan.
 
-Then **Phase 2 is a code moratorium.** Read §2 of the plan before writing
-anything.
+## Screenshots are the one thing the API cannot do
+
+Version records inherit the previous version's screenshots automatically, so
+this is only a concern if the UI changed enough to need new ones. v1.5.0 adds a
+notice banner and does not change layout, so the inherited set is fine.
 
 ## Known, deliberately unfixed in v1.5.0
 

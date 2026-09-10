@@ -177,7 +177,23 @@ review cycle, because a second cycle costs a week to save a 15-line change.
   alone does nothing). Re-probe codesign first — it worked under a locked console
   today, but that has failed before and the check costs a second. Then
   `build-upload-asc.sh` → `asc_bind_version.py` → `asc_submit_review.py`.
-- **P1.7 — Paste the ASO copy by hand.** ⚠️ **Blocked today, and mis-scoped.**
+- **P1.7 — Paste the ASO copy by hand.** ✅ **DONE 2026-09-10 — and the "by
+  hand" premise was wrong.** Once the 1.5.0 version records existed,
+  `description` and `keywords` were writable through the SAME endpoint
+  `asc_bind_version.py` already uses for `whatsNew`
+  (`PATCH /v1/appStoreVersionLocalizations/{id}`), and the reviewer notes
+  through `PATCH /v1/appStoreReviewDetails/{id}`. All 16 ASO fields plus both
+  platforms' reviewer notes were written via the API in about two minutes, and
+  read back byte-identical to the repo.
+
+  The first draft proposed writing `asc_push_metadata.py`; both reviewers
+  called that procrastination and this plan agreed. **The reviewers were right
+  about the priority and wrong about the fact** — no script was needed, just
+  ~20 lines against the existing auth helper. The real blocker was never
+  tooling, it was that metadata is version-scoped and no editable version
+  existed. Sequencing, not automation.
+
+  Everything below was measured before that worked, and stays true:
   Verified against the live ASC API:
   - **Nothing is editable.** Every version record on both platforms is
     `READY_FOR_SALE`; `description` and `keywords` are version-scoped and
