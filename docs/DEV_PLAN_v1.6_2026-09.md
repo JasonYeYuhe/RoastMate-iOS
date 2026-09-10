@@ -214,20 +214,52 @@ review cycle, because a second cycle costs a week to save a 15-line change.
 secondary features, not cloud-routing. If something breaks in production, the
 kill-switches now work.
 
+- **P2.0 — Do NOT flip `share_card_enabled` yet.** New, and it blocks the growth
+  layer. `sharecard.findus` tells Chinese users 「App Store 搜索 RoastMate」, and
+  that search returns a **different app at #1** on the CN store — ours is #2.
+  Searching 帮你骂 returns ours first. The flag is dark today so nothing is
+  broken, but flipping it would route shared-card traffic to a competitor. Fix
+  the two zh strings in the next binary, then flip.
 - **P2.1 — Mint a provider token.** Create one campaign in the ASC web UI to
   generate the account's `pt=`, then add it to `ShareCardBadge`. Today the code
   asserts "`ct` alone is what App Analytics buckets on"; Apple requires `pt=`
   alongside, so the shipped QR is very likely unattributable. (This is the one
   code edit allowed in Phase 2, and it is one line.)
-- **P2.2 — Creator access.** Decide how a creator actually evaluates this app.
-  Right now they would download it, burn three credits, and hit a paywall. Set up
-  a TestFlight external group or promo codes with Pro unlocked **before**
-  contacting anyone. The first draft omitted this entirely and it blocks
-  everything else in Phase 2.
-- **P2.3 — Outreach.** 5–10 micro-creators on Xiaohongshu. Write the DM script,
-  the persona list and the tags first. Xiaohongshu weights Saves > Comments >
-  Likes, so design for a comeback someone wants to find again.
-- **P2.4 — Talk to 3–4 users.** Not 8. Eight will not happen.
+- **P2.2 — Creator access.** ✅ **ANSWERED 2026-09-10** — see
+  `docs/DISTRIBUTION_KIT_v1.md` §2. The mechanism is **subscription offer
+  codes**, not TestFlight: no beta review, the creator installs the real store
+  build, and their audience can install the same link. TestFlight would make a
+  creator's post unusable as a growth loop. Verified: both Pro subscriptions
+  APPROVED, the offerCodes endpoint live, zero codes minted, zero TestFlight
+  groups.
+
+  **This item's premise was wrong, and in the worse direction.** "Burn three
+  credits and hit a paywall" — a new user actually gets 10 seeded credits plus
+  2/day for 7 days. Credits were never the wall. The wall is a *capability*
+  lock: 狠 / 痛骂 / 发泄 are all `requiresPro`, and tapping one opens the
+  paywall **before any generation**. So a free arrival can never reach the modes
+  the whole pitch rests on. Offer codes fix that for the creator and **not for
+  the creator's audience** — which is the harder, still-open question.
+- **P2.3 — Outreach.** Materials drafted: `docs/DISTRIBUTION_KIT_v1.md` §3–§4
+  (archetypes + search criteria, zh-Hans DM script and variants, follow-up rule,
+  a do-not-do list, three post concepts, tag strategy). **Nothing sent.**
+
+  Two corrections. The "Saves > Comments > Likes" weighting is directionally
+  right but the specific formula is unverifiable — sources contradict each
+  other and Xiaohongshu has never published one; don't quote numbers. And
+  **the mainland question is now live**: the app IS on the CN store as 帮你骂
+  (released 2026-05-21), which contradicts §8 of the strategic doc, and
+  Xiaohongshu's audience is mainland-dominant.
+- **P2.4 — Talk to 3–4 users.** Not 8. Eight will not happen. Guide drafted:
+  `docs/DISTRIBUTION_KIT_v1.md` §5.
+
+  **The recruit form has collected exactly zero responses** (both KV namespaces
+  empty) — because its Settings tile was a dead link in every shipped build
+  until `05f305d`, which rides v1.5.0. So v1.5.0 is the first binary where
+  anyone can volunteer, there is no backlog, and the 30/90 clock should start
+  when v1.5.0 goes READY_FOR_SALE. The form also claims 「我们在招募 20 位用户」,
+  which is false at this size (a `research/web/*.js` edit — no binary, so it
+  does not touch the moratorium).
 
 ### Cut, explicitly, with the reasoning recorded
 
