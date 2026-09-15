@@ -63,8 +63,9 @@ Cheap checks, corrected:
 - **Live flags:** `curl -s https://jasonyeyuhe.github.io/RoastMate/roastmate-config.json`
   — **12 top-level keys: 10 flags + 2 `_comment` keys**, including
   `share_card_visible: true`. A naive `keys|length` will not equal the flag
-  count. The mirror Action deploys `research/web/roastmate-config.json` **on any
-  branch push**.
+  count. The mirror Action deploys it on a push to **any branch that touches
+  `research/web/**`** (paths-filtered) — so a docs-only push does NOT re-run it,
+  and a missing new run after a docs push is correct, not a failure.
 - **Prod Worker:** UP, but served by **OpenRouter** since the Groq primary
   died (see the production-state section above). To probe:
   `mode:"roast"` 403s **only when paired with a sendable intensity** —
