@@ -279,7 +279,7 @@ kill-switches now work.
 
 | signal | source | what would count |
 |---|---|---|
-| the three zh-Hant fixes reach users | ASC version state | v1.5.0 READY_FOR_SALE |
+| the three zh-Hant fixes reach users | ASC version state | v1.5.0 READY_FOR_SALE — ✅ **met 2026-09-10** (iOS + macOS, public store confirmed) |
 | nobody is charged for canned output | code + a no-FM device | P1.1 verified on a real device |
 | ASO copy is actually live | ASC API read-back | live keywords == `metadata/` |
 | store discovery | App Analytics impressions | any movement off the 4,919 lifetime baseline |
@@ -353,7 +353,17 @@ criterion repeats the exact mistake its own plan diagnosed.
    those surfaces to zh-Hans so no Traditional user reaches them), and the
    PromptBuilder region-blind checks noted in §4 — which mean a `zh_TW` device
    is told to reply in 简体中文 on the **model** path.
-3. **Provider spend ceilings — largely a non-issue, corrected 2026-09-09.**
+3. **Provider spend ceilings — now an AVAILABILITY question, not a cost one
+   (re-framed 2026-09-15).** The Groq primary (`qwen/qwen3.6-27b`) died between
+   2026-09-09 and 09-15 and returns 404, so OpenRouter is the ONLY working cloud
+   path. If OpenRouter auto-topup is OFF, the $10 prepaid balance is not just a
+   spend cap — it is the point at which vent, feral and the roommate group all
+   go down, because nothing sits behind it. Phase 2 outreach is exactly what
+   would drain it. **Check auto-topup before sending the first creator message.**
+   (Why the Groq model was NOT swapped: see the handoff's production-state
+   section.) The original framing follows.
+
+   **Provider spend ceilings — largely a non-issue, corrected 2026-09-09.**
    Groq is the **free tier** ($0, rate-limited: exceeding 8K TPM / 200K TPD
    returns 429, it does not bill). OpenRouter is **not** free —
    `qwen/qwen3-30b-a3b-instruct-2507` costs $0.0481/1M in, $0.1930/1M out, and

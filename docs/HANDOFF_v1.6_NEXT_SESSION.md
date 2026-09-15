@@ -6,28 +6,46 @@ first. Solo developer (Jason). Branch `feature/v1.4-track-b`, working tree clean
 
 ## Status in one line
 
-**v1.5.0 / build 21 is SUBMITTED and WAITING_FOR_REVIEW on BOTH platforms.**
-Phase 1 is closed. The branch is pushed and the live config carries the new
-kill-switch. **Phase 2 is a code moratorium — read §2 of the plan before
-writing anything.**
+**v1.5.0 / build 21 is LIVE on iOS and macOS** — approved and released
+2026-09-10 21:49 UTC, ~14h after submission. Tagged `v1.5.0` → `7277e76` (the
+tree both archives were built from; nothing that compiles changed after
+`36271e7`). **Phase 1 is closed. Phase 2 is a code moratorium — read §2 of the
+plan before writing anything.**
 
-Verified by read-back 2026-09-10:
+Verified 2026-09-15:
+- ASC: both versions `READY_FOR_SALE`, both reviewSubmissions `COMPLETE`, both
+  items `APPROVED`. (`READY_FOR_SALE` alone proves nothing here — every
+  historical record reads it; the APPROVED item on THIS submission is the proof.)
+- Public store (iTunes lookup) serves 1.5.0 in US, CN (帮你骂), TW/HK (幫你罵),
+  JP, and on the Mac App Store.
+- Live config: 12 top-level keys (10 flags + 2 `_comment`), all at intended
+  values, `share_card_visible: true`.
 
-| | iOS | macOS |
-|---|---|---|
-| version id | `6784f0de-b1db-472c-a63b-14bff774194d` | `a0a87e79-ad23-4e7b-aa2d-c58963c4fe5e` |
-| state | `WAITING_FOR_REVIEW` | `WAITING_FOR_REVIEW` |
-| build 21 attached | ✅ | ✅ |
-| reviewSubmission | `030c8edb-8db1-4f2d-b74f-444d50d2525d` | `15bc5d9e-400e-43ad-b375-c0a13989716a` |
-| What's New / description / keywords / reviewer notes | ✅ all match repo | ✅ all match repo |
-| releaseType | AFTER_APPROVAL | AFTER_APPROVAL |
+**The 30/90 clock starts 2026-09-10** — the day v1.5.0 went READY_FOR_SALE,
+which is also the first build where the in-app research tile works at all.
 
-`AFTER_APPROVAL` means these go live automatically once approved. If that is
-not wanted, change it BEFORE approval.
+## 🔴 Production state — the Groq primary is dead (found 2026-09-15)
 
-Live config now serves **12 top-level keys** (10 flags + 2 `_comment`), with
-`share_card_visible: true`. The mirror Action's hardened validator passed on
-the real payload ("config OK — 10 required keys present and well-typed").
+`qwen/qwen3.6-27b` returns **404** on Groq (confirmed in the Worker's own log:
+`Groq primary failed: groq:404`). It served fine on 2026-09-09. Users see no
+outage — every vent is served by the OpenRouter fallback in 2–4s — but
+**OpenRouter is now the only working path**.
+
+What that changes: Jason's open question "is OpenRouter auto-topup on?" is no
+longer a cost question. OpenRouter is prepaid at $10. If auto-topup is OFF and
+the balance drains — which successful Phase 2 outreach is exactly what would
+cause — OpenRouter returns 402 and **vent, feral and the roommate group go down
+together**, because nothing is behind it. That is the 2026-08-31 outage shape.
+
+Deliberately NOT fixed, with evidence (see the note in `cloud-worker/wrangler.toml`):
+the only Qwen left on Groq is `qwen/qwen3.8-27b`, a **Preview** model. Tested via
+`wrangler dev --remote` against the live key: accessible and vents properly in
+zh, but the key is on the FREE tier and 429'd a second request 7s after the
+first, and the one zh sample inverted the situation's pronouns. Under real
+traffic it would 429 into OpenRouter anyway, and a model that returns 200 with
+worse text silently REPLACES the fallback rather than backing it up. Groq's only
+non-Enterprise production models are GPT-OSS, which this repo already rejected
+for neutering vent output. So: check auto-topup, not the model.
 
 ## VERIFY BEFORE YOU ACT
 
@@ -43,11 +61,12 @@ Cheap checks, corrected:
   pbxproj carries its own copies (4 occurrences, all project-level); they are
   in sync, so `xcodegen generate` should produce a **zero**-line diff now.
 - **Live flags:** `curl -s https://jasonyeyuhe.github.io/RoastMate/roastmate-config.json`
-  — **11 top-level keys: 9 flags + 2 `_comment` keys.** The old handoff said 9
-  and a naive `keys|length` therefore reads as a failure. NOTE: the served file
-  does not yet carry `share_card_visible`; `research/web/roastmate-config.json`
-  does, and the mirror Action deploys it **on any branch push**.
-- **Prod Worker:** UP (200 in 1.6s off Groq, 2026-09-09). To probe:
+  — **12 top-level keys: 10 flags + 2 `_comment` keys**, including
+  `share_card_visible: true`. A naive `keys|length` will not equal the flag
+  count. The mirror Action deploys `research/web/roastmate-config.json` **on any
+  branch push**.
+- **Prod Worker:** UP, but served by **OpenRouter** since the Groq primary
+  died (see the production-state section above). To probe:
   `mode:"roast"` 403s **only when paired with a sendable intensity** —
   `intensity` is mode-coupled (`vent`/`feral` for vent, `calm`/`sharp`/`savage`
   for roast) and `validate()` runs before the roast gate, so
@@ -108,15 +127,16 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 **Nothing in Xcode.** Phase 1 shipped. What is left is Phase 2, which is
 distribution work, not code:
 
-1. **Watch the review.** Both platforms are `WAITING_FOR_REVIEW`. The one
+1. ~~**Watch the review.**~~ **Approved and live 2026-09-10.** The one
    Guideline risk this binary was built to remove (2.1 / 4.0 — a reviewer on a
    non-Apple-Intelligence device seeing canned text presented as a response) is
    mitigated three ways: the output is labelled on every surface, it is never
    charged, and the reviewer notes say plainly what each device gets.
 2. **P2.1** — mint a provider token in the ASC web UI, add the `pt=` to
    `ShareCardBadge`. One line, and the only code edit Phase 2 allows.
-3. **P2.2** — creator access (TestFlight external group or promo codes with Pro
-   unlocked) BEFORE contacting anyone. Blocks P2.3.
+3. **P2.2** — creator access: **subscription offer codes**, not TestFlight (see
+   `docs/DISTRIBUTION_KIT_v1.md` §2). Mechanism verified, zero codes minted —
+   count and free duration are Jason's call.
 4. **P2.3 / P2.4** — outreach, then talk to 3–4 users.
 
 **Kill-switches, now that they work.** If something goes wrong in production,

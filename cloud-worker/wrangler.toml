@@ -20,6 +20,19 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 DEFAULT_MODEL = "qwen/qwen3-30b-a3b-instruct-2507"
 
+# ⚠️ STATUS 2026-09-15 — THE GROQ PRIMARY BELOW IS DEAD. `qwen/qwen3.6-27b` now
+# returns 404 (last seen serving 2026-09-09; gone from Groq's catalog, no
+# deprecation notice). Every request 404s here in a few ms and is served by the
+# OpenRouter fallback, which is therefore the ONLY working path. Values are left
+# unchanged on purpose so this file still matches what is deployed.
+#   The only Qwen Groq still offers is `qwen/qwen3.8-27b` — PREVIEW, so it can be
+# retired without notice. Tested through `wrangler dev --remote` against the live
+# key: it is accessible and vents properly in zh, but the key is on the FREE tier
+# and 429'd a second request 7s after the first, and the one zh sample inverted
+# the situation's pronouns. Not deployed: under real traffic it would 429 into
+# OpenRouter anyway, and a 200-with-worse-text silently REPLACES the fallback.
+#   The "250K TPM / 1K RPM" below is the Dev-tier figure; this key is free tier.
+#
 # Groq is PRIMARY (lower latency, isolated quota). Routed by locale. Verified
 # against the live Groq catalog 2026-08-31: the old primaries both died —
 # `qwen/qwen3-32b` was DEPRECATED and `llama-3.3-70b-versatile` became
