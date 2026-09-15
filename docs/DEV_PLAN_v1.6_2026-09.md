@@ -280,11 +280,32 @@ kill-switches now work.
 | signal | source | what would count |
 |---|---|---|
 | the three zh-Hant fixes reach users | ASC version state | v1.5.0 READY_FOR_SALE — ✅ **met 2026-09-10** (iOS + macOS, public store confirmed) |
-| nobody is charged for canned output | code + a no-FM device | P1.1 verified on a real device |
+| nobody is charged for canned output | code + a no-FM device | ✅ **met 2026-09-16** — see note below |
 | ASO copy is actually live | ASC API read-back | live keywords == `metadata/` |
 | store discovery | App Analytics impressions | any movement off the 4,919 lifetime baseline |
 | does anyone share the card | asking humans | ≥1 unprompted share |
 | does anyone want this | 3–4 conversations | written down, with quotes |
+
+**P1.1 verification, 2026-09-16** — `docs/evidence/2026-09-16-p1.1-curated-not-charged.png`.
+The same throwaway XCUITest (never committed) ran against the `v1.4.0` and
+`v1.5.0` tags, each as a **Release** build on a clean install on an **iOS 18.5
+simulator**, where Foundation Models does not exist, so Sharp is always curated:
+
+| build | free generations before → after one Sharp tap | label |
+|---|---|---|
+| v1.4.0 (control) | 2 free today → **1** free today | none — and the card read "I admire your commitment to making my life slightly more interesting", one of the five hardcoded strings, in reply to "my coworker presented my project as his own" |
+| v1.5.0 (shipped) | 2 free today → **2** free today | "Curated example — not generated from what you typed. No credit used." |
+
+The control matters: an identical first run in **Debug** "passed" for both
+builds, because **`StoreService.isPro` is hard-coded `true` in DEBUG**
+(`StoreService.swift:52`, and again on every refresh), so the free-tier charge
+path is unreachable in any Debug build — v1.4.0 looked innocent too. Only the
+Release control proved the test could catch a charge at all.
+
+Honest limit: a simulator, not a physical iPhone. It is a faithful stand-in for
+this code path — the curated branch keys off the absence of the Foundation
+Models framework, which iOS 18 lacks entirely, not off any hardware property —
+but it is not a device.
 
 **Deliberately absent:** anything from `EventLedger` (no egress), per-creator
 campaign rows (suppressed), and the v1.5 plan's "repeat usage by deviceId via

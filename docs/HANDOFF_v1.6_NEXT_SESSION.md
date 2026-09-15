@@ -169,6 +169,39 @@ trio on the wallet, with the peek reading `canSpendNow()` minus in-flight
 reservations. That is real scope; it was not landed the night before a
 submission.
 
+## 🔴 Verifying anything about credits or the paywall: DEBUG builds are always Pro
+
+`StoreService.isPro` is hard-coded `true` under `#if DEBUG`
+(`Shared/Services/StoreService.swift:52`, and forced again in
+`refreshSubscriptionStatus`). Every `xcodebuild test` defaults to Debug. So in any
+Debug build the free-tier path — credit spend, the wallet gate, the paywall, the
+1-vs-3 variant count — **cannot execute**, and a test of it passes vacuously.
+
+This nearly produced a false verification on 2026-09-16: the P1.1 check "passed"
+for BOTH v1.5.0 and the broken v1.4.0 in Debug. Tell-tale: 3 result cards
+(`isPro ? 3 : 1`) and no wallet chip on screen.
+
+Recipe that works (both builds, clean install, iOS 18.5 sim):
+```
+xcodebuild test -scheme RoastMate -configuration Release ENABLE_TESTABILITY=YES \
+  -destination "platform=iOS Simulator,id=<iOS 18 sim>" -only-testing:RoastMateUITests/<Test>
+```
+`ENABLE_TESTABILITY=YES` is required only because the hostless unit-test bundle
+also gets built and needs `@testable`; it does not turn `DEBUG` on. **Always run a
+control against the broken build first** — if the control doesn't fail, the test
+is blind. Result + evidence: plan §3, `docs/evidence/`.
+
+## OpenRouter auto-top-up — attempted 2026-09-16, NOT confirmed
+
+The API does not expose top-up settings and the key is a write-only Worker
+secret, so only the dashboard can answer. Jason is logged in to OpenRouter in
+Chrome; the credits page showed **exactly one transaction ever, $10.00** — so
+auto top-up has never fired. That does NOT prove it is off (near-zero usage would
+never trip it), and the balance figure and the top-up toggle never rendered:
+the Claude-in-Chrome extension hung on every operation on that page (text,
+script, screenshot, even closing the tab) while the screen was unlocked. Still
+an owner check: openrouter.ai/settings/credits → Auto Top-Up.
+
 ## Hard-won gotchas
 
 - **Isolated simulator for preflight:**
