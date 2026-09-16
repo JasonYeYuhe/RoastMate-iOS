@@ -169,6 +169,30 @@ trio on the wallet, with the peek reading `canSpendNow()` minus in-flight
 reservations. That is real scope; it was not landed the night before a
 submission.
 
+## ✅ The research recruit channel works — verified end to end 2026-09-16
+
+v1.5.0 is the first build whose Settings tile actually reaches this form, and it
+had never been exercised. Probed against production (`roastmate-research`):
+
+- CORS preflight from `https://jasonyeyuhe.github.io` → 204 with the allow
+  header; an unknown origin gets no allow header, so a browser blocks it.
+- Step 1 `POST /` → **201** with a participant code, row persisted in
+  `RESEARCH_ANSWERS`.
+- Step 2 `POST /book` → **201**, row persisted in `RESEARCH_CONTACTS`.
+- Anti-spam: `/book` with an invented code → **404**, as designed.
+- **Privacy separation holds in production**: the answers row contains no
+  email; the email lives only in the separate contacts namespace. That was the
+  Codex v1 design requirement and it is real, not just intended.
+
+The test rows were deleted afterwards; **both namespaces are back to 0 keys**, so
+the first real submission will be the first row. (`wrangler kv key delete
+--namespace-id <id> <key> --remote` — note `--force` is NOT a valid flag and
+silently prints help instead of deleting.)
+
+Also corrected on that page: it claimed to be recruiting **20** users in all four
+locales, which is false at this size (the plan targets 3-4). It now says "a small
+number" / 几位 / 幾位 / 数名 — no number to go stale.
+
 ## 🔴 Verifying anything about credits or the paywall: DEBUG builds are always Pro
 
 `StoreService.isPro` is hard-coded `true` under `#if DEBUG`

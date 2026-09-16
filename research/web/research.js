@@ -17,7 +17,7 @@ const STRINGS = {
   'en': {
     'step.indicator': 'Step 1 of 2 — anonymous research questions',
     title: 'RoastMate research interview',
-    intro: 'We are recruiting 20 people for a 30-minute interview about how you use RoastMate. This step asks the research questions; the next step (booking) is on a separate page and captures your email + timezone independently.',
+    intro: 'We are recruiting a small number of people for a 30-minute interview about how you use RoastMate. This step asks the research questions; the next step (booking) is on a separate page and captures your email + timezone independently.',
     'meta.compensation': 'Compensation: 1 year of RoastMate Pro free, via Apple offer code (you redeem in App Store after the call — no PII exchange).',
     'meta.duration': 'Time: 30 minutes by FaceTime / Zoom / WeChat — your choice, scheduled on the next page.',
     'meta.privacy_step1': 'Privacy: this page submits anonymously. Your email + timezone are captured separately on the next page so they never travel in the same payload as your answers.',
@@ -48,7 +48,7 @@ const STRINGS = {
   'zh-Hans': {
     'step.indicator': '第 1 步 / 共 2 步 — 匿名研究问题',
     title: 'RoastMate 用户访谈招募',
-    intro: '我们在招募 20 位用户做 30 分钟的访谈，聊聊你怎么用 RoastMate。这一步只问研究问题；下一步（约时间）是单独的页面，分开收你的邮箱和时区。',
+    intro: '我们在招募几位用户做 30 分钟的访谈，聊聊你怎么用 RoastMate。这一步只问研究问题；下一步（约时间）是单独的页面，分开收你的邮箱和时区。',
     'meta.compensation': '报酬：免费 1 年 RoastMate Pro 订阅，访谈结束后通过 Apple 兑换码发给你（App Store 里兑换，无需交换任何个人信息）。',
     'meta.duration': '时长：30 分钟，可用 FaceTime / 腾讯会议 / 微信视频，下一步约时间。',
     'meta.privacy_step1': '隐私：这个页面纯匿名提交，邮箱和时区在下一步单独收，确保它们和你的答案不会出现在同一个请求里。',
@@ -79,7 +79,7 @@ const STRINGS = {
   'zh-Hant': {
     'step.indicator': '第 1 步 / 共 2 步 — 匿名研究問題',
     title: 'RoastMate 使用者訪談招募',
-    intro: '我們在招募 20 位使用者做 30 分鐘的訪談,聊聊你怎麼用 RoastMate。這一步只問研究問題;下一步(約時間)是獨立頁面,分開收你的電子郵件和時區。',
+    intro: '我們在招募幾位使用者做 30 分鐘的訪談,聊聊你怎麼用 RoastMate。這一步只問研究問題;下一步(約時間)是獨立頁面,分開收你的電子郵件和時區。',
     'meta.compensation': '報酬:免費 1 年 RoastMate Pro 訂閱,訪談結束後透過 Apple 兌換碼發給你(在 App Store 兌換,無需交換任何個人資料)。',
     'meta.duration': '時長:30 分鐘,可用 FaceTime / LINE / Zoom,下一步約時間。',
     'meta.privacy_step1': '隱私:這個頁面純匿名提交,電子郵件和時區在下一步單獨收,確保它們和你的答案不會出現在同一個請求裡。',
@@ -110,7 +110,7 @@ const STRINGS = {
   'ja': {
     'step.indicator': 'ステップ 1/2 — 匿名のリサーチ質問',
     title: 'RoastMate ユーザーインタビュー募集',
-    intro: 'RoastMate の使い方について 30 分のインタビューに参加いただける方を 20 名募集しています。このステップではリサーチ質問のみ。次のステップ(予約)は別ページで、メールとタイムゾーンを独立に取得します。',
+    intro: 'RoastMate の使い方について 30 分のインタビューに参加いただける方を数名募集しています。このステップではリサーチ質問のみ。次のステップ(予約)は別ページで、メールとタイムゾーンを独立に取得します。',
     'meta.compensation': '謝礼:RoastMate Pro 1 年無料サブスクリプション。インタビュー終了後に Apple オファーコードをお送りします(App Store で引き換え、個人情報のやり取りは不要)。',
     'meta.duration': '所要時間:30分。FaceTime / Zoom / LINE のいずれかで、次のステップで日程調整。',
     'meta.privacy_step1': 'プライバシー:このページは匿名送信。メールとタイムゾーンは次のステップで別途取得するため、回答と同じリクエストには載りません。',
