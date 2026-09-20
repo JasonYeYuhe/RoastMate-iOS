@@ -169,6 +169,44 @@ trio on the wallet, with the peek reading `canSpendNow()` minus in-flight
 reservations. That is real scope; it was not landed the night before a
 submission.
 
+## First post-release numbers — measured 2026-09-20
+
+Ten days after v1.5.0 went live. From the ASC Analytics API (there is no script;
+recipe below). Window 2026-09-04 → 09-19, DAILY granularity:
+
+| | |
+|---|---|
+| first-time downloads in window | **5** (3 of them after the 09-10 release) |
+| territory of those 5 | **CN 4, TW 1** |
+| update events | 4 |
+| ratings / reviews | **0** |
+
+Two honest readings:
+
+1. **v1.5.0 did not change acquisition, as expected** — ~2 first-time downloads
+   in the 6 days before, ~3 in the 10 days after. Nothing about discovery
+   changed, so this is the flat baseline the plan's "any movement off 4,919
+   impressions" criterion is measured against. The 30/90 clock is running from
+   09-10.
+2. **Every single new user is Chinese-speaking, and 4 of 5 are mainland CN.**
+   n=5, so this is a hint, not a finding — but it is the only demand signal that
+   exists, and it points at the market `PHASE_5_STRATEGIC_2026-09.md` §8 puts out
+   of scope. See open decision "target storefront" in
+   `docs/DISTRIBUTION_KIT_v1.md`.
+
+Also worth noting: **0 ratings and 0 reviews**, so the one-star risk the whole
+v1.5.0 binary existed to prevent has not materialised — though at this volume
+that is not evidence of much either.
+
+**Recipe (no script exists):** ONGOING request
+`53b320a6-68d1-4796-930f-62521ea5e749` →
+`/v1/analyticsReportRequests/{id}/reports` → pick `App Downloads Standard` →
+`/instances` → `/segments` → each segment is a gzipped TSV at a signed URL.
+Processing dates repeat the same underlying day, so **de-duplicate rows before
+summing or you will double-count**. `Download Type` separates
+`First-time download` from `Auto-update` / `Manual update` — the lifetime "23"
+figure counts first-time only.
+
 ## ✅ The research recruit channel works — verified end to end 2026-09-16
 
 v1.5.0 is the first build whose Settings tile actually reaches this form, and it
