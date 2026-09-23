@@ -123,28 +123,30 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 **Gate:** `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh` →
 80 pass, 0 fail; **374 unit + 7 UI tests**; all 5 targets build.
 
-## What remains
+## What remains — all of it is Jason's, none of it is code
 
-**Nothing in Xcode.** Phase 1 shipped. What is left is Phase 2, which is
-distribution work, not code:
+Everything an agent could move is moved. Two decisions are left, both framed
+with evidence in `docs/DISTRIBUTION_KIT_v1.md`:
 
-1. ~~**Watch the review.**~~ **Approved and live 2026-09-10.** The one
-   Guideline risk this binary was built to remove (2.1 / 4.0 — a reviewer on a
-   non-Apple-Intelligence device seeing canned text presented as a response) is
-   mitigated three ways: the output is labelled on every surface, it is never
-   charged, and the reviewer notes say plainly what each device gets.
-2. **P2.1** — mint a provider token in the ASC web UI, add the `pt=` to
-   `ShareCardBadge`. One line, and the only code edit Phase 2 allows.
-3. **P2.2** — creator access: **subscription offer codes**, not TestFlight (see
-   `docs/DISTRIBUTION_KIT_v1.md` §2). Mechanism verified, zero codes minted —
-   count and free duration are Jason's call.
-4. **P2.3 / P2.4** — outreach, then talk to 3–4 users.
+1. **Target storefront.** The app is live in mainland CN as 帮你骂; the
+   strategy doc rules mainland out; the first post-release data says 4 of 5
+   new users are mainland. This is a legal/regulatory call (unlicensed AI
+   listing, see `docs/marketing/xiaohongshu-launch-zh.md`) — not one an agent
+   should make.
+2. **Whether 发泄 becomes free.** Pricing, and needs a binary — so it also waits
+   on the moratorium.
 
-**Kill-switches, now that they work.** If something goes wrong in production,
-edit `research/web/roastmate-config.json` and push — the mirror Action deploys
-to Pages on any branch and clients pick it up next launch. No Apple cycle.
+Then the work that is actually the point of Phase 2, and that cannot be
+delegated at all: **send the first three DMs** (kit §3), and **have 3–4
+conversations** (kit §5). The recruit form works, the codes exist, the copy is
+honest, the kill-switches work. There is nothing left to build first.
+
+**Kill-switches, now that they work.** Edit `research/web/roastmate-config.json`
+and push — the mirror Action deploys on any branch touching `research/web/**`.
 `share_card_visible:false` takes the card down; `echoes_enabled`,
 `roommate_group_enabled`, `vent_cloud_enabled`, `force_local_only` do the rest.
+**Do not flip `share_card_enabled`** until `sharecard.findus` stops pointing CN
+users at a competitor (needs a binary).
 
 ## Known, deliberately unfixed in v1.5.0
 
@@ -207,6 +209,34 @@ summing or you will double-count**. `Download Type` separates
 `First-time download` from `Auto-update` / `Manual update` — the lifetime "23"
 figure counts first-time only.
 
+## ✅ Creator access exists — offer codes minted 2026-09-24
+
+Delegated four times, so done with the documented recommendation (kit §2):
+
+| | |
+|---|---|
+| offer | `36f7f5d7-2d26-49d0-a0ac-1b315560d33e` on **Pro Monthly** (`6769322501`) |
+| terms | `FREE_TRIAL`, `THREE_MONTHS` × 1, `REPLACE_INTRO_OFFERS`, eligible NEW + EXISTING + EXPIRED, **all 175 territories** |
+| batch | `596464` — **500** one-time codes, expire **2026-12-31** |
+| codes | `~/Documents/RoastMate-research/offer-codes-creator-outreach-2026-09.csv` (600/700, **not in the repo**) |
+| distributed | **none** |
+
+Why 500 and not 25: Apple's API rejected 25, 50, 100 and 250
+("The given number of codes N is invalid") and accepted 500 — that is the
+floor for this endpoint. Undistributed codes do nothing. Monthly, not yearly,
+so a forgotten cancellation after the free 3 months costs $2.99, not $19.99 —
+say that plainly in the DM (kit §3 already does).
+
+To pull the plug: `PATCH /v1/subscriptionOfferCodeOneTimeUseCodes/596464`
+`{"attributes":{"active":false}}` kills the batch; the same PATCH on the offer
+id kills the offer.
+
+**API shape that finally worked** (docs are JS-rendered and unhelpful): the
+`prices` relationship is REQUIRED, one inline `subscriptionOfferCodePrices` per
+territory (get the list from the USA price point's `/equalizations`), and for
+`FREE_TRIAL` each entry carries ONLY `territory` — a `subscriptionPricePoint`
+is rejected.
+
 ## ✅ The research recruit channel works — verified end to end 2026-09-16
 
 v1.5.0 is the first build whose Settings tile actually reaches this form, and it
@@ -253,16 +283,26 @@ also gets built and needs `@testable`; it does not turn `DEBUG` on. **Always run
 control against the broken build first** — if the control doesn't fail, the test
 is blind. Result + evidence: plan §3, `docs/evidence/`.
 
-## OpenRouter auto-top-up — attempted 2026-09-16, NOT confirmed
+## OpenRouter balance — MEASURED 2026-09-24: $9.97 of $10 remains
 
-The API does not expose top-up settings and the key is a write-only Worker
-secret, so only the dashboard can answer. Jason is logged in to OpenRouter in
-Chrome; the credits page showed **exactly one transaction ever, $10.00** — so
-auto top-up has never fired. That does NOT prove it is off (near-zero usage would
-never trip it), and the balance figure and the top-up toggle never rendered:
-the Claude-in-Chrome extension hung on every operation on that page (text,
-script, screenshot, even closing the tab) while the screen was unlocked. Still
-an owner check: openrouter.ai/settings/credits → Auto Top-Up.
+The dashboard never rendered, but the Worker's own key can read the account:
+a read-only preview (`wrangler dev --remote` with a scratch config sharing the
+worker NAME — that is what binds the deployed secrets; a bare script path does
+not) called `GET /api/v1/credits` and `/api/v1/auth/key`. Nothing deployed;
+production deployments unchanged; scratch files removed.
+
+| | |
+|---|---|
+| credits purchased | $10.00 |
+| usage, lifetime | **$0.0347** |
+| remaining | **$9.9653** |
+| key | paid tier, no per-key limit |
+
+So the auto-top-up toggle is **moot at any volume Phase 2 can produce**: at the
+measured per-vent cost this is on the order of 50,000+ vents, and lifetime
+usage after four months is three and a half cents. The availability risk
+("Groq is dead, OpenRouter is the only path, a drained balance takes vent down")
+is real in shape but not near. **Re-check when usage crosses ~$5** — same probe.
 
 ## Hard-won gotchas
 

@@ -210,6 +210,13 @@ I have no evidence about what any of this does to the conversion rate, and neith
 
 # 2. Creator access
 
+> **DONE 2026-09-24.** Offer `36f7f5d7-2d26-49d0-a0ac-1b315560d33e` (Pro Monthly,
+> 3 months free, all territories) with batch `596464` of **500** one-time codes
+> expiring 2026-12-31 — Apple's API floor is 500, not 25. Codes live at
+> `~/Documents/RoastMate-research/offer-codes-creator-outreach-2026-09.csv`,
+> outside this repo. **None distributed.** The section below is the reasoning;
+> the parameters it recommends are the ones that were used.
+
 ## Creator access — the concrete mechanism
 
 **This is a chore, not a blocker. Budget 20 minutes, and do not let it become the thing you do instead of sending messages.**
