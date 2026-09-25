@@ -113,7 +113,26 @@ jobs:
           for k in ints:
               if not isinstance(cfg[k], int) or isinstance(cfg[k], bool):
                   sys.exit(f"::error::{path} '{k}' must be an integer")
-          print(f"config OK — {len(required)} required keys present and well-typed")
+          # PERMANENTLY RETIRED FLAG. `cloud_sendable_enabled` routes Calm /
+          # Sharp / Savage text to a third-party LLM on devices without an
+          # on-device model. Every shipped binary's consent sheet (all four
+          # locales, cloud.consent.footnote) promises the opposite: "Calm, Sharp,
+          # and Savage always run on-device and never use cloud." Turning it on
+          # would send those users' text off-device against the consent they
+          # gave — an App Store 5.1.2(i) violation, not a product tweak.
+          #
+          # This is NOT "off until new consent copy ships". Old installs keep
+          # their old consent and read this same global flag, and
+          # min_supported_build is advisory, so flipping it after a new binary
+          # ships would still re-route every v<=1.5 user under the old promise.
+          # Any future sendable-cloud feature needs a NEW flag name and a fresh,
+          # versioned consent. This key stays false forever.
+          if cfg["cloud_sendable_enabled"] is not False:
+              sys.exit(f"::error::{path} cloud_sendable_enabled must be false — it "
+                       "is a retired flag whose use would violate the consent "
+                       "shipped in every binary (see the comment above this check)")
+          print(f"config OK — {len(required)} required keys present and well-typed; "
+                "retired cloud_sendable_enabled is false")
           PY
 
       - name: Copy research form files
