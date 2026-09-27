@@ -2,10 +2,15 @@ import Foundation
 
 /// The consumables-primary half of v1.1 hybrid monetization.
 ///
-/// A "credit" is the spendable currency for ONE generation or ONE
-/// sendable-rewrite. Credits are deliberately a *quantity* knob only —
-/// they NEVER unlock a capability. Savage / Feral / Vent intensities and
-/// the Pro style shelf stay subscription-only no matter how many credits
+/// A "credit" is the spendable currency for ONE generation. The "Make it
+/// sendable" rewrite of a user's own draft is FREE — a v1.6.0 decision, made
+/// when free Vent first let non-subscribers reach it: it runs on-device, costs
+/// nothing to serve, and is the step that turns venting into something
+/// constructive, so metering it would tax the behaviour the app exists for.
+/// (Older docs said credits paid for rewrites too; no code ever charged one.)
+/// Credits are deliberately a *quantity* knob only —
+/// they NEVER unlock a capability. Savage / Feral intensities and the Pro
+/// style shelf stay subscription-only no matter how many credits
 /// a non-subscriber holds (see `Intensity.requiresPro` /
 /// `StylePreset.Tier` — unchanged by Pillar B). Pro is the unlimited,
 /// best-value tier for heavy users; credits are the pay-as-you-go path

@@ -22,9 +22,9 @@ struct ShareRootView: View {
 
     private var styles: [StylePreset] { StyleCatalog.shared.byTier(.free) }
 
-    /// Only the free intensities. Savage / Feral / Vent are Pro-only
-    /// and the extension has no StoreKit surface — those stay in the
-    /// app where entitlement gating lives.
+    /// Calm / Sharp only. Savage is Pro-only and the extension has no
+    /// StoreKit surface; Vent / Feral are private drafts that need the
+    /// app's cloud-consent sheet and crisis net. All of those stay in the app.
     private let intensities: [Intensity] = [.calm, .sharp]
 
     var body: some View {

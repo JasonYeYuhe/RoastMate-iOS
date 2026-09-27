@@ -28,6 +28,8 @@ import { resolveVentLane } from "./lane.js";
 import { QuotaCounter } from "./quota_do.js";
 import { consumeQuota, refundQuota, quotaBackendIsDO } from "./quota.js";
 import { resolveIpAttemptCap } from "./ipguard.js";
+import { isTraditionalChinese, baseLocale } from "./locale.js";
+import { privateDraftCalibration } from "./calibration.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
@@ -543,7 +545,13 @@ function validate(body) {
   if (!legalIntensity) {
     return { error: "invalid_intensity" };
   }
-  if (typeof locale !== "string" || locale.length > 16) {
+  // Keywords ("@calendar=roc") are dropped, and only the base is length-capped
+  // and used from here on — see baseLocale. The raw cap only bounds abuse.
+  if (typeof locale !== "string" || locale.length > 128) {
+    return { error: "invalid_locale" };
+  }
+  const base = baseLocale(locale);
+  if (base.length > 16) {
     return { error: "invalid_locale" };
   }
   if (typeof deviceId !== "string" || deviceId.length < 8 || deviceId.length > 64) {
@@ -577,7 +585,7 @@ function validate(body) {
       styleName: typeof styleName === "string" ? styleName.slice(0, 80) : "",
       styleId: typeof styleId === "string" ? styleId.slice(0, 40) : "",
       intensity,
-      locale,
+      locale: base,
       deviceId,
       modelOverride,
       mode,
@@ -638,7 +646,7 @@ function buildSystemPrompt(intensity, locale, styleName) {
   // not a replacement. Per-locale so en/ja outputs aren't affected.
   // Per-intensity so this only fires for vent/feral, not sharp/calm.
   const localePrefix = (locale || "").toLowerCase();
-  const isTraditionalZh = localePrefix.includes("hant") || localePrefix.includes("tw") || localePrefix.includes("hk");
+  const isTraditionalZh = isTraditionalChinese(locale);
   let localeReinforcement = "";
   if (localePrefix.startsWith("zh") && (intensity === "vent" || intensity === "feral")) {
     // Hant + Hans split: same intensity rule but the example wordlist
@@ -722,7 +730,7 @@ function buildRoastSystemPrompt(intensity, locale, styleName, styleId, variantCo
   const code = (locale || "").toLowerCase();
   let reinforcement = "";
   if (code.startsWith("zh")) {
-    reinforcement = code.includes("hant")
+    reinforcement = isTraditionalChinese(locale)
       ? `中文 SENDABLE 強制指令:必須輸出 ${n} 條,每條獨立成段。每條都要咬住對方的「具體行為/原話」,狠在精準不在髒話(不許用髒字/侮辱詞——這是能直接發出去的話)。避免簡體字。`
       : `中文 SENDABLE 强制指令:必须输出 ${n} 条,每条独立成段。每条都要咬住对方的「具体行为/原话」,狠在精准不在脏话(不许用脏字/侮辱词——这是能直接发出去的话)。`;
   } else if (code.startsWith("ja")) {
@@ -869,54 +877,10 @@ function buildRoommateUserPrompt(situation, locale) {
   ].join("\n");
 }
 
-function privateDraftCalibration(locale, intensity) {
-  const code = (locale || "").toLowerCase();
-  const feral = intensity === "feral";
-
-  if (code.startsWith("zh")) {
-    return feral
-      ? [
-          "PRIVATE DRAFT CALIBRATION:",
-          "- BAD: \"如果你把这份心思放在自己身上，可能早就成功了。\" (too reflective, too polite)",
-          "- GOOD: \"凌晨两点还狠狠干游戏开外放，你他妈真把宿舍当自己家网吧了？别人第二天不用活是吧。\""
-        ].join("\n")
-      : [
-          "PRIVATE DRAFT CALIBRATION:",
-          "- BAD: \"如果你把这份心思放在自己身上，可能早就成功了。\" (too reflective, too polite)",
-          "- GOOD: \"凌晨两点还开外放打游戏，真把宿舍当你一个人的网吧了？别人第二天不用活是吧。\""
-        ].join("\n");
-  }
-
-  if (code.startsWith("ja")) {
-    return feral
-      ? [
-          "PRIVATE DRAFT CALIBRATION:",
-          "- BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)",
-          "- GOOD: 「深夜2時に爆音でゲームとか、マジで寮を自分の部屋だと思ってんのかよ。こっちは明日も生きるんだわ。」"
-        ].join("\n")
-      : [
-          "PRIVATE DRAFT CALIBRATION:",
-          "- BAD: 「その情熱を自分に向ければ、もっと成長できるのに。」 (too reflective, too polite)",
-          "- GOOD: 「深夜2時に爆音でゲームって、寮を自分だけの部屋だと思ってるの？こっちは明日もあるんだけど。」"
-        ].join("\n");
-  }
-
-  return feral
-    ? [
-        "PRIVATE DRAFT CALIBRATION:",
-        "- BAD: \"If you put that energy into yourself, you'd be so much further ahead.\" (too reflective, too polite)",
-        "- GOOD: \"Blasting games at 2 AM like the whole dorm belongs to you? Fuck off. Other people have a tomorrow.\""
-      ].join("\n")
-    : [
-        "PRIVATE DRAFT CALIBRATION:",
-        "- BAD: \"If you put that energy into yourself, you'd be so much further ahead.\" (too reflective, too polite)",
-        "- GOOD: \"Gaming out loud at 2 AM like this dorm is your private arcade? Other people have a tomorrow.\""
-      ].join("\n");
-}
 
 function languageDirective(locale) {
   const code = (locale || "").toLowerCase();
-  if (code.startsWith("zh") && code.includes("hant")) {
+  if (isTraditionalChinese(locale)) {
     // Measured 2026-09-03: the sendable eval found simplified-character bleed
     // in 6 of 24 zh-Hant cells, including one response written ENTIRELY in
     // Simplified. The old directive was a single sentence — materially weaker
@@ -943,7 +907,7 @@ function languageDirective(locale) {
 
 function userLanguageReminder(locale) {
   const code = (locale || "").toLowerCase();
-  if (code.startsWith("zh") && code.includes("hant")) return "請以繁體中文回覆，全文不得出現簡體字。";
+  if (isTraditionalChinese(locale)) return "請以繁體中文回覆，全文不得出現簡體字。";
   if (code.startsWith("zh")) return "请用简体中文回复。";
   if (code.startsWith("ja")) return "日本語で回答してください。";
   if (code.startsWith("ko")) return "한국어로 답변해 주세요.";

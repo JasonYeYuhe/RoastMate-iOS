@@ -49,6 +49,9 @@ final class FeatureGeneratorViewModel {
     /// output while the rewrite (which has no cloud path at all) is canned.
     /// Reusing one screen-level flag would label that paid draft as canned.
     var rewriteCurated: Bool = false
+    /// Drives the 5.1.2(i) cloud-AI consent sheet on these tools, exactly as
+    /// `RoastGeneratorViewModel.pendingCloudConsent` does on the Roast tab.
+    var pendingCloudConsent: Bool = false
 
     init(config: FeatureGeneratorConfig) {
         self.config = config
@@ -57,6 +60,18 @@ final class FeatureGeneratorViewModel {
 
     func style() -> StylePreset? {
         StyleCatalog.shared.style(id: selectedStyleId)
+    }
+
+    /// Records the one-time 5.1.2(i) choice, then resumes the generation the
+    /// user was trying to run. Same contract as
+    /// `RoastGeneratorViewModel.resolveCloudConsent` — the consent is one
+    /// setting shared by both surfaces.
+    func resolveCloudConsent(_ allow: Bool, context: ModelContext, locale: Locale) async {
+        let settings = HistoryService.userSettings(context: context)
+        settings.cloudConsent = allow ? .granted : .denied
+        try? context.save()
+        pendingCloudConsent = false
+        await generate(context: context, locale: locale)
     }
 
     func generate(context: ModelContext, locale: Locale) async {
@@ -107,9 +122,12 @@ final class FeatureGeneratorViewModel {
 
         // Track 0.2 fix: this surface never resolved cloud permission, so on an
         // iOS-18 device with no on-device model it failed instead of falling
-        // back to cloud — even with consent granted and the flag on. It does
-        // NOT prompt for consent (that UI lives in the generator tab); without
-        // a prior grant this resolves to false and stays on-device.
+        // back to cloud — even with consent granted and the flag on.
+        //
+        // v1.6.0: it now ASKS for consent too. Until then it never prompted, so
+        // Vent / Feral here were curated for anyone who had not first answered
+        // the sheet on the Roast tab — harmless while only Pro users could pick
+        // them, and a broken promise once Vent became free.
         //
         // Resolved BEFORE the wallet gate because the gate needs it: see
         // `willBeCurated`.
@@ -118,6 +136,10 @@ final class FeatureGeneratorViewModel {
             consent: settings.cloudConsent,
             locale: locale
         )
+        if cloud.needsConsent {
+            pendingCloudConsent = true
+            return
+        }
         // Curated output is free — see CloudPermission.Decision.willBeCurated.
         if !isPro, !cloud.willBeCurated {
             // Credits add quantity only; the Pro-only guards above are
@@ -260,6 +282,16 @@ struct FeatureGeneratorView: View {
         .sheet(isPresented: $showPaywall) {
             PaywallView(isPresented: $showPaywall)
         }
+        .sheet(isPresented: $viewModel.pendingCloudConsent) {
+            CloudConsentSheet(
+                onAllow: {
+                    Task { await viewModel.resolveCloudConsent(true, context: context, locale: locale) }
+                },
+                onDeny: {
+                    Task { await viewModel.resolveCloudConsent(false, context: context, locale: locale) }
+                }
+            )
+        }
         .onAppear {
             if viewModel.config.proGated && !isPro {
                 EventLedger.shared.recordPaywallImpression(source: .proTap)
@@ -345,11 +377,11 @@ struct FeatureGeneratorView: View {
                             intensity: viewModel.selectedIntensity,
                             consent: settings?.cloudConsent ?? .notAsked,
                             locale: locale
-                        ).willBeCurated {
+                        ).skipsPaywall {
                 // Intent-triggered paywall at the peak moment — but not for a
                 // generation that can only return free curated text. Same
-                // predicate as the view model; see
-                // CloudPermission.Decision.willBeCurated.
+                // Decision as the view model; see
+                // CloudPermission.Decision.skipsPaywall.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {

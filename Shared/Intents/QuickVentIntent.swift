@@ -6,9 +6,9 @@ import AppIntents
 /// extension compile the exact same intent.
 ///
 /// Unlike `GenerateRoastIntent` (which generates head-lessly on-device),
-/// Quick Vent intentionally OPENS THE APP. Vent is a Pro-only,
-/// safety-filtered private draft — opening the app keeps entitlement
-/// gating, the credit wallet and the crisis safety net exactly where
+/// Quick Vent intentionally OPENS THE APP. Vent is a safety-filtered,
+/// cloud-consented private draft — opening the app keeps the 5.1.2(i)
+/// consent sheet, the credit wallet and the crisis safety net exactly where
 /// they already live instead of duplicating them in an extension.
 struct QuickVentIntent: AppIntent {
     static let title: LocalizedStringResource = "intent.quick_vent.title"

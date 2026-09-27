@@ -3,7 +3,8 @@ import SwiftData
 import StoreKit
 
 /// v1.2 hybrid monetization paywall. **Pro is PRIMARY** — it is the
-/// only thing that unlocks the marquee modes (Vent / Feral / Savage) +
+/// only thing that unlocks the marquee modes (Feral / Savage; Vent became
+/// free in v1.6) +
 /// unlimited + every style, so it is the hero and shown first. Credit
 /// packs are honest pay-as-you-go *overflow* (no subscription, quantity
 /// only) shown second. This corrects the v1.1 "consumables-primary"
@@ -208,14 +209,22 @@ struct PaywallView: View {
             featureRow(
                 icon: "flame.fill",
                 tint: .orange,
-                title: "paywall.feature.vent",
-                detail: "paywall.feature.vent.detail"
+                title: "paywall.feature.feral",
+                detail: "paywall.feature.feral.detail"
             )
+            // Savage is a SENDABLE mode, so it runs on the on-device model —
+            // and on a device without one it can only return curated examples.
+            // Selling it as a working benefit at the point of sale on such a
+            // device would be the same defect v1.5.0 removed from the credit
+            // path, so the row says so. (Feral is cloud-routed and works on
+            // every device after consent.)
             featureRow(
                 icon: "bolt.fill",
                 tint: .red,
                 title: "paywall.feature.savage",
-                detail: "paywall.feature.savage.detail"
+                detail: RoastEngine.isOnDeviceModelAvailable
+                    ? "paywall.feature.savage.detail"
+                    : "paywall.feature.savage.detail.curated"
             )
             featureRow(
                 icon: "infinity",

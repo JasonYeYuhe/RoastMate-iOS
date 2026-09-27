@@ -159,6 +159,9 @@
 "paywall.feature.vent.detail" = "Get it out raw, then we rewrite it into something you can actually send.";
 "paywall.feature.savage" = "Savage intensity";
 "paywall.feature.savage.detail" = "No-prisoners take-downs for the styles that earn them.";
+"paywall.feature.savage.detail.curated" = "On this device Savage shows curated examples — writing from what you type needs Apple Intelligence.";
+"paywall.feature.feral.detail" = "Vent with the limits off — profanity unlocked. A private draft, just for you.";
+"paywall.feature.feral" = "Feral Mode";
 "paywall.feature.unlimited" = "Unlimited generations";
 "paywall.feature.unlimited.detail" = "Skip the daily cap. Use it as often as you need.";
 
@@ -178,14 +181,14 @@
 "paywall.out_of_credits.title" = "Out of credits";
 "paywall.out_of_credits.body" = "Go unlimited with Pro, or top up with a credit pack to keep going.";
 "paywall.credits.title" = "Just need a few more?";
-"paywall.credits.subtitle" = "Top up without a subscription. Credits are extra generations only — they do NOT unlock Vent, Feral, or Savage.";
+"paywall.credits.subtitle" = "Top up without a subscription. Credits are extra generations only — they do NOT unlock Feral or Savage.";
 "paywall.credits.pack" = "%d credits";
 "paywall.credits.bestvalue" = "Best value";
-"paywall.credits.note" = "Credits add generations and rewrites. Vent, Feral and Savage are Pro-only — a credit pack won't unlock them.";
+"paywall.credits.note" = "Credits pay for generations. Feral and Savage are Pro-only — a credit pack won't unlock them.";
 "paywall.credits.balance" = "You have %d credits";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "Recommended";
-"paywall.pro.subtitle" = "The only way to unlock Vent · Feral · Savage — plus unlimited generations and every style. The best value unless you only vent once in a blue moon.";
+"paywall.pro.subtitle" = "The only way to unlock Feral · Savage — plus unlimited generations and every style.";
 "settings.credits.balance" = "Credits";
 "settings.credits.buy" = "Get more credits";
 "paywall.loading" = "Loading…";

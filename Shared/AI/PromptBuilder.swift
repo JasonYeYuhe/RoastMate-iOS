@@ -312,6 +312,21 @@ enum PromptBuilder {
     private static func privateDraftCalibration(for locale: Locale, intensity: Intensity) -> String {
         let isFeral = intensity == .feral
         switch locale.language.languageCode?.identifier {
+        case "zh" where AppLanguage.contentBucket(for: locale) == .traditionalChinese:
+            // The GOOD line is what the model imitates most closely, so it has
+            // to be in the target script. Mirrors the Worker's calibration.js.
+            if isFeral {
+                return """
+                PRIVATE DRAFT CALIBRATION:
+                - BAD: "如果你把這份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
+                - GOOD: "凌晨兩點還開外放狂打遊戲，你他媽真把宿舍當自己家網咖了？別人第二天不用活是吧。"
+                """
+            }
+            return """
+            PRIVATE DRAFT CALIBRATION:
+            - BAD: "如果你把這份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
+            - GOOD: "凌晨兩點還開外放打遊戲，真把宿舍當你一個人的網咖了？別人第二天不用活是吧。"
+            """
         case "zh":
             if isFeral {
                 return """
@@ -363,7 +378,7 @@ enum PromptBuilder {
         let isSharp = intensity == .sharp
         switch locale.language.languageCode?.identifier {
         case "zh":
-            let isHant = locale.identifier.contains("Hant")
+            let isHant = AppLanguage.contentBucket(for: locale) == .traditionalChinese
             if isSharp {
                 if isHant {
                     return """
@@ -423,7 +438,7 @@ enum PromptBuilder {
     private static func languageHint(for locale: Locale) -> String {
         switch locale.language.languageCode?.identifier {
         case "zh":
-            if locale.identifier.contains("Hant") { return "Reply in 繁體中文" }
+            if AppLanguage.contentBucket(for: locale) == .traditionalChinese { return "Reply in 繁體中文" }
             return "Reply in 简体中文"
         case "ja":
             return "Reply in 日本語"
@@ -485,7 +500,7 @@ enum PromptBuilder {
     private static func languageEnforcement(for locale: Locale) -> String {
         switch locale.language.languageCode?.identifier {
         case "zh":
-            if locale.identifier.contains("Hant") {
+            if AppLanguage.contentBucket(for: locale) == .traditionalChinese {
                 return "OUTPUT LANGUAGE (REQUIRED): 必須以「繁體中文」回覆。即使上面的範例是英文,你的回覆也必須完全使用繁體中文。"
             }
             return "OUTPUT LANGUAGE (REQUIRED): 必须用「简体中文」回复。即使上面的示例是英文,你的回复也必须完全使用简体中文。"
@@ -503,7 +518,7 @@ enum PromptBuilder {
     static func userLanguageReminder(for locale: Locale) -> String {
         switch locale.language.languageCode?.identifier {
         case "zh":
-            if locale.identifier.contains("Hant") { return "請以繁體中文回覆。" }
+            if AppLanguage.contentBucket(for: locale) == .traditionalChinese { return "請以繁體中文回覆。" }
             return "请用简体中文回复。"
         case "ja":
             return "日本語で回答してください。"

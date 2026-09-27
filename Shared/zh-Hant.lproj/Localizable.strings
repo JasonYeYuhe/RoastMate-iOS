@@ -159,6 +159,9 @@
 "paywall.feature.vent.detail" = "先把氣寫出來,再讓 AI 改成能發出去的版本。";
 "paywall.feature.savage" = "狠話強度";
 "paywall.feature.savage.detail" = "不留情面的尖銳回擊,僅在配得上的風格中開放。";
+"paywall.feature.savage.detail.curated" = "這台裝置上「狠」顯示的是預設範例 —— 需要 Apple Intelligence 才能根據你輸入的內容生成。";
+"paywall.feature.feral.detail" = "不設上限的發洩 —— 粗口解鎖,只給你自己看的私密草稿。";
+"paywall.feature.feral" = "痛罵模式";
 "paywall.feature.unlimited" = "無限生成";
 "paywall.feature.unlimited.detail" = "跳過每日上限,想罵多少罵多少。";
 
@@ -178,14 +181,14 @@
 "paywall.out_of_credits.title" = "點數已用完";
 "paywall.out_of_credits.body" = "升級 Pro 享受無限,或買個點數包先繼續用。";
 "paywall.credits.title" = "只想再多幾次?";
-"paywall.credits.subtitle" = "無需訂閱,按需儲值。點數只增加生成次數 —— 不會解鎖發洩、痛罵或狠。";
+"paywall.credits.subtitle" = "無需訂閱,按需儲值。點數只增加生成次數 —— 不會解鎖痛罵或狠。";
 "paywall.credits.pack" = "%d 點";
 "paywall.credits.bestvalue" = "最划算";
-"paywall.credits.note" = "點數用於生成和改寫。發洩、痛罵、狠為 Pro 專屬 —— 買點數包不會解鎖它們。";
+"paywall.credits.note" = "點數用於生成。痛罵、狠為 Pro 專屬 —— 買點數包不會解鎖它們。";
 "paywall.credits.balance" = "你還有 %d 點";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "推薦";
-"paywall.pro.subtitle" = "解鎖發洩 · 痛罵 · 狠的唯一方式 —— 外加無限生成和全部風格。除非你極少發洩,否則它最划算。";
+"paywall.pro.subtitle" = "解鎖痛罵 · 狠的唯一方式 —— 外加無限生成和全部風格。";
 "settings.credits.balance" = "點數";
 "settings.credits.buy" = "取得更多點數";
 "paywall.loading" = "載入中…";

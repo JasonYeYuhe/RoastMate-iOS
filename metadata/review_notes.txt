@@ -1,3 +1,5 @@
+SUPERSEDED (frozen at v1.3.1). The notes actually sent to App Review are metadata/review_notes_asc_short.txt (<= 4000 chars), kept current per release.
+
 Reviewer notes for RoastMate v1.3.1:
 
 1. WHERE GENERATION RUNS (on-device first, consented cloud for two modes).

@@ -159,6 +159,9 @@
 "paywall.feature.vent.detail" = "まず本音をそのまま書き出して、それから送れる形に書き直します。";
 "paywall.feature.savage" = "容赦なしモード";
 "paywall.feature.savage.detail" = "遠慮なしの切れ味。対応するスタイルでのみ利用可。";
+"paywall.feature.savage.detail.curated" = "この端末では「容赦なし」はあらかじめ用意した例を表示します。入力内容から生成するには Apple Intelligence が必要です。";
+"paywall.feature.feral.detail" = "制限なしの吐き出し —— 強い言葉も解禁。自分だけのプライベートな下書き。";
+"paywall.feature.feral" = "罵倒モード";
 "paywall.feature.unlimited" = "無制限の生成";
 "paywall.feature.unlimited.detail" = "1日の上限を気にせず、何度でも。";
 
@@ -178,14 +181,14 @@
 "paywall.out_of_credits.title" = "クレジットがありません";
 "paywall.out_of_credits.body" = "Proで無制限に。または、クレジットパックで補充して続けられます。";
 "paywall.credits.title" = "あと数回だけ?";
-"paywall.credits.subtitle" = "サブスク不要で補充。クレジットは生成回数が増えるだけ —— 吐き出し・罵倒・容赦なしは解除されません。";
+"paywall.credits.subtitle" = "サブスク不要で補充。クレジットは生成回数が増えるだけ —— 罵倒・容赦なしは解除されません。";
 "paywall.credits.pack" = "%d クレジット";
 "paywall.credits.bestvalue" = "最もお得";
-"paywall.credits.note" = "クレジットは生成と書き直しに使えます。吐き出し・罵倒・容赦なしはPro限定 —— クレジットパックでは解除できません。";
+"paywall.credits.note" = "クレジットは生成に使えます。罵倒・容赦なしはPro限定 —— クレジットパックでは解除できません。";
 "paywall.credits.balance" = "残り %d クレジット";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "おすすめ";
-"paywall.pro.subtitle" = "吐き出し・罵倒・容赦なしを解除する唯一の方法 —— さらに無制限生成と全スタイル。ごくたまにしか使わない人以外は、これが一番お得です。";
+"paywall.pro.subtitle" = "罵倒・容赦なしを解除する唯一の方法 —— さらに無制限生成と全スタイル。";
 "settings.credits.balance" = "クレジット";
 "settings.credits.buy" = "クレジットを追加";
 "paywall.loading" = "読み込み中…";

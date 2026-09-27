@@ -83,9 +83,10 @@ struct GenerateRoastIntent: AppIntent {
     }
 }
 
-/// The headless intent only exposes the free intensities. Savage /
-/// Feral / Vent are Pro-only, safety-sensitive private drafts — they
-/// must go through the app (where entitlement gating, the credit wallet
+/// The headless intent only exposes Calm / Sharp. Savage is Pro-only, and
+/// Vent / Feral are safety-sensitive private drafts that need the app's
+/// cloud-consent sheet — they must go through the app (where entitlement
+/// gating, the consent sheet, the credit wallet
 /// and the crisis safety net live), so they are deliberately not
 /// reachable from a no-UI Siri/Shortcuts run. Vent is offered instead
 /// via `QuickVentIntent`, which opens the app.

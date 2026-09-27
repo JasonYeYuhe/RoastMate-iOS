@@ -11,6 +11,84 @@ defers it.
 
 ---
 
+## ⚠️ DECISIONS 2026-09-26 — read this before any section below
+
+Jason delegated the open decisions ("你全权负责 做决定吧"). They were made
+after both advisors (Gemini 3.1 Pro, Codex) attacked a draft, and after
+checking their claims against the code. **This section supersedes the rest of
+the kit wherever they disagree.**
+
+**1. Storefront: Taiwan first. Mainland China is delisted.**
+The app was live on the mainland store only because "all territories" was the
+default — never a decision. China requires generative-AI services to be filed
+(备案) — Apple itself needed ~22 months of CAC registration to launch Apple
+Intelligence there — and App Store Guideline 5 requires compliance wherever an
+app is listed. This app is unfiled and sends Vent text to US-based models. CHN
+availability was set to false on 2026-09-26; it is one API call to restore the
+day 备案 exists. Existing mainland installs keep working.
+**Consequence for this kit: §4 (Xiaohongshu) is on hold.** Its audience is
+mainland-dominant and can no longer download the app. Use the Taiwan plan below.
+
+**2. Vent is free from v1.6.0.** On any iPhone without Apple's on-device model
+the free tier used to be 100% canned examples; a free arrival never saw one real
+generation, and never saw the mode the app is named after. Vent is cloud-routed,
+so it produces real output on every device, and its 5.1.2(i) consent already
+names it. Feral and Savage stay Pro. **Do not send creator codes until v1.6.0
+is live** — a creator's audience is free users.
+
+**3. `cloud_sendable_enabled` is retired, permanently.** Every shipped consent
+sheet promises Calm/Sharp/Savage "never use cloud". CI now rejects any value but
+false. See the handoff.
+
+**4. Codes exist, two kinds — never mix them up:**
+
+| for | offer | codes file (outside the repo) |
+|---|---|---|
+| creators | 3 months Pro free | `~/Documents/RoastMate-research/offer-codes-creator-outreach-2026-09.csv` |
+| interviewees | **1 year** Pro free — what the research form publicly promises | `~/Documents/RoastMate-research/offer-codes-research-interview-1yr-2026-09.csv` |
+
+Both are on Pro **Monthly**, so after the free period they auto-renew at the
+monthly price unless cancelled. **Say so in every message that contains a code.**
+
+### Taiwan plan (replaces §4 for now)
+
+Channels, in order — find accounts yourself with these; no names are listed:
+
+- **Threads** — the largest place Taiwanese users post everyday rants. Search
+  職場、主管、同事、室友、情勒、回嘴、嘴砲、吐槽、社畜. Target accounts with roughly
+  2k–30k followers whose posts are relatable "I held it in, now I'm fuming" stories.
+- **Instagram** — 圖文創作者 who draw workplace or relationship comics (職場插畫、
+  社畜日常). They make the exact kind of content this app produces.
+- **Dcard** — do not DM. Post once as the developer, in a board whose rules allow
+  it (check first), asking for interviewees, with the research form link.
+  心情版 / 工作版 are where the target moments are written about.
+
+**DM (zh-Hant, Taiwan register) — send three, then read the replies before more:**
+
+> 嗨 [名字],我是 Jason,一個人在做 App 的獨立開發者。
+>
+> 我做了一個叫「幫你罵」的小工具:吵完架才想到該怎麼回、那句話又不能直接傳出去的時候,先在裡面把氣發洩完,再一鍵改成真的能傳的版本。
+>
+> 看到你之前那篇 [具體的貼文],覺得你應該懂那種「當下吞下去、事後越想越氣」的感覺,所以想請你幫忙試用看看。這是 3 個月免費 Pro 的兌換碼:[CODE](在 App Store 兌換就好,不用給我任何資料)。
+>
+> 老實說現在用的人很少,我最想知道的是:你覺得它哪裡有用、哪裡很爛。不用發文、不用幫我宣傳,回我一兩句真心話就很感謝了。
+>
+> (提醒:免費 3 個月後會自動續訂 Pro 月費方案,不想續的話記得到「設定 → Apple 帳號 → 訂閱」取消。)
+
+Shorter variant, for someone you have never interacted with:
+
+> 嗨,我是做「幫你罵」這個 App 的獨立開發者 Jason。它讓你先把吵架後憋著的話罵完,再一鍵改成能傳的版本。想送你 3 個月免費 Pro 試用:[CODE]。不用發文,只想聽你一句真心的評價。(3 個月後會自動續訂月費,可隨時在 App Store 訂閱設定取消。)
+
+Rules: one follow-up after 7 days of silence, then stop. Never copy-paste the
+identical text to many accounts in a row. **If someone offers to post about it,
+it must be labelled as sponsored (業配/合作)** — giving free Pro in exchange for a
+post is a paid collaboration. Do not contact anyone who appears to be a minor.
+
+**Interviews (§5) in Taiwan:** recruit through the Dcard post and the in-app
+research tile; the thank-you is a **1-year** code from the interviewee file.
+
+---
+
 ## Read this first: five things the plan had wrong
 
 Verified directly, 2026-09-10. Each of these changes what the outreach should say.

@@ -49,8 +49,8 @@ final class UserSettings {
 
     // MARK: - Credit wallet (v1.1 Pillar B — consumables-primary)
 
-    /// Spendable credit balance. One credit == one generation / one
-    /// sendable-rewrite. Credits are a quantity knob only and never
+    /// Spendable credit balance. One credit == one generation (sendable
+    /// rewrites are free — see CreditCatalog). Credits are a quantity knob only and never
     /// unlock a Pro capability. Nullable so CloudKit-backed stores
     /// upgrade without a migration (same pattern as `lifetimeFreeUsed`);
     /// resolves through `creditBalance`, which lazily seeds the trial
@@ -315,7 +315,7 @@ final class UserSettings {
     // counters and their tests are left byte-unchanged (same additive
     // discipline Pillar D used for the safety filter).
 
-    /// Spendable balance. One credit == one generation/rewrite. Credits
+    /// Spendable balance. One credit == one generation (rewrites are free — see CreditCatalog). Credits
     /// are a quantity knob only — they never unlock a Pro capability.
     var creditBalance: Int {
         get { creditBalanceRaw ?? 0 }
@@ -389,7 +389,7 @@ final class UserSettings {
         return creditBalance > 0
     }
 
-    /// Spends one unit for a generation/rewrite. Priority:
+    /// Spends one unit for a generation. Priority:
     /// 1. Lazily seed the trial wallet (first spend ever).
     /// 2. Free starter-window trickle — does NOT touch the wallet, so the
     ///    seeded credits survive the soft-landing window.

@@ -176,4 +176,69 @@ final class CloudPermissionTests: XCTestCase {
         XCTAssertTrue(d.needsConsent, "the surface must be able to prompt")
         XCTAssertFalse(d.cloudAllowed, "and must not proceed meanwhile")
     }
+    // MARK: - v1.6.0: free Vent reaches the wallet and the paywall
+
+    private func vent(_ consent: CloudConsent, fm: Bool, ventCloud: Bool = true) -> CloudPermission.Decision {
+        CloudPermission.resolve(intensity: .vent, consent: consent,
+                                remote: config(sendable: false, vent: ventCloud),
+                                cloudConfigured: true, onDeviceModelAvailable: fm)
+    }
+
+    /// Apple's guardrails refuse vent, so without cloud a Vent draft is curated
+    /// even on a device WITH the on-device model — and curated output is free.
+    /// Before this, a free user who declined cloud was sent to a paywall to buy
+    /// output that could not be generated.
+    func testDeclinedVentIsCuratedEvenWithAnOnDeviceModel() {
+        for fm in [true, false] {
+            let d = vent(.denied, fm: fm)
+            XCTAssertTrue(d.willBeCurated, "fm=\(fm)")
+            XCTAssertTrue(d.skipsPaywall, "fm=\(fm): never sell a generation that can only be curated")
+        }
+    }
+
+    /// The paywall runs BEFORE the consent sheet. While consent is unasked it
+    /// must assume Allow, or an empty wallet is asked for consent, taps Allow,
+    /// and dead-ends on an error.
+    func testUnaskedVentIsTreatedAsBillableByThePaywall() {
+        for fm in [true, false] {
+            let d = vent(.notAsked, fm: fm)
+            XCTAssertTrue(d.needsConsent)
+            XCTAssertTrue(d.willBeCurated, "nothing reaches cloud before the answer")
+            XCTAssertFalse(d.skipsPaywall, "fm=\(fm): Allow would make it billable")
+        }
+    }
+
+    func testGrantedVentIsBillable() {
+        let d = vent(.granted, fm: false)
+        XCTAssertTrue(d.cloudAllowed)
+        XCTAssertFalse(d.willBeCurated)
+        XCTAssertFalse(d.skipsPaywall)
+    }
+
+    /// With the remote kill-switch on, even Allow keeps Vent local — so it
+    /// stays curated and the paywall must not sell it.
+    func testKillSwitchedVentNeverSellsAGeneration() {
+        for consent in [CloudConsent.notAsked, .granted] {
+            let d = vent(consent, fm: false, ventCloud: false)
+            XCTAssertFalse(d.cloudAllowed)
+            XCTAssertTrue(d.skipsPaywall, "\(consent)")
+        }
+    }
+
+    /// Sendable modes are unchanged: an on-device model writes them (billable);
+    /// without one they are curated (free) while the sendable flag is dark.
+    func testSendableCurationStillFollowsTheOnDeviceModel() {
+        for consent in [CloudConsent.notAsked, .denied, .granted] {
+            let withFM = CloudPermission.resolve(intensity: .sharp, consent: consent,
+                                                 remote: config(sendable: false),
+                                                 cloudConfigured: true, onDeviceModelAvailable: true)
+            XCTAssertFalse(withFM.willBeCurated, "\(consent)")
+            XCTAssertFalse(withFM.skipsPaywall, "\(consent)")
+            let noFM = CloudPermission.resolve(intensity: .sharp, consent: consent,
+                                               remote: config(sendable: false),
+                                               cloudConfigured: true, onDeviceModelAvailable: false)
+            XCTAssertTrue(noFM.willBeCurated, "\(consent)")
+            XCTAssertTrue(noFM.skipsPaywall, "\(consent)")
+        }
+    }
 }

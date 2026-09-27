@@ -37,8 +37,14 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
     /// True when this intensity requires Pro entitlement.
     var requiresPro: Bool {
         switch self {
-        case .calm, .sharp: return false
-        case .savage, .feral, .vent: return true
+        // v1.6: Vent is free. It is what the app is named for (帮你骂), and on
+        // any iPhone without Apple's on-device model it is the ONLY free path to
+        // real, input-specific output — Calm/Sharp there are curated examples.
+        // Before this, a free user on such a phone never saw a single real
+        // generation. Vent stays metered by credits and still requires the
+        // explicit 5.1.2(i) cloud consent, which already covers it by name.
+        case .calm, .sharp, .vent: return false
+        case .savage, .feral: return true
         }
     }
 

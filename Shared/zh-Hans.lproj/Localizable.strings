@@ -159,6 +159,9 @@
 "paywall.feature.vent.detail" = "先吐口恶气写出来,再让 AI 改成能发出去的版本。";
 "paywall.feature.savage" = "狠话强度";
 "paywall.feature.savage.detail" = "不留情面的尖锐回击,只在配得上的风格中开放。";
+"paywall.feature.savage.detail.curated" = "这台设备上「狠」显示的是预设示例 —— 需要 Apple 智能才能根据你输入的内容生成。";
+"paywall.feature.feral.detail" = "不设上限的发泄 —— 粗口解锁,只给你自己看的私密草稿。";
+"paywall.feature.feral" = "痛骂模式";
 "paywall.feature.unlimited" = "无限生成";
 "paywall.feature.unlimited.detail" = "跳过每日上限,想骂多少骂多少。";
 
@@ -178,14 +181,14 @@
 "paywall.out_of_credits.title" = "点数已用完";
 "paywall.out_of_credits.body" = "升级 Pro 畅享无限,或买个点数包先继续用。";
 "paywall.credits.title" = "只想再多几次?";
-"paywall.credits.subtitle" = "无需订阅,按需充值。点数只增加生成次数 —— 不会解锁发泄、痛骂或狠。";
+"paywall.credits.subtitle" = "无需订阅,按需充值。点数只增加生成次数 —— 不会解锁痛骂或狠。";
 "paywall.credits.pack" = "%d 点";
 "paywall.credits.bestvalue" = "最划算";
-"paywall.credits.note" = "点数用于生成和改写。发泄、痛骂、狠为 Pro 专属 —— 买点数包不会解锁它们。";
+"paywall.credits.note" = "点数用于生成。痛骂、狠为 Pro 专属 —— 买点数包不会解锁它们。";
 "paywall.credits.balance" = "你还有 %d 点";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "推荐";
-"paywall.pro.subtitle" = "解锁发泄 · 痛骂 · 狠的唯一方式 —— 外加无限生成和全部风格。除非你极少发泄,否则它最划算。";
+"paywall.pro.subtitle" = "解锁痛骂 · 狠的唯一方式 —— 外加无限生成和全部风格。";
 "settings.credits.balance" = "点数";
 "settings.credits.buy" = "获取更多点数";
 "paywall.loading" = "加载中…";

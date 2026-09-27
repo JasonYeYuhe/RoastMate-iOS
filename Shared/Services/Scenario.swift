@@ -32,7 +32,9 @@ struct Scenario: Codable, Identifiable, Sendable {
         if let direct = prompt[code] { return direct }
         if let lang = locale.language.languageCode?.identifier {
             if lang == "zh" {
-                let isHant = locale.identifier.contains("Hant")
+                // contentBucket, not identifier.contains("Hant"): a real Taiwan
+                // phone reports "zh_TW" with no script subtag (measured 2026-09-26).
+                let isHant = AppLanguage.contentBucket(for: locale) == .traditionalChinese
                 let key = isHant ? "zh-Hant" : "zh-Hans"
                 if let s = prompt[key] { return s }
             }

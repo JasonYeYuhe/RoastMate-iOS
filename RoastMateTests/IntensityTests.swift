@@ -7,7 +7,7 @@ final class IntensityTests: XCTestCase {
         XCTAssertFalse(Intensity.sharp.requiresPro)
         XCTAssertTrue(Intensity.savage.requiresPro)
         XCTAssertTrue(Intensity.feral.requiresPro)
-        XCTAssertTrue(Intensity.vent.requiresPro)
+        XCTAssertFalse(Intensity.vent.requiresPro, "v1.6: Vent is free — the app's namesake")
     }
 
     func testPrivateDraftPolicy() {

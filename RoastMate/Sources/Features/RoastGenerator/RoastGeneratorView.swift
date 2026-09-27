@@ -291,7 +291,7 @@ struct RoastGeneratorView: View {
                             intensity: viewModel.selectedIntensity,
                             consent: settings?.cloudConsent ?? .notAsked,
                             locale: locale
-                        ).willBeCurated {
+                        ).skipsPaywall {
                 // Intent-triggered paywall: fire at the peak moment the
                 // user reaches for a generation with an empty wallet —
                 // not at onboarding.
@@ -300,7 +300,9 @@ struct RoastGeneratorView: View {
                 // That output is free, and this is the surface where charging
                 // for it would be most visible: the app has just told the user
                 // in their own language that example responses cost nothing.
-                // Same predicate the view model uses, so the two cannot drift.
+                // Same Decision the view model uses, so the two cannot drift;
+                // `skipsPaywall` differs from `willBeCurated` only while consent
+                // is unasked — see its doc comment.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
                 showPaywall = true
             } else {

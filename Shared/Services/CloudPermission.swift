@@ -43,9 +43,27 @@ enum CloudPermission {
         /// ANDs in `cloudAllowed`, so when `cloud_sendable_enabled` flips those
         /// same devices start producing real, billable output and the gate
         /// re-arms itself with no code change.
+        ///
+        /// Private drafts (Vent / Feral) are curated whenever cloud is not
+        /// permitted, even on a device WITH the on-device model: Apple's
+        /// default guardrails refuse vent/feral (measured 64/64, 2026-08-30),
+        /// and the engine turns that refusal into curated text. Before v1.6.0
+        /// only Pro users — who skip the wallet — could pick Vent, so this
+        /// never mattered; now a free user who declined cloud would otherwise
+        /// be sent to a paywall to buy output that cannot be generated.
         let willBeCurated: Bool
 
         var needsConsent: Bool { gate == .needsConsent }
+
+        /// What the intent-triggered paywall reads: would this generation
+        /// still be curated if the user allowed cloud? The paywall runs BEFORE
+        /// the consent sheet, so while consent is unasked it must assume the
+        /// one answer that could make the generation billable. Reading
+        /// `willBeCurated` there instead skipped the paywall, asked for
+        /// consent, and then dead-ended an empty wallet on an error message.
+        /// Resolved through the remote flags, so a kill-switched cloud path
+        /// still counts as curated and never sells an unreachable generation.
+        let skipsPaywall: Bool
     }
 
     /// Resolve cloud permission for one generation.
@@ -79,13 +97,25 @@ enum CloudPermission {
         )
         // RESTRICT-only: the remote flags can only SUBTRACT from the consent
         // grant. Neither can route text to cloud without it.
-        let allowed = intensity.isPrivateDraft
-            ? remote.cloudAllowed(consentAllowsCloud: gate.allowsCloud)
-            : remote.cloudSendableAllowed(consentAllowsCloud: gate.allowsCloud, locale: locale)
+        func permitted(consentAllowsCloud: Bool) -> Bool {
+            intensity.isPrivateDraft
+                ? remote.cloudAllowed(consentAllowsCloud: consentAllowsCloud)
+                : remote.cloudSendableAllowed(consentAllowsCloud: consentAllowsCloud, locale: locale)
+        }
+        func curated(cloudAllowed: Bool) -> Bool {
+            intensity.isPrivateDraft ? !cloudAllowed : !onDeviceModelAvailable && !cloudAllowed
+        }
+        let allowed = permitted(consentAllowsCloud: gate.allowsCloud)
+        // `.needsConsent` means cloud-eligible and configured, so Allow would
+        // turn it into `.proceedCloud`.
+        let allowedIfConsented = gate == .needsConsent
+            ? permitted(consentAllowsCloud: true)
+            : allowed
         return Decision(
             gate: gate,
             cloudAllowed: allowed,
-            willBeCurated: !onDeviceModelAvailable && !allowed
+            willBeCurated: curated(cloudAllowed: allowed),
+            skipsPaywall: curated(cloudAllowed: allowedIfConsented)
         )
     }
 }
