@@ -356,6 +356,15 @@ criterion repeats the exact mistake its own plan diagnosed.
 
 ## 5. Open decisions for Jason
 
+**2026-09-26/27 — delegated and made** ("你全权负责 做决定吧"): mainland China
+delisted (CHN `CANNOT_SELL`), Taiwan first; Vent free from v1.6.0 (submitted
+2026-09-27); `cloud_sendable_enabled` retired permanently; 1-year codes for
+interviewees; the sendable rewrite stays free. Evidence and reasoning:
+`docs/DISTRIBUTION_KIT_v1.md` → "DECISIONS 2026-09-26", and the handoff's top
+section. Item 2's "region-blind checks … a `zh_TW` device is told to reply in
+简体中文" is **fixed** in v1.6.0 (client) and Worker `200d240c` (server). Item 3
+(OpenRouter auto-top-up) is still open.
+
 1. ~~**P1.1 — refund after, or check before charging?**~~ **SETTLED
    2026-09-09: neither.** Spend *after* generation, gated on provenance. Both
    offered options were wrong — see P1.1 in §2 for why (checking before zeroes

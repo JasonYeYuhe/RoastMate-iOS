@@ -2,27 +2,90 @@
 
 You are picking up **RoastMate** (帮你骂 / `~/Documents/RoastMate`) — Swift 6,
 iOS/macOS/watchOS, plus a Cloudflare Worker in `cloud-worker/`. Chinese-language-
-first. Solo developer (Jason). Branch `feature/v1.4-track-b`, working tree clean.
+first. Solo developer (Jason). Branch `feature/v1.4-track-b`.
 
 ## Status in one line
 
-**v1.5.0 / build 21 is LIVE on iOS and macOS** — approved and released
-2026-09-10 21:49 UTC, ~14h after submission. Tagged `v1.5.0` → `7277e76` (the
-tree both archives were built from; nothing that compiles changed after
-`36271e7`). **Phase 1 is closed. Phase 2 is a code moratorium — read §2 of the
-plan before writing anything.**
+**v1.6.0 / build 22 was SUBMITTED for App Review on iOS and macOS on
+2026-09-27** (both `WAITING_FOR_REVIEW`, releaseType `AFTER_APPROVAL` = auto-release on approval; iOS version `e178273a-015b-4db8-a0f6-e43195e15e1c` / reviewSubmission `0a6caf1c-0084-4787-82ef-2b56e641adc8`, macOS `2a80bf7b-dda3-444a-85fb-fb8b687534aa` / `dd535168-0cdd-42bc-b09f-a30ce0719d36`; build 22 attached, 4-locale What's New (Mac copy says "Mac"), descriptions and reviewer notes all read back identical). **v1.5.0 / build 21 is what is LIVE.** Commit
+`d7efd49` is the tree both archives were built from; tag `v1.6.0` points at it.
+The Worker change that rides with it is **already deployed** (server-side):
+version `200d240c`, rollback target `df0123b3`.
 
-Verified 2026-09-15:
-- ASC: both versions `READY_FOR_SALE`, both reviewSubmissions `COMPLETE`, both
-  items `APPROVED`. (`READY_FOR_SALE` alone proves nothing here — every
-  historical record reads it; the APPROVED item on THIS submission is the proof.)
-- Public store (iTunes lookup) serves 1.5.0 in US, CN (帮你骂), TW/HK (幫你罵),
-  JP, and on the Mac App Store.
-- Live config: 12 top-level keys (10 flags + 2 `_comment`), all at intended
-  values, `share_card_visible: true`.
+Check before anything else: both 1.6.0 versions' `appStoreState`, via the ASC API
+(recipe below). A rejection would land there.
 
-**The 30/90 clock starts 2026-09-10** — the day v1.5.0 went READY_FOR_SALE,
-which is also the first build where the in-app research tile works at all.
+## v1.6.0 — what it is, and the decisions behind it (2026-09-26/27)
+
+Jason delegated the open business decisions ("你全权负责 做决定吧"). Made, with
+evidence, in `docs/DISTRIBUTION_KIT_v1.md` → "DECISIONS 2026-09-26":
+
+1. **Mainland China delisted** — CHN `CANNOT_SELL` (verified 2026-09-27). Unfiled
+   generative-AI service; one API call restores it the day 备案 exists. Taiwan,
+   Hong Kong, Macau, Singapore, Japan, US: available.
+2. **Vent no longer needs Pro** (this binary). Still metered by credits, still
+   behind the 5.1.2(i) consent. Feral / Savage stay Pro.
+3. **`cloud_sendable_enabled` is retired forever** — CI rejects anything but
+   false (`afd3cbf`), because every shipped consent sheet promises
+   Calm/Sharp/Savage never use cloud.
+4. **Interviewees get 1-year codes** (the research form promises a year);
+   creators get 3-month codes. Both files are outside the repo.
+5. **The "Make it sendable" rewrite is free** (recorded in `CreditCatalog`). It
+   runs on-device, costs nothing, and was never charged by any code.
+
+What the binary changes (`d7efd49`, full reasoning in the commit message):
+- `Intensity.vent.requiresPro == false`; paywall no longer sells Vent.
+- **Taiwan / Hong Kong get Traditional.** MEASURED: a zh-Hant-TW phone's
+  `Locale.current.identifier` is `"zh_TW"` — no "Hant" — so every
+  `contains("Hant")` check told them to answer in Simplified. All routed through
+  `AppLanguage.contentBucket` now; Worker mirror in `cloud-worker/src/locale.js`.
+- Explore tools (Reply Helper etc.) now ask for cloud consent instead of silently
+  returning curated Vent.
+- `CloudPermission`: a declined-cloud Vent is curated even WITH the on-device
+  model (guardrails refuse vent), so it is free and never paywalled; new
+  `Decision.skipsPaywall` = "curated even if the user allowed cloud?", so an
+  empty wallet sees the paywall BEFORE the consent sheet instead of a dead-end
+  error after it. Matrix-tested in `CloudPermissionTests`.
+
+**Worker (deployed 2026-09-27, `200d240c`):** keyword identifiers such as
+`zh_TW@calendar=roc` used to get **400 invalid_locale** — `validate` capped the
+raw identifier at 16 chars — so Vent silently never reached the cloud for those
+users; keywords are now stripped (`baseLocale`). The Traditional vent prompt no
+longer shows the model a Simplified sentence as the ideal answer
+(`src/calibration.js`). Measured on production, same Taiwan/HK inputs: old Worker
+2/8 responses with Simplified (one ENTIRELY Simplified); routing fix alone 2/11;
+with the paired calibration **0/16**.
+
+### How v1.6.0 was verified
+
+- **Release-build control, iOS 18.5 sim (no on-device model), clean install,
+  free user taps Vent** — `docs/evidence/2026-09-27-v160-vent-free-release-control.png`:
+  `v1.5.0` → Pro paywall at the chip ("The only way to unlock Vent · Feral ·
+  Savage"). `v1.6.0` → consent sheet → Allow → a real cloud draft about the
+  typed situation, no curated banner, Feral still locked, wallet "2 free today"
+  → "1 free today". The probe was a throwaway XCUITest, never committed.
+  Two gotchas cost three reruns: the `BEGINSWITH 'Vent'` query matches the
+  **"Vent by voice"** mic button first (match the chip's blurb instead), and a
+  root-level `TextEditor` keyboard cannot be dismissed in SwiftUI UI tests and
+  sits over the intensity row — choose the intensity BEFORE typing, and never
+  swipe near the keyboard (it swipe-TYPES into the field).
+- Five-lens adversarial review of the diff, each finding re-checked by a
+  skeptic: 15 survived, 3 refuted, nothing P0/P1; every surviving code/copy
+  finding is fixed in `d7efd49` except those listed under "Known, deliberately
+  unfixed in v1.6.0" below.
+- Worker: 59/59 `node --test`; each new test mutation-checked (reverting the fix
+  makes it fail).
+- **preflight: 78 pass / 2 fail — both failures are this Mac, not the code**,
+  proven by running the identical tests from the `v1.5.0` tag on the same
+  simulator: 3 engine tests fail inside Apple's model service
+  (`PrompteTemplateError.promptTemplateNotFound` — the iOS 26.5 simulator borrows
+  the Darwin-27 host's model), `ShareCardTests.testCatchesBareTwoCharChineseName`
+  (NLTagger on this runtime) and `ScreenshotTests.test_paywall` ("timed out while
+  synthesizing event") fail identically on v1.5.0. The Echoes bridge UI test
+  failed once under load and passes on a rerun (92 s). New suites
+  (`CloudPermissionTests`, `TraditionalLocaleTests`, `IntensityTests`) pass.
+  **On a healthy machine this gate should read 80/0 — if it doesn't, re-run the
+  v1.5.0 control before believing either number.**
 
 ## 🔴 Production state — the Groq primary is dead (found 2026-09-15)
 
@@ -57,7 +120,7 @@ list. Do not trust this document either.
 
 Cheap checks, corrected:
 - **git:** `git rev-list --count v1.4.0..HEAD` — should be ≥15.
-- **Version:** `sed -n '20,21p' project.yml` → `1.5.0` / `21`. The committed
+- **Version:** `sed -n '20,21p' project.yml` → `1.6.0` / `22`. The committed
   pbxproj carries its own copies (4 occurrences, all project-level); they are
   in sync, so `xcodegen generate` should produce a **zero**-line diff now.
 - **Live flags:** `curl -s https://jasonyeyuhe.github.io/RoastMate/roastmate-config.json`
@@ -82,7 +145,7 @@ Cheap checks, corrected:
   ⚠️ `READY_FOR_SALE` is not a discriminator — all 17 historical records read
   it, back to v1.0.
 
-## What is already done
+## What is already done (v1.5.0 — for the v1.6.0 work see the top)
 
 Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 
@@ -123,32 +186,57 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 **Gate:** `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh` →
 80 pass, 0 fail; **374 unit + 7 UI tests**; all 5 targets build.
 
-## What remains — all of it is Jason's, none of it is code
+## What remains — Jason's, and none of it is code
 
-Everything an agent could move is moved. Two decisions are left, both framed
-with evidence in `docs/DISTRIBUTION_KIT_v1.md`:
+1. **Wait for v1.6.0 to be approved AND released on both platforms**
+   (`READY_FOR_SALE` on the 1.6.0 records — and remember `READY_FOR_SALE` alone
+   proves nothing for older records; check the 1.6.0 ones). Release is
+   automatic on approval (`AFTER_APPROVAL`, verified on both).
+2. **Then send three DMs** — Taiwan plan in the kit's DECISIONS section
+   (Threads / Instagram, zh-Hant copy with the auto-renew disclosure, 3-month
+   codes). Read replies before sending more. Do not send before step 1: a
+   creator's audience is free users, and before v1.6.0 they cannot reach Vent.
+3. **Have 3–4 conversations**, thank-you = a 1-year code from the interviewee file.
+4. **OpenRouter auto-top-up** — still unconfirmed, and OpenRouter is the only
+   working model path (Groq primary dead). Balance was $9.97 on 2026-09-24; the
+   2026-09-27 verification probes used well under $0.05. Free Vent + outreach is
+   exactly what drains it.
 
-1. **Target storefront.** The app is live in mainland CN as 帮你骂; the
-   strategy doc rules mainland out; the first post-release data says 4 of 5
-   new users are mainland. This is a legal/regulatory call (unlicensed AI
-   listing, see `docs/marketing/xiaohongshu-launch-zh.md`) — not one an agent
-   should make.
-2. **Whether 发泄 becomes free.** Pricing, and needs a binary — so it also waits
-   on the moratorium.
-
-Then the work that is actually the point of Phase 2, and that cannot be
-delegated at all: **send the first three DMs** (kit §3), and **have 3–4
-conversations** (kit §5). The recruit form works, the codes exist, the copy is
-honest, the kill-switches work. There is nothing left to build first.
+Not decisions any more: storefront (Taiwan first, CN delisted) and 发泄-free
+(shipped in v1.6.0) — see the top.
 
 **Kill-switches, now that they work.** Edit `research/web/roastmate-config.json`
 and push — the mirror Action deploys on any branch touching `research/web/**`.
 `share_card_visible:false` takes the card down; `echoes_enabled`,
 `roommate_group_enabled`, `vent_cloud_enabled`, `force_local_only` do the rest.
+`vent_cloud_enabled:false` now also turns free Vent into curated-only (and free).
 **Do not flip `share_card_enabled`** until `sharecard.findus` stops pointing CN
-users at a competitor (needs a binary).
+users at a competitor (needs a binary). **Never flip `cloud_sendable_enabled`.**
 
-## Known, deliberately unfixed in v1.5.0
+## Known, deliberately unfixed in v1.6.0
+
+- **The Echoes gate may hide Echoes from real mainland phones.**
+  `ExploreView.isZhHansLocale` checks `contains("hans") || hasPrefix("zh-cn")`;
+  by the same rule that makes Taiwan report `zh_TW`, a mainland phone probably
+  reports `zh_CN` (no "hans", and the prefix uses a hyphen). UNMEASURED for
+  zh-Hans — measure on a zh-Hans-CN simulator before touching it. Left alone
+  because fixing it widens a feature, and CN is now delisted.
+- **Shared vent rule text still quotes Simplified examples** (Swift
+  `PromptBuilder.ventPreamble`, Worker `index.js` rule block). Measured harmless
+  on the cloud path after the calibration fix (0/16 bleed); one borderline
+  variant character (晒 for 曬) was seen once.
+- **Share / Siri / Watch stay Calm/Sharp only** — they cannot show the consent
+  sheet, so they cannot reach cloud Vent. Intentional.
+- **A free user who declined cloud on an Apple-Intelligence phone can still get
+  unlimited on-device rewrites** by generating curated Vent drafts and tapping
+  "Make it sendable". Accepted: on-device, zero cost, and rewrites are free by
+  decision.
+- **The wallet race below now also covers cloud Vent**: two surfaces peeking the
+  last credit at once can both run, so at most one free-tier generation per
+  wallet exhaustion goes unbilled — now possibly a cloud one (~$0.0003 of
+  OpenRouter). Still bounded, still in the user's favour, same fix as below.
+
+## Known, deliberately unfixed in v1.5.0 (still true)
 
 **The wallet peek is not a reservation.** `canSpendNow()` is a pure read, so
 two generator surfaces sharing one `UserSettings` can both pass it against the
@@ -305,6 +393,23 @@ usage after four months is three and a half cents. The availability risk
 is real in shape but not near. **Re-check when usage crosses ~$5** — same probe.
 
 ## Hard-won gotchas
+
+Added 2026-09-27:
+- **`wrangler deployments list` prints OLDEST first.** Read the tail. Current
+  prod `200d240c`; previous `df0123b3` (`npx wrangler rollback df0123b3-6f25-4604-b913-0bb5beaf789d`).
+- **Probing the Worker from Python gets Cloudflare error 1010** (bot signature
+  on the default urllib User-Agent). Send an app-like UA, e.g.
+  `RoastMate/22 CFNetwork/1568 Darwin/24.0`. The response field is `text`.
+- **Test Worker changes with `npx wrangler dev --remote --port 8799`** from
+  `cloud-worker/` — the real worker NAME binds the deployed secrets, so it hits
+  the real model without touching production.
+- **Load average ~900 = orphaned simulator daemons.** Stopping a test run that
+  owns a booted simulator can kill its `launchd_sim` and leave ~160 daemons
+  (ppid 1) spinning. `ps -A -o stat=,ppid=,comm= | awk '$1 ~ /^R/ && $2==1' |
+  grep -c simruntime`; kill only the ones whose start time matches YOUR sim's
+  boot. Never TaskStop a UI-test run mid-flight without shutting its sim down.
+- **This Mac (16 GB) is often swapping** under several agent sessions; run heavy
+  jobs (preflight, archives, UI tests) one at a time.
 
 - **Isolated simulator for preflight:**
   `ROASTMATE_TEST_DEVICE=RoastMate-UITests ./scripts/preflight.sh`. The device

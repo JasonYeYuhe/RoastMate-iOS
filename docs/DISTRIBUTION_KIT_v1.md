@@ -34,7 +34,10 @@ the free tier used to be 100% canned examples; a free arrival never saw one real
 generation, and never saw the mode the app is named after. Vent is cloud-routed,
 so it produces real output on every device, and its 5.1.2(i) consent already
 names it. Feral and Savage stay Pro. **Do not send creator codes until v1.6.0
-is live** — a creator's audience is free users.
+is live** — a creator's audience is free users. (Status: submitted 2026-09-27 —
+check `appStoreState == READY_FOR_SALE` for 1.6.0 on BOTH platforms first.)
+The DMs below promise the one-tap rewrite only on Apple Intelligence iPhones:
+that step is on-device, and elsewhere it returns a labelled curated example.
 
 **3. `cloud_sendable_enabled` is retired, permanently.** Every shipped consent
 sheet promises Calm/Sharp/Savage "never use cloud". CI now rejects any value but
@@ -67,7 +70,7 @@ Channels, in order — find accounts yourself with these; no names are listed:
 
 > 嗨 [名字],我是 Jason,一個人在做 App 的獨立開發者。
 >
-> 我做了一個叫「幫你罵」的小工具:吵完架才想到該怎麼回、那句話又不能直接傳出去的時候,先在裡面把氣發洩完,再一鍵改成真的能傳的版本。
+> 我做了一個叫「幫你罵」的小工具:吵完架才想到該怎麼回、那句話又不能直接傳出去的時候,先在裡面把氣發洩完;如果你的 iPhone 支援 Apple Intelligence,還能一鍵改成真的能傳的版本。
 >
 > 看到你之前那篇 [具體的貼文],覺得你應該懂那種「當下吞下去、事後越想越氣」的感覺,所以想請你幫忙試用看看。這是 3 個月免費 Pro 的兌換碼:[CODE](在 App Store 兌換就好,不用給我任何資料)。
 >
@@ -77,7 +80,7 @@ Channels, in order — find accounts yourself with these; no names are listed:
 
 Shorter variant, for someone you have never interacted with:
 
-> 嗨,我是做「幫你罵」這個 App 的獨立開發者 Jason。它讓你先把吵架後憋著的話罵完,再一鍵改成能傳的版本。想送你 3 個月免費 Pro 試用:[CODE]。不用發文,只想聽你一句真心的評價。(3 個月後會自動續訂月費,可隨時在 App Store 訂閱設定取消。)
+> 嗨,我是做「幫你罵」這個 App 的獨立開發者 Jason。它讓你先把吵架後憋著的話罵完(支援 Apple Intelligence 的 iPhone 還能一鍵改成能傳的版本)。想送你 3 個月免費 Pro 試用:[CODE]。不用發文,只想聽你一句真心的評價。(3 個月後會自動續訂月費,可隨時在 App Store 訂閱設定取消。)
 
 Rules: one follow-up after 7 days of silence, then stop. Never copy-paste the
 identical text to many accounts in a row. **If someone offers to post about it,
