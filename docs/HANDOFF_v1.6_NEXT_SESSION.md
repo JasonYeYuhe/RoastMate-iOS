@@ -205,7 +205,15 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 ## What remains — Jason's, and none of it is code
 
 1. ~~Wait for v1.6.0 to be live~~ — **done 2026-09-27 22:33 UTC**, verified.
-2. **Send three DMs** — Taiwan plan in the kit's DECISIONS section
+2. ✅ **Outreach batch 1 SENT 2026-09-28 11:52 UTC** (Jason confirmed) — three emails from
+   Jason's Gmail to creator-published addresses: 「我不推」podcast, 「職場奇葩談」(Gugu姊),
+   zmei (哈囉兔兔). Each got one 3-month code as a one-tap redeem link. Picked by two
+   research workflows (26 candidates → 7 verified; criteria in the kit). Backups:
+   PLGM podcast, poopoo.studio, 小儀 (pinkcat_yi). A one-time task
+   `roastmate-creator-outreach-followup-1005` reads replies on 2026-10-05 and DRAFTS
+   (never sends) one follow-up per silent recipient. Log:
+   `~/Documents/RoastMate-research/creator-outreach-log.tsv`.
+   (Original plan, superseded:) **Send three DMs** — Taiwan plan in the kit's DECISIONS section
    (Threads / Instagram, zh-Hant copy with the auto-renew disclosure, 3-month
    codes). Read replies before sending more. Do not send before step 1: a
    creator's audience is free users, and before v1.6.0 they cannot reach Vent.
