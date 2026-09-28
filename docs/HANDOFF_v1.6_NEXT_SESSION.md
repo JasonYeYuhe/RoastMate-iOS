@@ -22,8 +22,8 @@ is OFF (Jason confirmed 2026-09-28)** — so the balance is a hard spend cap
 because Groq is dead and nothing sits behind OpenRouter. Per the code, the app
 then degrades to labelled curated examples and charges nothing (cloud error →
 local path → curated provenance) — graceful, but the headline feature goes dark
-silently. Re-measure with the read-only probe (recipe in the OpenRouter section)
-and top up by hand below ~$2.
+silently. `scripts/openrouter-balance.sh` re-measures it read-only (~7 s,
+exit 1 below $2); a weekly scheduled task runs it. Top up by hand below ~$2.
 
 **Phase 2 can start: the gate "don't DM creators until 1.6.0 is live" is met.**
 The 30/90 clock for Vent-free starts 2026-09-27.
