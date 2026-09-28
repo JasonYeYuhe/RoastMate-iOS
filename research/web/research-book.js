@@ -11,8 +11,18 @@
 
 const WORKER_ENDPOINT = window.RM_RESEARCH_WORKER_URL || 'https://roastmate-research.yyyyy-yeyuhe.workers.dev';
 
+// Recruiting switch. Interviews were dropped on 2026-09-28 (0 signups ever),
+// but the in-app Settings tile that links here ("paid 30-min interview") is
+// compiled into shipped binaries and only hides itself on 2026-11-01. So this
+// page must not keep promising an interview and a year of Pro: with the switch
+// off it shows a closed notice and never submits anything. Flip to true only
+// together with someone actually running interviews.
+const RECRUITING_OPEN = false;
+
 const STRINGS = {
   'en': {
+    'closed.title': 'Research interviews are closed',
+    'closed.body': "Thanks for your interest. We aren't running interviews right now, so there is nothing to sign up for here, and this page collects nothing. If you'd like to tell us something about RoastMate, a rating or review in the App Store reaches us.",
     'step.indicator': 'Step 2 of 2 — schedule your interview',
     title: 'Book your interview slot',
     intro: 'Your anonymous answers were already submitted in Step 1. This page collects only your email and timezone, so we can email you a scheduling link. Locus / context never reaches this request.',
@@ -37,6 +47,8 @@ const STRINGS = {
     'status.error_code': 'Your reference code is invalid or expired. Please redo Step 1.'
   },
   'zh-Hans': {
+    'closed.title': '用户访谈招募已结束',
+    'closed.body': '谢谢你的关注。我们目前不再进行访谈，所以这里没有需要报名的内容，这个页面也不会收集你的任何信息。如果想对 RoastMate 说点什么，在 App Store 留个评分或评论，我们都会看到。',
     'step.indicator': '第 2 步 / 共 2 步 — 约访谈时间',
     title: '约访谈时间',
     intro: '你的研究答案已经在第 1 步匿名提交完了。这个页面只收你的邮箱和时区，方便我们发约时间邮件。你之前写的场景内容不会出现在这个请求里。',
@@ -61,6 +73,8 @@ const STRINGS = {
     'status.error_code': '参考编号无效或已过期，请回到第 1 步重新填写。'
   },
   'zh-Hant': {
+    'closed.title': '使用者訪談招募已結束',
+    'closed.body': '謝謝你的關注。我們目前沒有在進行訪談,所以這裡沒有需要報名的內容,這個頁面也不會收集你的任何資料。如果想對 RoastMate 說點什麼,在 App Store 留個評分或評論,我們都會看到。',
     'step.indicator': '第 2 步 / 共 2 步 — 約訪談時間',
     title: '約訪談時間',
     intro: '你的研究答案已經在第 1 步匿名送出。這個頁面只收你的電子郵件和時區,方便我們發約時間信。你之前寫的場景內容不會出現在這個請求裡。',
@@ -85,6 +99,8 @@ const STRINGS = {
     'status.error_code': '參考編號無效或已過期,請回到第 1 步重填。'
   },
   'ja': {
+    'closed.title': 'ユーザーインタビューの募集は終了しました',
+    'closed.body': 'ご関心ありがとうございます。現在インタビューは行っていないため、ここで申し込むものはなく、このページは何も収集しません。RoastMate へのご意見は、App Store の評価やレビューでお寄せいただければ必ず目を通します。',
     'step.indicator': 'ステップ 2/2 — インタビュー日程調整',
     title: 'インタビュー日程の調整',
     intro: 'リサーチ回答はステップ 1 で匿名送信済みです。このページではメールアドレスとタイムゾーンのみを取得します。先ほどの文脈情報はこのリクエストには含まれません。',
@@ -206,8 +222,28 @@ async function submitForm(event) {
   }
 }
 
+function showClosed(hideIds) {
+  document.title = 'RoastMate';
+  const h1 = document.querySelector('header h1');
+  const intro = document.querySelector('header .intro');
+  if (h1) h1.setAttribute('data-i18n', 'closed.title');
+  if (intro) intro.setAttribute('data-i18n', 'closed.body');
+  document.querySelectorAll('header .stepbar, header .meta').forEach(el => { el.style.display = 'none'; });
+  hideIds.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  // The participant-code lines only make sense while booking is open.
+  const prompt = document.querySelector('header [data-i18n="codeprompt"]');
+  const code = document.getElementById('participant-code');
+  if (prompt) prompt.style.display = 'none';
+  if (code && code.parentElement) code.parentElement.style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   wireLocaleSwitcher();
+  if (!RECRUITING_OPEN) {
+    showClosed(['book-form', 'booked']);
+    applyLocale(currentLocale);
+    return;
+  }
   applyLocale(currentLocale);
   const codeEl = document.getElementById('participant-code');
   if (PARTICIPANT_CODE && /^[A-Z0-9]{12}$/.test(PARTICIPANT_CODE)) {

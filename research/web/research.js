@@ -13,8 +13,18 @@
 
 const WORKER_ENDPOINT = window.RM_RESEARCH_WORKER_URL || 'https://roastmate-research.yyyyy-yeyuhe.workers.dev';
 
+// Recruiting switch. Interviews were dropped on 2026-09-28 (0 signups ever),
+// but the in-app Settings tile that links here ("paid 30-min interview") is
+// compiled into shipped binaries and only hides itself on 2026-11-01. So this
+// page must not keep promising an interview and a year of Pro: with the switch
+// off it shows a closed notice and never submits anything. Flip to true only
+// together with someone actually running interviews.
+const RECRUITING_OPEN = false;
+
 const STRINGS = {
   'en': {
+    'closed.title': 'Research interviews are closed',
+    'closed.body': "Thanks for your interest. We aren't running interviews right now, so there is nothing to sign up for here, and this page collects nothing. If you'd like to tell us something about RoastMate, a rating or review in the App Store reaches us.",
     'step.indicator': 'Step 1 of 2 — anonymous research questions',
     title: 'RoastMate research interview',
     intro: 'We are recruiting a small number of people for a 30-minute interview about how you use RoastMate. This step asks the research questions; the next step (booking) is on a separate page and captures your email + timezone independently.',
@@ -46,6 +56,8 @@ const STRINGS = {
     'status.error_network': 'Could not submit. Please try again in a moment.'
   },
   'zh-Hans': {
+    'closed.title': '用户访谈招募已结束',
+    'closed.body': '谢谢你的关注。我们目前不再进行访谈，所以这里没有需要报名的内容，这个页面也不会收集你的任何信息。如果想对 RoastMate 说点什么，在 App Store 留个评分或评论，我们都会看到。',
     'step.indicator': '第 1 步 / 共 2 步 — 匿名研究问题',
     title: 'RoastMate 用户访谈招募',
     intro: '我们在招募几位用户做 30 分钟的访谈，聊聊你怎么用 RoastMate。这一步只问研究问题；下一步（约时间）是单独的页面，分开收你的邮箱和时区。',
@@ -77,6 +89,8 @@ const STRINGS = {
     'status.error_network': '提交失败，请稍后重试。'
   },
   'zh-Hant': {
+    'closed.title': '使用者訪談招募已結束',
+    'closed.body': '謝謝你的關注。我們目前沒有在進行訪談,所以這裡沒有需要報名的內容,這個頁面也不會收集你的任何資料。如果想對 RoastMate 說點什麼,在 App Store 留個評分或評論,我們都會看到。',
     'step.indicator': '第 1 步 / 共 2 步 — 匿名研究問題',
     title: 'RoastMate 使用者訪談招募',
     intro: '我們在招募幾位使用者做 30 分鐘的訪談,聊聊你怎麼用 RoastMate。這一步只問研究問題;下一步(約時間)是獨立頁面,分開收你的電子郵件和時區。',
@@ -108,6 +122,8 @@ const STRINGS = {
     'status.error_network': '送出失敗,請稍後再試。'
   },
   'ja': {
+    'closed.title': 'ユーザーインタビューの募集は終了しました',
+    'closed.body': 'ご関心ありがとうございます。現在インタビューは行っていないため、ここで申し込むものはなく、このページは何も収集しません。RoastMate へのご意見は、App Store の評価やレビューでお寄せいただければ必ず目を通します。',
     'step.indicator': 'ステップ 1/2 — 匿名のリサーチ質問',
     title: 'RoastMate ユーザーインタビュー募集',
     intro: 'RoastMate の使い方について 30 分のインタビューに参加いただける方を数名募集しています。このステップではリサーチ質問のみ。次のステップ(予約)は別ページで、メールとタイムゾーンを独立に取得します。',
@@ -224,8 +240,23 @@ function showSuccess(code) {
   document.getElementById('success').hidden = false;
 }
 
+function showClosed(hideIds) {
+  document.title = 'RoastMate';
+  const h1 = document.querySelector('header h1');
+  const intro = document.querySelector('header .intro');
+  if (h1) h1.setAttribute('data-i18n', 'closed.title');
+  if (intro) intro.setAttribute('data-i18n', 'closed.body');
+  document.querySelectorAll('header .stepbar, header .meta').forEach(el => { el.style.display = 'none'; });
+  hideIds.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   wireLocaleSwitcher();
+  if (!RECRUITING_OPEN) {
+    showClosed(['research-form', 'success']);
+    applyLocale(currentLocale);
+    return;
+  }
   applyLocale(currentLocale);
   document.getElementById('research-form').addEventListener('submit', submitForm);
 });
