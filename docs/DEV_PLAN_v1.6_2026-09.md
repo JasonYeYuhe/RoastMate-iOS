@@ -363,7 +363,7 @@ interviewees; the sendable rewrite stays free. Evidence and reasoning:
 `docs/DISTRIBUTION_KIT_v1.md` → "DECISIONS 2026-09-26", and the handoff's top
 section. Item 2's "region-blind checks … a `zh_TW` device is told to reply in
 简体中文" is **fixed** in v1.6.0 (client) and Worker `200d240c` (server). Item 3
-(OpenRouter auto-top-up) is still open.
+(OpenRouter auto-top-up) is **answered: OFF** (Jason, 2026-09-28) — $9.96 left, a hard cap.
 
 1. ~~**P1.1 — refund after, or check before charging?**~~ **SETTLED
    2026-09-09: neither.** Spend *after* generation, gated on provenance. Both

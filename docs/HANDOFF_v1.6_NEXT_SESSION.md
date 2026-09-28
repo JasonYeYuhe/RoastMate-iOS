@@ -16,8 +16,14 @@ records `READY_FOR_SALE`, both reviewSubmissions `COMPLETE` with their item
 `share_card_enabled:false` — as intended.
 
 OpenRouter MEASURED 2026-09-28: $10 bought, $0.0409 used lifetime (+$0.006
-since 09-24, mostly verification probes → ~$0.00013 per vent). Auto-top-up
-still unconfirmed.
+since 09-24, mostly verification probes → ~$0.00013 per vent). **Auto-top-up
+is OFF (Jason confirmed 2026-09-28)** — so the balance is a hard spend cap
+(good: no runaway bill) AND the point where cloud Vent/Feral/roommate stop,
+because Groq is dead and nothing sits behind OpenRouter. Per the code, the app
+then degrades to labelled curated examples and charges nothing (cloud error →
+local path → curated provenance) — graceful, but the headline feature goes dark
+silently. Re-measure with the read-only probe (recipe in the OpenRouter section)
+and top up by hand below ~$2.
 
 **Phase 2 can start: the gate "don't DM creators until 1.6.0 is live" is met.**
 The 30/90 clock for Vent-free starts 2026-09-27.
@@ -204,10 +210,8 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
    codes). Read replies before sending more. Do not send before step 1: a
    creator's audience is free users, and before v1.6.0 they cannot reach Vent.
 3. **Have 3–4 conversations**, thank-you = a 1-year code from the interviewee file.
-4. **OpenRouter auto-top-up** — still unconfirmed, and OpenRouter is the only
-   working model path (Groq primary dead). Balance was $9.97 on 2026-09-24; the
-   2026-09-27 verification probes used well under $0.05. Free Vent + outreach is
-   exactly what drains it.
+4. ~~OpenRouter auto-top-up~~ — **confirmed OFF 2026-09-28**, $9.96 left. Top
+   up by hand when it nears ~$2 (≈15,000 vents of headroom at current prices).
 
 Not decisions any more: storefront (Taiwan first, CN delisted) and 发泄-free
 (shipped in v1.6.0) — see the top.
