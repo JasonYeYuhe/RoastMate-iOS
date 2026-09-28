@@ -6,14 +6,24 @@ first. Solo developer (Jason). Branch `feature/v1.4-track-b`.
 
 ## Status in one line
 
-**v1.6.0 / build 22 was SUBMITTED for App Review on iOS and macOS on
-2026-09-27** (both `WAITING_FOR_REVIEW`, releaseType `AFTER_APPROVAL` = auto-release on approval; iOS version `e178273a-015b-4db8-a0f6-e43195e15e1c` / reviewSubmission `0a6caf1c-0084-4787-82ef-2b56e641adc8`, macOS `2a80bf7b-dda3-444a-85fb-fb8b687534aa` / `dd535168-0cdd-42bc-b09f-a30ce0719d36`; build 22 attached, 4-locale What's New (Mac copy says "Mac"), descriptions and reviewer notes all read back identical). **v1.5.0 / build 21 is what is LIVE.** Commit
-`d7efd49` is the tree both archives were built from; tag `v1.6.0` points at it.
-The Worker change that rides with it is **already deployed** (server-side):
-version `200d240c`, rollback target `df0123b3`.
+**v1.6.0 / build 22 is LIVE on iOS and macOS** — approved and released
+2026-09-27 22:33 UTC (~15h after submission). Verified 2026-09-28: both 1.6.0
+records `READY_FOR_SALE`, both reviewSubmissions `COMPLETE` with their item
+`APPROVED`; the public store (iTunes lookup) serves 1.6.0 in TW / HK / MO
+(幫你罵), SG, JP, US; **CN returns nothing** (delisting effective). Tag
+`v1.6.0` → `d7efd49`. Worker `200d240c` (rollback `df0123b3`). Live config: 
+`vent_cloud_enabled:true`, `cloud_sendable_enabled:false`,
+`share_card_enabled:false` — as intended.
 
-Check before anything else: both 1.6.0 versions' `appStoreState`, via the ASC API
-(recipe below). A rejection would land there.
+OpenRouter MEASURED 2026-09-28: $10 bought, $0.0409 used lifetime (+$0.006
+since 09-24, mostly verification probes → ~$0.00013 per vent). Auto-top-up
+still unconfirmed.
+
+**Phase 2 can start: the gate "don't DM creators until 1.6.0 is live" is met.**
+The 30/90 clock for Vent-free starts 2026-09-27.
+
+(History: submitted 2026-09-27 — iOS version `e178273a-…` / reviewSubmission
+`0a6caf1c-…`, macOS `2a80bf7b-…` / `dd535168-…`, releaseType AFTER_APPROVAL.)
 
 ## v1.6.0 — what it is, and the decisions behind it (2026-09-26/27)
 
@@ -188,11 +198,8 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
 
 ## What remains — Jason's, and none of it is code
 
-1. **Wait for v1.6.0 to be approved AND released on both platforms**
-   (`READY_FOR_SALE` on the 1.6.0 records — and remember `READY_FOR_SALE` alone
-   proves nothing for older records; check the 1.6.0 ones). Release is
-   automatic on approval (`AFTER_APPROVAL`, verified on both).
-2. **Then send three DMs** — Taiwan plan in the kit's DECISIONS section
+1. ~~Wait for v1.6.0 to be live~~ — **done 2026-09-27 22:33 UTC**, verified.
+2. **Send three DMs** — Taiwan plan in the kit's DECISIONS section
    (Threads / Instagram, zh-Hant copy with the auto-renew disclosure, 3-month
    codes). Read replies before sending more. Do not send before step 1: a
    creator's audience is free users, and before v1.6.0 they cannot reach Vent.

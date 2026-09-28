@@ -34,8 +34,8 @@ the free tier used to be 100% canned examples; a free arrival never saw one real
 generation, and never saw the mode the app is named after. Vent is cloud-routed,
 so it produces real output on every device, and its 5.1.2(i) consent already
 names it. Feral and Savage stay Pro. **Do not send creator codes until v1.6.0
-is live** — a creator's audience is free users. (Status: submitted 2026-09-27 —
-check `appStoreState == READY_FOR_SALE` for 1.6.0 on BOTH platforms first.)
+is live** — a creator's audience is free users. (Status: **LIVE 2026-09-27 22:33 UTC**
+on both platforms, verified — the gate is met; DMs can go.)
 The DMs below promise the one-tap rewrite only on Apple Intelligence iPhones:
 that step is on-device, and elsewhere it returns a labelled curated example.
 
