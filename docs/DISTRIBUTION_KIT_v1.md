@@ -87,8 +87,13 @@ identical text to many accounts in a row. **If someone offers to post about it,
 it must be labelled as sponsored (業配/合作)** — giving free Pro in exchange for a
 post is a paid collaboration. Do not contact anyone who appears to be a minor.
 
-**Interviews (§5) in Taiwan:** recruit through the Dcard post and the in-app
-research tile; the thank-you is a **1-year** code from the interviewee file.
+**Interviews: DROPPED 2026-09-28** (Jason). The research form is closed
+(`RECRUITING_OPEN = false`); no Dcard recruiting post. **Channel change:** Instagram
+put the agent's browser behind a reCAPTCHA and neither Threads nor Instagram is
+signed in, so outreach goes by **email to the business address a creator published
+themselves**, from Jason's Gmail, after he confirms each batch. Same honesty rules
+as the DMs above (rewrite only on Apple Intelligence iPhones, auto-renew disclosure,
+合作/業配 labelling, one-tap redeem link).
 
 ---
 

@@ -209,7 +209,13 @@ Commits `4a392c4`, `76a8672`, `e3c4575`, `d6df0e2`, `36271e7`, `ae55fa8`.
    (Threads / Instagram, zh-Hant copy with the auto-renew disclosure, 3-month
    codes). Read replies before sending more. Do not send before step 1: a
    creator's audience is free users, and before v1.6.0 they cannot reach Vent.
-3. **Have 3–4 conversations**, thank-you = a 1-year code from the interviewee file.
+3. ~~Interviews~~ — **dropped by Jason 2026-09-28.** The form had 0 submissions ever, so
+   nobody is owed a code. `research/web/research*.js` now set `RECRUITING_OPEN = false`
+   (closed notice in 4 languages, nothing submitted) because the in-app Settings tile
+   still says "paid 30-min interview" until its hard-coded 2026-11-01 sunset. The
+   500 one-year codes stay unused. **Creator outreach is now run by the agent** (Jason
+   delegated it); sends go out from Jason's Gmail only after he confirms the exact
+   recipients + text. Log: `~/Documents/RoastMate-research/creator-outreach-log.tsv`.
 4. ~~OpenRouter auto-top-up~~ — **confirmed OFF 2026-09-28**, $9.96 left. Top
    up by hand when it nears ~$2 (≈15,000 vents of headroom at current prices).
 
