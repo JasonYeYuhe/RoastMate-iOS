@@ -399,7 +399,9 @@ CoreSimulator registration) but they cannot boot. The iOS 18.5 runtime is still
 installed. When you next need it:
 ```
 xcrun simctl delete F28D2DD0-4B60-4647-8B11-DA1AB013C7EC 2>/dev/null   # drop the stale entry
-xcrun simctl create RefuteProbe18 "iPhone 16" com.apple.CoreSimulator.SimRuntime.iOS-18-5
+SIM=$(xcrun simctl create RefuteProbe18 "iPhone 16" com.apple.CoreSimulator.SimRuntime.iOS-18-5)
+echo "$SIM"   # use -destination "platform=iOS Simulator,id=$SIM" — never the name:
+              # until the stale entry is deleted, two devices are called RefuteProbe18
 ```
 (393×852 pt, matching the 2026-09-27 evidence screenshots.) It is load-bearing:
 an iOS 18 device has no Apple on-device model, which is the only way to test the
