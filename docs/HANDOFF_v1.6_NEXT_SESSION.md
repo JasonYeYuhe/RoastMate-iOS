@@ -391,6 +391,20 @@ Recipe that works (both builds, clean install, iOS 18.5 sim):
 xcodebuild test -scheme RoastMate -configuration Release ENABLE_TESTABILITY=YES \
   -destination "platform=iOS Simulator,id=<iOS 18 sim>" -only-testing:RoastMateUITests/<Test>
 ```
+**There is currently NO usable iOS 18 simulator (2026-09-30).** `RefuteProbe18`
+(F28D2DD0…, iOS 18.5 — the device every Release control so far ran on) and
+`RefuteProbe17Pro` had their data directories destroyed by a disk-full cleanup in
+another session on 2026-09-27; `xcrun simctl list` may STILL list them (stale
+CoreSimulator registration) but they cannot boot. The iOS 18.5 runtime is still
+installed. When you next need it:
+```
+xcrun simctl delete F28D2DD0-4B60-4647-8B11-DA1AB013C7EC 2>/dev/null   # drop the stale entry
+xcrun simctl create RefuteProbe18 "iPhone 16" com.apple.CoreSimulator.SimRuntime.iOS-18-5
+```
+(393×852 pt, matching the 2026-09-27 evidence screenshots.) It is load-bearing:
+an iOS 18 device has no Apple on-device model, which is the only way to test the
+curated / cloud-only paths.
+
 `ENABLE_TESTABILITY=YES` is required only because the hostless unit-test bundle
 also gets built and needs `@testable`; it does not turn `DEBUG` on. **Always run a
 control against the broken build first** — if the control doesn't fail, the test
