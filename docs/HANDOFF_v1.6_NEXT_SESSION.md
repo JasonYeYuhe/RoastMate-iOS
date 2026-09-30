@@ -391,17 +391,17 @@ Recipe that works (both builds, clean install, iOS 18.5 sim):
 xcodebuild test -scheme RoastMate -configuration Release ENABLE_TESTABILITY=YES \
   -destination "platform=iOS Simulator,id=<iOS 18 sim>" -only-testing:RoastMateUITests/<Test>
 ```
-**There is currently NO usable iOS 18 simulator (2026-09-30).** `RefuteProbe18`
-(F28D2DD0…, iOS 18.5 — the device every Release control so far ran on) and
-`RefuteProbe17Pro` had their data directories destroyed by a disk-full cleanup in
-another session on 2026-09-27; `xcrun simctl list` may STILL list them (stale
-CoreSimulator registration) but they cannot boot. The iOS 18.5 runtime is still
-installed. When you next need it:
+**There is no iOS 18 simulator DEVICE on this Mac, by design (2026-09-30).**
+`RefuteProbe18` (the iOS 18.5 device every Release control through 2026-09-27 ran
+on) and `RefuteProbe17Pro` lost their data in another session's disk-full cleanup
+on 09-27; their stale registrations were deleted on 09-30 (verified: neither is in
+`xcrun simctl list`). Jason's decision, recorded in `CLAUDE.md`: **keep the iOS
+18.5 RUNTIME, treat devices on it as disposable** — create one when needed and
+delete it when done:
 ```
-xcrun simctl delete F28D2DD0-4B60-4647-8B11-DA1AB013C7EC 2>/dev/null   # drop the stale entry
 SIM=$(xcrun simctl create RefuteProbe18 "iPhone 16" com.apple.CoreSimulator.SimRuntime.iOS-18-5)
-echo "$SIM"   # use -destination "platform=iOS Simulator,id=$SIM" — never the name:
-              # until the stale entry is deleted, two devices are called RefuteProbe18
+xcodebuild … -destination "platform=iOS Simulator,id=$SIM" …
+xcrun simctl shutdown "$SIM"; xcrun simctl delete "$SIM"
 ```
 (393×852 pt, matching the 2026-09-27 evidence screenshots.) It is load-bearing:
 an iOS 18 device has no Apple on-device model, which is the only way to test the
