@@ -1,5 +1,9 @@
 # RoastMate — handoff (paste into a fresh session)
 
+> **SUPERSEDED 2026-10-07 by `docs/HANDOFF_v1.7_NEXT_SESSION.md`.** Still
+> authoritative only for: "VERIFY BEFORE YOU ACT", "Debug builds are always
+> Pro", "Hard-won gotchas", "Design rules". The rest is history.
+
 You are picking up **RoastMate** (帮你骂 / `~/Documents/RoastMate`) — Swift 6,
 iOS/macOS/watchOS, plus a Cloudflare Worker in `cloud-worker/`. Chinese-language-
 first. Solo developer (Jason). Branch `feature/v1.4-track-b`.

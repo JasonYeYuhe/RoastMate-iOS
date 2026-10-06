@@ -95,6 +95,15 @@ themselves**, from Jason's Gmail, after he confirms each batch. Same honesty rul
 as the DMs above (rewrite only on Apple Intelligence iPhones, auto-renew disclosure,
 合作/業配 labelling, one-tap redeem link).
 
+**Batch 1 status (2026-10-07):** 3 emails sent 09-28 (「我不推」podcast, 「職場奇葩談」
+Gugu姊, zmei). After 9 days: 0 replies, 0 bounces, 0 offer-code redemptions (the
+ASC subscription-event report shows no offer events). One follow-up each sent
+10-07 in the original thread (Jason: 「全发」) — 「兌換連結現在還能用……這是唯一一封
+追蹤信」. **That was the only follow-up; never contact these three again.** Decide
+on 10-21: any reply → batch 2 from the backups; none → stop cold creator email and
+record 0/3 here. (§2 Step 2's "only if they redeemed" predates this section, which
+governs.) Log: `~/Documents/RoastMate-research/creator-outreach-log.tsv`.
+
 ---
 
 ## Read this first: five things the plan had wrong
