@@ -20,6 +20,21 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 DEFAULT_MODEL = "qwen/qwen3-30b-a3b-instruct-2507"
 
+# v1.7 P0.1 (2026-10-07): OpenRouter's native fallback. Sent with DEFAULT_MODEL
+# as `models: [DEFAULT_MODEL, ...FALLBACK_MODELS]`; OpenRouter tries them in
+# order inside one request and bills whichever answered (reported back as the
+# response's `model`). Comma-separated. Same rules as DEFAULT_MODEL: current,
+# paid (never `:free`), NON-reasoning instruct. qwen3-next-80b-a3b-instruct:
+# non-thinking Qwen (the Qwen-tuned prompt transfers), 5 healthy providers on
+# 2026-10-07 vs 1 for deepseek-chat. Checked with 8 vents (4 zh-Hant, 4 zh-Hans)
+# via `wrangler dev --remote` — results in evals/runs/2026-10-07-p01-fallback.md.
+FALLBACK_MODELS = "qwen/qwen3-next-80b-a3b-instruct"
+
+# Groq hop: OFF. Its model 404s on every request (status below), so running it
+# only added a failed round trip before OpenRouter. The code stays; "true"
+# (plus a live GROQ_*_MODEL) brings it back. See src/routing.js.
+GROQ_ENABLED = "false"
+
 # ⚠️ STATUS 2026-09-15 — THE GROQ PRIMARY BELOW IS DEAD. `qwen/qwen3.6-27b` now
 # returns 404 (last seen serving 2026-09-09; gone from Groq's catalog, no
 # deprecation notice). Every request 404s here in a few ms and is served by the

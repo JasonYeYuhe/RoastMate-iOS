@@ -30,6 +30,7 @@ import { consumeQuota, refundQuota, quotaBackendIsDO } from "./quota.js";
 import { resolveIpAttemptCap } from "./ipguard.js";
 import { isTraditionalChinese, baseLocale } from "./locale.js";
 import { privateDraftCalibration } from "./calibration.js";
+import { groqEnabled, openRouterModels, openRouterAttempts, modelSelection } from "./routing.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
@@ -293,8 +294,10 @@ export default {
     }
 
     // Attempt 1: Groq with locale-appropriate model. (Skipped if model
-    // override was requested and succeeded above.)
-    if (!text && !modelOverride && env.GROQ_API_KEY) {
+    // override was requested and succeeded above.) OFF unless
+    // GROQ_ENABLED="true" — the Groq model has 404'd since ~2026-09-15 (v1.7
+    // P0.1, see routing.js).
+    if (!text && !modelOverride && groqEnabled(env)) {
       const groqResult = await callOpenAICompatible({
         endpoint: "https://api.groq.com/openai/v1/chat/completions",
         apiKey: env.GROQ_API_KEY,
@@ -323,7 +326,8 @@ export default {
       }
     }
 
-    // Attempt 2: OpenRouter fallback — GLM 4.5 Air :free.
+    // Attempt 2: OpenRouter — the only live path since 2026-09-15 (models:
+    // DEFAULT_MODEL + FALLBACK_MODELS in wrangler.toml). History below.
     // Choice rationale (2026-05-23, see evals/runs/2026-05-23-backend-
     // compare-zh-vent.md): in a 24-model :free sweep on a long zh-Hans
     // vent prompt, GLM 4.5 Air tied for the highest quality (5.0
@@ -340,33 +344,45 @@ export default {
     // BOTH tiers 404 → the whole cloud path was 502-ing. Fallback is now a
     // CURRENT, stable PAID model (z-ai/glm-5.3-flash: strong zh, cheap, own
     // quota — not a shared :free pool). env.DEFAULT_MODEL still wins if set.
+    //
+    // v1.7 P0.1: DEFAULT_MODEL plus FALLBACK_MODELS go out as OpenRouter's
+    // native `models` list, so one model retirement no longer takes Vent,
+    // Feral and the roommate group down together. modelUsed is what
+    // OpenRouter reports actually answered.
+    //
+    // OpenRouter falls through on rate limits / downtime / moderation, but it
+    // VALIDATES every id first: one unknown id 400s the whole request
+    // (measured 2026-10-07 via wrangler dev with a nonexistent primary). A
+    // retired primary is exactly that case, so on failure we retry with the
+    // remaining models — at most one call per configured model.
+    //
+    // NOTE (v1.3): OpenRouter's GLM rejects `reasoning:{enabled:false}` with an
+    // error, which nuked the fallback (→ 502 whenever Groq missed). So no
+    // reasoning param is sent; every configured model must be a NON-reasoning
+    // instruct model (enforced by test/routing.test.js on wrangler.toml).
     if (!text && env.OPENROUTER_API_KEY) {
-      const orModel = env.DEFAULT_MODEL || "qwen/qwen3-30b-a3b-instruct-2507";
-      const orResult = await callOpenAICompatible({
-        endpoint: "https://openrouter.ai/api/v1/chat/completions",
-        apiKey: env.OPENROUTER_API_KEY,
-        model: orModel,
-        systemPrompt,
-        userPrompt,
-        extraHeaders: {
-          "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
-          "X-Title": env.OPENROUTER_TITLE || "RoastMate"
+      const orModels = openRouterModels(env);
+      for (const candidates of openRouterAttempts(orModels)) {
+        const orResult = await callOpenAICompatible({
+          endpoint: "https://openrouter.ai/api/v1/chat/completions",
+          apiKey: env.OPENROUTER_API_KEY,
+          model: candidates,
+          systemPrompt,
+          userPrompt,
+          extraHeaders: {
+            "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
+            "X-Title": env.OPENROUTER_TITLE || "RoastMate"
+          }
+        });
+        if (orResult.ok) {
+          text = orResult.text;
+          modelUsed = orResult.model || candidates[0];
+          providerUsed = "openrouter";
+          break;
         }
-        // NOTE (v1.3): OpenRouter's GLM rejects `reasoning:{enabled:false}` with
-        // an error, which nuked the fallback (→ 502 whenever Groq missed). So the
-        // OR fallback is left as-is; it can occasionally leak CoT on the complex
-        // roommate prompt, but Groq (reasoning_effort:"none") now serves roommate
-        // cleanly so OR is rarely hit there. Proper per-model OR reasoning
-        // suppression is a Track 0.4 follow-up (needs per-model verification).
-      });
-      if (orResult.ok) {
-        text = orResult.text;
-        modelUsed = orModel;
-        providerUsed = "openrouter";
-      } else {
         const summary = `openrouter:${orResult.status || "?"}`;  // provider:status only — never the body (privacy)
         attempts.push(summary);
-        console.log("OpenRouter fallback failed:", summary);
+        console.log("OpenRouter attempt failed:", summary);
       }
     }
 
@@ -423,8 +439,9 @@ function ddLog(env, ctx, fields) {
 }
 
 /// OpenAI-compatible chat completion call. Both OpenRouter and Groq
-/// accept the same request shape, so we share one helper. Returns
-/// `{ ok: true, text }` on success or `{ ok: false, status, detail }`
+/// accept the same request shape, so we share one helper. `model` is a model
+/// id or, for OpenRouter only, an ordered array of fallbacks. Returns
+/// `{ ok: true, text, model }` (model = what the provider says answered) on success or `{ ok: false, status, detail }`
 /// on any failure (HTTP non-2xx, network error, or empty completion).
 async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders, extraBody }) {
   let res;
@@ -437,7 +454,7 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
         ...(extraHeaders || {})
       },
       body: JSON.stringify({
-        model,
+        ...modelSelection(model),
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
@@ -477,7 +494,7 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
     const debug = JSON.stringify(msg).slice(0, 250);
     return { ok: false, status: res.status, detail: `empty:${debug}` };
   }
-  return { ok: true, text: stripped };
+  return { ok: true, text: stripped, model: typeof parsed?.model === "string" ? parsed.model : "" };
 }
 
 /// Remove `<think>…</think>` blocks (Qwen3, R1 distills, etc.), strip
