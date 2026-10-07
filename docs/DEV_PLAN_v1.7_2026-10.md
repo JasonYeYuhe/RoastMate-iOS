@@ -126,6 +126,14 @@ distribution actually happened.
   matrix, not a latency study. `node --test` green; record the new rollback id
   (current prod `200d240c`, previous `df0123b3`).
   If it doesn't fit in the timebox, ship (a) alone.
+- **✅ P0.1 DONE 2026-10-07** — prod Worker **`90d8f1c5`** (rollback
+  `npx wrangler rollback 200d240c-4a00-44ec-b1e3-6b64cee3c0b5`), commit
+  `f835a59`. Groq off (`GROQ_ENABLED="false"`), secondary
+  `qwen/qwen3-next-80b-a3b-instruct` (5 healthy providers vs 1 for
+  deepseek-chat). **Measured: OpenRouter's native `models` does NOT cover a
+  retired model** — one unknown id 400s the whole list — so the Worker also
+  retries with the tail of the list on failure. 8 vents + a fake-retired
+  primary + the shipped config: `evals/runs/2026-10-07-p01-fallback.md`.
 - **P0.2 — No new telemetry.** Readouts come from `scripts/asc_analytics.py`,
   the OpenRouter balance log and the subscription-event report. Zero-tracking
   is the moat.

@@ -21,7 +21,8 @@ until you measure it.
 ## Status (measured 2026-10-07)
 
 - **Live:** iOS + macOS v1.6.0 build 22 (released 2026-09-27). Tag `v1.6.0` →
-  `d7efd49`. Worker `200d240c` (rollback `df0123b3`). Flags: see the plan §0.
+  `d7efd49`. Worker **`90d8f1c5`** (P0.1, deployed 2026-10-07; rollback
+  `200d240c`). Flags: see the plan §0.
 - **Money:** 2 paying subscribers, both Pro Monthly at full price, both
   converted on download day — TW 2026-09-19, US 2026-10-04. Proceeds since
   09-15: $5.16 (the two subscriptions + one $0.39 CN credit pack). First renewals ~10-19 (TW),
@@ -30,7 +31,9 @@ until you measure it.
   3 page views → 2 first-time downloads. About half the impressions vanished
   with CN.
 - **OpenRouter:** $9.95 left of $10, auto-top-up OFF (hard cap). It is the
-  ONLY live model path (Groq's model 404s). ≈45 cloud generations 09-28→10-07.
+  ONLY live model path; since P0.1 the Worker no longer tries Groq at all
+  and has a second OpenRouter model (`FALLBACK_MODELS`). ≈45 cloud
+  generations 09-28→10-07.
 - **Creator outreach:** batch 1 (3 emails, 09-28) → 0 replies, 0 redemptions;
   one follow-up each sent 10-07 at Jason's confirmation. Never contact those
   three again. Decision on 10-21 (plan P2.2).
