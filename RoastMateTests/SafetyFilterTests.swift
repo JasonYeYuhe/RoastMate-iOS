@@ -74,6 +74,8 @@ final class SafetyFilterTests: XCTestCase {
     /// Kana means the term is Japanese, where these characters are simply the
     /// correct spelling and have no Traditional "twin" (自殺したい,
     /// 自分を傷つけ). Without this guard the walk reports false positives.
+    /// Japanese terms get their own parity check instead — see
+    /// `testEveryJapaneseHardRailPhraseHasKanjiHiraganaAndKatakanaForms`.
     private func containsKana(_ term: String) -> Bool {
         term.unicodeScalars.contains { (0x3040...0x30FF).contains($0.value) }
     }
@@ -107,6 +109,74 @@ final class SafetyFilterTests: XCTestCase {
         XCTAssertFalse(lists.isEmpty, "no matching lists exposed — accessor regressed")
         for (name, terms) in lists {
             assertScriptParity(terms, listName: name)
+        }
+    }
+
+    // MARK: - Japanese script forms (added 2026-10-14)
+    //
+    // The walk above skips every kana-bearing term — rightly, 殺 in 殺してやる
+    // is the correct Japanese spelling and has no Simplified twin — so until
+    // the rail gained Japanese, nothing checked Japanese terms at all. For a
+    // Japanese phrase the other scripts are its kana spellings.
+
+    private func isHiragana(_ u: Unicode.Scalar) -> Bool { (0x3041...0x309F).contains(u.value) }
+    private func isKatakana(_ u: Unicode.Scalar) -> Bool { (0x30A0...0x30FF).contains(u.value) }
+    private func isKanji(_ u: Unicode.Scalar) -> Bool { (0x4E00...0x9FFF).contains(u.value) }
+
+    /// Hiragana ↔ katakana. The two blocks are 0x60 apart.
+    private func kanaSwapped(_ s: String) -> String {
+        var out = String.UnicodeScalarView()
+        for u in s.unicodeScalars {
+            switch u.value {
+            case 0x3041...0x3096: out.append(Unicode.Scalar(u.value + 0x60)!)
+            case 0x30A1...0x30F6: out.append(Unicode.Scalar(u.value - 0x60)!)
+            default: out.append(u)
+            }
+        }
+        return String(out)
+    }
+
+    /// The kana before the first kanji and after the last: ("ぶっ", "す") for
+    /// ぶっ殺す. A hiragana spelling of the same phrase starts and ends with them.
+    private func kanaEdges(_ s: String) -> (lead: String, trail: String) {
+        let scalars = Array(s.unicodeScalars)
+        let lead = scalars.prefix { !isKanji($0) }
+        let trail = scalars.reversed().prefix { !isKanji($0) }.reversed()
+        return (String(String.UnicodeScalarView(lead)), String(String.UnicodeScalarView(trail)))
+    }
+
+    /// Every Japanese hard-rail row carries a kanji spelling, a hiragana
+    /// spelling of the SAME phrase, and that hiragana's katakana twin; every
+    /// spelling is wired into the rail; and no Japanese term sits in the rail
+    /// outside a row, where none of this would be checked.
+    func testEveryJapaneseHardRailPhraseHasKanjiHiraganaAndKatakanaForms() {
+        let rows = SafetyFilter.japaneseVentHardRailForTesting()
+        let rail = SafetyFilter.matchingListsForTesting()["ventHardRail"] ?? []
+        XCTAssertFalse(rows.isEmpty, "no Japanese rows exposed — accessor regressed")
+        for row in rows {
+            let kanji = row.filter { $0.unicodeScalars.contains(where: isKanji) }
+            let hiragana = row.filter { $0.unicodeScalars.allSatisfy(isHiragana) }
+            let katakana = row.filter { $0.unicodeScalars.allSatisfy(isKatakana) }
+            XCTAssertFalse(kanji.isEmpty, "\(row) has no kanji spelling")
+            XCTAssertFalse(hiragana.isEmpty, "\(row) has no hiragana spelling")
+            for kana in hiragana + katakana {
+                XCTAssertTrue(row.contains(kanaSwapped(kana)),
+                              "\(row): '\(kana)' has no '\(kanaSwapped(kana))' — that script would be unguarded")
+            }
+            for k in kanji {
+                let (lead, trail) = kanaEdges(k)
+                XCTAssertTrue(hiragana.contains { $0.hasPrefix(lead) && $0.hasSuffix(trail) },
+                              "\(row): no hiragana spelling of '\(k)' — the row mixes different phrases")
+            }
+            for spelling in row {
+                XCTAssertTrue(rail.contains(spelling), "'\(spelling)' is in a row but not in ventHardRail")
+            }
+        }
+        let rowTerms = Set(rows.joined())
+        for term in rail where containsKana(term) {
+            XCTAssertTrue(rowTerms.contains(term),
+                          "'\(term)' was added to ventHardRail outside japaneseVentHardRail, "
+                          + "so nobody checks its other spellings — give it a row")
         }
     }
 

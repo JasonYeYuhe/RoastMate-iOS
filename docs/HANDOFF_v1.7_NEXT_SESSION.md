@@ -18,6 +18,29 @@ Everything else in the v1.6 handoff is history.
 is not true until you open the file; a claim about production is not true
 until you measure it.
 
+## Update 2026-10-20 — Phase 1 is LIVE
+
+- **iOS + macOS 1.7.0 build 24 submitted 2026-10-14, READY_FOR_SALE by 2026-10-20**
+  (auto-release). Tag `v1.7.0`. Everything below that says Phase 1 is "not started" is
+  history. The stop rule's T starts at the later of this and the third P2.1 post.
+- What shipped beyond the plan: the cloud **consent sheet, onboarding and Settings
+  footer said declining cloud keeps Vent/Feral "on-device, gentler" in all 4 locales**;
+  the code gives labelled examples. Fixed, with guard tests (`StoreCopyTests`). The Pro
+  screen no longer sells "unlimited generations / skip the daily cap".
+- Product page: new 6.9" + 6.3" screenshots × 4 locales (shot 01 = a Vent result, from
+  `marketing/appstore/vent-fixtures/`), the inherited 6.5" Simplified set removed from 1.7.0,
+  new subtitles/descriptions/promo (promo already LIVE on 1.6.0), zh-Hant keywords in
+  Taiwan vocabulary, ja store name "RoastMate AI". Tool: `scripts/asc_product_page.py`
+  (dry run by default). Evidence of the copy review: this session's transcript; the
+  decisions are in `docs/evidence/2026-10-07-v17-phase1-decisions-brief.md`.
+- Not done: macOS screenshots (May-era, Debug=Pro, old footer text; zh-Hant/ja none).
+- Done 2026-10-20: the live privacy policy and support page (separate Pages repo,
+  commit 6b57a14) now name OpenRouter only and say iCloud sync is automatic.
+- In the working tree but NOT in the 1.7.0 binary under review: Japanese terms for
+  `SafetyFilter.ventHardRail` (殺してやる / 殺すぞ / ぶっ殺す / 自殺, each in kanji,
+  hiragana and katakana; 死ね deliberately allowed — see the doc comment) + tests.
+  Rides the next binary.
+
 ## Status (measured 2026-10-07)
 
 - **Live:** iOS + macOS v1.6.0 build 22 (released 2026-09-27). Tag `v1.6.0` →

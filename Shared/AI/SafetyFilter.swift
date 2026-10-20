@@ -54,6 +54,40 @@ enum SafetyFilter {
         "kill yourself", "kys", "go die", "suicide",
         "杀了你", "殺了你", "去死", "自杀", "自殺",
         "shoot you", "shoot them", "stab you", "stab them"
+    ] + japaneseVentHardRail.flatMap { $0 }
+
+    /// The Japanese part of `ventHardRail`. Until 2026-10 the rail had no
+    /// Japanese at all, while the Worker's ja Vent and Feral prompts demand
+    /// 強めの言葉 — so 殺してやる reached the card untouched.
+    ///
+    /// One row per phrase, spelled in every script it is written in. For
+    /// Japanese the other scripts are kana: menace is often written in
+    /// katakana (コロス), casual text in hiragana, so a kanji-only term is the
+    /// Japanese form of the unpaired-term bug. The script-parity test checks
+    /// each row for a kanji, a hiragana and the matching katakana spelling.
+    ///
+    /// The match is a substring with no tokenizer, so each entry is a whole
+    /// threat-shaped phrase, never a bare stem: 殺す is inside 黙殺する,
+    /// 相殺する, 押し殺す and the everyday 殺す気か ("are you trying to kill
+    /// me?"); ころす is inside このころすごく ("lately, really…").
+    ///
+    /// 死ね is deliberately NOT here (decided 2026-10-14), although en blocks
+    /// "go die" and zh blocks 去死:
+    ///  • Aimed at the person being vented about, it is ordinary Japanese
+    ///    swearing — 「保育園落ちた日本死ね!!!」 (2016) was a vent that reached
+    ///    the Diet, not a threat. Vent drafts allow profanity; this rail is for
+    ///    threats and self-harm.
+    ///  • As a substring it also matches the potential form of 死ぬ —
+    ///    恥ずかしくて死ねる, 終わるまで死ねない — which is plain hyperbole.
+    ///  • It still cannot leave the app: `ForbiddenTerms.json` lists 死ね,
+    ///    and that strict list gates the share card and all sendable output.
+    /// Telling someone to kill themselves IS blocked: 自殺 (shared with zh-Hant)
+    /// already caught 自殺しろ, and its row adds the kana spellings.
+    private static let japaneseVentHardRail: [[String]] = [
+        ["殺してやる", "ころしてやる", "コロシテヤル"],  // "I'll kill you"
+        ["殺すぞ", "ころすぞ", "コロスゾ"],              // "I'll kill you", as a warning
+        ["ぶっ殺す", "ぶっころす", "ブッコロス"],        // "I'll fucking kill (you)"
+        ["自殺", "じさつ", "ジサツ"]                     // suicide; 自殺しろ = "kill yourself"
     ]
 
     static func validateInput(_ text: String) throws {
@@ -139,6 +173,10 @@ enum SafetyFilter {
             "softSelfHarmPhrases": softSelfHarmPhrases
         ]
     }
+
+    /// The Japanese hard-rail rows, for the kana half of the script-parity
+    /// test. The flat lists above lose the row structure that test needs.
+    static func japaneseVentHardRailForTesting() -> [[String]] { japaneseVentHardRail }
 
     /// Returns the first denylist substring matched, lowercased, if any.
     private static func matchedDenylistTerm(in text: String) -> String? {
