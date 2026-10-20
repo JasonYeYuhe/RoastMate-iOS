@@ -84,7 +84,9 @@ struct IntensityChip: View {
         case .feral:
             return "flame.fill"
         case .vent:
-            return "lock.open"
+            // Not a padlock: next to the chip's name an open lock read as
+            // "locked" at App Store thumbnail size, and Vent is free.
+            return "bubble.left.and.exclamationmark.bubble.right"
         }
     }
 }

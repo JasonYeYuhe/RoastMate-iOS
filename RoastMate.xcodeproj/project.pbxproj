@@ -402,6 +402,7 @@
 		C0606B74FABD4EE31317393C /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
 		C0A6FC2783099F125B950333 /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		C1077B377B0297E5A86A3035 /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
+		C15F01525824ED8C249C23D2 /* StoreCopyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDE5832B50030792504736D /* StoreCopyTests.swift */; };
 		C1E3D5E87674703A306374C6 /* StylePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F37D7C4EDA50657292425 /* StylePreset.swift */; };
 		C2363D7F46054DBFCBE52DD4 /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
 		C28344518AEB069722838962 /* Intensity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A0607EDE0BBCBBD66E0B1 /* Intensity.swift */; };
@@ -735,6 +736,7 @@
 		F9D7EB4CC03B25DE6BA07D6B /* ShareCardScenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareCardScenario.swift; sourceTree = "<group>"; };
 		FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		FB1FC6398F46F7E52915FE14 /* EventLedger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLedger.swift; sourceTree = "<group>"; };
+		FCDE5832B50030792504736D /* StoreCopyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCopyTests.swift; sourceTree = "<group>"; };
 		FDB74A247001CF2C1093499E /* FallbackRoasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackRoasts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -920,6 +922,7 @@
 				133FB869CE2ABF6F610D85E8 /* SavedRepliesTests.swift */,
 				C6170E3A5DBB1F27F26CF7EC /* ScenarioCatalogTests.swift */,
 				0D09E8118DF68AA860F66E81 /* ShareCardTests.swift */,
+				FCDE5832B50030792504736D /* StoreCopyTests.swift */,
 				8B345F703B0902E4FECF539A /* StoreServiceProTests.swift */,
 				115B5C918D3BD5C5C8372636 /* StyleCatalogTests.swift */,
 				F313D8BE3B58F3F19C2827CD /* TelemetryExportTests.swift */,
@@ -1580,6 +1583,7 @@
 				997087433748B46D4BA84311 /* ShareCardTests.swift in Sources */,
 				18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */,
 				2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */,
+				C15F01525824ED8C249C23D2 /* StoreCopyTests.swift in Sources */,
 				52B95A8E3271A10DAB210303 /* StoreService.swift in Sources */,
 				5943BB63CCCE95A53385A9B2 /* StoreServiceProTests.swift in Sources */,
 				E8D0F20EA745EAC3911102D7 /* StyleCatalog.swift in Sources */,
@@ -2232,7 +2236,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -2247,7 +2251,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2457,7 +2461,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KHMK6Q3L3K;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2478,7 +2482,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.6.0;
+				MARKETING_VERSION = 1.7.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

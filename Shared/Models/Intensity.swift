@@ -5,9 +5,9 @@ import Foundation
 /// etc.). Any mode can be invoked at any intensity.
 ///
 /// Tier policy (enforced at the call-site, not by this enum):
-/// - `.calm` and `.sharp` are free-tier.
-/// - `.savage` requires Pro.
-/// - `.feral` and `.vent` require Pro **and** produce private drafts that
+/// - `.calm`, `.sharp` and `.vent` are free-tier (`.vent` since v1.6.0).
+/// - `.savage` and `.feral` require Pro (`requiresPro`).
+/// - `.feral` and `.vent` produce private drafts that
 ///   we intentionally never advertise as sendable messages. A second LLM
 ///   call (`RoastEngine.rewriteAsSendable`) converts a private draft into a
 ///   Sendable Reply when the user explicitly asks for it.

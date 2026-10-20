@@ -9,20 +9,6 @@ struct SettingsView: View {
     @State private var showPaywall = false
     @State private var preparedTelemetryURL: URL?
 
-    /// Sunset date for the Phase 5 Q1 research recruit tile.
-    /// 2026-11-01 00:00 UTC = end of Phase 5 Q1 (Oct 5) + ~4 weeks buffer
-    /// for slow-rolling interview tails. After this date the tile auto-
-    /// hides without needing a new app ship. To run another research
-    /// wave, bump this constant + re-ship.
-    static let researchRecruitDeadline: Date = {
-        var comps = DateComponents()
-        comps.year = 2026
-        comps.month = 11
-        comps.day = 1
-        comps.timeZone = TimeZone(identifier: "UTC")
-        return Calendar(identifier: .iso8601).date(from: comps) ?? .distantFuture
-    }()
-
     private var settings: UserSettings? { settingsQuery.first }
     private var version: String {
         let s = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
@@ -136,44 +122,6 @@ struct SettingsView: View {
                         EventLedger.shared.resetCounters()
                         preparedTelemetryURL = nil
                     }
-                }
-            }
-
-            // P5 Q1 W1 — distribution-research recruit tile. Intentionally
-            // NOT gated by `telemetryOptedIn`: per App Review 2.2 and the
-            // research protocol §1, compensation cannot be conditional on
-            // data-consent. Opens a Safari link to the form (no embedded
-            // WebView, keeps the recruit channel out of the app's data
-            // surface).
-            //
-            // 2026-09-06: this pointed at https://roastmate.app/research for
-            // every shipped build since v1.0.5. That domain has never been
-            // registered — RDAP 404, DNS NXDOMAIN — so the tile was a dead link
-            // in production, and credits.md's claim that it is held at Name.com
-            // is wrong. Repointed to the GitHub Pages form, which is the page
-            // the mirror workflow actually publishes and which returns 200.
-            //
-            // v1.0.5 addition: auto-hide after Self.researchRecruitDeadline
-            // (currently 2026-11-01 UTC = end of Phase 5 Q1 + 1 month
-            // buffer). Both advisors flagged a permanent-UX-for-2-week-
-            // sprint smell in the 2026-05-28 audit; rather than ship a
-            // remote feature-flag service for one tile, hardcode a sunset
-            // date and re-ship a new cutoff (or remove the tile) when the
-            // next research wave is scoped.
-            if Date() < Self.researchRecruitDeadline {
-                Section(header: Text("settings.section.research")) {
-                    Link(destination: URL(string: "https://jasonyeyuhe.github.io/RoastMate/research.html")!) {
-                        HStack {
-                            Label("settings.research.tile", systemImage: "person.fill.questionmark")
-                            Spacer()
-                            Image(systemName: "arrow.up.right.square")
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                    .foregroundStyle(.primary)
-                    Text("settings.research.footer")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
                 }
             }
 

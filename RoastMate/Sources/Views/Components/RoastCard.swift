@@ -121,7 +121,9 @@ struct GeneratedRoastCard: View {
             }
 
             if result.kind == .ventDraft {
-                Label(disclosureKey, systemImage: "lock.fill")
+                // "Only you see this", not a padlock: a lock on the Vent result
+                // read as "this feature is locked" (v1.7, Vent is free).
+                Label(disclosureKey, systemImage: "eye.slash")
                     .font(.caption)
                     .foregroundStyle(privateDraftAccent)
                     .padding(10)

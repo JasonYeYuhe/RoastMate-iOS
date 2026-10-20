@@ -1,46 +1,49 @@
 Vent first. Then send the version that actually wins.
 
-RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, Feral, or Vent — and the on-device AI gives you a response that helps you say what you actually mean. Feral and Vent create private drafts just for releasing the feeling — then a single tap rewrites them into sharp, safe-to-send replies that hold your ground without crossing any lines.
+RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, Feral, or Vent — and get a response that helps you say what you actually mean. Feral and Vent create private drafts just for releasing the feeling — then, where Apple's on-device model is available, a single tap rewrites them into sharp, safe-to-send replies that hold your ground without crossing any lines.
 
-Pick from 20+ writing styles — Polite, Passive-Aggressive, Japanese Keigo, Literary, Stand-up, MBA Buzzword, Shakespearean, Savage, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
+Pick from 24 writing styles — High EQ, Passive Aggressive, Japanese Keigo, Literary, Stand-up Bit, Shakespearean, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
 
-Composed, Sharp, and Savage intensities run 100% on your device — using Apple's Foundation Models framework where Apple Intelligence is available, and curated built-in responses where it isn't. Vent and Feral private drafts route through our developer-owned cloud proxy to a third-party LLM provider — Apple's on-device model is too gentle for real venting. You can toggle Cloud AI off in Settings to keep everything local; vent output will be much gentler. No tracking, no analytics, no advertising IDs. Per-device rate-limited so abuse can't drain shared free quota.
+Composed, Sharp, Savage and the rewrite run 100% on your device, on Apple's Foundation Models where available. Vent and Feral use a cloud model, and only after you give permission: Apple's on-device model is too gentle for real venting, so the cloud lets them write real drafts on any device. Switch Cloud AI off in Settings → AI & Privacy and Vent and Feral show curated examples instead.
 
-RoastMate is a creative writing and emotional expression tool. It is not designed to target or harass any individual — names, threats, and slurs are automatically removed by a built-in safety filter.
+Without Apple's on-device model (iOS 18, macOS 14–15, or Apple Intelligence off or unsupported), Composed, Sharp and Savage (in every tool), the Argument Simulator and the one-tap rewrite show curated examples — always labeled, and never charged a credit.
+
+RoastMate is a creative writing and emotional expression tool. It is not designed to target or harass any individual — the AI is told to replace real names with roles and never to use slurs or threats, and a built-in safety filter blocks threats and self-harm language.
 
 FEATURES
 
-• Private draft modes: Vent for release, Feral for stronger catharsis — then one tap rewrites either into a sendable reply
+• Private draft modes: Vent for release, Feral (Pro) for stronger catharsis — then one tap rewrites either into a sendable reply
 • 5 intensity levels: Composed, Sharp, Savage, Feral, Vent
-• 20+ writing styles, from Polite to Literary to Savage
-• Reply Helper: paste a message you received, get suggested replies
+• Reply Helper: paste a message you received, get a reply to send
 • Argument Simulator (Pro): rehearse a tough conversation, AI plays the other side
 • Emotion Translator: turn raw frustration into the polished language you need
-• Social Roast: paste a tweet or post, get reaction replies ready to share
+• Social Roast: paste a tweet or post, get a reaction ready to share
 • Situation Threads: pick up where you left off when the other person replies again
-• Sample Gallery: 15 curated examples so you can see RoastMate at work without typing
-• Apple Watch quick roast — vent on your wrist, hand off to iPhone
-• macOS menu bar quick access — one keyboard shortcut from any app
+• Sample Gallery: 17 sample situations — see RoastMate at work without typing
+• macOS menu bar quick roast — one click away from any app
 • Siri & Shortcuts integration via App Intents
 • iOS Share Extension — roast text from Mail, Messages, Safari, anywhere
 • Available in English, 简体中文, 繁體中文, 日本語
 
+Without Pro, AI-written generations use credits — new users get 10 free, plus 2 free a day in their first week. Curated examples never use a credit.
+
 PRO
 
-• Unlimited generations
-• All 20+ styles unlocked
-• Generate three styles in parallel
+• Feral: the rawest private draft
+• Savage intensity
+• All 24 styles (16 are Pro-only)
+• Three versions of each Composed, Sharp or Savage reply instead of one
 • Multi-turn Argument Simulator
 • Unlimited history
+• No credits needed
 
-RoastMate Pro Monthly — 1 month — $2.99 (or local equivalent)
-RoastMate Pro Yearly — 1 year — $19.99 (or local equivalent), 7-day free trial for eligible new subscribers
+RoastMate Pro Monthly (1 month) or Yearly (1 year), auto-renewing — the app shows your local price before you buy.
 
-Payment is charged to your Apple ID at confirmation of purchase. Auto-renews at the same price unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in Settings → Apple ID → Subscriptions.
+Payment is charged to your Apple Account at confirmation of purchase. Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. Manage or cancel anytime in your Apple Account settings.
 
 PRIVACY
 
-Calm / Sharp / Savage / Rewrite — fully on-device: Apple's Foundation Models where Apple Intelligence is available, curated built-in responses otherwise. Vent / Feral private drafts route through a developer-owned Cloudflare Worker that forwards to third-party LLM providers, stateless on our side and per-device rate-limited. You can disable cloud routing in Settings → AI & Privacy. Sign in with Apple is optional; when signed in, only an Apple-issued User ID is stored locally. No analytics, no advertising IDs, no fingerprinting.
+With your permission, what you type for Vent and Feral goes through a developer-owned Cloudflare Worker to third-party LLM providers; the Worker keeps none of your text and rate-limits each device. Sign in with Apple is optional; if you sign in, your Apple-issued User ID (plus name and email, if you share them) is stored only on your device. No tracking, no advertising IDs, no fingerprinting, no third-party SDKs. Anonymized usage counters are off by default; turned on, they stay on your device until you export them.
 
 TERMS OF USE (EULA) & PRIVACY POLICY
 

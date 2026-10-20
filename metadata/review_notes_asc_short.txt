@@ -1,70 +1,71 @@
-Reviewer notes — RoastMate v1.6.0
+Reviewer notes — RoastMate v1.7.0
 
-1. WHERE GENERATION RUNS, AND WHAT A DEVICE WITHOUT APPLE INTELLIGENCE GETS.
-Calm / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
-Apple's Foundation Models. The app also supports iOS 18 / macOS 14, where
-Foundation Models does not exist. On such a device — or with Apple
-Intelligence off, or while its assets are still downloading — those modes
-return a small set of CURATED EXAMPLE responses instead of a model answer.
-Every surface labels it ("Curated example — not generated from what you
-typed. No credit used.") and NO credit is charged. This is intended.
+1. WHAT'S NEW IN 1.7.0 (copy, two icons, screenshots).
+No new feature, data collection or permission; no change to purchases or to
+what is sent to the cloud. The Pro screen header now lists Feral, Savage,
+all 24 styles... and no longer Vent (free since 1.6.0). The Vent chip and
+Vent draft no longer show a padlock. A Pro-only style or intensity now says
+it needs Pro (it claimed a daily free limit). Shared cards show our
+searchable store name (RoastMate AI / 幫你罵 / 帮你骂). The consent sheet,
+onboarding and Settings now say declining cloud gives labelled examples
+(they said "gentler, on-device"). Two zh-Hant/ja labels translated; expired
+research link removed. iOS: new screenshots in all four languages.
 
-Vent and Feral are different: Apple's on-device model refuses to produce
-genuine vent output, so these two modes send the typed situation to our own
-Cloudflare Worker, which forwards it to a third-party LLM provider (currently
-Groq, OpenRouter as fallback). This happens ONLY after a separate, explicit
-in-app consent (Guideline 5.1.2(i)) shown before any text leaves the device
-— it names Vent and Feral — and is revocable anytime in Settings > AI &
-Privacy. Our proxy is stateless; we do not retain text. Vent and Feral
-therefore give real output on ANY device. The "roommate group" in the Echoes
-tab is cloud-only for the same reason, behind the same consent.
+2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
+Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
+Apple's Foundation Models. Without it (iOS 18, macOS 14-15, ineligible
+hardware, Apple Intelligence off, assets still downloading) those modes
+return CURATED EXAMPLE responses, labelled on every surface; NO credit is
+charged. This is intended.
 
-2. POSITIONING.
+Vent and Feral are different: Apple's on-device model refuses genuine vent
+output, so these two modes send the typed situation (plus a random
+per-install ID) to our own Cloudflare Worker, which forwards it to a
+third-party LLM provider (OpenRouter). This happens ONLY after a separate,
+explicit in-app consent (Guideline 5.1.2(i)) shown before any text leaves
+the device — it names Vent and Feral — revocable anytime in Settings > AI &
+Privacy. Our proxy is stateless; we do not retain text. Once allowed, Vent
+and Feral give real output on ANY device. Declined: nothing is sent; they
+show labelled curated examples, free. Echoes Feral and the
+roommate group (Simplified-Chinese-only tiles in the Styles tab) also use
+the cloud, behind their OWN separate consent.
+
+3. POSITIONING.
 A creative-writing / emotional-expression tool, not a harassment tool. No
 field for a target person's name — only a SITUATION. Safe Mode on by default.
 Vent and Feral produce PRIVATE drafts labelled "for yourself only", not
 presented as messages to send. A user-initiated "Make it sendable" runs a
 second pass that strips profanity, slurs, threats, sexual content and doxxing.
 
-TEST PATH (no purchase or sign-in): a fresh install receives 10 free
-starter credits. Roast Generator > Intensity "Vent" > type any situation >
-Generate. The cloud consent sheet appears first; tap Allow. The card is
-labelled "Vent draft - for yourself only" with a do-not-send banner and one
-credit is used. "Make it sendable" rewrites it on-device at no charge (on a
-device without Apple Intelligence it returns a labelled curated example).
-
-3. WHAT'S NEW IN 1.6.0.
-- Vent no longer requires Pro (it still uses credits and the consent above):
-  on a device without Apple Intelligence it is a free user's only real output.
-- The Explore tools (Reply Helper etc.) now show the same consent sheet
-  before a Vent/Feral draft instead of silently staying on-device.
-- The Pro screen no longer lists Vent, and says plainly when Savage can only
-  show curated examples on the current device.
-- Traditional Chinese: Taiwan/Hong Kong devices report "zh_TW"/"zh_HK" (no
-  script tag), so they were told to answer in Simplified. Fixed.
-- Some capabilities ship DISABLED behind remote flags.
+TEST PATH (no purchase or sign-in): a fresh install gets 10 free credits plus
+2 free generations a day in its first week. Roast Generator > Intensity
+"Vent" > type any situation > Generate. The consent sheet appears first; tap
+"Allow Cloud AI". The card is labelled "Vent draft · for yourself only" with
+a do-not-send banner; the credit count drops by one. "Make it sendable"
+rewrites it on-device at no charge (without Apple Intelligence: a labelled
+curated example).
 
 4. iCLOUD SYNC IS ACTIVE. History, threads, saved situations, settings and
-credit-ledger entries mirror via SwiftData + CloudKit into the PRIVATE
-database of the Apple Account on the device (container
-iCloud.yyh.roastmate.app) — the user's own storage. It never reaches our
-servers and we cannot read it.
+the credit ledger mirror via SwiftData + CloudKit into the PRIVATE database
+of the device's Apple Account (iCloud.yyh.roastmate.app) — the user's own
+storage. It never reaches our servers; we cannot read it.
 
 5. ACCOUNTS. Sign in with Apple is OPTIONAL and gates no feature; only the
 Apple user ID and any shared name are stored locally in Keychain. No content
-shared between users, no social features, no analytics or advertising SDKs,
-no third-party SDKs.
+shared between users, no social features, no analytics, advertising or other
+third-party SDKs.
 
-6. PURCHASES (products unchanged from 1.3.1).
+6. PURCHASES (unchanged since 1.3.1).
 - yyh.roastmate.app.pro.monthly ($2.99/mo)
 - yyh.roastmate.app.pro.yearly ($19.99/yr, 7-day trial)
 - Consumable credit packs: .credits.10 / .70 / .160 / .380
 Pro unlocks Savage, Feral and the Pro styles and removes the credit meter.
-Pro is verified server-side: the app sends the StoreKit 2 transaction JWS to
-our Worker, which validates Apple's signature and issues a short-lived token
-for the higher cloud quota. The JWS carries no name, email or payment detail.
+Pro is verified server-side: our Worker checks the StoreKit 2 transaction
+JWS (no name, email or payment detail) and issues a short-lived token for the
+higher cloud quota.
 
-7. Share Extension and App Intents expose only Calm / Sharp — neither can
-produce a private vent draft. 17+; first launch shows an age gate.
+7. The Share Extension and the Generate Roast intent offer only Composed / Sharp.
+"Quick Vent" (Shortcuts / Control Center) only opens the app on Vent, where
+the consent and credits above apply. 17+; first launch shows an age gate.
 
 Thank you for the review.

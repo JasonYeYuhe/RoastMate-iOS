@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "RoastMateは、あなたのモヤモヤを上品で安全な言葉に変えます。多くのモードはAppleのオンデバイスAIで動作します。「吐き出し」と「罵倒」のプライベート下書きは、より強い表現のため当方のクラウドプロキシを利用できますが、あなたが明示的に許可した場合のみです — それまでは端末内で処理されます。";
 
 "onboarding.privacy.title" = "プライバシー優先。";
-"onboarding.privacy.body" = "「冷静 / 鋭利 / 容赦なし」と「送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作します。そのモデルを利用できない端末では、これらのモードと書き直しは、あらかじめ用意した例であることを明示したうえで表示されます。例の表示でクレジットを消費することはありません。「吐き出し」と「罵倒」も、そのモデルが使える端末では端末内で処理されます。それ以外の場合、およびより強い出力のためには、当方のクラウドプロキシ経由で第三者LLMに送信されますが、あなたが明示的に許可した場合のみです。いずれの場合も当方が控えを保持することはありません。履歴はあなた自身のiCloudアカウントで同期され、当方は読み取れません。この許可は「設定 → AIとプライバシー」でいつでも確認・取り消しできます。";
+"onboarding.privacy.body" = "「穏やか / 鋭い / 容赦なし」と「送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作します。そのモデルを利用できない端末では、これらのモードと書き直しは、あらかじめ用意した例であることを明示したうえで表示されます。例の表示でクレジットを消費することはありません。「吐き出し」と「罵倒」は、あなたが明示的に許可した場合のみ、当方のクラウドプロキシ経由で第三者LLMが生成します。許可しない場合は、あらかじめ用意した例であることを明示して表示します。いずれの場合も当方が控えを保持することはありません。履歴はあなた自身のiCloudアカウントで同期され、当方は読み取れません。この許可は「設定 → AIとプライバシー」でいつでも確認・取り消しできます。";
 
 "onboarding.safety.title" = "嫌がらせのためではなく、自己表現のために。";
 "onboarding.safety.body" = "RoastMateは自分の気持ちを言葉にするためのツールです。個人を標的にする目的ではありません。固有名、脅迫、差別的表現は自動的に除去されます。";
@@ -114,8 +114,8 @@
 "settings.safe_mode" = "セーフモード";
 "settings.safe_mode.footer" = "セーフモードは、Apple標準の安全機構に加えて追加のフィルタを適用します。オンのままを推奨します。";
 
-"settings.cloud_vent" = "吐き出し / 罵倒を強化(クラウドAI)";
-"settings.cloud_vent.footer" = "「吐き出し」と「罵倒」は、あなたが明示的に許可した場合に限り、当方のクラウドプロキシ経由で第三者LLMに転送され、より強い出力になります。冷静 / 鋭利 / 容赦なしは常に100%オンデバイスです。オフにすると全機能ローカル動作 — 吐き出しの強度は大幅に下がります。";
+"settings.cloud_vent" = "吐き出し / 罵倒にクラウドAIを使う";
+"settings.cloud_vent.footer" = "「吐き出し」と「罵倒」は、あなたが明示的に許可した場合に限り、当方のクラウドプロキシ経由で第三者LLMに転送され、より強い出力になります。穏やか / 鋭い / 容赦なしは常に100%オンデバイスです。オフにすると何も送信されず、「吐き出し」と「罵倒」は、あらかじめ用意した例であることを明示して表示します。";
 
 "cloud.error.not_configured" = "クラウドAIは未配備 — ローカルモデルに切り替えます";
 "cloud.error.disabled" = "クラウドAIは設定でオフ — ローカルモデルに切り替えます";
@@ -126,11 +126,11 @@
 "cloud.consent.body" = "「吐き出し」と「罵倒」は生々しいカタルシスの下書きを作ります。十分な強さにするため、このモードはあなたの文章を当方のプロキシ経由で第三者AIモデルに送信します。選ぶのはあなた — 確認は一度だけです。";
 "cloud.consent.point.what" = "状況テキストとインストールごとのランダムIDが、この下書き生成のためだけに(当方プロキシ経由で)第三者LLMへ送信されます。";
 "cloud.consent.point.nostore" = "当方は保存せず学習にも使いません。アカウント・氏名・連絡先は送信しません。";
-"cloud.consent.point.local" = "拒否すると「吐き出し / 罵倒」は100%オンデバイスのままです(出力は穏やかになります)。";
+"cloud.consent.point.local" = "拒否すると何も送信されず、「吐き出し / 罵倒」は、あらかじめ用意した例であることを明示して表示します。";
 "cloud.consent.point.change" = "設定でいつでも変更できます。";
 "cloud.consent.allow" = "クラウドAIを許可";
-"cloud.consent.deny" = "オンデバイスのまま";
-"cloud.consent.footnote" = "冷静 / 鋭利 / 容赦なしは常にオンデバイスで動作し、クラウドは使いません。";
+"cloud.consent.deny" = "許可しない";
+"cloud.consent.footnote" = "穏やか / 鋭い / 容赦なしは常にオンデバイスで動作し、クラウドは使いません。";
 
 "settings.about_ai.title" = "AIについて";
 "settings.about_ai.body" = "「冷静 / 鋭利 / 容赦なし / 送信用書き直し」はAppleのオンデバイスFoundation Modelsで動作し、その内容を当方が見ることはありません。そのモデルを利用できない端末では、これらのモードと書き直しは、あらかじめ用意した例であることを明示したうえで表示されます。例の表示でクレジットを消費することはありません。「吐き出し / 罵倒」は、あなたが初回に明示的に許可した場合に限り、当方のクラウドプロキシ経由で第三者LLMに転送され、より強いカタルシス出力を生成します(選ぶのはあなたで、ここでいつでも変更できます)。なお、保存された履歴はあなた自身のプライベートなiCloudアカウントで各端末に同期されます。これはAppleのストレージであり当方のものではなく、当方は読み取れません。";
@@ -151,19 +151,17 @@
 
 "quota.remaining" = "今日の無料回数:残り%d回";
 "quota.exhausted.title" = "本日の無料回数を使い切りました";
-"quota.exhausted.body" = "本日5回の無料生成をご利用いただきました。Proにアップグレードすると、無制限の生成とすべてのスタイルが解放されます。";
+"quota.exhausted.body" = "この機能には Pro が必要です。Pro なら罵倒・容赦なし・全24スタイルが使えます。";
 
 "paywall.title" = "RoastMate Pro";
-"paywall.body" = "吐き出しモード(プライベート下書き+書き直し)· 容赦なしモード · 無制限の生成 · 20+のスタイル · 議論シミュレーター · 無制限の履歴";
-"paywall.feature.vent" = "吐き出しモード";
-"paywall.feature.vent.detail" = "まず本音をそのまま書き出して、それから送れる形に書き直します。";
+"paywall.body" = "罵倒 · 容赦なし · 全24スタイル · 返しは毎回3パターン · 口論シミュレーター · 履歴無制限 · クレジット不要";
 "paywall.feature.savage" = "容赦なしモード";
 "paywall.feature.savage.detail" = "遠慮なしの切れ味。対応するスタイルでのみ利用可。";
 "paywall.feature.savage.detail.curated" = "この端末では「容赦なし」はあらかじめ用意した例を表示します。入力内容から生成するには Apple Intelligence が必要です。";
 "paywall.feature.feral.detail" = "制限なしの吐き出し —— 強い言葉も解禁。自分だけのプライベートな下書き。";
 "paywall.feature.feral" = "罵倒モード";
-"paywall.feature.unlimited" = "無制限の生成";
-"paywall.feature.unlimited.detail" = "1日の上限を気にせず、何度でも。";
+"paywall.feature.unlimited" = "クレジット不要";
+"paywall.feature.unlimited.detail" = "Proはクレジットを消費しません。残高を気にする必要はありません。";
 
 "quota.remaining.lifetime" = "スターター枠 残り %d 回";
 "quota.lifetime.hint" = "最初の20回は無料、その後は1日5回";
@@ -179,7 +177,7 @@
 "wallet.starter" = "今日は無料であと%d回";
 "wallet.starter.hint" = "お試し週間";
 "paywall.out_of_credits.title" = "クレジットがありません";
-"paywall.out_of_credits.body" = "Proで無制限に。または、クレジットパックで補充して続けられます。";
+"paywall.out_of_credits.body" = "Proならクレジット不要。または、クレジットパックで補充して続けられます。";
 "paywall.credits.title" = "あと数回だけ?";
 "paywall.credits.subtitle" = "サブスク不要で補充。クレジットは生成回数が増えるだけ —— 罵倒・容赦なしは解除されません。";
 "paywall.credits.pack" = "%d クレジット";
@@ -188,7 +186,7 @@
 "paywall.credits.balance" = "残り %d クレジット";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "おすすめ";
-"paywall.pro.subtitle" = "罵倒・容赦なしを解除する唯一の方法 —— さらに無制限生成と全スタイル。";
+"paywall.pro.subtitle" = "罵倒・容赦なしを解除する唯一の方法 —— さらに全スタイル、クレジット不要。";
 "settings.credits.balance" = "クレジット";
 "settings.credits.buy" = "クレジットを追加";
 "paywall.loading" = "読み込み中…";
@@ -497,7 +495,8 @@
 "sharecard.comeback_eyebrow" = "私の返し";
 "sharecard.blocked" = "この一文はカードにできません。生成し直してみてください。";
 "sharecard.privacy_note" = "画像はすべて端末内で生成されます。元の吐き出しは非公開のまま、アップロードされません。";
-"sharecard.findus" = "App Storeで RoastMate を検索";
+"sharecard.findus" = "App Storeで「RoastMate AI」を検索";
+"sharecard.wordmark" = "RoastMate AI";
 "sharecard.watermark" = "まず吐き出し、勝てる方を送る";
 
 /* A′ ローンチ後の計測 — プライバシー両立の集計カウント。
@@ -508,11 +507,6 @@
 "settings.telemetry.prepare_export" = "匿名利用スナップショットを準備";
 "settings.telemetry.share" = "匿名利用スナップショットを共有";
 "settings.telemetry.reset" = "利用カウントをリセット";
-
-// P5 Q1 W1 — リサーチ募集タイル。利用統計への同意は不要。
-"settings.section.research" = "サービス改善にご協力ください";
-"settings.research.tile" = "有料 30 分インタビュー";
-"settings.research.footer" = "RoastMate の使い方について 30 分の有料インタビューに参加いただける方を 20 名募集しています。タップして詳細を確認してください。利用統計の許可は不要です。";
 
 /* ルームメイト集合 (roommate group, Echoes vNext) */
 "feature.roommate.title" = "ルームメイト集合";
@@ -548,3 +542,5 @@
 "sharecard.scenario.marriage_pressure" = "また結婚の話";
 "sharecard.setup_picker_title" = "状況を一言(任意・選択式)";
 "sharecard.setup_none" = "なし";
+"settings.echoes_feral_cloud" = "Echoes 罵倒をクラウドで";
+"settings.echoes_feral_cloud.footer" = "罵倒トーンの Echoes で、入力した内容を RoastMate のクラウドに送ってより強い出力を生成するかどうか。カジュアルは常にこの端末内で処理されます。「吐き出し」のクラウド設定とは別の同意です。";

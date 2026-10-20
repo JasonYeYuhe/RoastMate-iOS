@@ -128,9 +128,15 @@ struct ShareCardView: View {
                 .font(.system(size: 30 * s))
                 .foregroundStyle(.orange)
             VStack(alignment: .leading, spacing: 2 * s) {
-                Text("RoastMate")
+                // The name people can SEARCH and find us by, per locale (v1.7
+                // P1.2): "RoastMate" alone ranks an unrelated app first in
+                // every storefront measured; "RoastMate AI" / 幫你罵 / 帮你骂
+                // rank us #1. Same strings as the store names.
+                Text("sharecard.wordmark")
                     .font(.system(size: 32 * s, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
                 if content.showsGrowthBadge {
                     // A printed URL is inert on a static image, so the human-
                     // readable half tells people what to SEARCH.

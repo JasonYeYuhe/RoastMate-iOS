@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "RoastMate turns frustration into witty, safe self-expression. Most modes run on Apple's on-device AI. Vent and Feral private drafts can use our cloud proxy for stronger output — but only after you explicitly allow it; until then they stay on-device.";
 
 "onboarding.privacy.title" = "Private by design.";
-"onboarding.privacy.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on-device with Apple's Foundation Models. Where that model isn't available, these modes and the rewrite show a clearly-marked example response instead; you are never charged for an example. Vent and Feral stay on-device too where that model is available; otherwise, and for stronger output, they go through our developer-owned cloud proxy to a third-party LLM — but only if you explicitly allow it. We never keep a copy either way. Your history syncs through your own iCloud account, which we cannot read. Review or revoke cloud permission anytime in Settings → AI & Privacy.";
+"onboarding.privacy.body" = "Composed / Sharp / Savage and the Make-it-sendable rewrite run on-device with Apple's Foundation Models. Where that model isn't available, these modes and the rewrite show a clearly-marked example response instead; you are never charged for an example. Vent and Feral are written by a third-party LLM through our developer-owned cloud proxy — but only if you explicitly allow it; if you don't, they show clearly-marked examples. We never keep a copy either way. Your history syncs through your own iCloud account, which we cannot read. Review or revoke cloud permission anytime in Settings → AI & Privacy.";
 
 "onboarding.safety.title" = "For self-expression, not harassment.";
 "onboarding.safety.body" = "RoastMate is for venting your own feelings — not for targeting specific people. We strip names, threats, and slurs automatically.";
@@ -114,8 +114,8 @@
 "settings.safe_mode" = "Safe Mode";
 "settings.safe_mode.footer" = "Safe Mode adds an extra layer of filtering on top of Apple's built-in safety. We recommend keeping it on.";
 
-"settings.cloud_vent" = "Stronger Vent / Feral (Cloud AI)";
-"settings.cloud_vent.footer" = "Vent and Feral can use our developer-owned cloud proxy to a third-party LLM for stronger output — only after you explicitly allow it. Calm, Sharp, and Savage always stay 100% on-device. Off keeps everything local — vent output will be much gentler.";
+"settings.cloud_vent" = "Vent / Feral via Cloud AI";
+"settings.cloud_vent.footer" = "Vent and Feral can use our developer-owned cloud proxy to a third-party LLM for stronger output — only after you explicitly allow it. Composed, Sharp, and Savage always stay 100% on-device. Off: nothing is sent, and Vent and Feral show clearly-marked examples instead.";
 
 "cloud.error.not_configured" = "Cloud AI hasn't been deployed yet — using local model.";
 "cloud.error.disabled" = "Cloud AI is off in Settings — using local model.";
@@ -126,11 +126,11 @@
 "cloud.consent.body" = "Vent and Feral make raw, cathartic drafts. To be strong enough they send your text to a third-party AI model through our developer-owned proxy. You choose — once.";
 "cloud.consent.point.what" = "Your situation text plus a random per-install ID go to a third-party LLM (via our proxy) only to generate this draft.";
 "cloud.consent.point.nostore" = "We don't store it or use it for training; no account, name, or contacts are sent.";
-"cloud.consent.point.local" = "Decline and Vent / Feral stay 100% on-device (gentler output).";
+"cloud.consent.point.local" = "Decline and nothing is sent: Vent / Feral show clearly-marked examples instead.";
 "cloud.consent.point.change" = "You can change this anytime in Settings.";
 "cloud.consent.allow" = "Allow Cloud AI";
-"cloud.consent.deny" = "Keep on-device";
-"cloud.consent.footnote" = "Calm, Sharp, and Savage always run on-device and never use cloud.";
+"cloud.consent.deny" = "Don't allow";
+"cloud.consent.footnote" = "Composed, Sharp, and Savage always run on-device and never use cloud.";
 
 "settings.about_ai.title" = "About the AI";
 "settings.about_ai.body" = "Calm / Sharp / Savage and the Make-it-sendable rewrite run on Apple's on-device Foundation Models — we never see that text. Where that model is unavailable, these modes and the rewrite show a clearly-marked example response instead; you are never charged for an example. Vent and Feral can use our developer-owned cloud proxy to a third-party LLM provider for stronger cathartic output, but only after you explicitly allow it (you choose the first time, and can change it here anytime). Separately, your saved history syncs through your own private iCloud account so it is on all your devices — that is Apple's storage, not ours, and we cannot read it.";
@@ -151,19 +151,17 @@
 
 "quota.remaining" = "%d free roasts left today";
 "quota.exhausted.title" = "Daily free limit reached";
-"quota.exhausted.body" = "You've used all 5 free generations today. Upgrade to Pro for unlimited generations and all styles.";
+"quota.exhausted.body" = "That needs Pro. Pro unlocks Feral, Savage and all 24 styles.";
 
 "paywall.title" = "RoastMate Pro";
-"paywall.body" = "Vent Mode (private draft + rewrite) · Savage intensity · Unlimited generations · All 20+ styles · Argument simulator · Unlimited history";
-"paywall.feature.vent" = "Vent Mode";
-"paywall.feature.vent.detail" = "Get it out raw, then we rewrite it into something you can actually send.";
+"paywall.body" = "Feral · Savage · All 24 styles · 3 versions per comeback · Argument simulator · Unlimited history · No credits needed";
 "paywall.feature.savage" = "Savage intensity";
 "paywall.feature.savage.detail" = "No-prisoners take-downs for the styles that earn them.";
 "paywall.feature.savage.detail.curated" = "On this device Savage shows curated examples — writing from what you type needs Apple Intelligence.";
 "paywall.feature.feral.detail" = "Vent with the limits off — profanity unlocked. A private draft, just for you.";
 "paywall.feature.feral" = "Feral Mode";
-"paywall.feature.unlimited" = "Unlimited generations";
-"paywall.feature.unlimited.detail" = "Skip the daily cap. Use it as often as you need.";
+"paywall.feature.unlimited" = "No credits needed";
+"paywall.feature.unlimited.detail" = "Pro never spends credits — no wallet to watch.";
 
 "quota.remaining.lifetime" = "%d free to start";
 "quota.lifetime.hint" = "First 20 free, then 5 daily";
@@ -179,7 +177,7 @@
 "wallet.starter" = "%d free today";
 "wallet.starter.hint" = "Free starter week";
 "paywall.out_of_credits.title" = "Out of credits";
-"paywall.out_of_credits.body" = "Go unlimited with Pro, or top up with a credit pack to keep going.";
+"paywall.out_of_credits.body" = "Get Pro and stop counting credits, or top up with a credit pack to keep going.";
 "paywall.credits.title" = "Just need a few more?";
 "paywall.credits.subtitle" = "Top up without a subscription. Credits are extra generations only — they do NOT unlock Feral or Savage.";
 "paywall.credits.pack" = "%d credits";
@@ -188,7 +186,7 @@
 "paywall.credits.balance" = "You have %d credits";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "Recommended";
-"paywall.pro.subtitle" = "The only way to unlock Feral · Savage — plus unlimited generations and every style.";
+"paywall.pro.subtitle" = "The only way to unlock Feral · Savage — plus every style, with no credits needed.";
 "settings.credits.balance" = "Credits";
 "settings.credits.buy" = "Get more credits";
 "paywall.loading" = "Loading…";
@@ -497,7 +495,8 @@
 "sharecard.comeback_eyebrow" = "MY COMEBACK";
 "sharecard.blocked" = "This line can't be made into a card. Try regenerating it.";
 "sharecard.privacy_note" = "Rendered entirely on your device. Your original vent stays private and is never uploaded.";
-"sharecard.findus" = "Search RoastMate on the App Store";
+"sharecard.findus" = "Search “RoastMate AI” on the App Store";
+"sharecard.wordmark" = "RoastMate AI";
 "sharecard.watermark" = "Vent first, then send the version that wins";
 
 /* A′ post-launch instrumentation — privacy-compatible aggregate counts.
@@ -508,12 +507,6 @@
 "settings.telemetry.prepare_export" = "Prepare anonymized usage snapshot";
 "settings.telemetry.share" = "Share anonymized usage snapshot";
 "settings.telemetry.reset" = "Reset usage counts";
-
-// P5 Q1 W1 — distribution research recruit tile. NOT gated by
-// telemetryOptedIn (compensation cannot be conditional on data consent).
-"settings.section.research" = "Help us improve";
-"settings.research.tile" = "Paid 30-min research interview";
-"settings.research.footer" = "We're recruiting 20 people for a 30-minute paid interview about how you use RoastMate. Tap to learn more. Telemetry consent not required.";
 
 // MARK: - Echoes / 替你出气 (Phase 5 Q2 — zh-Hans only in v1; en strings
 // kept here as bilingual fallbacks for dev / debug. End-user en tile is

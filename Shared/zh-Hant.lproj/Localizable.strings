@@ -17,7 +17,7 @@
 "onboarding.welcome.body" = "「幫你罵」把你的不爽變成俏皮、安全、可以發出去的話。多數模式跑在 Apple 本地 AI 上;「發洩」與「痛罵」可以走雲端代理獲得更猛的輸出 — 但僅在你明確同意後才會,在此之前一律留在本地。";
 
 "onboarding.privacy.title" = "預設私密。";
-"onboarding.privacy.body" = "「體面 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 本地 Foundation Models 執行。在無法使用該模型的裝置上,這三檔和「改成能發的」改寫會改為顯示帶明確標註的預設範例;預設範例永遠不扣額度。「發洩」與「痛罵」在支援該模型的裝置上同樣留在本地;否則(以及為了更強的輸出)會透過我們自有的雲端代理呼叫第三方 LLM —— 但僅在你明確授權後。無論哪種方式,我們都不會保留副本。你的歷史記錄透過你自己的 iCloud 帳戶同步,我們無法讀取。可隨時在「設定 → AI 與隱私」中查看或撤銷該授權。";
+"onboarding.privacy.body" = "「得體 / 銳利 / 狠」三檔強度和「改成能發的」改寫,都用 Apple 裝置端的 Foundation Models 執行。在無法使用該模型的裝置上,這三檔和「改成能發的」改寫會改為顯示帶明確標註的預設範例;預設範例永遠不扣額度。「發洩」與「痛罵」由第三方 LLM 生成,經我們自有的雲端代理 —— 但僅在你明確授權後;不授權的話,會顯示帶明確標註的預設範例。無論哪種方式,我們都不會保留副本。你的歷史記錄透過你自己的 iCloud 帳戶同步,我們無法讀取。可隨時在「設定 → AI 與隱私」中查看或撤銷該授權。";
 
 "onboarding.safety.title" = "為自我表達,而非攻擊他人。";
 "onboarding.safety.body" = "「幫你罵」幫你說出自己的感受,不用於針對具體的人。我們會自動去掉姓名、威脅和侮辱性詞彙。";
@@ -114,8 +114,8 @@
 "settings.safe_mode" = "安全模式";
 "settings.safe_mode.footer" = "安全模式在 Apple 內建的內容安全機制上再加一層過濾。建議保持開啟。";
 
-"settings.cloud_vent" = "增強發洩 / 痛罵(雲端 AI)";
-"settings.cloud_vent.footer" = "「發洩」與「痛罵」可透過我們自有的雲端代理轉發給第三方 LLM 以獲得更強輸出 —— 僅在你明確同意後。「體面 / 銳利 / 狠」始終 100% 本地運行。關掉就全部本地 —— 發洩會溫和很多。";
+"settings.cloud_vent" = "「發洩 / 痛罵」使用雲端 AI";
+"settings.cloud_vent.footer" = "「發洩」與「痛罵」可透過我們自有的雲端代理轉發給第三方 LLM 以獲得更強輸出 —— 僅在你明確同意後。「得體 / 銳利 / 狠」始終 100% 在本機執行。關掉的話不會傳送任何內容,「發洩」與「痛罵」改為顯示帶明確標註的預設範例。";
 
 "cloud.error.not_configured" = "雲端 AI 尚未部署 — 改用本地模型";
 "cloud.error.disabled" = "雲端 AI 已在設定中關閉 — 改用本地模型";
@@ -126,11 +126,11 @@
 "cloud.consent.body" = "「發洩」與「痛罵」產生的是原始、宣洩式的草稿。為了夠力,這個模式會透過我們自有的代理把你的文字傳給第三方 AI 模型。由你決定 —— 只問這一次。";
 "cloud.consent.point.what" = "你的情境文字 + 一組隨機的安裝識別碼會傳給第三方 LLM(經我們的代理),僅用於生成這次草稿。";
 "cloud.consent.point.nostore" = "我們不儲存、也不用於訓練;不傳送帳號、姓名或通訊錄。";
-"cloud.consent.point.local" = "拒絕的話,「發洩 / 痛罵」全部 100% 本地運行(輸出較溫和)。";
+"cloud.consent.point.local" = "拒絕的話不會傳送任何內容,「發洩 / 痛罵」改為顯示帶明確標註的預設範例。";
 "cloud.consent.point.change" = "隨時可在「設定」中變更。";
 "cloud.consent.allow" = "允許使用雲端 AI";
-"cloud.consent.deny" = "保持本地運行";
-"cloud.consent.footnote" = "「體面 / 銳利 / 狠」始終本地運行,從不使用雲端。";
+"cloud.consent.deny" = "不允許";
+"cloud.consent.footnote" = "「得體 / 銳利 / 狠」始終在本機執行,從不使用雲端。";
 
 "settings.about_ai.title" = "關於 AI";
 "settings.about_ai.body" = "「體面 / 銳利 / 狠 / 改成能發的」用 Apple 本地 Foundation Models 框架運行 —— 這些內容我們永遠看不到。在無法使用該模型的裝置上,這三檔和「改成能發的」改寫會改為顯示帶明確標註的預設範例;預設範例永遠不扣額度。「發洩 / 痛罵」可透過我們自有的雲端代理轉發給第三方 LLM 提供商以獲得更強的發洩效果,但僅在你首次明確同意後(由你選擇,且隨時可在此變更)。另外,你儲存的歷史記錄會透過你自己的私人 iCloud 帳戶在各裝置間同步 —— 那是 Apple 的儲存空間,不是我們的,我們無法讀取。";
@@ -151,19 +151,17 @@
 
 "quota.remaining" = "今日還剩 %d 次免費生成";
 "quota.exhausted.title" = "今日免費次數已用完";
-"quota.exhausted.body" = "今天的 5 次免費生成已經用完。升級 Pro 可以無限生成,並解鎖全部風格。";
+"quota.exhausted.body" = "這個需要 Pro。Pro 解鎖痛罵、狠和全部 24 種風格。";
 
 "paywall.title" = "RoastMate Pro";
-"paywall.body" = "發洩模式(私密草稿 + 改寫)· 狠話強度 · 無限生成 · 20+ 風格 · 吵架模擬器 · 無限歷史";
-"paywall.feature.vent" = "發洩模式";
-"paywall.feature.vent.detail" = "先把氣寫出來,再讓 AI 改成能發出去的版本。";
+"paywall.body" = "痛罵 · 狠 · 全部 24 種風格 · 每則回擊 3 個版本 · 吵架模擬器 · 無限歷史 · 不扣點數";
 "paywall.feature.savage" = "狠話強度";
 "paywall.feature.savage.detail" = "不留情面的尖銳回擊,僅在配得上的風格中開放。";
 "paywall.feature.savage.detail.curated" = "這台裝置上「狠」顯示的是預設範例 —— 需要 Apple Intelligence 才能根據你輸入的內容生成。";
 "paywall.feature.feral.detail" = "不設上限的發洩 —— 粗口解鎖,只給你自己看的私密草稿。";
 "paywall.feature.feral" = "痛罵模式";
-"paywall.feature.unlimited" = "無限生成";
-"paywall.feature.unlimited.detail" = "跳過每日上限,想罵多少罵多少。";
+"paywall.feature.unlimited" = "不扣點數";
+"paywall.feature.unlimited.detail" = "Pro 從不扣點數,不用再盯著餘額。";
 
 "quota.remaining.lifetime" = "新人額度還剩 %d 次";
 "quota.lifetime.hint" = "前 20 次免費,之後每日 5 次";
@@ -179,7 +177,7 @@
 "wallet.starter" = "今日免費 %d 次";
 "wallet.starter.hint" = "新手體驗週";
 "paywall.out_of_credits.title" = "點數已用完";
-"paywall.out_of_credits.body" = "升級 Pro 享受無限,或買個點數包先繼續用。";
+"paywall.out_of_credits.body" = "升級 Pro 就不再扣點數,或買個點數包先繼續用。";
 "paywall.credits.title" = "只想再多幾次?";
 "paywall.credits.subtitle" = "無需訂閱,按需儲值。點數只增加生成次數 —— 不會解鎖痛罵或狠。";
 "paywall.credits.pack" = "%d 點";
@@ -188,7 +186,7 @@
 "paywall.credits.balance" = "你還有 %d 點";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "推薦";
-"paywall.pro.subtitle" = "解鎖痛罵 · 狠的唯一方式 —— 外加無限生成和全部風格。";
+"paywall.pro.subtitle" = "解鎖痛罵 · 狠的唯一方式 —— 外加全部風格,而且不扣點數。";
 "settings.credits.balance" = "點數";
 "settings.credits.buy" = "取得更多點數";
 "paywall.loading" = "載入中…";
@@ -497,7 +495,8 @@
 "sharecard.comeback_eyebrow" = "我的回擊";
 "sharecard.blocked" = "這句暫時不能做成卡片。可以重新產生一則試試。";
 "sharecard.privacy_note" = "整張圖都在你的手機上產生。你原本的發洩內容始終私密,不會被上傳。";
-"sharecard.findus" = "App Store 搜尋 RoastMate";
+"sharecard.findus" = "App Store 搜尋「幫你罵」";
+"sharecard.wordmark" = "幫你罵";
 "sharecard.watermark" = "先罵個痛快，再發會贏的版本";
 
 /* A′ 上線後埋點 — 隱私友善的彙總計數。詳見 docs/A_PRIME_TELEMETRY.md。 */
@@ -507,11 +506,6 @@
 "settings.telemetry.prepare_export" = "準備匿名使用快照";
 "settings.telemetry.share" = "分享匿名使用快照";
 "settings.telemetry.reset" = "重置使用計數";
-
-// P5 Q1 W1 — 使用者研究招募入口。不需要授權數據使用即可參與。
-"settings.section.research" = "幫我們做得更好";
-"settings.research.tile" = "付費 30 分鐘使用者訪談";
-"settings.research.footer" = "我們正在招募 20 位使用者做 30 分鐘的付費訪談,了解你怎麼用 RoastMate。點擊了解詳情。不需要授權數據使用。";
 
 /* 虛擬室友群 (roommate group, Echoes vNext) */
 "feature.roommate.title" = "虛擬室友群";
@@ -547,3 +541,5 @@
 "sharecard.scenario.marriage_pressure" = "又開始催婚";
 "sharecard.setup_picker_title" = "加一句前情(可選,只從下面選)";
 "sharecard.setup_none" = "不加";
+"settings.echoes_feral_cloud" = "Echoes 痛罵檔走雲端";
+"settings.echoes_feral_cloud.footer" = "痛罵語氣的 Echoes 是否可以把你寫的內容送到 RoastMate 的雲端，產生更衝的輸出。日常語氣一律只在這台裝置上處理。和「發洩」的雲端授權是分開的。";

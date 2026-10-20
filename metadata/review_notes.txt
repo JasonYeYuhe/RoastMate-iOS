@@ -1,4 +1,5 @@
 SUPERSEDED (frozen at v1.3.1). The notes actually sent to App Review are metadata/review_notes_asc_short.txt (<= 4000 chars), kept current per release.
+Corrected 2026-10-14 (v1.7.0 prep), two claims that are false today: the cloud provider is OpenRouter only (the Worker's Groq hop has been off since 2026-10-07, GROQ_ENABLED="false"), and the roommate group sits behind its own Echoes cloud consent, not the Vent one. Everything else below still describes v1.3.1; check it against the code before reusing any of it.
 
 Reviewer notes for RoastMate v1.3.1:
 
@@ -11,14 +12,15 @@ Reviewer notes for RoastMate v1.3.1:
    Apple's on-device model refuses to produce genuine vent output (its
    guardrails reject the register), so these two modes send the user's
    typed situation to OUR developer-owned Cloudflare Worker proxy, which
-   forwards it to a third-party LLM provider (currently Groq; OpenRouter
-   as fallback). This happens ONLY after the user grants an explicit,
-   separate in-app consent (Guideline 5.1.2(i)), shown before any text
-   leaves the device and revocable anytime in Settings → AI & Privacy.
+   forwards it to a third-party LLM provider (OpenRouter). This happens
+   ONLY after the user grants an explicit, separate in-app consent
+   (Guideline 5.1.2(i)), shown before any text leaves the device and
+   revocable anytime in Settings → AI & Privacy.
    The proxy is stateless — we do not retain the text.
 
-   The 虚拟舍友群 ("roommate group") feature in the Echoes tab is
-   cloud-only for the same reason, behind the same consent.
+   The 虚拟舍友群 ("roommate group") feature (an Echoes tile in the
+   Styles tab, shown only in Simplified Chinese) is cloud-only for the
+   same reason, behind its own separate Echoes cloud consent.
 
    NOTE: an earlier version of this document said the app was on-device
    only and suggested verifying in Airplane Mode. That has not been

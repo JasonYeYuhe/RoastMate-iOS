@@ -158,14 +158,20 @@ actor RoastEngine {
         if cloudVentEnabled, CloudConfig.isConfigured {
             if intensity.isPrivateDraft {
                 do {
-                    let cloudText = try await runCloudVent(
-                        client: cloudClient,
-                        auth: auth,
-                        situation: situation,
-                        style: style,
-                        intensity: intensity,
-                        locale: locale
-                    )
+                    let cloudText: String
+                    if let fixture = AppLaunchEnvironment.uiTestVentFixture {
+                        // App Store screenshots only (-uitest + fixture arg).
+                        cloudText = fixture
+                    } else {
+                        cloudText = try await runCloudVent(
+                            client: cloudClient,
+                            auth: auth,
+                            situation: situation,
+                            style: style,
+                            intensity: intensity,
+                            locale: locale
+                        )
+                    }
                     // Cloud output must clear the SAME vent safety bar as
                     // local output. Use `try` (not `try?`) so a hard-rail
                     // violation (slur / threat of violence / self-harm)

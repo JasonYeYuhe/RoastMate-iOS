@@ -52,4 +52,24 @@ enum AppLaunchEnvironment {
         }
         return raw
     }
+
+    /// A canned Vent reply for the App Store screenshots, via
+    /// `-uitestVentFixture <base64>`. It replaces ONLY the network call in
+    /// `RoastEngine`'s cloud Vent branch: consent, the cloud gate and the
+    /// vent safety filter all still run, so the screenshot shows the real
+    /// post-consent screen. The text is a real reply from the live Worker with
+    /// only its profanity tokens deleted (store screenshots must be 4+,
+    /// App Review 2.3.8) — see marketing/appstore/vent-fixtures/. Requires
+    /// `-uitest` as well; nil in production (users cannot pass launch args).
+    static var uiTestVentFixture: String? {
+        guard isUITest else { return nil }
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-uitestVentFixture"), i + 1 < args.count,
+              let data = Data(base64Encoded: args[i + 1]),
+              let decoded = String(data: data, encoding: .utf8),
+              !decoded.isEmpty else {
+            return nil
+        }
+        return decoded
+    }
 }

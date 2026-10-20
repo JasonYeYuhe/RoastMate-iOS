@@ -1,76 +1,188 @@
 import XCTest
 
-/// Drives the app through the six App Store screenshot scenes. Run per
+/// Drives the app through the App Store screenshot scenes. Run per
 /// locale × simulator from `scripts/screenshots.sh`. Each `XCTAttachment`
 /// it produces is extracted from the resulting `.xcresult` bundle by
 /// `scripts/extract-screenshots.sh`.
 final class ScreenshotTests: XCTestCase {
 
     override func setUp() {
-        // Screenshot capture must be resilient: one flaky tap (e.g. the
-        // SwiftUI TextEditor briefly reporting "not hittable" while the
-        // onboarding overlay finishes dismissing) should NOT abort the
-        // other five scenes. We continue after failures and guard every
-        // interaction defensively below.
+        // The marketing flows below poll and carry on after a flaky tap.
+        // test_screenshots does NOT rely on this: each of its guards
+        // XCTFails and returns, so a broken App Store set fails the run.
         continueAfterFailure = true
     }
 
-    func test_screenshots() {
+    /// App Store set. Every scene is guarded: a capture is only taken once
+    /// the screen it claims to show is provably on screen, and any guard
+    /// that fails stops the run (a broken set must fail, not upload).
+    ///
+    /// History of what went wrong here (2026-10-07 root cause):
+    /// - The locale never reached this process. scripts/screenshots.sh ran
+    ///   `LOCALE=zh_Hant xcodebuild …`, but xcodebuild forwards only
+    ///   `TEST_RUNNER_`-prefixed variables to the test runner, so `LOCALE`
+    ///   was nil here and the old `?? "en_US"` default produced an ENGLISH
+    ///   set for every locale (measured: same UI, same English typed text,
+    ///   with LOCALE=zh_Hant; correct zh-Hant with TEST_RUNNER_LOCALE).
+    /// - Scenes 2–5 typed into the TextEditor and then tapped the tab bar
+    ///   while the keyboard covered it, so every tab tap hit the keyboard:
+    ///   4 byte-identical frames, and the last tap hit the dictation key
+    ///   ("Enable Dictation?" — a system alert that then survives into the
+    ///   NEXT run's first frame).
+    /// - The PNGs committed in metadata/screenshots/ (all added in 9e27583,
+    ///   2026-05-15, never regenerated) are stale: en_US/ja_JP/zh_Hant are
+    ///   the PRE-fix run (onboarding, English); the "zh_Hans" folder is one
+    ///   post-fix run that is English (LOCALE never arrived) with the
+    ///   keyboard bug above.
+    func test_screenshots() throws {
+        // Not launched by scripts/screenshots.sh (e.g. preflight runs the whole
+        // scheme): nothing to capture, so skip rather than fail. Inside a
+        // screenshot run every guard below still fails loudly.
+        guard let locale = ProcessInfo.processInfo.environment["LOCALE"], !locale.isEmpty else {
+            throw XCTSkip("LOCALE is not set in the test-runner environment. xcodebuild forwards only "
+                          + "TEST_RUNNER_-prefixed variables: run scripts/screenshots.sh, or pass "
+                          + "TEST_RUNNER_LOCALE=<en_US|zh_Hans|zh_Hant|ja_JP>.")
+        }
+        guard let spec = ShotLocale(locale) else {
+            XCTFail("Unsupported LOCALE '\(locale)' (expected en_US, zh_Hans, zh_Hant or ja_JP).")
+            return
+        }
+
+        dismissLeftoverDictationAlert()
+
         let app = XCUIApplication()
         app.launchArguments += [
             "-uitest",
-            "-uitestLang", uiTestLanguageCode(),
-            // Belt-and-braces: also set the standard locale args. The
-            // app's -uitest path pins LanguageManager so these aren't
-            // load-bearing, but they keep system-formatted dates etc.
-            // in the right locale too.
-            "-AppleLanguages", appleLanguagesArgument(),
-            "-AppleLocale", appleLocaleArgument()
+            "-uitestLang", spec.languageCode,
+            // Belt-and-braces: the app's -uitest path pins LanguageManager,
+            // these keep system-formatted dates etc. in the locale too.
+            "-AppleLanguages", "(\(spec.languageCode))",
+            "-AppleLocale", locale
         ]
+        // Scene 01 needs a Vent result without the network: a real Worker
+        // reply with its profanity tokens deleted (store screenshots must be 4+,
+        // App Review 2.3.8), base64, from marketing/appstore/vent-fixtures/
+        // via TEST_RUNNER_VENT_FIXTURE. The app swaps it in for the network
+        // call only — consent, the cloud gate and the safety filter still run.
+        guard let ventFixture = ProcessInfo.processInfo.environment["VENT_FIXTURE"],
+              !ventFixture.isEmpty else {
+            XCTFail("VENT_FIXTURE is not set: run scripts/screenshots.sh (it passes "
+                    + "TEST_RUNNER_VENT_FIXTURE per locale).")
+            return
+        }
+        app.launchArguments += ["-uitestVentFixture", ventFixture]
         app.launch()
 
-        // App skips onboarding entirely under -uitest, so we land
-        // straight on the generator. No tapping-through required.
-        capture(app: app, name: "01-generator-empty")
+        // Guard 1 — the generator is on screen and nothing covers it
+        // (onboarding sheet, consent sheet, a system alert).
+        let editor = app.textViews["situation_editor"]
+        guard waitForHittable(editor, timeout: 20) else {
+            XCTFail("The generator's situation editor never became hittable — something covers the root UI.")
+            return
+        }
+        // Guard 2 — the app renders the requested language. The tab label
+        // is resolved by the app from its own .strings, so this proves the
+        // language forcing worked end to end, not just that LOCALE arrived.
+        guard app.tabBars.buttons[spec.settingsTabLabel].waitForExistence(timeout: 5) else {
+            XCTFail("No '\(spec.settingsTabLabel)' tab: the app is not rendering \(spec.languageCode).")
+            return
+        }
 
-        // 2. Generator filled in. The TextEditor can momentarily report
-        //    "not hittable" right after onboarding dismissal — poll for
-        //    hittability instead of tapping blind, and don't fail the
-        //    run if typing doesn't take (scene 1 + 3-6 are still useful).
-        let situationField = app.textViews.firstMatch
-        if situationField.waitForExistence(timeout: 4) {
-            var tries = 0
-            while !situationField.isHittable && tries < 10 {
-                usleep(300_000)
-                tries += 1
+        // 2. Situation filled + Vent selected. Filled by tapping the app's
+        //    own first scenario card (Scenarios.json `boss_credit`, written
+        //    per locale — zh-Hant in Taiwan wording), NOT by typing: the
+        //    scenario button never focuses the TextEditor, so no keyboard
+        //    ever covers the tab bar. Vent is selected after, because a
+        //    scenario sets its own default intensity.
+        let scenario = app.buttons.matching(
+            NSPredicate(format: "label BEGINSWITH %@", spec.scenarioPrefix)).firstMatch
+        guard waitForHittable(scenario, timeout: 5) else {
+            XCTFail("Scenario card '\(spec.scenarioPrefix)…' not found or not hittable.")
+            return
+        }
+        scenario.tap()
+        guard (editor.value as? String)?.hasPrefix(spec.scenarioPrefix) == true else {
+            XCTFail("Tapping the scenario did not fill the situation editor (value: \(String(describing: editor.value))).")
+            return
+        }
+        guard selectVent(app, spec) else {
+            XCTFail("Could not select the '\(spec.ventLabel)' intensity chip.")
+            return
+        }
+        guard !app.keyboards.firstMatch.exists else {
+            XCTFail("Keyboard is up — tab-bar taps would land on it.")
+            return
+        }
+        settle()
+        capture(app: app, name: "02-generator-vent")
+
+        // 1. The Vent result card — the store's first, inline-in-search shot.
+        //    Generate → the cloud consent sheet (reset to "not asked" on every
+        //    -uitest launch) → Allow → the fixture renders through the real
+        //    post-consent path.
+        let generate = app.buttons[spec.generateLabel]
+        guard waitForHittable(generate, timeout: 5) else {
+            XCTFail("'\(spec.generateLabel)' button not hittable.")
+            return
+        }
+        generate.tap()
+        let allow = app.buttons[spec.allowCloudLabel]
+        guard waitForHittable(allow, timeout: 10) else {
+            XCTFail("Cloud consent sheet never offered '\(spec.allowCloudLabel)'.")
+            return
+        }
+        allow.tap()
+        let rewrite = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@", spec.rewriteLabel)).firstMatch
+        guard rewrite.waitForExistence(timeout: 20) else {
+            XCTFail("No Vent result card ('\(spec.rewriteLabel)' never appeared).")
+            return
+        }
+        guard app.staticTexts.matching(
+            NSPredicate(format: "label BEGINSWITH %@", spec.ventDraftLabelPrefix)).firstMatch.exists else {
+            XCTFail("The result is not a Vent draft (no '\(spec.ventDraftLabelPrefix)…' label) — "
+                    + "the fixture did not render; check that it passes the vent safety filter.")
+            return
+        }
+        // Bring the whole card into frame: scroll until its bottom button sits
+        // ABOVE the tab bar (the scenario/sample sections hide once results
+        // land). "Hittable" alone is not enough: a button under the
+        // translucent tab bar still counts as hittable, and the 2026-10-14
+        // zh-Hans set shipped its card's buttons hidden behind the tab bar.
+        let tabBarTop = app.tabBars.firstMatch.frame.minY
+        var swipes = 0
+        while (!rewrite.isHittable || rewrite.frame.maxY > tabBarTop) && swipes < 4 {
+            app.swipeUp(velocity: .slow)
+            swipes += 1
+        }
+        guard rewrite.isHittable, rewrite.frame.maxY <= tabBarTop else {
+            XCTFail("The Vent result card never scrolled fully above the tab bar "
+                    + "(button maxY \(rewrite.frame.maxY), tab bar top \(tabBarTop)).")
+            return
+        }
+        settle()
+        capture(app: app, name: "01-vent-result")
+
+        // 3–4. Tabs. Each tap must actually select its tab before capture.
+        // History is deliberately NOT captured: its seeded samples are in
+        // mixed languages in every locale (HistoryService seeds each sample
+        // in its response language) — known, not fixed in v1.7.
+        let tabScenes: [(index: Int, name: String)] = [
+            (1, "03-explore"), (3, "04-settings")
+        ]
+        for scene in tabScenes {
+            let tab = app.tabBars.buttons.element(boundBy: scene.index)
+            guard waitForHittable(tab, timeout: 5) else {
+                XCTFail("Tab \(scene.index) is not hittable (for \(scene.name)).")
+                return
             }
-            if situationField.isHittable {
-                situationField.tap()
-                situationField.typeText(sampleSituation())
+            tab.tap()
+            guard waitFor(tab, "isSelected == true", timeout: 5) else {
+                XCTFail("Tab \(scene.index) did not become selected (for \(scene.name)).")
+                return
             }
-        }
-        capture(app: app, name: "02-generator-filled")
-
-        // 3. Style row scrolled to show variety — tap a Pro style to
-        //    show the gating overlay if available, else stay on free.
-        capture(app: app, name: "03-style-chips")
-
-        // 4. Explore tab (tools + samples)
-        if app.tabBars.buttons.element(boundBy: 1).exists {
-            app.tabBars.buttons.element(boundBy: 1).tap()
-            capture(app: app, name: "04-explore")
-        }
-
-        // 5. History tab (pre-seeded with samples)
-        if app.tabBars.buttons.element(boundBy: 2).exists {
-            app.tabBars.buttons.element(boundBy: 2).tap()
-            capture(app: app, name: "05-history")
-        }
-
-        // 6. Settings (About AI / Safe Mode visible)
-        if app.tabBars.buttons.element(boundBy: 3).exists {
-            app.tabBars.buttons.element(boundBy: 3).tap()
-            capture(app: app, name: "06-settings")
+            settle()
+            capture(app: app, name: scene.name)
         }
     }
 
@@ -485,15 +597,127 @@ final class ScreenshotTests: XCTestCase {
 
     // MARK: - Helpers
 
-    /// Maps the screenshots.sh `LOCALE` env var to the app's
-    /// `-uitestLang` codes (matching `AppLanguage.rawValue`).
-    private func uiTestLanguageCode() -> String {
-        switch currentLocale() {
-        case let s where s.hasPrefix("zh_Hans"): return "zh-Hans"
-        case let s where s.hasPrefix("zh_Hant"): return "zh-Hant"
-        case let s where s.hasPrefix("ja"):      return "ja"
-        default:                                 return "en"
+    /// Per-locale facts the App Store run needs. The labels mirror the
+    /// app's `Shared/<lang>.lproj/Localizable.strings` and
+    /// `Shared/Resources/Scenarios.json`; if one drifts, the guard that
+    /// uses it fails loudly instead of capturing the wrong screen.
+    private struct ShotLocale {
+        /// `-uitestLang` value (`AppLanguage.rawValue`).
+        let languageCode: String
+        /// "tab.settings" in this language.
+        let settingsTabLabel: String
+        /// "intensity.vent.name" in this language (messages only).
+        let ventLabel: String
+        /// Start of "intensity.vent.blurb" — unique to the Vent chip.
+        let ventBlurbPrefix: String
+        /// Start of Scenarios.json `boss_credit` prompt in this language.
+        let scenarioPrefix: String
+        /// "generator.generate", "cloud.consent.allow", "output.rewrite.button"
+        /// and the start of "output.kind.vent_draft.label" in this language.
+        let generateLabel: String
+        let allowCloudLabel: String
+        let rewriteLabel: String
+        let ventDraftLabelPrefix: String
+
+        init?(_ locale: String) {
+            switch locale {
+            case let s where s.hasPrefix("zh_Hans"):
+                self.init(languageCode: "zh-Hans", settingsTabLabel: "设置",
+                          ventLabel: "发泄", ventBlurbPrefix: "只给自己看的发泄稿",
+                          scenarioPrefix: "我做的项目", generateLabel: "开始生成",
+                          allowCloudLabel: "允许使用云端 AI", rewriteLabel: "改成能发的",
+                          ventDraftLabelPrefix: "发泄稿")
+            case let s where s.hasPrefix("zh_Hant"):
+                self.init(languageCode: "zh-Hant", settingsTabLabel: "設定",
+                          ventLabel: "發洩", ventBlurbPrefix: "只給自己看的發洩稿",
+                          scenarioPrefix: "我做的專案", generateLabel: "開始生成",
+                          allowCloudLabel: "允許使用雲端 AI", rewriteLabel: "改成能發的",
+                          ventDraftLabelPrefix: "發洩稿")
+            case let s where s.hasPrefix("ja"):
+                self.init(languageCode: "ja", settingsTabLabel: "設定",
+                          ventLabel: "吐き出し", ventBlurbPrefix: "自分だけの吐き出し草稿",
+                          scenarioPrefix: "自分が進めたプロジェクト", generateLabel: "生成する",
+                          allowCloudLabel: "クラウドAIを許可", rewriteLabel: "送れる形にする",
+                          ventDraftLabelPrefix: "吐き出し草稿")
+            case let s where s.hasPrefix("en"):
+                self.init(languageCode: "en", settingsTabLabel: "Settings",
+                          ventLabel: "Vent", ventBlurbPrefix: "Private vent draft",
+                          scenarioPrefix: "My manager took credit", generateLabel: "Generate",
+                          allowCloudLabel: "Allow Cloud AI", rewriteLabel: "Make it sendable",
+                          ventDraftLabelPrefix: "Vent draft")
+            default:
+                return nil
+            }
         }
+
+        private init(languageCode: String, settingsTabLabel: String, ventLabel: String,
+                     ventBlurbPrefix: String, scenarioPrefix: String, generateLabel: String,
+                     allowCloudLabel: String, rewriteLabel: String, ventDraftLabelPrefix: String) {
+            self.languageCode = languageCode
+            self.settingsTabLabel = settingsTabLabel
+            self.ventLabel = ventLabel
+            self.ventBlurbPrefix = ventBlurbPrefix
+            self.scenarioPrefix = scenarioPrefix
+            self.generateLabel = generateLabel
+            self.allowCloudLabel = allowCloudLabel
+            self.rewriteLabel = rewriteLabel
+            self.ventDraftLabelPrefix = ventDraftLabelPrefix
+        }
+    }
+
+    /// Selects the Vent chip — the last chip in the horizontally scrolling
+    /// intensity row, off-screen at launch. Drags the row left until the
+    /// chip is hittable, taps it. Returns false if it never got there.
+    ///
+    /// Matched on the chip's BLURB, not its name: the name alone is not
+    /// unique — in English the mic button over the editor is labelled
+    /// "Vent by voice" ("voice.button"), sits earlier in the hierarchy, and
+    /// a `BEGINSWITH "Vent"` match tapped it instead (measured 2026-10-07).
+    private func selectVent(_ app: XCUIApplication, _ spec: ShotLocale) -> Bool {
+        let vent = app.buttons.matching(
+            NSPredicate(format: "label CONTAINS %@", spec.ventBlurbPrefix)).firstMatch
+        guard vent.waitForExistence(timeout: 5) else { return false }
+        let origin = app.coordinate(withNormalizedOffset: .zero)
+        let width = app.frame.width
+        var drags = 0
+        while !vent.isHittable && drags < 4 {
+            let y = vent.frame.midY
+            origin.withOffset(CGVector(dx: width * 0.85, dy: y))
+                .press(forDuration: 0.05,
+                       thenDragTo: origin.withOffset(CGVector(dx: width * 0.15, dy: y)))
+            drags += 1
+        }
+        guard vent.isHittable else { return false }
+        vent.tap()
+        return waitFor(vent, "isSelected == true", timeout: 2) || vent.isHittable
+    }
+
+    /// A previous run that tapped the keyboard's dictation key leaves the
+    /// system "Enable Dictation?" alert up, and it survives into the next
+    /// launch's first frame. Dismiss only that alert, nothing else.
+    private func dismissLeftoverDictationAlert() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let alert = springboard.alerts.matching(
+            NSPredicate(format: "label CONTAINS 'Dictation'")).firstMatch
+        if alert.exists, alert.buttons["Not Now"].exists {
+            alert.buttons["Not Now"].tap()
+        }
+    }
+
+    private func waitForHittable(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
+        waitFor(element, "exists == true AND isHittable == true", timeout: timeout)
+    }
+
+    private func waitFor(_ element: XCUIElement, _ format: String, timeout: TimeInterval) -> Bool {
+        let expectation = XCTNSPredicateExpectation(
+            predicate: NSPredicate(format: format), object: element)
+        return XCTWaiter().wait(for: [expectation], timeout: timeout) == .completed
+    }
+
+    /// Lets transitions and the tab-switch animation finish so the frame
+    /// is not mid-animation.
+    private func settle() {
+        sleep(1)
     }
 
     private func capture(app: XCUIApplication, name: String) {
@@ -502,31 +726,5 @@ final class ScreenshotTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
-    }
-
-    private func currentLocale() -> String {
-        ProcessInfo.processInfo.environment["LOCALE"] ?? "en_US"
-    }
-
-    private func appleLanguagesArgument() -> String {
-        switch currentLocale() {
-        case let s where s.hasPrefix("zh_Hans"): return "(zh-Hans)"
-        case let s where s.hasPrefix("zh_Hant"): return "(zh-Hant)"
-        case let s where s.hasPrefix("ja"):      return "(ja)"
-        default:                                 return "(en)"
-        }
-    }
-
-    private func appleLocaleArgument() -> String {
-        currentLocale()
-    }
-
-    private func sampleSituation() -> String {
-        switch currentLocale() {
-        case let s where s.hasPrefix("zh_Hans"): return "我室友凌晨两点打游戏"
-        case let s where s.hasPrefix("zh_Hant"): return "我室友凌晨兩點打遊戲"
-        case let s where s.hasPrefix("ja"):      return "ルームメイトが深夜2時にゲームをします"
-        default:                                  return "My roommate plays games at 2 AM"
-        }
     }
 }
