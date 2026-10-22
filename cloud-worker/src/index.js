@@ -31,7 +31,7 @@ import { resolveIpAttemptCap } from "./ipguard.js";
 import { isTraditionalChinese, baseLocale } from "./locale.js";
 import { groqEnabled, openRouterModels, openRouterAttempts, modelSelection } from "./routing.js";
 import { languageDirective, userLanguageReminder } from "./language.js";
-import { buildVentSystemPrompt, buildVentUserPrompt } from "./vent_prompt.js";
+import { buildVentSystemPrompt, buildVentUserPrompt, ventStyleInstruction } from "./vent_prompt.js";
 import { cleanVentText, stripNameAddress, draftDefects, fewerDefects, defectKinds, retryModels, retryNudge } from "./postprocess.js";
 import { budgetFor, attemptTimeout, qualityRetryTimeout } from "./budget.js";
 
@@ -241,8 +241,10 @@ export default {
       userPrompt = buildRoastUserPrompt(situation, locale, variantCount);
     } else {
       // Private Vent / Feral drafts: per-script prompt (src/vent_prompt.js).
-      systemPrompt = buildVentSystemPrompt(intensity, locale, styleName, situation);
-      userPrompt = buildVentUserPrompt(situation, locale);
+      // A Pro style sets the draft's voice (src/style_voice.js); the
+      // intensity still sets the anger and the swearing.
+      systemPrompt = buildVentSystemPrompt(intensity, locale, styleName, situation, styleId);
+      userPrompt = buildVentUserPrompt(situation, locale, "", { styleName, styleId, intensity });
     }
 
     // One deadline for every upstream call this request makes (first call,
@@ -448,9 +450,16 @@ export default {
     let qualityRetry = "none";
     let qualityDefects = [];
     if (mode === "vent") {
+      // A draft in a Pro style's voice also counts the person's surname +
+      // title (「陳主管」) as their name; an unstyled draft is checked exactly
+      // as before styles shaped private drafts (src/postprocess.js).
+      // Surname + title (陳主管 for a 陳志明 in the situation) is the same
+      // "never address the person by name" rule as full names, so it applies
+      // to every Vent/Feral draft, styled or not (owner decision 2026-10-22).
+      const nameCheck = { titles: true };
       const cleaned = cleanVentText(text);
-      text = stripNameAddress(cleaned, locale, situation);
-      const defects = draftDefects(text, locale, situation);
+      text = stripNameAddress(cleaned, locale, situation, nameCheck);
+      const defects = draftDefects(text, locale, situation, nameCheck);
       qualityDefects = defectKinds(defects);
       if (text !== cleaned) qualityDefects.push("name_address_removed");
       if (defects.count > 0) {
@@ -466,7 +475,7 @@ export default {
             apiKey: env.OPENROUTER_API_KEY,
             model: targets,
             systemPrompt,
-            userPrompt: buildVentUserPrompt(situation, locale, retryNudge(defects, locale)),
+            userPrompt: buildVentUserPrompt(situation, locale, retryNudge(defects, locale), { styleName, styleId, intensity }),
             timeoutMs,
             extraHeaders: {
               "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
@@ -476,8 +485,8 @@ export default {
           if (!retry.ok) {
             qualityRetry = `failed:${retry.status || "?"}`;  // status only (privacy)
           } else {
-            const second = stripNameAddress(cleanVentText(retry.text), locale, situation);
-            if (fewerDefects(draftDefects(second, locale, situation), defects)) {
+            const second = stripNameAddress(cleanVentText(retry.text), locale, situation, nameCheck);
+            if (fewerDefects(draftDefects(second, locale, situation, nameCheck), defects)) {
               text = second;
               modelUsed = retry.model || targets[0];
               qualityRetry = "used";

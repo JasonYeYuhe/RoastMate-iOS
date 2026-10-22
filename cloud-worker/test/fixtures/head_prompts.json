@@ -1,0 +1,3565 @@
+{
+ "generated_from": "HEAD 4ed652f (production 7846ac95)",
+ "cases": [
+  {
+   "id": "roommate/vent/zh-Hans/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "05754402315360f1be6eaa0673df1fba5155924afd300d80e9bd134557ce0bf9",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/vent/zh-Hans/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "05754402315360f1be6eaa0673df1fba5155924afd300d80e9bd134557ce0bf9",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/vent/zh-Hans/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。"
+   },
+   "system_sha256": "05754402315360f1be6eaa0673df1fba5155924afd300d80e9bd134557ce0bf9",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/vent/zh_TW/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "9c7c5f000d41679d5070d5ed081aade8c38dd9bf02666a415023af1f1128e4c9",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/vent/zh_TW/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "9c7c5f000d41679d5070d5ed081aade8c38dd9bf02666a415023af1f1128e4c9",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/vent/zh_TW/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。"
+   },
+   "system_sha256": "9c7c5f000d41679d5070d5ed081aade8c38dd9bf02666a415023af1f1128e4c9",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/vent/en_US/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "f6e85ace9b0bd2dae55ec3554a028a06ad1255b468fb813f76f4f041f807b7b6",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/vent/en_US/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "f6e85ace9b0bd2dae55ec3554a028a06ad1255b468fb813f76f4f041f807b7b6",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/vent/en_US/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on."
+   },
+   "system_sha256": "f6e85ace9b0bd2dae55ec3554a028a06ad1255b468fb813f76f4f041f807b7b6",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/vent/ja_JP/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "9a5e661c7042f24d5c0960a8389a7813410f4a0b4648e013fa586ca2c57920aa",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roommate/vent/ja_JP/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "9a5e661c7042f24d5c0960a8389a7813410f4a0b4648e013fa586ca2c57920aa",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roommate/vent/ja_JP/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。"
+   },
+   "system_sha256": "9a5e661c7042f24d5c0960a8389a7813410f4a0b4648e013fa586ca2c57920aa",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roommate/feral/zh-Hans/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "db9ba11f21a5bd2cd971394de1d69313cfaaae5060a0bf3f4ca341b2dbefdd8c",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/feral/zh-Hans/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "db9ba11f21a5bd2cd971394de1d69313cfaaae5060a0bf3f4ca341b2dbefdd8c",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/feral/zh-Hans/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。"
+   },
+   "system_sha256": "db9ba11f21a5bd2cd971394de1d69313cfaaae5060a0bf3f4ca341b2dbefdd8c",
+   "user_sha256": "9e83ec9b4f8860d80b4daca4046760f20a6ab0db922afb391883a563c509b5be"
+  },
+  {
+   "id": "roommate/feral/zh_TW/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "e53c824986e7267f1d637b65e1726b540846f9d67675b9d7172ee8b791fa6ce1",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/feral/zh_TW/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "e53c824986e7267f1d637b65e1726b540846f9d67675b9d7172ee8b791fa6ce1",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/feral/zh_TW/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。"
+   },
+   "system_sha256": "e53c824986e7267f1d637b65e1726b540846f9d67675b9d7172ee8b791fa6ce1",
+   "user_sha256": "bd8450ce86f9a8b6878c0f26fcf3ca2c0e54b299f7bf70f6127135c23e435cf1"
+  },
+  {
+   "id": "roommate/feral/en_US/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "124e44ed096e8ace6f96bf354155226fa4ac2402faecaff869c94d7c128f6286",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/feral/en_US/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "124e44ed096e8ace6f96bf354155226fa4ac2402faecaff869c94d7c128f6286",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/feral/en_US/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on."
+   },
+   "system_sha256": "124e44ed096e8ace6f96bf354155226fa4ac2402faecaff869c94d7c128f6286",
+   "user_sha256": "337dbc0bbd238503f6c09e2e001ac57c7fcfef0fe1eba6f3c72d738b639a4976"
+  },
+  {
+   "id": "roommate/feral/ja_JP/tw_drama",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "c6fccae7d449974238eb156c822232cd66cdcfe2a1989a9ed8aa352adc673544",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roommate/feral/ja_JP/cold_name",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "Cold Reply"
+   },
+   "system_sha256": "c6fccae7d449974238eb156c822232cd66cdcfe2a1989a9ed8aa352adc673544",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roommate/feral/ja_JP/none",
+   "body": {
+    "mode": "roommate",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。"
+   },
+   "system_sha256": "c6fccae7d449974238eb156c822232cd66cdcfe2a1989a9ed8aa352adc673544",
+   "user_sha256": "cd565678ff871d329415db553dbe0e8552118e015fcd473bf36af36b8607c087"
+  },
+  {
+   "id": "roast/calm/zh-Hans/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "84586c412652015cb774471c9781bbb0f3d70ce29d91a6ec7b7e6b32542dfb2a",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/calm/zh-Hans/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "31376bab4abe4c9767e5730c1e452165f74e5434e2357d078f8fe4fd4f240a02",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/calm/zh-Hans/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "2e5ac577986901fddba7038dd3f2d7421d2613adbb6c01ecdd68e9f0f7517856",
+   "user_sha256": "021feacc6aa839549608f323988a3c271e648b94909e6995ec1aa5d27137d902"
+  },
+  {
+   "id": "roast/calm/zh-Hans/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3
+   },
+   "system_sha256": "31376bab4abe4c9767e5730c1e452165f74e5434e2357d078f8fe4fd4f240a02",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/calm/zh_TW/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "c95054c45b0287cdf4a1a134b807477d214b5ba39028895a8d012cbbcc714c8e",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/calm/zh_TW/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "ecbedb2fdacba38f25a8375e2187ce2bb791fd89096acddad767321e5bd7e5db",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/calm/zh_TW/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "857ee2e5c399acd503f92f3200bfb1460c825878b5c460450376f93c16b177e4",
+   "user_sha256": "ecf235f2519592d87210b7bcdd3031a4f0226e7a77b0f0eed6c544d3d14da5da"
+  },
+  {
+   "id": "roast/calm/zh_TW/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3
+   },
+   "system_sha256": "ecbedb2fdacba38f25a8375e2187ce2bb791fd89096acddad767321e5bd7e5db",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/calm/en_US/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "0ffd49d11a386b5860bdb2c2a8772731f5e1307829369880930d6c9f9b0f074d",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/calm/en_US/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "370c50ac821a24ad0714de03709cb491678d7b2ee7341e65514ec7b6bd7ca3e1",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/calm/en_US/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "f8db6f443ad0c71987fd90563713d219228694d16b2ffd3b886c5d5ca6dee346",
+   "user_sha256": "6e112c56eb0b1f88c687cc4af1472af0fb1bf21385817b32b66c70d126207b94"
+  },
+  {
+   "id": "roast/calm/en_US/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3
+   },
+   "system_sha256": "370c50ac821a24ad0714de03709cb491678d7b2ee7341e65514ec7b6bd7ca3e1",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/calm/ja_JP/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "a967871f0936fb8557bcf697ca19004eae27ad222dda22ca7512caab8512922e",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/calm/ja_JP/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "f5ce33e14fc678a746b9d55489f6d30c7a886bf009bfaa77834066e6e15af347",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/calm/ja_JP/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "79c72042dc6a74913f6945c22c592d8733dc59c6ffe687f8a2bae47ab239c4b1",
+   "user_sha256": "9f8e555838bf327409434e5b9d788e3c2059425e20eafcfc0ed07ac99c2280b4"
+  },
+  {
+   "id": "roast/calm/ja_JP/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "calm",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3
+   },
+   "system_sha256": "f5ce33e14fc678a746b9d55489f6d30c7a886bf009bfaa77834066e6e15af347",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/sharp/zh-Hans/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "d3af4ad2ca9111bdc2fa31b8db341be5287aa540c8a9b27b64cbff712b4a8886",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/sharp/zh-Hans/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "65a17309e2a6fe798dc1f5aeb517030162f2fa51f07057c221bd74b9b793ac4a",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/sharp/zh-Hans/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "ac8d030b1821d872d3f6b5880dc1b0171d5eb947ccce300c2275de9c25a54749",
+   "user_sha256": "021feacc6aa839549608f323988a3c271e648b94909e6995ec1aa5d27137d902"
+  },
+  {
+   "id": "roast/sharp/zh-Hans/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3
+   },
+   "system_sha256": "65a17309e2a6fe798dc1f5aeb517030162f2fa51f07057c221bd74b9b793ac4a",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/sharp/zh_TW/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "817763983d94b3bc3083bc0806b0bff7316831f72e9bfa1dd7760825f949c81f",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/sharp/zh_TW/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "576c39d3c6b64720a44e15caaebbfed136857681b90b20d2da1908027354ad1f",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/sharp/zh_TW/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "d7154f2b283f7840535133de2dbc5b68933cbe0cf8ad82c9f0a0e3e185d3e052",
+   "user_sha256": "ecf235f2519592d87210b7bcdd3031a4f0226e7a77b0f0eed6c544d3d14da5da"
+  },
+  {
+   "id": "roast/sharp/zh_TW/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3
+   },
+   "system_sha256": "576c39d3c6b64720a44e15caaebbfed136857681b90b20d2da1908027354ad1f",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/sharp/en_US/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "a0c241b0f511dd405b6c248365fb45abd39b161db67e3f1e264d6c5edf6876a7",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/sharp/en_US/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "02f3c0f6d076c00e4ea450a11709369a6efd085bdeffe22ed302403801d785ef",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/sharp/en_US/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "908965e7db42d482a6ab3e7632faa2a3fbb2d56c6d9df7a94657fda472a067a3",
+   "user_sha256": "6e112c56eb0b1f88c687cc4af1472af0fb1bf21385817b32b66c70d126207b94"
+  },
+  {
+   "id": "roast/sharp/en_US/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3
+   },
+   "system_sha256": "02f3c0f6d076c00e4ea450a11709369a6efd085bdeffe22ed302403801d785ef",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/sharp/ja_JP/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "ea5f9dedb498eaeb5228d50d1d00d52fee8cbf05f89122e7daab0d9b8decf705",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/sharp/ja_JP/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "eedf45dd567a1e044f8f0279b21723aa0da8518960d12037b8ff912841a755b0",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/sharp/ja_JP/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "d9d84dd0382728794e4105649979df3a3d0afa9def8f37c62047dfaf806233dd",
+   "user_sha256": "9f8e555838bf327409434e5b9d788e3c2059425e20eafcfc0ed07ac99c2280b4"
+  },
+  {
+   "id": "roast/sharp/ja_JP/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "sharp",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3
+   },
+   "system_sha256": "eedf45dd567a1e044f8f0279b21723aa0da8518960d12037b8ff912841a755b0",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/savage/zh-Hans/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "b03156caa18315efb5a1d992d9b0511ffcbb61d301ab539f486c4df92b63e4a9",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/savage/zh-Hans/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "db0c487452481b0aa1d0160fb5d88b76b4a5448ceb87e3a8200141449b1aa77f",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/savage/zh-Hans/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "c0735e3984063dcdb4249d7797d6e80b0736e00a946dd3178410a7c9839d5de0",
+   "user_sha256": "021feacc6aa839549608f323988a3c271e648b94909e6995ec1aa5d27137d902"
+  },
+  {
+   "id": "roast/savage/zh-Hans/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "variantCount": 3
+   },
+   "system_sha256": "db0c487452481b0aa1d0160fb5d88b76b4a5448ceb87e3a8200141449b1aa77f",
+   "user_sha256": "3629a5f540386a2f1d99f8ab9ef64ce8e7ad80a27fdc454a4f8aa3e8fd7cb7ed"
+  },
+  {
+   "id": "roast/savage/zh_TW/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "2646dd68e02f26ddf5481ff44725f63beca34e1f0cc01c208ce06a87e4c5588e",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/savage/zh_TW/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "54a51f79d30bccd454cd2e6e8da7184de36aa9d02fd6f6e768d0908470aee7a9",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/savage/zh_TW/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "0a3782ae6175c4eb90b277341a9d244323837f9639fe8b9ced32bb259f998829",
+   "user_sha256": "ecf235f2519592d87210b7bcdd3031a4f0226e7a77b0f0eed6c544d3d14da5da"
+  },
+  {
+   "id": "roast/savage/zh_TW/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "variantCount": 3
+   },
+   "system_sha256": "54a51f79d30bccd454cd2e6e8da7184de36aa9d02fd6f6e768d0908470aee7a9",
+   "user_sha256": "f28e50d987ba36f3f272c5f9141d7fce29ae7b4bb7646f6c062b67974f7aba9d"
+  },
+  {
+   "id": "roast/savage/en_US/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "7469c6cae413217816dc70403525668ed2cbef16ec772435185dce22d0dfee88",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/savage/en_US/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "4207980aa18ab814a855b0dc49f67e6664c99eb469623bb8cedeb069d051a855",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/savage/en_US/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "d5a00759744c49401e7e8d4a95295f86dbced273e7878945cb10c8c9bb02b976",
+   "user_sha256": "6e112c56eb0b1f88c687cc4af1472af0fb1bf21385817b32b66c70d126207b94"
+  },
+  {
+   "id": "roast/savage/en_US/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "variantCount": 3
+   },
+   "system_sha256": "4207980aa18ab814a855b0dc49f67e6664c99eb469623bb8cedeb069d051a855",
+   "user_sha256": "62afd44598b2ef457b5f5435920a0564f26eb056259a5373e111447813d3a132"
+  },
+  {
+   "id": "roast/savage/ja_JP/tw_drama",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "台劇腔",
+    "styleId": "taiwanese_drama"
+   },
+   "system_sha256": "614a8b3dda83c2c6ab702698afa14a1ad96a54681ccacc2c13c7b7dfd67d386e",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/savage/ja_JP/high_eq_name",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3,
+    "styleName": "High EQ"
+   },
+   "system_sha256": "3db66b85e386a4d76caf3c84ccc839a9df9ae4b0de0a69b3759c7d0683ceb093",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "roast/savage/ja_JP/cold_id",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 1,
+    "styleId": "cold_violence"
+   },
+   "system_sha256": "7b7cb484ad316d7f596e808b10d6098290a6366f80d71884e446d72d3b7f905b",
+   "user_sha256": "9f8e555838bf327409434e5b9d788e3c2059425e20eafcfc0ed07ac99c2280b4"
+  },
+  {
+   "id": "roast/savage/ja_JP/none",
+   "body": {
+    "mode": "roast",
+    "intensity": "savage",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "variantCount": 3
+   },
+   "system_sha256": "3db66b85e386a4d76caf3c84ccc839a9df9ae4b0de0a69b3759c7d0683ceb093",
+   "user_sha256": "bd65d4082b976a0e0e71e74e0875a50664bddb3f9dfc63b652c457a769c03e4e"
+  },
+  {
+   "id": "vent/vent/zh_TW/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": ""
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "309142b906c29f93e9e9b3a6f6a69b9c5ea7172f2c58614641882b52bdd49602",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "a23ce72feed241b0c497edeb993b4a753d26d0e878b3b788f849eca03855fb40",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "d9a69665fc9041dbbd300f9d748d2d4dde4703a2cf03bce9624b86e27697b595",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_HK/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。"
+   },
+   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh_HK/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": ""
+   },
+   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh_HK/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "5cc87e6553494a66daf202e622cf71efead6b503869e990370d9fb337f9fe5a8",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh_HK/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "7ecfd00b6ea31a05a1279a4b09d4725ac299bfe049a48a70aa7ff58328c3a83e",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh_HK/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh_HK/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "81bb1c9173ffa2d5e569b555933bb6b486c30496f16626cc0211a0be47c90adb",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/vent/zh-Hans/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": ""
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "4eb1cd66efb031d13fa9ce1ba4b2249c8c929d1c83665992a951dae044e21e3c",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "7dc143754c01ba4295efcc533a02748a8da713b1c100d8b87168c37cc7e14a82",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "da857e914e1aa8bcad460a99dc498813acd19198c09c831709b3454b203df712",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/en_US/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on."
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": ""
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "c892ffb3f7d839bac5c81dd8ea85112db7f5ea2bbdf52033d7d1097b8cdadcba",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "高情商"
+   },
+   "system_sha256": "4f9d867140546bee312658b6e1b34e11d80b4c929af9cfc20e913bb33620f348",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "9e6d481f6795fc2650eb6977fbbc2a0b291c3e41828455b6f85bbdd418b6c030",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/ja_JP/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": ""
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "2de5781b08c396ecdc2af19fa7a9ebbfa9810ba18c080031565b2983e08bdd5d",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "e1ed4c5480b24e81df96bf6fc85f90706a4e54fe8834e537ec9b34d77874891b",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "a6065c37b75e0e8ede1b7dad715174fae37d111f1f8b63c0c20cfff7770b0bb1",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ko_KR/absent",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어."
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/empty",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": ""
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/unknown_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "d9375162369dfe83d5ce8a160908148a90f18478d7c7cc2c2b6324a51a649102",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/near_miss_name",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "高情商"
+   },
+   "system_sha256": "702ca36131b17f9516f4d59a808aad23c6556f5f3b80d1c1db14ac326a9a1b64",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/unknown_id",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/unknown_both",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "9141fdd9e04c53d459a223b50b94cc24ac677b5de48f3c188c78fca302980904",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/zh_TW/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": ""
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "96e6e003c148080b2580d0989ab0fb8bc4d65801a07be12ef17239db316d59e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "5d63ffc21fab9b256c406ff85a026b31ae019204bda790c7746efce56af5913f",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "df7e578726a0a6e80d733b2a6daa48aeb06b1ee56c3c796b241a08fb88dfe5ea",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_HK/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。"
+   },
+   "system_sha256": "5878f1f1a9ecb6d24b69c5a02afdea1ffd4f102d52c14b1511afc2f72fd46023",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh_HK/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": ""
+   },
+   "system_sha256": "5878f1f1a9ecb6d24b69c5a02afdea1ffd4f102d52c14b1511afc2f72fd46023",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh_HK/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "207284b8e9e9f34cc6ac3cb7f7c4edfb68704b3e85f44bf348873d07face0395",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh_HK/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "a865bd7f73dd1893123b17b975c8b5eba2df7695a388466f8b2bd15905560acd",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh_HK/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "5878f1f1a9ecb6d24b69c5a02afdea1ffd4f102d52c14b1511afc2f72fd46023",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh_HK/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_HK",
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "0b8d2aaf146f02bdd68728da7aa804b337a2f014ad18a2a69e7d784cb3d65591",
+   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+  },
+  {
+   "id": "vent/feral/zh-Hans/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": ""
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "a776ba26b2d40ec9749f4f26eaee7dc03740d481d0984b7901f51913a31d8083",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "846810aea588e84b2d68db4f8e83760424487b18161b05f6df7502ce18675aaf",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "95461c8436c72d98faf7d10ad5ba0a5bb0b4b3487664b18742cc4f04da3993a6",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/en_US/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on."
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": ""
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "c8156a9bd5687c97c8fe679ddd267a21bf558ffe14efe30b6149c8cd638b8069",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "高情商"
+   },
+   "system_sha256": "c461987df7711acaa3fb90989f0f9391ac5959cc59b776d60a823cb38d536d2b",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "031ed02a3890fe9f4745157cf78655cf64935519531d05e96e1f9229fb4ef6e2",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/ja_JP/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": ""
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "eddce2d7230269782f0e4550500269a90b6245891a5578a1474d8e32dcbc169b",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "高情商"
+   },
+   "system_sha256": "24e5f2233bca7588530fc08f0525e6d860da97f5f4bba72a26be2d45996a3975",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "18966e671356424a31a7ca91cd4b22fa7786781daf7d330249e7e52ed5c674f5",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ko_KR/absent",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어."
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/empty",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": ""
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/unknown_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Some Unknown Style"
+   },
+   "system_sha256": "ffb26baadbbff1bdde1f150bb33206ddc18d5c85545f019e7bfdfa1011f71657",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/near_miss_name",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "高情商"
+   },
+   "system_sha256": "9657e15cacfa33408affa9a40f76f36bf1f19a9a129c54341596f721680d379d",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/unknown_id",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "made_up_id"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/unknown_both",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "made_up_id",
+    "styleName": "Nope"
+   },
+   "system_sha256": "546e9770761f0412e8d7a7874f690d6cc16ffdbebf05a19759097a8d7deeabfd",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "高 EQ"
+   },
+   "system_sha256": "86a077f7596201d2f5958a429f4d376e3318568562e585a6e094df06844ab7cb",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "陰陽怪氣"
+   },
+   "system_sha256": "636a6c06030eeae6a6f47ae6a2a8b3c552f62e0a5da5231cc7d41c8abb165510",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "日式敬語"
+   },
+   "system_sha256": "10c93fdcd9a2e1cfc2dab435ed6cd3639efe054a062220e6ac2d2a4c1abd119e",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "文學體"
+   },
+   "system_sha256": "7e596f245ec9bc4db21f46a393daba23a022a915d53b8d5c0ee09cbf035133fd",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "哲學家"
+   },
+   "system_sha256": "7dd943985472862aef0b1f943e82963770091ccb5db0c2f5947e379f559c2f78",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "奶奶智慧"
+   },
+   "system_sha256": "6e34be1cbd9765cac69c650843b55f596abc600e2d412ee25aebcd4b9129f690",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "一句話"
+   },
+   "system_sha256": "6fa9e8fb55ad706290cfbf6c373e7faa3f3178f2e956f1fd669bdfb36229dd65",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_id_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/free_name_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "小紅書吐槽"
+   },
+   "system_sha256": "7ceacac9dd167f98f884b49bca668a5489675015f1117985f1da7ebb3e3df967",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh_TW/pro_no_form_bjing",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "bjing_taunt",
+    "styleName": "京片兒"
+   },
+   "system_sha256": "96004731c24c80f7b66819b04cd1dce54146b69a7c39a37e93bef16c1e29d2e9",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "高 EQ"
+   },
+   "system_sha256": "f5cc038b80950da8f712795cd83e06c0dd4e8fecbea13e528f12b0458b607982",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "阴阳怪气"
+   },
+   "system_sha256": "cc24d9b7c193998e89c0344ffa3dea63d989681352f9e6cb19dbb97ec287cde4",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "日式敬语"
+   },
+   "system_sha256": "ea77aa9fed0ffcbf196762adb7d0f83ce49bbd4b67d228feba4d1fe05e114feb",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "文学体"
+   },
+   "system_sha256": "a181f79edc67aa2a0b35cbcb713bab0ee64f048b10c825505384c972dc03f881",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "哲学家"
+   },
+   "system_sha256": "0616bf2e1c03b6ac73f328fec1d298bf7cd25aa84784a707b903b9be1dd9fa85",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "奶奶智慧"
+   },
+   "system_sha256": "ef9ceb0bb20eeb420daab47d3607fc044e8a3b456dd2a65022e5abe5e98010b8",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "一句话"
+   },
+   "system_sha256": "547e7e6179a4f7dddf59bf76b4b076d51e440ad201145ad1b7b099e3230d1c01",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_id_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "ac12ba09c7f2a9568c60d2f97fd538e98ea9760df552134e92f1b62e194eaaba",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/zh-Hans/free_name_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "小红书吐槽"
+   },
+   "system_sha256": "b77cd05e2ba8be443134514b29feebd80463af7e0e51a14a002493e3ee8f5793",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "High EQ"
+   },
+   "system_sha256": "aeb4938a34b9da8f81ad3e1dcc3a737c7c102b113fdbe80883a19348c0ff6eb5",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Passive Aggressive"
+   },
+   "system_sha256": "0f8958e08d4c928b057d69deb6ca357b95b9d4e46958c8eddf75e1704681c1e0",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Japanese Keigo"
+   },
+   "system_sha256": "ebd8159f0c6d381b38e5314c7666a8f099c097ad70c1938760369bfc1c9ee430",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Literary"
+   },
+   "system_sha256": "a4abc4fb9673daa6beb44d9bc34ef6f130e615f40e802075b61d079b6446dce4",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Philosopher"
+   },
+   "system_sha256": "44fcc4f74fe6918c947903ebd9ad0f61ac70bcb4a27f359581fee9a7074ee574",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Grandma Wisdom"
+   },
+   "system_sha256": "398e71c57f8643d31625fd996e8b837ddb95b7736659f05ccf484ca1641ba5f2",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "One-Liner"
+   },
+   "system_sha256": "254de8ea947577b86a4aaf9034d5189e784e6fb2db2da2e503dd2bd4a26ab9e1",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_id_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "c223ef7c155a861306770028388a281af53c51b304916e499dd1454d759827ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/free_name_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Lifestyle Rant"
+   },
+   "system_sha256": "46c884a734b911004d337bdb7df71b2a05dc2fe1cb1d0841d27239a9b2de5806",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/en_US/pro_no_form_bjing",
+   "body": {
+    "intensity": "vent",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "bjing_taunt",
+    "styleName": "Beijing Colloquial"
+   },
+   "system_sha256": "92caaae36ec24af2273e8f2b622533458e7ee6fd549808a19d816a2e526485d3",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "高EQ"
+   },
+   "system_sha256": "1ef8ee1a11bc26761240e7765661c8f131eb12d7f9e89f0054a158d3c9c7afaf",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "パッシブ・アグレッシブ"
+   },
+   "system_sha256": "1dcc4fe9dcecc0ae6229962d62de010178df2603d94724828635040f88d0cdd7",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "敬語"
+   },
+   "system_sha256": "a2eeec1956b18d671cdc2440bd4a41a8f36c70f9359ae5a315e8a5a1774101b6",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "文学風"
+   },
+   "system_sha256": "3fcf4be81db98b3f8f371c0377f0e2df1d85290fd537eda528b080c912f8dd02",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "哲学者"
+   },
+   "system_sha256": "10023b7fe08172dbbcdd6ab34c7fda3a5ed4429bdf775a2eab27cba0167956f5",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "おばあちゃんの知恵"
+   },
+   "system_sha256": "5303b9d2ff774ae22babf2df7a52ac976ba1b6f3a1d6fbb773f8cb941c1abc0a",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "ワンライナー"
+   },
+   "system_sha256": "5703a226a856f6df3a0576ab502a98d984f7e2689fa9e1812f3903f0100ccb94",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_id_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/free_name_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "SNS愚痴投稿"
+   },
+   "system_sha256": "40a282b84dbccb25a57684a41b8b3ae4fbfa3163eb23f47dbfad8f187a089760",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ja_JP/pro_no_form_bjing",
+   "body": {
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "bjing_taunt",
+    "styleName": "北京なまり"
+   },
+   "system_sha256": "00dc1d43fc50120fe5b16b3a4b81b9256a9a1c09d78708f8c8acc95181a82f69",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_high_eq",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "High EQ"
+   },
+   "system_sha256": "03cdc1a3a0094fb94e478f7c5ff72f24d466a3e473a5ac7f56d066e1d0e26e77",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_passive_aggressive",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Passive Aggressive"
+   },
+   "system_sha256": "bbe6db52cb21037646954d7833c098354e9f4a88d44c29b7b312ecec82ed5eb7",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Japanese Keigo"
+   },
+   "system_sha256": "fa835f9c8736b96576656bf056c56c671c9834da0ac29f7bc2ce6c3d1c4d3172",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Literary"
+   },
+   "system_sha256": "3755bfa264ca9763bc03ade1c1399b43e5989e9f0bbce8fe8ed7fbc7d7ad32b9",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_philosopher",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Philosopher"
+   },
+   "system_sha256": "2b100942dfd451267d23e841600bfe098b3e0eedce3f87d62c973c39a3ab7e66",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Grandma Wisdom"
+   },
+   "system_sha256": "1e1d3a762bf3884243554c44deb58ed87d8ae4e8926929a89d8775f1e12baed1",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_tweet_short",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "One-Liner"
+   },
+   "system_sha256": "e353ae9b3cd3b00873ca4e6cb97617702747752d20b2bcd4e763108a5a2a5380",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_id_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "88b877d8db8a23f8412e1e7d5380da7512728c2bb7525c8b55543c844f7fab4c",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/free_name_xiaohongshu",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Lifestyle Rant"
+   },
+   "system_sha256": "3385a31b107e21b6ddb038dd4301af39e102dd08275132fd306680be1bcf63f9",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/vent/ko_KR/pro_no_form_bjing",
+   "body": {
+    "intensity": "vent",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "bjing_taunt",
+    "styleName": "Beijing Colloquial"
+   },
+   "system_sha256": "9fc19a1f410181c923810002bde5b18035d01aa72b0f2631b0bca82b9b3be8a7",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "高 EQ"
+   },
+   "system_sha256": "77914d8612fb9b96da7d88b6cd6dc989691d0e0e2d6090506ae5d1e47fb8f4fe",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "陰陽怪氣"
+   },
+   "system_sha256": "e12c9a2862e479dea038d9c78bcb3cc15b3380e9381d7ca47e48ce72cfb7ac3b",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "日式敬語"
+   },
+   "system_sha256": "bd8bb3bd74c5986dfcd4ba5870d6b1d6c30102f7b1d061cdf3a17be6861c8d81",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "文學體"
+   },
+   "system_sha256": "30f52083e580794612aebe567aebda261ca882d1cab214dc3bd720ca8aceb0a3",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "哲學家"
+   },
+   "system_sha256": "aacef79fb8ae87ea7aa23c3eab6569c3ce1bdd7d5710efc90241533502510ba4",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "奶奶智慧"
+   },
+   "system_sha256": "375303314f42afa6df1cf031864ef4c1a387f8d5a4059eef87444e345a4bb570",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "一句話"
+   },
+   "system_sha256": "01a51107e738440ee75028ca4ed129f6fdccc59ea1f642da6664ae1889fa08ec",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_id_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "8481b549a248562802ec45fa4422e202b15ebbb7b78cdbaaa25171be7cee6281",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/free_name_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleName": "小紅書吐槽"
+   },
+   "system_sha256": "11489bc459ab5137b1d35e22ea842c9008aab201b457247f3a3510f463edee3b",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh_TW/pro_no_form_bjing",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
+    "styleId": "bjing_taunt",
+    "styleName": "京片兒"
+   },
+   "system_sha256": "e5ab3db930091223bda91dc3181934fb747d0a5b25de072d7510c9cc2d8ab035",
+   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "高 EQ"
+   },
+   "system_sha256": "5a573a8377ff907e744910a777c9b909a36b278b9982111d070dfc6ee81354c4",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "阴阳怪气"
+   },
+   "system_sha256": "d0e4d670347c6b4640ab3874301dea48e5fa857bfbc29015be03501fc7d3b0f6",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "日式敬语"
+   },
+   "system_sha256": "493029c1cd5921b9a2205bf2269073bd0684bb1293aee5ac3aca6b2aab4c64b8",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "文学体"
+   },
+   "system_sha256": "9e387ac26e5e550caf4de7291cf9d52d0044bf8a6df1e275170015183090df3b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "哲学家"
+   },
+   "system_sha256": "c237e19563cfeb92f2c3079054ce8739695b4ee3207ca14cd0079eefe78e4fbb",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "奶奶智慧"
+   },
+   "system_sha256": "a6b7440f78678563f87718e44766d1aa373e330275b14a39ec39c03713410cda",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "一句话"
+   },
+   "system_sha256": "88d527e46c0a60172525191e865871b0baeefe12cbc730b50938b8d3eecc1e79",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_id_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "c1f1d68afbda1d24df4781200cc49544fe75672dd10ffe25d0c68bd9416cc99b",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/zh-Hans/free_name_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做。",
+    "styleName": "小红书吐槽"
+   },
+   "system_sha256": "c2188b1348d1f019f002427d32a483f0d1c22c340caae9f4741b49cb8312aeb7",
+   "user_sha256": "03a401a882b76ae1a0ae1ac1fa16b56ee5d520c56587121c014f602facd33acd"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "High EQ"
+   },
+   "system_sha256": "18d25310a63c3d41ab99e151abb21c354c1a3354a5f40b5b631c9c0f496828de",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Passive Aggressive"
+   },
+   "system_sha256": "e888c3707aa85ef304d6eab5f8eaf96d74e3a2f5834344120c029b195e1b3d25",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Japanese Keigo"
+   },
+   "system_sha256": "aa205c1c0e5f91b4581f47f57467634ffcab8c448e208252895ccc0322f021a9",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Literary"
+   },
+   "system_sha256": "072646cdd952c6ab5e35c250929dd00c0f3ade4d5a85cf254744fce681b1decb",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Philosopher"
+   },
+   "system_sha256": "b5af2ec76cd81c11fe26bad2f1bdc08f9eb0d6272abdb0941f35dd1d2185c535",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Grandma Wisdom"
+   },
+   "system_sha256": "d26ce2f5bada3a60c8616b28cdd624ef042bf426fd88e1bbfb0a8247cd935683",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "One-Liner"
+   },
+   "system_sha256": "e9fbaee6eef395a5069f73defe9dcc6e69ec9a959e3919347cb58d07feab0353",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_id_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "f0f11dc09ff2dc51f32090131b56d679d8dbe5ebe64ccff8e167b2c911611ada",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/free_name_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleName": "Lifestyle Rant"
+   },
+   "system_sha256": "8f0d063bec0bc9ba7486bfd4388ac3188c40f1624f40a31136cb212a2fc83afd",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/en_US/pro_no_form_bjing",
+   "body": {
+    "intensity": "feral",
+    "locale": "en_US",
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on.",
+    "styleId": "bjing_taunt",
+    "styleName": "Beijing Colloquial"
+   },
+   "system_sha256": "b8c02ba4f9df69a29a1c6353602bfd2ced0407a0de767775fe7f6f79f5eec2ef",
+   "user_sha256": "569d4528978c86a0e6922a9d2e5ee8d34730ceaad0c68b2ed94d8b1209cb6e7e"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "高EQ"
+   },
+   "system_sha256": "0ca9c330c6cab2e4c31f2fc0694a41c9b3088cbbbe3efc18f039140a72e7e4e2",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "パッシブ・アグレッシブ"
+   },
+   "system_sha256": "7b9c678e81f9d63a1cbc8aae6fc5e231e47bc60a8146c869ae611b80034f722d",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "敬語"
+   },
+   "system_sha256": "9861f0bc77f69e89413ce64a8a0c7ce50723b62b33d539a7d1210ba1cc6fefe4",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "文学風"
+   },
+   "system_sha256": "63971339760a6ae930b9dd0cf74d6bd55a2f19cae780eab95c6e8b9739db3640",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "哲学者"
+   },
+   "system_sha256": "4f7f4e221dfb985d604ee94e3bbb8ed89f45f7d7760494a62d15944b2dd2a5dd",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "おばあちゃんの知恵"
+   },
+   "system_sha256": "2a56aa35a4fb3d0fc35a2371fe0bfaa6744994d997e33250f3d7653535c0065e",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "ワンライナー"
+   },
+   "system_sha256": "a25bacc043a12ec98c59c4df43b20e9d438b182ee8a684200e2e346b5b80a067",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_id_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "4c70d74a6a0428006e725ac7701d15e89fccf2ee0077c2123b562175fbe4d3a9",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/free_name_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleName": "SNS愚痴投稿"
+   },
+   "system_sha256": "3e324836a61a2731d977c9e1eb7c1fbe72f45ef32e8d7ebbeaeee3c910178323",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ja_JP/pro_no_form_bjing",
+   "body": {
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "situation": "彼氏が私の誕生日をまた忘れてた。",
+    "styleId": "bjing_taunt",
+    "styleName": "北京なまり"
+   },
+   "system_sha256": "ecebd60b04255e8403560a811c112acfcc98a5a7374a3ff4424d590d2d9e8b8c",
+   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "high_eq"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_high_eq",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "High EQ"
+   },
+   "system_sha256": "1a3109a0f692d81888908819ffa4dd56ec698d7f48b75b7ae6105a39b4ce6e36",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "passive_aggressive"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_passive_aggressive",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Passive Aggressive"
+   },
+   "system_sha256": "78ec52a43e531d32dbc2c4afa6116c892a30c3b221273957883a5824fa1ec32e",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "jp_workplace_keigo"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_jp_workplace_keigo",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Japanese Keigo"
+   },
+   "system_sha256": "425ba53694ebb1bad5e7d8db57332c155a7503a50103cab769a5fe80e8228f05",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "literary_lu_xun"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_literary_lu_xun",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Literary"
+   },
+   "system_sha256": "58491f3803cb50b0035954a71b3993d42fc9bd857c9ca107d8aa47fc21320221",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "philosopher"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_philosopher",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Philosopher"
+   },
+   "system_sha256": "9ff35144c2b4cf0d61af6beba1fde80c30a4a91d5343ea8bcc953d83a4bf3b55",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "grandma_wisdom"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_grandma_wisdom",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Grandma Wisdom"
+   },
+   "system_sha256": "d00e05129042ab32b41bb5616d6d9554c2a20137bf889aa8c373c6ba6bdd4563",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "tweet_short"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_tweet_short",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "One-Liner"
+   },
+   "system_sha256": "9c07d66c61dc8a05cdd593f1637bd01eb67d227fa0c136aa80c345f5db2d3db7",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_id_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "xiaohongshu"
+   },
+   "system_sha256": "05945983978f35517afac155f8ec292cbe463ed34bf30f8468ab73d23af2a209",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/free_name_xiaohongshu",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleName": "Lifestyle Rant"
+   },
+   "system_sha256": "331f3f8a29ecfac1f0b5c8ddebcb2fdfa9706069d81b56279be043b26cfaf376",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  },
+  {
+   "id": "vent/feral/ko_KR/pro_no_form_bjing",
+   "body": {
+    "intensity": "feral",
+    "locale": "ko_KR",
+    "situation": "룸메이트가 또 내 음식을 먹었어.",
+    "styleId": "bjing_taunt",
+    "styleName": "Beijing Colloquial"
+   },
+   "system_sha256": "361a2a26641f83829ca575cce02222aa1c5f1cf0e7fd116b6fbaa0e78e02a20d",
+   "user_sha256": "b334ae891824c3cd272e470cfb74471002f539479ee270ddbad948ff7e49a08b"
+  }
+ ]
+}

@@ -35,6 +35,7 @@
 import { isTraditionalChinese } from "./locale.js";
 import { privateDraftCalibration } from "./calibration.js";
 import { languageDirective, userLanguageReminder } from "./language.js";
+import { resolveStyleId, styleVoiceInstruction, styleVoiceBlock, styleUserLine, STYLED_LENGTH, STYLED_MAX } from "./style_voice.js";
 
 /// Which example set a locale gets. "en" covers every locale whose output
 /// language is English (languageDirective answers in English for anything
@@ -69,10 +70,12 @@ export const VOICES = {
     // English gets its own, tighter ceiling.
     maxLength: "50 words",
     vocab: { vent: "damn, hell, bullshit", feral: "fuck, shit, asshole, prick" },
-    block: (intensity, v) => [
+    block: (intensity, v, styled = false) => [
       "ENGLISH VOICE:",
       "- Plain text only: no asterisks, no bold or italics, no markdown, no headings, no lists. One short paragraph.",
-      "- Length: two sentences is the target, three the most, and under 50 words, unless the user's situation asks for a different length — then follow that. Every sentence counts, a short one or a question included.",
+      styled
+        ? `- Length: ${STYLED_LENGTH.en}, unless the user's situation asks for a different length — then follow that. Every sentence counts, a short one or a question included.`
+        : "- Length: two sentences is the target, three the most, and under 50 words, unless the user's situation asks for a different length — then follow that. Every sentence counts, a short one or a question included.",
       "- English words only. Never mix in words from another language.",
       intensity === "feral"
         ? `- At least one real swear word (${v.vocab.feral}), inside a sentence where it hits hardest — not stacked into every sentence, and never a swear word as a sentence of its own. Never list words.`
@@ -94,15 +97,17 @@ export const VOICES = {
       vent: "他妈的、老子、特么、服了、装什么装、烦死了",
       feral: "他妈的、老子、傻逼、操、卧槽、滚、神经病"
     },
-    block: (intensity, v) => [
+    block: (intensity, v, styled = false) => [
       "简体中文口气:",
-      "- 像真人气头上打字:直接、有脾气、说大白话。",
+      styled
+        ? "- 口吻照用户选的风格(见下面的 STYLE VOICE),但要说人话、带真火气。"
+        : "- 像真人气头上打字:直接、有脾气、说大白话。",
       intensity === "feral"
         ? `- 暴走模式:脏话是意料之中的,但用在最狠的地方,不要每句都堆。参考(不是指标,更不要把词列出来):${v.vocab.feral}。`
         : `- 强烈词可以用,用在刀刃上,不是指标——不要堆砌,更不要把词列出来。参考:${v.vocab.vent}。`,
       "- 开头不要每次都是「他妈的」或别的脏话;直接从对方干的事、说过的原话,或一句反问开始。",
       "- 对象是用户自己的爸妈或家人时,别用「你妈」这类骂到对方家人的话(那是在骂用户自己的家人),只骂那个行为。",
-      "- 不许用「哎呀」「真是的」「唉」开头。全文 150 字以内。"
+      styled ? `- 不许用「哎呀」「真是的」「唉」开头。${STYLED_LENGTH.hans}。` : "- 不许用「哎呀」「真是的」「唉」开头。全文 150 字以内。"
     ].join("\n")
   },
 
@@ -121,9 +126,11 @@ export const VOICES = {
       vent: "很扯、傻眼、白目、機車、很盤、是怎樣、夠了喔、火大、三小、靠北",
       feral: "幹、北七、爛人、王八蛋、去你的、白目、機車、三小、靠北、滾"
     },
-    block: (intensity, v) => [
+    block: (intensity, v, styled = false) => [
       "繁體中文(台灣)口氣:",
-      "- 寫成台灣人氣到在 LINE 上打字的口氣:台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。",
+      styled
+        ? "- 口吻照使用者選的風格(見下面的 STYLE VOICE)來寫,用詞是台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。"
+        : "- 寫成台灣人氣到在 LINE 上打字的口氣:台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。",
       intensity === "feral"
         ? `- 暴走模式:一定要有真的髒話,一兩個就夠,放在最狠的地方,不要每句都塞。台灣常用的罵法(配合這個情境挑;不是清單,更不要把詞列出來):${v.vocab.feral}。`
         : `- 台灣常用的罵法(配合這個情境挑一個,或一個都不用;不是指標,不要硬塞,更不要把詞列出來):${v.vocab.vent}。`,
@@ -133,7 +140,9 @@ export const VOICES = {
       "- 開頭不要每次都是「他媽的」或「幹」;直接從對方做的事、說過的話,或一句反問開始。",
       "- 只講使用者寫到的事,不要自己編細節。",
       "- 對象是使用者自己的爸媽或家人時,不要用「你媽」這類罵到對方家人的話(那等於罵到使用者自己的家人),只罵那個行為。",
-      "- 不許用「哎呀」「真是的」「唉」開頭。避免簡體字(誰不能寫成谁,讓不能寫成让)。兩三句就好,全文 120 字以內。"
+      styled
+        ? `- 不許用「哎呀」「真是的」「唉」開頭。避免簡體字(誰不能寫成谁,讓不能寫成让)。${STYLED_LENGTH.hant}。`
+        : "- 不許用「哎呀」「真是的」「唉」開頭。避免簡體字(誰不能寫成谁,讓不能寫成让)。兩三句就好,全文 120 字以內。"
     ].join("\n")
   },
 
@@ -147,16 +156,20 @@ export const VOICES = {
     specific: "「金を借りる時だけ優しくて、返せと言ったら既読無視」は「最低」より刺さる",
     reflective: "「その情熱を自分に向ければ…」/「あなたはもっと大切にされるべき…」",
     vocab: { vent: "", feral: "クソ、ふざけんな" },
-    block: (intensity, v) => [
+    block: (intensity, v, styled = false) => [
       "日本語の口調:",
       intensity === "feral"
-        ? `- 本気でキレている人の話し言葉(タメ口)で書く。本気の罵倒(例えば${v.vocab.feral})を少なくとも一つ、一番効くところで使う。数を稼ぐために並べない。`
-        : "- 本気でイラついている人の話し言葉(タメ口)で書く。強めの言葉は効くところで自然に使ってよいが、ノルマではない。",
+        ? (styled
+          ? `- 口調はユーザーが選んだスタイル(下の STYLE VOICE)に合わせ、本気でキレていることが伝わるように書く。本気の罵倒(例えば${v.vocab.feral})を少なくとも一つ、一番効くところで使う。数を稼ぐために並べない。`
+          : `- 本気でキレている人の話し言葉(タメ口)で書く。本気の罵倒(例えば${v.vocab.feral})を少なくとも一つ、一番効くところで使う。数を稼ぐために並べない。`)
+        : (styled
+          ? "- 口調はユーザーが選んだスタイル(下の STYLE VOICE)に合わせ、本気の苛立ちをにじませる。強めの言葉は効くところで自然に使ってよいが、ノルマではない。"
+          : "- 本気でイラついている人の話し言葉(タメ口)で書く。強めの言葉は効くところで自然に使ってよいが、ノルマではない。"),
       "- 単語を並べたり、最後に括弧で付け足したりしない。",
       "- 一人称はユーザーの文に出てくる一人称(私・あたし・僕・俺など)に合わせる。書かれていなければ「私」を使うか、一人称を省く。「俺」「お前」口調をデフォルトにしない。",
       "- 書き出しを毎回罵り言葉にしない。相手がしたこと・言ったことから始める。",
       "- ユーザーが書いていないこと(人・物・出来事)を付け足さない。",
-      "- 「あらまあ」「やれやれ」で始めるな。2〜3文、120字以内。改行せず一段落で書く。"
+      styled ? `- 「あらまあ」「やれやれ」で始めるな。${STYLED_LENGTH.ja}。改行せず一段落で書く。` : "- 「あらまあ」「やれやれ」で始めるな。2〜3文、120字以内。改行せず一段落で書く。"
     ].join("\n")
   },
 
@@ -185,39 +198,101 @@ function universalRules(v) {
   ].join("\n");
 }
 
-function ventRules(v) {
+function ventRules(v, styled = false) {
   return [
     "VENT DRAFT RULES (this output is private and will be labelled \"for yourself only\"):",
     "- The user is FURIOUS. They are not asking for advice and not trying to be witty. Write what is screaming in their head right now.",
-    "- Write a PRIVATE OUTBURST in the user's voice, not a clever observation and not a therapeutic reflection. Anger first, structure last.",
+    styled
+      ? "- Write a PRIVATE OUTBURST in the voice of the style the user picked (STYLE VOICE, below): the style sets how it sounds, the anger is still real. Never a therapeutic reflection."
+      : "- Write a PRIVATE OUTBURST in the user's voice, not a clever observation and not a therapeutic reflection. Anger first, structure last.",
     `- Imagined direct address is ALLOWED when it gives the anger more force. People vent by thinking ${v.directAddress} in their head. Do not flatten that into detached narration.`,
     `- Strong, raw language and mild profanity are welcome where they land — they are not a quota, so do not stack them. Do not water the anger down into sarcastic exclamations (${v.softOpeners} are FORBIDDEN openings — those are polite-sarcasm, not vent).`,
     `- Answer THIS situation: name what the other person actually did or said, using the details the user gave. ${v.specific}. Do not invent facts the user did not mention.`,
     "- Vary the opening: start with the offense itself — what they did, what they said, or a pointed question about it — not with a swear word or a stock exclamation.",
-    "- Default shape: 1–3 blunt sentences that hit the grievance immediately. No proverb, compliment, or life lesson.",
+    styled
+      ? "- Shape: whatever the style calls for, in 1–3 sentences within the length limit, staying on the grievance. No life lesson for the user."
+      : "- Default shape: 1–3 blunt sentences that hit the grievance immediately. No proverb, compliment, or life lesson.",
     `- FORBIDDEN: advice, consolation, moral lessons, self-improvement reframes, therapist voice, and reflective lines such as ${v.reflective}.`,
     "- Do not use slurs, threats of violence, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely."
   ].join("\n");
 }
 
-function feralRules(v) {
+function feralRules(v, styled = false) {
   return [
     "FERAL DRAFT RULES (this output is private and will be labelled \"for yourself only\"):",
-    "- The user is past polite. They want maximum cathartic impact, RAW. No sarcasm-as-substitute-for-anger.",
+    styled
+      ? "- The user is past polite. They want maximum cathartic impact. The style may be cold, sweet, theatrical or old-fashioned, but the fury has to come through it — never sarcasm instead of anger."
+      : "- The user is past polite. They want maximum cathartic impact, RAW. No sarcasm-as-substitute-for-anger.",
     "- Swearing is expected here: at least one real swear word (one or two is enough), placed where it hits hardest — not a list to tick off, and never the words on their own.",
-    `- Write a PRIVATE OUTBURST in the user's own voice. Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. FORBIDDEN openings: ${v.softOpeners}.`,
+    styled
+      ? `- Write a PRIVATE OUTBURST in the voice of the style the user picked (STYLE VOICE, below). Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. FORBIDDEN openings: ${v.softOpeners}.`
+      : `- Write a PRIVATE OUTBURST in the user's own voice. Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. FORBIDDEN openings: ${v.softOpeners}.`,
     `- Answer THIS situation: be specific about the behavior and the role (${v.roles}), using the details the user gave. Do not invent facts the user did not mention.`,
     "- Vary the opening: start with the offense itself, not with a swear word.",
-    "- Default shape: 1–3 blunt sentences. Start with the offense. No advice, no consolation, no moral lesson, no reflective self-help framing.",
+    styled
+      ? "- Shape: whatever the style calls for, in 1–3 sentences within the length limit. No advice, no consolation, no moral lesson, no reflective self-help framing."
+      : "- Default shape: 1–3 blunt sentences. Start with the offense. No advice, no consolation, no moral lesson, no reflective self-help framing.",
     "- Hard limits (UNIVERSAL SAFETY RULES still apply): no slurs based on race/religion/gender/sexuality/disability/body/family; no threats of physical violence; no sexual content; no doxxing.",
     `- Stay under ${v.maxLength.replace(" per variant", "")}.`
   ].join("\n");
 }
 
+/// The voice instruction for the request's Pro style in this locale's script,
+/// or "" (no style, a free style, an unknown style, or a style with no form in
+/// that language).
+/// `styleId` (apps from 1.7.1) wins over the localized `styleName`.
+export function ventStyleInstruction(locale, styleName, styleId) {
+  return styleVoiceInstruction(resolveStyleId(styleId, styleName), ventVoice(locale));
+}
+
+/// The calibration block without its GOOD lines (and the "GOOD examples show
+/// the tone only" note), for a styled draft: the GOOD lines are written in the
+/// plain angry register, and the model copies them. Measured 2026-10-22 (6
+/// zh_TW Feral drafts, one per style, with the style block at the top and the
+/// GOOD lines kept): all 6 came out in the same plain LINE register, 爛人 in
+/// 6 of 6 — none recognisably cold, melodramatic or Shakespearean. The BAD line
+/// (too reflective, too polite) still applies to every style.
+function styledCalibration(locale, intensity, situation) {
+  return privateDraftCalibration(locale, intensity, situation)
+    .split("\n").filter((line) => !line.startsWith("- GOOD")).join("\n");
+}
+
 /// `situation` only picks which Taiwan calibration lines this request shows
 /// (src/calibration.js); nothing from it is copied into the system prompt.
-export function buildVentSystemPrompt(intensity, locale, styleName, situation = "") {
-  const v = VOICES[ventVoice(locale)];
+///
+/// A Pro style (src/style_voice.js) sets the draft's voice: the lines that
+/// prescribe the default plain-angry register (the private-outburst line, the
+/// default shape, the script block's register line, Feral's "no sarcasm") get
+/// their styled wording, the length lines state the styled limit (up to 1.3×
+/// the usual one), the calibration loses its plain-register GOOD lines, and a
+/// STYLE VOICE block goes last before the language directive, where the model
+/// weighs it most (the first version put it at the top, where the old line
+/// was, and the pilot above showed no style). The safety rules, the
+/// intensity's anger and swearing rules and the language directive are the
+/// same lines as in an unstyled prompt.
+///
+/// Without a style voice — no style, a free style (the app default high_eq
+/// among them), a style this Worker does not know, or one with no form in
+/// this language — the prompt is byte-identical to the one before styles
+/// shaped private drafts (test/style_voice.test.js pins it against a fixture
+/// recorded from HEAD 4ed652f).
+export function buildVentSystemPrompt(intensity, locale, styleName, situation = "", styleId = "") {
+  const voice = ventVoice(locale);
+  const v = VOICES[voice];
+  const instruction = ventStyleInstruction(locale, styleName, styleId);
+  if (instruction) {
+    // The styled length replaces the usual one in every line that states it.
+    const sv = { ...v, maxLength: STYLED_MAX[voice] };
+    return [
+      "You are RoastMate, an AI that helps users express frustration through private vent drafts.",
+      universalRules(sv),
+      intensity === "feral" ? feralRules(sv, true) : ventRules(sv, true),
+      styledCalibration(locale, intensity, situation),
+      v.block(intensity, v, true),
+      styleVoiceBlock(instruction, intensity, voice),
+      languageDirective(locale)
+    ].join("\n\n");
+  }
   const styleLine = styleName
     ? `Style hint: ${styleName} — but IGNORE this style's politeness/professional/de-escalating framing. Intensity overrides Style for private drafts.`
     : "Style hint: none. Write in the user's raw voice, not a styled register.";
@@ -276,6 +351,17 @@ function voiceUserLine(locale, situation) {
   }
 }
 
+/// voiceUserLine for a styled draft: the style now sets the tone (Taiwan gets
+/// Taiwan wording rather than "a Taiwanese tone") and the length (English: the
+/// styled line carries the styled limit, so the 50-word line goes).
+function styledVoiceUserLine(locale, situation) {
+  switch (ventVoice(locale)) {
+    case "en": return "Plain text, no asterisks.";
+    case "hant": return "用台灣用語、台灣說法寫。";
+    default: return voiceUserLine(locale, situation);
+  }
+}
+
 // When the situation involves the user's own parent, a "your mother" curse
 // lands on the user's own family. Measured: two zh-Hant feral replies about
 // 「我媽每次過年…」 opened 「你媽他媽的…」 / 「你媽真的操你媽的…」, and the
@@ -305,11 +391,18 @@ export function ownFamilyLine(locale, situation) {
 }
 
 /// `extra` is one more instruction line (the quality retry's nudge); empty
-/// on the first call.
-export function buildVentUserPrompt(situation, locale, extra = "") {
+/// on the first call. `style` ({ styleName, styleId } as the request sent
+/// them, plus its intensity) adds the Pro style's voice instruction once more,
+/// in the reply's language, with the styled length, the no-invented-facts rule
+/// and, in Feral, the swear word (and, for Taiwan, asks for Taiwan wording
+/// rather than "a Taiwanese tone", which the style now sets); without a style
+/// voice the user prompt is unchanged.
+export function buildVentUserPrompt(situation, locale, extra = "", style = {}) {
+  const instruction = ventStyleInstruction(locale, style && style.styleName, style && style.styleId);
   const instructions = [
     "Write 1 private vent draft about THIS situation — raw, immediate, and emotionally specific, using what the user actually described. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly — no numbering, no preface, no commentary.",
-    voiceUserLine(locale, situation),
+    instruction ? styleUserLine(instruction, ventVoice(locale), style && style.intensity) : "",
+    instruction ? styledVoiceUserLine(locale, situation) : voiceUserLine(locale, situation),
     ownFamilyLine(locale, situation),
     extra,
     userLanguageReminder(locale)

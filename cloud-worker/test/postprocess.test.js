@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   stripMarkdown, stripWordListTail, cleanVentText, strayLatin, simplifiedChars,
   repeatedUnits, draftDefects, defectKinds, retryModels, retryNudge,
-  situationNames, echoedNames, stripNameAddress, fewerDefects
+  situationNames, echoedNames, stripNameAddress, fewerDefects, surnameTitles
 } from "../src/postprocess.js";
 
 // Inputs below are excerpts of real production replies from the 2026-10-22
@@ -229,6 +229,91 @@ test("echoedNames and draftDefects count a name anywhere in the draft", () => {
   assert.deepEqual(d.names, ["陳志明"]);
   assert.equal(d.count, 1);
   assert.deepEqual(defectKinds(d), ["names"]);
+});
+
+// Styled drafts only: index.js passes { titles: true } when the request's Pro
+// style gives the draft a voice; unstyled drafts keep HEAD's full-name check.
+const TITLES_ON = { titles: true };
+
+test("surname + title: a detected name's surname followed by a title counts as the name (hits)", () => {
+  // Measured (style gate 2026-10-22): a polite-voice draft opened 「陳主管欸」
+  // for a situation naming 陳志明; the full-name check did not see it.
+  assert.deepEqual(surnameTitles("陳主管欸，下班前十分鐘丟案子是怎樣", "zh_TW", BOSS), ["陳主管"]);
+  for (const [draft, hit] of [["陳經理又來了", "陳經理"], ["跟陳先生說一聲", "陳先生"], ["陳小姐", "陳小姐"], ["陳總監又在群組講話", "陳總"],
+                              ["陳總，案子明天要", "陳總"], ["陳哥你很會喔", "陳哥"], ["陳姐又來", "陳姐"], ["陳老闆好棒", "陳老闆"],
+                              ["陳老師", "陳老師"], ["陳組長", "陳組長"], ["陳董", "陳董"]]) {
+    assert.deepEqual(surnameTitles(draft, "zh_TW", BOSS), [hit], draft);
+    assert.ok(echoedNames(draft, "zh_TW", BOSS, TITLES_ON).includes(hit), draft);
+    assert.deepEqual(echoedNames(draft, "zh_TW", BOSS), [], `${draft}: not counted without titles (unstyled, as HEAD)`);
+  }
+  assert.deepEqual(surnameTitles("王经理又在周会上抢功", "zh-Hans", COWORKER), ["王经理"], "Simplified titles");
+  assert.deepEqual(surnameTitles("王总，你可真行", "zh-Hans", COWORKER), ["王总"]);
+  assert.deepEqual(surnameTitles("張學長又叫我買飲料", "zh_TW", "學長張偉每次都叫我幫他買飲料"), ["張學長"]);
+  // Both the full name and the titled form are reported, once each.
+  assert.deepEqual(echoedNames("陳志明，陳主管，陳主管", "zh_TW", BOSS, TITLES_ON), ["陳志明", "陳主管"]);
+  assert.deepEqual(echoedNames("陳志明，陳主管，陳主管", "zh_TW", BOSS), ["陳志明"], "unstyled: full names only");
+  const d = draftDefects("那個陳主管又丟案子", "zh_TW", BOSS, TITLES_ON);
+  assert.deepEqual(d.names, ["陳主管"]);
+  assert.deepEqual(d.titled, ["陳主管"]);
+  assert.deepEqual(defectKinds(d), ["names"]);
+  const plain = draftDefects("那個陳主管又丟案子", "zh_TW", BOSS);
+  assert.deepEqual([plain.names, plain.titled, plain.count], [[], [], 0], "unstyled: no defect, as HEAD");
+});
+
+test("surname + title: narrow — only this situation's surnames, never ordinary words (non-hits)", () => {
+  // Another surname with a title is not this situation's person.
+  assert.deepEqual(surnameTitles("王經理又來了", "zh_TW", BOSS), []);
+  // No name in the situation: nothing to derive.
+  assert.deepEqual(surnameTitles("陳主管又來了", "zh_TW", "慣老闆又在下班前十分鐘丟一個案子給我"), []);
+  // The surname character inside an ordinary word, or before an ordinary word.
+  assert.deepEqual(surnameTitles("陳年舊帳翻出來", "zh_TW", BOSS), []);
+  assert.deepEqual(surnameTitles("陳述一下事實", "zh_TW", BOSS), []);
+  assert.deepEqual(surnameTitles("陳總是這樣", "zh_TW", BOSS), [], "總是 is 'always'");
+  assert.deepEqual(surnameTitles("陳總共丟了幾個案子", "zh_TW", BOSS), [], "總共 is 'in total'");
+  const FANG = "同事方志明又把報告丟給我";
+  assert.deepEqual(situationNames(FANG, "zh_TW"), ["方志明"]);
+  assert.deepEqual(surnameTitles("對方主管又這樣", "zh_TW", FANG), [], "對方 is 'the other party'");
+  assert.deepEqual(surnameTitles("雙方經理都沒說話", "zh_TW", FANG), []);
+  assert.deepEqual(surnameTitles("方主管又這樣", "zh_TW", FANG), ["方主管"]);
+  const ZHOU = "同事周志明又把報告丟給我";
+  assert.deepEqual(surnameTitles("每周主管會議都這樣", "zh_TW", ZHOU), [], "每周 is 'every week'");
+  assert.deepEqual(surnameTitles("那個周主管", "zh_TW", ZHOU), ["周主管"]);
+  // Japanese, Korean and English situations: never.
+  assert.deepEqual(surnameTitles("陳主管", "ja_JP", BOSS), []);
+  assert.deepEqual(surnameTitles("Mr. Kevin, really?", "en_US", "My manager Kevin took credit"), []);
+  // 「任何主管」 is "any manager", not 何主管.
+  const HE = "同事何志明又把報告丟給我";
+  assert.deepEqual(situationNames(HE, "zh_TW"), ["何志明"]);
+  assert.deepEqual(surnameTitles("任何主管都不會這樣", "zh_TW", HE), []);
+  assert.deepEqual(surnameTitles("為何總是我", "zh_TW", HE), []);
+  assert.deepEqual(surnameTitles("何主管又這樣", "zh_TW", HE), ["何主管"]);
+  // A draft with no titled form: echoedNames is what it was.
+  assert.deepEqual(echoedNames("那個主管又在下班前丟案子", "zh_TW", BOSS, TITLES_ON), []);
+});
+
+test("surname + title: stripped where it opens the draft as an address, and the retry nudge says so", () => {
+  assert.equal(stripNameAddress("陳主管，你又下班前丟案子", "zh_TW", BOSS, TITLES_ON), "你又下班前丟案子");
+  assert.equal(stripNameAddress("陳主管你又下班前丟案子", "zh_TW", BOSS, TITLES_ON), "你又下班前丟案子");
+  assert.equal(stripNameAddress("王总，你可真行", "zh-Hans", COWORKER, TITLES_ON), "你可真行");
+  assert.equal(stripNameAddress("陳主管欸，下班前丟案子", "zh_TW", BOSS, TITLES_ON), "陳主管欸，下班前丟案子", "not a clean vocative: left for the retry");
+  assert.equal(stripNameAddress("對方主管，你又這樣", "zh_TW", "同事方志明又把報告丟給我", TITLES_ON), "對方主管，你又這樣");
+  // Unstyled drafts: left alone, exactly as HEAD 4ed652f does.
+  assert.equal(stripNameAddress("陳主管，你又下班前丟案子", "zh_TW", BOSS), "陳主管，你又下班前丟案子");
+  assert.equal(stripNameAddress("王总，你可真行", "zh-Hans", COWORKER), "王总，你可真行");
+  const titled = retryNudge(draftDefects("陳主管欸，下班前丟案子", "zh_TW", BOSS, TITLES_ON), "zh_TW");
+  assert.match(titled, /不要寫出任何人名/);
+  assert.match(titled, /也不要用姓氏加職稱的叫法/);
+  assert.doesNotMatch(titled, /陳/, "never quotes the draft");
+  assert.match(retryNudge(draftDefects("王经理又抢功", "zh-Hans", COWORKER, TITLES_ON), "zh-Hans"), /也不要用姓氏加职称的叫法/);
+  // A full-name hit alone gets exactly the nudge it got before.
+  assert.equal(retryNudge(draftDefects("你那個主管陳志明，下班前", "zh_TW", BOSS, TITLES_ON), "zh_TW"),
+               "不要寫出任何人名，連開頭稱呼也不要，用「那個主管」「對方」這類稱呼。");
+  // A full name that merely looks like surname + title (detected as the name
+  // 陳先生) gets HEAD's nudge in an unstyled draft: no surname + title clause.
+  const MR = "主管陳先生又把報告丟給我";
+  assert.deepEqual(situationNames(MR, "zh_TW"), ["陳先生"]);
+  assert.equal(retryNudge(draftDefects("陳先生又來了", "zh_TW", MR), "zh_TW"),
+               "不要寫出任何人名，連開頭稱呼也不要，用「那個主管」「對方」這類稱呼。");
 });
 
 test("fewerDefects: a draft without the user's name wins even over a cosmetic defect", () => {

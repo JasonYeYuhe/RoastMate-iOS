@@ -247,21 +247,73 @@ function chineseNames(s) {
   return [...found];
 }
 
-/// The situation's names that a draft repeats (English: as a whole word).
-export function echoedNames(text, locale, situation = "") {
+// Titles that follow a surname when a person is named by role: 陳主管,
+// 王經理, 林老師, 張總, 李姐 (both scripts; the two-character titles first,
+// then the one-character ones, so 「陳總監」 is found as 陳總).
+const TITLES = ["主管", "經理", "经理", "老闆", "老板", "老師", "老师", "先生", "小姐", "太太", "主任",
+  "組長", "组长", "課長", "课长", "科長", "科长", "處長", "处长", "部長", "部长", "店長", "店长",
+  "副理", "協理", "协理", "襄理", "特助", "秘書", "秘书", "教授", "醫師", "医师", "醫生", "医生",
+  "律師", "律师", "同學", "同学", "學長", "学长", "學姊", "學姐", "学姐", "學弟", "学弟", "學妹", "学妹",
+  "阿姨", "師傅", "师傅", "董", "總", "总", "哥", "姐", "姊"];
+// Common words that END in a surname character, so the character is not a
+// surname there: 「對方主管」 is not 方主管, 「每周主管會議」 is not 周主管.
+const SURNAME_IN_WORD = new Set(["對方", "对方", "雙方", "双方", "甲方", "乙方", "官方", "地方", "一方", "各方", "警方", "校方",
+  "每周", "上周", "下周", "本周", "這周", "这周", "一周", "两周", "兩周", "提高", "最高", "很高", "太高",
+  "責任", "责任", "主任", "信任", "擔任", "担任", "現金", "现金", "資金", "资金", "獎金", "奖金", "租金",
+  "明白", "告白", "坦白", "空白", "工程", "課程", "课程", "過程", "过程", "流程", "行程", "歷史", "历史",
+  "文章", "健康", "行李", "森林", "手段", "其余", "支付", "預付", "预付", "應付", "应付",
+  "任何", "如何", "為何", "为何", "奈何", "幾何", "几何", "有錢", "有钱", "金錢", "金钱", "千萬", "千万"]);
+// 總 / 总 starts ordinary words too: 總共, 總算, 總之, 總是.
+const NOT_AFTER_ZONG = new Set([..."共算之是"]);
+
+/// Surname + title forms of the people a Chinese situation names, as they
+/// appear in `text`: for 「慣老闆陳志明…」 a draft's 「陳主管」 or 「陳先生」.
+/// Only surnames taken from a name detected in THIS situation count, so an
+/// unrelated 「王經理」 never does. Deliberately narrow, like situationNames.
+///
+/// Used only for drafts written in a Pro style's voice (index.js passes
+/// `{ titles: true }` to echoedNames / stripNameAddress / draftDefects): a
+/// polite or formal voice is what reached for 「陳主管欸」 (style gate
+/// 2026-10-22). Unstyled Vent / Feral drafts keep exactly HEAD 4ed652f's name
+/// handling (full names only) until the owner decides otherwise.
+export function surnameTitles(text, locale, situation = "") {
+  const code = String(locale || "").toLowerCase();
+  if (!code.startsWith("zh")) return [];
   const t = String(text || "");
-  return situationNames(situation, locale)
+  const surnames = new Set(situationNames(situation, locale).map((n) => n[0]));
+  const found = new Set();
+  for (const surname of surnames) {
+    for (let i = t.indexOf(surname); i !== -1; i = t.indexOf(surname, i + 1)) {
+      if (i > 0 && SURNAME_IN_WORD.has(t[i - 1] + surname)) continue;
+      const title = TITLES.find((x) => t.startsWith(x, i + 1));
+      if (!title) continue;
+      if ((title === "總" || title === "总") && NOT_AFTER_ZONG.has(t[i + 2] || "")) continue;
+      found.add(surname + title);
+    }
+  }
+  return [...found];
+}
+
+/// The situation's names that a draft repeats (English: as a whole word),
+/// and, with `titles` (styled drafts only), a detected Chinese name's surname
+/// followed by a title.
+export function echoedNames(text, locale, situation = "", { titles = false } = {}) {
+  const t = String(text || "");
+  const full = situationNames(situation, locale)
     .filter((n) => (/^[A-Za-z]/.test(n) ? new RegExp(`\\b${n}\\b`).test(t) : t.includes(n)));
+  return titles ? [...new Set([...full, ...surnameTitles(t, locale, situation)])] : full;
 }
 
 /// Remove a name from the situation where the draft uses it to address that
 /// person: opening the draft (「陳志明你又…」 → 「你又…」, 「王强，你…」 → 「你…」,
-/// "Kevin, you…" → "You…") or, in English, closing a sentence ("Fuck you,
-/// Kevin." → "Fuck you."). In those positions the name is a vocative, so
-/// dropping it keeps the sentence whole; anywhere else the text is left alone.
-export function stripNameAddress(text, locale, situation = "") {
+/// 「陳主管，你…」 → 「你…」 with `titles`, "Kevin, you…" → "You…") or, in
+/// English, closing a sentence ("Fuck you, Kevin." → "Fuck you."). In those
+/// positions the name is a vocative, so dropping it keeps the sentence whole;
+/// anywhere else the text is left alone (and the quality retry sees the name).
+export function stripNameAddress(text, locale, situation = "", { titles = false } = {}) {
   let t = String(text || "");
-  for (const name of situationNames(situation, locale)) {
+  const names = situationNames(situation, locale);
+  for (const name of titles ? [...names, ...surnameTitles(t, locale, situation)] : names) {
     const latin = /^[A-Za-z]/.test(name);
     const lead = (t.match(/^(\s*[「『“"]?)/) || ["", ""])[1];
     if (t.startsWith(name, lead.length) && !(latin && /^[a-z]/.test(t[lead.length + name.length] || ""))) {
@@ -277,13 +329,16 @@ export function stripNameAddress(text, locale, situation = "") {
   return t;
 }
 
-/// What is wrong with a draft that only a new draft can fix.
-export function draftDefects(text, locale, situation = "") {
+/// What is wrong with a draft that only a new draft can fix. `titled` lists
+/// the surname + title forms among `names` (always empty without `titles`);
+/// it only adds a clause to the retry nudge, so it is not counted twice.
+export function draftDefects(text, locale, situation = "", { titles = false } = {}) {
   const latin = strayLatin(text, locale, situation);
   const simplified = simplifiedChars(text, locale);
   const repeats = repeatedUnits(text, locale);
-  const names = echoedNames(text, locale, situation);
-  return { latin, simplified, repeats, names, count: latin.length + simplified.length + repeats.length + names.length };
+  const names = echoedNames(text, locale, situation, { titles });
+  const titled = titles ? surnameTitles(text, locale, situation) : [];
+  return { latin, simplified, repeats, names, titled, count: latin.length + simplified.length + repeats.length + names.length };
 }
 
 /// True when draft `b` is better than draft `a`: fewer of the user's names,
@@ -318,12 +373,16 @@ export function retryModels(candidates, used) {
 }
 
 /// One extra line for the retry's user prompt, naming the kind of defect —
-/// never quoting the draft.
+/// never quoting the draft. The surname + title clause is added only when
+/// draftDefects found that form (styled drafts only), so every other retry
+/// prompt is unchanged — including one for a full name that merely looks like
+/// surname + title (「陳先生又…」 detected as the name 陳先生).
 export function retryNudge(defects, locale) {
   const latin = Boolean(defects && defects.latin && defects.latin.length > 0);
   const simp = Boolean(defects && defects.simplified && defects.simplified.length > 0);
   const rep = Boolean(defects && defects.repeats && defects.repeats.length > 0);
   const names = Boolean(defects && defects.names && defects.names.length > 0);
+  const titled = names && Boolean(defects.titled && defects.titled.length > 0);
   if (!latin && !simp && !rep && !names) return "";
   const code = String(locale || "").toLowerCase();
   const parts = [];
@@ -333,10 +392,12 @@ export function retryNudge(defects, locale) {
     else if (simp) parts.push("這次每一個字都要是繁體字，不要出現任何簡體字。");
     if (rep) parts.push("同一個詞不要連著重複。");
     if (names) parts.push("不要寫出任何人名，連開頭稱呼也不要，用「那個主管」「對方」這類稱呼。");
+    if (titled) parts.push("也不要用姓氏加職稱的叫法，只寫職稱或「對方」。");
   } else if (code.startsWith("zh")) {
     if (latin) parts.push("这次全文只用中文，不要夹英文单词。");
     if (rep) parts.push("同一个词不要连着重复。");
     if (names) parts.push("不要写出任何人名，连开头称呼也不要，用「那个领导」「对方」这类称呼。");
+    if (titled) parts.push("也不要用姓氏加职称的叫法，只写职称或「对方」。");
   } else if (code.startsWith("ja")) {
     if (latin) parts.push("今回は英単語を混ぜず、すべて日本語で書くこと。");
     if (rep) parts.push("同じ言葉を続けて繰り返さないこと。");
