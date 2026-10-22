@@ -29,8 +29,11 @@ import { QuotaCounter } from "./quota_do.js";
 import { consumeQuota, refundQuota, quotaBackendIsDO } from "./quota.js";
 import { resolveIpAttemptCap } from "./ipguard.js";
 import { isTraditionalChinese, baseLocale } from "./locale.js";
-import { privateDraftCalibration } from "./calibration.js";
 import { groqEnabled, openRouterModels, openRouterAttempts, modelSelection } from "./routing.js";
+import { languageDirective, userLanguageReminder } from "./language.js";
+import { buildVentSystemPrompt, buildVentUserPrompt } from "./vent_prompt.js";
+import { cleanVentText, stripNameAddress, draftDefects, fewerDefects, defectKinds, retryModels, retryNudge } from "./postprocess.js";
+import { budgetFor, attemptTimeout, qualityRetryTimeout } from "./budget.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
@@ -237,9 +240,17 @@ export default {
       systemPrompt = buildRoastSystemPrompt(intensity, locale, styleName, styleId, variantCount);
       userPrompt = buildRoastUserPrompt(situation, locale, variantCount);
     } else {
-      systemPrompt = buildSystemPrompt(intensity, locale, styleName);
-      userPrompt = buildUserPrompt(situation, locale);
+      // Private Vent / Feral drafts: per-script prompt (src/vent_prompt.js).
+      systemPrompt = buildVentSystemPrompt(intensity, locale, styleName, situation);
+      userPrompt = buildVentUserPrompt(situation, locale);
     }
+
+    // One deadline for every upstream call this request makes (first call,
+    // tail retries, the vent quality retry) — see src/budget.js for the
+    // numbers; the roommate transcript gets a longer first call. Measured from
+    // when the Worker received the request.
+    const { totalMs: budgetMs, firstMs: firstAttemptMs, minTailMs } = budgetFor(mode);
+    const deadline = t0 + budgetMs;
 
     // Decision after smoke testing: Groq is primary because OpenRouter's
     // :free model pool is consistently rate-limited upstream (all the
@@ -276,6 +287,7 @@ export default {
         model: modelOverride,
         systemPrompt,
         userPrompt,
+        timeoutMs: attemptTimeout(deadline, Date.now(), firstAttemptMs),
         extraHeaders: {
           "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
           "X-Title": env.OPENROUTER_TITLE || "RoastMate"
@@ -304,6 +316,7 @@ export default {
         model: groqPrimaryModel,
         systemPrompt,
         userPrompt,
+        timeoutMs: attemptTimeout(deadline, Date.now(), firstAttemptMs),
         // Groq's Qwen3 is a REASONING model: by default it burns the whole
         // token budget on a <think> trace, so the answer comes back empty
         // (stripped) and we waste a slow, billed generation before falling
@@ -360,15 +373,33 @@ export default {
     // error, which nuked the fallback (→ 502 whenever Groq missed). So no
     // reasoning param is sent; every configured model must be a NON-reasoning
     // instruct model (enforced by test/routing.test.js on wrangler.toml).
+    //
+    // Timeouts (src/budget.js): the first call — the whole list, with
+    // OpenRouter's own fallback running inside it — gets up to the mode's
+    // first-call cap; each tail retry gets what is left of the deadline. A
+    // call that would start with less than MIN_ATTEMPT_MS left is skipped.
+    // `answeredFrom` keeps the list the successful call sent, so the vent
+    // quality retry never goes back to a model that already failed here.
+    const orModels = openRouterModels(env);
+    let answeredFrom = [];
     if (!text && env.OPENROUTER_API_KEY) {
-      const orModels = openRouterModels(env);
+      let first = true;
       for (const candidates of openRouterAttempts(orModels)) {
+        const timeoutMs = first
+          ? attemptTimeout(deadline, Date.now(), firstAttemptMs)
+          : attemptTimeout(deadline, Date.now(), Infinity, minTailMs);
+        first = false;
+        if (!timeoutMs) {
+          attempts.push("openrouter:budget");
+          break;
+        }
         const orResult = await callOpenAICompatible({
           endpoint: "https://openrouter.ai/api/v1/chat/completions",
           apiKey: env.OPENROUTER_API_KEY,
           model: candidates,
           systemPrompt,
           userPrompt,
+          timeoutMs,
           extraHeaders: {
             "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
             "X-Title": env.OPENROUTER_TITLE || "RoastMate"
@@ -378,6 +409,7 @@ export default {
           text = orResult.text;
           modelUsed = orResult.model || candidates[0];
           providerUsed = "openrouter";
+          answeredFrom = candidates;
           break;
         }
         const summary = `openrouter:${orResult.status || "?"}`;  // provider:status only — never the body (privacy)
@@ -400,9 +432,67 @@ export default {
       );
     }
 
+    // Private Vent / Feral drafts only (never the roommate transcript the app
+    // parses, never the numbered roast variants): remove markdown, a printed
+    // word list, and a name from the situation used to address the person
+    // (「陳志明你…」, "…, Kevin.") in place, then — if the draft has English words inside
+    // zh / ja text, Simplified characters inside zh-Hant text, a word stuck on
+    // repeat, or the situation's name anywhere else — ask the model that
+    // answered once more (not the fallback model, which named the person in 4
+    // of 4 Chinese drafts; see retryModels) and keep the draft with fewer
+    // names, then fewer defects. The retry is
+    // skipped for eval-harness overrides (it would change the model under
+    // test) and when the deadline leaves too little time; any failure keeps
+    // the first draft. See src/postprocess.js. The log carries the defect
+    // kinds and the retry's outcome, never the words.
+    let qualityRetry = "none";
+    let qualityDefects = [];
+    if (mode === "vent") {
+      const cleaned = cleanVentText(text);
+      text = stripNameAddress(cleaned, locale, situation);
+      const defects = draftDefects(text, locale, situation);
+      qualityDefects = defectKinds(defects);
+      if (text !== cleaned) qualityDefects.push("name_address_removed");
+      if (defects.count > 0) {
+        const timeoutMs = qualityRetryTimeout(deadline, Date.now());
+        if (modelOverride || providerUsed !== "openrouter" || !env.OPENROUTER_API_KEY) {
+          qualityRetry = "not_applicable";
+        } else if (!timeoutMs) {
+          qualityRetry = "skipped_budget";
+        } else {
+          const targets = retryModels(answeredFrom.length ? answeredFrom : orModels, modelUsed);
+          const retry = await callOpenAICompatible({
+            endpoint: "https://openrouter.ai/api/v1/chat/completions",
+            apiKey: env.OPENROUTER_API_KEY,
+            model: targets,
+            systemPrompt,
+            userPrompt: buildVentUserPrompt(situation, locale, retryNudge(defects, locale)),
+            timeoutMs,
+            extraHeaders: {
+              "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
+              "X-Title": env.OPENROUTER_TITLE || "RoastMate"
+            }
+          });
+          if (!retry.ok) {
+            qualityRetry = `failed:${retry.status || "?"}`;  // status only (privacy)
+          } else {
+            const second = stripNameAddress(cleanVentText(retry.text), locale, situation);
+            if (fewerDefects(draftDefects(second, locale, situation), defects)) {
+              text = second;
+              modelUsed = retry.model || targets[0];
+              qualityRetry = "used";
+            } else {
+              qualityRetry = "kept_first";
+            }
+          }
+        }
+      }
+    }
+
     ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,
       quota_backend: quota.backend, quota_do_enabled: quotaBackendIsDO(env),
-      provider: providerUsed, model: modelUsed, latency_ms: Date.now() - t0 });
+      provider: providerUsed, model: modelUsed, quality_retry: qualityRetry, quality_defects: qualityDefects,
+      attempts: attempts.map((a) => a.split(":").slice(0, 2).join(":")), latency_ms: Date.now() - t0 });
     return json({
       text,
       model: modelUsed,
@@ -442,11 +532,25 @@ function ddLog(env, ctx, fields) {
 /// accept the same request shape, so we share one helper. `model` is a model
 /// id or, for OpenRouter only, an ordered array of fallbacks. Returns
 /// `{ ok: true, text, model }` (model = what the provider says answered) on success or `{ ok: false, status, detail }`
-/// on any failure (HTTP non-2xx, network error, or empty completion).
-async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders, extraBody }) {
+/// on any failure (HTTP non-2xx, network error, timeout, or empty completion).
+///
+/// `timeoutMs` (from src/budget.js) aborts the call — headers and body — after
+/// that long; the failure's status is then "timeout". A non-positive value
+/// means the budget is spent and nothing is sent ("budget").
+async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, userPrompt, extraHeaders, extraBody, timeoutMs }) {
+  if (timeoutMs !== undefined && !(timeoutMs > 0)) {
+    return { ok: false, status: "budget", detail: "budget" };
+  }
+  const signal = timeoutMs !== undefined ? AbortSignal.timeout(timeoutMs) : undefined;
+  // Any failure after our own signal fired is the timeout, whatever the
+  // runtime names the error — so an unexpected error name can never turn a
+  // timeout into a "transport" status (review 2026-10-22).
+  const timedOut = (e) => Boolean((signal && signal.aborted) ||
+    (e && (e.name === "TimeoutError" || e.name === "AbortError")));
   let res;
   try {
     res = await fetch(endpoint, {
+      signal,
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
@@ -465,6 +569,7 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
       })
     });
   } catch (e) {
+    if (timedOut(e)) return { ok: false, status: "timeout", detail: "timeout" };
     return { ok: false, status: 0, detail: `transport:${e.message || "unknown"}` };
   }
   if (!res.ok) {
@@ -474,7 +579,8 @@ async function callOpenAICompatible({ endpoint, apiKey, model, systemPrompt, use
   let parsed;
   try {
     parsed = await res.json();
-  } catch (_e) {
+  } catch (e) {
+    if (timedOut(e)) return { ok: false, status: "timeout", detail: "timeout" };
     return { ok: false, status: res.status, detail: "decode_error" };
   }
   // Some reasoning-style models (Qwen3, DeepSeek R1 family) inline a
@@ -611,105 +717,7 @@ function validate(body) {
   };
 }
 
-function buildSystemPrompt(intensity, locale, styleName) {
-  const langLine = languageDirective(locale);
-  const universal = [
-    "SAFETY RULES (always apply, regardless of intensity / mode):",
-    "- Never target a specific real person by full name. If a name appears in the user's situation, replace it with a generic role (\"the manager\", \"the roommate\").",
-    "- NEVER echo identifying details back, even if the user typed them: no real names, no company or school names, no addresses, no phone numbers, no email addresses, and no contact handles (WeChat/vx/QQ). Replace them with a generic role or reference — in Chinese use 「对方」/「你的同事」/「那家公司」; in English: them / your coworker / that company. The output may be rendered onto a shareable image, so treat every specific identifier as something that must not survive into it.",
-    "- Never produce slurs, racist, sexist, ableist, homophobic, transphobic, or hateful content.",
-    "- Never produce threats of physical violence, doxxing, sexual content, or self-harm content.",
-    "- Never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
-    "- If the user's situation suggests self-harm, violence, or stalking, decline and respond with empathy and a suggestion to seek support.",
-    "- Stay under 120 words per variant.",
-    "- For private drafts, raw anger is allowed, but keep the attack on the behavior or choice — never on identity."
-  ].join("\n");
-
-  const ventRules = [
-    "VENT DRAFT RULES (this output is private and will be labelled \"for yourself only\"):",
-    "- The user is FURIOUS. They are not asking for advice and not trying to be witty. Write what is screaming in their head right now.",
-    "- Write a PRIVATE OUTBURST in the user's voice, not a clever observation and not a therapeutic reflection. Anger first, structure last.",
-    "- Imagined direct address is ALLOWED when it gives the anger more force. People vent by thinking \"你到底凭什么...\" / \"who the hell do you think you are...\" in their head. Do not flatten that into detached narration.",
-    "- USE strong, raw language and mild profanity where it earns its place: \"尼玛\", \"屁话\", \"他妈的\", \"服了\", \"damn\", \"hell\", \"うるせえ\". Do not water it down into sarcastic exclamations (\"哎呀…\" / \"Oh my…\" / \"あらまあ…\" are FORBIDDEN openings — those are polite-sarcasm, not vent).",
-    "- Be specific about what the other person did. \"你天天凌晨两点打游戏\" beats \"好吵啊\".",
-    "- Default shape: 1–3 blunt sentences that hit the grievance immediately. Start with the offense, not a proverb, compliment, or life lesson.",
-    "- FORBIDDEN: advice, consolation, moral lessons, self-improvement reframes, therapist voice, and reflective lines such as \"如果你把这份心思放在自己身上...\" / \"maybe focus on yourself...\" / \"你值得更好的...\".",
-    "- Do not use slurs, threats of violence, sexual content, doxxing, or attacks on protected attributes — the universal safety rules above still apply absolutely.",
-  ].join("\n");
-
-  const feralRules = [
-    "FERAL DRAFT RULES (this output is private and will be labelled \"for yourself only\"):",
-    "- The user is past polite. They want maximum cathartic impact, RAW. No sarcasm-as-substitute-for-anger.",
-    "- USE strong profanity. Reach for the actual swear words:",
-    "  * English: fuck, fucking, shit, bullshit, asshole, prick",
-    "  * 中文: 操, 妈的, 他妈的, 傻逼, 你妈, 滚, 卧槽, 操你妈, 神经病",
-    "  * 日本語: クソ, クソが, ふざけるな, うるせえ, ばかやろう",
-    "- Write a PRIVATE OUTBURST in the user's own voice. Imagined direct address is ALLOWED and often preferred when it makes the line hit harder. FORBIDDEN openings: \"哎呀…\" / \"Oh my…\" / \"あらまあ…\".",
-    "- Be specific about the behavior and the role (the manager, the ex, the roommate).",
-    "- Default shape: 1–3 blunt sentences. Start with the offense. No advice, no consolation, no moral lesson, no reflective self-help framing.",
-    "- Hard limits (UNIVERSAL SAFETY RULES still apply): no slurs based on race/religion/gender/sexuality/disability/body/family; no threats of physical violence; no sexual content; no doxxing.",
-    "- Stay under 120 words."
-  ].join("\n");
-
-  const styleLine = styleName
-    ? `Style hint: ${styleName} — but IGNORE this style's politeness/professional/de-escalating framing. Intensity overrides Style for private drafts.`
-    : "Style hint: none. Write in the user's raw voice, not a styled register.";
-
-  // C-a Vent prompt tune (2026-05-23): observed Qwen3-32B (production
-  // primary) occasionally complies with vent rules but skips profanity
-  // entirely even when explicitly permitted. Naming a count + concrete
-  // word list in the target locale reliably nudges it. This is layered
-  // ON TOP of the existing English `ventRules` permission language,
-  // not a replacement. Per-locale so en/ja outputs aren't affected.
-  // Per-intensity so this only fires for vent/feral, not sharp/calm.
-  const localePrefix = (locale || "").toLowerCase();
-  const isTraditionalZh = isTraditionalChinese(locale);
-  let localeReinforcement = "";
-  if (localePrefix.startsWith("zh") && (intensity === "vent" || intensity === "feral")) {
-    // Hant + Hans split: same intensity rule but the example wordlist
-    // must be in the target script to avoid char-bleed (observed
-    // 2026-05-23: model echoes "特么" simplified 么 into zh-Hant output).
-    // Also: avoid PRC-only terms (朋友圈, 微博, 抖音) in zh-Hant; the
-    // model latent vocabulary will use them unless explicitly told.
-    if (isTraditionalZh) {
-      localeReinforcement = (intensity === "feral")
-        ? "繁體中文 FERAL 強制指令:必須使用 2-3 個強烈詞。例:他媽的、老子、傻逼、操、幹、滾、神經病。零粗口 = 沒完成任務。不許用「哎呀」「真是的」開頭。避免簡體字(誰不能寫成谁)。避免大陸專屬詞(朋友圈 → 限動/貼文,微博 → IG/FB)。"
-        : "繁體中文 VENT 強制指令:必須使用 1-2 個強烈詞(不許零粗口)。可選:他媽的、老子、特麼、服了、裝什麼裝、煩死了。不許用「哎呀」「真是的」「唉」開頭。避免簡體字(誰不能寫成谁,讓不能寫成让)。避免大陸專屬詞(朋友圈 → 限動/貼文)。";
-    } else {
-      localeReinforcement = (intensity === "feral")
-        ? "中文 FERAL 强制指令:必须使用 2-3 个强烈词。例:他妈的、老子、傻逼、操、卧槽、滚、神经病。零粗口 = 没完成任务。不许用「哎呀」「真是的」开头。"
-        : "中文 VENT 强制指令:必须使用 1-2 个强烈词(不许零粗口)。可选:他妈的、老子、特么、服了、装什么装、烦死了。不许用「哎呀」「真是的」「唉」开头。";
-    }
-  } else if (localePrefix.startsWith("ja") && (intensity === "vent" || intensity === "feral")) {
-    localeReinforcement = (intensity === "feral")
-      ? "日本語 FERAL 強制ルール:強い罵り言葉を 2-3 個必ず使う。例:クソ、クソが、ふざけるな、うるせえ、ばかやろう。罵り言葉ゼロ = タスク未達成。「あらまあ」「やれやれ」で始めるな。"
-      : "日本語 VENT 強制ルール:強めの言葉を 1-2 個必ず使う。例:うるせえ、マジで、ふざけんな、いい加減にしろ、ありえねえ。「あらまあ」「やれやれ」で始めるな。";
-  }
-
-  const intensityRules = intensity === "feral" ? feralRules : ventRules;
-  const calibration = privateDraftCalibration(locale, intensity);
-
-  const sections = [
-    "You are RoastMate, an AI that helps users express frustration through private vent drafts.",
-    styleLine,
-    universal,
-    intensityRules,
-    calibration
-  ];
-  if (localeReinforcement) sections.push(localeReinforcement);
-  sections.push(langLine);
-  return sections.join("\n\n");
-}
-
-function buildUserPrompt(situation, locale) {
-  const reminder = userLanguageReminder(locale);
-  return [
-    `Situation: ${situation}`,
-    "",
-    "Write 1 private vent draft. Raw, immediate, and emotionally specific. It may use imagined direct address if that makes the anger sharper. Do not give advice, reflection, or moral lessons. Output the draft directly — no numbering, no preface, no commentary.",
-    reminder
-  ].join("\n");
-}
+// The private-draft (Vent / Feral) prompt lives in src/vent_prompt.js.
 
 // --- Sendable "roast" modes (calm / sharp / savage) -------------------------
 // The modes the user can actually SEND (unlike private vent drafts). On iOS 18
@@ -894,42 +902,6 @@ function buildRoommateUserPrompt(situation, locale) {
   ].join("\n");
 }
 
-
-function languageDirective(locale) {
-  const code = (locale || "").toLowerCase();
-  if (isTraditionalChinese(locale)) {
-    // Measured 2026-09-03: the sendable eval found simplified-character bleed
-    // in 6 of 24 zh-Hant cells, including one response written ENTIRELY in
-    // Simplified. The old directive was a single sentence — materially weaker
-    // than the zh-Hans one, which already carried the "even if the rest of the
-    // prompt is English" reinforcement, and it never actually forbade
-    // simplified characters. The examples below are the exact characters that
-    // leaked, which gives the model something concrete to check against.
-    return "OUTPUT LANGUAGE (REQUIRED): 必須全程使用「繁體中文」回覆。"
-         + "即使本提示其他部分是英文，你的回覆也必須完全使用繁體中文。"
-         + "嚴禁出現任何簡體字（例如「说、让、经、义、认、这、个、时、会、门、问、发」等），"
-         + "每一個字都必須是繁體寫法（說、讓、經、義、認、這、個、時、會、門、問、發）。";
-  }
-  if (code.startsWith("zh")) {
-    return "OUTPUT LANGUAGE (REQUIRED): 必须用「简体中文」回复。即使本提示其它部分是英文,你的回复也必须完全使用简体中文。";
-  }
-  if (code.startsWith("ja")) {
-    return "OUTPUT LANGUAGE (REQUIRED): 必ず日本語で回答してください。";
-  }
-  if (code.startsWith("ko")) {
-    return "OUTPUT LANGUAGE (REQUIRED): 반드시 한국어로 답변하세요.";
-  }
-  return "OUTPUT LANGUAGE (REQUIRED): Reply entirely in English.";
-}
-
-function userLanguageReminder(locale) {
-  const code = (locale || "").toLowerCase();
-  if (isTraditionalChinese(locale)) return "請以繁體中文回覆，全文不得出現簡體字。";
-  if (code.startsWith("zh")) return "请用简体中文回复。";
-  if (code.startsWith("ja")) return "日本語で回答してください。";
-  if (code.startsWith("ko")) return "한국어로 답변해 주세요.";
-  return "Reply in English.";
-}
 
 function json(payload, status) {
   return new Response(JSON.stringify(payload), {

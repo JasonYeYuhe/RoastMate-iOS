@@ -28,3 +28,24 @@ test("mainland calibration stays Simplified", () => {
     }
   }
 });
+
+test("every locale's calibration says its GOOD examples are tone, not a template", () => {
+  for (const locale of ["zh_TW", "zh-Hans", "ja_JP", "en_US", "ko_KR", ""]) {
+    for (const intensity of ["vent", "feral"]) {
+      const text = privateDraftCalibration(locale, intensity);
+      assert.match(text, /GOOD examples show the tone only/, `${locale}/${intensity}`);
+      assert.ok(text.split("\n").some((l) => l.startsWith("- GOOD:")), `${locale}/${intensity}`);
+    }
+  }
+});
+
+test("English GOOD lines are at most two sentences, with no swear word standing alone", () => {
+  for (const intensity of ["vent", "feral"]) {
+    for (const line of privateDraftCalibration("en_US", intensity).split("\n").filter((l) => l.startsWith("- GOOD:"))) {
+      const quote = line.slice(line.indexOf("\"") + 1, line.lastIndexOf("\""));
+      const sentences = quote.split(/(?<=[.!?])\s+/).filter(Boolean);
+      assert.ok(sentences.length <= 2, `${intensity}: ${quote}`);
+      for (const s of sentences) assert.ok(s.split(/\s+/).length > 3, `bare short sentence: ${s}`);
+    }
+  }
+});
