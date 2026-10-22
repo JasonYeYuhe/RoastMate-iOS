@@ -22,8 +22,8 @@ until you measure it.
 
 - Churn: RoastMate has had 2 payers; TW cancelled on DAY 0 (09-19, v1.5.0, iOS 27),
   US active (renews ~11-04). The other cancellations that week were ColorArchive's.
-  Full diagnosis: the 10-22 investigation (evidence was in the session scratchpad;
-  conclusions are in memory `project-v17-plan` and the commit messages below).
+  Full diagnosis, gates and re-runnable harness: `docs/evidence/2026-10-22-churn-and-fixes/`
+  (start with its README).
 - Worker 046f2134 LIVE (rollback 7846ac95 → 90d8f1c5): Taiwan register for zh-Hant,
   no quota templates, output cleanup, names/surname+title never used to address the
   person, per-mode timeout budget (commit 4ed652f); Pro styles shape the voice of
@@ -33,9 +33,12 @@ until you measure it.
   SDK 27), working "Make it sendable" (permissive guardrails + refusal and threat
   screens), purchase confirmation/errors, device-honest paywall, Taiwan crisis lines
   first, Vent default without the on-device model, styleId sent.
-- Open: subscription descriptions in ASC still say "Unlimited generations" (shown on
-  the paywall rows); the API refuses edits while ACTIVE — change them in the ASC web UI
-  or show app-owned copy in the next binary. Datadog connector failed this session, so
+- Open: subscription descriptions in ASC still say "Unlimited generations" (the API
+  refuses edits while ACTIVE). The paywall rows no longer depend on them from the NEXT
+  binary (commit 7301437, PlanCopy); the StoreKit purchase sheet still shows ASC's
+  text until someone edits it in the ASC web UI.
+- Next binary already has in the tree: PlanCopy (above). When 1.7.1 is approved:
+  verify the live listing (iTunes lookup), then `git tag -a v1.7.1 0b76d33`. Datadog connector failed this session, so
   Worker logs were not read. Lifetime Pro: decide after 11-15.
 
 ## Update 2026-10-20 — Phase 1 is LIVE

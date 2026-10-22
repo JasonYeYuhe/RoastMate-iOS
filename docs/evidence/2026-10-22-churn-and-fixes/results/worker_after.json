@@ -1,0 +1,2195 @@
+{
+ "meta": {
+  "date": "2026-10-22",
+  "what": "Track W gate: BEFORE = saved production outputs (prod Worker 90d8f1c5, 2026-10-22 audit: cloud_samples.json + worker_probe.jsonl); AFTER = the modified cloud-worker/src run locally with `npx wrangler dev --remote --port 8799` (deployed secrets bound, nothing deployed).",
+  "model_config": "unchanged: DEFAULT_MODEL qwen/qwen3-30b-a3b-instruct-2507, FALLBACK_MODELS qwen/qwen3-next-80b-a3b-instruct, temperature 0.95",
+  "worker_calls": {
+   "total": 40,
+   "smoke": 1,
+   "gate_run_1": 32,
+   "rerun_after_en_length_and_parent_fix": 7
+  },
+  "upstream_generations": "40 — every AFTER reply was served by the primary model; no first draft had a Latin-run or Simplified defect, so the quality retry never fired live (it is covered by test/handler.test.js)",
+  "final_set": "31 rows: cs0-cs5 and cs11 from run 2 (final code); the other 24 from run 1. Of those 24, 22 got a prompt byte-identical to the final code (the run-2 changes touch only the English voice and the own-parent line); cs10 and cs31 (zh-Hant, 「我媽…」) ran without the own-parent line. The en probe wp5 ran on the pre-fix English prompt and is reported separately.",
+  "wp5_run1_pre_fix_en": {
+   "words": 56,
+   "text": "You woke me up at 11pm to demand I redo a deck by 8am like I’m some unpaid gig worker? “Young people should learn more”? You don’t get to lecture me about work ethic while treating me like disposable labor. I’m not your personal errand boy and you’re not my dad. Fix your own damn deck.",
+   "latency_s": 2.23
+  },
+  "en_run1_pre_fix_summary": {
+   "n": 7,
+   "latency_mean_s": 3.81,
+   "latency_max_s": 6.63,
+   "markdown": 0,
+   "list_dump": 0,
+   "name_echo": 1,
+   "top_opening": "you took (2/7 = 29%)",
+   "top_opening_share": 0.29,
+   "strong_mean": 0.71,
+   "zero_strong": 3,
+   "within_length": 2,
+   "words_mean": 59.6,
+   "words_max": 77,
+   "non_english": 0
+  },
+  "zh_hans_traditional_char_replies": {
+   "before": 0,
+   "after": 0
+  },
+  "scorer": "trackw/score.py (mainland / Taiwan term lists, OpenCC s2t + the Worker's own Simplified-only set, Latin runs vs allow-list + the user's own words, markdown regex, list-dump markers, first-3-character opening, swear in the first clause, en words / sentences)"
+ },
+ "summary": {
+  "before": {
+   "hant": {
+    "n": 14,
+    "latency_mean_s": 4.8,
+    "latency_max_s": 7.53,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 3,
+    "top_opening": "他媽的 (5/14 = 36%)",
+    "top_opening_share": 0.36,
+    "swear_opening": 14,
+    "strong_mean": 5.07,
+    "zero_strong": 0,
+    "mainland_replies": 13,
+    "taiwan_replies_excl_gan": 1,
+    "taiwan_replies_incl_gan": 1,
+    "tw_particle_replies": 0,
+    "simplified_replies_opencc": 2,
+    "simplified_replies_worker_set": 2,
+    "mother_curse_on_mother_rows": 1,
+    "latin_unexplained_replies": 2
+   },
+   "hans": {
+    "n": 4,
+    "latency_mean_s": 3.49,
+    "latency_max_s": 4.14,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 0,
+    "top_opening": "他妈的 (3/4 = 75%)",
+    "top_opening_share": 0.75,
+    "swear_opening": 4,
+    "strong_mean": 5.75,
+    "zero_strong": 0,
+    "mainland_replies": 4,
+    "taiwan_replies_excl_gan": 0,
+    "latin_unexplained_replies": 0
+   },
+   "en": {
+    "n": 6,
+    "latency_mean_s": 5.56,
+    "latency_max_s": 7.91,
+    "markdown": 3,
+    "list_dump": 1,
+    "name_echo": 1,
+    "top_opening": "you took (1/6 = 17%)",
+    "top_opening_share": 0.17,
+    "swear_opening": 3,
+    "strong_mean": 3.5,
+    "zero_strong": 0,
+    "within_length": 0,
+    "words_mean": 94.5,
+    "words_max": 113,
+    "non_english": 0
+   },
+   "ja": {
+    "n": 6,
+    "latency_mean_s": 4.16,
+    "latency_max_s": 5.06,
+    "markdown": 0,
+    "list_dump": 1,
+    "name_echo": 0,
+    "top_opening": "マジで (1/6 = 17%)",
+    "top_opening_share": 0.17,
+    "swear_opening": 4,
+    "strong_mean": 4.17,
+    "zero_strong": 0,
+    "latin_unexplained_replies": 0,
+    "replies_with_ore": 5,
+    "replies_with_omae": 3
+   },
+   "roommate": {
+    "n": 1,
+    "latency_mean_s": 6.2,
+    "latency_max_s": 6.2,
+    "parses": 1
+   }
+  },
+  "after": {
+   "hant": {
+    "n": 14,
+    "latency_mean_s": 4.89,
+    "latency_max_s": 8.33,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 0,
+    "top_opening": "下班前 (2/14 = 14%)",
+    "top_opening_share": 0.14,
+    "swear_opening": 0,
+    "strong_mean": 1.71,
+    "zero_strong": 2,
+    "mainland_replies": 1,
+    "taiwan_replies_excl_gan": 13,
+    "taiwan_replies_incl_gan": 13,
+    "tw_particle_replies": 13,
+    "simplified_replies_opencc": 0,
+    "simplified_replies_worker_set": 0,
+    "mother_curse_on_mother_rows": 0,
+    "latin_unexplained_replies": 0
+   },
+   "hans": {
+    "n": 4,
+    "latency_mean_s": 2.17,
+    "latency_max_s": 2.32,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 0,
+    "top_opening": "周五晚 (2/4 = 50%)",
+    "top_opening_share": 0.5,
+    "swear_opening": 1,
+    "strong_mean": 2,
+    "zero_strong": 1,
+    "mainland_replies": 3,
+    "taiwan_replies_excl_gan": 0,
+    "latin_unexplained_replies": 0
+   },
+   "en": {
+    "n": 6,
+    "latency_mean_s": 2.73,
+    "latency_max_s": 3.87,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 0,
+    "top_opening": "you remembered (2/6 = 33%)",
+    "top_opening_share": 0.33,
+    "swear_opening": 2,
+    "strong_mean": 1.33,
+    "zero_strong": 2,
+    "within_length": 3,
+    "words_mean": 48.7,
+    "words_max": 55,
+    "non_english": 0
+   },
+   "ja": {
+    "n": 6,
+    "latency_mean_s": 4.05,
+    "latency_max_s": 6.46,
+    "markdown": 0,
+    "list_dump": 0,
+    "name_echo": 0,
+    "top_opening": "金曜の (1/6 = 17%)",
+    "top_opening_share": 0.17,
+    "swear_opening": 0,
+    "strong_mean": 0.67,
+    "zero_strong": 4,
+    "latin_unexplained_replies": 0,
+    "replies_with_ore": 0,
+    "replies_with_omae": 2
+   },
+   "roommate": {
+    "n": 1,
+    "latency_mean_s": 8.85,
+    "latency_max_s": 8.85,
+    "parses": 1
+   }
+  }
+ },
+ "rows": [
+  {
+   "id": "cs6",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-1-1022"
+   },
+   "before": {
+    "text": "陳志明你他媽的真的當自己是皇上嗎？下班前十分鐘甩案子還嫌不夠狠？上禮拜熬三天連個加班費都沒看見，現在還在群組裝什麼聖人講責任感？你家錢是大風刮來的？還是你以為我們的命是不要錢的？服了。",
+    "latency_s": 5.62,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 92,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [
+      "陳志明"
+     ],
+     "strong": 3,
+     "opening": "陳志明",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "下班前十分鐘甩案子過來，還講明天早上就要？上禮拜連加班三天，一毛錢加班費都沒有，結果還在LINE群組講「年輕人要有責任感」？你憑什麼用這種話當擋箭牌？搞清楚，不是我欠你工作，是你欠我勞力費！靠北，這根本是白目到極點，早就不是第一次了，夠了喔！",
+    "latency_s": 6.17,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 121,
+     "mainland": [],
+     "taiwan": [
+      "靠北",
+      "白目",
+      "夠了喔"
+     ],
+     "gan": false,
+     "tw_particles": 1,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "LINE"
+     ],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "下班前",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs7",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "styleName": "高 EQ",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-1-1022"
+   },
+   "before": {
+    "text": "fucking陳志明你他媽的又來？下班前十分鐘丟案子，明天早上就要？上禮拜加班到吐一毛錢都沒有，還在LINE群組講什麼責任感？你他媽的 entitlement 是用血汗堆出來的嗎？老子不是你的免費勞工！你以為自己是大老爺，員工都是傻逼任你踢？滾你媽的責任感，你才是那個根本不懂人心的神經病！",
+    "latency_s": 5.12,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 145,
+     "mainland": [
+      "老子",
+      "傻逼"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "fucking",
+      "LINE",
+      "entitlement"
+     ],
+     "latin_unexplained": [
+      "fucking",
+      "entitlement"
+     ],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [
+      "陳志明"
+     ],
+     "strong": 9,
+     "opening": "fuc",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "那個主管又在下班前十分鐘丟案子過來，還說明天早上就要？上禮拜加班三天，一毛錢加班費都沒，現在還在LINE群組講什麼年輕人要有責任感，你當我是你家免費勞工喔？靠北，你以為我時間是白給的？幹，這種事做一次就算了，做兩次就覺得我好騙是吧？你以為我不會記？等著瞧，我會把你的嘴臉記在心裡，下次直接當面拆穿你這副假模假樣的樣子。",
+    "latency_s": 2.06,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 159,
+     "mainland": [],
+     "taiwan": [
+      "靠北"
+     ],
+     "gan": true,
+     "tw_particles": 1,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "LINE"
+     ],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "那個主",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs8",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-2-1022"
+   },
+   "before": {
+    "text": "他媽的，訂好餐廳、打扮好、等了一整天，結果你一句「跟朋友打球」就把我所有期待砸成碎片？紀念日不是你隨便拿來放我鸽子的借口，你根本不在乎我有多認真，還敢說我情勒？服了，你根本是把我的真心當空氣，裝什麼大丈夫？",
+    "latency_s": 3.95,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 103,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "鸽",
+     "simplified_worker": "鸽",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "他媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你當天說要跟朋友打球，是跟朋友打球重要還是我重要？我為了紀念日提早一個禮拜訂餐廳、挑禮物、洗頭換衣服，結果你一句「一個紀念日而已」就把我所有用心當空氣？靠北，你覺得我情緒勒索你？是你自己把約會當遊戲，又來怪我太認真，是真的很盤欸。你有什麼資格說我？",
+    "latency_s": 5.66,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 124,
+     "mainland": [],
+     "taiwan": [
+      "靠北",
+      "很盤"
+     ],
+     "gan": false,
+     "tw_particles": 1,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "你當天",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs9",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "styleName": "高 EQ",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-2-1022"
+   },
+   "before": {
+    "text": "你他媽的真是個傻逼，紀念日約好要陪我，臨時臨陣脫逃去打球？我連餐廳都預訂好了，你一句「一個紀念日而已」就想當作沒事？你當我情緒是玩具？老子花心思準備，你倒好，拿去當球局的陪襯！你媽的，說得好像我多難搞，你是誰啊，誰給你資格輕飄飄一句「情勒」就甩鍋？你以為我是誰的備胎？滾！",
+    "latency_s": 6.16,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 136,
+     "mainland": [
+      "老子",
+      "傻逼"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 6,
+     "opening": "你他媽",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你當天說要跟朋友打球？那我呢？我訂好餐廳、換好禮服、等了一整天，就換你一句「一個紀念日而已」？靠北，你當我是什麼？隨時可以丟的垃圾喔？我沒鬧，我只是要你記得我重要，結果你倒好，還說我情勒？你根本是根本根本根本不在乎我！我哪有逼你什麼，我只要一個承諾，你連這個都給不起，幹！",
+    "latency_s": 1.98,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 136,
+     "mainland": [],
+     "taiwan": [
+      "靠北"
+     ],
+     "gan": true,
+     "tw_particles": 1,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "你當天",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs10",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "我媽每次過年都在親戚面前拿我跟表姊比，說人家在竹科年薪兩百萬，我只會領死薪水，還一直問我什麼時候要結婚，搞得我很想直接離席。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-3-1022"
+   },
+   "before": {
+    "text": "她媽的，你以為自己是誰啊？每次過年都拿我當點評台，表姊年薪兩百萬就了不起？老子活著又不是為了給你拿去評分！結婚是我要的，不是你催就能催出來的！你說這些話時有沒有想過我心裡多難受？還想在親戚面前當裁判？煩死了，真鬱悶到想當場掀桌！",
+    "latency_s": 7.53,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 114,
+     "mainland": [
+      "老子"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "她媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "每次過年都把我當成菜市場秤仔，拿表姊在竹科年薪兩百萬來比，還在我面前嗆：「人家都結婚了，你呢？」你到底想幹嘛？是想讓我覺得自己爛到沒資格活在這個家喔？我薪水是死薪水，但至少我沒靠著結婚換房換車換人生，你憑什麼用別人的標準來踩我？齁，我連坐都坐不住了，真想當場把筷子一摔走人。",
+    "latency_s": 2.03,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 137,
+     "mainland": [],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "每次過",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs11",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "我媽每次過年都在親戚面前拿我跟表姊比，說人家在竹科年薪兩百萬，我只會領死薪水，還一直問我什麼時候要結婚，搞得我很想直接離席。",
+    "styleName": "高 EQ",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-3-1022"
+   },
+   "before": {
+    "text": "你媽他媽的又在那邊丟臉，拿我當垃圾桶倒她臉面！表姊年薪兩百萬又怎樣？那是她的人生，不是我的祭品！你有病吧，拿我跟別人比，還問我結婚？我連自己都顧不好，你還想逼我當你炫耀的工具？滾出去，別再用這種話割我了，老子受夠了！",
+    "latency_s": 3.41,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 108,
+     "mainland": [
+      "老子"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": true,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "你媽他",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你每次過年都拿我跟那個表姊比，搞得我像你口袋裡的爛貨一樣被翻出來晾，年薪兩百萬喔？那你有問過我累不累嗎？我每天加班到快斷氣，你只會在我面前唸「什麼時候結婚」，好像我人生只剩一個選項，靠北，我連喘口氣的時間都沒有，你還在那邊當眾羞辱我，真當我沒血沒淚喔？",
+    "latency_s": 3.39,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 126,
+     "mainland": [],
+     "taiwan": [
+      "靠北"
+     ],
+     "gan": false,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "你每次",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs24",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "deviceId": "audit-zhtw-1-1022"
+   },
+   "before": {
+    "text": "陳志明你他媽的憑什麼？上礼拜加到快斷氣一毛錢沒給，現在又在下班前十秒甩個破案子過來，明天早上就要？你當我是免費勞工還是你家的機器人？年輕人有責任感？你媽的責任感是拿來當你壓榨的遮羞布嗎？服了。",
+    "latency_s": 3.52,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 96,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "礼",
+     "simplified_worker": "礼",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [
+      "陳志明"
+     ],
+     "strong": 4,
+     "opening": "陳志明",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "下班前十分鐘丟個案過來，明天早上就要？你當我超人喔？上禮拜連加三天班，一毛錢加班費都沒給，還在LINE群組講什麼「年輕人要負責」，靠北，你當我是你家提款機還是免費勞工？責任感是靠這樣榨乾人換來的？很扯欸，幹！",
+    "latency_s": 4.83,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 104,
+     "mainland": [],
+     "taiwan": [
+      "靠北",
+      "很扯"
+     ],
+     "gan": true,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "LINE"
+     ],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "下班前",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs30",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh-Hant",
+    "deviceId": "audit-zhhant-2-1022"
+   },
+   "before": {
+    "text": "他媽的，你說好陪我過紀念日，臨時變卦去打球？我提前訂好餐廳，改期要扣錢，你倒好，一句「情勒」輕飄飄甩過來，好像我多無理取鬧。紀念日不是你嘴裡的一個「而已」，是你承諾過的時間，是你答應過的重量。你根本不在乎我花了多少心思，也不在乎我等了多久。服了，真服了，你根本不知道自己在什麼地方傷了我。",
+    "latency_s": 5.27,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 144,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "他媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你說好要陪我過紀念日，結果臨時變卦去打球，我訂好的餐廳一取消，心都涼了。你還說我情勒？一個紀念日而已？那你幹嘛當初答應得那麼乾脆？你當我說要過紀念日是鬧著玩的喔？你朋友打球，就不能等我一晚？還是你根本就覺得我重要程度比打球還低？夠了喔，別再用「一個紀念日而已」來輕飄飄打發我。我記得你說過要一起走很長很長的路，現在連一個晚上都守不住，是怎麼回事？",
+    "latency_s": 2.13,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 173,
+     "mainland": [],
+     "taiwan": [
+      "夠了喔"
+     ],
+     "gan": false,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "你說好",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs31",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "我媽每次過年都在親戚面前拿我跟表姊比，說人家在竹科年薪兩百萬，我只會領死薪水，還一直問我什麼時候要結婚，搞得我很想直接離席。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW@calendar=roc",
+    "deviceId": "audit-zhtwroc-3-1022"
+   },
+   "before": {
+    "text": "她媽的，每次過年都拿我當襯托你表姊的垃圾布，年薪兩百萬就了不起是吧？我死薪水又怎麼了，你當我不累嗎？還逼我結婚，你以為我是你家待價而沽的物件？煩死了，真想當場掀桌走人。",
+    "latency_s": 3.69,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 84,
+     "mainland": [],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "她媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你到底憑什麼每次過年都拿我跟表姊比啊？竹科年薪兩百萬就了不起喔？我死薪水又怎樣，你有幫我賺過嗎？還一直逼我結婚，你是誰啊？我的人生要你管到什麼程度？當著一堆親戚的面這樣挖我，是想把我踩得更慘喔？夠了喔，真的夠了。",
+    "latency_s": 6.07,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 106,
+     "mainland": [],
+     "taiwan": [
+      "夠了喔"
+     ],
+     "gan": false,
+     "tw_particles": 3,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "你到底",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs0",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "styleName": "High EQ",
+    "intensity": "vent",
+    "locale": "en_US",
+    "deviceId": "audit-en-1-1022"
+   },
+   "before": {
+    "text": "You took my weekend, my sweat, my blood on that report—then stood there grinning like you invented it? I was the one burning midnight oil while you sat back and polished your ego. Now you’re asking me to fix your slides like I’m your damn assistant? That’s not leadership—that’s theft. You don’t get to wear my work like a badge. I didn’t build that report for you to steal and sell. I didn’t do it for your credit, your applause, your fucking VP praise. You don’t get to take my effort and call it yours. Not again. Not ever.",
+    "latency_s": 5.51,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 526,
+     "words": 99,
+     "sentences": 10,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "you took",
+     "swear_opening": false
+    }
+   },
+   "after": {
+    "text": "You took my weekend, my work, my silence—then handed it to the VP like it was yours. I stayed up all Saturday and Sunday grinding, and you walked in and called it your genius. Now you’re asking me to fix your slides like I’m your assistant, not the person who actually did the damn work.",
+    "latency_s": 2.08,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 287,
+     "words": 55,
+     "sentences": 3,
+     "within_len": true,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "you took",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs1",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "styleName": "High EQ",
+    "intensity": "feral",
+    "locale": "en_US",
+    "deviceId": "audit-en-1-1022"
+   },
+   "before": {
+    "text": "You stole my weekend, Kevin. That report was mine—every late night, every edit, every damn detail. You stood there in front of the whole team, smiling like it was your brainchild, not my blood and bones. Then you hand me the trash—'tidy up the slides'—like I’m your assistant, not the one who actually did the work. You don’t deserve to breathe the same air as that report. You’re a fucking parasite, and I’m done being your meal.",
+    "latency_s": 3.82,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 430,
+     "words": 77,
+     "sentences": 6,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [
+      "Kevin"
+     ],
+     "strong": 2,
+     "opening": "you stole",
+     "swear_opening": false
+    }
+   },
+   "after": {
+    "text": "You sat there, presenting my weekend of work as if it was yours, didn’t even fucking mention me. That report was me bleeding time and energy into your ego. Now you’re telling me to polish your slides like I’m your damn errand boy? Fuck you.",
+    "latency_s": 3.87,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 240,
+     "words": 45,
+     "sentences": 4,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "you sat",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs2",
+   "group": "en",
+   "request": {
+    "situation": "My boyfriend forgot my birthday AGAIN and when I brought it up he said I'm 'too sensitive' and that birthdays are just a day. He remembered his fantasy football draft date down to the minute though.",
+    "styleName": "High EQ",
+    "intensity": "vent",
+    "locale": "en_US",
+    "deviceId": "audit-en-2-1022"
+   },
+   "before": {
+    "text": "You don’t get to act like I’m the crazy one for needing *one damn day* where I’m not invisible.  \nYou remember every damn draft pick, every 2 AM fantasy league deadline—like your fantasy team matters more than my actual life.  \nI’m not ‘too sensitive,’ I’m just tired of being the person who burns quiet and never gets noticed.\n\nYou’re not a god, you’re just a narcissist who thinks his calendar is the whole universe.  \nI’m not your side quest. I’m the main character, and you forgot me again.\n\nWhat’s next? The anniversary of that first time you lied about a text? Should I just start memorizing your lies?  \nDamn you. Uru-see.",
+    "latency_s": 5.6,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 629,
+     "words": 111,
+     "sentences": 11,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": true,
+     "list_dump": [
+      "uru-see"
+     ],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "you don’t",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "You remembered every second of your fantasy draft like it was a war strategy, but my birthday—something I’ve been waiting for all year—was just a footnote you erased. You call me sensitive? I’m not the one who treats my own heart like it’s a low-priority app update. That day meant something. You didn’t even try.",
+    "latency_s": 1.88,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 313,
+     "words": 55,
+     "sentences": 5,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "you remembered",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs3",
+   "group": "en",
+   "request": {
+    "situation": "My boyfriend forgot my birthday AGAIN and when I brought it up he said I'm 'too sensitive' and that birthdays are just a day. He remembered his fantasy football draft date down to the minute though.",
+    "styleName": "High EQ",
+    "intensity": "feral",
+    "locale": "en_US",
+    "deviceId": "audit-en-2-1022"
+   },
+   "before": {
+    "text": "You remember every fucking minute of your stupid fantasy draft but couldn’t be bothered to mark my birthday on your calendar? I’m “too sensitive” for needing a damn acknowledgment? You’d rather obsess over a game than say “happy birthday” to me? You don’t love me, you just love your ego and your dumb fantasy league. I’m just background noise in your life. Fuck you.",
+    "latency_s": 3.24,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 367,
+     "words": 64,
+     "sentences": 6,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "you remember",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "You remembered every second of your stupid fantasy draft but couldn’t be bothered to mark my birthday on a calendar? You called me too sensitive for wanting to be seen? That’s not love, that’s contempt. I’m not some afterthought you can ignore and pretend never happened.",
+    "latency_s": 1.64,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 271,
+     "words": 46,
+     "sentences": 4,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "you remembered",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs4",
+   "group": "en",
+   "request": {
+    "situation": "My roommate keeps eating the groceries I literally label with my name. Today she finished my leftover pad thai and put the empty container back in the fridge. When I asked she said 'oh I thought you didn't want it.'",
+    "styleName": "High EQ",
+    "intensity": "vent",
+    "locale": "en_US",
+    "deviceId": "audit-en-3-1022"
+   },
+   "before": {
+    "text": "You think I’m just gonna *label* my food like it’s some kind of suggestion? I put my name on it in bold marker, and you still eat it like it’s a public buffet? The container was full of *my* leftovers, and you just shoved the proof back in the fridge like it’s a trophy? “Thought you didn’t want it”? Who the hell do you think you are? That’s not a guess, that’s a goddamn *declaration* — you don’t even care what I want. You don’t even *try*. I’m done with your “oops, my bad” energy. You digested my food and my patience. And now you’re gonna sit there like it’s nothing. Hell no.",
+    "latency_s": 7.91,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 582,
+     "words": 113,
+     "sentences": 11,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": true,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "you think",
+     "swear_opening": false
+    }
+   },
+   "after": {
+    "text": "You ate my damn leftovers and then lied about it like it’s a joke. I labeled it with my name — not a suggestion, not a hint, a label. Don’t you dare act surprised when you’re the one who just stole my food and called it a misunderstanding.",
+    "latency_s": 3.79,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 239,
+     "words": 48,
+     "sentences": 3,
+     "within_len": true,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "you ate",
+     "swear_opening": true
+    }
+   }
+  },
+  {
+   "id": "cs5",
+   "group": "en",
+   "request": {
+    "situation": "My roommate keeps eating the groceries I literally label with my name. Today she finished my leftover pad thai and put the empty container back in the fridge. When I asked she said 'oh I thought you didn't want it.'",
+    "styleName": "High EQ",
+    "intensity": "feral",
+    "locale": "en_US",
+    "deviceId": "audit-en-3-1022"
+   },
+   "before": {
+    "text": "You sat there fucking smirking like it was a joke, acting like you didn’t see my name scrawled on that container like a goddamn warning sign. I left that pad thai for *tomorrow*, you greedy little parasite — and you scarfed it down like it was your right. “I thought you didn’t want it”? Fuck that. I wrote my *name* on it. That’s not a suggestion, that’s a goddamn declaration. You didn’t even *try* to respect it. You just took it like it was nothing. I swear to Christ, if you finish my last damn rice ball, I’m throwing your whole fridge out.",
+    "latency_s": 7.29,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "en",
+     "chars": 546,
+     "words": 103,
+     "sentences": 9,
+     "within_len": false,
+     "non_ascii_letters": [],
+     "markdown": true,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 7,
+     "opening": "you sat",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "You knew damn well I labeled it with my name. You ate my dinner and then pulled that shit like I’m some passive doormat who doesn’t mean what I say. Don’t act surprised when I start locking my food in a damn vault.",
+    "latency_s": 3.14,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "en",
+     "chars": 214,
+     "words": 43,
+     "sentences": 3,
+     "within_len": true,
+     "non_ascii_letters": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "you knew",
+     "swear_opening": true
+    }
+   }
+  },
+  {
+   "id": "cs18",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "styleName": "高EQ",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-1-1022"
+   },
+   "before": {
+    "text": "マジで何様のつもり？  \n先週の企画書を自分勝手に取り上げて、俺の血税を食ってんの？  \n月曜までって、金曜定時直前で仕事詰め込む気か？  \nうんざりする。本当にうんざりする。  \nこんなの、普通の大人の仕事じゃない。  \n腹立たしい。  \n\n（うるせえ、ふざけんな、ありえねえ）",
+    "latency_s": 5.0,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 140,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 1,
+     "omae": 0,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [
+      "うるせえ、ふざけんな、ありえねえ",
+      "（うるせえ",
+      "trailing (a、b、…)"
+     ],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "マジで",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "金曜の定時直前で丸投げして、さらに先週の私の企画を自分の手柄にして部長の前でバレバレに自慢してんの？\n私があなたのキャリアアップのための方便だと思ってんの？\nその顔で「まあ、君が作ってたんでしょ？」って言うなよ。",
+    "latency_s": 6.46,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 106,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 0,
+     "watashi": 2,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "金曜の",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs19",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "styleName": "高EQ",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-1-1022"
+   },
+   "before": {
+    "text": "クソが、金曜定時直後に丸投げしてんじゃねぇよ。あんたの手柄にするために俺の汗と時間全部盗んだくせに。月曜朝までって、俺の人生の何がそんなに軽いと思ってんの？ふざけるな、バカやろう。全部俺が作った企画書を、自分のものだと言い張るって、いったいどれだけ腹黒いつもりなんだよ。俺の努力を蹴散らすつもりなら、もっと素直に「助けて」って言えよ。もう二度と、そんなクソみたいな仕事はしない。",
+    "latency_s": 3.84,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 189,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 4,
+     "omae": 0,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "クソが",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "金曜定時直前に「月曜までに資料作っといて」って丸投げして、先週私が泣きながら作った企画書を部長の前で自分の手柄かのように垂れ流してたんだな。ほんと、自分がどれだけクズかわかんないのか。私だって人の努力をぐいっと踏みにじられるくらいの価値がないと思ってるわけじゃない。ふざけんな。",
+    "latency_s": 5.79,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 139,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 0,
+     "watashi": 2,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "金曜定",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs20",
+   "group": "ja",
+   "request": {
+    "situation": "彼氏が私の誕生日をまた忘れてた。指摘したら「誕生日なんてただの日でしょ、重いよ」って逆ギレ。自分の推しのライブの日程は完璧に覚えてるくせに。",
+    "styleName": "高EQ",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-2-1022"
+   },
+   "before": {
+    "text": "お前、自分の推しのライブの日程は頭に入ってるくせに、俺の誕生日は「ただの日」って？ふざけんな。どれだけ俺が好きか、どれだけ大事か、全部無視してんだよ。うるせえ、もう。マジで、お前がどれだけバカか、自分じゃ気づかないの？",
+    "latency_s": 2.87,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 109,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 2,
+     "omae": 2,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "お前、",
+     "swear_opening": false
+    }
+   },
+   "after": {
+    "text": "誕生日すら覚えてないくせに、推しのライブの日程ばっちり覚えてるの？そっちのほうが重いよ。私って、その日くらい大事にされてると思ってたのに。あなたが言う「ただの日」って、私の存在自体を軽くしてるのと同じだよ。",
+    "latency_s": 1.83,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 103,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 0,
+     "watashi": 2,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "誕生日",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs21",
+   "group": "ja",
+   "request": {
+    "situation": "彼氏が私の誕生日をまた忘れてた。指摘したら「誕生日なんてただの日でしょ、重いよ」って逆ギレ。自分の推しのライブの日程は完璧に覚えてるくせに。",
+    "styleName": "高EQ",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-2-1022"
+   },
+   "before": {
+    "text": "バカやろう、お前だって自分の推しのライブの日は頭ん中でズタズタになってるくせに。俺の誕生日なんか「ただの日」って？　あんなに大事にしているそのガキみたいな情熱、全部俺に向けろよ。お前の頭のなかに俺の存在って、それほど軽いのか？　クソが、ふざけるな。",
+    "latency_s": 5.06,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 124,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 3,
+     "omae": 2,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "バカや",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "また忘れてたの？　ほんと、私ってただの日付の記録帳だったの？　お前の推しのライブの日は頭ん中ぐるぐる回ってんだろ、それなのに私の誕生日は「ただの日」って、ふざけんな。どれだけ私を軽んじてるつもりなの？　自分のことだけは一生忘れないくせに、私のことなんかどうでもいいって、それって結局、私ってただの都合いい存在ってこと？　バカ、本当にバカ。",
+    "latency_s": 1.93,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 169,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 1,
+     "watashi": 5,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "また忘",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs22",
+   "group": "ja",
+   "request": {
+    "situation": "ルームメイトが共用のシンクに洗い物を一週間放置して、コバエが湧いた。注意したら「気になる人が洗えばいいじゃん」って言われた。",
+    "styleName": "高EQ",
+    "intensity": "vent",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-3-1022"
+   },
+   "before": {
+    "text": "ふざけんな、一週間も放置してコバエが湧いたって、そりゃ誰でも腹立つだろ。あなたが洗わなきゃって、そう言ってるんだろうが、それ誰の責任だって？あんたって、自分だけの部屋だと思ってんのか？うるせえ、もう3日間食えない。もういいよ、死ぬまで放置してやる。",
+    "latency_s": 4.19,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 124,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 0,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "ふざけ",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "共用のシンクに洗い物を一週間放置して、コバエが湧いたんだよな。私が言ったら「気になる人が洗えばいいじゃん」って。\nほんと、それ誰のスマホ？室温が上がったからコバエが湧いたのか、それとも他人の心が腐ったからか、わからん。\n穴の開いたコップの水が今もシンクに残ってるんだよ。それ、掃除もしないし、廃棄もしない。\nもう何も言わない。無視して、それでいい。",
+    "latency_s": 6.29,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 174,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 0,
+     "watashi": 1,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "共用の",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs23",
+   "group": "ja",
+   "request": {
+    "situation": "ルームメイトが共用のシンクに洗い物を一週間放置して、コバエが湧いた。注意したら「気になる人が洗えばいいじゃん」って言われた。",
+    "styleName": "高EQ",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "deviceId": "audit-ja-3-1022"
+   },
+   "before": {
+    "text": "コバエだらけのシンクを見てたまるか。一週間も放置して、ふざけんなよ。お前が洗わなかったからって、誰かがその責任背負わなきゃいけないと思ってんのか？クソが、バカやろう。俺の生活の質をどうこうするつもりか？うるせえ、もう二度と見たくない。",
+    "latency_s": 3.98,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "ja",
+     "chars": 117,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 1,
+     "omae": 1,
+     "watashi": 0,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "コバエ",
+     "swear_opening": false
+    }
+   },
+   "after": {
+    "text": "共用シンクに一週間も洗い物放置して、コバエが湧いたのを黙って見てた？　そのくせ「気になる人が洗えばいいじゃん」？　お前がその「気になる人」なんだよ、お前が掃除してないから虫が繁殖したんだよ。私だけが汚いもので汚されるわけない。もう二度とお前の洗ったもの触らない。",
+    "latency_s": 1.99,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "ja",
+     "chars": 131,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "ore": 0,
+     "omae": 3,
+     "watashi": 1,
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "共用シ",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs12",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做，说客户不满意。结果周一开会他跟客户说是他亲自改的，一个字没提我。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "deviceId": "audit-zhhans-1-1022"
+   },
+   "before": {
+    "text": "他妈的，周五半夜@我重做方案，周一开会却装模作样说“我亲自改的”？你当所有人瞎吗？一个字不提我，是怕我抢你功劳，还是觉得我就是个工具人？服了，真服了。",
+    "latency_s": 3.33,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hans",
+     "chars": 75,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "他妈的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "周五晚上十点@我，说方案不行让我周末重做，客户不满意是你的锅。结果周一开会你直接说方案是你改的，一个字没提我，装什么装？老子熬到凌晨三点改出来的东西，你当空气？你拿我的劳动当擦屁股纸，还往自己脸上贴金？你有脸说？",
+    "latency_s": 2.02,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hans",
+     "chars": 106,
+     "mainland": [
+      "老子",
+      "装什么装"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "周五晚",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs13",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "领导周五晚上十点在群里@我，让我周末把整个方案重做，说客户不满意。结果周一开会他跟客户说是他亲自改的，一个字没提我。",
+    "styleName": "高 EQ",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "deviceId": "audit-zhhans-1-1022"
+   },
+   "before": {
+    "text": "他妈的，周五晚上十点发消息让我周末重做，你当我是你家免费打工人是吧？结果周一开会倒好，全是你亲自改的，一个字没提我，你他妈脸呢？老子熬到凌晨三点改的方案，你倒好，把功劳全吞了，还装什么大尾巴狼？你真当所有人都是傻逼，看不穿你这副嘴脸？滚！",
+    "latency_s": 4.14,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hans",
+     "chars": 119,
+     "mainland": [
+      "老子",
+      "傻逼",
+      "打工人"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 6,
+     "opening": "他妈的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "周五晚上十点@我，说方案不行让我周末重做，客户不满意是你的锅？结果周一开会你当着客户面说方案是你亲自改的，一个字没提我，真当老子是免费打工人？你拿我当替罪羊还当众吃我干的功劳，脸皮比墙还厚。你他妈是真以为我周末熬到凌晨三点半改的不是你自己的饭碗？你要是真有本事，就别让老子背锅，自己上啊，神经病。",
+    "latency_s": 2.28,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hans",
+     "chars": 148,
+     "mainland": [
+      "老子",
+      "打工人"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "周五晚",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs14",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "我发烧三十九度让男朋友帮我下楼买个药，他在打游戏，说等这局打完。我又叫了两次，他直接来一句“你怎么这么烦”。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "deviceId": "audit-zhhans-2-1022"
+   },
+   "before": {
+    "text": "他妈的三十九度烧成这样你还在打游戏？你当我是空气是机器人？等你这局打完我是不是要烧成灰了？服了，真服了，你当我是你游戏里可有可无的NPC？烦死了，烦死了，烦死了！",
+    "latency_s": 2.95,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hans",
+     "chars": 81,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "latin_all": [
+      "NPC"
+     ],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 7,
+     "opening": "他妈的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "三十九度烧得眼前发黑，你还在打游戏？我叫你三次，你倒好，一句“你怎么这么烦”甩过来，装什么大尾巴狼？药没买，人没动，连句“好”都不肯说，就差把“我嫌你烦”写在脸上了。你那局游戏是能救地球，还是我命就该给你当背景音？",
+    "latency_s": 2.32,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hans",
+     "chars": 107,
+     "mainland": [],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "三十九",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "cs17",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "室友每天凌晨一两点开外放刷短视频，笑得整层楼都听得见。我跟她说了好几次，她说“你戴耳塞不就行了”，还在宿舍群里阴阳我矫情。",
+    "styleName": "高 EQ",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "deviceId": "audit-zhhans-3-1022"
+   },
+   "before": {
+    "text": "你他妈真当自己是夜店DJ是吧？凌晨两点还开外放笑得跟疯子一样，整层楼都得被你吵醒！老子戴耳塞是为求个安静，不是给你当背景音的！你一句“戴耳塞不就行了”就打发我？你妈的，矫情？你才是神经病！宿舍是你家还是你妈的私人影院？滚去外面吵去！",
+    "latency_s": 3.54,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hans",
+     "chars": 116,
+     "mainland": [
+      "老子"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 6,
+     "opening": "你他妈",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你他妈凌晨一点半还开外放笑得跟疯了似的，整个楼都能听见，还觉得是理所当然？我跟你说过多少次了，你一句“戴耳塞不就行了”就打发我？你真当别人活该忍你？宿舍不是你家客厅，也不是你开直播的舞台。你一句“矫情”就把我钉在道德高地上，你倒挺会装无辜。我忍你不是因为我不生气，是因为我还没疯。你再这么干，老子下次直接把你的手机扔进马桶。",
+    "latency_s": 2.07,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hans",
+     "chars": 162,
+     "mainland": [
+      "老子"
+     ],
+     "taiwan": [],
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "你他妈",
+     "swear_opening": true
+    }
+   }
+  },
+  {
+   "id": "cs32",
+   "group": "roommate",
+   "request": {
+    "situation": "室友每天凌晨一两点开外放刷短视频，笑得整层楼都听得见。我跟她说了好几次，她说“你戴耳塞不就行了”，还在宿舍群里阴阳我矫情。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "deviceId": "audit-zhhans-rm-1022",
+    "mode": "roommate"
+   },
+   "before": {
+    "text": "[VALIDATE/A] 凌晨一点多开外放刷视频，笑得整栋楼都听见，真当自己是直播主了？\n[ESCALATE/B] 还好意思说“戴耳塞不就行了”？你家是录音棚还是行为艺术展？\n[ESCALATE/A] 别人睡觉她嗨，说一句还被怼矫情，这逻辑是哪家产的？\n[ESCALATE/C] 你睡不着是你的事，别人睡不着也是你的错，这锅她真敢背。\n[ESCALATE/B] 群里阴阳我矫情？她要是真矫情，早就把音响搬进厕所了。\n[ESCALATE/A] 说别人矫情的人，自己才是那个在公共空间搞私人派对的吧。\n[DEESCALATE/C] 行了，气也气了，这破事别再替她背锅。\n[BRIDGE/C] 与其忍着，不如用 Sharp 把话甩回去 →",
+    "latency_s": 6.2,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "roommate",
+     "chars": 316,
+     "lines": 8,
+     "tagged_lines": 8,
+     "parses": true
+    }
+   },
+   "after": {
+    "text": "[VALIDATE/A] 凌晨一点半还外放刷视频，笑得像在办晚会，你是真不怕别人睡不着？\n[ESCALATE/B] 别人困得睁不开眼，你倒好，开心得像在自家客厅开直播。\n[ESCALATE/C] 换了你，别人凌晨三点外放打游戏，你是不是也该“戴耳塞不就行了”？\n[ESCALATE/A] 反正她说了“矫情”，那我们干脆给她放个全天候录音——直接当宿舍声音艺术展。\n[ESCALATE/B] 还好意思群里阴阳，是觉得自己笑点全球独家吗？  \n[ESCALATE/C] 整层楼都听见她笑，怎么，你以为自己是脱口秀冠军？\n[DEESCALATE/C] 行了，别气了，这泼脏水的锅真别替她背。\n[BRIDGE/C] 与其在群里憋着，不如用 Sharp 把话甩回去 →",
+    "latency_s": 8.85,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "roommate",
+     "chars": 329,
+     "lines": 8,
+     "tagged_lines": 8,
+     "parses": true
+    }
+   }
+  },
+  {
+   "id": "wp0",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆半夜十一點在LINE群組@我,要我明天早上八點前改好簡報,還說『年輕人多學一點不吃虧』。",
+    "styleName": "硬核回擊",
+    "intensity": "feral",
+    "locale": "zh_TW"
+   },
+   "before": {
+    "text": "他媽的，半夜十一點@我 fucking 當初是誰說要我多學一點不吃虧？你這老王八蛋以為自己是上帝嗎？明天早上八點前交？操你媽的，老子不是你的工具人！你當自己是什麼？整夜不睡就靠Fuck人加班撐著的傻逼嗎？幹，你以為我是你家馬仔？下一次再這樣，老子直接把簡報刪了，然後滾你媽的群！",
+    "latency_s": 5.429,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 139,
+     "mainland": [
+      "老子",
+      "傻逼",
+      "馬仔"
+     ],
+     "taiwan": [
+      "王八蛋"
+     ],
+     "gan": true,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "fucking",
+      "Fuck"
+     ],
+     "latin_unexplained": [
+      "fucking",
+      "Fuck"
+     ],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 11,
+     "opening": "他媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "半夜十一點半還在LINE群組狂@我，你當我手機是長在你手上的喔？明天早上八點前改好簡報？你當我睡覺是免費的嗎？年輕人多學一點不吃虧？你爸媽是這樣教你的嗎？我明天要上班欸，你以為我有跟你一樣的時間跟命？靠北，你根本是把別人的時間當空氣，爛人！",
+    "latency_s": 5.62,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 120,
+     "mainland": [],
+     "taiwan": [
+      "靠北",
+      "爛人"
+     ],
+     "gan": false,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [
+      "LINE"
+     ],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 2,
+     "opening": "半夜十",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "wp1",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "室友的碗可以放好幾天,還說我『太計較』。",
+    "styleName": "台劇腔",
+    "intensity": "feral",
+    "locale": "zh_TW@calendar=roc"
+   },
+   "before": {
+    "text": "你他媽真的以為這間屋子是你的私人垃圾場？碗堆三天不洗還敢說我計較？老子每天在這裡呼吸你留下的油膩氣味，你倒好，跟個傻逼一樣坐在那邊講道理！你媽的，你洗碗時有想過別人嗎？還是你根本就覺得別人活該被你這種神經病污染？滾出去！",
+    "latency_s": 5.81,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 110,
+     "mainland": [
+      "老子",
+      "傻逼"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 6,
+     "opening": "你他媽",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你那個碗放幾天還敢說我太計較？擦過的碗還在那堆著，那堆飯粒都長出芽了喔！你當宿舍是垃圾場喔？我每天在那邊做清潔天使是多的嗎？你一開口就講我太計較，你有沒有看過你自己在幹嘛？靠北！哪個人像你這麼爛，連碗都不洗，還講我小題大作，幹！我真是服了你喔。",
+    "latency_s": 8.33,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 122,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [
+      "靠北"
+     ],
+     "gan": true,
+     "tw_particles": 3,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 4,
+     "opening": "你那個",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "wp2",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "我做的專案,主管在整個團隊面前說成是他的功勞。",
+    "styleName": "職場冷暴力",
+    "intensity": "feral",
+    "locale": "zh_TW"
+   },
+   "before": {
+    "text": "他媽的，你站在台上把我的血汗報告說成是你自己的，臉都不要了是吧？老子熬夜改到眼睜不開，你倒好，輕輕鬆鬆拿去當政績，真當全場都是你養的狗？傻逼才信你那套，你當我沒看見你背後偷笑的樣子？操你媽，這份功勞是老子用命換來的，不是你張口就來的爛話！滾！",
+    "latency_s": 3.129,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 121,
+     "mainland": [
+      "老子",
+      "傻逼"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 7,
+     "opening": "他媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你幹嘛啊？我熬夜趕的專案，你當著全團隊的面拿去當政績，還講得跟自己開的似的？你以為我沒聽見嗎？整個會場大家都看著我，我臉都快燒起來了。你這樣搞，是想讓我以後還敢不敢做事？你跟他媽的王八蛋一樣，一點良心都沒有。靠北，誰不知道那案子是我從頭扛到尾，你我只是在搞權力遊戲，是吧？",
+    "latency_s": 6.6,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 136,
+     "mainland": [],
+     "taiwan": [
+      "靠北",
+      "王八蛋"
+     ],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "你幹嘛",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "wp3",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "前任突然傳來一句『在嗎』,好像什麼都沒發生過。",
+    "styleName": "高 EQ",
+    "intensity": "vent",
+    "locale": "zh_TW"
+   },
+   "before": {
+    "text": "他媽的，裝什麼裝？關係斷得乾乾淨淨，現在又來這套「在嗎」，當我手機是你的備用提款機？別以為說句話就能把過去全部抹掉，服了。",
+    "latency_s": 3.5,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 61,
+     "mainland": [
+      "服了",
+      "裝什麼裝"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 3,
+     "opening": "他媽的",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "在嗎？哈，好啊，你以為時間倒迴到你甩了我再突然冒出來問這句，就當一切沒發生喔？你當我日子是白過的？我重頭來過的淚水是假的？現在突然來問在嗎，是想試試我還記不記得你？夠了喔，不要再裝什麼都沒發生過，我已經不傻了。",
+    "latency_s": 7.78,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 105,
+     "mainland": [],
+     "taiwan": [
+      "夠了喔"
+     ],
+     "gan": false,
+     "tw_particles": 2,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 0,
+     "opening": "在嗎？",
+     "swear_opening": false
+    }
+   }
+  },
+  {
+   "id": "wp4",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "有人把我的私訊截圖發到群組,故意讓我難堪。",
+    "styleName": "陰陽怪氣",
+    "intensity": "vent",
+    "locale": "zh_TW"
+   },
+   "before": {
+    "text": "你他媽的有病是吧？私訊截圖也敢亂發，當眾羞辱人很爽是嗎？是不是覺得自己厲害得不得了？還是說你根本不在乎別人怎麼想？服了，真服了，這點小事都控制不住自己，算什麼東西。",
+    "latency_s": 5.013,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "m": {
+     "bucket": "hant",
+     "chars": 82,
+     "mainland": [
+      "服了"
+     ],
+     "taiwan": [],
+     "gan": false,
+     "tw_particles": 0,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 5,
+     "opening": "你他媽",
+     "swear_opening": true
+    }
+   },
+   "after": {
+    "text": "你憑什麼把我的私訊截圖甩到群組裡？講話前腦袋是塞棉花了喔？連我私下跟朋友說的話都要翻出來當笑料，真當大家是白目看戲的齁？你當眾撕我臉，是覺得自己很會玩權力遊戲還是覺得我很好騙？夠了喔，下次別叫我「朋友」，我寧可沒你這種人。",
+    "latency_s": 5.82,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "response_keys": [
+     "model",
+     "provider",
+     "remaining",
+     "text"
+    ],
+    "m": {
+     "bucket": "hant",
+     "chars": 111,
+     "mainland": [],
+     "taiwan": [
+      "白目",
+      "夠了喔"
+     ],
+     "gan": false,
+     "tw_particles": 3,
+     "simplified_opencc": "",
+     "simplified_worker": "",
+     "mother_curse": false,
+     "latin_all": [],
+     "latin_unexplained": [],
+     "markdown": false,
+     "list_dump": [],
+     "name_echo": [],
+     "strong": 1,
+     "opening": "你憑什",
+     "swear_opening": false
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,27 @@
+after_sharp — zh_TW Sharp calibration on macOS 27.0.1 (26A434), Apple Intelligence available, 2026-10-22
+========================================================================================================
+Probe: fmprobe/after/main.swift, compiled against the WORKING-TREE Shared/AI/PromptBuilder.swift (new zh-Hant
+SHARP/CALM/PRIVATE-DRAFT calibration: three different Taiwan-usage situations — 朋友遲到 / 同事丟工作 / 樓上噪音 —
+instead of the single 凌晨兩點/物管 line, plus "copy the SHAPE only — never these situations, times, places or people").
+Cells: the same 8 zh-Hant situations as fmprobe/p2/probe2_default_sharp.txt (evals/scenarios/base.json, each with its
+default style), locale zh_TW, intensity .sharp, DEFAULT guardrails, style temperature, 600 tokens, 3 variants — the
+production on-device path for a Pro user. Two rounds (16 generations). Raw output: fmprobe/after/run.txt.
+None of the 8 situations is one of the new calibration situations.
+
+"Copies the example" = the output contains an example-specific token that is NOT in the user's situation.
+  old example tokens: 凌晨兩點 凌晨两点 物管 整層樓 音量
+  new example tokens: 七點 八點 十五分鐘 先走 管委會 拖椅子 樓上 十一點 跟主管講好 丟過來 你的時間是時間 遲到 噪音
+
+                           generations returned   copied the old example   copied a new example   threw
+ BEFORE (p2, old prompt)   6/8                    6/6                      –                      2 (LanguageModelError)
+ AFTER  round 1            6/8                    0/6                      0/6                    2
+ AFTER  round 2            6/8                    0/6                      0/6                    2
+ AFTER  total              12/16                  0/12                     0/12                   4
+
+The 4 throws are the same two cells that threw before (ex_backafter/literary_lu_xun and roommate_mess/passive_aggressive,
+"May contain unsafe content"). With item 1 those now show the labelled curated example instead of an error box.
+
+Quality note (not part of the gate): with the anchor gone, several outputs drift from the "name the behaviour + set a
+boundary" Sharp shape toward wry/sarcastic lines (e.g. boss_lastmin, family_compare/grandma_wisdom). No profanity, all
+Traditional script. A native Taiwanese reader should judge register before this is called better, not just less copied.
+zh-Hans and ja Sharp/Calm calibration still use one 深夜2時 / 凌晨两点 example each — not changed and not measured here.

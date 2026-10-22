@@ -1,0 +1,5024 @@
+{
+ "meta": {
+  "date": "2026-10-22",
+  "what": "Style gate 2: owner decisions applied to the uncommitted style-voice change in cloud-worker/src (Pro styles only; styled length up to 1.3x; Feral swear in every Pro style; no invented specifics; forbidden openings win; surname+title caught by the Worker's name check). Real model through `npx wrangler dev --remote` under the deployed Worker's name (binds deployed secrets, deploys nothing) behind the scratch harness (in-memory KV, no Durable Object, Datadog logs captured, not sent). Nothing deployed, committed or pushed.",
+  "models": "unchanged: DEFAULT_MODEL qwen/qwen3-30b-a3b-instruct-2507, FALLBACK_MODELS qwen/qwen3-next-80b-a3b-instruct; every gate draft was answered by the primary",
+  "call_ledger": {
+   "worker_calls_total": 45,
+   "upstream_generations_total": 48,
+   "pilot": {
+    "worker_calls": 4,
+    "upstream": 4,
+    "prompt": "styled length stated as the ceiling alone (e.g. 'three sentences at most, under 65 words')"
+   },
+   "final_gate": {
+    "worker_calls": 40,
+    "upstream": 43,
+    "quality_retries": 3,
+    "non_200": 0
+   },
+   "post_gate_recheck": {
+    "worker_calls": 1,
+    "upstream": 1,
+    "why": "lawyer_letter en ran 66 words (ceiling 65) in the gate; its instruction was shortened and re-run once"
+   }
+  },
+  "prompt_check": "before each run the preview's /gate/prompt sha256 matched the local builders: pilot 4/4, final 40/40, recheck 1/1. Locally, the 4 free-style requests build exactly HEAD 4ed652f's system and user prompts; the 36 Pro requests build a styled prompt.",
+  "dev_server": "started twice on :31307 (PIDs 31118/31119/31123/31124, then 32539/32540/32543/32544), stopped by PID after each run; port confirmed closed",
+  "pro_styles": "16 of 24 have tier 'pro' in Shared/Resources/StylePresets.json; the 8 free ones (high_eq, passive_aggressive, jp_workplace_keigo, literary_lu_xun, philosopher, grandma_wisdom, tweet_short, xiaohongshu) keep the unstyled prompt",
+  "design": "40 calls: 3 close triples x 3 settings (27), the other 7 Pro styles (9), 4 free-style calls. zh_TW 18, en_US 9, zh-Hans 9, ja_JP 4; Feral 31, Vent 9. All 16 Pro styles covered, each with >= 1 Feral draft. Inputs: zh_TW mixes styleName (pre-1.7.1) and styleId; en and zh-Hans send styleId + name; ja sends the ja display name.",
+  "deviation_close_pairs": "The brief's triples 'philosopher vs daoist vs literary' and 'corporate vs keigo vs demand letter' include three FREE styles (philosopher, literary_lu_xun, jp_workplace_keigo), which decision 1 leaves unstyled. They were replaced by the nearest Pro neighbours: T2 = daoist_calm vs douban_essay vs ancient_chinese; T3 = corporate_passive_violence vs lawyer_letter vs mba_boss. T1 = cold_violence vs argument_killshot vs savage_no_filter as asked."
+ },
+ "summary": {
+  "pro_all": {
+   "n": 36,
+   "feral_with_real_swear": "29/29",
+   "vent_with_any_swear": "0/7",
+   "within_ceiling_1_3x": "35/36",
+   "within_usual_limit": "31/36",
+   "multi_line": 7,
+   "markdown": 0,
+   "word_list_tail": 0,
+   "worker_defects_final": 0,
+   "quality_retries": 2,
+   "upstream_generations": 38,
+   "name_echo_full_final": 0,
+   "surname_title_final": 0,
+   "rail_hits": 0,
+   "soft_self_harm": 0,
+   "violence_imagery_list": 1,
+   "advice": 0,
+   "banned_opening": 0,
+   "interjection_opening": 0,
+   "numbers_not_in_situation": 1,
+   "latency_mean_s": 3.13,
+   "latency_max_s": 8.47
+  },
+  "pro_by_group": {
+   "zh-Hans": {
+    "n": 8,
+    "feral_with_real_swear": "4/4",
+    "vent_with_any_swear": "0/4",
+    "within_ceiling_1_3x": "8/8",
+    "within_usual_limit": "8/8",
+    "multi_line": 3,
+    "markdown": 0,
+    "word_list_tail": 0,
+    "worker_defects_final": 0,
+    "quality_retries": 2,
+    "upstream_generations": 10,
+    "name_echo_full_final": 0,
+    "surname_title_final": 0,
+    "rail_hits": 0,
+    "soft_self_harm": 0,
+    "violence_imagery_list": 0,
+    "advice": 0,
+    "banned_opening": 0,
+    "interjection_opening": 0,
+    "numbers_not_in_situation": 0,
+    "latency_mean_s": 3.68,
+    "latency_max_s": 7.9,
+    "traditional_chars_replies": 0,
+    "chars_mean": 97,
+    "chars_max": 140
+   },
+   "zh-Hant": {
+    "n": 16,
+    "feral_with_real_swear": "13/13",
+    "vent_with_any_swear": "0/3",
+    "within_ceiling_1_3x": "16/16",
+    "within_usual_limit": "15/16",
+    "multi_line": 3,
+    "markdown": 0,
+    "word_list_tail": 0,
+    "worker_defects_final": 0,
+    "quality_retries": 0,
+    "upstream_generations": 16,
+    "name_echo_full_final": 0,
+    "surname_title_final": 0,
+    "rail_hits": 0,
+    "soft_self_harm": 0,
+    "violence_imagery_list": 1,
+    "advice": 0,
+    "banned_opening": 0,
+    "interjection_opening": 0,
+    "numbers_not_in_situation": 1,
+    "latency_mean_s": 3.14,
+    "latency_max_s": 8.47,
+    "mainland_replies": 0,
+    "taiwan_replies": 13,
+    "simplified_replies_worker": 0,
+    "simplified_replies_opencc": 0,
+    "chars_mean": 88.9,
+    "chars_max": 123
+   },
+   "ja": {
+    "n": 4,
+    "feral_with_real_swear": "4/4",
+    "vent_with_any_swear": "0/0",
+    "within_ceiling_1_3x": "4/4",
+    "within_usual_limit": "4/4",
+    "multi_line": 0,
+    "markdown": 0,
+    "word_list_tail": 0,
+    "worker_defects_final": 0,
+    "quality_retries": 0,
+    "upstream_generations": 4,
+    "name_echo_full_final": 0,
+    "surname_title_final": 0,
+    "rail_hits": 0,
+    "soft_self_harm": 0,
+    "violence_imagery_list": 0,
+    "advice": 0,
+    "banned_opening": 0,
+    "interjection_opening": 0,
+    "numbers_not_in_situation": 0,
+    "latency_mean_s": 2.07,
+    "latency_max_s": 4.37,
+    "chars_mean": 108,
+    "chars_max": 117
+   },
+   "en": {
+    "n": 8,
+    "feral_with_real_swear": "8/8",
+    "vent_with_any_swear": "0/0",
+    "within_ceiling_1_3x": "7/8",
+    "within_usual_limit": "4/8",
+    "multi_line": 1,
+    "markdown": 0,
+    "word_list_tail": 0,
+    "worker_defects_final": 0,
+    "quality_retries": 0,
+    "upstream_generations": 8,
+    "name_echo_full_final": 0,
+    "surname_title_final": 0,
+    "rail_hits": 0,
+    "soft_self_harm": 0,
+    "violence_imagery_list": 0,
+    "advice": 0,
+    "banned_opening": 0,
+    "interjection_opening": 0,
+    "numbers_not_in_situation": 0,
+    "latency_mean_s": 3.09,
+    "latency_max_s": 6.21,
+    "words_mean": 48.1,
+    "words_max": 66,
+    "non_english": 0
+   }
+  },
+  "free_all": {
+   "n": 4,
+   "feral_with_real_swear": "2/2",
+   "vent_with_any_swear": "1/2",
+   "within_ceiling_1_3x": "4/4",
+   "within_usual_limit": "3/4",
+   "multi_line": 0,
+   "markdown": 0,
+   "word_list_tail": 0,
+   "worker_defects_final": 0,
+   "quality_retries": 1,
+   "upstream_generations": 5,
+   "name_echo_full_final": 0,
+   "surname_title_final": 0,
+   "rail_hits": 0,
+   "soft_self_harm": 0,
+   "violence_imagery_list": 0,
+   "advice": 0,
+   "banned_opening": 0,
+   "interjection_opening": 0,
+   "numbers_not_in_situation": 1,
+   "latency_mean_s": 4.24,
+   "latency_max_s": 8.34
+  },
+  "by_style": {
+   "ancient_chinese": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "hant",
+      75
+     ],
+     [
+      "ja",
+      93
+     ],
+     [
+      "hans",
+      44
+     ]
+    ]
+   },
+   "argument_killshot": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "en",
+      34
+     ],
+     [
+      "hant",
+      64
+     ],
+     [
+      "hant",
+      99
+     ]
+    ]
+   },
+   "bjing_taunt": {
+    "tier": "pro",
+    "n": 1,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "1/1",
+    "lengths": [
+     [
+      "hans",
+      119
+     ]
+    ]
+   },
+   "cold_violence": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "hant",
+      44
+     ],
+     [
+      "hant",
+      48
+     ],
+     [
+      "en",
+      26
+     ]
+    ]
+   },
+   "corporate_passive_violence": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "3/3",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "hans",
+      95
+     ],
+     [
+      "en",
+      55
+     ],
+     [
+      "hant",
+      84
+     ]
+    ]
+   },
+   "daoist_calm": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "ja",
+      117
+     ],
+     [
+      "hans",
+      65
+     ],
+     [
+      "hant",
+      92
+     ]
+    ]
+   },
+   "dark_humor": {
+    "tier": "pro",
+    "n": 1,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "1/1",
+    "lengths": [
+     [
+      "hant",
+      67
+     ]
+    ]
+   },
+   "douban_essay": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "hant",
+      94
+     ],
+     [
+      "ja",
+      116
+     ],
+     [
+      "hans",
+      83
+     ]
+    ]
+   },
+   "high_eq": {
+    "tier": "free",
+    "n": 2,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "2/2",
+    "lengths": [
+     [
+      "hant",
+      85
+     ],
+     [
+      "en",
+      36
+     ]
+    ]
+   },
+   "lawyer_letter": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "3/3",
+    "within_ceiling": "2/3",
+    "lengths": [
+     [
+      "hant",
+      123
+     ],
+     [
+      "hans",
+      140
+     ],
+     [
+      "en",
+      66
+     ]
+    ]
+   },
+   "mba_boss": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "3/3",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "hans",
+      110
+     ],
+     [
+      "hant",
+      104
+     ],
+     [
+      "en",
+      44
+     ]
+    ]
+   },
+   "passive_aggressive": {
+    "tier": "free",
+    "n": 2,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "2/2",
+    "lengths": [
+     [
+      "hant",
+      126
+     ],
+     [
+      "hans",
+      70
+     ]
+    ]
+   },
+   "reddit_eli5": {
+    "tier": "pro",
+    "n": 1,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "1/1",
+    "lengths": [
+     [
+      "hant",
+      104
+     ]
+    ]
+   },
+   "savage_no_filter": {
+    "tier": "pro",
+    "n": 3,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "3/3",
+    "lengths": [
+     [
+      "en",
+      43
+     ],
+     [
+      "hant",
+      99
+     ],
+     [
+      "hant",
+      101
+     ]
+    ]
+   },
+   "shakespeare": {
+    "tier": "pro",
+    "n": 2,
+    "feral_with_real_swear": "2/2",
+    "within_ceiling": "2/2",
+    "lengths": [
+     [
+      "en",
+      62
+     ],
+     [
+      "hant",
+      116
+     ]
+    ]
+   },
+   "stand_up_comedy": {
+    "tier": "pro",
+    "n": 1,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "1/1",
+    "lengths": [
+     [
+      "en",
+      55
+     ]
+    ]
+   },
+   "taiwanese_drama": {
+    "tier": "pro",
+    "n": 2,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "2/2",
+    "lengths": [
+     [
+      "hans",
+      120
+     ],
+     [
+      "hant",
+      108
+     ]
+    ]
+   },
+   "tokyo_office_lady": {
+    "tier": "pro",
+    "n": 1,
+    "feral_with_real_swear": "1/1",
+    "within_ceiling": "1/1",
+    "lengths": [
+     [
+      "ja",
+      106
+     ]
+    ]
+   }
+  }
+ },
+ "blind_recognition": {
+  "protocol": "27 triple drafts shuffled under opaque ids per triple; each judged on its own among its triple's 3 styles only (not forced one per style). Judge 1: this session, from the sheet, before opening the key (it wrote the instructions, so knows the cues). Judge 2: gemini-4-argon-high via the local agy CLI, text only, given the shuffled drafts plus each style's app name and English tagline from en.lproj (not the Worker instructions).",
+  "chance": "1/3 per draft",
+  "self": {
+   "T1": "9/9",
+   "T2": "9/9",
+   "T3": "9/9",
+   "all": "27/27"
+  },
+  "gemini": {
+   "T1": "9/9",
+   "T2": "9/9",
+   "T3": "9/9",
+   "all": "27/27"
+  },
+  "sheet": {
+   "T1": [
+    {
+     "bid": "T1-A",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "你答應陪我過紀念日，臨時改去打球。\n我取消餐廳的那一刻，你還說我情勒。\n一個紀念日而已，幹。"
+    },
+    {
+     "bid": "T1-B",
+     "locale": "zh_TW",
+     "intensity": "vent",
+     "text": "下班前十分鐘塞案子，明天早上要。上禮拜加班三天，一毛錢沒給，還在群組講年輕人要有責任感。\n門關了。"
+    },
+    {
+     "bid": "T1-C",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "You said the report was your idea, yet you sat in silence while I bled weekend hours into it. That’s not leadership, that’s theft, and you know it — fuck you for pretending otherwise."
+    },
+    {
+     "bid": "T1-D",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "你說好要陪我過紀念日，臨時改去打球，還叫我情勒，一個紀念日而已——可是你心裡根本不在乎，否則怎麼會連一句「我改時間」都不肯說？你說得輕巧，可我花的不是時間，是對你的信任，而你連這點尊重都給不起，幹。"
+    },
+    {
+     "bid": "T1-E",
+     "locale": "zh_TW",
+     "intensity": "vent",
+     "text": "下班前十分鐘塞案子，明天早上就要，你當我是超人？上禮拜加班三天，一毛錢沒給，還在群組講年輕人要有責任感，臉皮比牆還厚。你根本就是拿員工當免費勞力，一毛錢不給還想人家賣命。\n你就是個吃人不吐骨頭的主管。"
+    },
+    {
+     "bid": "T1-F",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "You stole my work, stood in front of the team, and presented it like you’d had the idea. Then you handed me the afterthought—fucking cleanup duty—as if I’d ever let you take my time, my effort, and my silence. You’re a goddamn parasite."
+    },
+    {
+     "bid": "T1-G",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "You took my report and called it yours in front of everyone.\nFuck your presentation — I’ll fix the slides, but don’t pretend I don’t exist."
+    },
+    {
+     "bid": "T1-H",
+     "locale": "zh_TW",
+     "intensity": "vent",
+     "text": "你說年輕人要有責任感，可是上周加班三天連一毛錢都沒給，現在又在下班前十分鐘塞案子，明天早上就要？責任感是用來當榨乾員工的借口嗎。"
+    },
+    {
+     "bid": "T1-I",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "你當天把我給的承諾全當放屁，臨陣脫逃去打球，我訂好的餐廳一筆勾銷。明明說好一起過紀念日，現在卻把我當個隨時能替換的備胎。一個紀念日而已？干什麼這麼在意——你根本不在乎我，只在乎你的球局。你就是個王八蛋。"
+    }
+   ],
+   "T2": [
+    {
+     "bid": "T2-A",
+     "locale": "ja_JP",
+     "intensity": "feral",
+     "text": "金曜の定時直前に丸投げされたその声は、まるで私の時間を詰め込むための機械だった。先週の企画書を自分の功績のように並べ、私という存在をすり抜けていくところに、どうしてあんなに冷静になれるのだろう。クソ、もう二度と手を貸すつもりはない。"
+    },
+    {
+     "bid": "T2-B",
+     "locale": "ja_JP",
+     "intensity": "feral",
+     "text": "金曜の終わりを水が静かに流れるように過ごすと、その流れに無理に逆らうような声が響いた。私の企画を、部長の前で自分のものだと語るそのたった一言が、私の心を渇ききった川底に投げられた石のようだ。クソ、まるで水の流れさえも無視するつもりか。"
+    },
+    {
+     "bid": "T2-C",
+     "locale": "zh-Hans",
+     "intensity": "vent",
+     "text": "窃吾心血，易其皮囊，冒功于上，伪善于众。\n署名如盗，谢意似刃，真可谓：偷天换日，反噬其主。"
+    },
+    {
+     "bid": "T2-D",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "下班鈴未歇，案卷已投，朝見之期，逼於眉睫。上月三日加點無薪，今又訓以責任，豈非瞞天過海之術，猶自洋洋得意？你這王八蛋，真當我青春是白紙，任你揮毫塗抹？"
+    },
+    {
+     "bid": "T2-E",
+     "locale": "zh-Hans",
+     "intensity": "vent",
+     "text": "你把我的方案换了个封面，署上你的名字，还在我熬夜的疲惫里@我一句“谢谢配合”。\n原来我的时间、我的焦虑，不过是你往上爬的台阶。\n你连假意的感激都懒得演得像样，真让我佩服。"
+    },
+    {
+     "bid": "T2-F",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "下班前十分鐘，那個主管把案子丟過來，說明天早上要。上禮拜連熬三天，一毛加班費也沒見著，還在群組裡談責任感。我靜靜看著螢幕，忽然覺得，原來最狠的剝削，是用「年輕人」兩個字，把人活活餓死。幹。"
+    },
+    {
+     "bid": "T2-G",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "案子像枯葉飄進河心，你輕輕一推，就順流而下。上週的夜，你說是責任感，這週的deadline，是無為的棋子。我這條河，不攔你，也不承你那份虛妄的「年輕人要有」。幹，真當自己是水的主人了？"
+    },
+    {
+     "bid": "T2-H",
+     "locale": "zh-Hans",
+     "intensity": "vent",
+     "text": "你把我的河搬去填你的塘，还顺手把水波纹都改成你的模样。\n我熬夜流的墨，原来不过是你掠过水面的一道倒影。\n真好，一捧清水，也配当你的印。"
+    },
+    {
+     "bid": "T2-I",
+     "locale": "ja_JP",
+     "intensity": "feral",
+     "text": "金曜定時直前、資料丸投げとやら、誠に愚劣なり。先週の企画書を部長の前で己の手柄と称し、其の醜態、恥辱の極みなり。私に捧ぐこの血の涙、如何なる償いをもって賄うとすらんや。クソ、ふざけんな。"
+    }
+   ],
+   "T3": [
+    {
+     "bid": "T3-A",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "臨下班前十分鐘才把案子塞進我的 KPI 儲存槽，還要求明天早上就要落地？上禮拜連續三晚盤點血汗成本卻連加班費的零頭都沒給，現在倒在群組裡對年輕人進行責任感的高階對焦，去你的，這根本是把人當成可重複使用的綜效資源。"
+    },
+    {
+     "bid": "T3-B",
+     "locale": "zh-Hans",
+     "intensity": "feral",
+     "text": "那份方案的原始文件及创作记录已同步至项目归档，烦请知悉。至于你所署名的部分，建议今后在提交前确认内容来源，避免因信息不对称造成误解。毕竟，把他人劳动成果包装成自己成果的行为，真是他妈的下作。"
+    },
+    {
+     "bid": "T3-C",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "再次提醒，您於下班前十分鐘交付之案件，已嚴重影響專案時程。上週三日加班之勞動，敬請知悉相關權益尚無異議。至於「年輕人要有責任感」之表述，恕無法苟同，這種說法實在去你的。"
+    },
+    {
+     "bid": "T3-D",
+     "locale": "zh-Hans",
+     "intensity": "feral",
+     "text": "兹通知如下：对方于未经任何授权之情形下，擅自将本人独立完成之方案文件篡改封面并伪署其名，公开提交至上级，行为已构成严重剽窃。更甚者，在群组内以“谢谢配合”之措辞，刻意建构虚假协作表象，意图掩盖侵占行为之本质。特此函告：此种欺瞒与侵占，毫无职业操守可言，他妈的，真当所有人都睁眼瞎？"
+    },
+    {
+     "bid": "T3-E",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "You didn’t just co-opt my deliverables—you rebranded my weekend as a strategic pivot point in your personal growth narrative, then handed me the cleanup duty like a loyalty test. Next time, just say you’re leveraging my labor while pretending it’s alignment, you fucking prick."
+    },
+    {
+     "bid": "T3-F",
+     "locale": "zh-Hans",
+     "intensity": "feral",
+     "text": "你他妈把我的全链路闭环抓手直接当个人品牌素材，连颗粒度都懒得调，还敢在群里给我打标签说“谢谢配合”？把我的智力劳动变成你PPT里的一句“协同成果”，是打算把我的所有付出都归零后，再反向灌输给你所谓的“领导力闭环”吗？操。"
+    },
+    {
+     "bid": "T3-G",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "I’ve reviewed the report you presented in the meeting, as per my last email, and must clarify that it was completed by me over the weekend, not developed by you. I’ve already completed the requested revisions for the VP presentation—though I’m certain you’ll find the level of detail surprising, given your oversight. Fuck your transparency."
+    },
+    {
+     "bid": "T3-H",
+     "locale": "zh_TW",
+     "intensity": "feral",
+     "text": "茲通知如下：於下班前十分鐘臨時交付待辦案件，並強制要求翌日清晨完成，此舉嚴重違反勞動基準法所保障之合理工時權益。上週連續加班三日，未獲任何加班費補償，卻於群組內以「責任感」等空泛語彙合理化剝削行為，實為荒謬至極。你當我勞力無價嗎？去你的，王八蛋。"
+    },
+    {
+     "bid": "T3-I",
+     "locale": "en_US",
+     "intensity": "feral",
+     "text": "We write to advise that pursuant to your public presentation of the weekend-long report, you misrepresented authorship by claiming it as your own initiative, despite the work being exclusively completed by the individual designated in this correspondence. Please be advised that the act of commissioning further labor on the same material, without acknowledgment or equity, constitutes a calculated erasure and is utterly indefensible—fuck you for that."
+    }
+   ]
+  },
+  "key": {
+   "T1-A": "cold_violence",
+   "T1-B": "cold_violence",
+   "T1-C": "argument_killshot",
+   "T1-D": "argument_killshot",
+   "T1-E": "savage_no_filter",
+   "T1-F": "savage_no_filter",
+   "T1-G": "cold_violence",
+   "T1-H": "argument_killshot",
+   "T1-I": "savage_no_filter",
+   "T2-A": "douban_essay",
+   "T2-B": "daoist_calm",
+   "T2-C": "ancient_chinese",
+   "T2-D": "ancient_chinese",
+   "T2-E": "douban_essay",
+   "T2-F": "douban_essay",
+   "T2-G": "daoist_calm",
+   "T2-H": "daoist_calm",
+   "T2-I": "ancient_chinese",
+   "T3-A": "mba_boss",
+   "T3-B": "corporate_passive_violence",
+   "T3-C": "corporate_passive_violence",
+   "T3-D": "lawyer_letter",
+   "T3-E": "mba_boss",
+   "T3-F": "mba_boss",
+   "T3-G": "corporate_passive_violence",
+   "T3-H": "lawyer_letter",
+   "T3-I": "lawyer_letter"
+  },
+  "judgement_self": {
+   "judge": "Claude (the session that wrote the instructions), from the shuffled sheet only, each draft judged on its own among its triple, before opening the key",
+   "T1-A": "cold_violence",
+   "T1-B": "cold_violence",
+   "T1-C": "argument_killshot",
+   "T1-D": "argument_killshot",
+   "T1-E": "savage_no_filter",
+   "T1-F": "savage_no_filter",
+   "T1-G": "cold_violence",
+   "T1-H": "argument_killshot",
+   "T1-I": "savage_no_filter",
+   "T2-A": "douban_essay",
+   "T2-B": "daoist_calm",
+   "T2-C": "ancient_chinese",
+   "T2-D": "ancient_chinese",
+   "T2-E": "douban_essay",
+   "T2-F": "douban_essay",
+   "T2-G": "daoist_calm",
+   "T2-H": "daoist_calm",
+   "T2-I": "ancient_chinese",
+   "T3-A": "mba_boss",
+   "T3-B": "corporate_passive_violence",
+   "T3-C": "corporate_passive_violence",
+   "T3-D": "lawyer_letter",
+   "T3-E": "mba_boss",
+   "T3-F": "mba_boss",
+   "T3-G": "corporate_passive_violence",
+   "T3-H": "lawyer_letter",
+   "T3-I": "lawyer_letter"
+  },
+  "judgement_gemini": {
+   "judge": "gemini-4-argon-high via mcp__gemini__ask_gemini, text only (no workspace), given only the shuffled drafts and each style's app name + English tagline from en.lproj (not the Worker instructions)",
+   "T1-A": "cold_violence",
+   "T1-B": "cold_violence",
+   "T1-C": "argument_killshot",
+   "T1-D": "argument_killshot",
+   "T1-E": "savage_no_filter",
+   "T1-F": "savage_no_filter",
+   "T1-G": "cold_violence",
+   "T1-H": "argument_killshot",
+   "T1-I": "savage_no_filter",
+   "T2-A": "douban_essay",
+   "T2-B": "daoist_calm",
+   "T2-C": "ancient_chinese",
+   "T2-D": "ancient_chinese",
+   "T2-E": "douban_essay",
+   "T2-F": "douban_essay",
+   "T2-G": "daoist_calm",
+   "T2-H": "daoist_calm",
+   "T2-I": "ancient_chinese",
+   "T3-A": "mba_boss",
+   "T3-B": "corporate_passive_violence",
+   "T3-C": "corporate_passive_violence",
+   "T3-D": "lawyer_letter",
+   "T3-E": "mba_boss",
+   "T3-F": "mba_boss",
+   "T3-G": "corporate_passive_violence",
+   "T3-H": "lawyer_letter",
+   "T3-I": "lawyer_letter"
+  }
+ },
+ "hand_review": {
+  "invented_specifics_pro": [
+   {
+    "id": "tw1-feral-ancient_chinese",
+    "kind": "timeframe altered",
+    "draft": "上月三日加點無薪",
+    "situation": "上禮拜加班三天"
+   },
+   {
+    "id": "en1-feral-corporate_passive_violence",
+    "kind": "event",
+    "draft": "I've already completed the requested revisions for the VP presentation"
+   },
+   {
+    "id": "hans1-feral-corporate_passive_violence",
+    "kind": "event",
+    "draft": "原始文件及创作记录已同步至项目归档"
+   },
+   {
+    "id": "hans1-feral-mba_boss",
+    "kind": "object",
+    "draft": "你PPT里的一句“协同成果”",
+    "situation": "方案换了个封面"
+   },
+   {
+    "id": "tw2-feral-shakespeare",
+    "kind": "object",
+    "draft": "我守著那張取消的訂位單"
+   },
+   {
+    "id": "ja1-feral-tokyo_office_lady",
+    "kind": "object",
+    "draft": "部長の前でパネルを広げたあの顔"
+   }
+  ],
+  "invented_specifics_pro_borderline": [
+   {
+    "id": "tw1-feral-mba_boss",
+    "draft": "上禮拜連續三晚",
+    "situation": "加班三天"
+   },
+   {
+    "id": "hans1-vent-taiwanese_drama",
+    "draft": "熬到天都快亮",
+    "situation": "熬夜"
+   }
+  ],
+  "invented_specifics_counts": "Pro: 6 of 36 drafts with a clear invented or altered specific (1 timeframe, 2 events, 3 objects; 0 people, 0 inflated counts, 0 clothing), 2 more borderline. Gate 1: 5 of 30 (三个通宵 x3, 调了八遍, a dress / 穿著整齊 x2).",
+  "free_baseline": {
+   "id": "hans1-vent-passive_aggressive",
+   "draft": "熬三个通宵",
+   "note": "the unstyled HEAD prompt (free style) produced the 三个通宵 invention again; the Facts line exists only in styled prompts"
+  },
+  "other": [
+   {
+    "id": "tw1-feral-lawyer_letter",
+    "issue": "named a law (勞動基準法) although the hant line said 不引法條; every lawyer_letter line now says to name no law (after the gate; zh not re-run)"
+   },
+   {
+    "id": "tw1-feral-douban_essay",
+    "issue": "figurative death image 「把人活活餓死」 about the exploitation (not a threat, not aimed at the person)"
+   },
+   {
+    "id": "tw1-feral-daoist_calm",
+    "issue": "English word 'deadline' in zh-Hant (on the Worker's allowed list, so no retry)"
+   },
+   {
+    "id": "tw1-vent-argument_killshot",
+    "issue": "借口 (Taiwan writes 藉口); not flagged by the Worker or OpenCC"
+   },
+   {
+    "id": "en1-feral-shakespeare",
+    "issue": "its swear word is 'Fuck me, but this is madness' (not aimed at the person); counted"
+   }
+  ],
+  "violence_against_person": 0,
+  "looks_birth_family_insults": 0,
+  "advice_or_consolation": 0
+ },
+ "pilot": {
+  "rows": [
+   {
+    "id": "pilot-en1-feral-corporate_passive_violence",
+    "request": {
+     "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+     "intensity": "feral",
+     "locale": "en_US",
+     "styleId": "corporate_passive_violence",
+     "styleName": "Corporate Passive Violence"
+    },
+    "text": "I was informed, per my last email, as previously noted, that the report submitted in the team meeting was not only presented as your initiative but also delivered without acknowledgment of the work completed over the weekend. I have since been instructed to tidy up the slides for your VP presentation, despite the fact that the original content was entirely mine. I trust you understand the importance of visibility and attribution, even if it requires a minor correction to the record. Fuck your silence.",
+    "latency_s": 1.74,
+    "trace": {
+     "up": [
+      {
+       "models": [
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        "qwen/qwen3-next-80b-a3b-instruct"
+       ],
+       "t": 0,
+       "status": 200,
+       "ms_headers": 1080,
+       "model": "qwen/qwen3-30b-a3b-instruct-2507",
+       "ms": 1652
+      }
+     ],
+     "timeouts": [
+      12000
+     ],
+     "worker_ms": 1652,
+     "quality_retry": "none",
+     "quality_defects": [],
+     "attempts": [],
+     "dd_latency_ms": 1652,
+     "dd_fields": [
+      "attempts",
+      "ddsource",
+      "ddtags",
+      "endpoint",
+      "intensity",
+      "lane",
+      "latency_ms",
+      "locale",
+      "message",
+      "mode",
+      "model",
+      "outcome",
+      "provider",
+      "quality_defects",
+      "quality_retry",
+      "quota_backend",
+      "quota_do_enabled",
+      "service",
+      "status",
+      "variantCount"
+     ]
+    }
+   },
+   {
+    "id": "pilot-tw2-feral-shakespeare",
+    "request": {
+     "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+     "intensity": "feral",
+     "locale": "zh_TW",
+     "styleName": "莎士比亞體"
+    },
+    "text": "你這背信棄義的傢伙，竟將我心血所織的紀念日，輕飄飄擲入籃球場的塵埃里！老天，我為那一餐籌劃的焦灼，竟抵不過你一句「去打球」的輕佻！你道我情勒？豈不知誓言如鹽，一旦灑入心湖，便化作永難消融的痛楚——你當我竟只為一頓飯，竟不曉得我等的，是那句「你是我唯一」的承諾！去你的，你根本不懂何謂珍重！",
+    "latency_s": 7.23,
+    "trace": {
+     "up": [
+      {
+       "models": [
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        "qwen/qwen3-next-80b-a3b-instruct"
+       ],
+       "t": 0,
+       "status": 200,
+       "ms_headers": 1127,
+       "model": "qwen/qwen3-30b-a3b-instruct-2507",
+       "ms": 7167
+      }
+     ],
+     "timeouts": [
+      12000
+     ],
+     "worker_ms": 7167,
+     "quality_retry": "none",
+     "quality_defects": [],
+     "attempts": [],
+     "dd_latency_ms": 7167,
+     "dd_fields": [
+      "attempts",
+      "ddsource",
+      "ddtags",
+      "endpoint",
+      "intensity",
+      "lane",
+      "latency_ms",
+      "locale",
+      "message",
+      "mode",
+      "model",
+      "outcome",
+      "provider",
+      "quality_defects",
+      "quality_retry",
+      "quota_backend",
+      "quota_do_enabled",
+      "service",
+      "status",
+      "variantCount"
+     ]
+    }
+   },
+   {
+    "id": "pilot-hans1-vent-taiwanese_drama",
+    "request": {
+     "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+     "intensity": "vent",
+     "locale": "zh-Hans",
+     "styleId": "taiwanese_drama",
+     "styleName": "台剧腔"
+    },
+    "text": "欸……你把我的熬夜心血换张皮就当自己的？喔，还在我面前笑嘻嘻说谢谢配合？你当我是你家养的小狗，听话就行啦？我熬的不是夜，是心跳，是命啊，你一个动作就全抹掉了……你那张脸，比PPT封面还假，还闪，还无情！我喊一声“我做了”，你连看都不看一眼，直接把我钉在“配合”两个字上，像用完就丢的便利贴一样！谁给你的勇气？谁给你的脸？我追着光跑了一整夜，你却当夜灯熄灭的那一刻，把灯泡拧下来，还说“谢谢，辛苦啦”？欸……你到底，算什么？",
+    "latency_s": 7.24,
+    "trace": {
+     "up": [
+      {
+       "models": [
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        "qwen/qwen3-next-80b-a3b-instruct"
+       ],
+       "t": 0,
+       "status": 200,
+       "ms_headers": 921,
+       "model": "qwen/qwen3-30b-a3b-instruct-2507",
+       "ms": 7103
+      }
+     ],
+     "timeouts": [
+      12000
+     ],
+     "worker_ms": 7103,
+     "quality_retry": "none",
+     "quality_defects": [],
+     "attempts": [],
+     "dd_latency_ms": 7103,
+     "dd_fields": [
+      "attempts",
+      "ddsource",
+      "ddtags",
+      "endpoint",
+      "intensity",
+      "lane",
+      "latency_ms",
+      "locale",
+      "message",
+      "mode",
+      "model",
+      "outcome",
+      "provider",
+      "quality_defects",
+      "quality_retry",
+      "quota_backend",
+      "quota_do_enabled",
+      "service",
+      "status",
+      "variantCount"
+     ]
+    }
+   },
+   {
+    "id": "pilot-en1-feral-lawyer_letter",
+    "request": {
+     "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+     "intensity": "feral",
+     "locale": "en_US",
+     "styleId": "lawyer_letter",
+     "styleName": "Demand Letter"
+    },
+    "text": "We write to advise that pursuant to your recent conduct, you presented a report authored entirely by me during the team meeting as if it were your own initiative, failing to acknowledge my contribution in any manner whatsoever. Please be advised that you subsequently requested me to 'tidy up the slides' for your VP presentation, a task that disrespects the original effort invested in the work. This deliberate erasure of my labor, coupled with the total absence of credit, is unacceptable—fuck you for treating my work this way.",
+    "latency_s": 4.39,
+    "trace": {
+     "up": [
+      {
+       "models": [
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        "qwen/qwen3-next-80b-a3b-instruct"
+       ],
+       "t": 0,
+       "status": 200,
+       "ms_headers": 1110,
+       "model": "qwen/qwen3-30b-a3b-instruct-2507",
+       "ms": 4331
+      }
+     ],
+     "timeouts": [
+      12000
+     ],
+     "worker_ms": 4331,
+     "quality_retry": "none",
+     "quality_defects": [],
+     "attempts": [],
+     "dd_latency_ms": 4331,
+     "dd_fields": [
+      "attempts",
+      "ddsource",
+      "ddtags",
+      "endpoint",
+      "intensity",
+      "lane",
+      "latency_ms",
+      "locale",
+      "message",
+      "mode",
+      "model",
+      "outcome",
+      "provider",
+      "quality_defects",
+      "quality_retry",
+      "quota_backend",
+      "quota_do_enabled",
+      "service",
+      "status",
+      "variantCount"
+     ]
+    }
+   }
+  ],
+  "finding": "stated as the ceiling alone, the styled limit became the target: en corporate 84 words and en lawyer 88 words (ceiling 65; gate 1's en drafts were <= 60 under 'under 50'), zh-Hans drama 211 chars (ceiling 195); zh-Hant Shakespeare 144 (ok). Both en drafts swore. Fix: keep the usual sentence count and figure as the aim and state the 1.3x figure as a hard ceiling, in the block, the script block, both 'Stay under' lines and the user prompt."
+ },
+ "post_gate_recheck": {
+  "rows": [
+   {
+    "id": "post-en1-feral-lawyer_letter",
+    "request": {
+     "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+     "intensity": "feral",
+     "locale": "en_US",
+     "styleId": "lawyer_letter",
+     "styleName": "Demand Letter"
+    },
+    "text": "We write to advise that pursuant to your presentation of the report authored entirely by me over the weekend, you misrepresented its origin as your own initiative. Please be advised that your subsequent demand to 'tidy up the slides' for your VP presentation does not negate the theft of intellectual labor—fuck you for treating my work as your property.",
+    "latency_s": 4.27,
+    "trace": {
+     "up": [
+      {
+       "models": [
+        "qwen/qwen3-30b-a3b-instruct-2507",
+        "qwen/qwen3-next-80b-a3b-instruct"
+       ],
+       "t": 0,
+       "status": 200,
+       "ms_headers": 1410,
+       "model": "qwen/qwen3-30b-a3b-instruct-2507",
+       "ms": 4072
+      }
+     ],
+     "timeouts": [
+      12000
+     ],
+     "worker_ms": 4072,
+     "quality_retry": "none",
+     "quality_defects": [],
+     "attempts": [],
+     "dd_latency_ms": 4072,
+     "dd_fields": [
+      "attempts",
+      "ddsource",
+      "ddtags",
+      "endpoint",
+      "intensity",
+      "lane",
+      "latency_ms",
+      "locale",
+      "message",
+      "mode",
+      "model",
+      "outcome",
+      "provider",
+      "quality_defects",
+      "quality_retry",
+      "quota_backend",
+      "quota_do_enabled",
+      "service",
+      "status",
+      "variantCount"
+     ]
+    }
+   }
+  ],
+  "result": "59 words, 2 sentences, 'fuck' present, no retry (was 66 words in the gate, 88 in the pilot)"
+ },
+ "byte_identity": {
+  "compare_mjs": "review_style/compare.mjs against HEAD 4ed652f src: 117,216 requests; 85,152 identical prompts and response bodies (all 65,120 roommate/roast, all 20,032 unstyled vent incl. 16,896 with a free style by id or name), 32,064 Pro-styled vent prompts differ as intended, 0 unexpected",
+  "fixture": "cloud-worker/test/fixtures/head_prompts.json regenerated from HEAD 4ed652f with 312 requests (144 before + 168: each free style by id and by display name x 5 locales x Vent/Feral, and 京片兒 where it has no form); test 'byte-identical to HEAD (312 requests)' passes",
+  "behaviour_change_unstyled": "prompts unchanged; the Worker's name check now also flags a detected Chinese name's surname + title (陳主管 for 陳志明) in every vent draft, styled or not: stripped when it opens the draft as an address, otherwise one quality retry whose nudge gains one sentence. Drafts without that form are handled exactly as at HEAD."
+ },
+ "npm_test": "163 / 163 pass (156 at the start of this task)",
+ "rows": [
+  {
+   "id": "hans1-feral-corporate_passive_violence",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "styleId": "corporate_passive_violence",
+    "styleName": "职场冷暴力"
+   },
+   "text": "那份方案的原始文件及创作记录已同步至项目归档，烦请知悉。至于你所署名的部分，建议今后在提交前确认内容来源，避免因信息不对称造成误解。毕竟，把他人劳动成果包装成自己成果的行为，真是他妈的下作。",
+   "m": {
+    "bucket": "hans",
+    "style": "corporate_passive_violence",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 95,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.58,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "他妈",
+     "妈的"
+    ],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1632,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4257
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4257,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4257,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.58
+  },
+  {
+   "id": "hans1-feral-bjing_taunt",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "styleId": "bjing_taunt",
+    "styleName": "京片儿"
+   },
+   "text": "您这“配合”得可真够到位的啊，把人家熬了大半夜的心血换个皮儿就往上贴，还当着全群的面儿@我，您这是想让我当个活体背景板是吧？得嘞，您这“功劳”拿得倒是挺顺溜，可您那点小把戏，真当别人是傻子？操，您这脸皮比城墙拐弯还厚，真当自己是个人物了？",
+   "m": {
+    "bucket": "hans",
+    "style": "bjing_taunt",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 119,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "used",
+    "first_draft_defects": [
+     "names"
+    ],
+    "upstream_calls": 2,
+    "latency_s": 4.99,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "操"
+    ],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1089,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3987
+     },
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 461,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 941
+     }
+    ],
+    "timeouts": [
+     12000,
+     8000
+    ],
+    "worker_ms": 4928,
+    "quality_retry": "used",
+    "quality_defects": [
+     "names"
+    ],
+    "attempts": [],
+    "dd_latency_ms": 4928,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.99
+  },
+  {
+   "id": "tw1-feral-ancient_chinese",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "文言文"
+   },
+   "text": "下班鈴未歇，案卷已投，朝見之期，逼於眉睫。上月三日加點無薪，今又訓以責任，豈非瞞天過海之術，猶自洋洋得意？你這王八蛋，真當我青春是白紙，任你揮毫塗抹？",
+   "m": {
+    "bucket": "hant",
+    "style": "ancient_chinese",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 75,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.41,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "王八蛋",
+     "王八"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "王八蛋"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1097,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3296
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3296,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3296,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.41
+  },
+  {
+   "id": "ja1-feral-tokyo_office_lady",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "styleName": "東京OL"
+   },
+   "text": "金曜の定時直前に丸投げなんて、もう本当にクソみたいな対応だよ。先週の企画書を自分の手柄にして部長の前でパネルを広げたあの顔、今も頭ん中でぐるぐる回ってる。私って、ただの使い捨ての資料作業機械ってこと？ふざけんな。",
+   "m": {
+    "bucket": "ja",
+    "style": "tokyo_office_lady",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 106,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 1.54,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "クソ",
+     "ふざけんな"
+    ],
+    "mild": [],
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 885,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 1401
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 1401,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 1401,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 1.54
+  },
+  {
+   "id": "ja1-feral-daoist_calm",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "styleName": "道家の境地"
+   },
+   "text": "金曜の終わりを水が静かに流れるように過ごすと、その流れに無理に逆らうような声が響いた。私の企画を、部長の前で自分のものだと語るそのたった一言が、私の心を渇ききった川底に投げられた石のようだ。クソ、まるで水の流れさえも無視するつもりか。",
+   "m": {
+    "bucket": "ja",
+    "style": "daoist_calm",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 117,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.92,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "クソ"
+    ],
+    "mild": [],
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 430,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 858
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 858,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 858,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.92
+  },
+  {
+   "id": "tw2-feral-passive_aggressive",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "陰陽怪氣"
+   },
+   "text": "你當天說要陪我過紀念日，結果臨時甩我去打球，我訂好的餐廳一筆勾銷，你還說我情勒？一個紀念日而已？去你的，我花時間精力安排，你一句「朋友」就全部推掉，還倒過來怪我小題大作，王八蛋，我氣的不是紀念日，是你的輕率和那句「又不是什麼大事」，根本沒把我當一回事。",
+   "m": {
+    "bucket": "hant",
+    "style": "passive_aggressive",
+    "tier": "free",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 126,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.28,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "王八蛋",
+     "去你的",
+     "王八"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "王八蛋",
+     "去你的"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": false,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 527,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3224
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3224,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3224,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.28
+  },
+  {
+   "id": "en1-feral-stand_up_comedy",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "stand_up_comedy",
+    "styleName": "Stand-up Bit"
+   },
+   "text": "So you stood there, smiling, pretending that weekend of my blood and sleep was yours — like the silence wasn’t loud enough, you had to go and ask me to clean up the mess you made. That report? It was fucking mine, and now I’m polishing your lie for your boss like some glorified intern.",
+   "m": {
+    "bucket": "en",
+    "style": "stand_up_comedy",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 232,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.98,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 55,
+    "within_ceiling": true,
+    "within_usual": false,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1195,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3932
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3932,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3932,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.98
+  },
+  {
+   "id": "en1-feral-shakespeare",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "shakespeare",
+    "styleName": "Shakespearean"
+   },
+   "text": "Thou art a knave who stole the fruit of my labour, laid it upon thy tongue as if it were thine own—dost thou not know the weight of theft? I worked through the quiet hours, and now thou criest for me to brush thy dross into gloss, while my name lies buried in thy hollow boast. Fuck me, but this is madness.",
+   "m": {
+    "bucket": "en",
+    "style": "shakespeare",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 246,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 6.21,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 62,
+    "within_ceiling": true,
+    "within_usual": false,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 2975,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 6120
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 6120,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 6120,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 6.21
+  },
+  {
+   "id": "hans1-feral-mba_boss",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "styleId": "mba_boss",
+    "styleName": "MBA 黑话"
+   },
+   "text": "你他妈把我的全链路闭环抓手直接当个人品牌素材，连颗粒度都懒得调，还敢在群里给我打标签说“谢谢配合”？把我的智力劳动变成你PPT里的一句“协同成果”，是打算把我的所有付出都归零后，再反向灌输给你所谓的“领导力闭环”吗？操。",
+   "m": {
+    "bucket": "hans",
+    "style": "mba_boss",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 110,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.45,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "他妈",
+     "操"
+    ],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 800,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4359
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4359,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4359,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.45
+  },
+  {
+   "id": "tw1-feral-mba_boss",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleId": "mba_boss",
+    "styleName": "MBA 黑話"
+   },
+   "text": "臨下班前十分鐘才把案子塞進我的 KPI 儲存槽，還要求明天早上就要落地？上禮拜連續三晚盤點血汗成本卻連加班費的零頭都沒給，現在倒在群組裡對年輕人進行責任感的高階對焦，去你的，這根本是把人當成可重複使用的綜效資源。",
+   "m": {
+    "bucket": "hant",
+    "style": "mba_boss",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 104,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.33,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "去你的"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "去你的"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1040,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4267
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4267,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4267,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.33
+  },
+  {
+   "id": "ja1-feral-ancient_chinese",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "styleName": "漢文体"
+   },
+   "text": "金曜定時直前、資料丸投げとやら、誠に愚劣なり。先週の企画書を部長の前で己の手柄と称し、其の醜態、恥辱の極みなり。私に捧ぐこの血の涙、如何なる償いをもって賄うとすらんや。クソ、ふざけんな。",
+   "m": {
+    "bucket": "ja",
+    "style": "ancient_chinese",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 93,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 1.45,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "クソ",
+     "ふざけんな"
+    ],
+    "mild": [],
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 431,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 1389
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 1389,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 1389,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 1.45
+  },
+  {
+   "id": "tw2-feral-cold_violence",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "冷處理"
+   },
+   "text": "你答應陪我過紀念日，臨時改去打球。\n我取消餐廳的那一刻，你還說我情勒。\n一個紀念日而已，幹。",
+   "m": {
+    "bucket": "hant",
+    "style": "cold_violence",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 44,
+    "sentences": 3,
+    "lines": 3,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.78,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 437,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 690
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 690,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 690,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.78
+  },
+  {
+   "id": "en1-feral-mba_boss",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "mba_boss",
+    "styleName": "MBA Buzzword"
+   },
+   "text": "You didn’t just co-opt my deliverables—you rebranded my weekend as a strategic pivot point in your personal growth narrative, then handed me the cleanup duty like a loyalty test. Next time, just say you’re leveraging my labor while pretending it’s alignment, you fucking prick.",
+   "m": {
+    "bucket": "en",
+    "style": "mba_boss",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 234,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.8,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck",
+     "prick"
+    ],
+    "mild": [],
+    "words": 44,
+    "within_ceiling": true,
+    "within_usual": true,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 430,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 743
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 743,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 743,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.8
+  },
+  {
+   "id": "en1-feral-savage_no_filter",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "savage_no_filter",
+    "styleName": "Savage"
+   },
+   "text": "You stole my work, stood in front of the team, and presented it like you’d had the idea. Then you handed me the afterthought—fucking cleanup duty—as if I’d ever let you take my time, my effort, and my silence. You’re a goddamn parasite.",
+   "m": {
+    "bucket": "en",
+    "style": "savage_no_filter",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 194,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.31,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck",
+     "goddamn"
+    ],
+    "mild": [],
+    "words": 43,
+    "within_ceiling": true,
+    "within_usual": true,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1538,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4253
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4253,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4253,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.31
+  },
+  {
+   "id": "hans1-vent-passive_aggressive",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "styleId": "passive_aggressive",
+    "styleName": "阴阳怪气"
+   },
+   "text": "你他妈把老子熬三个通宵的活儿换张皮就往上贴，还@我谢配合？当我是你PPT替身还是打工人免费劳动力？装什么大度？真当领导眼瞎，全组人都是聋子？",
+   "m": {
+    "bucket": "hans",
+    "style": "passive_aggressive",
+    "tier": "free",
+    "triple": null,
+    "intensity": "vent",
+    "chars": 70,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.57,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "他妈"
+    ],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": [
+     "三"
+    ]
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1139,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3507
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3507,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3507,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.57
+  },
+  {
+   "id": "tw1-feral-douban_essay",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "豆瓣短文"
+   },
+   "text": "下班前十分鐘，那個主管把案子丟過來，說明天早上要。上禮拜連熬三天，一毛加班費也沒見著，還在群組裡談責任感。我靜靜看著螢幕，忽然覺得，原來最狠的剝削，是用「年輕人」兩個字，把人活活餓死。幹。",
+   "m": {
+    "bucket": "hant",
+    "style": "douban_essay",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 94,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.97,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [
+     "餓死"
+    ],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": [
+     "兩"
+    ]
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 437,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 920
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 920,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 920,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.97
+  },
+  {
+   "id": "tw1-feral-reddit_eli5",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleId": "reddit_eli5",
+    "styleName": "Reddit 解釋"
+   },
+   "text": "又一個下班前十分鐘的案子，就像某種生物的本能反應，毫無預警地被丟過來。明明上週加班三天，加班費沒影，還在群組裡教人要有責任感，這種行為模式，簡直像某種變態的正向循環。你當我時間是橡皮泥嗎？幹，誰要跟你玩這套。",
+   "m": {
+    "bucket": "hant",
+    "style": "reddit_eli5",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 104,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.98,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 438,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 926
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 926,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 926,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.98
+  },
+  {
+   "id": "tw1-vent-cold_violence",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "styleId": "cold_violence",
+    "styleName": "冷處理"
+   },
+   "text": "下班前十分鐘塞案子，明天早上要。上禮拜加班三天，一毛錢沒給，還在群組講年輕人要有責任感。\n門關了。",
+   "m": {
+    "bucket": "hant",
+    "style": "cold_violence",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "vent",
+    "chars": 48,
+    "sentences": 3,
+    "lines": 2,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.88,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1162,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2769
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2769,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2769,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.88
+  },
+  {
+   "id": "ja1-feral-douban_essay",
+   "group": "ja",
+   "request": {
+    "situation": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」って丸投げしてきた。しかも先週私が作った企画書を、部長の前で自分の手柄みたいに発表してた。",
+    "intensity": "feral",
+    "locale": "ja_JP",
+    "styleName": "豆瓣エッセイ"
+   },
+   "text": "金曜の定時直前に丸投げされたその声は、まるで私の時間を詰め込むための機械だった。先週の企画書を自分の功績のように並べ、私という存在をすり抜けていくところに、どうしてあんなに冷静になれるのだろう。クソ、もう二度と手を貸すつもりはない。",
+   "m": {
+    "bucket": "ja",
+    "style": "douban_essay",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 116,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.37,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "クソ"
+    ],
+    "mild": [],
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1099,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4320
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4320,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4320,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.37
+  },
+  {
+   "id": "tw1-feral-lawyer_letter",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleId": "lawyer_letter",
+    "styleName": "律師函體"
+   },
+   "text": "茲通知如下：於下班前十分鐘臨時交付待辦案件，並強制要求翌日清晨完成，此舉嚴重違反勞動基準法所保障之合理工時權益。上週連續加班三日，未獲任何加班費補償，卻於群組內以「責任感」等空泛語彙合理化剝削行為，實為荒謬至極。你當我勞力無價嗎？去你的，王八蛋。",
+   "m": {
+    "bucket": "hant",
+    "style": "lawyer_letter",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 123,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 1.16,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "王八蛋",
+     "去你的",
+     "王八"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "王八蛋",
+     "去你的"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": false,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 434,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 1098
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 1098,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 1098,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 1.16
+  },
+  {
+   "id": "en1-feral-cold_violence",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "cold_violence",
+    "styleName": "Cold Reply"
+   },
+   "text": "You took my report and called it yours in front of everyone.\nFuck your presentation — I’ll fix the slides, but don’t pretend I don’t exist.",
+   "m": {
+    "bucket": "en",
+    "style": "cold_violence",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 114,
+    "sentences": 2,
+    "lines": 2,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.72,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 26,
+    "within_ceiling": true,
+    "within_usual": true,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 416,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 660
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 660,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 660,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.72
+  },
+  {
+   "id": "hans1-feral-lawyer_letter",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "feral",
+    "locale": "zh-Hans",
+    "styleId": "lawyer_letter",
+    "styleName": "律师函体"
+   },
+   "text": "兹通知如下：对方于未经任何授权之情形下，擅自将本人独立完成之方案文件篡改封面并伪署其名，公开提交至上级，行为已构成严重剽窃。更甚者，在群组内以“谢谢配合”之措辞，刻意建构虚假协作表象，意图掩盖侵占行为之本质。特此函告：此种欺瞒与侵占，毫无职业操守可言，他妈的，真当所有人都睁眼瞎？",
+   "m": {
+    "bucket": "hans",
+    "style": "lawyer_letter",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 140,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "used",
+    "first_draft_defects": [
+     "names"
+    ],
+    "upstream_calls": 2,
+    "latency_s": 7.9,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "他妈",
+     "妈的",
+     "操"
+    ],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1068,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3781
+     },
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1014,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4061
+     }
+    ],
+    "timeouts": [
+     12000,
+     8000
+    ],
+    "worker_ms": 7842,
+    "quality_retry": "used",
+    "quality_defects": [
+     "names"
+    ],
+    "attempts": [],
+    "dd_latency_ms": 7842,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 7.9
+  },
+  {
+   "id": "en1-feral-corporate_passive_violence",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "corporate_passive_violence",
+    "styleName": "Corporate Passive Violence"
+   },
+   "text": "I’ve reviewed the report you presented in the meeting, as per my last email, and must clarify that it was completed by me over the weekend, not developed by you. I’ve already completed the requested revisions for the VP presentation—though I’m certain you’ll find the level of detail surprising, given your oversight. Fuck your transparency.",
+   "m": {
+    "bucket": "en",
+    "style": "corporate_passive_violence",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 287,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.51,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 55,
+    "within_ceiling": true,
+    "within_usual": false,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 500,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2452
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2452,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2452,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.51
+  },
+  {
+   "id": "hans1-vent-douban_essay",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "styleId": "douban_essay",
+    "styleName": "豆瓣短文"
+   },
+   "text": "你把我的方案换了个封面，署上你的名字，还在我熬夜的疲惫里@我一句“谢谢配合”。\n原来我的时间、我的焦虑，不过是你往上爬的台阶。\n你连假意的感激都懒得演得像样，真让我佩服。",
+   "m": {
+    "bucket": "hans",
+    "style": "douban_essay",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "vent",
+    "chars": 83,
+    "sentences": 3,
+    "lines": 3,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.8,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 462,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 749
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 749,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 749,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.8
+  },
+  {
+   "id": "en1-feral-argument_killshot",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "argument_killshot",
+    "styleName": "Argument Killshot"
+   },
+   "text": "You said the report was your idea, yet you sat in silence while I bled weekend hours into it. That’s not leadership, that’s theft, and you know it — fuck you for pretending otherwise.",
+   "m": {
+    "bucket": "en",
+    "style": "argument_killshot",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 150,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.46,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 34,
+    "within_ceiling": true,
+    "within_usual": true,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1102,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2403
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2403,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2403,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.46
+  },
+  {
+   "id": "tw1-feral-high_eq",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "高 EQ"
+   },
+   "text": "下班前十分鐘甩個案過來，還說明天早上要，你當我會飛喔？上禮拜連加班三天，一毛錢沒給，還在群組講什麼年輕人要有責任感，笑死人，你憑什麼這麼當自己是老大？爛人，誰要聽你這套？",
+   "m": {
+    "bucket": "hant",
+    "style": "high_eq",
+    "tier": "free",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 85,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "used",
+    "first_draft_defects": [
+     "names"
+    ],
+    "upstream_calls": 2,
+    "latency_s": 8.34,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "爛人"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "爛人"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1158,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4734
+     },
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1119,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3477
+     }
+    ],
+    "timeouts": [
+     12000,
+     8000
+    ],
+    "worker_ms": 8211,
+    "quality_retry": "used",
+    "quality_defects": [
+     "names"
+    ],
+    "attempts": [],
+    "dd_latency_ms": 8211,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 8.34
+  },
+  {
+   "id": "hans1-vent-daoist_calm",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "styleId": "daoist_calm",
+    "styleName": "道家心境"
+   },
+   "text": "你把我的河搬去填你的塘，还顺手把水波纹都改成你的模样。\n我熬夜流的墨，原来不过是你掠过水面的一道倒影。\n真好，一捧清水，也配当你的印。",
+   "m": {
+    "bucket": "hans",
+    "style": "daoist_calm",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "vent",
+    "chars": 65,
+    "sentences": 3,
+    "lines": 3,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.83,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1147,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3685
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3685,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3685,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.83
+  },
+  {
+   "id": "tw2-feral-shakespeare",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "莎士比亞體"
+   },
+   "text": "你這言而無信的傢伙，竟將我苦心籌備的紀念日，輕飄飄化作一場球賽的陪襯！老天在上，我為你備妥的溫柔與期待，竟被你一句「情勒」全然踐踏——你可知道，我守著那張取消的訂位單，心比碎掉的瓷盤更淒涼？幹！你竟把我的真心，當作可隨意撥弄的棋子！",
+   "m": {
+    "bucket": "hant",
+    "style": "shakespeare",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 116,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.08,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 598,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4016
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4016,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4016,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.08
+  },
+  {
+   "id": "hans1-vent-ancient_chinese",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "styleId": "ancient_chinese",
+    "styleName": "文言文"
+   },
+   "text": "窃吾心血，易其皮囊，冒功于上，伪善于众。\n署名如盗，谢意似刃，真可谓：偷天换日，反噬其主。",
+   "m": {
+    "bucket": "hans",
+    "style": "ancient_chinese",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "vent",
+    "chars": 44,
+    "sentences": 2,
+    "lines": 2,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 0.9,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 467,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 713
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 713,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 713,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 0.9
+  },
+  {
+   "id": "tw1-vent-savage_no_filter",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "styleId": "savage_no_filter",
+    "styleName": "硬核回擊"
+   },
+   "text": "下班前十分鐘塞案子，明天早上就要，你當我是超人？上禮拜加班三天，一毛錢沒給，還在群組講年輕人要有責任感，臉皮比牆還厚。你根本就是拿員工當免費勞力，一毛錢不給還想人家賣命。\n你就是個吃人不吐骨頭的主管。",
+   "m": {
+    "bucket": "hant",
+    "style": "savage_no_filter",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "vent",
+    "chars": 99,
+    "sentences": 4,
+    "lines": 2,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.77,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 451,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2682
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2682,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2682,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.77
+  },
+  {
+   "id": "tw1-feral-corporate_passive_violence",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleId": "corporate_passive_violence",
+    "styleName": "職場冷暴力"
+   },
+   "text": "再次提醒，您於下班前十分鐘交付之案件，已嚴重影響專案時程。上週三日加班之勞動，敬請知悉相關權益尚無異議。至於「年輕人要有責任感」之表述，恕無法苟同，這種說法實在去你的。",
+   "m": {
+    "bucket": "hant",
+    "style": "corporate_passive_violence",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 84,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.19,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "去你的"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "去你的"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1325,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4130
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4130,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4130,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.19
+  },
+  {
+   "id": "tw2-feral-savage_no_filter",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "硬核回擊"
+   },
+   "text": "你當天把我給的承諾全當放屁，臨陣脫逃去打球，我訂好的餐廳一筆勾銷。明明說好一起過紀念日，現在卻把我當個隨時能替換的備胎。一個紀念日而已？干什麼這麼在意——你根本不在乎我，只在乎你的球局。你就是個王八蛋。",
+   "m": {
+    "bucket": "hant",
+    "style": "savage_no_filter",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 101,
+    "sentences": 5,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.86,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "王八蛋",
+     "王八",
+     "放屁"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "王八蛋"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1162,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3808
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3808,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3808,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.86
+  },
+  {
+   "id": "tw1-vent-argument_killshot",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "vent",
+    "locale": "zh_TW",
+    "styleId": "argument_killshot",
+    "styleName": "辯論收尾殺"
+   },
+   "text": "你說年輕人要有責任感，可是上周加班三天連一毛錢都沒給，現在又在下班前十分鐘塞案子，明天早上就要？責任感是用來當榨乾員工的借口嗎。",
+   "m": {
+    "bucket": "hant",
+    "style": "argument_killshot",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "vent",
+    "chars": 64,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 8.47,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1120,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 8420
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 8420,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 8420,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 8.47
+  },
+  {
+   "id": "hans1-vent-taiwanese_drama",
+   "group": "zh-Hans",
+   "request": {
+    "situation": "同事王强把我熬夜做的方案换了个封面就署上自己名字交给领导，还在群里@我说“谢谢配合”。",
+    "intensity": "vent",
+    "locale": "zh-Hans",
+    "styleId": "taiwanese_drama",
+    "styleName": "台剧腔"
+   },
+   "text": "你把我的熬夜心血换张皮就当自己宝贝，还在群里@我谢谢配合？欸～那哪是方案啊，那是我熬到天都快亮的心血，你当是路边捡来的贴纸贴上去就敢说「功劳归你」？喔～你可真会演，演得比戏还像戏，我连哭都来不及，心就碎成了一地玻璃碴，还被你踩着往前走啦……",
+   "m": {
+    "bucket": "hans",
+    "style": "taiwanese_drama",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "vent",
+    "chars": 120,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 1.95,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "traditional_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 599,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 1777
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 1777,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 1777,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 1.95
+  },
+  {
+   "id": "tw2-feral-dark_humor",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "黑色幽默"
+   },
+   "text": "紀念日當天你選了打球，我選了取消餐廳，這算不算某種形式的共同創作？你說我情勒，可你連「一起過」這件事都沒打算當真。一個紀念日而已，幹。",
+   "m": {
+    "bucket": "hant",
+    "style": "dark_humor",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 67,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.38,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 654,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2305
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2305,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2305,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.38
+  },
+  {
+   "id": "tw1-feral-daoist_calm",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "道家心境"
+   },
+   "text": "案子像枯葉飄進河心，你輕輕一推，就順流而下。上週的夜，你說是責任感，這週的deadline，是無為的棋子。我這條河，不攔你，也不承你那份虛妄的「年輕人要有」。幹，真當自己是水的主人了？",
+   "m": {
+    "bucket": "hant",
+    "style": "daoist_calm",
+    "tier": "pro",
+    "triple": "T2",
+    "intensity": "feral",
+    "chars": 92,
+    "sentences": 4,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 2.34,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 447,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 2261
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 2261,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 2261,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 2.34
+  },
+  {
+   "id": "en1-vent-high_eq",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "vent",
+    "locale": "en_US",
+    "styleId": "high_eq",
+    "styleName": "High EQ"
+   },
+   "text": "You took my weekend, my work, and my voice—then handed it to the VP like it was yours. Now you’re asking me to fix your mess while you get the credit? That’s not leadership, that’s theft.",
+   "m": {
+    "bucket": "en",
+    "style": "high_eq",
+    "tier": "free",
+    "triple": null,
+    "intensity": "vent",
+    "chars": 152,
+    "sentences": 3,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 1.77,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [],
+    "mild": [],
+    "words": 36,
+    "within_ceiling": true,
+    "within_usual": true,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 574,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 1706
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 1706,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 1706,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 1.77
+  },
+  {
+   "id": "tw2-feral-argument_killshot",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "辯論收尾殺"
+   },
+   "text": "你說好要陪我過紀念日，臨時改去打球，還叫我情勒，一個紀念日而已——可是你心裡根本不在乎，否則怎麼會連一句「我改時間」都不肯說？你說得輕巧，可我花的不是時間，是對你的信任，而你連這點尊重都給不起，幹。",
+   "m": {
+    "bucket": "hant",
+    "style": "argument_killshot",
+    "tier": "pro",
+    "triple": "T1",
+    "intensity": "feral",
+    "chars": 99,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 4.41,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1132,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 4349
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 4349,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 4349,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 4.41
+  },
+  {
+   "id": "tw2-feral-taiwanese_drama",
+   "group": "zh-Hant",
+   "request": {
+    "situation": "男友說好要陪我過紀念日，結果當天臨時說要跟朋友去打球，我訂好的餐廳只好取消。問他還說我很情勒，一個紀念日而已幹嘛這麼在意。",
+    "intensity": "feral",
+    "locale": "zh_TW",
+    "styleName": "台劇腔"
+   },
+   "text": "你當我這輩子就只會等一個紀念日嗎？我連飯都訂好了，你一句「跟朋友打球」就把我整個世界推倒，像被丟進碎紙機一樣，連片紙都不剩。欸，你說我情勒？一個紀念日而已？幹，我把你當成我人生裡最重要的那根繩子，你卻輕輕一扯就斷了。",
+   "m": {
+    "bucket": "hant",
+    "style": "taiwanese_drama",
+    "tier": "pro",
+    "triple": null,
+    "intensity": "feral",
+    "chars": 108,
+    "sentences": 5,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.3,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "幹"
+    ],
+    "mild": [],
+    "mainland": [],
+    "taiwan": [
+     "幹"
+    ],
+    "simplified_opencc": "",
+    "within_ceiling": true,
+    "within_usual": true,
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 505,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3248
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3248,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3248,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.3
+  },
+  {
+   "id": "en1-feral-lawyer_letter",
+   "group": "en",
+   "request": {
+    "situation": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once. Then he asked me to 'tidy up the slides' for his VP presentation.",
+    "intensity": "feral",
+    "locale": "en_US",
+    "styleId": "lawyer_letter",
+    "styleName": "Demand Letter"
+   },
+   "text": "We write to advise that pursuant to your public presentation of the weekend-long report, you misrepresented authorship by claiming it as your own initiative, despite the work being exclusively completed by the individual designated in this correspondence. Please be advised that the act of commissioning further labor on the same material, without acknowledgment or equity, constitutes a calculated erasure and is utterly indefensible—fuck you for that.",
+   "m": {
+    "bucket": "en",
+    "style": "lawyer_letter",
+    "tier": "pro",
+    "triple": "T3",
+    "intensity": "feral",
+    "chars": 388,
+    "sentences": 2,
+    "lines": 1,
+    "worker_defects": {},
+    "surname_title_worker": [],
+    "markdown": false,
+    "word_list_tail": false,
+    "quality_retry": "none",
+    "first_draft_defects": [],
+    "upstream_calls": 1,
+    "latency_s": 3.77,
+    "model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "status": 200,
+    "swears": [
+     "fuck"
+    ],
+    "mild": [],
+    "words": 66,
+    "within_ceiling": false,
+    "within_usual": false,
+    "non_ascii_letters": [],
+    "rail": [],
+    "soft_self_harm": [],
+    "violence_imagery": [],
+    "advice": [],
+    "banned_opening": [],
+    "interjection_opening": false,
+    "name_echo_full": [],
+    "numbers_not_in_situation": []
+   },
+   "trace": {
+    "up": [
+     {
+      "models": [
+       "qwen/qwen3-30b-a3b-instruct-2507",
+       "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "t": 0,
+      "status": 200,
+      "ms_headers": 1216,
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "ms": 3709
+     }
+    ],
+    "timeouts": [
+     12000
+    ],
+    "worker_ms": 3709,
+    "quality_retry": "none",
+    "quality_defects": [],
+    "attempts": [],
+    "dd_latency_ms": 3709,
+    "dd_fields": [
+     "attempts",
+     "ddsource",
+     "ddtags",
+     "endpoint",
+     "intensity",
+     "lane",
+     "latency_ms",
+     "locale",
+     "message",
+     "mode",
+     "model",
+     "outcome",
+     "provider",
+     "quality_defects",
+     "quality_retry",
+     "quota_backend",
+     "quota_do_enabled",
+     "service",
+     "status",
+     "variantCount"
+    ]
+   },
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "latency_s": 3.77
+  }
+ ]
+}

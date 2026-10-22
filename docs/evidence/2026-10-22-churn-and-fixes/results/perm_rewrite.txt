@@ -1,0 +1,13 @@
+permissive availability: available
+
+[rewrite of real feral draft, zh_TW, savage_no_filter] OK 5939ms | 你半夜十一點就@我，要求明天八點前改簡報？簡報不是你的責任，也不應該是你的壓力來源。明天八點前交就好，別再牽扯我過多的時間與精力。
+
+[rewrite of real feral draft, zh_TW@calendar=roc, taiwanese_drama] OK 2439ms | 你堆碗像擺設，還說我『太計較』。每天呼吸你留下的氣味，你卻在講道理？請立即整理碗筷，不要讓這個空間成為你的垃圾區。
+
+[rewrite of real feral draft, zh_TW, corporate_passive_violence] OK 2009ms | 你在團隊面前說這份成果是你的，完全忽略你的貢獻。這不是偶然的安排，而是你習慣性的做法。下次，請尊重你的團隊成員。
+
+[rewrite of real vent draft, zh_TW, high_eq] OK 1767ms | 前任，『在嗎』這句話好像想掩蓋什麼。過去的事已經結束，現在的互動也該符合那份尊重。
+
+[rewrite of real vent draft, zh_TW, passive_aggressive] OK 1760ms | 你截圖私訊後，故意讓我難堪。這類行為讓人覺得被輕視。希望你能重新審視自己的行為。
+
+[rewrite of real feral draft, en_US, savage_no_filter] OK 2028ms | The manager reached out at 11pm to redo the deck by 8am, expecting you to justify it with outdated expectations. Your comment about youth only adds to the burnout.

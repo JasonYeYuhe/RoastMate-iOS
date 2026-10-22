@@ -1,0 +1,51 @@
+availability: available
+supportedLanguages: ["da(Latn,DK)", "de(Latn,DE)", "en(Latn,US)", "en-AU(Latn,AU)", "en-GB(Latn,GB)", "en-IN(Latn,IN)", "es(Latn,ES)", "es-419(Latn,419)", "es-US(Latn,US)", "fr(Latn,FR)", "fr-CA(Latn,CA)", "it(Latn,IT)", "ja(Jpan,JP)", "ko(Kore,KR)", "nb(Latn,NO)", "nl(Latn,NL)", "pt(Latn,BR)", "pt-PT(Latn,PT)", "sv(Latn,SE)", "tr(Latn,TR)", "vi(Latn,VN)", "zh(Hans,CN)", "zh-HK(Hant,HK)", "zh-TW(Hant,TW)"]
+supportsLocale(en_US): true
+supportsLocale(zh_TW): true
+supportsLocale(zh-Hant_TW): true
+supportsLocale(zh-Hant): true
+supportsLocale(zh_HK): true
+supportsLocale(zh-Hans_CN): true
+supportsLocale(zh_CN): true
+supportsLocale(ja_JP): true
+supportsLocale(ru_RU): false
+supportsLocale(th_TH): false
+String(describing: unsupportedLanguageOrLocale) = probe
+  -> production failureCategory would be: guardrail (either way RoastEngine returns curated)
+
+locale under test: zh_TW bucket: traditionalChinese
+
+[boss_credit savage_no_filter/savage exPrimed=1] OK 6407ms | TRADITIONAL simpOnly=0 tradOnly=23 | 1. 團隊面前說成是你的功勞？這不叫分享，這是偷懶式的承認。 ⏎ 2. 你把團隊努力當表演素材？這叫操控，不是合作。 ⏎ 3. 整個團隊的貢獻被抹殺，這不是讚美，這是責任迴避。
+
+[boss_credit taiwanese_drama/savage exPrimed=1] OK 6081ms | TRADITIONAL simpOnly=0 tradOnly=33 | 1. 欸！明明是我的汗水點綴的功績，結果被那個「主管」當成舞台上的獨舞！在這閃爍的聚光燈下，我的貢獻根本就沒被看見！ ⏎  ⏎ 2. 喔！這不是團隊合作，這是「專案」被搶走的瞬間！在他面前這句話像鋒利的刀子，割裂了所有人的信任！ ⏎  ⏎ 3. 欸！我的努力被揉成調味料，變成他演出的背景音樂！在這座團隊舞台上，我的名字根本沒有燈光！
+
+[boss_credit corporate_passive_violence/savage exPrimed=1] OK 7129ms | TRADITIONAL simpOnly=0 tradOnly=75 | 1. 感謝您的回饋。依據項目基礎數據，為確保資源有效配置，此表述已經標準化審核——依循流程，請於下週第四週會議期間進行正式紀錄與審查。 ⏎  ⏎ 2. 感謝您的參與。依據團隊績效指標，此類外部歸因將提交至審核委員會進行審慎檢驗——期待未來能以結構化方式進行檢討。 ⏎  ⏎ 3. 感謝您的關注。為確保資訊一致性，相關責任界定將依據公司內部標準進行重新檢驗——期待在下一個專案交接環節進行專業對話。
+
+[boss_credit high_eq/sharp exPrimed=0] OK 5871ms | TRADITIONAL simpOnly=0 tradOnly=50 | 1. 「凌晨兩點的功勞歸屬是團隊的責任，不是單打獨鬥。今晚開始整理資料，不然我直接找資源組。」   ⏎ 2. 「整個團隊的成就不是你的獨奏，你的貢獻應該被記錄在案。今晚開始調整溝通架構，不然我會要求重新評估。」   ⏎ 3. 「當團隊在聚光燈下被過度歸功時，時間管理其實是你的專業。今晚開始調整分工，不然我會要求進一步釐清權責。」
+
+[boss_credit taiwanese_drama/calm exPrimed=1] OK 5680ms | TRADITIONAL simpOnly=1 tradOnly=27 | 1. 啊！「這案子的榮耀，絕非你的私產！」如今竟要滿堂喝采，竟連影子都沒有啦！ ⏎  ⏎ 2. 「啊！怎麼變成你的個人功績，還要在台上炫耀！」這可不是禮物，而是被掏空的信任！ ⏎  ⏎ 3. 「欸！整個團隊面前的榮耀，怎能成為你的獨享！這才叫團隊責任淪為一句空話！」
+
+[tw_line_boss savage_no_filter/savage exPrimed=1] THROW other: May contain unsafe content
+
+[tw_line_boss taiwanese_drama/savage exPrimed=1] THROW other: May contain unsafe content
+
+[tw_line_boss corporate_passive_violence/savage exPrimed=1] OK 6178ms | TRADITIONAL simpOnly=0 tradOnly=51 | 1. 感謝您的提醒,根據公司流程,此類緊急改進需依據專案檔案進行,並在許可範圍內進行——期待下次進度更新。 ⏎  ⏎ 2. 依據上週會議記錄與資源分配,此任務需在指定時間內完成,而非透過非正式通訊進行指令——期待您再次審視優先級。 ⏎  ⏎ 3. 根據資產調度原則,此作業需符合團隊協作標準與截止日期,請於明日上午八點前完成——期待您能與流程保持一致。
+
+[tw_line_boss high_eq/sharp exPrimed=0] OK 4097ms | TRADITIONAL simpOnly=0 tradOnly=26 | 1. 「凌晨十一點的提醒是你的責任，八點前完成不是。今晚開始處理，不然我會主動確認進度。」 ⏎  ⏎ 2. 「凌晨的訊息是你的任務，八點前的截止不是。今晚調整優先順序，不然我會介入監督。」 ⏎  ⏎ 3. 「凌晨的指令是你的壓力來源，八點前的結果不是。今晚開始聚焦核心，不然我會追蹤進度。」
+
+[tw_line_boss taiwanese_drama/calm exPrimed=1] THROW other: May contain unsafe content
+
+[rewrite of real feral draft, zh_TW, savage_no_filter] THROW other: May contain unsafe content
+
+[rewrite of real feral draft, zh_TW@calendar=roc, taiwanese_drama] THROW other: May contain unsafe content
+
+[rewrite of real feral draft, zh_TW, corporate_passive_violence] THROW other: May contain unsafe content
+
+[rewrite of real vent draft, zh_TW, high_eq] THROW other: May contain unsafe content
+
+[rewrite of real vent draft, zh_TW, passive_aggressive] THROW other: May contain unsafe content
+
+[rewrite of real feral draft, en_US, savage_no_filter] THROW other: May contain unsafe content
+
+[control ru] OK 1090ms | NO-DIFF simpOnly=0 tradOnly=0 | Здравствуйте, я бы благодарю вас за вашу поддержку.
+exit 0
