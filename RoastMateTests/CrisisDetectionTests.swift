@@ -60,7 +60,7 @@ final class CrisisDetectionTests: XCTestCase {
     // MARK: - Crisis resources
 
     func testRegionalResourcesNonEmptyAndRouted() {
-        let hant = CrisisResources.regionalResources(for: Locale(identifier: "zh-Hant"))
+        let hant = CrisisResources.regionalResources(for: Locale(identifier: "zh-Hant"), deviceRegion: nil)
         XCTAssertTrue(hant.contains { $0.id == "hk-sbhk" })
 
         let ja = CrisisResources.regionalResources(for: Locale(identifier: "ja"))
@@ -73,5 +73,40 @@ final class CrisisDetectionTests: XCTestCase {
         XCTAssertFalse(hans.isEmpty)
 
         XCTAssertEqual(CrisisResources.directoryURL.host, "findahelpline.com")
+    }
+
+    /// 1.7.1: Taiwan users see Taiwan's lines first — 1925 安心專線 (MOHW,
+    /// 24 h), 1995 生命線, 1980 張老師. Before, two Hong Kong numbers
+    /// came first, and their 8-digit local tel: links don't reach Hong Kong
+    /// from Taiwan. Hong Kong keeps its own lines first.
+    func testTaiwanUsersGetTaiwanLinesFirst() {
+        let expected = ["tw-1925", "tw-1995", "tw-1980"]
+        for locale in ["zh_TW", "zh-Hant_TW", "zh-Hant-TW", "zh_TW@calendar=roc"] {
+            let ids = CrisisResources.regionalResources(for: Locale(identifier: locale), deviceRegion: nil).map(\.id)
+            XCTAssertEqual(ids, expected, "\(locale)")
+        }
+        // The in-app language picker yields a bare "zh-Hant"; the device region decides.
+        let picked = CrisisResources.regionalResources(for: Locale(identifier: "zh-Hant"), deviceRegion: "TW").map(\.id)
+        XCTAssertEqual(picked, expected)
+
+        // Region decides, not language: an English or Japanese UI in Taiwan
+        // still needs numbers that dial in Taiwan.
+        for locale in ["en_TW", "ja_TW"] {
+            XCTAssertEqual(CrisisResources.regionalResources(for: Locale(identifier: locale), deviceRegion: nil).map(\.id),
+                           expected, locale)
+        }
+        XCTAssertEqual(CrisisResources.regionalResources(for: Locale(identifier: "en"), deviceRegion: "TW").map(\.id),
+                       expected)
+
+        let tw = CrisisResources.regionalResources(for: Locale(identifier: "zh_TW"), deviceRegion: nil)
+        XCTAssertEqual(tw.map { $0.url?.absoluteString }, ["tel:1925", "tel:1995", "tel:1980"])
+    }
+
+    func testHongKongUsersKeepHongKongLinesFirst() {
+        for (locale, region) in [("zh_HK", nil), ("zh-Hant_HK", nil), ("zh-Hant", "HK"), ("zh_MO", nil)] as [(String, String?)] {
+            let ids = CrisisResources.regionalResources(for: Locale(identifier: locale), deviceRegion: region).map(\.id)
+            XCTAssertEqual(ids.first, "hk-sbhk", "\(locale)/\(region ?? "-")")
+            XCTAssertTrue(ids.contains("hk-sw"))
+        }
     }
 }

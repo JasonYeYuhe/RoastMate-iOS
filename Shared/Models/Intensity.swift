@@ -24,6 +24,16 @@ enum Intensity: String, Codable, CaseIterable, Sendable {
     /// Default intensity for legacy sessions that pre-date this field.
     static var legacyDefault: Intensity { .sharp }
 
+    /// The intensity a fresh generator starts on, before the user picks one.
+    /// Sharp is written by Apple's on-device model; on a device without it
+    /// (iOS 18, no Apple Intelligence, AI off) Sharp can only return curated
+    /// examples, so a first session there used to start on canned text. Vent
+    /// is free and writes from what the user typed through the consented
+    /// cloud (the consent sheet still runs first). (1.7.1)
+    static func firstSessionDefault(onDeviceModelAvailable: Bool) -> Intensity {
+        onDeviceModelAvailable ? .sharp : .vent
+    }
+
     /// True when this intensity should produce a private draft instead of an
     /// immediately-sendable reply. The UI must label these clearly as "for
     /// yourself only" and surface a rewrite-as-sendable action.

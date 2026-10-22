@@ -272,7 +272,27 @@ final class PromptBuilderIntensityTests: XCTestCase {
         XCTAssertTrue(prompt.contains("SHARP TONE CALIBRATION"))
         XCTAssertTrue(prompt.contains("やり取りを終わらせる一行"),
                       "ja-specific Sharp anchor should ship.")
-        XCTAssertTrue(prompt.contains("深夜2時"))
+        XCTAssertTrue(prompt.contains("友人の遅刻"))
+    }
+
+    /// The rule, not the instances: every CJK Sharp/Calm calibration gives
+    /// several different situations and says to copy only the shape. A single
+    /// example was pasted into unrelated situations by the on-device model in
+    /// zh-Hant (6/6), zh-Hans (6/8) and ja (15/16) on macOS 27.0.1
+    /// (2026-10-22); 1.7.1 first fixed zh-Hant only.
+    func testCJKSharpAndCalmCalibrationsUseSeveralSituations() {
+        for id in ["zh_Hans_CN", "zh-Hant-TW", "zh_TW", "ja_JP"] {
+            for intensity in [Intensity.sharp, .calm] {
+                let prompt = PromptBuilder.systemPrompt(
+                    style: emptyStyle, locale: Locale(identifier: id), intensity: intensity)
+                XCTAssertTrue(prompt.contains("Copy the SHAPE only"), "\(id) \(intensity.rawValue)")
+                XCTAssertGreaterThanOrEqual(prompt.components(separatedBy: "- GOOD (").count - 1, 3,
+                                            "\(id) \(intensity.rawValue): one GOOD example gets copied")
+                for anchor in ["凌晨两点", "凌晨兩點", "深夜2時"] {
+                    XCTAssertFalse(prompt.contains(anchor), "\(id) \(intensity.rawValue) still carries \(anchor)")
+                }
+            }
+        }
     }
 
     func testSharpEnglishStaysUntuned() {
@@ -299,7 +319,7 @@ final class PromptBuilderIntensityTests: XCTestCase {
                       "Calm + zh-Hans should include the new calibration block.")
         XCTAssertTrue(prompt.contains("沉稳但立场清楚"),
                       "Calm anchor must distinguish composed from conceding.")
-        XCTAssertTrue(prompt.contains("被打扰的那方不该道歉"),
+        XCTAssertTrue(prompt.contains("被冒犯的那方不该道歉"),
                       "Calm calibration should explicitly mark apology-creep as BAD.")
     }
 
@@ -311,7 +331,7 @@ final class PromptBuilderIntensityTests: XCTestCase {
         )
         XCTAssertTrue(prompt.contains("CALM TONE CALIBRATION"))
         XCTAssertTrue(prompt.contains("沉穩但立場清楚"))
-        XCTAssertTrue(prompt.contains("被打擾的那方不該道歉"))
+        XCTAssertTrue(prompt.contains("被冒犯的那方不該道歉"))
     }
 
     func testCalmJaIncludesNoApologyAnchor() {

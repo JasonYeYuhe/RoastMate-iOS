@@ -30,15 +30,129 @@ final class StoreCopyTests: XCTestCase {
     func test_paywallHeader_neverSellsVent_andNamesFeral() throws {
         let vent = try NSRegularExpression(pattern: "(?i)\\bvent\\b|发泄|發洩|吐き出し")
         let feral = ["en": "Feral", "zh-Hans": "痛骂", "zh-Hant": "痛罵", "ja": "罵倒"]
-        for locale in locales {
-            guard let body = string("paywall.body", locale) else {
-                XCTFail("\(locale) is missing paywall.body"); continue
+        // 1.7.1: every header variant, including the one shown on devices
+        // without the on-device model.
+        for key in ["paywall.body", "paywall.body.curated"] {
+            for locale in locales {
+                guard let body = string(key, locale) else {
+                    XCTFail("\(locale) is missing \(key)"); continue
+                }
+                let range = NSRange(body.startIndex..., in: body)
+                XCTAssertNil(vent.firstMatch(in: body, range: range),
+                             "\(locale) \(key) sells Vent, which is free: \(body)")
+                XCTAssertTrue(body.contains(feral[locale]!),
+                              "\(locale) \(key) omits Feral: \(body)")
             }
-            let range = NSRange(body.startIndex..., in: body)
-            XCTAssertNil(vent.firstMatch(in: body, range: range),
-                         "\(locale) paywall.body sells Vent, which is free: \(body)")
-            XCTAssertTrue(body.contains(feral[locale]!),
-                          "\(locale) paywall.body omits Feral: \(body)")
+        }
+    }
+
+    /// The header shown without the on-device model (1.7.1) must say what
+    /// needs Apple Intelligence instead of selling Savage, the styles, 3
+    /// versions and the simulator as if they worked there. Apple's own
+    /// Simplified Chinese name for it is "Apple 智能".
+    func test_curatedPaywallHeader_saysWhatNeedsAppleIntelligence() {
+        let name = ["en": "Apple Intelligence", "zh-Hans": "Apple 智能",
+                    "zh-Hant": "Apple Intelligence", "ja": "Apple Intelligence"]
+        for locale in locales {
+            guard let body = string("paywall.body.curated", locale) else {
+                XCTFail("\(locale) is missing paywall.body.curated"); continue
+            }
+            XCTAssertTrue(body.contains(name[locale]!),
+                          "\(locale) paywall.body.curated must name \(name[locale]!): \(body)")
+        }
+    }
+
+    /// Feature details must describe the code. Savage has no per-style gate
+    /// anywhere in the app (it was sold as "for the styles that earn them" /
+    /// 「僅在配得上的風格中開放」), and Feral's detail read as "unlimited" in
+    /// three locales while the Worker caps Pro cloud use per day.
+    func test_featureDetails_makeNoInventedClaims() {
+        let banned = ["styles that earn them", "配得上", "対応するスタイルでのみ",
+                      "limits off", "不设上限", "不設上限", "制限なし"]
+        for key in ["paywall.feature.savage.detail", "paywall.feature.feral.detail"] {
+            for locale in locales {
+                guard let value = string(key, locale) else {
+                    XCTFail("\(locale) is missing \(key)"); continue
+                }
+                for term in banned where value.contains(term) {
+                    XCTFail("\(locale) \(key) still claims '\(term)': \(value)")
+                }
+            }
+        }
+    }
+
+    /// After purchase (1.7.1) the confirmation must exist in every locale, and
+    /// its no-model variant must name Apple Intelligence like the header does.
+    func test_purchaseConfirmationAndErrorCopy_exist() {
+        let keys = ["paywall.success.title", "paywall.success.body", "paywall.success.body.curated",
+                    "paywall.success.done", "paywall.error.title", "common.ok"]
+        for key in keys {
+            for locale in locales {
+                XCTAssertNotNil(string(key, locale), "\(locale) is missing \(key)")
+            }
+        }
+        for locale in locales {
+            let body = string("paywall.success.body.curated", locale) ?? ""
+            XCTAssertTrue(body.contains("Apple Intelligence") || body.contains("Apple 智能"),
+                          "\(locale) paywall.success.body.curated: \(body)")
+        }
+    }
+
+    /// Every message `PurchaseNotice` can show exists in all four locales,
+    /// and the no-op outcomes really show nothing.
+    func test_purchaseNoticeCopy_existsForEveryOutcome() {
+        let notices: [PurchaseNotice] = [
+            PurchaseNotice.forPurchase(.pending), PurchaseNotice.forPurchase(.unverified),
+            PurchaseNotice.forRestore(.nothingToRestore), PurchaseNotice.forRestore(.failed("x")),
+            PurchaseNotice.forPurchaseError(NSError(domain: "x", code: 1)),
+        ].compactMap { $0 }
+        XCTAssertEqual(notices.count, 5)
+        for notice in notices {
+            for key in [notice.titleKey] + (notice.messageKey.map { [$0] } ?? []) {
+                for locale in locales {
+                    XCTAssertNotNil(string(key, locale), "\(locale) is missing \(key)")
+                }
+            }
+        }
+        // The cloud-paused reason must not send the user to retry or to Settings
+        // as the fix (that is exactly the state where neither helps).
+        let retryAsAFix = ["Try again in a moment", "稍後再試一次", "稍后再试一次", "もう一度お試しください"]
+        for locale in locales {
+            let value = string("roast.notice.reason.cloud_paused", locale) ?? ""
+            for phrase in retryAsAFix where value.contains(phrase) {
+                XCTFail("\(locale) cloud_paused tells the user to retry: \(value)")
+            }
+        }
+    }
+
+    /// The curated banner (1.7.1) says WHY, and "no credit used" is its own
+    /// line so Pro users — who never spend credits — don't see it.
+    func test_curatedBanner_hasReasons_andSeparatesTheCreditLine() {
+        // Every CuratedReason's key (iOS wording), plus the Mac wording and
+        // the credit line. Driven by allCases so a new reason can't ship
+        // without copy.
+        let reasons = CuratedReason.allCases.map(\.localizationKey)
+            + ["roast.notice.reason.apple_intelligence.mac", "roast.notice.nocredit"]
+        XCTAssertTrue(reasons.contains("roast.notice.reason.cloud_paused"))
+        for key in reasons {
+            for locale in locales {
+                XCTAssertNotNil(string(key, locale), "\(locale) is missing \(key)")
+            }
+        }
+        let creditWords = ["No credit", "不扣额度", "不扣額度", "クレジット"]
+        for key in ["roast.notice.curated", "rewrite.notice.curated"] {
+            for locale in locales {
+                let value = string(key, locale) ?? ""
+                for word in creditWords where value.contains(word) {
+                    XCTFail("\(locale) \(key) still carries the credit line (\(word)): \(value)")
+                }
+            }
+        }
+        for locale in locales {
+            let iOS = string("roast.notice.reason.apple_intelligence", locale) ?? ""
+            XCTAssertTrue(iOS.contains("iPhone 15 Pro"), "\(locale) iOS reason: \(iOS)")
+            let mac = string("roast.notice.reason.apple_intelligence.mac", locale) ?? ""
+            XCTAssertTrue(mac.contains("Mac"), "\(locale) Mac reason: \(mac)")
         }
     }
 

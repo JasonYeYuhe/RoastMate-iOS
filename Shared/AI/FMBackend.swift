@@ -3,22 +3,43 @@ import Foundation
 /// Errors thrown by an ``FMBackend``. Deliberately carries NO Foundation
 /// Models types, so it can be `catch`-matched in code compiled for
 /// iOS 18 / macOS 14 (where `FoundationModels` is absent). The Apple backend
-/// maps the real, iOS-26-only `LanguageModelSession.GenerationError` into
-/// `.generation(_:)` internally — the FM error type never crosses this
-/// boundary.
+/// maps every error Foundation Models throws into `.generation(_:)`
+/// internally — the FM error types never cross this boundary.
 ///
-/// Not annotated `Sendable` on purpose: it can wrap an arbitrary `Error`
-/// (`.other`), exactly like the existing `RoastError.generationFailed`, and
-/// thrown errors are exempt from the `Sendable` crossing requirement.
-enum FMBackendError: Error {
+/// There is deliberately no "surface this as a hard error" case any more.
+/// v1.6.0 switched the build to SDK 27, and on iOS/macOS 27 a model refusal
+/// arrives as the new `LanguageModelError` instead of
+/// `LanguageModelSession.GenerationError`. The backend only matched the old
+/// type, so every refusal fell into the old `.other` case and the user saw an
+/// error box instead of the labelled curated example (measured on macOS
+/// 27.0.1, 2026-10-22). Anything the model throws is now a generation failure;
+/// only `CancellationError` propagates unchanged.
+enum FMBackendError: Error, Sendable {
     /// The on-device model is not available: no FM backend at all (iOS 18),
     /// Apple Intelligence off, unsupported device, or asset still downloading.
     case unavailable
-    /// A recoverable generation failure, already classified into an A′
-    /// failure category. The caller should fall back to curated output.
+    /// A generation failure (refusal, guardrail, context, timeout, or an error
+    /// type this build has never seen), already classified into an A′ failure
+    /// category. The caller falls back to labelled curated output.
     case generation(EventLedger.FailureCategory)
-    /// An unexpected error the caller should surface as a hard failure.
-    case other(Error)
+}
+
+/// Which safety guardrails a one-shot generation runs under. FM-free so the
+/// protocol below compiles for iOS 18 / macOS 14.
+enum FMGuardrails: Sendable {
+    /// `SystemLanguageModel.Guardrails.default` — every generation except the
+    /// rewrite below.
+    case standard
+    /// `SystemLanguageModel.Guardrails.permissiveContentTransformations`.
+    /// ONLY for "make it sendable" and its threat judge: the rewrite's input
+    /// is the user's own private vent draft, which default guardrails refuse
+    /// outright (6/6 real drafts on macOS 27.0.1), and the judge's input is
+    /// the finished rewrite, where default guardrails refused legitimate
+    /// racism and harassment complaints (12/36). In this mode Apple returns a
+    /// refusal as ordinary text instead of throwing, so the caller MUST screen
+    /// the result (`ModelRefusal.looksLikeRefusal` for the rewrite; the judge
+    /// accepts nothing but a plain "SAFE") before acting on it.
+    case permissiveContentTransformations
 }
 
 /// Abstraction over Apple's on-device language model.
@@ -50,11 +71,27 @@ protocol FMBackend: Sendable {
     /// cold and must not clobber the roast session.
     func respondFresh(
         instructions: String, to prompt: String,
-        temperature: Double, maxTokens: Int
+        temperature: Double, maxTokens: Int,
+        guardrails: FMGuardrails
     ) async throws -> String
 
     /// Drops the cached session (parity with `resetConversation`).
     func reset() async
+}
+
+extension FMBackend {
+    /// Standard-guardrail shorthand, so Echoes and every other caller keep
+    /// their exact behaviour.
+    func respondFresh(
+        instructions: String, to prompt: String,
+        temperature: Double, maxTokens: Int
+    ) async throws -> String {
+        try await respondFresh(
+            instructions: instructions, to: prompt,
+            temperature: temperature, maxTokens: maxTokens,
+            guardrails: .standard
+        )
+    }
 }
 
 /// Single construction point for the on-device backend. Returns `nil` on any

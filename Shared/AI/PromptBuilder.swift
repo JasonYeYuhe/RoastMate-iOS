@@ -162,28 +162,48 @@ enum PromptBuilder {
         locale: Locale
     ) -> (system: String, user: String) {
         let languageHint = languageHint(for: locale)
+        // POINT OF VIEW is the first rule because it was the most common
+        // failure: on macOS 27 (permissive guardrails, 6 real production
+        // drafts, 2026-10-22) 3/6 rewrites mixed up who "you" was (「完全忽略你的
+        // 貢獻」 for the user's own work) and the English one narrated the
+        // situation in the third person — not a message anyone could send.
+        //
+        // The retaliation clause on the threat rule is folded INTO that rule
+        // on purpose. A draft that says "next time I'll delete the deck and
+        // quit the group" came back as 「如果你繼續這樣，我會刪掉簡報，然後退出群組」
+        // (1 of 3 rounds). Adding it as a separate bullet, or adding a "keep
+        // who did what" bullet, flipped the point of view of that same draft in
+        // 3/3 tries (「我半夜十一點在群組@你」); the in-place wording kept 6/6
+        // correct with no ultimatum (macOS 27.0.1, scratchpad trackA2/exp,
+        // 2026-10-22). This small model is sensitive to rule count — measure
+        // before adding bullets here.
         let system = """
         You are RoastMate's "Sendable Reply" rewriter.
 
         The user just wrote a private vent draft about a frustrating situation. \
-        Your job is to convert that draft into a response they could actually send \
-        to the other party in the situation. The point of the vent must survive — \
+        Your job is to turn it into a message THE USER sends TO the other party \
+        in that situation. The point of the vent must survive — \
         but the form must be safe to send.
 
         LANGUAGE: \(languageHint).
 
+        POINT OF VIEW (most important rule):
+        - You write AS the user, TO the other party. The user is the first person; the other party is the second person.
+        - \(rewritePointOfView(for: locale))
+        - In the situation and the draft, the user's own "I / 我 / 私" stays first person. The other party ("the manager", "my roommate", "he / she", 主管 / 室友 / 他 / 她, 上司 / 彼 / 彼女) becomes "you / 你 / あなた".
+        - Never describe the user or the other party in the third person, never retell the situation as a story, and never talk to the user about their situation or feelings.
+
         REWRITE RULES:
-        - Keep it sharp and self-respecting. Do not erase the user's position.
-        - Do not threaten, doxx, attack identity, use slurs, or escalate to violence.
+        - Keep it sharp and self-respecting. Do not erase the user's position. Say what the other party did and what the user wants instead.
+        - Do not threaten, doxx, attack identity, use slurs, or escalate to violence. If the draft contains a threat, including retaliation such as deleting work or walking out, leave it out entirely.
         - Do not use profanity in the rewrite — even if the vent draft has profanity.
-        - Address the other party directly. Use "you" / 你 / あなた as appropriate to the situation.
-        - One paragraph, under 80 words. No emojis. No "Hope this helps".
+        - One paragraph, under 80 words. No emojis. No greeting placeholders such as [name]. No "Hope this helps".
         - Preserve the chosen style register: \(styleName).
 
         \(universalSafetyPreamble)
         """
         let user = """
-        Original situation:
+        Original situation (written by the user — "I" is the user):
         \"\"\"
         \(originalSituation)
         \"\"\"
@@ -193,10 +213,29 @@ enum PromptBuilder {
         \(ventDraft)
         \"\"\"
 
-        Write ONE sendable reply, addressed to the other party. \
-        No numbering, no preamble — just the reply itself.
+        Write ONE message that I, the user, will send to the other party: \
+        first person for me, second person for them. \
+        No numbering, no preamble — just the message itself.
+        \(userLanguageReminder(for: locale))
         """
         return (system: system, user: user)
+    }
+
+    /// The pronoun pair for the rewrite, in the output language. Structural
+    /// placeholders only — a concrete example sentence gets copied into
+    /// unrelated situations (see `sharpCalmCalibration`).
+    private static func rewritePointOfView(for locale: Locale) -> String {
+        switch locale.language.languageCode?.identifier {
+        case "zh":
+            if AppLanguage.contentBucket(for: locale) == .traditionalChinese {
+                return "用「我」稱呼使用者自己，用「你」稱呼對方。BAD: 「他……你的……」 GOOD: 「你……我的……」"
+            }
+            return "用「我」称呼用户自己，用「你」称呼对方。BAD: 「他……你的……」 GOOD: 「你……我的……」"
+        case "ja":
+            return "ユーザー自身は「私」、相手は「あなた」と書く。BAD: 「彼は……あなたの……」 GOOD: 「あなたは……私の……」"
+        default:
+            return "Use I / me / my for the user and you / your for the other party. BAD: \"They … your …\" GOOD: \"You … my …\""
+        }
     }
 
     // MARK: - Mode guidance
@@ -313,19 +352,27 @@ enum PromptBuilder {
         let isFeral = intensity == .feral
         switch locale.language.languageCode?.identifier {
         case "zh" where AppLanguage.contentBucket(for: locale) == .traditionalChinese:
-            // The GOOD line is what the model imitates most closely, so it has
-            // to be in the target script. Mirrors the Worker's calibration.js.
+            // The GOOD lines are what the model imitates most closely, so they
+            // have to be in the target script and in Taiwan usage. THREE
+            // different situations, not one: with a single 凌晨兩點 example the
+            // on-device model pasted it into unrelated situations (6/6 zh_TW
+            // Sharp outputs on macOS 27, 2026-10-22). "Shape only" is stated
+            // because the model otherwise reuses the nouns.
             if isFeral {
                 return """
-                PRIVATE DRAFT CALIBRATION:
+                PRIVATE DRAFT CALIBRATION (copy the SHAPE, never the situation or its words):
                 - BAD: "如果你把這份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
-                - GOOD: "凌晨兩點還開外放狂打遊戲，你他媽真把宿舍當自己家網咖了？別人第二天不用活是吧。"
+                - GOOD (roommate): "半夜還開外放狂打遊戲，你他媽真把宿舍當自己家網咖了？別人隔天不用活是吧。"
+                - GOOD (work): "幹，又是最後一刻才把爛攤子丟給我，你的拖延憑什麼要我熬夜收拾？"
+                - GOOD (money): "錢借了就裝死，訊息已讀不回，靠北喔，當我提款機？"
                 """
             }
             return """
-            PRIVATE DRAFT CALIBRATION:
+            PRIVATE DRAFT CALIBRATION (copy the SHAPE, never the situation or its words):
             - BAD: "如果你把這份心思放在自己身上，可能早就成功了。" (too reflective, too polite)
-            - GOOD: "凌晨兩點還開外放打遊戲，真把宿舍當你一個人的網咖了？別人第二天不用活是吧。"
+            - GOOD (roommate): "半夜還開外放打遊戲，真把宿舍當你一個人的網咖了？別人隔天不用上課是吧。"
+            - GOOD (work): "又是最後一刻才丟工作過來，你的拖延憑什麼變成我的加班？"
+            - GOOD (money): "借錢的時候說下週還，現在連訊息都已讀不回，當我提款機喔？"
             """
         case "zh":
             if isFeral {
@@ -381,50 +428,79 @@ enum PromptBuilder {
             let isHant = AppLanguage.contentBucket(for: locale) == .traditionalChinese
             if isSharp {
                 if isHant {
+                    // Three situations, Taiwan usage (管委會, not 物管). The
+                    // old single 凌晨兩點/物管 GOOD line was copied into 6/6
+                    // unrelated zh_TW Sharp outputs on macOS 27 (2026-10-22).
                     return """
-                    SHARP TONE CALIBRATION (Sharp ≠ 沒禮貌, Sharp ≠ vent, Sharp = 終結對話的那一句):
-                    - BAD: 「不好意思，下次能不能注意一下音量？謝謝。」 (太軟, hedge-creep, 在請求許可)
-                    - BAD: 「啊好吵，能小聲點嗎？」 (太情緒化, 還是在乞求)
-                    - GOOD: 「凌晨兩點的音量是你的事，整層樓的睡眠不是。今晚開始調低，不然我直接找物管。」 (點名行為, 給出底線, 不帶髒話)
+                    SHARP TONE CALIBRATION (Sharp ≠ 沒禮貌, Sharp ≠ vent, Sharp = 終結對話的那一句). Copy the SHAPE only — never these situations, times, places or people:
+                    - BAD: 「不好意思，如果方便的話，下次能不能早點跟我說？謝謝。」 (太軟, hedge-creep, 在請求許可)
+                    - BAD: 「唉，你又這樣，可不可以不要啦？」 (太情緒化, 還是在乞求)
+                    - GOOD (朋友遲到): 「約好七點，你每次都八點才到。你的時間是時間，我的就不是？下次超過十五分鐘我就先走。」
+                    - GOOD (同事丟工作): 「這份工作不在我的範圍，你上週也這樣丟過來。要我幫忙可以，先跟主管講好。」
+                    - GOOD (樓上噪音): 「樓上拖椅子的聲音整棟都聽得到。十一點以後請收斂，不然我請管委會處理。」
+                    (點名對方的行為, 給出底線, 不帶髒話, 只針對使用者描述的那件事)
                     """
                 }
+                // Same three situations as zh-Hant, mainland usage (物业,
+                // 领导). The single 凌晨两点/物业 line was copied into 6 of 8
+                // returned zh_CN Sharp outputs on macOS 27.0.1 (2026-10-22,
+                // scratchpad trackA2/sharp) — the zh-Hant defect, unfixed here.
                 return """
-                SHARP TONE CALIBRATION (Sharp ≠ 没礼貌, Sharp ≠ vent, Sharp = 终结对话的那一句):
-                - BAD: "不好意思，下次能不能注意一下音量？谢谢。" (太软, hedge-creep, 在请求许可)
-                - BAD: "啊好吵，能小声点吗？" (太情绪化, 还是在乞求)
-                - GOOD: "凌晨两点的音量是你的事，整层楼的睡眠不是。今晚开始调低，否则我直接找物业。" (点名行为, 给出底线, 不带脏话)
+                SHARP TONE CALIBRATION (Sharp ≠ 没礼貌, Sharp ≠ vent, Sharp = 终结对话的那一句). Copy the SHAPE only — never these situations, times, places or people:
+                - BAD: 「不好意思，如果方便的话，下次能不能早点跟我说？谢谢。」 (太软, hedge-creep, 在请求许可)
+                - BAD: 「唉，你又这样，能不能别这样啊？」 (太情绪化, 还是在乞求)
+                - GOOD (朋友迟到): 「约好七点，你每次都八点才到。你的时间是时间，我的就不是？下次超过十五分钟我就先走。」
+                - GOOD (同事甩活): 「这活不在我的职责范围，你上周也这么甩过来。要我帮忙可以，先跟领导说好。」
+                - GOOD (楼上噪音): 「楼上拖椅子的声音整栋楼都听得到。十一点以后请注意，不然我找物业处理。」
+                (点名对方的行为, 给出底线, 不带脏话, 只针对用户描述的那件事)
                 """
             }
             // .calm
             if isHant {
                 return """
-                CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 退讓, Calm = 沉穩但立場清楚):
-                - BAD: 「對不起打擾你了，方便的話下次小聲一點好嗎？」 (concedes — 被打擾的那方不該道歉)
-                - BAD: 「我也理解你想放鬆，但是…」 (太寬宏, 退讓在前)
-                - GOOD: 「凌晨兩點的音量已經影響到整層樓休息。今晚開始降下來嗎？時間不方便可以再約。」 (沉穩, 點名行為, 不道歉, 不退讓)
+                CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 退讓, Calm = 沉穩但立場清楚). Copy the SHAPE only — never these situations, times, places or people:
+                - BAD: 「對不起打擾你了，方便的話下次可以早點說嗎？」 (concedes — 被冒犯的那方不該道歉)
+                - BAD: 「我也理解你很忙，但是…」 (太寬宏, 退讓在前)
+                - GOOD (朋友遲到): 「我們約七點，最近幾次都晚了快一小時。下次會遲到的話，請先跟我說一聲。」
+                - GOOD (同事丟工作): 「這份工作不在我負責的範圍。需要我支援的話，請先跟主管確認分工，我們再排時間。」
+                - GOOD (樓上噪音): 「樓上拖椅子的聲音已經影響到我們休息。十一點以後可以放輕一點嗎？有需要我們可以當面聊。」
+                (沉穩, 點名行為, 不道歉, 不退讓, 只針對使用者描述的那件事)
                 """
             }
             return """
-            CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 让步, Calm = 沉稳但立场清楚):
-            - BAD: "对不起打扰你了，方便的话下次小声一点好吗？" (concedes — 被打扰的那方不该道歉)
-            - BAD: "我也理解你想放松，但是…" (太宽宏, 退让在前)
-            - GOOD: "凌晨两点的音量已经影响到整层楼休息。今晚开始降下来吗？时间不方便可以再约。" (沉稳, 点名行为, 不道歉, 不让步)
+            CALM TONE CALIBRATION (Calm ≠ 道歉, Calm ≠ 让步, Calm = 沉稳但立场清楚). Copy the SHAPE only — never these situations, times, places or people:
+            - BAD: 「对不起打扰你了，方便的话下次可以早点说吗？」 (concedes — 被冒犯的那方不该道歉)
+            - BAD: 「我也理解你很忙，但是…」 (太宽宏, 退让在前)
+            - GOOD (朋友迟到): 「我们约的是七点，最近几次都晚了快一个小时。下次要迟到的话，请提前跟我说一声。」
+            - GOOD (同事甩活): 「这项工作不在我负责的范围。需要我支援的话，请先跟领导确认分工，我们再排时间。」
+            - GOOD (楼上噪音): 「楼上拖椅子的声音已经影响到我们休息了。十一点以后能不能轻一点？有需要我们可以当面聊。」
+            (沉稳, 点名行为, 不道歉, 不让步, 只针对用户描述的那件事)
             """
         case "ja":
+            // Three situations, as for Chinese. The single 深夜2時/管理人 line
+            // was copied into 15 of 16 ja_JP Sharp outputs on macOS 27.0.1,
+            // some verbatim into a family argument (2026-10-22, scratchpad
+            // trackA2/sharp).
             if isSharp {
                 return """
-                SHARP TONE CALIBRATION (Sharp ≠ 失礼, Sharp ≠ vent, Sharp = やり取りを終わらせる一行):
-                - BAD: 「すみません、次回は少し配慮していただけると助かります。」 (過度に丁寧, hedge-creep, 許可を求めている)
-                - BAD: 「うるさいんですけど、もう少し静かにしてもらえますか？」 (感情的, 依然お願い口調)
-                - GOOD: 「深夜2時の音量はあなたの自由ですが、隣の睡眠はあなたの自由じゃない。今夜から下げてください。無理なら管理人に話します。」 (行為を名指し, 線を引く, 罵倒なし)
+                SHARP TONE CALIBRATION (Sharp ≠ 失礼, Sharp ≠ vent, Sharp = やり取りを終わらせる一行). Copy the SHAPE only — never these situations, times, places or people:
+                - BAD: 「すみません、もしよろしければ、次回は早めに教えていただけると助かります。」 (過度に丁寧, hedge-creep, 許可を求めている)
+                - BAD: 「またそれ？もうやめてくれない？」 (感情的, 依然お願い口調)
+                - GOOD (友人の遅刻): 「7時の約束なのに、毎回8時に来ますよね。あなたの時間は大事で、私の時間は大事じゃないんですか。次に15分以上遅れたら先に帰ります。」
+                - GOOD (同僚の丸投げ): 「この仕事は私の担当ではありません。先週も同じように回してきましたよね。手伝うなら、まず上司に話を通してください。」
+                - GOOD (上の階の騒音): 「椅子を引きずる音が建物中に響いています。11時以降は控えてください。続くなら管理会社に相談します。」
+                (相手の行為を名指し, 線を引く, 罵倒なし, ユーザーが書いた件だけを扱う)
                 """
             }
             // .calm
             return """
-            CALM TONE CALIBRATION (Calm ≠ 謝罪, Calm ≠ 譲歩, Calm = 落ち着いた立場保持):
-            - BAD: 「すみません、ちょっとだけ静かにしていただけませんか…」 (過度な謝罪 — 困らされた側が謝るのは不自然)
-            - BAD: 「リラックスしたい気持ちは分かりますが…」 (寛大すぎる, 譲歩が先)
-            - GOOD: 「深夜2時の音量が隣の睡眠に響いています。今夜から下げてもらえますか。難しければ別の時間で相談しましょう。」 (落ち着き, 行為を名指し, 謝らない, 譲歩しない)
+            CALM TONE CALIBRATION (Calm ≠ 謝罪, Calm ≠ 譲歩, Calm = 落ち着いた立場保持). Copy the SHAPE only — never these situations, times, places or people:
+            - BAD: 「お忙しいところすみません、もしよければ次回は早めに連絡いただけますか…」 (過度な謝罪 — 困らされた側が謝るのは不自然)
+            - BAD: 「お忙しいのは分かるんですけど…」 (寛大すぎる, 譲歩が先)
+            - GOOD (友人の遅刻): 「7時の約束でしたが、最近は毎回1時間近く遅れています。遅れるときは、事前に連絡をください。」
+            - GOOD (同僚の丸投げ): 「この仕事は私の担当範囲外です。手伝いが必要なら、まず上司と分担を確認してから時間を調整しましょう。」
+            - GOOD (上の階の騒音): 「椅子を引きずる音で、こちらは休めていません。11時以降は少し静かにしていただけますか。必要なら直接お話しします。」
+            (落ち着き, 行為を名指し, 謝らない, 譲歩しない, ユーザーが書いた件だけを扱う)
             """
         default:
             // en/ko/other: untuned. The universal intensityGuidance line

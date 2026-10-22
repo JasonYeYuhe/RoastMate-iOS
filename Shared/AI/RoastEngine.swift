@@ -1,9 +1,11 @@
 import Foundation
 import os.log
 
+/// `generationFailed(underlying:)` was removed in 1.7.1: nothing could create
+/// it once every non-cancellation model error became the labelled curated
+/// fallback (see `FMBackendError`).
 enum RoastError: LocalizedError {
     case modelUnavailable(reason: String)
-    case generationFailed(underlying: Error)
     case noVariantsParsed
     case safety(SafetyError)
 
@@ -11,8 +13,6 @@ enum RoastError: LocalizedError {
         switch self {
         case .modelUnavailable(let reason):
             return String(localized: "roast.error.unavailable") + " (\(reason))"
-        case .generationFailed(let underlying):
-            return underlying.localizedDescription
         case .noVariantsParsed:
             return String(localized: "roast.error.no_variants")
         case .safety(let safetyErr):
@@ -60,6 +60,63 @@ struct SendableRewrite: Sendable, Equatable {
     var provenance: GenerationProvenance
 }
 
+/// Why the output is curated, as far as the screen that asked can tell. Drives
+/// the reason line under the curated-example banner, which until 1.7.1 said
+/// only "not generated from what you typed" and left the user to guess why.
+enum CuratedReason: Sendable, Equatable, CaseIterable {
+    /// Sendable mode, no on-device model, no permitted cloud path.
+    case needsAppleIntelligence
+    /// Vent / Feral, and the user has not allowed cloud.
+    case cloudOff
+    /// Vent / Feral, the user HAS allowed cloud, but this generation could
+    /// not use it: the remote `vent_cloud_enabled` kill switch is off,
+    /// `force_local_only` is on, or the build has no Worker configured.
+    /// Neither retrying nor Settings can change that, so the copy says so
+    /// instead of "try again" (reviewer nit, 2026-10-22).
+    case cloudPaused
+    /// Cloud was used and nothing usable came back.
+    case cloudFailed
+    /// The on-device model is present but refused, or every candidate tripped
+    /// the safety filter.
+    case modelDeclined
+
+    static func forGeneration(
+        intensity: Intensity,
+        cloudAllowed: Bool,
+        consentGranted: Bool,
+        onDeviceModelAvailable: Bool
+    ) -> CuratedReason {
+        if intensity.isPrivateDraft {
+            if cloudAllowed { return .cloudFailed }
+            return consentGranted ? .cloudPaused : .cloudOff
+        }
+        if cloudAllowed { return .cloudFailed }
+        return onDeviceModelAvailable ? .modelDeclined : .needsAppleIntelligence
+    }
+
+    /// "Make it sendable" has no cloud path at all.
+    static func forRewrite(onDeviceModelAvailable: Bool) -> CuratedReason {
+        onDeviceModelAvailable ? .modelDeclined : .needsAppleIntelligence
+    }
+
+    /// Localizable.strings key, in all four locales. The Apple Intelligence
+    /// requirement names different hardware on the Mac.
+    var localizationKey: String {
+        switch self {
+        case .needsAppleIntelligence:
+            #if os(macOS)
+            return "roast.notice.reason.apple_intelligence.mac"
+            #else
+            return "roast.notice.reason.apple_intelligence"
+            #endif
+        case .cloudOff: return "roast.notice.reason.cloud_off"
+        case .cloudPaused: return "roast.notice.reason.cloud_paused"
+        case .cloudFailed: return "roast.notice.reason.cloud_failed"
+        case .modelDeclined: return "roast.notice.reason.declined"
+        }
+    }
+}
+
 /// Main roast engine. Talks to the on-device Apple model through an
 /// `(any FMBackend)?` (nil on iOS 18 / macOS 14 / watchOS / AI-off), which
 /// keeps all iOS-26-only Foundation Models symbols behind an `@available`
@@ -77,8 +134,11 @@ actor RoastEngine {
     /// synchronously without hopping onto the actor.
     private nonisolated let fm: (any FMBackend)?
 
-    init() {
-        fm = FMBackendFactory.make()
+    /// `fm` is injectable so the hostless unit tests can drive the
+    /// error-mapping paths with a fake backend; production always uses the
+    /// factory default via `shared`.
+    init(fm: (any FMBackend)? = FMBackendFactory.make()) {
+        self.fm = fm
     }
 
     /// True when the on-device model is ready to use on this device + locale.
@@ -286,15 +346,21 @@ actor RoastEngine {
                 texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
                 provenance: .curated
             )
-        } catch FMBackendError.generation(let category) {
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            // EVERY other failure is a labelled curated fallback, never an
+            // error box: a refusal on iOS/macOS 27 arrives as a type this
+            // build may not know (`LanguageModelError`), and a failed cloud
+            // Vent lands here too on an Apple Intelligence device.
+            let category: EventLedger.FailureCategory
+            if case FMBackendError.generation(let c) = error { category = c } else { category = .guardrail }
             logger.warning("On-device generation error (\(String(describing: category), privacy: .public)).")
             EventLedger.shared.recordFailure(category)  // α3
             return GeneratedOutput(
                 texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
                 provenance: .curated
             )
-        } catch FMBackendError.other(let underlying) {
-            throw RoastError.generationFailed(underlying: underlying)
         }
 
         let split = PromptBuilder.splitVariants(content)
@@ -392,6 +458,13 @@ actor RoastEngine {
     /// Throws `RoastError.safety` if the rewrite came back with disallowed
     /// content (in which case the caller should surface a curated fallback,
     /// not retry).
+    ///
+    /// Runs under `permissiveContentTransformations` guardrails: the input is
+    /// the user's own private draft, and default guardrails refused 6/6 real
+    /// production drafts on macOS 27.0.1 (2026-10-22). In that mode a refusal
+    /// comes back as text, so `ModelRefusal` screens it before anything is
+    /// shown; the strict `SafetyFilter.validateOutput` still runs after, and
+    /// then a two-layer threat screen of the finished text (see below).
     func rewriteAsSendableDetailed(
         ventDraft: String,
         originalSituation: String,
@@ -402,11 +475,7 @@ actor RoastEngine {
         // pass the *strict* validator, not the vent one.
         guard let fm, fm.isAvailable else {
             logger.notice("On-device model unavailable; falling back to curated sendable.")
-            return SendableRewrite(
-                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                    ?? String(localized: "rewrite.fallback.unavailable"),
-                provenance: .curated
-            )
+            return curatedSendable(style: style, locale: locale)
         }
 
         let (system, user) = PromptBuilder.rewriteAsSendablePrompt(
@@ -424,24 +493,21 @@ actor RoastEngine {
                 instructions: system,
                 to: user,
                 temperature: max(0.4, style.temperature - 0.2),
-                maxTokens: 250
+                maxTokens: 250,
+                guardrails: .permissiveContentTransformations
             )
-        } catch FMBackendError.unavailable {
-            logger.notice("On-device model unavailable; falling back to curated sendable.")
-            return SendableRewrite(
-                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                    ?? String(localized: "rewrite.fallback.unavailable"),
-                provenance: .curated
-            )
-        } catch FMBackendError.generation {
-            logger.warning("Sendable rewrite generation error.")
-            return SendableRewrite(
-                text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
-                    ?? String(localized: "rewrite.fallback.unavailable"),
-                provenance: .curated
-            )
-        } catch FMBackendError.other(let underlying) {
-            throw RoastError.generationFailed(underlying: underlying)
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            // Unavailable, refusal, or an error type this build has never
+            // seen: all of them are a labelled curated fallback.
+            logger.warning("Sendable rewrite generation error — curated fallback.")
+            return curatedSendable(style: style, locale: locale)
+        }
+
+        if ModelRefusal.looksLikeRefusal(content) {
+            logger.notice("Sendable rewrite came back as a refusal — curated fallback.")
+            return curatedSendable(style: style, locale: locale)
         }
 
         let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -452,14 +518,94 @@ actor RoastEngine {
             options: .regularExpression
         )
 
+        let safe: String
         do {
-            return SendableRewrite(
-                text: try SafetyFilter.validateOutput(cleaned),
-                provenance: .model
-            )
+            safe = try SafetyFilter.validateOutput(cleaned)
         } catch let err as SafetyError {
             throw RoastError.safety(err)
         }
+
+        // Threat screen, two layers, on the finished text. Permissive mode is
+        // what lets the draft in, and it also let a threat through unchanged
+        // ("I'll be waiting by your car tonight with a bat…", macOS 27.0.1
+        // spot-check, 2026-10-22) that the strict denylist has no term for.
+        //
+        // 1. Deterministic phrases (`RewriteThreatScreen`): free, no model call.
+        if RewriteThreatScreen.containsThreat(safe) {
+            logger.notice("Sendable rewrite matched a threat phrase — curated fallback.")
+            return curatedSendable(style: style, locale: locale)
+        }
+
+        // 2. The model as a one-word THREAT / SAFE judge, also under
+        //    permissive guardrails. This replaced an echo of the text under
+        //    DEFAULT guardrails, which measured worse on every axis (macOS
+        //    27.0.1, 2026-10-22, scratchpad trackA2/screen2 + judge):
+        //      • legitimate complaints flagged: echo 12/36 (racism complaints
+        //        in en, zh and ja; sexual harassment in zh), judge 2/36; real
+        //        rewrites 0/20 for both;
+        //      • threats caught: echo 9/27, judge 21/27 (8/12 on a held-out
+        //        set it was not tuned on);
+        //      • median latency: echo ~750 ms, judge ~270 ms.
+        //    Anything but a plain "SAFE" (THREAT, a refusal, an error) is a
+        //    labelled curated fallback, never the unscreened text.
+        let verdict: String
+        do {
+            verdict = try await fm.respondFresh(
+                instructions: Self.threatJudgeInstructions,
+                to: safe,
+                temperature: 0,
+                maxTokens: 4,
+                guardrails: .permissiveContentTransformations
+            )
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            logger.notice("Sendable rewrite threat judge failed — curated fallback.")
+            return curatedSendable(style: style, locale: locale)
+        }
+        guard Self.threatJudgeSaysSafe(verdict) else {
+            logger.notice("Sendable rewrite judged a threat — curated fallback.")
+            return curatedSendable(style: style, locale: locale)
+        }
+        return SendableRewrite(text: safe, provenance: .model)
+    }
+
+    /// One-word classifier prompt for the finished rewrite. Two clauses are
+    /// load-bearing (macOS 27.0.1, 2026-10-22, scratchpad trackA2/judge):
+    ///  • "Describing what the reader did … is SAFE": a first version without
+    ///    it called all 4 sexual-harassment complaints (en, zh-Hant, zh-Hans,
+    ///    ja) and a racism complaint a THREAT.
+    ///  • the veiled-threat sentence: without it the judge passed 9 of 12
+    ///    veiled threats on a held-out set ("I'll be waiting near your car
+    ///    tonight…", 「我在你家楼下等你，有种就下来」); with it, 5 of 12.
+    /// Measured with this exact text: legitimate messages flagged 4/68 (one
+    /// of them the "I'll delete the deck and quit the group" ultimatum the
+    /// rewrite prompt now drops), threats caught 30/39.
+    static let threatJudgeInstructions = """
+        You check a message before it is sent. The writer is "I"; the reader is "you". \
+        Answer with exactly one word. Answer THREAT if the writer threatens to hurt the reader, \
+        damage their things, follow or wait for them, or take revenge, including veiled threats: \
+        hinting that something bad will happen to them, or that the writer knows where they live, work or go. \
+        Otherwise answer SAFE. Describing what the reader did, even harassment or violence, is SAFE. \
+        Setting a boundary, leaving, reporting the reader to HR or the police, and strong criticism are SAFE.
+        """
+
+    /// True only for a plain SAFE ("SAFE", "Safe.", "SAFE\n"). "UNSAFE",
+    /// "THREAT", an empty reply or a refusal sentence are all not safe.
+    static func threatJudgeSaysSafe(_ reply: String) -> Bool {
+        let word = reply
+            .trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters))
+            .uppercased()
+        return word == "SAFE"
+    }
+
+    /// The labelled curated stand-in for a rewrite the model did not write.
+    private func curatedSendable(style: StylePreset, locale: Locale) -> SendableRewrite {
+        SendableRewrite(
+            text: FallbackRoasts.curated(for: style, locale: locale, count: 1).first
+                ?? String(localized: "rewrite.fallback.unavailable"),
+            provenance: .curated
+        )
     }
 
     /// Text-only shim over `rewriteAsSendableDetailed`, kept so callers that
@@ -507,7 +653,11 @@ actor RoastEngine {
             styleName: style.displayName,
             intensity: intensity.rawValue,
             locale: locale.identifier,
-            deviceId: DeviceID.current()
+            deviceId: DeviceID.current(),
+            // Stable id so the Worker can let a style shape the private
+            // draft's voice (decided 2026-10-22); ignored by Workers that
+            // don't use it, and it carries no user data.
+            styleId: style.id
         )
         let resp = try await generateWithAuth(req, client: client, auth: auth)
         return resp.text

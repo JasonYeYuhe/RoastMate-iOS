@@ -155,10 +155,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "痛罵 · 狠 · 全部 24 種風格 · 每則回擊 3 個版本 · 吵架模擬器 · 無限歷史 · 不扣點數";
+"paywall.body.curated" = "痛罵（經你同意後走雲端）· 不扣點數 · 無限歷史。狠、24 種風格、每則 3 個版本和吵架模擬器需要 Apple Intelligence。";
 "paywall.feature.savage" = "狠話強度";
-"paywall.feature.savage.detail" = "不留情面的尖銳回擊,僅在配得上的風格中開放。";
+"paywall.feature.savage.detail" = "最不留情面的回擊,任何風格都能用。";
 "paywall.feature.savage.detail.curated" = "這台裝置上「狠」顯示的是預設範例 —— 需要 Apple Intelligence 才能根據你輸入的內容生成。";
-"paywall.feature.feral.detail" = "不設上限的發洩 —— 粗口解鎖,只給你自己看的私密草稿。";
+"paywall.feature.feral.detail" = "尺度全開的發洩 —— 粗口解鎖,經你同意後在雲端生成。只給你自己看的私密草稿。";
 "paywall.feature.feral" = "痛罵模式";
 "paywall.feature.unlimited" = "不扣點數";
 "paywall.feature.unlimited.detail" = "Pro 從不扣點數,不用再盯著餘額。";
@@ -171,6 +172,17 @@
 "paywall.restore" = "恢復購買";
 "paywall.subscribe" = "立即訂閱";
 "paywall.continue_free" = "繼續免費使用";
+"paywall.success.title" = "你已是 Pro";
+"paywall.success.body" = "這台裝置上可以用：痛罵（經你同意後走雲端）、狠、全部 24 種風格且每則 3 個版本、吵架模擬器、無限歷史，而且不扣點數。";
+"paywall.success.body.curated" = "這台裝置上可以用：痛罵（經你同意後走雲端）和無限歷史，而且不扣點數。狠、各種風格、3 個版本和吵架模擬器需要 Apple Intelligence，這台裝置上會顯示預設範例。";
+"paywall.success.done" = "知道了";
+"paywall.error.title" = "購買沒有完成";
+"paywall.pending.title" = "等待核准";
+"paywall.pending.body" = "這筆購買需要先經過核准，例如家長或家庭群組的管理者。核准後會自動套用。";
+"paywall.unverified.body" = "App Store 無法驗證這筆購買，所以沒有套用。請試試「恢復購買」；如果仍未套用且已被扣款，可以到 reportaproblem.apple.com 向 Apple 申請退款。";
+"paywall.restore.none.title" = "沒有可恢復的購買";
+"paywall.restore.none.body" = "目前登入 App Store 的 Apple ID 沒有有效的 Pro 訂閱。";
+"paywall.restore.failed.title" = "恢復購買沒有完成";
 
 // MARK: - Credits (v1.1 hybrid monetization)
 "wallet.credits" = "%d 點";
@@ -207,10 +219,17 @@
 "error.input_too_long" = "保持在 1500 字以內。";
 
 "safety.input_blocked" = "這段內容無法處理。試著用不帶姓名、威脅、自傷詞彙的方式描述。";
-"safety.output_blocked" = "AI 這次的輸出我們沒接受,正在重試。";
+"safety.output_blocked" = "AI 這次的輸出我們沒接受,請再試一次。";
 "roast.error.unavailable" = "本地 AI 暫不可用,顯示的是預設範例。";
-"roast.notice.curated" = "預設範例 —— 並非根據你輸入的內容生成,不扣額度。";
-"rewrite.notice.curated" = "「改成能發的」回傳的是預設範例 —— 你的草稿沒有被改寫,不扣額度。";
+"roast.notice.curated" = "預設範例 —— 並非根據你輸入的內容生成。";
+"rewrite.notice.curated" = "「改成能發的」回傳的是預設範例 —— 你的草稿沒有被改寫。";
+"roast.notice.nocredit" = "不扣額度。";
+"roast.notice.reason.apple_intelligence" = "要根據你輸入的內容生成，需要 Apple Intelligence：iPhone 15 Pro 或更新機型、iOS 26 以上，並在「設定」中以支援的語言開啟。";
+"roast.notice.reason.apple_intelligence.mac" = "要根據你輸入的內容生成，需要 Apple Intelligence：搭載 Apple 晶片的 Mac、macOS 26 以上，並在「系統設定」中以支援的語言開啟。";
+"roast.notice.reason.cloud_off" = "「發洩」與「痛罵」在雲端生成，而雲端目前是關閉的。可以在「設定 → AI 與隱私」中開啟。";
+"roast.notice.reason.cloud_paused" = "「發洩」與「痛罵」的雲端生成目前暫停中，再試一次也一樣，也不需要更改設定。";
+"roast.notice.reason.cloud_failed" = "這次雲端沒能生成，稍後再試一次。";
+"roast.notice.reason.declined" = "Apple 的裝置端模型這次沒能生成，換個說法再試試。";
 "roast.error.no_variants" = "這次沒有產出可用的內容,換種說法試試?";
 
 // MARK: - Watch

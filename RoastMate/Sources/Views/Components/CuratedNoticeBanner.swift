@@ -34,16 +34,30 @@ struct CuratedNoticeBanner: View {
     /// passes its own key, because on a no-FM device with cloud consent the
     /// drafts above can be real paid output while only the rewrite is canned.
     var messageKey: LocalizedStringKey = "roast.notice.curated"
+    /// Why, when the surface knows (the generator does). 1.7.1: the banner
+    /// used to state only *that* the text was canned.
+    var reason: CuratedReason? = nil
+
+    /// "No credit used" only means something to someone who spends credits.
+    private var showsNoCreditLine: Bool { !StoreService.shared.isPro }
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             Image(systemName: "text.quote")
                 .foregroundStyle(.secondary)
                 .accessibilityHidden(true)
-            Text(messageKey)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(messageKey)
+                if let reason {
+                    Text(LocalizedStringKey(reason.localizationKey))
+                }
+                if showsNoCreditLine {
+                    Text("roast.notice.nocredit")
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .padding(10)

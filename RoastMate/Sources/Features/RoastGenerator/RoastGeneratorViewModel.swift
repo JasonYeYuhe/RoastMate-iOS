@@ -17,7 +17,14 @@ final class RoastGeneratorViewModel {
 
     var situation: String = ""
     var selectedStyleId: String
-    var selectedIntensity: Intensity = .sharp
+    /// The full generator (`RoastGeneratorView`) starts on
+    /// `Intensity.firstSessionDefault` — Vent on a device without the
+    /// on-device model, where Sharp could only return curated examples (1.7.1).
+    /// Every other owner keeps Sharp: the Mac menu-bar Quick Roast has no
+    /// intensity picker and no cloud-consent sheet, so a Vent default there
+    /// would park an undecided user on `pendingCloudConsent` with nothing on
+    /// screen (a dead Generate button).
+    var selectedIntensity: Intensity
     var state: State = .idle
     var currentSession: RoastSession?
     var rewritingDraftId: UUID?
@@ -36,6 +43,9 @@ final class RoastGeneratorViewModel {
     /// output while the rewrite (which has no cloud path at all) is canned.
     /// Reusing one screen-level flag would label that paid draft as canned.
     var rewriteCurated: Bool = false
+    /// Why the results / the rewrite are curated; shown under the banner.
+    var curatedReason: CuratedReason?
+    var rewriteCuratedReason: CuratedReason?
 
     /// Drives the one-time 5.1.2(i) cloud-AI consent sheet. Set when a
     /// Vent/Feral generation needs explicit permission before any
@@ -51,8 +61,9 @@ final class RoastGeneratorViewModel {
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "GeneratorVM")
 
-    init(initialStyleId: String? = nil) {
+    init(initialStyleId: String? = nil, initialIntensity: Intensity = .sharp) {
         self.selectedStyleId = initialStyleId ?? StyleCatalog.shared.defaultStyleId
+        self.selectedIntensity = initialIntensity
     }
 
     func style() -> StylePreset? {
@@ -149,6 +160,9 @@ final class RoastGeneratorViewModel {
         rewriteError = nil
         curatedNotice = false
         rewriteCurated = false
+        curatedReason = nil
+        rewriteCuratedReason = nil
+        let requestedIntensity = selectedIntensity
         do {
             let output = try await RoastEngine.shared.generateDetailed(
                 situation: text,
@@ -181,6 +195,14 @@ final class RoastGeneratorViewModel {
                 try? context.save()
             }
             curatedNotice = output.isCurated
+            curatedReason = output.isCurated
+                ? .forGeneration(
+                    intensity: requestedIntensity,
+                    cloudAllowed: cloud.cloudAllowed,
+                    consentGranted: settings.cloudConsent == .granted,
+                    onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable
+                )
+                : nil
             currentSession = HistoryService.saveSession(
                 situation: text,
                 mode: .roast,
@@ -234,6 +256,7 @@ final class RoastGeneratorViewModel {
         rewritingDraftId = draft.id
         rewriteError = nil
         rewriteCurated = false
+        rewriteCuratedReason = nil
         do {
             let rewritten = try await RoastEngine.shared.rewriteAsSendableDetailed(
                 ventDraft: draft.text,
@@ -245,6 +268,9 @@ final class RoastGeneratorViewModel {
             // ROAST line, not a rewrite of the user's draft — and it gets a
             // Share button. Label it with the same note the generator uses.
             rewriteCurated = (rewritten.provenance == .curated)
+            rewriteCuratedReason = rewriteCurated
+                ? .forRewrite(onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable)
+                : nil
             HistoryService.appendSendableReply(
                 toSession: session,
                 sourceVentDraft: draft,
@@ -306,7 +332,11 @@ final class RoastGeneratorViewModel {
     func loadSample(_ sample: SampleRoast, locale: Locale) {
         situation = sample.situation(for: locale)
         selectedStyleId = sample.styleId
-        selectedIntensity = .sharp
+        // Was a hard-coded `.sharp`, i.e. curated text on a device without
+        // the on-device model.
+        selectedIntensity = .firstSessionDefault(
+            onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable
+        )
         currentSession = nil
         rewriteError = nil
         crisisBanner = false

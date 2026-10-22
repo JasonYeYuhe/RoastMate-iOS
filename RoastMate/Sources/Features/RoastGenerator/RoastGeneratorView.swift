@@ -5,7 +5,11 @@ struct RoastGeneratorView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.locale) private var locale
     @Environment(\.scenePhase) private var scenePhase
-    @State private var viewModel = RoastGeneratorViewModel()
+    // 1.7.1: Vent first on a device without the on-device model (this screen
+    // owns the cloud-consent sheet, so the Vent default can ask for it).
+    @State private var viewModel = RoastGeneratorViewModel(
+        initialIntensity: .firstSessionDefault(onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable)
+    )
     @State private var showPaywall = false
     @State private var threadContinuationBanner: String? = nil
     #if os(iOS)
@@ -364,10 +368,11 @@ struct RoastGeneratorView: View {
                     CrisisBanner()
                 }
                 if viewModel.curatedNotice {
-                    CuratedNoticeBanner()
+                    CuratedNoticeBanner(reason: viewModel.curatedReason)
                 }
                 if viewModel.rewriteCurated {
-                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated")
+                    CuratedNoticeBanner(messageKey: "rewrite.notice.curated",
+                                        reason: viewModel.rewriteCuratedReason)
                 }
                 if let message = viewModel.rewriteError {
                     HStack(alignment: .top, spacing: 8) {

@@ -85,8 +85,11 @@ final class StoreService {
         }
     }
 
-    /// Subscription purchase (Pro). Unchanged behavior.
-    func purchase(_ product: Product) async throws {
+    /// Subscription purchase (Pro). Entitlement handling is unchanged; 1.7.1
+    /// returns what happened so the paywall can say so instead of going
+    /// silent on Ask to Buy (`.pending`) or a failed verification.
+    @discardableResult
+    func purchase(_ product: Product) async throws -> PurchaseOutcome {
         EventLedger.shared.recordPurchaseAttempt()  // A′
         let result = try await product.purchase()
         switch result {
@@ -96,13 +99,17 @@ final class StoreService {
                 EventLedger.shared.recordPurchaseCompleted()  // A′
                 await transaction.finish()
                 await refreshSubscriptionStatus()
+                return .purchased
             case .unverified:
                 logger.warning("Purchase verification failed.")
+                return .unverified
             }
-        case .userCancelled, .pending:
-            break
+        case .userCancelled:
+            return .cancelled
+        case .pending:
+            return .pending
         @unknown default:
-            break
+            return .cancelled
         }
     }
 
@@ -112,20 +119,25 @@ final class StoreService {
     /// transaction once that write succeeded. If the process dies before
     /// the write, StoreKit keeps the transaction in `Transaction
     /// .unfinished` and it is recovered on the next settle.
-    func purchaseCredits(_ product: Product) async throws {
-        guard CreditCatalog.credits(forProductID: product.id) != nil else { return }
+    @discardableResult
+    func purchaseCredits(_ product: Product) async throws -> PurchaseOutcome {
+        guard CreditCatalog.credits(forProductID: product.id) != nil else { return .cancelled }
         EventLedger.shared.recordPurchaseAttempt()  // A′
         let result = try await product.purchase()
         switch result {
         case .success(.verified):
             EventLedger.shared.recordPurchaseCompleted()  // A′
             await settleConsumables()
+            return .purchased
         case .success(.unverified):
             logger.warning("Credit purchase verification failed.")
-        case .userCancelled, .pending:
-            break
+            return .unverified
+        case .userCancelled:
+            return .cancelled
+        case .pending:
+            return .pending
         @unknown default:
-            break
+            return .cancelled
         }
     }
 
@@ -146,9 +158,32 @@ final class StoreService {
         }
     }
 
-    func restorePurchases() async {
-        try? await AppStore.sync()
+    /// True when a purchase error only means the buyer backed out, which the
+    /// paywall must not report as a failure. Everything else (network, not
+    /// allowed, product unavailable, verification) is shown to the buyer
+    /// instead of being swallowed, as the paywall did until 1.7.1.
+    nonisolated static func isUserCancellation(_ error: any Error) -> Bool {
+        if error is CancellationError { return true }
+        if let storeKitError = error as? StoreKitError, case .userCancelled = storeKitError { return true }
+        return false
+    }
+
+    /// Re-syncs with the App Store. 1.7.1 returns the outcome (it used to be
+    /// `try?` and silent) so the paywall can report a failure, or that there
+    /// was nothing to restore. The Settings button still ignores it.
+    @discardableResult
+    func restorePurchases() async -> RestoreOutcome {
+        do {
+            try await AppStore.sync()
+        } catch let error where Self.isUserCancellation(error) {
+            return .cancelled
+        } catch {
+            logger.error("Restore failed: \(error.localizedDescription)")
+            await refreshSubscriptionStatus()
+            return isPro ? .restoredPro : .failed(error.localizedDescription)
+        }
         await refreshSubscriptionStatus()
+        return isPro ? .restoredPro : .nothingToRestore
     }
 
     func refreshSubscriptionStatus() async {
@@ -224,6 +259,79 @@ final class StoreService {
             // Subscription entitlement change.
             await transaction.finish()
             await refreshSubscriptionStatus()
+        }
+    }
+}
+
+/// What a purchase attempt ended as, for the paywall's message. Success is
+/// still applied by `StoreService` itself (Pro through `isPro`, credits
+/// through the settler); this only decides what the buyer is told.
+enum PurchaseOutcome: Sendable, Equatable {
+    case purchased
+    case cancelled
+    /// Waiting for approval (Ask to Buy, or a payment that needs action).
+    /// The approved transaction arrives later through `Transaction.updates`
+    /// and is applied there.
+    case pending
+    /// The App Store returned a transaction that failed verification, so it
+    /// was not applied.
+    case unverified
+}
+
+/// What a restore attempt ended as.
+enum RestoreOutcome: Sendable, Equatable {
+    case restoredPro
+    case nothingToRestore
+    case cancelled
+    case failed(String)
+}
+
+/// The alert the paywall shows after a purchase or restore attempt; nil when
+/// there is nothing to say. Lives in Shared so the hostless unit tests can
+/// check every outcome maps to copy that exists in all four locales — the
+/// paywall view itself is app-target code they cannot reach.
+struct PurchaseNotice: Sendable, Equatable, Identifiable {
+    let titleKey: String
+    /// Localizable.strings key for the message, or nil when `detail` is the
+    /// message (a StoreKit error's own localized description).
+    let messageKey: String?
+    let detail: String?
+
+    var id: String { titleKey + (messageKey ?? "") + (detail ?? "") }
+
+    static func forPurchase(_ outcome: PurchaseOutcome) -> PurchaseNotice? {
+        switch outcome {
+        case .purchased, .cancelled:
+            // Pro shows its own confirmation when `isPro` turns on; credits
+            // appear in the balance. Cancelling needs no message.
+            return nil
+        case .pending:
+            return PurchaseNotice(titleKey: "paywall.pending.title",
+                                  messageKey: "paywall.pending.body", detail: nil)
+        case .unverified:
+            return PurchaseNotice(titleKey: "paywall.error.title",
+                                  messageKey: "paywall.unverified.body", detail: nil)
+        }
+    }
+
+    /// nil for the buyer backing out (`StoreService.isUserCancellation`).
+    static func forPurchaseError(_ error: any Error) -> PurchaseNotice? {
+        if StoreService.isUserCancellation(error) { return nil }
+        return PurchaseNotice(titleKey: "paywall.error.title",
+                              messageKey: nil, detail: error.localizedDescription)
+    }
+
+    static func forRestore(_ outcome: RestoreOutcome) -> PurchaseNotice? {
+        switch outcome {
+        case .restoredPro, .cancelled:
+            // Restored Pro shows the same confirmation as a purchase.
+            return nil
+        case .nothingToRestore:
+            return PurchaseNotice(titleKey: "paywall.restore.none.title",
+                                  messageKey: "paywall.restore.none.body", detail: nil)
+        case .failed(let message):
+            return PurchaseNotice(titleKey: "paywall.restore.failed.title",
+                                  messageKey: nil, detail: message)
         }
     }
 }

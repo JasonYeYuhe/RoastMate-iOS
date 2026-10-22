@@ -155,10 +155,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "罵倒 · 容赦なし · 全24スタイル · 返しは毎回3パターン · 口論シミュレーター · 履歴無制限 · クレジット不要";
+"paywall.body.curated" = "罵倒（許可するとクラウドで生成）· クレジット不要 · 履歴無制限。容赦なし・24スタイル・3パターン・口論シミュレーターには Apple Intelligence が必要です。";
 "paywall.feature.savage" = "容赦なしモード";
-"paywall.feature.savage.detail" = "遠慮なしの切れ味。対応するスタイルでのみ利用可。";
+"paywall.feature.savage.detail" = "遠慮なしの切れ味。どのスタイルでも使えます。";
 "paywall.feature.savage.detail.curated" = "この端末では「容赦なし」はあらかじめ用意した例を表示します。入力内容から生成するには Apple Intelligence が必要です。";
-"paywall.feature.feral.detail" = "制限なしの吐き出し —— 強い言葉も解禁。自分だけのプライベートな下書き。";
+"paywall.feature.feral.detail" = "遠慮なしの吐き出し —— 強い言葉も解禁、許可するとクラウドで生成。自分だけのプライベートな下書き。";
 "paywall.feature.feral" = "罵倒モード";
 "paywall.feature.unlimited" = "クレジット不要";
 "paywall.feature.unlimited.detail" = "Proはクレジットを消費しません。残高を気にする必要はありません。";
@@ -171,6 +172,17 @@
 "paywall.restore" = "購入を復元";
 "paywall.subscribe" = "登録する";
 "paywall.continue_free" = "無料のまま続ける";
+"paywall.success.title" = "Proになりました";
+"paywall.success.body" = "この端末で使えるもの：罵倒（許可するとクラウドで生成）、容赦なし、全24スタイル（返しは毎回3パターン）、口論シミュレーター、履歴無制限。クレジットは不要です。";
+"paywall.success.body.curated" = "この端末で使えるもの：罵倒（許可するとクラウドで生成）と履歴無制限。クレジットは不要です。容赦なし・スタイル・3パターン・口論シミュレーターには Apple Intelligence が必要で、この端末ではあらかじめ用意した例を表示します。";
+"paywall.success.done" = "OK";
+"paywall.error.title" = "購入が完了しませんでした";
+"paywall.pending.title" = "承認待ち";
+"paywall.pending.body" = "この購入には承認が必要です（保護者やファミリー共有の管理者など）。承認されると自動的に反映されます。";
+"paywall.unverified.body" = "App Store でこの購入を確認できなかったため、反映されていません。「購入を復元」をお試しください。それでも反映されず請求された場合は、reportaproblem.apple.com から Apple に返金を申請できます。";
+"paywall.restore.none.title" = "復元できる購入がありません";
+"paywall.restore.none.body" = "App Store にサインインしている Apple ID に、有効な Pro サブスクリプションが見つかりませんでした。";
+"paywall.restore.failed.title" = "購入を復元できませんでした";
 
 // MARK: - Credits (v1.1 hybrid monetization)
 "wallet.credits" = "%d クレジット";
@@ -207,10 +219,17 @@
 "error.input_too_long" = "1500文字以内にしてください。";
 
 "safety.input_blocked" = "この内容は処理できません。固有名、脅迫、自傷的な表現を避けてください。";
-"safety.output_blocked" = "AIの出力に問題があったため、再生成しています。";
+"safety.output_blocked" = "AIの出力に問題があったため、表示できませんでした。もう一度お試しください。";
 "roast.error.unavailable" = "オンデバイスAIが現在利用できません。事前に用意した例を表示します。";
-"roast.notice.curated" = "あらかじめ用意した例です。入力内容からの生成ではなく、クレジットも消費しません。";
-"rewrite.notice.curated" = "「送信用書き直し」の結果はあらかじめ用意した例です。あなたの下書きは書き直されていません。クレジットも消費しません。";
+"roast.notice.curated" = "あらかじめ用意した例です。入力内容からの生成ではありません。";
+"rewrite.notice.curated" = "「送信用書き直し」の結果はあらかじめ用意した例です。あなたの下書きは書き直されていません。";
+"roast.notice.nocredit" = "クレジットは消費していません。";
+"roast.notice.reason.apple_intelligence" = "入力内容から生成するには Apple Intelligence が必要です（iPhone 15 Pro 以降、iOS 26 以降、対応言語で「設定」からオン）。";
+"roast.notice.reason.apple_intelligence.mac" = "入力内容から生成するには Apple Intelligence が必要です（Appleシリコン搭載のMac、macOS 26 以降、対応言語で「システム設定」からオン）。";
+"roast.notice.reason.cloud_off" = "「吐き出し」と「罵倒」はクラウドで生成しますが、クラウドがオフになっています。「設定 → AIとプライバシー」でオンにできます。";
+"roast.notice.reason.cloud_paused" = "「吐き出し」と「罵倒」のクラウド生成は現在一時停止中のため、もう一度試しても結果は変わりません。設定を変更する必要もありません。";
+"roast.notice.reason.cloud_failed" = "今回はクラウドで生成できませんでした。少し待ってからもう一度お試しください。";
+"roast.notice.reason.declined" = "Apple のオンデバイスモデルでは今回生成できませんでした。言い回しを変えてお試しください。";
 "roast.error.no_variants" = "今回は適切な結果が得られませんでした。別の言い方で試してください。";
 
 // MARK: - Watch

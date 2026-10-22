@@ -47,17 +47,32 @@ actor AppleFMBackend: FMBackend {
 
     func respondFresh(
         instructions: String, to prompt: String,
-        temperature: Double, maxTokens: Int
+        temperature: Double, maxTokens: Int,
+        guardrails: FMGuardrails
     ) async throws -> String {
-        let fresh = LanguageModelSession(instructions: instructions)
-        return try await run(fresh, prompt: prompt, temperature: temperature, maxTokens: maxTokens)
+        let model = Self.model(for: guardrails)
+        let fresh = LanguageModelSession(model: model, instructions: instructions)
+        return try await run(fresh, model: model, prompt: prompt, temperature: temperature, maxTokens: maxTokens)
+    }
+
+    /// `SystemLanguageModel(useCase:guardrails:)` and
+    /// `Guardrails.permissiveContentTransformations` are iOS 26.0 / macOS 26.0
+    /// API (FoundationModels swiftinterface, SDK 27: `@available(iOS 26.0,
+    /// macOS 26.0, …)`), the same floor as this type, so no extra gate.
+    private static func model(for guardrails: FMGuardrails) -> SystemLanguageModel {
+        switch guardrails {
+        case .standard:
+            return .default
+        case .permissiveContentTransformations:
+            return SystemLanguageModel(useCase: .general, guardrails: .permissiveContentTransformations)
+        }
     }
 
     private func run(
-        _ session: LanguageModelSession, prompt: String,
+        _ session: LanguageModelSession, model: SystemLanguageModel = .default, prompt: String,
         temperature: Double, maxTokens: Int
     ) async throws -> String {
-        guard SystemLanguageModel.default.availability == .available else {
+        guard model.availability == .available else {
             throw FMBackendError.unavailable
         }
         do {
@@ -66,23 +81,40 @@ actor AppleFMBackend: FMBackend {
                 options: GenerationOptions(temperature: temperature, maximumResponseTokens: maxTokens)
             )
             return response.content
-        } catch let genErr as LanguageModelSession.GenerationError {
-            throw FMBackendError.generation(Self.failureCategory(for: genErr))
         } catch {
-            throw FMBackendError.other(error)
+            throw Self.backendError(for: error)
         }
     }
 
-    /// α3: map a Foundation Models `GenerationError` to an A′ failure category
-    /// by string-introspection so the mapping survives API additions — new
-    /// cases fall through to `.guardrail` (the conservative bucket) until we
-    /// add a specific branch. (Moved here from `RoastEngine` so the 26-only
-    /// `GenerationError` type stays behind the availability boundary.)
-    private static func failureCategory(
-        for error: LanguageModelSession.GenerationError
-    ) -> EventLedger.FailureCategory {
-        let desc = String(describing: error).lowercased()
-        if desc.contains("guardrail") || desc.contains("safety") {
+    /// Maps whatever Foundation Models threw onto ``FMBackendError``.
+    ///
+    /// Every error except cancellation becomes `.generation`, so the engine
+    /// returns labelled curated text instead of an error box. This used to
+    /// match `LanguageModelSession.GenerationError` only; apps built with SDK
+    /// 27 (RoastMate since 1.6.0) receive `LanguageModelError` on iOS/macOS 27
+    /// instead (FoundationModels swiftinterface:1527, `@available(iOS 27.0,
+    /// macOS 27.0, …)`), so every refusal fell through to the old hard-error
+    /// case. Matching by type would break again the next time Apple adds one.
+    static func backendError(for error: any Error) -> any Error {
+        if error is CancellationError { return error }
+        return FMBackendError.generation(failureCategory(for: error))
+    }
+
+    /// α3: map a Foundation Models error to an A′ failure category by
+    /// string-introspection so the mapping survives API additions — unknown
+    /// shapes fall through to `.guardrail` (the conservative bucket). Reads
+    /// both the description (`GenerationError` puts its case name there:
+    /// "guardrailViolation(…)") and `LocalizedError.errorDescription`
+    /// (`LanguageModelError` describes itself as "May contain unsafe content"
+    /// and its errorDescription is "The model's safety guardrails were
+    /// triggered.", measured on macOS 27.0.1). Not `localizedDescription`: for
+    /// a non-LocalizedError that string embeds the domain
+    /// ("FoundationModels.LanguageModelError"), which would match "language".
+    static func failureCategory(for error: any Error) -> EventLedger.FailureCategory {
+        let localized = (error as? LocalizedError)?.errorDescription ?? ""
+        let desc = (String(describing: error) + " " + localized).lowercased()
+        if desc.contains("guardrail") || desc.contains("safety") || desc.contains("unsafe")
+            || desc.contains("refus") {
             return .guardrail
         }
         if desc.contains("context") || desc.contains("token") {

@@ -155,10 +155,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "Feral · Savage · All 24 styles · 3 versions per comeback · Argument simulator · Unlimited history · No credits needed";
+"paywall.body.curated" = "Feral (via cloud, once you allow it) · No credits needed · Unlimited history. Savage, the 24 styles, 3 versions per comeback and the argument simulator need Apple Intelligence.";
 "paywall.feature.savage" = "Savage intensity";
-"paywall.feature.savage.detail" = "No-prisoners take-downs for the styles that earn them.";
+"paywall.feature.savage.detail" = "The sharpest sendable comebacks, in any style.";
 "paywall.feature.savage.detail.curated" = "On this device Savage shows curated examples — writing from what you type needs Apple Intelligence.";
-"paywall.feature.feral.detail" = "Vent with the limits off — profanity unlocked. A private draft, just for you.";
+"paywall.feature.feral.detail" = "Vent with the gloves off — profanity unlocked, written in the cloud once you allow it. A private draft, just for you.";
 "paywall.feature.feral" = "Feral Mode";
 "paywall.feature.unlimited" = "No credits needed";
 "paywall.feature.unlimited.detail" = "Pro never spends credits — no wallet to watch.";
@@ -171,6 +172,17 @@
 "paywall.restore" = "Restore Purchases";
 "paywall.subscribe" = "Subscribe";
 "paywall.continue_free" = "Continue with free";
+"paywall.success.title" = "You're Pro";
+"paywall.success.body" = "On this device: Feral (via cloud, once you allow it), Savage, all 24 styles with 3 versions per comeback, the argument simulator and unlimited history — with no credits.";
+"paywall.success.body.curated" = "On this device: Feral (via cloud, once you allow it) and unlimited history — with no credits. Savage, the styles, 3 versions and the argument simulator need Apple Intelligence; here they show curated examples.";
+"paywall.success.done" = "Got it";
+"paywall.error.title" = "Purchase didn't go through";
+"paywall.pending.title" = "Waiting for approval";
+"paywall.pending.body" = "This purchase needs approval first, for example from a parent or family organizer. It is applied automatically once it is approved.";
+"paywall.unverified.body" = "The App Store couldn't verify this purchase, so it wasn't applied. Try Restore Purchases. If it still isn't applied and you were charged, you can ask Apple for a refund at reportaproblem.apple.com.";
+"paywall.restore.none.title" = "Nothing to restore";
+"paywall.restore.none.body" = "No active Pro subscription was found for the Apple ID signed in to the App Store.";
+"paywall.restore.failed.title" = "Restore didn't go through";
 
 // MARK: - Credits (v1.1 hybrid monetization)
 "wallet.credits" = "%d credits";
@@ -207,10 +219,17 @@
 "error.input_too_long" = "Keep it under 1500 characters.";
 
 "safety.input_blocked" = "We can't process this — try describing the situation without names, threats, or self-harm language.";
-"safety.output_blocked" = "The AI produced something we couldn't accept. Trying again.";
+"safety.output_blocked" = "The AI produced something we couldn't accept. Please try again.";
 "roast.error.unavailable" = "On-device AI isn't available right now. Showing curated responses instead.";
-"roast.notice.curated" = "Curated example — not generated from what you typed. No credit used.";
-"rewrite.notice.curated" = "The \"make it sendable\" result is a curated example — your draft wasn't rewritten. No credit used.";
+"roast.notice.curated" = "Curated example — not generated from what you typed.";
+"rewrite.notice.curated" = "The \"make it sendable\" result is a curated example — your draft wasn't rewritten.";
+"roast.notice.nocredit" = "No credit used.";
+"roast.notice.reason.apple_intelligence" = "Writing from what you type needs Apple Intelligence: iPhone 15 Pro or later on iOS 26 or later, turned on in Settings, in a supported language.";
+"roast.notice.reason.apple_intelligence.mac" = "Writing from what you type needs Apple Intelligence: a Mac with Apple silicon on macOS 26 or later, turned on in System Settings, in a supported language.";
+"roast.notice.reason.cloud_off" = "Vent and Feral are written in the cloud, and cloud is off. Turn it on in Settings → AI & Privacy.";
+"roast.notice.reason.cloud_paused" = "Cloud writing for Vent and Feral is paused right now, so trying again won't help. There is nothing to change in Settings.";
+"roast.notice.reason.cloud_failed" = "The cloud couldn't write this one this time. Try again in a moment.";
+"roast.notice.reason.declined" = "Apple's on-device model couldn't write this one. Try rewording it.";
 "roast.error.no_variants" = "No usable responses produced — please try again with more context.";
 
 // MARK: - Watch

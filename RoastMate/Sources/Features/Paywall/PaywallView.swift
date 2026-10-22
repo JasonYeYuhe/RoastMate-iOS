@@ -21,6 +21,14 @@ struct PaywallView: View {
     @Environment(\.modelContext) private var context
     @Query private var settingsQuery: [UserSettings]
     @State private var store = StoreService.shared
+    /// What to tell the buyer after a purchase or restore attempt: a failure
+    /// other than backing out, Ask to Buy waiting for approval, an unverified
+    /// transaction, a failed restore, or nothing to restore. Mapping lives in
+    /// `PurchaseNotice` (Shared, unit-tested).
+    @State private var notice: PurchaseNotice?
+    /// Set when Pro turns on while this sheet is up (purchase, restore, or an
+    /// Ask-to-Buy approval arriving through `Transaction.updates`).
+    @State private var showProConfirmation = false
 
     private var settings: UserSettings {
         settingsQuery.first ?? HistoryService.userSettings(context: context)
@@ -38,7 +46,9 @@ struct PaywallView: View {
                 creditPacksSection
 
                 Button("paywall.restore") {
-                    Task { await store.restorePurchases() }
+                    Task { @MainActor in
+                        notice = PurchaseNotice.forRestore(await store.restorePurchases())
+                    }
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity)
@@ -51,8 +61,40 @@ struct PaywallView: View {
                 legalFooter
             }
             .padding(24)
+            // Separate view from the success alert below so both can attach.
+            .alert(
+                LocalizedStringKey(notice?.titleKey ?? "paywall.error.title"),
+                isPresented: Binding(
+                    get: { notice != nil },
+                    set: { if !$0 { notice = nil } }
+                ),
+                presenting: notice
+            ) { _ in
+                Button("common.ok", role: .cancel) {}
+            } message: { notice in
+                if let key = notice.messageKey {
+                    Text(LocalizedStringKey(key))
+                } else {
+                    Text(notice.detail ?? "")
+                }
+            }
         }
         .frame(minWidth: 360, minHeight: 480)
+        // After purchase: say what Pro gives ON THIS DEVICE, then close the
+        // sheet. Every presenter passes its own `isPresented` binding, so
+        // closing it here closes the paywall wherever it was opened. Before
+        // 1.7.1 nothing reacted to `isPro`: the buy buttons and "continue
+        // free" simply stayed on screen after a successful purchase.
+        .onChange(of: store.isPro) { wasPro, isPro in
+            if !wasPro && isPro { showProConfirmation = true }
+        }
+        .alert("paywall.success.title", isPresented: $showProConfirmation) {
+            Button("paywall.success.done") { isPresented = false }
+        } message: {
+            Text(RoastEngine.isOnDeviceModelAvailable
+                 ? LocalizedStringKey("paywall.success.body")
+                 : LocalizedStringKey("paywall.success.body.curated"))
+        }
         // α3: callers tag the impression with a source via
         // `EventLedger.shared.recordPaywallImpression(source:)` at the
         // trigger site BEFORE setting `showPaywall = true`. PaywallView
@@ -74,7 +116,12 @@ struct PaywallView: View {
                 .foregroundStyle(.orange)
             VStack(alignment: .leading) {
                 Text("paywall.title").font(.title2.bold())
-                Text("paywall.body")
+                // Device-honest header: without the on-device model, Savage,
+                // the styles, 3 versions and the simulator can only show
+                // curated examples, so the header leads with what does work.
+                Text(RoastEngine.isOnDeviceModelAvailable
+                     ? LocalizedStringKey("paywall.body")
+                     : LocalizedStringKey("paywall.body.curated"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -139,9 +186,7 @@ struct PaywallView: View {
         let credits = CreditCatalog.credits(forProductID: product.id) ?? 0
         let isBest = CreditCatalog.Pack(rawValue: product.id)?.isBestValue ?? false
         return Button {
-            Task {
-                try? await store.purchaseCredits(product)
-            }
+            buy { try await store.purchaseCredits(product) }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -259,7 +304,7 @@ struct PaywallView: View {
 
     private func productRow(_ product: Product) -> some View {
         Button {
-            Task { try? await store.purchase(product) }
+            buy { try await store.purchase(product) }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -286,6 +331,21 @@ struct PaywallView: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    /// Runs a purchase and reports anything except success or the buyer
+    /// cancelling: errors, Ask to Buy waiting for approval, and unverified
+    /// transactions (all three were silent until 1.7.1). Success needs no
+    /// handling here: Pro arrives through `store.isPro` (see `.onChange`
+    /// above) and credits through the settler.
+    private func buy(_ purchase: @escaping @MainActor () async throws -> PurchaseOutcome) {
+        Task { @MainActor in
+            do {
+                notice = PurchaseNotice.forPurchase(try await purchase())
+            } catch {
+                notice = PurchaseNotice.forPurchaseError(error)
+            }
+        }
     }
 
     private func periodLabel(_ period: Product.SubscriptionPeriod) -> String {
