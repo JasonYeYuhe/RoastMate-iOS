@@ -168,6 +168,8 @@
 "quota.lifetime.hint" = "First 20 free, then 5 daily";
 "paywall.monthly" = "Monthly";
 "paywall.yearly" = "Yearly";
+"paywall.plan.monthly.detail" = "Feral, Savage and all 24 styles. No credits needed.";
+"paywall.plan.yearly.detail" = "Everything in Pro, billed once a year.";
 "paywall.yearly.trial" = "7-day free trial · then %@";
 "paywall.restore" = "Restore Purchases";
 "paywall.subscribe" = "Subscribe";

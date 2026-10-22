@@ -210,6 +210,32 @@ final class StoreCopyTests: XCTestCase {
         }
     }
 
+    /// The subscription rows show app-owned copy (PlanCopy), not App Store
+    /// Connect's descriptions, which still sell "Unlimited generations" and
+    /// can't be edited by API while ACTIVE. Both products map, every locale
+    /// has the copy, and none of it claims "unlimited".
+    func test_planRows_useAppOwnedCopyThatNeverClaimsUnlimited() {
+        let ids = [StoreService.monthlyProductId, StoreService.yearlyProductId]
+        let banned = ["unlimited", "无限", "無限", "無制限"]
+        for id in ids {
+            guard let keys = PlanCopy.keys(forProductID: id) else {
+                XCTFail("\(id) has no app-owned plan copy"); continue
+            }
+            for locale in locales {
+                for key in [keys.name, keys.detail] {
+                    guard let value = string(key, locale) else {
+                        XCTFail("\(locale) is missing \(key)"); continue
+                    }
+                    for term in banned where value.lowercased().contains(term) {
+                        XCTFail("\(locale) \(key) claims '\(term)': \(value)")
+                    }
+                }
+            }
+        }
+        XCTAssertNil(PlanCopy.keys(forProductID: "yyh.roastmate.app.credits.10"))
+        XCTAssertEqual(string("paywall.monthly", "zh-Hant"), "月訂閱")
+    }
+
     /// The card's wordmark is the name people search to find us — the store
     /// name in that locale (v1.7 P1.2), never the bare "RoastMate", which ranks
     /// an unrelated app first in every storefront measured on 2026-10-07.

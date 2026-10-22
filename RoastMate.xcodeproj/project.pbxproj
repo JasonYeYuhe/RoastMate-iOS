@@ -31,6 +31,7 @@
 		067C068C3B8704F26E3123E2 /* ShareCardScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D7EB4CC03B25DE6BA07D6B /* ShareCardScenario.swift */; };
 		06A58104C1CF2AAD837148A3 /* HistorySessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */; };
 		0704F97EBC6DA4A24DA37C43 /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
+		07DF1E6478EBCE40677E2FC9 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		08089FC83B60431AD0963327 /* Redactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA1A9BF2523442F3D7A2C243 /* Redactor.swift */; };
 		085CC4ACACDD86309AAC58CE /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
 		091BE7BE34131FB9414B125A /* CreditWalletLedgerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1839C5000FA21206EB9DC1B0 /* CreditWalletLedgerTests.swift */; };
@@ -130,6 +131,7 @@
 		381471F3E01DA54ADA3E6A14 /* EchoesFeralConsentSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C17A3C791D085B4F309E1CFE /* EchoesFeralConsentSheet.swift */; };
 		388F448B02D52272681946B5 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
 		3AEE51908660D480813CD995 /* HistorySessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */; };
+		3B4FEEB524B1463516CDC359 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		3BA336B51B8DEF4840E23ADF /* ModelRefusal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8F71C9B3581B5A1455B513 /* ModelRefusal.swift */; };
 		3BD26971CC34E54802A08C41 /* ModelRefusal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8F71C9B3581B5A1455B513 /* ModelRefusal.swift */; };
 		3C8CC6EAFB5430164C82A5FC /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEAE99564022D6C8CECBBBF /* OnboardingView.swift */; };
@@ -137,6 +139,7 @@
 		3EE72D116A1B6FD9E52B417A /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		3F00E536EFA2EDD391C00E33 /* RewriteThreatScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8EC65F2F1127851D3A5C2E2 /* RewriteThreatScreen.swift */; };
 		3FC5331335B8EEC137ACB93F /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
+		3FE5044F8B653398C9559A36 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		3FEBDFEC53D02397E1E24A47 /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */; };
 		3FFA8E1FDD919492E53C0990 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		40D47F00221F2E902E88089C /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
@@ -204,6 +207,7 @@
 		5AF7682FE0EB078C347C8275 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F71C81266E175EC1EFD5DD1 /* RootView.swift */; };
 		5B0A2E9416E90388DF768B22 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
 		5B691371E8021CF9780CEC58 /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
+		5B787C01682FFC6BBD1513E8 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		5D3D20436C302683D2370A53 /* RatingPromptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */; };
 		5D52051912F968BC0C5395D2 /* ForbiddenTerms.json in Resources */ = {isa = PBXBuildFile; fileRef = D0E9B27877B65F9AEBB9BBE6 /* ForbiddenTerms.json */; };
 		5E511C0310481BD18F0DFA1F /* MacMenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA10FA2DEB7AFCCFEC1468EE /* MacMenuBarContent.swift */; };
@@ -232,6 +236,7 @@
 		696A50C08BAEADA6F9AD0D17 /* AppLaunchEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708AC08EC94BA8DC2E23E24B /* AppLaunchEnvironment.swift */; };
 		69766C3C71DBD321B3173D9B /* CrisisResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4AE8F01F86C70AB907869 /* CrisisResources.swift */; };
 		69979D649F53923960FCC861 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */; };
+		699BB7718031CE24D40AE603 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		6B55A1717EED734E9B668451 /* ModelRefusal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE8F71C9B3581B5A1455B513 /* ModelRefusal.swift */; };
 		6B81B6A3961277AEA004EAB0 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EFF91CE10A108502250A16 /* RemoteConfig.swift */; };
 		6C320FEFB30ADFAD20407591 /* ModernSpeechBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BD8D3D62966EAA32CF98C3 /* ModernSpeechBackend.swift */; };
@@ -408,6 +413,7 @@
 		BE445CE5EAC402AA49FFF03C /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		BE7E3B00D1023297B6F91440 /* ThreadContinuationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4CFD9C6E6CA1734729DFA72 /* ThreadContinuationStoreTests.swift */; };
 		BF23A5F0AAE256CE999DEEC1 /* ThreadDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11AC90C29CF54A9781B56A0F /* ThreadDetailView.swift */; };
+		BF3F5FD5B06BE8899F6D4E76 /* PlanCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C181574E88B960D8B6785 /* PlanCopy.swift */; };
 		BF7A17E094A406F2B64B63F6 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
 		C00A16B6ABAD8F76A8C70E24 /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
 		C0606B74FABD4EE31317393C /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
@@ -630,6 +636,7 @@
 		3765A3E1830D7F5314CA5AA0 /* HistorySessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySessionDetailView.swift; sourceTree = "<group>"; };
 		38225DA3C0C31F64135B7CCA /* EchoesFeralConsentGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoesFeralConsentGateTests.swift; sourceTree = "<group>"; };
 		3A75DD3D3294393867B93031 /* WatchQuickPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchQuickPromptView.swift; sourceTree = "<group>"; };
+		3A7C181574E88B960D8B6785 /* PlanCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanCopy.swift; sourceTree = "<group>"; };
 		3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoastEngine.swift; sourceTree = "<group>"; };
 		3BFC0422287794DE08032EA7 /* CreditWalletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditWalletTests.swift; sourceTree = "<group>"; };
 		3EB0C99837F65CF26DB16AC2 /* TelemetryExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryExport.swift; sourceTree = "<group>"; };
@@ -1024,6 +1031,7 @@
 				77042C1003F6305E9448D814 /* KeychainStore.swift */,
 				FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */,
 				CCA7B87472544CCD604A5E4C /* LaunchRouter.swift */,
+				3A7C181574E88B960D8B6785 /* PlanCopy.swift */,
 				75E2A2AA157597FFBEE8E992 /* RatingPromptService.swift */,
 				EA1A9BF2523442F3D7A2C243 /* Redactor.swift */,
 				F4EFF91CE10A108502250A16 /* RemoteConfig.swift */,
@@ -1585,6 +1593,7 @@
 				CB9EDE709DEC67E49D65E07E /* LaunchRouterTests.swift in Sources */,
 				B02D2A49035DC78DEAECB789 /* ModelRefusal.swift in Sources */,
 				3786F39CDBE4ED0637C7A52C /* ModelRefusalTests.swift in Sources */,
+				699BB7718031CE24D40AE603 /* PlanCopy.swift in Sources */,
 				94E38E41351678483333ED73 /* PromptBuilder.swift in Sources */,
 				86CB4D28876E189B706A51F9 /* PromptBuilderIntensityTests.swift in Sources */,
 				21FF22DC79FE0A5105C8C9BF /* PromptBuilderModesTests.swift in Sources */,
@@ -1676,6 +1685,7 @@
 				69979D649F53923960FCC861 /* LanguageManager.swift in Sources */,
 				4C5947166420BF114079E296 /* LaunchRouter.swift in Sources */,
 				3BA336B51B8DEF4840E23ADF /* ModelRefusal.swift in Sources */,
+				07DF1E6478EBCE40677E2FC9 /* PlanCopy.swift in Sources */,
 				68473C13DFF73CCB2406AA6F /* PromptBuilder.swift in Sources */,
 				600A4AEBCFFC40A9097043FC /* QuickVentIntent.swift in Sources */,
 				6CA721CD6B76BCE2535E7272 /* RatingPromptService.swift in Sources */,
@@ -1748,6 +1758,7 @@
 				84E48496883E452E3B690F7C /* LanguageManager.swift in Sources */,
 				18793CE5245B2F733082C7F1 /* LaunchRouter.swift in Sources */,
 				6B55A1717EED734E9B668451 /* ModelRefusal.swift in Sources */,
+				3B4FEEB524B1463516CDC359 /* PlanCopy.swift in Sources */,
 				977C6BDD74B711051EA50850 /* PromptBuilder.swift in Sources */,
 				534C64B50E316BFC06BC825C /* QuickVentIntent.swift in Sources */,
 				1FEDAD5B771F9815C6AD976E /* RatingPromptService.swift in Sources */,
@@ -1818,6 +1829,7 @@
 				7C0074444D276B9BB2FA2D9E /* LanguageManager.swift in Sources */,
 				61F4B47889D22A5BFDFFF330 /* LaunchRouter.swift in Sources */,
 				1234637A5AFB4862E550D7D8 /* ModelRefusal.swift in Sources */,
+				5B787C01682FFC6BBD1513E8 /* PlanCopy.swift in Sources */,
 				0D65509483B1CACE49477444 /* PromptBuilder.swift in Sources */,
 				0F81F9D0DFE01120BA060599 /* QuickVentIntent.swift in Sources */,
 				D8FFCDA5940BC474CAF380A6 /* RatingPromptService.swift in Sources */,
@@ -1908,6 +1920,7 @@
 				3C8CC6EAFB5430164C82A5FC /* OnboardingView.swift in Sources */,
 				CA3CDA11099E1DE863DBE52B /* OutputShareButton.swift in Sources */,
 				1E491BDEE96196B31E8E8F7F /* PaywallView.swift in Sources */,
+				3FE5044F8B653398C9559A36 /* PlanCopy.swift in Sources */,
 				BE445CE5EAC402AA49FFF03C /* PromptBuilder.swift in Sources */,
 				305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */,
 				5D3D20436C302683D2370A53 /* RatingPromptService.swift in Sources */,
@@ -2011,6 +2024,7 @@
 				19F5524619680F3746F33362 /* OnboardingView.swift in Sources */,
 				18527FA5F4B4198A3BC6CBF2 /* OutputShareButton.swift in Sources */,
 				7A78E7FA8936D1C1BA02B1A7 /* PaywallView.swift in Sources */,
+				BF3F5FD5B06BE8899F6D4E76 /* PlanCopy.swift in Sources */,
 				FD4BC00795E0FBFCBD79C307 /* PromptBuilder.swift in Sources */,
 				EB4C08900A59D8F799C26E3B /* QuickVentIntent.swift in Sources */,
 				40D47F00221F2E902E88089C /* RatingPromptService.swift in Sources */,

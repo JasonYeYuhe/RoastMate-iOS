@@ -166,8 +166,10 @@
 
 "quota.remaining.lifetime" = "新人額度還剩 %d 次";
 "quota.lifetime.hint" = "前 20 次免費,之後每日 5 次";
-"paywall.monthly" = "月度";
-"paywall.yearly" = "年度";
+"paywall.monthly" = "月訂閱";
+"paywall.yearly" = "年訂閱";
+"paywall.plan.monthly.detail" = "痛罵、狠和全部 24 種風格，不扣點數。";
+"paywall.plan.yearly.detail" = "Pro 全部功能，一年付一次。";
 "paywall.yearly.trial" = "7 天免費試用 · 之後 %@";
 "paywall.restore" = "恢復購買";
 "paywall.subscribe" = "立即訂閱";

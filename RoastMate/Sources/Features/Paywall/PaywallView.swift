@@ -308,11 +308,19 @@ struct PaywallView: View {
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(product.displayName.isEmpty ? product.id : product.displayName)
-                        .font(.headline)
-                    Text(product.description.isEmpty ? product.id : product.description)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    if let copy = PlanCopy.keys(forProductID: product.id) {
+                        Text(LocalizedStringKey(copy.name))
+                            .font(.headline)
+                        Text(LocalizedStringKey(copy.detail))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text(product.displayName.isEmpty ? product.id : product.displayName)
+                            .font(.headline)
+                        Text(product.description.isEmpty ? product.id : product.description)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                     if let period = product.subscription?.subscriptionPeriod {
                         Text(periodLabel(period))
                             .font(.caption2)

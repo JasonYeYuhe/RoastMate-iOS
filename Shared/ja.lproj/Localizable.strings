@@ -166,8 +166,10 @@
 
 "quota.remaining.lifetime" = "スターター枠 残り %d 回";
 "quota.lifetime.hint" = "最初の20回は無料、その後は1日5回";
-"paywall.monthly" = "月額";
-"paywall.yearly" = "年額";
+"paywall.monthly" = "月額プラン";
+"paywall.yearly" = "年額プラン";
+"paywall.plan.monthly.detail" = "罵倒・容赦なし・全24スタイル。クレジット不要。";
+"paywall.plan.yearly.detail" = "Proのすべてを、年1回のお支払いで。";
 "paywall.yearly.trial" = "7日間無料体験 · その後 %@";
 "paywall.restore" = "購入を復元";
 "paywall.subscribe" = "登録する";
