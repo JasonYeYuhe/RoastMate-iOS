@@ -18,6 +18,26 @@ Everything else in the v1.6 handoff is history.
 is not true until you open the file; a claim about production is not true
 until you measure it.
 
+## Update 2026-10-22 — churn investigation, Worker fixes live, 1.7.1 in review
+
+- Churn: RoastMate has had 2 payers; TW cancelled on DAY 0 (09-19, v1.5.0, iOS 27),
+  US active (renews ~11-04). The other cancellations that week were ColorArchive's.
+  Full diagnosis: the 10-22 investigation (evidence was in the session scratchpad;
+  conclusions are in memory `project-v17-plan` and the commit messages below).
+- Worker 046f2134 LIVE (rollback 7846ac95 → 90d8f1c5): Taiwan register for zh-Hant,
+  no quota templates, output cleanup, names/surname+title never used to address the
+  person, per-mode timeout budget (commit 4ed652f); Pro styles shape the voice of
+  Vent/Feral drafts, free styles unchanged (commit 26add7d).
+- 1.7.1 build 25 SUBMITTED 2026-10-22 (commit 0b76d33): iOS/macOS 27 refusals show the
+  labelled example instead of an error (LanguageModelError, regression since 1.6.0's
+  SDK 27), working "Make it sendable" (permissive guardrails + refusal and threat
+  screens), purchase confirmation/errors, device-honest paywall, Taiwan crisis lines
+  first, Vent default without the on-device model, styleId sent.
+- Open: subscription descriptions in ASC still say "Unlimited generations" (shown on
+  the paywall rows); the API refuses edits while ACTIVE — change them in the ASC web UI
+  or show app-owned copy in the next binary. Datadog connector failed this session, so
+  Worker logs were not read. Lifetime Pro: decide after 11-15.
+
 ## Update 2026-10-20 — Phase 1 is LIVE
 
 - **iOS + macOS 1.7.0 build 24 submitted 2026-10-14, READY_FOR_SALE by 2026-10-20**

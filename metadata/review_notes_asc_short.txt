@@ -1,15 +1,15 @@
-Reviewer notes — RoastMate v1.7.0
+Reviewer notes — RoastMate v1.7.1
 
-1. WHAT'S NEW IN 1.7.0 (copy, two icons, screenshots).
-No new feature, data collection or permission; no change to purchases or to
-what is sent to the cloud. The Pro screen header now lists Feral, Savage,
-all 24 styles... and no longer Vent (free since 1.6.0). The Vent chip and
-Vent draft no longer show a padlock. A Pro-only style or intensity now says
-it needs Pro (it claimed a daily free limit). Shared cards show our
-searchable store name (RoastMate AI / 幫你罵 / 帮你骂). The consent sheet,
-onboarding and Settings now say declining cloud gives labelled examples
-(they said "gentler, on-device"). Two zh-Hant/ja labels translated; expired
-research link removed. iOS: new screenshots in all four languages.
+1. WHAT'S NEW IN 1.7.1 (fixes and copy).
+No new feature, data collection or permission; nothing new leaves the
+device. On iOS/macOS 27 an on-device model refusal showed an error; it now
+shows the labelled curated example. "Make it sendable" uses Apple's
+permissiveContentTransformations guardrails for the rewrite ONLY; output
+still passes a refusal check, a threat screen and our strict filter. The
+paywall confirms a purchase, closes, and reports errors; without Apple
+Intelligence its header says which parts need it. Taiwan users see Taiwan
+crisis lines first. Without the on-device model new users start on Vent
+(the cloud consent sheet still comes first).
 
 2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
 Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
