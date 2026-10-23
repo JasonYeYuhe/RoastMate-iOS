@@ -71,8 +71,8 @@ Exit codes: 0 ok or dry run; 1 bad input, gate failure or API error;
 Auth: the ASC API .p8 key, via mint_jwt()/api() from asc_bind_version.py.
 Defaults: key DMMFP6XTXX at ~/private_keys/AuthKey_<KEY_ID>.p8, issuer
 c5671c11-49ec-47d9-bd38-5e3c1a249416, app 6769317103. Override with
---key-id/--issuer/--key-path/--app-id or ASC_KEY_ID/ASC_ISSUER_ID/ASC_KEY_PATH/
-ASC_APP_ID."""
+--key-id/--issuer/--key-path or ASC_KEY_ID/ASC_ISSUER_ID/ASC_KEY_PATH; the app id
+only by --app-id (never from $ASC_APP_ID, which other projects set)."""
 import argparse
 import difflib
 import hashlib
@@ -1048,7 +1048,11 @@ def build_parser():
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--version", required=True, help="appStoreVersion versionString, e.g. 1.7.0")
     common.add_argument("--platform", default="IOS", choices=("IOS", "MAC_OS"))
-    common.add_argument("--app-id", default=os.environ.get("ASC_APP_ID", "6769317103"))
+    # NOT read from $ASC_APP_ID: that variable is shared by Jason's other projects
+    # (on 2026-10-23 it held another app's id, 6761163709), and this script writes
+    # store copy — a wrong default would write RoastMate text into another app.
+    common.add_argument("--app-id", default="6769317103",
+                        help="RoastMate's ASC app id; only an explicit flag overrides it")
     common.add_argument("--issuer", default=os.environ.get("ASC_ISSUER_ID", "c5671c11-49ec-47d9-bd38-5e3c1a249416"))
     common.add_argument("--key-id", default=os.environ.get("ASC_KEY_ID", "DMMFP6XTXX"))
     common.add_argument("--key-path", default=os.environ.get("ASC_KEY_PATH"),

@@ -1,15 +1,14 @@
-Reviewer notes — RoastMate v1.7.1
+Reviewer notes — RoastMate v1.7.2
 
-1. WHAT'S NEW IN 1.7.1 (fixes and copy).
+1. WHAT'S NEW IN 1.7.2 (icon and copy only).
 No new feature, data collection or permission; nothing new leaves the
-device. On iOS/macOS 27 an on-device model refusal showed an error; it now
-shows the labelled curated example. "Make it sendable" uses Apple's
-permissiveContentTransformations guardrails for the rewrite ONLY; output
-still passes a refusal check, a threat screen and our strict filter. The
-paywall confirms a purchase, closes, and reports errors; without Apple
-Intelligence its header says which parts need it. Taiwan users see Taiwan
-crisis lines first. Without the on-device model new users start on Vent
-(the cloud consent sheet still comes first).
+device. The app icon's speech bubble now reads 幫你罵 (Traditional Chinese)
+instead of 帮你骂. The paywall's subscription rows show the app's own
+description of Pro (Feral, Savage, all 24 styles, no credits) instead of the
+product description text. 1.7.1's fixes are unchanged: an on-device model
+refusal on iOS/macOS 27 shows the labelled curated example; "Make it
+sendable" uses Apple's permissiveContentTransformations guardrails for the
+rewrite only, then a refusal check, a threat screen and our strict filter.
 
 2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
 Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via

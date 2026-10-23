@@ -18,6 +18,23 @@ Everything else in the v1.6 handoff is history.
 is not true until you open the file; a claim about production is not true
 until you measure it.
 
+## Update 2026-10-23 — 1.7.1 live, 1.7.2 (Traditional icon) in review, share card on
+
+- 1.7.1 LIVE 2026-10-22 18:08Z (tag v1.7.1). 1.7.2 build 26 SUBMITTED 2026-10-23 13:41Z
+  (commit 64c4867): icon bubble now 幫你罵 (Traditional) — the one creator who replied
+  to batch 1 declined partly over the Simplified icon — plus the PlanCopy paywall rows.
+  When live: iTunes-lookup verify, `git tag -a v1.7.2 64c4867`.
+- `share_card_enabled` flipped ON 2026-10-23 (plan P2.3; commit 276502c; live config
+  verified). Rollback = set it false (works on every binary since v1.4.0).
+- P2.1 posts drafted and reviewed: docs/distribution/2026-10-23-p21-posts.md. Jason
+  decided to post AFTER 1.7.2's icon is live; PTT [廣宣] only on Mondays. The stop rule's
+  T is the date of the third post — log each post's URL and time.
+- Batch 1 was 1/3 replied (a decline), not 0/3 — corrected in the kit and the log.
+  Batch 2 (PLGM, poopoo.studio, 小儀) waits until the new icon is live, then Jason
+  confirms each send.
+- ⚠️ The shell's $ASC_APP_ID can hold ANOTHER app's id (it was 6761163709 on 10-23).
+  scripts/asc_product_page.py no longer reads it; pass --app-id only explicitly.
+
 ## Update 2026-10-22 — churn investigation, Worker fixes live, 1.7.1 in review
 
 - Churn: RoastMate has had 2 payers; TW cancelled on DAY 0 (09-19, v1.5.0, iOS 27),
