@@ -37,8 +37,8 @@ until you measure it.
   refuses edits while ACTIVE). The paywall rows no longer depend on them from the NEXT
   binary (commit 7301437, PlanCopy); the StoreKit purchase sheet still shows ASC's
   text until someone edits it in the ASC web UI.
-- Next binary already has in the tree: PlanCopy (above). When 1.7.1 is approved:
-  verify the live listing (iTunes lookup), then `git tag -a v1.7.1 0b76d33`. Datadog connector failed this session, so
+- Next binary already has in the tree: PlanCopy (above). 1.7.1 went LIVE
+  2026-10-22 18:08Z (verified by iTunes lookup TW/US/JP); tag `v1.7.1` → 0b76d33. Datadog connector failed this session, so
   Worker logs were not read. Lifetime Pro: decide after 11-15.
 
 ## Update 2026-10-20 — Phase 1 is LIVE
@@ -80,9 +80,10 @@ until you measure it.
   ONLY live model path; since P0.1 the Worker no longer tries Groq at all
   and has a second OpenRouter model (`FALLBACK_MODELS`). ≈45 cloud
   generations 09-28→10-07.
-- **Creator outreach:** batch 1 (3 emails, 09-28) → 0 replies, 0 redemptions;
+- **Creator outreach:** batch 1 (3 emails, 09-28) → 1 reply (「我不推」 declined
+  10-06 16:30Z: the icon and content are Simplified), 2 silent, 0 redemptions;
   one follow-up each sent 10-07 at Jason's confirmation. Never contact those
-  three again. Decision on 10-21 (plan P2.2).
+  three again. Batch 2 waits on the icon decision (corrected 2026-10-23).
 - **Interviews:** dropped. Research form closed.
 
 ## New since the v1.6 handoff

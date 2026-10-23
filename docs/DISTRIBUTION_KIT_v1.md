@@ -104,6 +104,15 @@ on 10-21: any reply → batch 2 from the backups; none → stop cold creator ema
 record 0/3 here. (§2 Step 2's "only if they redeemed" predates this section, which
 governs.) Log: `~/Documents/RoastMate-research/creator-outreach-log.tsv`.
 
+**Batch 1 result (read 2026-10-23): 1/3 replied, 0/3 redeemed — not 0/3.**
+「我不推」 declined at 2026-10-06 16:30Z, 7 minutes after the follow-up and after
+the status above was written: no need, and the icon and content are Simplified
+(「app icon是簡字，以及內容也都是簡字」). Gugu姊 and zmei silent, no bounce; ASC
+shows no offer redemption through 10-21. The content half was fixed by 1.7.0's
+screenshots, but the icon still reads 帮你骂 — batch 2 (PLGM, poopoo.studio, 小儀)
+waits for Jason's call on that, then his per-send confirmation. Do not reply to
+the decline (two messages per person was the rule).
+
 ---
 
 ## Read this first: five things the plan had wrong
