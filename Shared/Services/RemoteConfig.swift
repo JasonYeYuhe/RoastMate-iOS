@@ -109,9 +109,9 @@ struct RemoteConfigValues: Sendable, Codable, Equatable {
         ventCloudEnabled: true,
         minSupportedBuild: 0,
         roommateGroupEnabled: true,
-        cloudSendableEnabled: false, // DARK: flipped on remotely after the eval
+        cloudSendableEnabled: false, // RETIRED: must stay false forever (5.1.2(i) — see the live config note)
         cloudSendableLocales: nil,   // nil = all locales (back-compat)
-        shareCardEnabled: false,     // DARK: flipped after the §2 quantitative gate
+        shareCardEnabled: false,     // baked default; remotely ON since 2026-10-23 (v1.7 plan P2.3 superseded the §2 gate)
         shareCardSetupEnabled: false, // DARK: A.1 setup chips, flip after a device look
         shareCardVisible: true       // LIVE: the card has shipped since v1.0.5; this is a kill-switch, not a dark launch
     )
