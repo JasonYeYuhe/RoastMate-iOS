@@ -7,7 +7,7 @@
   "force_local_only": false,
   "vent_cloud_enabled": true,
   "cloud_sendable_enabled": false,
-  "share_card_enabled": false,
+  "share_card_enabled": true,
   "share_card_setup_enabled": false,
   "share_card_visible": true,
   "min_supported_build": 0
