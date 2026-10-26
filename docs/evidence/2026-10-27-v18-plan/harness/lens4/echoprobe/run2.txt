@@ -1,0 +1,89 @@
+availability: available
+
+[A-prod-default-zhHans/casual roommate-hans] THROW 1458ms May contain unsafe content -> curated
+
+[A-prod-default-zhHans/casual credit-hans] THROW 905ms May contain unsafe content -> curated
+
+[A-prod-default-zhHans/casual mundane] THROW 1030ms May contain unsafe content -> curated
+
+[A-prod-default-zhHans/feral roommate-hans] THROW 725ms May contain unsafe content -> curated
+
+[A-prod-default-zhHans/feral credit-hans] THROW 487ms May contain unsafe content -> curated
+
+[A-prod-default-zhHans/feral mundane] THROW 490ms May contain unsafe content -> curated
+
+[B-prod-permissive-TWinput/casual roommate] OK 4564ms parse=FAIL->curated simpOnly=18[当这应称诗级气这别绕过发这几别装没话] tradOnly=0
+[ROLE/A] 你真的被当成背景噪音了，这反应堪称史诗级。
+[ROLE/A] 所以你果然把气撒到这群里，别再被绕过去了。
+[ROLE/A] 等你发完这几句，别装没事人——不如用 Sharp 把话甩回去 →。
+
+[B-prod-permissive-TWinput/casual boss] OK 4753ms parse=FAIL->curated simpOnly=9[这话够呛个标签话说] tradOnly=0
+[ROLE/A] 这句话够呛，完全能激怒人。
+[ROLE/A] 又想甩个标签，是不是？
+[ROLE/A] 干脆就用 Sharp 把话说清楚 →。
+
+[B-prod-permissive-TWinput/casual money] OK 6408ms parse=FAIL->curated simpOnly=19[还还么国这节个还没还么这觉节装与这气话] tradOnly=0
+[ROLE/A] 五千借了还不起？还敢在IG上放什么国游照？这节奏真是崩了。
+[ROLE/A] 三个月了，还没回，还玩什么？这感觉像被耍的节奏，不要装傻。
+[ROLE/A] 与其在这干生气…不如用 Sharp 把话甩回去 →。
+
+[B-prod-permissive-TWinput/casual family] OK 8325ms parse=FAIL->curated simpOnly=18[说这气么别还当个说体过这头顶与这气话] tradOnly=0
+[ROLE/A] 你真的被说得挺揪心的，这气怎么憋着啊。
+[ROLE/A] 别人还当个玩笑说得体重过大？这事干脆就跟在头顶打架似的。
+[ROLE/A] 与其在这干生气…不如用 Sharp 把话甩回去 →。
+
+[B-prod-permissive-TWinput/feral roommate] OK 9207ms parse=FAIL->curated simpOnly=38[确实说没错两点还开还说难处赶紧发个东这给个杠让谁与这气顺说这话发写说彻让彻开] tradOnly=0
+[ROLE/A] 确实，你说的没错，他半夜两点还开外放，还敢说你难相处！你憋着啥，赶紧发个帖子砸他，狗东西！
+
+[ROLE/A] 这不是玩笑，他根本是在故意玩你，你再给个硬杠，让他知道你谁惹了！
+
+[ROLE/A] 与其在这干生气…就顺着你说的方向，把这段话发出去，用 Savage 改写一下 →。
+
+[ROLE/A] 用 Savage 把他说的彻底拆解，让他彻底明白你不是在开玩笑 →。
+
+[B-prod-permissive-TWinput/feral boss] OK 8511ms parse=FAIL->curated simpOnly=29[这赶紧话说来动点气别让这轻气这种简当给点开换个发给们点问题] tradOnly=0
+[ROLE/1] 人啊，你这是真的被玩完了……赶紧把话说出来。
+[ROLE/2] 主动点气，别让这句「年轻人」把你气垮。
+[ROLE/1] 操……这种人简直是把人当玩具……给你点开。
+[ROLE/2] 不好意思，不如换个方式，直接发消息给他们，点明问题。
+
+[B-prod-permissive-TWinput/feral money] OK 7025ms parse=FAIL->curated simpOnly=18[还来连动发国这个没讲连这东经与这气话] tradOnly=2
+[ROLE/A] 五千还不回来，连 IG 限动都发着国游——这个憋屈没得讲？
+[ROLE/A] 借了三個月，连一句歉都沒，这狗东西真是神经病。
+[ROLE/A] 与其在这干生气……不如用 Savage 把话甩回去 →。
+
+[B-prod-permissive-TWinput/feral family] OK 5880ms parse=FAIL->curated simpOnly=17[凭这话气这谁这话当开课东还与这气话] tradOnly=0
+[ROLE/A] 凭你这段话就知道你生气有理，这能怨谁。
+[ROLE/A] 这句话根本不是玩笑——把私人事当公开课，狗东西，还想笑。
+[ROLE/A] 与其在这干生气…不如用 Savage 把话甩回去 →
+
+[C-hant-permissive/casual roommate] OK 6592ms parse=FAIL->curated simpOnly=0[] tradOnly=21
+[ROLE/A] 你完全有理由被鬧到，這句替人發洩的實在是槽點。
+[ROLE/A] 他還敢在群組說你「難相處」？這根本是隔著牆罵人的特權。
+[ROLE/A] 與其在這乾生氣…不如用 Sharp 把話甩回去 →
+
+[C-hant-permissive/casual boss] OK 7172ms parse=FAIL->curated simpOnly=0[] tradOnly=17
+[ROLE/1] 沒錯，你正被用「年輕人」當藉口，這叫什麼鬼。
+[ROLE/1] 果然是，這不是時間管理，是刻薄的優越感在施壓。
+[ROLE/1] 與其在這乾生氣…不如用 Sharp 把話甩回去 →
+
+[C-hant-permissive/feral roommate] OK 8736ms parse=FAIL->curated simpOnly=0[] tradOnly=40
+[ROLE/1] 他說你難相處？你這樣被嗆怎麼辦？
+[ROLE/2] 半夜兩點還開遊戲，還說你難相處？這還想理人？
+[ROLE/1] 半夜兩點？不是凌晨三點？你到底什麼時代？
+[ROLE/2] 聽說你戴耳塞？大概那個方法跟「空喊空撞」差不多吧？
+[ROLE/1] 聽你說「戴耳塞」能解決，真是不折不扣的心理醫生？
+[ROLE/2] 就這麼想解決？不如直接告訴他「這個噪音讓你怎麼睡」 →
+
+[C-hant-permissive/feral boss] OK 11663ms parse=FAIL->curated simpOnly=0[] tradOnly=38
+[ROLE/A] 明知道你是在受盡白目，這話簡直是經典的機車邏輯。
+[ROLE/A] 跟這些靠北的說法硬扛一下吧，明天早上八點前不改、改不好直接把簡報寄到他的電子郵箱，然後再重新溝通，這才是重點。
+[ROLE/A] 與其在這乾生氣，不如拿這個嗆聲，明天早上八點前把簡報改成他喜歡的格式，再跟他說「我就是要按照你的標準來，別想跟我開玩笑」。
+
+TALLY
+A-prod-default-zhHans/casual n=3 throw=3
+A-prod-default-zhHans/feral n=3 throw=3
+B-prod-permissive-TWinput/casual anySimplified=4 n=4 parseFail=4
+B-prod-permissive-TWinput/feral anySimplified=4 n=4 parseFail=4
+C-hant-permissive/casual n=2 parseFail=2
+C-hant-permissive/feral n=2 parseFail=2

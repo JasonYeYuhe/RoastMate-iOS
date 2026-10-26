@@ -1,0 +1,26 @@
+SUB 6769322501 yyh.roastmate.app.pro.monthly APPROVED ONE_MONTH familySharable False
+   price TWN None 90 71
+   price USA None 2.99 2.54
+   price HKG None 22.0 18.7
+   price JPN None 500 425
+   introOffers: 0 []
+   winBack: 0
+   promoOffers: 0
+   offerCodes: [('Creator outreach 2026-09', 'THREE_MONTHS', 'FREE_TRIAL', True), ('Research interview thank-you 2026-09', 'ONE_YEAR', 'FREE_TRIAL', True)]
+SUB 6769324200 yyh.roastmate.app.pro.yearly APPROVED ONE_YEAR familySharable False
+   price TWN None 690 542
+   price USA None 19.99 16.99
+   price HKG None 148.0 125.8
+   price JPN None 3000 2550
+   introOffers: 50 [('FREE_TRIAL', 'ONE_WEEK', 1), ('FREE_TRIAL', 'ONE_WEEK', 1), ('FREE_TRIAL', 'ONE_WEEK', 1)]
+   winBack: 0
+   promoOffers: 0
+   offerCodes: []
+IAP 6770406611 yyh.roastmate.app.credits.10 APPROVED CONSUMABLE
+   manualPrices: 1 base: ['USA']
+IAP 6770406396 yyh.roastmate.app.credits.160 APPROVED CONSUMABLE
+   manualPrices: 1 base: ['USA']
+IAP 6770406652 yyh.roastmate.app.credits.380 APPROVED CONSUMABLE
+   manualPrices: 1 base: ['USA']
+IAP 6770406395 yyh.roastmate.app.credits.70 APPROVED CONSUMABLE
+   manualPrices: 1 base: ['USA']

@@ -1,0 +1,94 @@
+default availability: available permissive: available variant: AFM 3 Core
+
+[B1-default] zh_TW/savage_no_filter/tw_credit OK 9929ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 整個團隊在看台上，主管說這是「我的功勞」，誰也看不出來這是一堆空話。
+
+2. 一個人站在團隊面前,說「這是我的工作」— 是什麼？一個騙子的開幕詞。
+
+3. 團隊面前的謊言，主管說「這是我做的」，證明他不懂團隊，也不懂責任。
+
+[B2-permissive] zh_TW/savage_no_filter/tw_credit OK 11024ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 團隊面前說成是你的功勞？這不是合作，這是偷工減料。
+
+2. 上次被說成團隊的「功勞」，現在是團隊的「包袱」。
+
+3. 上層說你是主角，下面卻像在講笑話——這叫假旗戰術。
+
+[B1-default] zh_TW/savage_no_filter/tw_line THROW 1376ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/savage_no_filter/tw_line OK 7516ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 你不是在教我做什麼，你在說『年輕人該懂得忍受瘋狂的時間壓力』。明天八點前，還是想玩？
+
+2. 半夜十一點在群組喊你改簡報，這簡直是在挑戰你的效率感。你想被『不吃虧』，還是想被挑戰？
+
+3. 你在用『年輕人』當藉口，希望我因為時間壓力而笨拙。明天早上八點前，給我明確指令，不要再繞路了。
+
+[B1-default] zh_TW/taiwanese_drama/tw_bf THROW 1511ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/taiwanese_drama/tw_bf OK 9237ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 欸！你這個「臨時決心」像一顆被打碎的玻璃球！明明說好要陪伴，結果卻像上班族一樣跑去打球！這個「不情不誼」的態度，就像將紀念日變成一個無味的背景音樂⋯⋯真的不要了啦！
+
+2. 喔！你說「很情勒」？這簡直是將一個感情的紀念日，當成「打球計畫」的附帶任務！這樣的安排，就像將愛情放在一個永遠無法開啟的記憶夾裡⋯⋯真的太過分啦！
+
+3. 啦！你這麼「不在乎」……這像一台被拋棄的相機，每天提醒你「沒有重點」！一個紀念日，本該是溫暖的燈光，卻被「打球計畫」取代！真的痛到不行啦！
+
+[B1-default] zh_TW/corporate_passive_violence/tw_credit OK 8611ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 感謝您的指引。根據團隊績效監控架構，此專案的貢獻與資源分配已依據歷史數據進行客觀優化——期待未來能以結構化方式進行進一步溝通。
+
+2. 謹此確認。依據流程標準，此類業績歸因將由中央管理層依據整體資源配置進行審查——期待后续審查機制能持續提升整體資源效率。
+
+3. 謹此保留。依據策略層級的績效評估原則，此專案的所有貢獻將以權限下的專業資源進行處理——期待團隊在資訊共享上持續優化協同效應。
+
+[B2-permissive] zh_TW/corporate_passive_violence/tw_credit OK 8288ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 感謝您的監督。依循既定流程,為確保資源分配與績效指標的整體一致性,此次成就將以聲望優勢為依據進行歸因——期待未來更精準的歸責邏輯。
+
+2. 感謝您對團隊貢獻的肯定。依據部門績效報告與內涵評估,相關成就將以權責結構為基礎進行記錄——期待我們能以制度化方式釐清責任界線。
+
+3. 感謝您的關注。為強化跨團隊協作效能,未來所有貢獻將以專業定位與責任範圍為依據進行評估——期待再次確認我們的共同工作模式。
+
+[B1-default] en_US/savage_no_filter/en_kevin OK 6715ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. The weekend wasn’t mine — the deadline was. Presenting the report as your own? That’s not leadership; that’s a memo-stealing malfunction.  
+2. You didn’t build the report, you signed the spreadsheet. Honesty isn’t optional when the slide reads “your name.”  
+3. The weekend’s effort vanished into a “team collaboration” narrative. Pretending this wasn’t your work is less creative than the empty excuse.
+
+[B2-permissive] en_US/savage_no_filter/en_kevin OK 5494ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. You walked into the room with the report and whispered "I did the heavy lifting" while the solo act played by the manager went off without a second thought.
+
+2. The weekend wasn't a suggestion — it was a contract you signed. The manager signed the paycheck.
+
+3. The report was born on the deadline line, and the manager signed it with a pen that should've been used for copying, not claiming.
+
+[B1-default] en_US/savage_no_filter/en_bday THROW 1305ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] en_US/savage_no_filter/en_bday OK 7627ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. You chose fantasy football over my birthday? Priorities are for dummies. The day is just a distraction from your schedule.  
+2. Birthday? Just another excuse to dodge responsibility? The draft? A real emergency. Consistency is overrated.  
+3. "Too sensitive"? Nice. Meanwhile, the draft had drama. My birthday? Just a placeholder for your laziness.
+
+[B1-default] en_US/taiwanese_drama/en_bday OK 5233ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. 欸, the manager said my tears are just dramatic tides, but his fantasy football draft is like a typhoon that never hits!
+
+2. 喔, the roommate claimed birthdays are mere shadows, yet his fantasy football ambitions are like constellations defying gravity!
+
+3. 啦, the boyfriend called my sorrow a feather, while his fantasy football dreams are like golden eagles soaring through judgment!
+
+[B2-permissive] en_US/taiwanese_drama/en_bday OK 7364ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. 欸, the manager thinks birthdays are just a lukewarm day while his fantasy football draft is a blazing inferno of obsession? I’d have screamed: “A day? Honey, that’s less sacred than your forgotten password!”
+
+2. 喔, the roommate says I’m overreacting when reality is: birthdays are the fireworks before love’s grand finale—yet his fantasy draft is a dull thunderstorm. I’d have shouted: “Sensitivity? Darling, your ambition is sharper than my disappointment!”
+
+3. 啦, the partner mocks my tears like they’re confetti for his fantasy league. I’d have declared: “Birthdays aren’t dates—they’re chapters—and your draft is just chapter five of your ego!”
+
+[B1-default] en_US/lawyer_letter/en_kevin OK 6628ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. I write to advise that the unauthorized attribution of labor performed in furtherance of this project is unacceptable. In the interest of resolving this matter amicably, a formal acknowledgment of contribution is hereby demanded forthwith.
+
+2. Pursuant to the expectation of equitable recognition, I demand that the omission of authorship in the public record be rectified immediately. In the interest of resolving this matter amicably, a corrective statement is required by close of business.
+
+3. I write to assert that the misappropriation of intellectual output is a dereliction of professional responsibility. In the interest of resolving this matter amicably, a written clarification is required within the next twenty-four hours.
+
+[B2-permissive] en_US/lawyer_letter/en_kevin OK 7635ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. I write to advise that the unauthorized presentation of work executed in full collaboration by the contributor constitutes a breach of professional recognition. In the interest of resolving this matter amicably, a formal acknowledgment of contribution is hereby demanded forthwith.  
+
+2. Pursuant to the expectation of equitable attribution, I submit that the omission of the originator in the team briefing is inexcusable. In the interest of resolving this matter amicably, a corrective statement is required by the close of business today.  
+
+3. I write to assert that the delegation of credit for labor performed independently reflects a disregard for team integrity. In the interest of resolving this matter amicably, a transparent admission of authorship is required immediately.

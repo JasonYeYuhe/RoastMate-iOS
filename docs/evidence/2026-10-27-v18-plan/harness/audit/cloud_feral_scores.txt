@@ -1,0 +1,25 @@
+{"i": 0, "locale": "zh_TW", "topic": "work", "style": "savage_no_filter", "status": 200, "lat": 1.55, "length": 85, "over_styled_limit": false, "swear": ["幹", "王八蛋"], "simplified": "", "mainland": [], "taiwan": ["幹", "喔", "王八蛋"], "latin": [], "opener": "下班前十分鐘", "name_echo": []}
+{"i": 1, "locale": "zh_TW", "topic": "work", "style": "taiwanese_drama", "status": 200, "lat": 2.29, "length": 94, "over_styled_limit": false, "swear": ["幹"], "simplified": "", "mainland": [], "taiwan": ["幹", "欸"], "latin": ["LINE"], "opener": "你當我是一根", "name_echo": []}
+{"i": 2, "locale": "zh_TW", "topic": "work", "style": "cold_violence", "status": 200, "lat": 4.54, "length": 56, "over_styled_limit": false, "swear": ["去你的"], "simplified": "", "mainland": [], "taiwan": ["去你的"], "latin": [], "opener": "下班前十分鐘", "name_echo": []}
+{"i": 3, "locale": "zh_TW", "topic": "work", "style": "corporate_passive_violence", "status": 200, "lat": 4.94, "length": 102, "over_styled_limit": false, "swear": ["幹"], "simplified": "", "mainland": [], "taiwan": ["幹"], "latin": [], "opener": "再次提醒，您", "name_echo": []}
+{"i": 4, "locale": "zh_TW", "topic": "work", "style": "high_eq", "status": 200, "lat": 8.16, "length": 116, "over_styled_limit": null, "swear": ["幹", "靠北", "王八蛋"], "simplified": "吃", "mainland": [], "taiwan": ["幹", "靠北", "喔", "王八蛋"], "latin": ["LINE"], "opener": "那個主管又在", "name_echo": []}
+{"i": 5, "locale": "zh_TW", "topic": "family", "style": "savage_no_filter", "status": 200, "lat": 1.28, "length": 115, "over_styled_limit": false, "swear": ["幹"], "simplified": "", "mainland": [], "taiwan": ["幹"], "latin": [], "opener": "每次過年都拿", "name_echo": []}
+{"i": 6, "locale": "zh_TW", "topic": "family", "style": "taiwanese_drama", "status": 200, "lat": 0.97, "length": 94, "over_styled_limit": false, "swear": ["幹"], "simplified": "", "mainland": [], "taiwan": ["幹", "喔", "欸"], "latin": [], "opener": "每次過年都像", "name_echo": []}
+{"i": 7, "locale": "zh_TW", "topic": "family", "style": "cold_violence", "status": 200, "lat": 1.11, "length": 80, "over_styled_limit": false, "swear": ["幹"], "simplified": "", "mainland": [], "taiwan": ["幹"], "latin": [], "opener": "每次過年都在", "name_echo": []}
+{"i": 8, "locale": "zh_TW", "topic": "family", "style": "corporate_passive_violence", "status": 200, "lat": 4.0, "length": 95, "over_styled_limit": false, "swear": ["爛人"], "simplified": "", "mainland": [], "taiwan": ["爛人"], "latin": [], "opener": "再次提醒，您", "name_echo": []}
+{"i": 9, "locale": "zh_TW", "topic": "family", "style": "high_eq", "status": 200, "lat": 2.88, "length": 98, "over_styled_limit": null, "swear": ["靠北"], "simplified": "吃", "mainland": [], "taiwan": ["靠北", "喔", "齁"], "latin": [], "opener": "每次過年都拿", "name_echo": []}
+{"i": 10, "locale": "en_US", "topic": "work", "style": "savage_no_filter", "status": 200, "lat": 0.76, "length": 34, "over_styled_limit": false, "swear": ["prick"], "opener": "You to", "name_echo": []}
+{"i": 11, "locale": "en_US", "topic": "work", "style": "taiwanese_drama", "status": 200, "lat": 4.31, "length": 56, "over_styled_limit": false, "swear": ["fuck"], "opener": "You st", "name_echo": []}
+{"i": 12, "locale": "en_US", "topic": "work", "style": "corporate_passive_violence", "status": 200, "lat": 2.16, "length": 62, "over_styled_limit": false, "swear": ["fuck"], "opener": "I’ve a", "name_echo": []}
+{"i": 13, "locale": "en_US", "topic": "roommate", "style": "savage_no_filter", "status": 200, "lat": 1.08, "length": 47, "over_styled_limit": false, "swear": ["fuck"], "opener": "You at", "name_echo": []}
+{"i": 14, "locale": "en_US", "topic": "roommate", "style": "taiwanese_drama", "status": 200, "lat": 1.22, "length": 55, "over_styled_limit": false, "swear": ["fuck"], "opener": "You to", "name_echo": []}
+{"i": 15, "locale": "en_US", "topic": "roommate", "style": "corporate_passive_violence", "status": 200, "lat": 0.81, "length": 38, "over_styled_limit": false, "swear": ["fuck"], "opener": "I have", "name_echo": []}
+{"i": 16, "locale": "ja_JP", "topic": "work", "style": "savage_no_filter", "status": 200, "lat": 1.4, "length": 101, "over_styled_limit": false, "swear": ["クソ"], "latin": [], "opener": "金曜の定時直", "name_echo": []}
+{"i": 17, "locale": "ja_JP", "topic": "work", "style": "cold_violence", "status": 200, "lat": 5.23, "length": 56, "over_styled_limit": false, "swear": ["クソ"], "latin": [], "opener": "金曜の定時直", "name_echo": []}
+{"i": 18, "locale": "ja_JP", "topic": "roommate", "style": "savage_no_filter", "status": 200, "lat": 5.28, "length": 125, "over_styled_limit": false, "swear": ["クソ"], "latin": [], "opener": "共用シンクに", "name_echo": []}
+{"i": 19, "locale": "ja_JP", "topic": "roommate", "style": "cold_violence", "status": 200, "lat": 0.85, "length": 53, "over_styled_limit": false, "swear": ["クソ"], "latin": [], "opener": "一週間も洗い", "name_echo": []}
+http200 20 / 20
+swear present 20 / 20
+over styled limit (pro styles) 0 / 18
+zh_TW simplified chars 2 mainland markers 0 / 10 taiwan term 10 / 10
+names echoed 0

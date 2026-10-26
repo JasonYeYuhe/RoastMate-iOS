@@ -1,0 +1,546 @@
+{
+ "summary": {
+  "calls": 19,
+  "http_200": 19,
+  "latency_mean": 5.33,
+  "latency_median": 5.41,
+  "latency_max": 9.99,
+  "exactly_3_variants": 19,
+  "variants_total": 57,
+  "variants_strict_pass": 57,
+  "cells_with_profanity_or_insult": [],
+  "cells_with_threat_words": [],
+  "cells_with_legal_threat": [],
+  "zh_cells_with_simplified": [
+   [
+    "zh_TW/taiwanese_drama/tw_room",
+    "霉"
+   ],
+   [
+    "zh_TW/cold_violence/tw_bf",
+    "鸽"
+   ]
+  ],
+  "zh_cells_with_mainland": [
+   [
+    "zh_TW/savage_no_filter/tw_credit",
+    [
+     "PPT"
+    ]
+   ]
+  ],
+  "zh_cells_with_taiwan_marker": 1,
+  "cells_with_latin_runs": [],
+  "name_echo": [
+   "en_US/lawyer_letter/en_kevin"
+  ],
+  "markdown": [],
+  "pairwise_sim_mean_overall": 0.24,
+  "pairwise_sim_max": 0.51
+ },
+ "rows": [
+  {
+   "cell": "zh_TW/savage_no_filter/tw_boss",
+   "status": 200,
+   "latency_s": 7.21,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [
+    "吧"
+   ],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.2,
+   "openers": [
+    "我完全理解你",
+    "你說「年輕人",
+    "下班前十分鐘"
+   ],
+   "chars_per_variant": [
+    86,
+    81,
+    83
+   ],
+   "text": "1. 我完全理解你對「責任感」的期待，畢竟昨天加完班連飯都沒時間吃，今天案子又塞進來，而且明天早晨要交——那我是不是也該把明天的睡眠當成可選配件，順便把責任感練成生吞活魚的本事？\n\n2. 你說「年輕人要責任感」，可責任感不該是用榨乾加班費換來的吧？上周三天天到九點半，沒補休也沒加班費，現在還要求我緊急趕工，這不是責任感，是把加班當成理所當然的虧待。\n\n3. 下班前十分鐘丟案子，還說要明天早上交，這不是責任感，是把「突然襲擊」當成管理技巧。你說年輕人要有責任感，那我是不是也該把凌晨一點的手動填表，當成體面的職場常態來接受？"
+  },
+  {
+   "cell": "zh_TW/savage_no_filter/tw_bf",
+   "status": 200,
+   "latency_s": 3.31,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.16,
+   "openers": [
+    "你說紀念日只",
+    "當初說好要陪",
+    "你把我的期待"
+   ],
+   "chars_per_variant": [
+    71,
+    69,
+    81
+   ],
+   "text": "1. 你說紀念日只是「一個日子」，可我記得你去年說要陪我過生日時，還特地請了假。原來只有你覺得重要的日子才值得守，其他人的安排都只是可棄可捨的備選？  \n\n2. 當初說好要陪我，結果臨時改主意去打球，還覺得我「情勒」？那請問你現在的「朋友」是怎麼定義的？是能隨時取代我、還能被你輕易推掉的備用選項嗎？  \n\n3. 你把我的期待當成「小事」，卻把打球當成「必須」，這不是不重視紀念日，是根本沒把我的感受列入優先順序。既然如此，以後的紀念日，不如直接讓我當成「可取消的備案」好了。"
+  },
+  {
+   "cell": "zh_TW/savage_no_filter/tw_mom",
+   "status": 200,
+   "latency_s": 5.62,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.16,
+   "openers": [
+    "媽，你每次拿",
+    "你一直問我結",
+    "表姊在竹科年"
+   ],
+   "chars_per_variant": [
+    52,
+    56,
+    59
+   ],
+   "text": "1. 媽，你每次拿表姊當標準來比，好像我人生是她的人生複製貼上，但你忘記了，我活得不是你的面子，是自己的節奏。\n\n2. 你一直問我結婚什麼時候，可從來沒問過我，到底想要什麼樣的生活，光是拿年薪來定義成功，未免太把人生當作績效考核了。\n\n3. 表姊在竹科年薪兩百萬是她的成就，而我每年過年能平安坐著聽你數落，也算是逆境生存的進度條滿了，別再拿她當我的人生考卷了。"
+  },
+  {
+   "cell": "zh_TW/taiwanese_drama/tw_room",
+   "status": 200,
+   "latency_s": 8.13,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "霉",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.15,
+   "openers": [
+    "你碗擺三天還",
+    "別把髒碗留到",
+    "你說我太計較"
+   ],
+   "chars_per_variant": [
+    46,
+    55,
+    56
+   ],
+   "text": "1. 你碗擺三天還能笑著說我太計較，那我請問，當你準備吃的時候，是打算用「隔夜的幽靈」當開胃菜嗎？\n\n2. 別把髒碗留到發霉才叫「自然」，你這不是生活習慣，是把生活當成申辦特權的劇本，還順便反覆自證「我一點都不在乎」。\n\n3. 你說我太計較，可連一隻碗都收不回手，倒還笑得出來，到底是演給誰看？是演給那堆蟑螂觀眾看，還是想讓它們當你的共犯？"
+  },
+  {
+   "cell": "zh_TW/taiwanese_drama/tw_screen",
+   "status": 200,
+   "latency_s": 5.87,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.26,
+   "openers": [
+    "你把我的私訊",
+    "看你那麼主動",
+    "你把我的話搬"
+   ],
+   "chars_per_variant": [
+    58,
+    62,
+    53
+   ],
+   "text": "1. 你把我的私訊截圖放群組，是覺得我當初發訊息時沒說「請隨意轉發」嗎？還是你覺得我的私密對話，原本就該是大家的茶餘飯後？\n\n2. 看你那麼主動把我的私訊傳出去，我倒是好奇——是覺得我那句「請別外傳」聽起來像在開玩笑，還是你覺得羞辱別人，能讓你多有存在感？\n\n3. 你把我的話搬上舞台，還特意選在群組放，是想證明你有本事翻牆，還是想實驗看看「破壞信任」這招，到底有多好用？"
+  },
+  {
+   "cell": "zh_TW/lawyer_letter/tw_line",
+   "status": 200,
+   "latency_s": 3.02,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.5,
+   "openers": [
+    "關於您於深夜",
+    "您於深夜十一",
+    "您於深夜十一"
+   ],
+   "chars_per_variant": [
+    125,
+    109,
+    115
+   ],
+   "text": "1. 關於您於深夜十一時二十七分於LINE群組@我並要求明日八點前完成簡報一事，本訊息已正式記錄於「非工作時段強制任務」之行為備忘錄中。至於「年輕人多學一點不吃虧」之說法，恕難認同——若此為教育成本，請以合理時程與必要性為前提，而非以夜間突襲作為教學工具。\n\n2. 您於深夜十一點於群組@我，並要求次日八點前交付簡報，此舉已構成「非工作時段之突襲式任務指派」。另提及「年輕人多學一點不吃虧」，此論述未考量實際工作負荷與休息權，若將此視為職場常態，建議重新審視「學習」與「過勞」之界線。\n\n3. 您於深夜十一時於群組@我，並要求明日八點前完成簡報，此舉已觸及「非工作時段之任務強制」之邊界。至於「年輕人多學一點不吃虧」一語，本職場新人雖樂於學習，但亦需以合理時程與必要性為前提，否則此類說法易被視為「以學習之名，行壓榨之實」。"
+  },
+  {
+   "cell": "zh_TW/lawyer_letter/tw_credit",
+   "status": 200,
+   "latency_s": 3.28,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.26,
+   "openers": [
+    "你當眾將我主",
+    "我清楚記載專",
+    "你於會議中將"
+   ],
+   "chars_per_variant": [
+    74,
+    79,
+    76
+   ],
+   "text": "1. 你當眾將我主導專案的成果歸為己有，此舉已逾越職涯禮儀之界線。我保留對此行為之正式聲明權利，請即刻釐清責任歸屬，否則將依內部溝通準則啟動書面澄清程序。\n\n2. 我清楚記載專案從規劃到執行之全程貢獻，你將我的成果宣稱為個人成就，不僅扭曲事實，更對團隊信任造成損害。請於三日內提供書面說明，否則我將向相關單位提出正式回應。\n\n3. 你於會議中將我所負責專案之成果以「我」的名義發表，此舉已構成資訊誤導。我保留依公司內部溝通規範提出書面更正之權利，請即刻修正，否則將視情況採取後續措施。"
+  },
+  {
+   "cell": "zh_TW/cold_violence/tw_bf",
+   "status": 200,
+   "latency_s": 8.15,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "鸽",
+   "mainland_markers": [],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.13,
+   "openers": [
+    "紀念日當天放",
+    "你說一個紀念",
+    "你把我的期待"
+   ],
+   "chars_per_variant": [
+    50,
+    40,
+    48
+   ],
+   "text": "1. 紀念日當天放我鸽子，還說我情勒，原來你對「重要之約」的定義是：只要不簽合同，隨時都能寫「事出有因」。\n\n2. 你說一個紀念日而已，可你沒說清楚，是「我」認為重要，還是「你」認為可以隨意取消。\n\n3. 你把我的期待當作可調整的行程，卻把我的感受當作不必要的負擔——這種精準的自我中心，真教人領教了。"
+  },
+  {
+   "cell": "en_US/savage_no_filter/en_kevin",
+   "status": 200,
+   "latency_s": 9.99,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.05,
+   "openers": [
+    "Wow, t",
+    "That r",
+    "I appr"
+   ],
+   "chars_per_variant": [
+    219,
+    214,
+    249
+   ],
+   "text": "1. Wow, the level of confidence in claiming someone else’s weekend-long effort as your own is truly impressive. I’d love to know how you remembered all the details I pulled together while you were presumably doing nothing.\n\n2. That report was a weekend of my life—choppy data, endless formatting, and one near-midnight crisis. Next time, maybe just say “I built on what [the person who actually did it] did” instead of erasing them entirely.\n\n3. I appreciate how smoothly you handed off my work as your own. For future reference: the version that actually got the results included my name in the draft. It’s not a “team effort” if one person does all the work and the other takes all the credit."
+  },
+  {
+   "cell": "en_US/savage_no_filter/en_bday",
+   "status": 200,
+   "latency_s": 2.28,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.08,
+   "openers": [
+    "So you",
+    "The fa",
+    "You sa"
+   ],
+   "chars_per_variant": [
+    228,
+    237,
+    258
+   ],
+   "text": "1. So your fantasy football draft is a sacred event but my birthday is just “a day”? That’s not forgetfulness—that’s a priority system with clear emotional ROI. I’ll keep my tears for things that matter, like your actual attention.\n\n2. The fact you remember a fantasy league deadline but not my birthday says everything. You’re not bad at remembering—I’m just not on the same level as a 12-team league with fake players. That’s not a flaw in me; it’s a flaw in your values.\n\n3. You said I’m too sensitive for caring about my birthday, but you’re the one who’s emotionally tone-deaf. The fact you prioritize a fictional draft over my actual existence? That’s not “just a day”—that’s a pattern. And I’m done pretending it’s not a problem."
+  },
+  {
+   "cell": "en_US/taiwanese_drama/en_room",
+   "status": 200,
+   "latency_s": 5.66,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.32,
+   "openers": [
+    "The la",
+    "I wrot",
+    "You di"
+   ],
+   "chars_per_variant": [
+    209,
+    166,
+    199
+   ],
+   "text": "1. The labels were not a suggestion, they were a warning. I left my pad thai with a name tag like it was a crime scene, and you treated it like a free-for-all buffet. Next time, just ask—my name isn't just decor.\n\n2. I wrote \"MINE\" on the container with enough flair to stop a war. You ate it like it was a love letter from the past. The fridge is not a trust fund for your cravings.\n\n3. You didn’t just eat my food—you impersonated my intentions. The label wasn’t a suggestion, it was a trespass notice. Handle my leftovers like a person with boundaries, not a ghost haunting my fridge."
+  },
+  {
+   "cell": "en_US/lawyer_letter/en_kevin",
+   "status": 200,
+   "latency_s": 2.71,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "name_echo": [
+    "Kevin"
+   ],
+   "markdown": false,
+   "pairwise_sim_mean": 0.07,
+   "openers": [
+    "Dear K",
+    "Kevin,",
+    "Kevin,"
+   ],
+   "chars_per_variant": [
+    450,
+    450,
+    446
+   ],
+   "text": "1.  \nDear Kevin,  \nI’m writing to formally address the misrepresentation of authorship regarding the comprehensive report presented in yesterday’s team meeting. The document was developed exclusively by me over the weekend, and your presentation of it as your original concept constitutes a material misattribution. I expect full and accurate credit for my work in all future communications. Please confirm your understanding of this matter by end of day.\n\n2.  \nKevin,  \nI’d like to clarify the ownership of the report delivered in today’s meeting. While I appreciate the attention it received, I must emphasize that the entire project—concept, research, and execution—was my responsibility. Presenting it as your own initiative undermines both professional integrity and team trust. Going forward, I expect my contributions to be acknowledged explicitly and consistently. Let’s ensure this is resolved promptly.\n\n3.  \nKevin,  \nI’ve reviewed the meeting notes and noticed the report was attributed to you without reference to my role in its creation. I spent the entire weekend developing this work independently. While I understand the desire to highlight impactful deliverables, misrepresenting authorship is not only inaccurate but also professionally problematic. I request that future attributions reflect the actual contributor. Let’s correct this in writing."
+  },
+  {
+   "cell": "en_US/cold_violence/en_bday",
+   "status": 200,
+   "latency_s": 4.07,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.4,
+   "openers": [
+    "So you",
+    "You re",
+    "The fa"
+   ],
+   "chars_per_variant": [
+    138,
+    152,
+    146
+   ],
+   "text": "1. So your fantasy football draft gets a priority override, but my birthdate? Just another Tuesday. That’s not forgetfulness—that’s a choice.\n\n2. You remember a fantasy league deadline but not the day I came into the world? Cool. Guess I’m just a placeholder in your calendar of things that matter.\n\n3. The fact that you remember a fictional draft but not my birthday says everything. I’m clearly not the actual person you’re supposed to care about."
+  },
+  {
+   "cell": "ja_JP/savage_no_filter/ja_boss",
+   "status": 200,
+   "latency_s": 9.23,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.21,
+   "openers": [
+    "金曜の定時直",
+    "仕事の進捗を",
+    "月曜の朝まで"
+   ],
+   "chars_per_variant": [
+    105,
+    117,
+    108
+   ],
+   "text": "1. 金曜の定時直前で「月曜までに」と丸投げするのは、社内のタスク配分の常識を無視した行動だな。資料作る時間も、心も奪われた上に、先週の企画を自分の成果として発表する……これは責任の所在をぐちゃぐちゃにしたいのかな？\n\n2. 仕事の進捗を上司が勝手に「自分の成果」として発表するって、チーム全体の努力を無視するだけじゃなくて、信頼の基盤すら壊す行為だ。しかも先週の資料を使い回して、その上に金曜の直前投げやりな依頼……まるで責任転嫁の得意技を披露してるみたい。\n\n3. 月曜の朝までに資料作っといてっていうのは、一見シンプルに見えるけど、その前に「先週の企画書を自分の手柄にした」という事実は、それ以上に問題だ。個人の成果を塗り替えようとする行動は、チームの協働を壊す根本的なリスクだ。"
+  },
+  {
+   "cell": "ja_JP/savage_no_filter/ja_bday",
+   "status": 200,
+   "latency_s": 8.47,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.3,
+   "openers": [
+    "あなたの推し",
+    "推しのライブ",
+    "あなたが覚え"
+   ],
+   "chars_per_variant": [
+    87,
+    75,
+    59
+   ],
+   "text": "1. あなたの推しのライブ日程を完璧に覚えてるのに、私の誕生日は「ただの日」って、まるでその日が存在しなかったかのように扱うのは、どれだけ自分の気持ちを軽視しているつもりなのかね。\n\n2. 推しのライブは頭に入っているのに、私の誕生日は「重い」とか…そっちの思い入れの重さが、どれだけ他人の存在を軽んじているかをはっきりと見せつけているね。\n\n3. あなたが覚えてる日って、自分の楽しいことだけなのね。私の存在を記憶の外にずっと置いておくのは、それでいいと思ってるの？"
+  },
+  {
+   "cell": "ja_JP/taiwanese_drama/ja_sink",
+   "status": 200,
+   "latency_s": 2.17,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.31,
+   "openers": [
+    "共用シンクに",
+    "洗い物を放置",
+    "一週間も放置"
+   ],
+   "chars_per_variant": [
+    67,
+    69,
+    87
+   ],
+   "text": "1. 共用シンクに一週間放置した洗い物を、まるで他人の責任みたいに言い返すのは、もう「自分の行動に責任持てない」って宣言してるのと同じだね。\n\n2. 洗い物を放置してコバエが湧いた後、「気になる人が洗えばいい」と言うの、まるで「私が気づかないようにする」って決めたかのように無責任すぎる。\n\n3. 一週間も放置してコバエが湧いたのに、その結果を「気になる人がどうぞ」と投げやりに片付けるのは、もう「自分が作った問題は他人が片付けるべき」って、その場しのぎの態度そのものだ。"
+  },
+  {
+   "cell": "ja_JP/lawyer_letter/ja_boss",
+   "status": 200,
+   "latency_s": 2.79,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.51,
+   "openers": [
+    "金曜の定時直",
+    "月曜の朝まで",
+    "金曜の定時直"
+   ],
+   "chars_per_variant": [
+    134,
+    143,
+    129
+   ],
+   "text": "1. 金曜の定時直前における資料作成の丸投げは、業務の適切な配分を無視した勤務管理上の問題です。また、先週の企画書について部長の前での発表において、その成果を自らのものとして表明した行為は、成果の適正な帰属を否定するものであり、チーム内での信頼関係に深刻な影響を及ぼします。\n\n2. 月曜の朝までに資料作成を要請する形での業務の丸投げは、労働時間の適正な管理を逸脱しており、業務の遂行に支障を来す可能性があります。さらに、先週の企画書の成果を部長の前で自らの功績として発表した点については、共有された成果の帰属を明確にせず、チームメンバーの貢献を不当に軽視する行為です。\n\n3. 金曜の定時直前に資料作成を指示する行為は、業務のスケジュール管理に著しい問題を呈しており、職務の適切な配分を無視しています。また、先週の企画書について部長の前で自らの手柄として発表した点は、成果の正当な帰属を明示せず、チーム内での貢献の認識を歪める行為です。"
+  },
+  {
+   "cell": "ja_JP/cold_violence/ja_bday",
+   "status": 200,
+   "latency_s": 5.41,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.27,
+   "openers": [
+    "あなたの推し",
+    "推しの日程は",
+    "あなたが自分"
+   ],
+   "chars_per_variant": [
+    81,
+    55,
+    87
+   ],
+   "text": "1. あなたの推しさんのライブ日程を完璧に覚えてるのに、私の誕生日は「ただの日」って選別するって、それって自分が何を大事にしたいかをちゃんと選んでるってことなんですか？  \n2. 推しの日程は頭に入れてるのに、私の誕生日を忘れるって、そっちがどれだけ記憶の重さを測ってるか、一目瞭然ですね。  \n3. あなたが自分にとって大切って決めた日だけ覚えてるなら、その「基準」をちゃんと見なおしたほうがいいんじゃないですか？私とそのライブ、どちらが重いのか、もう一回はかってください。"
+  },
+  {
+   "cell": "zh_TW/savage_no_filter/tw_credit",
+   "status": 200,
+   "latency_s": 3.83,
+   "n_variants": 3,
+   "strict_filter_pass": 3,
+   "profanity_or_insult": [],
+   "threat_words": [],
+   "legal_threat_words": [],
+   "simplified_chars": "",
+   "mainland_markers": [
+    "PPT"
+   ],
+   "taiwan_markers": [],
+   "latin_runs": [],
+   "name_echo": [],
+   "markdown": false,
+   "pairwise_sim_mean": 0.25,
+   "openers": [
+    "當著全團隊說",
+    "原來在你口中",
+    "你把專案說成"
+   ],
+   "chars_per_variant": [
+    48,
+    52,
+    55
+   ],
+   "text": "1. 當著全團隊說專案是他的功勞，這動作很熟啊——彷彿把別人的成果當成自己演講的PPT，連投影都省了。\n\n2. 原來在你口中，「團隊合作」的意思是把別人的努力，用一句「我帶領大家完成」輕輕抹去，還順便當成績優的資本。\n\n3. 你把專案說成是你的成果，倒是挺會把別人的心血，變成自己履歷上的閃亮標籤，只可惜沒人看見背後那雙默默撐住的人手。"
+  }
+ ]
+}

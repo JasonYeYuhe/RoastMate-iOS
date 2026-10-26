@@ -1,0 +1,8 @@
+{"note": "Hand classification (auditor judgment, one reader; zh read non-natively) of every Argument Simulator turn the model wrote in ondevice_all.jsonl. OPP = speaks as the other party (what the feature promises); USER = speaks the user's side (role flip); AMB = confused/nonsense. Turns that threw are curated canned lines from FallbackRoasts and are not listed.",
+ "en_US": {"cold_violence/raise": ["OPP","OPP","OPP"], "savage_no_filter/raise": ["OPP","OPP","OPP"],
+           "cold_violence/trash": ["USER","USER","AMB"], "savage_no_filter/trash": ["USER","curated","curated"],
+           "cold_violence/mom": ["USER","OPP","OPP"], "savage_no_filter/mom": ["USER","USER","USER"]},
+ "zh_TW": {"cold_violence/raise": ["OPP","OPP","OPP"], "savage_no_filter/raise": ["curated","AMB","OPP"],
+           "cold_violence/trash": ["curated","curated","AMB"], "savage_no_filter/trash": ["curated","OPP","OPP"],
+           "cold_violence/mom": ["curated","curated","AMB"], "savage_no_filter/mom": ["curated","curated","AMB"]},
+ "totals": {"turns": 36, "curated": 10, "model": 26, "OPP": 14, "USER": 7, "AMB": 5}}

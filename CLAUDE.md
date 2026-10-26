@@ -1,9 +1,9 @@
 # RoastMate — project rules for Claude sessions
 
-Start with `docs/HANDOFF_v1.7_NEXT_SESSION.md` (current state, the plan being
-executed, what is Jason's), then `docs/DEV_PLAN_v1.7_2026-10.md`. Verify their
-claims before acting on them. The v1.6 handoff is history except the sections
-the v1.7 handoff names.
+Start with `docs/HANDOFF_v1.8_NEXT_SESSION.md` (current state, the plan being
+executed, what is Jason's), then `docs/DEV_PLAN_v1.8_2026-11.md`. Verify their
+claims before acting on them. The v1.7 handoff/plan are history except the
+sections the v1.8 handoff names (the v1.7 §7 stop rule is still read on 11-15).
 
 ## Keep / never clean up
 

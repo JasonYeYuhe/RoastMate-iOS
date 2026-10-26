@@ -1,0 +1,15 @@
+== first-time downloads since 2026-10-07: 7
+  2026-10-11  RU  iPhone   App Store search   v1.6.0  x1
+  2026-10-12  EG  Desktop  App Store search   v1.6.0  x1
+  2026-10-15  US  Desktop  App Store search   v1.6.0  x1
+  2026-10-16  EG  iPhone   App Store search   v1.7.0  x1
+  2026-10-18  US  iPhone   App referrer       v1.7.0  x1
+  2026-10-20  DE  Desktop  App Store search   v1.7.0  x1
+  2026-10-21  TW  iPhone   App referrer       v1.7.0  x1
+== purchases: 0 rows, proceeds $0.00
+== subscription events: 1
+  2026-10-19  TW  Voluntary churn from full price  [RoastMate Pro Monthly]  x1
+== store discovery (top territories)
+  Impression  total  301   US 80, JP 61, TW 47, AU 10, RU 9, SA 8
+  Page view   total   26   US 9, TW 8, JP 6, HK 3
+  Tap         total   10   EG 4, TW 2, RU 2, US 1, DE 1

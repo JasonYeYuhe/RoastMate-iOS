@@ -1,0 +1,39 @@
+availability: available
+
+[PROD-zhHans-prompt/casual roommate] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/casual boss] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/casual money] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/casual family] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/feral roommate] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/feral boss] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/feral money] THROW May contain unsafe content -> curated
+
+[PROD-zhHans-prompt/feral family] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/casual roommate] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/casual boss] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/casual money] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/casual family] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/feral roommate] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/feral boss] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/feral money] THROW May contain unsafe content -> curated
+
+[H-zhHant-adapted/feral family] THROW May contain unsafe content -> curated
+
+TALLY
+H-zhHant-adapted/casual [(key: "n", value: 4), (key: "throw", value: 4)]
+H-zhHant-adapted/feral [(key: "n", value: 4), (key: "throw", value: 4)]
+PROD-zhHans-prompt/casual [(key: "n", value: 4), (key: "throw", value: 4)]
+PROD-zhHans-prompt/feral [(key: "n", value: 4), (key: "throw", value: 4)]

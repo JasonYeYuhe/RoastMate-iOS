@@ -1,0 +1,29 @@
+== first-time downloads since 2026-09-01: 16
+  2026-09-19  TW  iPhone   App Store browse   v1.5.0  x1
+  2026-09-19  CN  Desktop  App Store search   v1.5.0  x1
+  2026-09-21  TW  iPhone   App Store search   v1.5.0  x1
+  2026-09-22  US  iPhone   App Store browse   v1.5.0  x1
+  2026-09-24  US  iPhone   App referrer       v1.5.0  x1
+  2026-09-25  CN  iPhone   App Store search   v1.5.0  x1
+  2026-09-25  CN  iPhone   App Store search   v1.5.0  x1
+  2026-09-30  TW  iPhone   App Store search   v1.6.0  x1
+  2026-10-04  US  iPhone   App Store search   v1.6.0  x1
+  2026-10-11  RU  iPhone   App Store search   v1.6.0  x1
+  2026-10-12  EG  Desktop  App Store search   v1.6.0  x1
+  2026-10-15  US  Desktop  App Store search   v1.6.0  x1
+  2026-10-16  EG  iPhone   App Store search   v1.7.0  x1
+  2026-10-18  US  iPhone   App referrer       v1.7.0  x1
+  2026-10-20  DE  Desktop  App Store search   v1.7.0  x1
+  2026-10-21  TW  iPhone   App referrer       v1.7.0  x1
+== purchases: 3 rows, proceeds $5.16
+  2026-09-19  TW  RoastMate Pro Monthly    x1  $2.23  (downloaded 2026-09-19, via App Store browse)
+  2026-09-25  CN  Credits 10               x1  $0.39  (downloaded 2026-09-25, via App Store search)
+  2026-10-04  US  RoastMate Pro Monthly    x1  $2.54  (downloaded 2026-10-04, via App Store search)
+== subscription events: 3
+  2026-09-19  TW  Full price subscription start activation  [RoastMate Pro Monthly]  x1
+  2026-10-04  US  Full price subscription start activation  [RoastMate Pro Monthly]  x1
+  2026-10-19  TW  Voluntary churn from full price  [RoastMate Pro Monthly]  x1
+== store discovery (top territories)
+  Impression  total  681   US 162, JP 135, CN 132, TW 65, SG 14, AU 14
+  Page view   total   61   TW 32, US 11, JP 7, CN 6, HK 3, PH 1
+  Tap         total   27   TW 7, CN 6, US 6, EG 4, RU 2, CO 1

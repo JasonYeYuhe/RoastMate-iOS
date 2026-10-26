@@ -1,0 +1,5 @@
+default availability: available permissive: available variant: AFM 3 Core
+PCC availability: available
+
+[C-pcc] zh_TW/savage_no_filter/tw_credit THROW 169ms NSError | Error Domain=FoundationModels.LanguageModelError Code=-1 "The operation couldn’t be completed. (FoundationModels.LanguageModelError error -1.)" UserInfo={NSLoca | 
+stopping PCC probe on non-guardrail error
