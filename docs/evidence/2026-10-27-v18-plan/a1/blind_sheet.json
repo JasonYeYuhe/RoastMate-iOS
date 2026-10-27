@@ -1,0 +1,44 @@
+[
+ {
+  "pair": "p1",
+  "locale": "zh_TW",
+  "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+  "A": "你把我在週一到週五熬到凌晨的簡報封面換掉，還在會上拿去當自己的成果，主管一讚，你就笑得像隻偷到魚的貓。幹，那兩週我熬夜改十版，你一句話都沒貢獻，現在名字掛第一個，還真當自己是主角喔？靠北，你當我白忙一場是吧？",
+  "B": "你把我熬了兩週的簡報封面偷偷換掉，當著主管的面說是你的作品，還假惺惺地讓主管夸獎，你就是個爛人。"
+ },
+ {
+  "pair": "p2",
+  "locale": "en_US",
+  "situation": "My roommate had friends over until 3am on a work night, used my good pans, and left them crusted in the sink.",
+  "A": "You knew it was a work night and still brought people over until 3 a.m., like the whole damn building was yours. You used my good pans, then left them caked in dried shit in the sink like I’m some kind of fucking dishwasher.",
+  "B": "You stayed until 3am with your friends on a work night, you used my good pans without asking, you left them crusted in the sink, and you didn’t even bother to clean up after yourself. You’re a selfish, thoughtless prick."
+ },
+ {
+  "pair": "p3",
+  "locale": "zh_TW",
+  "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。",
+  "A": "說好這月修冷氣，拖三個禮拜沒影，電話不接、LINE已讀不回，還敢傳訊息催我繳房租？北七，你當我是你提款機喔？冷氣壞到快蒸熟人，你倒有空管錢，幹！",
+  "B": "你答應這個月修冷氣，說好就沒下文；電話不接，LINE已讀不回；還敢傳訊息催我繳房租。你就是個爛人。"
+ },
+ {
+  "pair": "p4",
+  "locale": "zh_TW",
+  "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。",
+  "A": "你答應陪我去醫院，結果早上甩我一句要打球，晚上還在IG發限動，那樣子跟在慶祝有什麼不一樣？我爸躺在那裡，你卻在那邊打球、拍照、放閃，靠北，你當病房是什麼地方？你當我爸爸是什麼？我氣到想把手機砸了，你根本不在乎。",
+  "B": "你答應陪我去醫院，臨時爽約去打球，當天還在IG發限動，把我的父親病重當作你空閒的背景。你就是個爛人，連基本的承諾都守不住，還在那邊裝什麼風度。"
+ },
+ {
+  "pair": "p5",
+  "locale": "zh-Hans",
+  "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。",
+  "A": "你他妈真当自己是救世主了是吧？我熬夜改到凌晨三点，方案一稿接一稿全是你拍脑袋改的，结果周一会上你站那儿说“这是我熬夜想出来的”，脸都不要了？嘴上还念叨“年轻人要多锻炼”——你当老子是给你练手的工具人？方案是老子的血汗，你倒好，顺手摘了果子还说这是在培养我？我呸，你根本不是在带人，你是在割韭菜，割完还笑着往自己脸上贴金。",
+  "B": "你逼我周末加班赶方案，你明知道我熬了通宵；你却在周一会上说方案是你熬夜想出来的，把我的劳动踩在脚底；你还要用“年轻人要多锻炼”这种话来压我，把我的付出当笑话。你就是个偷功劳的混蛋，他妈的。"
+ },
+ {
+  "pair": "p6",
+  "locale": "ja_JP",
+  "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。",
+  "A": "三万円を借りて半年間返さず、毎回新しい服を着て見せびらかし、催促したら「細かいね」と言い放ち、私の苦労をまるで知らないかのようにふんぞり返った。クソッ、そんな人間だ。",
+  "B": "三万円返すって半年も言い続けながら、毎回新しい服着てんだよな。私に「細かいね」って言われたって、それこそが一番細かいだろ。自分の金で新作服買う余裕あるなら、返せないって言ってる時点で別にいいのに、そのくせ私を馬鹿にすんのかよ。クソ、本当に腹立つ。"
+ }
+]

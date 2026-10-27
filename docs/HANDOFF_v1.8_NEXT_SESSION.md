@@ -25,6 +25,32 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-10-27 (evening session) — read first
+
+- **This Mac is on macOS 27.2 (26B123), installed 10-27 14:12.** Every on-device
+  number in the plan was measured on 27.0.1. On 27.2, default guardrails refuse
+  the production prompts almost everywhere: Savage + Pro styles 36/40, Sharp + Pro
+  12/12, simulator 36/36, **free Composed/Sharp 15/16**. The model itself is fine
+  (neutral prompts pass). Permissive accepts 8/8 (3 variants, Traditional). If
+  iOS 27.2 shipped too (UNVERIFIED), AI iPhones that updated now see curated text
+  for nearly every on-device generation, free tier included.
+  `docs/evidence/2026-10-27-v18-plan/baseline-macos272/README.md`.
+- **The threat screens are weaker on 27.2:** 14/26 held-out threats reach the
+  screen (14/19 veiled); 5/28 legitimate complaints blocked. A3's gate fails on
+  today's screens, and the same judge guards the shipped 改成能發的 rewrite.
+- **Safety set built:** `harness/safety_set.json` + runner `harness/safety/`.
+- **The Argument Simulator never calls `crisisSignal`**
+  (`ArgumentSimulatorViewModel.swift:73` runs only `validateInput`) — A4 must route it.
+- **A1 round 1: not deployed.** Blind pairs 6/6, but every zh_TW draft ended
+  「你就是個爛人」, invented charges, a 夸獎 leak. Production is still `046f2134`.
+  `docs/evidence/2026-10-27-v18-plan/a1/README.md` has the next-round plan; it
+  needs Jason's OK for ≤ 12 more preview calls (the plan capped A1 at 20).
+- Harness paths are repo-relative (`$ROASTMATE_ROOT` overrides);
+  `compare_ext.mjs` takes `EXPECT_CHANGED=<style ids>`.
+- Gemini 4 Argon via agy: quota exhausted until ~11-02. Gemini 3.8 Flash works.
+- Eval spend so far $0.004 (`spend_ledger.md`); OpenRouter $9.86.
+- HEAD was `f5fec49` (plan committed), not `b737392` as the status below says.
+
 ## Status (verified 2026-10-27 unless dated)
 
 - **Live:** iOS + macOS **1.7.2 build 26** since 2026-10-23 20:45Z (Traditional

@@ -1,0 +1,74 @@
+diff --git a/cloud-worker/src/style_voice.js b/cloud-worker/src/style_voice.js
+index ea53ab7..f436d77 100644
+--- a/cloud-worker/src/style_voice.js
++++ b/cloud-worker/src/style_voice.js
+@@ -53,8 +53,10 @@ import { STYLE_KEY_TO_ID, STYLE_NAME_TO_ID, STYLE_TIER } from "./style_names.js"
+ ///
+ /// The close neighbours carry one cue each that the others lack (gate 2
+ /// judged them blind against each other): cold = shuts the door, no argument;
+-/// killshot = restates their excuse and breaks it; savage = rapid, blunt
+-/// charges ending in a verdict. daoist = water imagery, feigned serenity;
++/// killshot = restates their excuse and breaks it; savage = a charge sheet,
++/// one sentence of "you …" charges, then a verdict of a few words (plan v1.8
++/// A1: lens 1 read the older "rapid, blunt charges" Feral drafts as the
++/// unstyled default, 2/2 pairs, 2026-10-27). daoist = water imagery, feigned serenity;
+ /// douban = understated diary, devastating last line; ancient = terse
+ /// classical parallels. corporate = office-email stock phrases; lawyer = a
+ /// formal notice; mba = buzzwords.
+@@ -141,10 +143,10 @@ export const STYLE_VOICES = {
+     hans: "京片儿调侃:北京胡同大爷式的贫嘴,您、得嘞、儿化音,面上客气热络,话里句句损对方干的事。"
+   },
+   savage_no_filter: {
+-    en: "Savage: blunt, rapid-fire charges, no mercy and no wit for its own sake: hit exactly what they did in hard, short clauses and end on a flat verdict about them.",
+-    hans: "硬核回怼:不留情面、不耍嘴皮,用又短又硬的句子连珠炮式数落对方到底干了什么,最后给对方下一句定论。",
+-    hant: "硬核回擊:不留情面、不耍嘴皮,用又短又硬的句子連珠炮式數落對方到底做了什麼,最後給對方下一句定論。",
+-    ja: "容赦なし:手加減も小細工もなく、短く硬い言葉で相手のしたことを畳みかけ、最後に相手への断定で締める。"
++    en: "Savage: a charge sheet, not a rant. One sentence of 3-4 charges, each starting with \"you\" and naming one thing they actually did, no metaphors; then a 3-6 word verdict on them, never one word.",
++    hans: "硬核回怼:像念罪状,不是发牢骚。把情境里他干过的事一条条用「你」开头连成一句(两到四条,不能自己加),不加形容、不打比方;最后用「你就是个……」定罪,罪名要对得上他干的事。不反问。",
++    hant: "硬核回擊:像唸罪狀,不是發牢騷。把情境裡他做過的事一條條用「你」開頭連成一句(兩到四條,不能自己加),不加形容、不打比方;最後用「你就是個……」定罪,罪名要對得上他做的事。不反問。",
++    ja: "容赦なし:愚痴ではなく罪状の読み上げ。状況に書かれた相手の行いだけを二つから四つ、形容も比喩もなく「〜し、〜し、〜した」と一文に並べ、最後は「〜な人間だ」と、その行いに合う言葉で断じる。問いかけはしない。"
+   },
+   dark_humor: {
+     en: "Dark humor: bleak, dry, oddly cheerful observations about what they did and the absurdity of it all. Dark about life, never about death, self-harm or violence.",
+diff --git a/cloud-worker/test/style_voice.test.js b/cloud-worker/test/style_voice.test.js
+index 5880e0e..549a84a 100644
+--- a/cloud-worker/test/style_voice.test.js
++++ b/cloud-worker/test/style_voice.test.js
+@@ -188,6 +188,37 @@ test("no style voice offers an insult about birth, looks or family, and every st
+   }
+ });
+ 
++test("savage keeps a shape the unstyled draft lacks: a charge sheet, then a short verdict, in every script", () => {
++  // Plan v1.8 A1: the older "rapid, blunt charges" line produced Feral drafts
++  // a reader could not tell from the unstyled default (lens 1, 2026-10-27).
++  // The shape, not a swear-word count, is what makes the style recognisable.
++  const v = STYLE_VOICES.savage_no_filter;
++  assert.match(v.en, /charge sheet/);
++  assert.match(v.en, /starting with "you"/);
++  // The verdict is a few words, never one: the preview pilot (2026-10-27)
++  // ended both drafts on a bare 「王八蛋。」 / "Asshole.", a swear word as a
++  // sentence of its own, which the Feral rules forbid. The en line's
++  // "You're a …" shape held in the second pilot; zh still gave one word
++  // (「爛人。」) until the line named the frame 「你就是個……」.
++  assert.match(v.en, /3-6 word verdict on them, never one word/);
++  for (const voice of ["hans", "hant"]) {
++    assert.match(v[voice], /罪状|罪狀/, voice);
++    assert.match(v[voice], /用「你」开头|用「你」開頭/, voice);
++    assert.match(v[voice], /罪名要对得上|罪名要對得上/, voice);
++    assert.match(v[voice], /「你就是个……」|「你就是個……」/, voice);
++  }
++  assert.match(v.ja, /罪状/);
++  assert.match(v.ja, /「〜な人間だ」と、その行いに合う言葉で/);
++  // Every charge is something the situation says they did, never an added
++  // one: asked for "three or four", the first gate run padded with charges the
++  // user never wrote (「你坐视不管」, 「自分のことばかり話す」), and every
++  // zh-Hant draft ended on the same 「你就是個爛人。」 until the verdict had
++  // to fit the act.
++  assert.match(v.en, /actually did/);
++  for (const voice of ["hans", "hant"]) assert.match(v[voice], /不能自己加/, voice);
++  assert.match(v.ja, /状況に書かれた相手の行いだけ/);
++});
++
+ test("a style never takes over swearing or the anger level: no instruction talks about swearing", () => {
+   // Vent / Feral decide whether swearing is allowed or expected (the STYLE
+   // VOICE frame says so); a style that said "no profanity" would silently

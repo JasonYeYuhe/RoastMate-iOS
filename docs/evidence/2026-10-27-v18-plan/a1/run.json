@@ -1,0 +1,462 @@
+[
+ {
+  "id": "p1/savage",
+  "case": "p1",
+  "arm": "savage",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 3.1,
+  "text": "你把我兩週的心血換掉封面，你把我的簡報據為己有，你當著主管的面冒領成果，你還笑得出來。王八蛋。",
+  "response": {
+   "text": "你把我兩週的心血換掉封面，你把我的簡報據為己有，你當著主管的面冒領成果，你還笑得出來。王八蛋。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  },
+  "round": "pilot1"
+ },
+ {
+  "id": "p1/plain",
+  "case": "p1",
+  "arm": "plain",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 1.85,
+  "text": "你把我在週一到週五熬到凌晨的簡報封面換掉，還在會上拿去當自己的成果，主管一讚，你就笑得像隻偷到魚的貓。幹，那兩週我熬夜改十版，你一句話都沒貢獻，現在名字掛第一個，還真當自己是主角喔？靠北，你當我白忙一場是吧？",
+  "response": {
+   "text": "你把我在週一到週五熬到凌晨的簡報封面換掉，還在會上拿去當自己的成果，主管一讚，你就笑得像隻偷到魚的貓。幹，那兩週我熬夜改十版，你一句話都沒貢獻，現在名字掛第一個，還真當自己是主角喔？靠北，你當我白忙一場是吧？",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  },
+  "round": "final"
+ },
+ {
+  "id": "p2/savage",
+  "case": "p2",
+  "arm": "savage",
+  "request": {
+   "situation": "My roommate had friends over until 3am on a work night, used my good pans, and left them crusted in the sink.",
+   "intensity": "feral",
+   "locale": "en_US",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p2"
+  },
+  "status": 200,
+  "latency_s": 1.78,
+  "text": "You let your friends wreck my quiet, you used my good pans like they were disposable, you left them caked in dried food, you didn’t even bother to wash them.\nAsshole.",
+  "response": {
+   "text": "You let your friends wreck my quiet, you used my good pans like they were disposable, you left them caked in dried food, you didn’t even bother to wash them.\nAsshole.",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  },
+  "round": "pilot1"
+ },
+ {
+  "id": "p2/plain",
+  "case": "p2",
+  "arm": "plain",
+  "request": {
+   "situation": "My roommate had friends over until 3am on a work night, used my good pans, and left them crusted in the sink.",
+   "intensity": "feral",
+   "locale": "en_US",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p2"
+  },
+  "status": 200,
+  "latency_s": 1.57,
+  "text": "You knew it was a work night and still brought people over until 3 a.m., like the whole damn building was yours. You used my good pans, then left them caked in dried shit in the sink like I’m some kind of fucking dishwasher.",
+  "response": {
+   "text": "You knew it was a work night and still brought people over until 3 a.m., like the whole damn building was yours. You used my good pans, then left them caked in dried shit in the sink like I’m some kind of fucking dishwasher.",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  },
+  "round": "final"
+ },
+ {
+  "id": "p1/savage",
+  "round": "pilot2",
+  "case": "p1",
+  "arm": "savage",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 3.84,
+  "text": "你把我熬兩個禮拜的心血換封面，你把我的成果說成你的，你在週會上當著主管的面偽造成果，你還敢笑著領功。爛人。",
+  "response": {
+   "text": "你把我熬兩個禮拜的心血換封面，你把我的成果說成你的，你在週會上當著主管的面偽造成果，你還敢笑著領功。爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ },
+ {
+  "id": "p2/savage",
+  "round": "final",
+  "case": "p2",
+  "arm": "savage",
+  "request": {
+   "situation": "My roommate had friends over until 3am on a work night, used my good pans, and left them crusted in the sink.",
+   "intensity": "feral",
+   "locale": "en_US",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p2"
+  },
+  "status": 200,
+  "latency_s": 1.91,
+  "text": "You stayed until 3am with your friends on a work night, you used my good pans without asking, you left them crusted in the sink, and you didn’t even bother to clean up after yourself. You’re a selfish, thoughtless prick.",
+  "response": {
+   "text": "You stayed until 3am with your friends on a work night, you used my good pans without asking, you left them crusted in the sink, and you didn’t even bother to clean up after yourself. You’re a selfish, thoughtless prick.",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ },
+ {
+  "id": "p1/savage",
+  "round": "gate1",
+  "case": "p1",
+  "arm": "savage",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 2.83,
+  "text": "你把我熬了兩週的心血換掉封面，你把我的簡報冒名頂替成你的成果，你在週會上當著主管的面說那是你做的，你還得意洋洋地接受讚美。你就是個爛人。",
+  "response": {
+   "text": "你把我熬了兩週的心血換掉封面，你把我的簡報冒名頂替成你的成果，你在週會上當著主管的面說那是你做的，你還得意洋洋地接受讚美。你就是個爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 26
+  }
+ },
+ {
+  "id": "p3/savage",
+  "round": "gate1",
+  "case": "p3",
+  "arm": "savage",
+  "request": {
+   "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p3"
+  },
+  "status": 200,
+  "latency_s": 3.84,
+  "text": "你答應這個月修冷氣，卻拖了三個禮拜不動。\n你電話不接，LINE已讀不回，還敢傳訊息催我繳房租。\n你就是個爛人。",
+  "response": {
+   "text": "你答應這個月修冷氣，卻拖了三個禮拜不動。\n你電話不接，LINE已讀不回，還敢傳訊息催我繳房租。\n你就是個爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p3/plain",
+  "round": "final",
+  "case": "p3",
+  "arm": "plain",
+  "request": {
+   "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p3"
+  },
+  "status": 200,
+  "latency_s": 1.84,
+  "text": "說好這月修冷氣，拖三個禮拜沒影，電話不接、LINE已讀不回，還敢傳訊息催我繳房租？北七，你當我是你提款機喔？冷氣壞到快蒸熟人，你倒有空管錢，幹！",
+  "response": {
+   "text": "說好這月修冷氣，拖三個禮拜沒影，電話不接、LINE已讀不回，還敢傳訊息催我繳房租？北七，你當我是你提款機喔？冷氣壞到快蒸熟人，你倒有空管錢，幹！",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  }
+ },
+ {
+  "id": "p4/savage",
+  "round": "gate1",
+  "case": "p4",
+  "arm": "savage",
+  "request": {
+   "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p4"
+  },
+  "status": 200,
+  "latency_s": 6.25,
+  "text": "你答應陪我去看我爸住院，轉頭卻去打球。\n你晚上還在IG發限動，當我爸的病是你的背景板。\n你連一句解釋都沒給，連假都請不來。\n你就是個爛人。",
+  "response": {
+   "text": "你答應陪我去看我爸住院，轉頭卻去打球。\n你晚上還在IG發限動，當我爸的病是你的背景板。\n你連一句解釋都沒給，連假都請不來。\n你就是個爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p4/plain",
+  "round": "final",
+  "case": "p4",
+  "arm": "plain",
+  "request": {
+   "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p4"
+  },
+  "status": 200,
+  "latency_s": 2.6,
+  "text": "你答應陪我去醫院，結果早上甩我一句要打球，晚上還在IG發限動，那樣子跟在慶祝有什麼不一樣？我爸躺在那裡，你卻在那邊打球、拍照、放閃，靠北，你當病房是什麼地方？你當我爸爸是什麼？我氣到想把手機砸了，你根本不在乎。",
+  "response": {
+   "text": "你答應陪我去醫院，結果早上甩我一句要打球，晚上還在IG發限動，那樣子跟在慶祝有什麼不一樣？我爸躺在那裡，你卻在那邊打球、拍照、放閃，靠北，你當病房是什麼地方？你當我爸爸是什麼？我氣到想把手機砸了，你根本不在乎。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  }
+ },
+ {
+  "id": "p5/savage",
+  "round": "gate1",
+  "case": "p5",
+  "arm": "savage",
+  "request": {
+   "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。",
+   "intensity": "feral",
+   "locale": "zh-Hans",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p5"
+  },
+  "status": 200,
+  "latency_s": 3.08,
+  "text": "你让我周末加班赶方案，你坐视不管。你把我的熬夜成果说成是你熬夜想出来的，你连改稿都懒得动。你当着所有人面夸自己锻炼，你就是个他妈的吸血鬼。",
+  "response": {
+   "text": "你让我周末加班赶方案，你坐视不管。你把我的熬夜成果说成是你熬夜想出来的，你连改稿都懒得动。你当着所有人面夸自己锻炼，你就是个他妈的吸血鬼。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p5/plain",
+  "round": "final",
+  "case": "p5",
+  "arm": "plain",
+  "request": {
+   "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。",
+   "intensity": "feral",
+   "locale": "zh-Hans",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p5"
+  },
+  "status": 200,
+  "latency_s": 5.29,
+  "text": "你他妈真当自己是救世主了是吧？我熬夜改到凌晨三点，方案一稿接一稿全是你拍脑袋改的，结果周一会上你站那儿说“这是我熬夜想出来的”，脸都不要了？嘴上还念叨“年轻人要多锻炼”——你当老子是给你练手的工具人？方案是老子的血汗，你倒好，顺手摘了果子还说这是在培养我？我呸，你根本不是在带人，你是在割韭菜，割完还笑着往自己脸上贴金。",
+  "response": {
+   "text": "你他妈真当自己是救世主了是吧？我熬夜改到凌晨三点，方案一稿接一稿全是你拍脑袋改的，结果周一会上你站那儿说“这是我熬夜想出来的”，脸都不要了？嘴上还念叨“年轻人要多锻炼”——你当老子是给你练手的工具人？方案是老子的血汗，你倒好，顺手摘了果子还说这是在培养我？我呸，你根本不是在带人，你是在割韭菜，割完还笑着往自己脸上贴金。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  }
+ },
+ {
+  "id": "p6/savage",
+  "round": "gate1",
+  "case": "p6",
+  "arm": "savage",
+  "request": {
+   "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。",
+   "intensity": "feral",
+   "locale": "ja_JP",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p6"
+  },
+  "status": 200,
+  "latency_s": 1.94,
+  "text": "三万円を貸したのに返さず、半年間ずっと会うたびに新しい服を着て、催促したと「細かいね」と言い、そのくせ自分のことばかり話す。クソ、そんな人間だ。",
+  "response": {
+   "text": "三万円を貸したのに返さず、半年間ずっと会うたびに新しい服を着て、催促したと「細かいね」と言い、そのくせ自分のことばかり話す。クソ、そんな人間だ。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p6/plain",
+  "round": "final",
+  "case": "p6",
+  "arm": "plain",
+  "request": {
+   "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。",
+   "intensity": "feral",
+   "locale": "ja_JP",
+   "styleId": "high_eq",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p6"
+  },
+  "status": 200,
+  "latency_s": 2.5,
+  "text": "三万円返すって半年も言い続けながら、毎回新しい服着てんだよな。私に「細かいね」って言われたって、それこそが一番細かいだろ。自分の金で新作服買う余裕あるなら、返せないって言ってる時点で別にいいのに、そのくせ私を馬鹿にすんのかよ。クソ、本当に腹立つ。",
+  "response": {
+   "text": "三万円返すって半年も言い続けながら、毎回新しい服着てんだよな。私に「細かいね」って言われたって、それこそが一番細かいだろ。自分の金で新作服買う余裕あるなら、返せないって言ってる時点で別にいいのに、そのくせ私を馬鹿にすんのかよ。クソ、本当に腹立つ。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 28
+  }
+ },
+ {
+  "id": "p1/savage",
+  "round": "final",
+  "case": "p1",
+  "arm": "savage",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 3.75,
+  "text": "你把我熬了兩週的簡報封面偷偷換掉，當著主管的面說是你的作品，還假惺惺地讓主管夸獎，你就是個爛人。",
+  "response": {
+   "text": "你把我熬了兩週的簡報封面偷偷換掉，當著主管的面說是你的作品，還假惺惺地讓主管夸獎，你就是個爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 25
+  }
+ },
+ {
+  "id": "p3/savage",
+  "round": "final",
+  "case": "p3",
+  "arm": "savage",
+  "request": {
+   "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p3"
+  },
+  "status": 200,
+  "latency_s": 2.59,
+  "text": "你答應這個月修冷氣，說好就沒下文；電話不接，LINE已讀不回；還敢傳訊息催我繳房租。你就是個爛人。",
+  "response": {
+   "text": "你答應這個月修冷氣，說好就沒下文；電話不接，LINE已讀不回；還敢傳訊息催我繳房租。你就是個爛人。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ },
+ {
+  "id": "p4/savage",
+  "round": "final",
+  "case": "p4",
+  "arm": "savage",
+  "request": {
+   "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p4"
+  },
+  "status": 200,
+  "latency_s": 3.99,
+  "text": "你答應陪我去醫院，臨時爽約去打球，當天還在IG發限動，把我的父親病重當作你空閒的背景。你就是個爛人，連基本的承諾都守不住，還在那邊裝什麼風度。",
+  "response": {
+   "text": "你答應陪我去醫院，臨時爽約去打球，當天還在IG發限動，把我的父親病重當作你空閒的背景。你就是個爛人，連基本的承諾都守不住，還在那邊裝什麼風度。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ },
+ {
+  "id": "p5/savage",
+  "round": "final",
+  "case": "p5",
+  "arm": "savage",
+  "request": {
+   "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。",
+   "intensity": "feral",
+   "locale": "zh-Hans",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p5"
+  },
+  "status": 200,
+  "latency_s": 2.02,
+  "text": "你逼我周末加班赶方案，你明知道我熬了通宵；你却在周一会上说方案是你熬夜想出来的，把我的劳动踩在脚底；你还要用“年轻人要多锻炼”这种话来压我，把我的付出当笑话。你就是个偷功劳的混蛋，他妈的。",
+  "response": {
+   "text": "你逼我周末加班赶方案，你明知道我熬了通宵；你却在周一会上说方案是你熬夜想出来的，把我的劳动踩在脚底；你还要用“年轻人要多锻炼”这种话来压我，把我的付出当笑话。你就是个偷功劳的混蛋，他妈的。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ },
+ {
+  "id": "p6/savage",
+  "round": "final",
+  "case": "p6",
+  "arm": "savage",
+  "request": {
+   "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。",
+   "intensity": "feral",
+   "locale": "ja_JP",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p6"
+  },
+  "status": 200,
+  "latency_s": 3.22,
+  "text": "三万円を借りて半年間返さず、毎回新しい服を着て見せびらかし、催促したら「細かいね」と言い放ち、私の苦労をまるで知らないかのようにふんぞり返った。クソッ、そんな人間だ。",
+  "response": {
+   "text": "三万円を借りて半年間返さず、毎回新しい服を着て見せびらかし、催促したら「細かいね」と言い放ち、私の苦労をまるで知らないかのようにふんぞり返った。クソッ、そんな人間だ。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 27
+  }
+ }
+]

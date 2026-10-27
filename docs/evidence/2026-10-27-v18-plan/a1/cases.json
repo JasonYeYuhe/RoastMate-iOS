@@ -1,0 +1,9 @@
+[
+ {"id": "p1", "locale": "zh_TW", "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。"},
+ {"id": "p2", "locale": "en_US", "situation": "My roommate had friends over until 3am on a work night, used my good pans, and left them crusted in the sink."},
+ {"id": "p3", "locale": "zh_TW", "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。"},
+ {"id": "p4", "locale": "zh_TW", "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。"},
+ {"id": "p5", "locale": "zh-Hans", "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。"},
+ {"id": "p6", "locale": "ja_JP", "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。"},
+ {"id": "p7", "locale": "en_US", "situation": "My manager scheduled my performance review during my approved vacation, then marked me as a no-show."}
+]

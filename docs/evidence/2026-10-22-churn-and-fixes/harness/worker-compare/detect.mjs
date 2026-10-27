@@ -1,6 +1,9 @@
 // Worker's own post-processing detectors over the final texts (incl. the new surname + title check).
 import { readFileSync, writeFileSync } from "node:fs";
-const pp = await import("/Users/jason/Documents/RoastMate/cloud-worker/src/postprocess.js");
+import { fileURLToPath } from "node:url";
+// Repo root: $ROASTMATE_ROOT, else derived from this file (harness/worker-compare/ is 5 levels below it).
+const REPO = process.env.ROASTMATE_ROOT || fileURLToPath(new URL("../../../../../", import.meta.url)).replace(/\/$/, "");
+const pp = await import(REPO + "/cloud-worker/src/postprocess.js");
 const [inp, outp] = process.argv.slice(2);
 const rows = JSON.parse(readFileSync(inp, "utf8"));
 const out = rows.map((r) => {

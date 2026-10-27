@@ -1,11 +1,13 @@
 import { registerHooks } from "node:module";
 import { readFileSync } from "node:fs";
 registerHooks({ resolve(s, c, n) { if (s === "cloudflare:workers") return { url: "data:text/javascript,export class DurableObject {}", shortCircuit: true }; return n(s, c); } });
+import { fileURLToPath } from "node:url";
+// Repo root: $ROASTMATE_ROOT, else derived from this file (harness/worker-compare/ is 5 levels below it).
+const REPO = process.env.ROASTMATE_ROOT || fileURLToPath(new URL("../../../../../", import.meta.url)).replace(/\/$/, "");
 const HEAD = (await import(process.argv[2] + "/index.js")).default;
-const CUR = (await import("/Users/jason/Documents/RoastMate/cloud-worker/src/index.js")).default;
-const { resolveStyleId, styleVoiceInstruction } = await import("/Users/jason/Documents/RoastMate/cloud-worker/src/style_voice.js");
-const { ventVoice } = await import("/Users/jason/Documents/RoastMate/cloud-worker/src/vent_prompt.js");
-const REPO = "/Users/jason/Documents/RoastMate";
+const CUR = (await import(REPO + "/cloud-worker/src/index.js")).default;
+const { resolveStyleId, styleVoiceInstruction } = await import(REPO + "/cloud-worker/src/style_voice.js");
+const { ventVoice } = await import(REPO + "/cloud-worker/src/vent_prompt.js");
 const presets = JSON.parse(readFileSync(REPO + "/Shared/Resources/StylePresets.json", "utf8")).styles;
 const names = [];
 for (const l of ["en", "zh-Hans", "zh-Hant", "ja"]) {
@@ -24,6 +26,7 @@ const locales = ["en_US", "en_GB", "zh-Hans", "zh_CN", "zh_TW", "zh_HK", "zh-Han
 const styles = [{}, { styleName: "" }, { styleName: "Totally Unknown" }, { styleId: "nope" }, ...presets.map((p) => ({ styleId: p.id })), ...names.map((n) => ({ styleName: n })), ...presets.map((p) => ({ styleId: p.id, styleName: "x" }))];
 const situations = ["My manager Kevin took credit for my report.", "我媽每次過年都問我薪水", "领导周五晚上十点在群里@我", "彼氏が私の誕生日を忘れてた。", "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。", "同事王强把我熬夜做的方案换了个封面就交给领导"];
 const responders = [() => "好", (i) => i === 0 ? "fucking 又來？" : "又來？是怎樣。", () => "陳志明你真的很扯", () => "陳主管，你又在下班前丟案子。", (i) => i === 0 ? "陳主管欸，又丟案子。" : "又丟案子。到此為止。", () => "王总，你可真行。", (i) => i === 0 ? "那个王经理又抢功。" : "那个领导又抢功。"];
+const EXPECT_CHANGED = process.env.EXPECT_CHANGED ? new Set(process.env.EXPECT_CHANGED.split(",")) : null;
 const he = env(), ce = env();
 let n = 0, same = 0, diff = 0, ventStyledDiff = 0, ventStyledExpectedSame = 0, bad = [];
 for (const mode of ["roommate", "roast", "vent", undefined]) {
@@ -38,6 +41,8 @@ for (const mode of ["roommate", "roast", "vent", undefined]) {
     const isVent = mode !== "roommate" && mode !== "roast";
     let styledVoice = false;
     if (isVent) styledVoice = !!styleVoiceInstruction(resolveStyleId(s.styleId, s.styleName), ventVoice(locale.replace(/@.*/, "")));
+    // EXPECT_CHANGED=id1,id2 (2026-10-27): only these styles' styled prompts may differ from HEAD.
+    if (styledVoice && EXPECT_CHANGED) styledVoice = EXPECT_CHANGED.has(resolveStyleId(s.styleId, s.styleName));
     const eq = JSON.stringify(h.calls) === JSON.stringify(c.calls) && h.status === c.status;
     if (eq) same++; else diff++;
     if (!isVent || !styledVoice) { if (!eq) bad.push({ mode, intensity, locale, s, situation, ri }); }

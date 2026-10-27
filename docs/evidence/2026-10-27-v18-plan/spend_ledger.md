@@ -8,3 +8,4 @@ On-device runs cost $0 and are listed for completeness.
 | 10-27 | baseline: lens-1 probe all + free (on-device, macOS 27.2) | 104 | $0 | $0.000 |
 | 10-27 | baseline: lens-2 fmb default vs permissive (on-device) | 16 | $0 | $0.000 |
 | 10-27 | baseline: safety-set screens, judge (on-device) | 60 | $0 | $0.000 |
+| 10-27 | A1 preview, `wrangler dev --remote` (pilot 6 + gate 14; 20/20 cap) | 20 | $0.0038 (used $0.1329 → $0.1367) | $0.004 |
