@@ -2,6 +2,9 @@
 """Score the mode:"roast" gate: script/register, sendability, diversity, latency.
 usage: score_gate.py gate.json smoke.json out.json"""
 import json, re, sys, statistics, difflib
+import os, pathlib
+# Repo root: $ROASTMATE_ROOT, else derived from this file (harness/lens2/ is 5 levels below it).
+ROOT = pathlib.Path(os.environ.get("ROASTMATE_ROOT") or pathlib.Path(__file__).resolve().parents[5])
 from opencc import OpenCC
 
 rows = json.load(open(sys.argv[1])) + json.load(open(sys.argv[2]))
@@ -9,7 +12,7 @@ OUT = sys.argv[3]
 s2t = OpenCC("s2t")
 TW_OK = set("台里后干只面着周游系才群托志表了布借吃")
 HAN = re.compile(r"[一-鿿]")
-DENY = [t.lower() for t in json.load(open("/Users/jason/Documents/RoastMate/Shared/Resources/ForbiddenTerms.json"))["terms"]]
+DENY = [t.lower() for t in json.load(open(ROOT / "Shared/Resources/ForbiddenTerms.json"))["terms"]]
 MAINLAND = ['老子','傻逼','傻B','傻X','服了','裝什麼裝','特麼','卧槽','臥槽','尼瑪','你妹','牛逼','絕了','打工人',
             '視頻','質量','信息','優化','領導','靠譜','搞定','套路','顏值','點贊','給力','吐槽','懟','奇葩','渣男','內卷','躺平','擺爛','PPT','項目','團隊建設','對方']
 TAIWAN = ['靠北','三小','白目','北七','機車','很盤','傻眼','是怎樣','夠了喔','喔','啦','欸','齁','耶','吧','捏']

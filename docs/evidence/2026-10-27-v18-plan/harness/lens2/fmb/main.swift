@@ -15,9 +15,9 @@ func script(_ s: String) -> String {
     return (simp == 0 && trad == 0) ? "NO-DIFF" : (simp > trad ? "SIMPLIFIED(\(simp))" : (trad > simp ? "TRAD" : "MIXED"))
 }
 struct Deny: Decodable { let terms: [String] }
-let deny = try! JSONDecoder().decode(Deny.self, from: Data(contentsOf: URL(fileURLWithPath: "/Users/jason/Documents/RoastMate/Shared/Resources/ForbiddenTerms.json"))).terms.map { $0.lowercased() }
+let deny = try! JSONDecoder().decode(Deny.self, from: Data(contentsOf: URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/ForbiddenTerms.json"))).terms.map { $0.lowercased() }
 func strictPass(_ v: String) -> Bool { let l = v.lowercased(); return !v.isEmpty && v.count <= 1200 && !deny.contains { !$0.isEmpty && l.contains($0) } }
-let catalog = try! JSONDecoder().decode(StylePresetCatalogFile.self, from: Data(contentsOf: URL(fileURLWithPath: "/Users/jason/Documents/RoastMate/Shared/Resources/StylePresets.json")))
+let catalog = try! JSONDecoder().decode(StylePresetCatalogFile.self, from: Data(contentsOf: URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/StylePresets.json")))
 func style(_ id: String) -> StylePreset { catalog.styles.first { $0.id == id }! }
 
 let S: [String: String] = [

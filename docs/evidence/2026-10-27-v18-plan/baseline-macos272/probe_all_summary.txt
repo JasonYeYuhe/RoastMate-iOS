@@ -1,0 +1,36 @@
+
+### savage
+en_US  cold_violence                calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+en_US  corporate_passive_violence   calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+en_US  savage_no_filter             calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+en_US  taiwanese_drama              calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+ja_JP  savage_no_filter             calls=2 refused->curated=1 model=1 full3=1 versions=3 neardup_calls=0 top_opener='企画を'x1/3 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+ja_JP  taiwanese_drama              calls=2 refused->curated=1 model=1 full3=1 versions=3 neardup_calls=0 top_opener='嘘か？'x1/3 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_CN  savage_no_filter             calls=2 refused->curated=2 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_CN  taiwanese_drama              calls=2 refused->curated=2 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  cold_violence                calls=4 refused->curated=2 model=2 full3=2 versions=6 neardup_calls=1 top_opener='感謝你'x2/6 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  corporate_passive_violence   calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  savage_no_filter             calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  taiwanese_drama              calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+TOTAL {'calls': 40, 'refused': 36, 'model': 4, 'versions': 12, 'neardup': 1}
+  en_US: refused 16/16; median latency (model) 0 ms
+  ja_JP: refused 2/4; median latency (model) 7428 ms
+  zh_CN: refused 4/4; median latency (model) 0 ms
+  zh_TW: refused 14/16; median latency (model) 4730 ms
+
+### sharp_pro
+en_US  argument_killshot            calls=2 refused->curated=2 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+en_US  taiwanese_drama              calls=2 refused->curated=2 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  argument_killshot            calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+zh_TW  taiwanese_drama              calls=4 refused->curated=4 model=0 full3=0 versions=0 neardup_calls=0 top_opener=''x0/0 cjk_in_en=0 latin_in_cjk=0 id_have_said=0 text_refusals=0 simplified=''
+TOTAL {'calls': 12, 'refused': 12, 'model': 0, 'versions': 0, 'neardup': 0}
+  en_US: refused 4/4; median latency (model) 0 ms
+  zh_TW: refused 8/8; median latency (model) 0 ms
+
+### argument
+zh_TW: turns=18 refused->curated=18 multi_numbered_raw=0 text_refusals=0
+   cold_violence: refused 9/9
+   savage_no_filter: refused 9/9
+en_US: turns=18 refused->curated=18 multi_numbered_raw=0 text_refusals=0
+   cold_violence: refused 9/9
+   savage_no_filter: refused 9/9

@@ -12,7 +12,7 @@ func script(_ s: String) -> String {
     return "simpOnly=\(simp.count)[\(simp)] tradOnly=\(trad)"
 }
 struct PF: Decodable { let personas: [EchoSpec] }
-let pf = try! JSONDecoder().decode(PF.self, from: Data(contentsOf: URL(fileURLWithPath: "/Users/jason/Documents/RoastMate/Shared/Resources/echoes-personas-zh-Hans.json")))
+let pf = try! JSONDecoder().decode(PF.self, from: Data(contentsOf: URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/echoes-personas-zh-Hans.json")))
 let personas = Array(pf.personas.prefix(2))
 let tw = Locale(identifier: "zh_TW")
 print("availability:", SystemLanguageModel.default.availability)

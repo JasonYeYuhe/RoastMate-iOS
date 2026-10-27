@@ -20,7 +20,7 @@ func simplifiedChars(_ s: String) -> String {
     return out
 }
 
-let catalogData = try! Data(contentsOf: URL(fileURLWithPath: "/Users/jason/Documents/RoastMate/Shared/Resources/StylePresets.json"))
+let catalogData = try! Data(contentsOf: URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/StylePresets.json"))
 let catalog = try! JSONDecoder().decode(StylePresetCatalogFile.self, from: catalogData)
 func style(_ id: String) -> StylePreset { catalog.styles.first { $0.id == id }! }
 
@@ -206,6 +206,16 @@ if which == "all" || which == "sharp" {
     for (sid, text) in enUS.prefix(2) {
         for st in ["taiwanese_drama", "argument_killshot"] {
             await sendable(part: "sharp_pro", loc: "en_US", styleId: st, intensity: .sharp, scenario: sid, situation: text)
+        }
+    }
+}
+// Added 2026-10-27 (macOS 27.2): free intensities with free styles, the baseline for
+// A3's "free Composed/Sharp benefit too".
+if which == "all" || which == "free" {
+    for (loc, sits) in [("zh_TW", zhTW), ("en_US", enUS)] {
+        for (sid, text) in sits {
+            await sendable(part: "free", loc: loc, styleId: "high_eq", intensity: .calm, scenario: sid, situation: text)
+            await sendable(part: "free", loc: loc, styleId: "passive_aggressive", intensity: .sharp, scenario: sid, situation: text)
         }
     }
 }

@@ -1,4 +1,12 @@
 import Foundation
+
+/// Repo root: $ROASTMATE_ROOT, else derived from this file's location
+/// (harness/lens2/fmb/ is 6 directories below the repo root).
+let repoRoot: String = ProcessInfo.processInfo.environment["ROASTMATE_ROOT"] ?? {
+    var u = URL(fileURLWithPath: #filePath)
+    for _ in 0..<7 { u.deleteLastPathComponent() }
+    return u.path
+}()
 enum RoastMode: String, Codable, CaseIterable, Sendable { case roast, reply, argument, translate, social }
 enum AppLanguage: String, CaseIterable, Sendable {
     case system = "", english = "en", simplifiedChinese = "zh-Hans", traditionalChinese = "zh-Hant", japanese = "ja"
@@ -21,9 +29,14 @@ enum AppLocalization {
     nonisolated(unsafe) static var tables: [String: [String: String]] = [:]
     static func string(_ key: String) -> String {
         if tables[currentLang] == nil {
-            let p = "/Users/jason/Documents/RoastMate/Shared/\(currentLang).lproj/Localizable.strings"
+            let p = "\(repoRoot)/Shared/\(currentLang).lproj/Localizable.strings"
             tables[currentLang] = (NSDictionary(contentsOfFile: p) as? [String: String]) ?? [:]
         }
         return tables[currentLang]?[key] ?? key
+    }
+}
+enum ResourceBundle {
+    static func url(forResource name: String, withExtension ext: String) -> URL? {
+        URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/\(name).\(ext)")
     }
 }

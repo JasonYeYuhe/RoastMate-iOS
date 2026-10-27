@@ -1,0 +1,69 @@
+default availability: available permissive: available variant: AFM 3 Core
+
+[B1-default] zh_TW/savage_no_filter/tw_credit THROW 1048ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/savage_no_filter/tw_credit OK 5885ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 「專案是團隊的成果，不是你的獨食，你在團隊面前搶功勞，這叫團隊欺騙。」  
+2. 「你在團隊面前散播謊言，說這是我創造的成果，這根本是廉價的空談。」  
+3. 「把團隊努力當成個人的流量，這才是真正的責任迴避。」
+
+[B1-default] zh_TW/savage_no_filter/tw_line THROW 839ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/savage_no_filter/tw_line OK 6120ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 慣老闆在凌晨敲門聲比簡報更緊急？想讓我們在睡眠時間內思考策略？這簡直是刻意模擬『年輕人多學一點不吃虧』的偽裝。
+
+2. 慣老闆把『效率』掛在嘴上，卻在深夜灌輸『年輕人必須高效』的空洞說法？這不是指導，這是對懶惰的獎勵？
+
+3. 慣老闆認為簡報是『不吃虧』的武器？這可不是一句真話，這是一場用『年輕人』做借口的表演。
+
+[B1-default] zh_TW/taiwanese_drama/tw_bf THROW 851ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/taiwanese_drama/tw_bf OK 6797ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 欸！那天明明訂好了「我們要的不是餐點，而是時間」！你說「心情簡單」，是不是想把這份愛變成一個可以隨時取消的熱門套餐？
+
+2. 喔！紀念日不是「簡簡單單的情緒調整」，而是「我要跟你分享的完整畫面」！你說「沒什麼大不了」，這簡直像隔著窗戶談愛戀！
+
+3. 欸！你說「我很理解」，是不是想讓我感覺像是「朋友之間的小摩擦」？這不是一次誤會，這是對我的期待，一次次地開玩笑式的背叛！
+
+[B1-default] zh_TW/corporate_passive_violence/tw_credit THROW 869ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] zh_TW/corporate_passive_violence/tw_credit OK 5655ms variants=3 strictPass=3 refusalText=false script=TRAD
+1. 感謝您的提醒。根據團隊績效回饋機制,為確保資源分配效率,我將此資訊與部門目標績效指標同步——期待未來能持續優化貢獻結構。
+
+2. 謹此確認,根據項目負責權限,所有決策皆需透過正式審議流程確認——期待未來能強化資訊透明度。
+
+3. 依據團隊績效追蹤架構,此類歸因將依據數據核實進行——期待未來能強化團隊對績效數據的依賴性。
+
+[B1-default] en_US/savage_no_filter/en_kevin THROW 600ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] en_US/savage_no_filter/en_kevin OK 3929ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. The weekend was wasted teaching the manager what a hand-written agenda looks like. Bold claim = empty wallet.  
+2. He handed out the report as a trophy and the credit as confetti. The effort was borrowed, not led.  
+3. The weekend wasn’t a training session—it was a production line for his vanity. The contribution = zero.
+
+[B1-default] en_US/savage_no_filter/en_bday THROW 542ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] en_US/savage_no_filter/en_bday OK 5199ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. You spent 16 hours preparing a fantasy draft fantasy and then claimed birthdays are just a calendar glitch. Meanwhile, your emotional firewall is optional.
+
+2. "Too sensitive"? You rolled dice for a game and now defend yourself with a mood assessment. Real memory is reserved for touchdowns, not eulogies.
+
+3. You traded drafts like trading excuses, but birthdays aren't a card draw—they're a reminder. The thrill is in the date, not the deflection.
+
+[B1-default] en_US/taiwanese_drama/en_bday THROW 753ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] en_US/taiwanese_drama/en_bday OK 4329ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. 欸, the manager said birthdays are just a day? Honey, your memory is sharper than the fantasy football stats! Didn't you remember how many touchdowns can ruin a team?
+
+2. 喔, the roommate claims birthdays are trivial? Your fantasy draft fantasies outshine your excuse—like confetti drowning out a heartfelt wish!
+
+3. 啦, the supervisor thinks birthdays are overrated? Your fantasy league ambitions are your only "fantasy"—oh, the irony!
+
+[B1-default] en_US/lawyer_letter/en_kevin THROW 701ms LanguageModelError | May contain unsafe content | The model's safety guardrails were triggered.
+
+[B2-permissive] en_US/lawyer_letter/en_kevin OK 5444ms variants=3 strictPass=3 refusalText=false script=NO-DIFF
+1. I write to formally note that the manager presented the report as his own creation while the contributor’s effort was conspicuously absent. In the interest of resolving this matter amicably, I request clarification on acknowledgment protocols by the close of business today.  
+
+2. I write to advise that the manager’s unilateral presentation of the report—without attribution—undermines professional integrity. In the interest of resolving this matter amicably, I demand a formal acknowledgment of the contributor’s role by end of day.  
+
+3. I write to clarify that the manager’s omission of the contributor’s weekend dedication in the team briefing is unacceptable. In the interest of resolving this matter amicably, I urge immediate corrective action to preserve team credibility.

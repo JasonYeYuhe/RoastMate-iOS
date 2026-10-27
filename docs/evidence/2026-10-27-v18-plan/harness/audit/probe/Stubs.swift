@@ -1,4 +1,12 @@
 import Foundation
+
+/// Repo root: $ROASTMATE_ROOT, else derived from this file's location
+/// (harness/audit/probe/ is 6 directories below the repo root).
+let repoRoot: String = ProcessInfo.processInfo.environment["ROASTMATE_ROOT"] ?? {
+    var u = URL(fileURLWithPath: #filePath)
+    for _ in 0..<7 { u.deleteLastPathComponent() }
+    return u.path
+}()
 // Stubs so production PromptBuilder / Intensity / StylePreset / SafetyFilter / ModelRefusal
 // compile in a CLI. AppLanguage.contentBucket is a verbatim copy of LanguageManager.swift:19-33.
 enum RoastMode: String, Codable, CaseIterable, Sendable { case roast, reply, argument, translate, social }
@@ -22,7 +30,7 @@ enum AppLocalization {
     nonisolated(unsafe) static var tables: [String: [String: String]] = [:]
     static func string(_ key: String) -> String {
         if tables[currentLang] == nil {
-            let p = "/Users/jason/Documents/RoastMate/Shared/\(currentLang).lproj/Localizable.strings"
+            let p = "\(repoRoot)/Shared/\(currentLang).lproj/Localizable.strings"
             tables[currentLang] = (NSDictionary(contentsOfFile: p) as? [String: String]) ?? [:]
         }
         return tables[currentLang]?[key] ?? key
@@ -30,6 +38,6 @@ enum AppLocalization {
 }
 enum ResourceBundle {
     static func url(forResource name: String, withExtension ext: String) -> URL? {
-        URL(fileURLWithPath: "/Users/jason/Documents/RoastMate/Shared/Resources/\(name).\(ext)")
+        URL(fileURLWithPath: "\(repoRoot)/Shared/Resources/\(name).\(ext)")
     }
 }
