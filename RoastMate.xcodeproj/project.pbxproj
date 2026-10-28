@@ -103,6 +103,7 @@
 		287E9A9B6C124C8F29F5F727 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		28B41F654C7D2C492E34E3A6 /* EchoBridgeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EAA784D9DECF844D2E91FB /* EchoBridgeStore.swift */; };
 		29640E771496DD713346CB0E /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
+		2A8D5CC8D32888B331145440 /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		2AB3B4CEF88BB7CDC62EB24A /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E9BFF5F7651EFC170A12CC2 /* HistoryService.swift */; };
 		2BA419367B83430D875B36F7 /* HandoffStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */; };
 		2BDEB78EC3C6BFBEA9DD2EDC /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4236421FE8592A838FACBD94 /* Haptics.swift */; };
@@ -204,6 +205,7 @@
 		5943BB63CCCE95A53385A9B2 /* StoreServiceProTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B345F703B0902E4FECF539A /* StoreServiceProTests.swift */; };
 		595B0FB65B8BF1A963DCFB7B /* CloudConsentGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F59938F49FEDBF76E94D47 /* CloudConsentGate.swift */; };
 		5A6C26FD3A8CDCA3898A9198 /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
+		5AAFC44B7A5152AA7F916D04 /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		5AF7682FE0EB078C347C8275 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F71C81266E175EC1EFD5DD1 /* RootView.swift */; };
 		5B0A2E9416E90388DF768B22 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
 		5B691371E8021CF9780CEC58 /* EchoTranscriptRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1727A2CEED8E6254ED88F434 /* EchoTranscriptRecord.swift */; };
@@ -228,6 +230,7 @@
 		6366BF9557A72422E74306E4 /* RewriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA602EC2FDF2A406380E2C8 /* RewriteCoordinator.swift */; };
 		6458642A25263FF5C675AE99 /* CreditWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD7B416B31C5C254F40AFF9 /* CreditWallet.swift */; };
 		64FEC08EC132479DF960EF54 /* EventLedgerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB405F2612E72113E3E3F3DF /* EventLedgerTests.swift */; };
+		6566A8C4B64683C603FBE31C /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		65971DAFFB0C4F3FB2CE39CD /* HandoffActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195098C0E6EAAEE0025CED6 /* HandoffActivity.swift */; };
 		66F1F5CB70029246E49FAE36 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F32B5D19D53FB9C880B922 /* HistoryView.swift */; };
 		674B28B74075E04EE0586A0E /* ResourceBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */; };
@@ -369,8 +372,10 @@
 		A6FA1560F6FC63844713A097 /* CreditCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B8F6D06A31701CB6EA0E8B5 /* CreditCatalog.swift */; };
 		A75CE5E1A1EE82A462BD9B27 /* DeviceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = C994C838B393F986EB67EDCA /* DeviceID.swift */; };
 		A7D0EA62E689636A866C0605 /* IntensityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1658B4101DE1A025BBCFB379 /* IntensityTests.swift */; };
+		A826E73212BBD22EBFA4D428 /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		A84A30CD109D10D14ED9B176 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		A860D9A2CDF9EF01B380984A /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
+		A8D5B22A938AC39CFCDA77AA /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		A934702F7263DFD169A80FB4 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36BEC2187E1ACC421C18CE4 /* AppLocalization.swift */; };
 		A9372D7913E98D2592C4AEED /* CloudAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C0885C3A7EC767E9C0C766 /* CloudAuthService.swift */; };
 		A94C5AC2373DF289C78225E5 /* EchoesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2F1EA4C85898A03E4AEB7 /* EchoesView.swift */; };
@@ -402,6 +407,7 @@
 		BA3979F0EFEE76CCCBCD0D14 /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		BA8C9618DA1C910C4DA2BE54 /* SafetyFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35435AF43856D6230E0A35F /* SafetyFilterTests.swift */; };
 		BAB8A7AB54C24F7735B487C6 /* HandoffStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65752B8EDB8342E8FC7FFB8 /* HandoffStore.swift */; };
+		BB10F6F13C94D09A16FBE538 /* IntimidationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */; };
 		BBF4239F82A9A7FFD3BBEBE5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F375B44B7ED51C03E8B6DA /* AuthService.swift */; };
 		BC09A47ADEB7D0697CEF1132 /* EchoesTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EDC37F4F6EBE24E675E464 /* EchoesTypes.swift */; };
 		BC918E112E327A993F7887C7 /* EventLedger.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1FC6398F46F7E52915FE14 /* EventLedger.swift */; };
@@ -624,6 +630,7 @@
 		1F4CEAAC2B886F8035EE3A09 /* CuratedNoticeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuratedNoticeBanner.swift; sourceTree = "<group>"; };
 		21BFC602BC50F876A38EDF69 /* CloudVentClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudVentClient.swift; sourceTree = "<group>"; };
 		21D4AE8F01F86C70AB907869 /* CrisisResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrisisResources.swift; sourceTree = "<group>"; };
+		28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntimidationRequest.swift; sourceTree = "<group>"; };
 		2CEAE99564022D6C8CECBBBF /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadService.swift; sourceTree = "<group>"; };
 		2ED4E06FE20675139E16E6DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1138,6 +1145,7 @@
 				BD0D3F3EC78E1B847C8ED2AD /* EchoesPromptBuilder.swift */,
 				FDB74A247001CF2C1093499E /* FallbackRoasts.swift */,
 				CDA3663C8C768F6CB1FD85F0 /* FMBackend.swift */,
+				28EC8A450FDE60A3F549A9E0 /* IntimidationRequest.swift */,
 				AE8F71C9B3581B5A1455B513 /* ModelRefusal.swift */,
 				87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */,
 				82C4639F9A3ADC5EB75E6342 /* ResourceBundle.swift */,
@@ -1587,6 +1595,7 @@
 				EC1F90CCAE9B91A21E25C087 /* HistoryServiceSendableReplyTests.swift in Sources */,
 				F6343FF17C60C8FCFD849038 /* Intensity.swift in Sources */,
 				A7D0EA62E689636A866C0605 /* IntensityTests.swift in Sources */,
+				A826E73212BBD22EBFA4D428 /* IntimidationRequest.swift in Sources */,
 				70C171E1EAAA54A9E45E6E77 /* KeychainStore.swift in Sources */,
 				DCCF41F11CC0D5693D6069A0 /* LanguageManager.swift in Sources */,
 				54F091E1470ABB2BB31F644C /* LaunchRouter.swift in Sources */,
@@ -1681,6 +1690,7 @@
 				2BDEB78EC3C6BFBEA9DD2EDC /* Haptics.swift in Sources */,
 				F7B3D47A17C1738051DA328A /* HistoryService.swift in Sources */,
 				74A0252E5BE06EF4B1CAE9EB /* Intensity.swift in Sources */,
+				BB10F6F13C94D09A16FBE538 /* IntimidationRequest.swift in Sources */,
 				7B7D250AAA91725BDD8A538C /* KeychainStore.swift in Sources */,
 				69979D649F53923960FCC861 /* LanguageManager.swift in Sources */,
 				4C5947166420BF114079E296 /* LaunchRouter.swift in Sources */,
@@ -1754,6 +1764,7 @@
 				D78FF96DC5F373077431A4B3 /* Haptics.swift in Sources */,
 				7D2F207D51BA7B7B01553361 /* HistoryService.swift in Sources */,
 				6D66C9C4AF7C94F3642BA2E0 /* Intensity.swift in Sources */,
+				6566A8C4B64683C603FBE31C /* IntimidationRequest.swift in Sources */,
 				734530F27669026BEE82284E /* KeychainStore.swift in Sources */,
 				84E48496883E452E3B690F7C /* LanguageManager.swift in Sources */,
 				18793CE5245B2F733082C7F1 /* LaunchRouter.swift in Sources */,
@@ -1825,6 +1836,7 @@
 				BF7A17E094A406F2B64B63F6 /* Haptics.swift in Sources */,
 				F2F0C1D46220A900EA21F2E2 /* HistoryService.swift in Sources */,
 				B8FD3A1C665BE724CD438984 /* Intensity.swift in Sources */,
+				2A8D5CC8D32888B331145440 /* IntimidationRequest.swift in Sources */,
 				E94FCCF3E16400F3DA47AA77 /* KeychainStore.swift in Sources */,
 				7C0074444D276B9BB2FA2D9E /* LanguageManager.swift in Sources */,
 				61F4B47889D22A5BFDFFF330 /* LaunchRouter.swift in Sources */,
@@ -1911,6 +1923,7 @@
 				3AEE51908660D480813CD995 /* HistorySessionDetailView.swift in Sources */,
 				B0F621BC90FD20C79B4A7AC0 /* HistoryView.swift in Sources */,
 				E92BBE0A25EDBA0277B43AE5 /* Intensity.swift in Sources */,
+				A8D5B22A938AC39CFCDA77AA /* IntimidationRequest.swift in Sources */,
 				FE611C568490F86ECC0F3352 /* KeychainStore.swift in Sources */,
 				8B17210C25B763468CF45B99 /* LanguageManager.swift in Sources */,
 				1F62D4AAD9284EA165600424 /* LaunchRouter.swift in Sources */,
@@ -2016,6 +2029,7 @@
 				06A58104C1CF2AAD837148A3 /* HistorySessionDetailView.swift in Sources */,
 				66F1F5CB70029246E49FAE36 /* HistoryView.swift in Sources */,
 				C28344518AEB069722838962 /* Intensity.swift in Sources */,
+				5AAFC44B7A5152AA7F916D04 /* IntimidationRequest.swift in Sources */,
 				AEEE917CEDEFE01516080296 /* KeychainStore.swift in Sources */,
 				A50453236C33115558205278 /* LanguageManager.swift in Sources */,
 				CBEEF6B2EB57D9DC67F0910F /* LaunchRouter.swift in Sources */,

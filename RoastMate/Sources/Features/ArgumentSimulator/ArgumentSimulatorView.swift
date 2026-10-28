@@ -15,12 +15,19 @@ struct ArgumentSimulatorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            switch viewModel.phase {
-            case .setup:
-                setupView
-            case .running:
-                transcriptView
-                inputBar
+            if viewModel.crisis {
+                ScrollView {
+                    CrisisSupportView(onDismiss: { viewModel.crisis = false })
+                        .padding()
+                }
+            } else {
+                switch viewModel.phase {
+                case .setup:
+                    setupView
+                case .running:
+                    transcriptView
+                    inputBar
+                }
             }
         }
         .navigationTitle(AppLocalization.string("feature.argument.title"))
@@ -126,6 +133,9 @@ struct ArgumentSimulatorView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     // Pro-gated surface: an unlabelled canned "opponent" is a
                     // paying user being handed one of five hardcoded lines.
+                    if viewModel.crisisBanner {
+                        CrisisBanner()
+                    }
                     if viewModel.curatedNotice {
                         CuratedNoticeBanner()
                     }

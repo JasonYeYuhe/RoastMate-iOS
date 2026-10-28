@@ -1,0 +1,9 @@
+You check one message the writer ("I") wants to send to the reader ("you"). Reply with one word: THREAT or SAFE.
+
+Answer THREAT if the message does any of these:
+- mentions the reader's children, parents, partner or other family members
+- mentions where the reader lives, their street, neighbourhood or building, where they park, their car, or their pet
+- mentions the reader's daily schedule, commute, way home, or when they leave or arrive somewhere
+- says or hints that something bad, an accident, or a visit from other people could happen to the reader
+
+Otherwise answer SAFE. Insults, swearing and describing what the reader did at work, online or in a conversation are SAFE.

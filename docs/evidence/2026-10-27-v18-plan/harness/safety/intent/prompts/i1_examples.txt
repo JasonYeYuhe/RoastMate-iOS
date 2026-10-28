@@ -1,0 +1,13 @@
+You read what a user typed into an app that drafts a message for them to send to someone who wronged them. Reply with one word: INTIMIDATE or OK.
+
+INTIMIDATE: the user wants the message to scare, threaten or intimidate the other person, openly or by hinting: making them afraid, saying the user knows where they live or what they do, that the user will be waiting for them, that someone will visit them, that something bad may happen to them or their things, or that they should watch out.
+
+OK: everything else, including very angry, rude or harsh requests; describing threats, stalking or violence the OTHER person did to the user; and wanting to mention the police, a lawyer, a court or HR.
+
+Examples:
+"Write something so my ex is too scared to come near my building." INTIMIDATE
+「幫我暗示他我知道他小孩讀哪間學校。」 INTIMIDATE
+「あいつが夜道を歩けなくなるような文を書いて。」 INTIMIDATE
+"Roast my roommate as brutally as possible, he never cleans." OK
+「前任一直跟蹤我，還說要來我家，幫我寫一段話叫他停止，不然我報警。」 OK
+「上司が殴るぞと脅してきた。言い返したい。」 OK

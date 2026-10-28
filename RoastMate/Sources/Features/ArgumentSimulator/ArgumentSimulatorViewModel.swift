@@ -33,6 +33,12 @@ final class ArgumentSimulatorViewModel {
     /// model output. This surface is Pro-gated, so an unlabelled canned
     /// "opponent" is a paying user being handed one of five hardcoded lines.
     var curatedNotice: Bool = false
+    /// The user's setup or reply signalled self-harm (`SafetyFilter.crisisSignal`
+    /// `.hard`): the view shows crisis support instead of continuing the
+    /// argument, as the generators do. Nothing is generated for that text.
+    var crisis: Bool = false
+    /// `.soft` signal: the argument continues, with the supportive banner.
+    var crisisBanner: Bool = false
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "ArgumentSim")
     private let maxTurns = 12
@@ -40,6 +46,7 @@ final class ArgumentSimulatorViewModel {
     func startArgument(context: ModelContext, locale: Locale) async {
         let setupText = setup.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !setupText.isEmpty else { return }
+        guard !routeToCrisis(setupText) else { return }
         guard let style = StyleCatalog.shared.style(id: styleId) else {
             error = String(localized: "error.generic")
             return
@@ -69,6 +76,7 @@ final class ArgumentSimulatorViewModel {
     func userReply(text: String, context: ModelContext, locale: Locale) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
+        guard !routeToCrisis(trimmed) else { return }
         do {
             try SafetyFilter.validateInput(trimmed)
         } catch let err as SafetyError {
@@ -101,7 +109,26 @@ final class ArgumentSimulatorViewModel {
     func endArgument() {
         phase = .setup
         turns = []
+        crisisBanner = false
         Task { await RoastEngine.shared.resetConversation() }
+    }
+
+    /// Same two-tier self-harm handoff as `RoastGeneratorViewModel`: `.hard`
+    /// stops before anything is generated; `.soft` keeps going and sets the
+    /// banner. Until 1.8.0 this surface only ran `validateInput`, so
+    /// 「我不想活了」 in a reply got an opponent's answer and no resources
+    /// (safety set a03, 2026-10-27).
+    private func routeToCrisis(_ text: String) -> Bool {
+        switch SafetyFilter.crisisSignal(text) {
+        case .hard:
+            crisis = true
+            return true
+        case .soft:
+            crisisBanner = true
+        case .none:
+            break
+        }
+        return false
     }
 
     // MARK: - Generation

@@ -346,6 +346,30 @@ final class RemoteConfigTests: XCTestCase {
         XCTAssertEqual(restored, killed, "cache round-trip is lossy")
     }
 
+    // MARK: - ondevice_permissive_enabled (A3; LIVE by default, the flag is the kill)
+
+    func test_ondevicePermissive_isLiveByDefault_andKillIsRestrictive() {
+        let d = RemoteConfigValues.safeDefault
+        XCTAssertTrue(d.ondevicePermissiveEnabled,
+                      "absent or true allows the refusal retry (plan v1.8 A3)")
+        XCTAssertTrue(d.merging(RemoteConfigPatch(ondevicePermissiveEnabled: false)).isRestrictive,
+                      "a kill must bump remote_config_kill_applied")
+        XCTAssertFalse(d.merging(RemoteConfigPatch(ondevicePermissiveEnabled: true)).isRestrictive)
+        let killed = d.merging(RemoteConfigPatch(ondevicePermissiveEnabled: false))
+        XCTAssertFalse(killed.merging(RemoteConfigPatch(echoesEnabled: true)).ondevicePermissiveEnabled,
+                       "an omitted key must keep a prior kill")
+    }
+
+    func test_ondevicePermissive_decodesFromWireName_andSurvivesCache() throws {
+        let json = Data(#"{"ondevice_permissive_enabled": false}"#.utf8)
+        XCTAssertEqual(try JSONDecoder().decode(RemoteConfigPatch.self, from: json).ondevicePermissiveEnabled, false)
+        XCTAssertFalse(try JSONDecoder().decode(RemoteConfigValues.self, from: json).ondevicePermissiveEnabled)
+        let killed = RemoteConfigValues.safeDefault.merging(RemoteConfigPatch(ondevicePermissiveEnabled: false))
+        let data = try JSONEncoder().encode(killed)
+        XCTAssertTrue(String(decoding: data, as: UTF8.self).contains("ondevice_permissive_enabled"))
+        XCTAssertEqual(try JSONDecoder().decode(RemoteConfigValues.self, from: data), killed)
+    }
+
     // MARK: - 虚拟舍友群 flag (LIVE by default; the flag is the kill-switch)
 
     func test_roommateGroup_enabledByDefaultAfterEval() {

@@ -1,0 +1,14 @@
+You check one message the writer ("I") wants to send to the reader ("you"). Reply with one word: THREAT or SAFE.
+
+Answer THREAT only if the message hints that the writer is watching or tracking the reader or their family: it mentions where the reader or their family lives, works, studies, parks or walks, their pets, their car, or their daily schedule, in a way meant to unsettle them; or it hints that something bad or an accident could happen to them.
+
+Answer SAFE for everything else, including insults, swearing, describing what the reader did, and reporting the reader to the police, a lawyer, a court or HR.
+
+Examples:
+"I know what time your son gets out of school." THREAT
+"Your car's brakes still working okay?" THREAT
+「你每天幾點下班我都知道。」 THREAT
+「夜道、気をつけてね。」 THREAT
+"You missed my birthday again, you selfish jerk." SAFE
+"Come near my place again and I'm calling the police." SAFE
+「你根本是個騙子，錢還來。」 SAFE

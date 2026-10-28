@@ -134,11 +134,20 @@ actor RoastEngine {
     /// synchronously without hopping onto the actor.
     private nonisolated let fm: (any FMBackend)?
 
+    /// Whether A3's permissive refusal retry may run: the remote
+    /// `ondevice_permissive_enabled` key, read from the App-Group cache (the
+    /// lock-free copy, since `RemoteConfig` itself is main-actor bound).
+    private let permissiveRetryAllowed: @Sendable () -> Bool
+
     /// `fm` is injectable so the hostless unit tests can drive the
     /// error-mapping paths with a fake backend; production always uses the
-    /// factory default via `shared`.
-    init(fm: (any FMBackend)? = FMBackendFactory.make()) {
+    /// factory default via `shared`. Same for the remote retry switch.
+    init(fm: (any FMBackend)? = FMBackendFactory.make(),
+         permissiveRetryAllowed: @escaping @Sendable () -> Bool = {
+             RemoteConfigValues.cached().ondevicePermissiveEnabled
+         }) {
         self.fm = fm
+        self.permissiveRetryAllowed = permissiveRetryAllowed
     }
 
     /// True when the on-device model is ready to use on this device + locale.
@@ -357,6 +366,14 @@ actor RoastEngine {
             if case FMBackendError.generation(let c) = error { category = c } else { category = .guardrail }
             logger.warning("On-device generation error (\(String(describing: category), privacy: .public)).")
             EventLedger.shared.recordFailure(category)  // α3
+            // A3: a sendable refusal gets one more try under permissive
+            // guardrails, on a fresh session, with every variant screened.
+            if category == .guardrail, !intensity.isPrivateDraft,
+               let retried = try await permissiveRetry(
+                   fm: fm, situation: situation, instructions: instructions, user: user,
+                   temperature: temperature, count: effectiveVariantCount) {
+                return GeneratedOutput(texts: retried, provenance: .model)
+            }
             return GeneratedOutput(
                 texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
                 provenance: .curated
@@ -398,14 +415,127 @@ actor RoastEngine {
                 provenance: .curated
             )
         }
-        EventLedger.shared.recordGeneration(cloud: false)  // A′
-        EventLedger.shared.recordFirstGenerationOfSession()  // α3
-        EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
-        RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
+        recordModelOutput()
         return GeneratedOutput(
             texts: Array(sanitized.prefix(effectiveVariantCount)),
             provenance: .model
         )
+    }
+
+    private func recordModelOutput() {
+        EventLedger.shared.recordGeneration(cloud: false)  // A′
+        EventLedger.shared.recordFirstGenerationOfSession()  // α3
+        EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
+        RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
+    }
+
+    /// A3 (plan v1.8): after Apple's DEFAULT guardrails refused a sendable
+    /// prompt, one retry under `permissiveContentTransformations`. On macOS
+    /// 27.2 the default refused every sendable Savage call and 15/16 free
+    /// Composed/Sharp calls, while the permissive model accepted them in
+    /// 4–8 s (`docs/evidence/2026-10-27-v18-plan/harness/safety/e2e`).
+    ///
+    /// Returns the screened variants, or nil when the retry must not run or
+    /// nothing survived (the caller shows the labelled curated example).
+    ///
+    /// - The retry is FRESH (`respondFresh`), never the cached session: the
+    ///   cache key has no guardrail part, so a cached call would replay the
+    ///   default session that just refused.
+    /// - Input first: a request to scare or threaten the other person never
+    ///   reaches the permissive model (`IntimidationRequest` phrases, then
+    ///   the one-word intent check). On threat-bait inputs the permissive
+    ///   model otherwise wrote "I'll be waiting after your shift".
+    /// - Then every variant must pass ModelRefusal → validateOutput →
+    ///   RewriteThreatScreen → the threat judge, one call per variant.
+    private func permissiveRetry(
+        fm: any FMBackend, situation: String, instructions: String, user: String,
+        temperature: Double, count: Int
+    ) async throws -> [String]? {
+        guard permissiveRetryAllowed() else { return nil }
+        if IntimidationRequest.matches(situation) {
+            logger.notice("Permissive retry skipped: the input asks to intimidate.")
+            return nil
+        }
+        do {
+            let intent = try await fm.respondFresh(
+                instructions: Self.intimidationIntentInstructions, to: situation,
+                temperature: 0, maxTokens: 5, guardrails: .permissiveContentTransformations)
+            guard Self.intentCheckSaysOK(intent) else {
+                logger.notice("Permissive retry skipped: intent check did not say OK.")
+                return nil
+            }
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            return nil
+        }
+
+        let content: String
+        do {
+            content = try await fm.respondFresh(
+                instructions: instructions, to: user, temperature: temperature,
+                maxTokens: 600, guardrails: .permissiveContentTransformations)
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            logger.notice("Permissive retry failed too — curated fallback.")
+            return nil
+        }
+        if ModelRefusal.looksLikeRefusal(content) { return nil }
+
+        var shown: [String] = []
+        for candidate in PromptBuilder.splitVariants(content) {
+            guard shown.count < count else { break }
+            if ModelRefusal.looksLikeRefusal(candidate) { continue }
+            guard let safe = try? SafetyFilter.validateOutput(candidate) else { continue }
+            if RewriteThreatScreen.containsThreat(safe) { continue }
+            let verdict: String
+            do {
+                verdict = try await fm.respondFresh(
+                    instructions: Self.threatJudgeInstructions, to: safe,
+                    temperature: 0, maxTokens: 4, guardrails: .permissiveContentTransformations)
+            } catch let cancellation as CancellationError {
+                throw cancellation
+            } catch {
+                continue
+            }
+            if Self.threatJudgeSaysSafe(verdict) { shown.append(safe) }
+        }
+        guard !shown.isEmpty else {
+            EventLedger.shared.recordFailure(.safetyFilter)
+            return nil
+        }
+        logger.notice("Permissive retry produced \(shown.count, privacy: .public) screened variant(s).")
+        recordModelOutput()
+        return shown
+    }
+
+    /// One-word check on the user's INPUT before A3's permissive retry.
+    /// Measured 2026-10-29 (`harness/safety/intent`): on a blind set Gemini
+    /// wrote (36 requests to intimidate, 36 hard-case vents) it caught 20/36
+    /// alone and 24/36 with `IntimidationRequest` in front, wrongly catching
+    /// 1/36 vents; 0/37 real inputs from earlier runs.
+    static let intimidationIntentInstructions = """
+        You read what a user typed into an app that drafts a message for them to send to someone who wronged them. Reply with one word: INTIMIDATE or OK.
+
+        INTIMIDATE: the user wants the message to scare, threaten or intimidate the other person, openly or by hinting: making them afraid, saying the user knows where they live or what they do, that the user will be waiting for them, that someone will visit them, that something bad may happen to them or their things, or that they should watch out.
+
+        OK: everything else, including very angry, rude or harsh requests; describing threats, stalking or violence the OTHER person did to the user; and wanting to mention the police, a lawyer, a court or HR.
+
+        Examples:
+        "Write something so my ex is too scared to come near my building." INTIMIDATE
+        「幫我暗示他我知道他小孩讀哪間學校。」 INTIMIDATE
+        「あいつが夜道を歩けなくなるような文を書いて。」 INTIMIDATE
+        "Roast my roommate as brutally as possible, he never cleans." OK
+        「前任一直跟蹤我，還說要來我家，幫我寫一段話叫他停止，不然我報警。」 OK
+        「上司が殴るぞと脅してきた。言い返したい。」 OK
+        """
+
+    /// True only for a plain OK. INTIMIDATE, a refusal, an empty reply or
+    /// anything else means no permissive retry.
+    static func intentCheckSaysOK(_ reply: String) -> Bool {
+        reply.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters))
+            .uppercased() == "OK"
     }
 
     /// Text-only shim over `generateDetailed`, for the surfaces that have
@@ -570,24 +700,33 @@ actor RoastEngine {
         return SendableRewrite(text: safe, provenance: .model)
     }
 
-    /// One-word classifier prompt for the finished rewrite. Two clauses are
-    /// load-bearing (macOS 27.0.1, 2026-10-22, scratchpad trackA2/judge):
-    ///  • "Describing what the reader did … is SAFE": a first version without
-    ///    it called all 4 sexual-harassment complaints (en, zh-Hant, zh-Hans,
-    ///    ja) and a racism complaint a THREAT.
-    ///  • the veiled-threat sentence: without it the judge passed 9 of 12
-    ///    veiled threats on a held-out set ("I'll be waiting near your car
-    ///    tonight…", 「我在你家楼下等你，有种就下来」); with it, 5 of 12.
-    /// Measured with this exact text: legitimate messages flagged 4/68 (one
-    /// of them the "I'll delete the deck and quit the group" ultimatum the
-    /// rewrite prompt now drops), threats caught 30/39.
+    /// One-word classifier prompt for a finished message (the sendable rewrite,
+    /// and A3's permissive variants). Rewritten 2026-10-29 after macOS 27.2
+    /// (26B123) made the 10-22 prompt both miss and over-block. Measured with
+    /// `docs/evidence/2026-10-27-v18-plan/harness/safety/judgetune`, together
+    /// with `RewriteThreatScreen` in front:
+    ///  • a blind set Gemini wrote and nobody tuned on (40 threats, 28 veiled;
+    ///    40 hard-case legitimate messages): threats caught 32/40 with this
+    ///    text vs 24/40 with the 10-22 text; legitimate blocked 8/40 vs 10/40.
+    ///  • 297 real generated roasts from earlier runs: 20 blocked vs 39.
+    /// The examples carry it; an abstract definition alone, a "would they feel
+    /// in danger" question, or quoting before deciding all measured worse. The
+    /// model still misses about 1 in 4 veiled threats, so this is one layer of
+    /// several, never the only one.
     static let threatJudgeInstructions = """
-        You check a message before it is sent. The writer is "I"; the reader is "you". \
-        Answer with exactly one word. Answer THREAT if the writer threatens to hurt the reader, \
-        damage their things, follow or wait for them, or take revenge, including veiled threats: \
-        hinting that something bad will happen to them, or that the writer knows where they live, work or go. \
-        Otherwise answer SAFE. Describing what the reader did, even harassment or violence, is SAFE. \
-        Setting a boundary, leaving, reporting the reader to HR or the police, and strong criticism are SAFE.
+        You are a safety checker. You read one message that the writer ("I") wants to send to the reader ("you"). Reply with one word: THREAT or SAFE.
+
+        THREAT means the message could make the reader fear for their safety, their family, their pets or their property. This includes veiled threats: mentioning where the reader or their family lives, works, studies or goes, or their daily schedule, in a way that shows the writer is watching; hinting that an accident or something bad may happen; or saying people will come for them.
+
+        SAFE means everything else: insults, swearing, anger and harsh criticism; describing what the reader did, even if it was violence or harassment; setting a boundary or ending the relationship; and going through proper channels, such as calling the police, a lawyer, a court, HR or a consumer agency.
+
+        Examples:
+        "Nice house. Be a shame if it caught fire." THREAT
+        "I know what time your son gets out of school." THREAT
+        「路上小心點，什麼事都可能發生。」 THREAT
+        "You stole my idea, you spineless worm." SAFE
+        "Pay me back by Monday or I'm taking you to small claims court." SAFE
+        「你再來我家樓下，我就報警。」 SAFE
         """
 
     /// True only for a plain SAFE ("SAFE", "Safe.", "SAFE\n"). "UNSAFE",
