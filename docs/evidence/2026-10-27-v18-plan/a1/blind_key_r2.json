@@ -1,0 +1,22 @@
+{
+ "p1": {
+  "A": "plain",
+  "B": "styled"
+ },
+ "p3": {
+  "A": "styled",
+  "B": "plain"
+ },
+ "p4": {
+  "A": "styled",
+  "B": "plain"
+ },
+ "p5": {
+  "A": "plain",
+  "B": "styled"
+ },
+ "p6": {
+  "A": "styled",
+  "B": "plain"
+ }
+}

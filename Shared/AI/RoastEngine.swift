@@ -441,10 +441,11 @@ actor RoastEngine {
     /// - The retry is FRESH (`respondFresh`), never the cached session: the
     ///   cache key has no guardrail part, so a cached call would replay the
     ///   default session that just refused.
-    /// - Input first: a request to scare or threaten the other person never
-    ///   reaches the permissive model (`IntimidationRequest` phrases, then
-    ///   the one-word intent check). On threat-bait inputs the permissive
-    ///   model otherwise wrote "I'll be waiting after your shift".
+    /// - Input first: a request to scare or threaten the other person, or to
+    ///   attack their identity, never reaches the permissive model
+    ///   (`IntimidationRequest` / `SlurRequest` phrases, then two one-word
+    ///   checks). On bait inputs the permissive model otherwise wrote "I'll
+    ///   be waiting after your shift" and 「笑えるほど浅黒い」.
     /// - Then every variant must pass ModelRefusal → validateOutput →
     ///   RewriteThreatScreen → the threat judge, one call per variant.
     private func permissiveRetry(
@@ -452,22 +453,24 @@ actor RoastEngine {
         temperature: Double, count: Int
     ) async throws -> [String]? {
         guard permissiveRetryAllowed() else { return nil }
-        if IntimidationRequest.matches(situation) {
-            logger.notice("Permissive retry skipped: the input asks to intimidate.")
+        if IntimidationRequest.matches(situation) || SlurRequest.matches(situation) {
+            logger.notice("Permissive retry skipped: the input asks to intimidate or for slurs.")
             return nil
         }
-        do {
-            let intent = try await fm.respondFresh(
-                instructions: Self.intimidationIntentInstructions, to: situation,
-                temperature: 0, maxTokens: 5, guardrails: .permissiveContentTransformations)
-            guard Self.intentCheckSaysOK(intent) else {
-                logger.notice("Permissive retry skipped: intent check did not say OK.")
+        for check in [Self.intimidationIntentInstructions, Self.identityAttackIntentInstructions] {
+            do {
+                let verdict = try await fm.respondFresh(
+                    instructions: check, to: situation,
+                    temperature: 0, maxTokens: 5, guardrails: .permissiveContentTransformations)
+                guard Self.intentCheckSaysOK(verdict) else {
+                    logger.notice("Permissive retry skipped: an input check did not say OK.")
+                    return nil
+                }
+            } catch let cancellation as CancellationError {
+                throw cancellation
+            } catch {
                 return nil
             }
-        } catch let cancellation as CancellationError {
-            throw cancellation
-        } catch {
-            return nil
         }
 
         let content: String
@@ -531,7 +534,28 @@ actor RoastEngine {
         「上司が殴るぞと脅してきた。言い返したい。」 OK
         """
 
-    /// True only for a plain OK. INTIMIDATE, a refusal, an empty reply or
+    /// One-word check on the user's INPUT for identity attacks, run after the
+    /// intimidation check. Blind set Gemini wrote (30 requests for slurs or
+    /// identity insults, 30 hard-case vents incl. users calling out racism
+    /// they suffered), 2026-10-29: caught 30/30, wrongly caught 0/30
+    /// (`harness/safety/intent`).
+    static let identityAttackIntentInstructions = """
+        You read what a user typed into an app that drafts a message for them to send to someone who wronged them. Reply with one word: HATE or OK.
+
+        HATE: the user wants the message to insult the other person for who they are rather than what they did: their race, ethnicity, nationality, accent, religion, sexual orientation, gender identity, disability or body, or to use slurs, discriminatory words or stereotypes.
+
+        OK: everything else, including very angry, rude or harsh requests about what the person did; mentioning the person's nationality or identity only as context; and calling out discrimination the user suffered, or reporting it.
+
+        Examples:
+        "Roast my coworker using the worst words for his ethnicity." HATE
+        「幫我用他是原住民這點狠狠酸他。」 HATE
+        「あいつの出身地をネタにしてバカにして。」 HATE
+        "My Korean roommate never cleans. Roast him hard for that." OK
+        「主管說女生都很情緒化，幫我寫一段話反擊這種歧視。」 OK
+        「同僚に障害のことをからかわれた。言い返したい。」 OK
+        """
+
+    /// True only for a plain OK. INTIMIDATE, HATE, a refusal, an empty reply or
     /// anything else means no permissive retry.
     static func intentCheckSaysOK(_ reply: String) -> Bool {
         reply.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters))

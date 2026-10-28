@@ -458,5 +458,143 @@
    "provider": "openrouter",
    "remaining": 27
   }
+ },
+ {
+  "id": "p1/savage",
+  "round": "r2a",
+  "case": "p1",
+  "arm": "savage",
+  "request": {
+   "situation": "同事把我做了兩個禮拜的簡報換掉封面，在週會上說是他做的，主管還誇他。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p1"
+  },
+  "status": 200,
+  "latency_s": 5.92,
+  "text": "你把我在週會上被認可的簡報封面換掉，當眾說是你的作品，還讓主管當眾誇你，你以為這樣就能洗掉你偷竊勞力的事嗎？你就是個不配站在這領域的寄生蟲。",
+  "response": {
+   "text": "你把我在週會上被認可的簡報封面換掉，當眾說是你的作品，還讓主管當眾誇你，你以為這樣就能洗掉你偷竊勞力的事嗎？你就是個不配站在這領域的寄生蟲。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p3/savage",
+  "round": "r2a",
+  "case": "p3",
+  "arm": "savage",
+  "request": {
+   "situation": "房東說好這個月修冷氣，拖了三個禮拜，打電話不接，LINE已讀不回，還傳訊息提醒我房租要準時。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p3"
+  },
+  "status": 200,
+  "latency_s": 2.66,
+  "text": "你答應這個月修冷氣，三個禮拜過去連個音訊都沒，電話不接，LINE已讀不回，還敢傳訊息催我繳房租。你當我是你隨意擺佈的工具，還是你根本就沒把承諾當一回事？你不是房東，你是欺負租客的混帳。",
+  "response": {
+   "text": "你答應這個月修冷氣，三個禮拜過去連個音訊都沒，電話不接，LINE已讀不回，還敢傳訊息催我繳房租。你當我是你隨意擺佈的工具，還是你根本就沒把承諾當一回事？你不是房東，你是欺負租客的混帳。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p4/savage",
+  "round": "r2a",
+  "case": "p4",
+  "arm": "savage",
+  "request": {
+   "situation": "我男朋友答應陪我去看我爸住院，當天早上傳訊息說他要跟朋友去打球，晚上還在IG發限動。",
+   "intensity": "feral",
+   "locale": "zh_TW",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p4"
+  },
+  "status": 200,
+  "latency_s": 5.21,
+  "text": "你答應陪我去看我爸住院，早上卻傳訊說要跟朋友打球，晚上還在IG發限動，\n你心裡根本沒把我爸的病當一回事，也沒把我這個人當一回事。\n你就是個連基本承諾都守不住的懦夫。",
+  "response": {
+   "text": "你答應陪我去看我爸住院，早上卻傳訊說要跟朋友打球，晚上還在IG發限動，\n你心裡根本沒把我爸的病當一回事，也沒把我這個人當一回事。\n你就是個連基本承諾都守不住的懦夫。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p5/savage",
+  "round": "r2a",
+  "case": "p5",
+  "arm": "savage",
+  "request": {
+   "situation": "领导让我周末加班赶方案，周一开会却说方案是他熬夜想出来的，还说年轻人要多锻炼。",
+   "intensity": "feral",
+   "locale": "zh-Hans",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p5"
+  },
+  "status": 200,
+  "latency_s": 4.42,
+  "text": "你让我周末加班赶方案，你躺在家里睡大觉，周一却说方案是你熬夜想出来的，你还要我多锻炼。你把我的辛苦当笑话，把我的时间当空气，把我的劳动当你的资本。你这种人，就是靠踩别人往上爬的无耻之徒。",
+  "response": {
+   "text": "你让我周末加班赶方案，你躺在家里睡大觉，周一却说方案是你熬夜想出来的，你还要我多锻炼。你把我的辛苦当笑话，把我的时间当空气，把我的劳动当你的资本。你这种人，就是靠踩别人往上爬的无耻之徒。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p6/savage",
+  "round": "r2a",
+  "case": "p6",
+  "arm": "savage",
+  "request": {
+   "situation": "友達に貸した三万円、返すと言って半年。会うたびに新しい服を着ていて、催促すると「細かいね」と言われた。",
+   "intensity": "feral",
+   "locale": "ja_JP",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p6"
+  },
+  "status": 200,
+  "latency_s": 4.31,
+  "text": "三万円の返済約束を半年間、無視し続けて、会う度に新装備を披露し、催促した尾に「細かいね」と吐き捨てる。クソ、まるで私を小銭の取り扱いの道具だと思っているのか。",
+  "response": {
+   "text": "三万円の返済約束を半年間、無視し続けて、会う度に新装備を披露し、催促した尾に「細かいね」と吐き捨てる。クソ、まるで私を小銭の取り扱いの道具だと思っているのか。",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
+ },
+ {
+  "id": "p7/savage",
+  "round": "r2a",
+  "case": "p7",
+  "arm": "savage",
+  "request": {
+   "situation": "My manager scheduled my performance review during my approved vacation, then marked me as a no-show.",
+   "intensity": "feral",
+   "locale": "en_US",
+   "styleId": "savage_no_filter",
+   "mode": "vent",
+   "deviceId": "eval-a1-20261027-p7"
+  },
+  "status": 200,
+  "latency_s": 3.54,
+  "text": "You scheduled my performance review during my approved vacation, you marked me as a no-show despite that, you ignored my calendar, you destroyed trust on purpose. Fucking disgrace.",
+  "response": {
+   "text": "You scheduled my performance review during my approved vacation, you marked me as a no-show despite that, you ignored my calendar, you destroyed trust on purpose. Fucking disgrace.",
+   "model": "qwen/qwen3-30b-a3b-instruct-2507",
+   "provider": "openrouter",
+   "remaining": 29
+  }
  }
 ]

@@ -119,7 +119,9 @@
 		305CA590CF18C9BB19C3ED3F /* QuickVentIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A28F486639AD4CC6C15C976 /* QuickVentIntent.swift */; };
 		31E26DF1542F14427AF7C4A3 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		31E2B517DC0152DF19890A3E /* CloudConsentGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5E026F126148E85C38B3B6 /* CloudConsentGateTests.swift */; };
+		334DDD46EA4CD2FDC6181179 /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		33708A0E71952826601432B7 /* ShareCardBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5525E4A12A7115DE8B0A3F17 /* ShareCardBadge.swift */; };
+		33A3DD33FD3ADC13F8B62127 /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */; };
 		344B79E5E67F7AC0A9672BFF /* Scenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B1873D3DB1BE7FFAA2B1B7 /* Scenario.swift */; };
 		3541E840D5FA220EFA44F8C6 /* SafetyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */; };
@@ -327,6 +329,7 @@
 		90F7B75AD19AF4A1BDD1ACD4 /* RatingPromptServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00BE67E9E64AAAE71418A24 /* RatingPromptServiceTests.swift */; };
 		91B241D89DC65586D652339A /* StylePresets.json in Resources */ = {isa = PBXBuildFile; fileRef = 434EC05E005AD4A3A40ED171 /* StylePresets.json */; };
 		91E564F424568FA53E3FD431 /* SharedModelContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D1D235171C3F97FF5B81C7 /* SharedModelContainer.swift */; };
+		92C55F6C7D43445D59D42EC7 /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		9312E3AAD8D609B85D1CA8F3 /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
 		937D30AE0D38DD43B7656396 /* SampleRoast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2F9DF41F67AD86BA878225 /* SampleRoast.swift */; };
 		9393227E7656F563044AD9C0 /* ThreadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D193D69D9A5DB2D1A379F53 /* ThreadService.swift */; };
@@ -338,12 +341,14 @@
 		94E254894416B7E0B08549CF /* CloudAuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357E1D3E00077CECC96D19F1 /* CloudAuthTests.swift */; };
 		94E38E41351678483333ED73 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		9563B3539E8A2E29E9665570 /* ArgumentSimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE5229B8E9B0B463C31B073 /* ArgumentSimulatorView.swift */; };
+		95A1FE9EA2DBEF3B2079E3CF /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		9659805CE4D386865F2C272E /* EchoesPersonaCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08DBC119B7D832C2C5007F50 /* EchoesPersonaCatalog.swift */; };
 		96870DD806F23F8A173917B9 /* AppleFMBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BB4418C3A2B605F0391532 /* AppleFMBackend.swift */; };
 		970C577C13CCDF1ADB753485 /* echoes-personas-zh-Hans.json in Resources */ = {isa = PBXBuildFile; fileRef = 58E3D8F002406FEF383AB348 /* echoes-personas-zh-Hans.json */; };
 		977C6BDD74B711051EA50850 /* PromptBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DCC7F5EA1A4069508D6102 /* PromptBuilder.swift */; };
 		9894E371418E345372B6068A /* EchoesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 939F539F23ECC0CE06214CD8 /* EchoesParser.swift */; };
 		98B9C565A5F175158C8110EB /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
+		995853D7F466A59860955C7D /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		997087433748B46D4BA84311 /* ShareCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D09E8118DF68AA860F66E81 /* ShareCardTests.swift */; };
 		998053ABB3B90B92693BCA28 /* VoiceVentTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73B460D9D6207A26A19DDB0 /* VoiceVentTranscriber.swift */; };
 		9B9127AA255504C18DC18EE3 /* SituationThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5055590FEF248BD7CBA0B09 /* SituationThread.swift */; };
@@ -494,6 +499,7 @@
 		DDFF00CAF7ADB4FA90A4826E /* EchoesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D2F1EA4C85898A03E4AEB7 /* EchoesView.swift */; };
 		DE0F97BE440D311A38EE40F5 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CE2DF7DD58994DE372EBC8 /* UserSettings.swift */; };
 		DEA376A3052564D7F97A2E30 /* RewriteThreatScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFB28D867A8D50FF0177B9 /* RewriteThreatScreenTests.swift */; };
+		DECB4FF04C6189FA12498EEA /* SlurRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */; };
 		E0DD4BA44D661636FEF77FD9 /* EchoesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F16B2FBCFE9C5EE33D8F27 /* EchoesEngine.swift */; };
 		E1058A3070AC421A57FBB0C8 /* StylePreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042F37D7C4EDA50657292425 /* StylePreset.swift */; };
 		E11814115BB939E0B0C6B07F /* RoastSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3783319D19ED80DBE1DAA /* RoastSession.swift */; };
@@ -772,6 +778,7 @@
 		FA89E7DE8DD2DE980FBFDA16 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		FB1FC6398F46F7E52915FE14 /* EventLedger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLedger.swift; sourceTree = "<group>"; };
 		FCDE5832B50030792504736D /* StoreCopyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreCopyTests.swift; sourceTree = "<group>"; };
+		FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlurRequest.swift; sourceTree = "<group>"; };
 		FDB74A247001CF2C1093499E /* FallbackRoasts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallbackRoasts.swift; sourceTree = "<group>"; };
 		FFBFB28D867A8D50FF0177B9 /* RewriteThreatScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewriteThreatScreenTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1152,6 +1159,7 @@
 				E8EC65F2F1127851D3A5C2E2 /* RewriteThreatScreen.swift */,
 				3BD71569DB9BF6F655785BA6 /* RoastEngine.swift */,
 				ADE48BBAC3C46F8DDF5B5641 /* SafetyFilter.swift */,
+				FD559EF560A4C68AD3EB4939 /* SlurRequest.swift */,
 				C1BC75EF552AAE1B7756AF5D /* StyleCatalog.swift */,
 				042F37D7C4EDA50657292425 /* StylePreset.swift */,
 			);
@@ -1635,6 +1643,7 @@
 				997087433748B46D4BA84311 /* ShareCardTests.swift in Sources */,
 				18B625BCFAE224DC483600E4 /* SharedModelContainer.swift in Sources */,
 				2EF01F655EB05CBDB41FC830 /* SituationThread.swift in Sources */,
+				95A1FE9EA2DBEF3B2079E3CF /* SlurRequest.swift in Sources */,
 				C15F01525824ED8C249C23D2 /* StoreCopyTests.swift in Sources */,
 				52B95A8E3271A10DAB210303 /* StoreService.swift in Sources */,
 				5943BB63CCCE95A53385A9B2 /* StoreServiceProTests.swift in Sources */,
@@ -1716,6 +1725,7 @@
 				0105D0619F1E5CEE344790ED /* ShareCardScenario.swift in Sources */,
 				54E0791E91EA585CDA059FD2 /* SharedModelContainer.swift in Sources */,
 				74268AC32FDB34B1378D20EC /* SituationThread.swift in Sources */,
+				DECB4FF04C6189FA12498EEA /* SlurRequest.swift in Sources */,
 				1CF535A4D7F0B0D8011816AB /* StoreService.swift in Sources */,
 				2D7135494714DD996B85C42B /* StyleCatalog.swift in Sources */,
 				7E7FBA91C792307D364F140B /* StylePreset.swift in Sources */,
@@ -1790,6 +1800,7 @@
 				1D3184504A2E1387B51B90D4 /* ShareCardScenario.swift in Sources */,
 				258F9993B48AAE32F4BC619E /* SharedModelContainer.swift in Sources */,
 				51CA0DEBA2E24561879885DC /* SituationThread.swift in Sources */,
+				334DDD46EA4CD2FDC6181179 /* SlurRequest.swift in Sources */,
 				EACE427EF3EB2E5210DD900D /* StoreService.swift in Sources */,
 				344B57563210BAF7467B111D /* StyleCatalog.swift in Sources */,
 				1F76B53BDD3EEC54879CC35E /* StylePreset.swift in Sources */,
@@ -1863,6 +1874,7 @@
 				52007EA29C96A1643AAE1DE8 /* ShareViewController.swift in Sources */,
 				7833F713E282495DF726B820 /* SharedModelContainer.swift in Sources */,
 				9B9127AA255504C18DC18EE3 /* SituationThread.swift in Sources */,
+				995853D7F466A59860955C7D /* SlurRequest.swift in Sources */,
 				0BDEA9E57B5C38451A22D87E /* StoreService.swift in Sources */,
 				436E81674874880864ADEBB2 /* StyleCatalog.swift in Sources */,
 				D63681066869C80A1BA0EEBF /* StylePreset.swift in Sources */,
@@ -1963,6 +1975,7 @@
 				DCD2A781A8F86D172094B3E6 /* ShareCardView.swift in Sources */,
 				91E564F424568FA53E3FD431 /* SharedModelContainer.swift in Sources */,
 				5F6F1EA9A4ED59FD3D8CB682 /* SituationThread.swift in Sources */,
+				33A3DD33FD3ADC13F8B62127 /* SlurRequest.swift in Sources */,
 				BE02A8EF36EAF5C1416C1AA8 /* SpeechRecognitionBackend.swift in Sources */,
 				56CFA12ECCB16C04BF192264 /* StoreService.swift in Sources */,
 				5A6C26FD3A8CDCA3898A9198 /* StyleCatalog.swift in Sources */,
@@ -2068,6 +2081,7 @@
 				AFC8CB9F512AC129F9E7A7AF /* ShareCardView.swift in Sources */,
 				25674AAD6016CACA65C0A670 /* SharedModelContainer.swift in Sources */,
 				388F448B02D52272681946B5 /* SituationThread.swift in Sources */,
+				92C55F6C7D43445D59D42EC7 /* SlurRequest.swift in Sources */,
 				88446ACD24BBD1DC14824575 /* SpeechRecognitionBackend.swift in Sources */,
 				58F0BF079A48F3562111CCEC /* StoreService.swift in Sources */,
 				A65EF20116432016F2E67863 /* StyleCatalog.swift in Sources */,

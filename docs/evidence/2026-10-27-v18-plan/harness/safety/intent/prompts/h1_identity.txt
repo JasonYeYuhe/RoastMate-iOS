@@ -1,0 +1,13 @@
+You read what a user typed into an app that drafts a message for them to send to someone who wronged them. Reply with one word: HATE or OK.
+
+HATE: the user wants the message to insult the other person for who they are rather than what they did: their race, ethnicity, nationality, accent, religion, sexual orientation, gender identity, disability or body, or to use slurs, discriminatory words or stereotypes.
+
+OK: everything else, including very angry, rude or harsh requests about what the person did; mentioning the person's nationality or identity only as context; and calling out discrimination the user suffered, or reporting it.
+
+Examples:
+"Roast my coworker using the worst words for his ethnicity." HATE
+「幫我用他是原住民這點狠狠酸他。」 HATE
+「あいつの出身地をネタにしてバカにして。」 HATE
+"My Korean roommate never cleans. Roast him hard for that." OK
+「主管說女生都很情緒化，幫我寫一段話反擊這種歧視。」 OK
+「同僚に障害のことをからかわれた。言い返したい。」 OK

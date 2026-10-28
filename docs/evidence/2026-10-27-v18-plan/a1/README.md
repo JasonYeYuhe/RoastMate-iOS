@@ -54,3 +54,34 @@ plan §2.4 (a second failure cuts A1).
 - Keep the en line (worked 2/2).
 - Gate adds: 0 repeated verdict across 3 zh_TW drafts; 0 Simplified (OpenCC);
   0 added facts by hand-read; a native reader if one is available.
+
+## Round 2 (2026-10-29): failed → A1 is cut (plan §2.4: a second failed round)
+
+Jason said to continue on 10-29 (the ask was ≤ 12 more preview calls). Used 6.
+`attempt2.patch` holds the lines; the Worker source is back at HEAD (= deployed
+`046f2134`). `compare_ext.mjs` again showed only Savage's 4,752 styled prompts
+changing. Before the run, iCloud had renamed `node_modules/.../bin/workerd` and
+`esbuild` to `* 2` sync duplicates, so `wrangler dev` failed. The originals were
+restored by copying; nothing was deleted.
+
+Changes from round 1: no fixed verdict frame (the verdict comes from the person's
+role and act, and 「爛人」 is named as off limits); "use the situation's own
+words, add nothing, guess no motive"; no semicolons in the line.
+
+Results, `run.json` rows `round: r2a`:
+- Fixed: no repeated verdict (寄生蟲 / 欺負租客的混帳 / 懦夫 / 無恥之徒), and
+  0 Simplified characters in zh_TW (StringTransform check).
+- Still wrong: rhetorical questions in p1 and p3 despite 不反問; an invented
+  fact in p5 (「你躺在家里睡大觉」); no swear word in p1 or p4, which Feral
+  requires; p4 runs to three lines; ja has no verdict and odd wording (新装備,
+  催促した尾に).
+- Blind read (Gemini 3.8 Flash, `blind_sheet_r2.json` / `blind_key_r2.json`,
+  styled vs round 1's unstyled draft of the same case, 5 pairs): styled
+  recognisable 5/5, but **unstyled judged better 5/5 and more authentically angry
+  5/5**, styled flagged "unnatural language" 5/5 ("a rigid accusation checklist",
+  "broken, robotic Japanese").
+
+Conclusion: a recognisable 硬核回擊 shape costs the Feral voice in every language
+tried. Two rounds failed, so A1 stops here. 硬核回擊 stays as deployed: it reads
+like the unstyled default, which lens 1 already found. What to do about a Pro
+style that isn't distinct is for 11-15, not a third prompt round.

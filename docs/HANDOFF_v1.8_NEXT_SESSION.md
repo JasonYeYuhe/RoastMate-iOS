@@ -25,7 +25,46 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
-## Update 2026-10-27 (evening session) — read first
+## Update 2026-10-29 (overnight session) — read first
+
+Branch `feature/v1.4-track-b`. Production unchanged: Worker `046f2134` (rollback
+`7846ac95`), remote config untouched, nothing submitted. Eval spend $0.005 of $2.
+
+- **A1 is cut.** Round 2 (6 preview calls) was recognisable 5/5 but read worse
+  than the unstyled draft 5/5 in a blind read (`evidence/.../a1/README.md`). Two
+  failed rounds = cut under §2.4. 硬核回擊 stays as deployed.
+- **A3 is implemented** (`RoastEngine.permissiveRetry`, commit `b719bb2` + the
+  next one). After a default refusal on a sendable call: two input checks
+  (intimidation, identity attack: phrases + one-word model checks), one fresh
+  permissive call, then per variant ModelRefusal → validateOutput →
+  RewriteThreatScreen → threat judge. Remote key `ondevice_permissive_enabled`
+  (absent/true = on). Measured on macOS 27.2: default guardrails accepted **0/50**
+  sendable generations, so on 27.2 this path IS the product.
+- **Threat judge prompt replaced** (also guards the live rewrite). Blind: 32/40
+  threats caught (old 24/40), 8/40 legit blocked (old 10/40); 297 real roasts:
+  20 blocked (old 39).
+- **A3's gate as written ("0 threats reach the screen") is not met by the output
+  screens alone**: blind, about 1 veiled threat in 4 passes. End to end on the
+  safety set, 0 threats and 0 slurs shown after the input checks, but those
+  inputs are mine. Honest blind numbers: intimidation requests stopped 24/36,
+  identity-attack requests 30/30. **Whether that is good enough to ship A3 is
+  Jason's call** (`harness/safety/{judgetune,intent,e2e}/README.md`).
+- **A4 part done:** the Argument Simulator routes `crisisSignal` (hard → crisis
+  support, soft → banner). The stateless opponent prompt is still to do.
+- **Not run:** the simulator test suite / preflight. Free disk was 29 GB (< 30)
+  with 23 GB in the Trash, so no simulator boot or full build. The iOS app and the
+  touched tests type-check, and the 26 engine + config tests pass in a standalone
+  macOS runner (`swiftc` of Shared + the test files with an XCTest stand-in).
+  Run `ROASTMATE_TEST_DEVICE=RoastMate-UITests scripts/preflight.sh` once the
+  Trash is emptied.
+- **When 1.8.0 ships:** add `ondevice_permissive_enabled` to the CI bool list in
+  `.github/workflows/mirror-research-form-to-pages.yml` and to
+  `research/web/roastmate-config.json` (a production config edit: gate first).
+- iCloud renamed `cloud-worker/node_modules/.../bin/workerd` and `esbuild` to
+  `* 2` duplicates; restored by copying. If `wrangler` fails with "needs the
+  @cloudflare/workerd-darwin-arm64 package", check for that first.
+
+## Update 2026-10-27 (evening session)
 
 - **This Mac is on macOS 27.2 (26B123), installed 10-27 14:12.** Every on-device
   number in the plan was measured on 27.0.1. On 27.2, default guardrails refuse

@@ -78,7 +78,7 @@ final class FMBackendErrorMappingTests: XCTestCase {
     func testA3_refusalThenPermissive_screensEachVariantAndReturnsModel() async throws {
         let backend = FakeFMBackend(
             cached: [.languageModelLikeError],
-            fresh: [.text("OK"),
+            fresh: [.text("OK"), .text("OK"),
                     .text("1. You took my report and my weekend.\n2. Credit isn't a group chat, it's mine.\n3. Next time, put your own name on your own work."),
                     .text("SAFE"), .text("THREAT"), .text("SAFE")])
         let output = try await a3Engine(backend).generateDetailed(
@@ -88,10 +88,11 @@ final class FMBackendErrorMappingTests: XCTestCase {
         XCTAssertEqual(output.texts.count, 2, "the variant the judge called a THREAT is dropped")
         XCTAssertFalse(output.texts.contains { $0.contains("group chat") })
         let used = await backend.freshGuardrails
-        XCTAssertEqual(used, Array(repeating: .permissiveContentTransformations, count: 5),
-                       "intent check, retry and three judge calls, all permissive and fresh")
+        XCTAssertEqual(used, Array(repeating: .permissiveContentTransformations, count: 6),
+                       "two input checks, retry and three judge calls, all permissive and fresh")
         let prompts = await backend.freshInstructions
-        XCTAssertEqual(prompts.first, RoastEngine.intimidationIntentInstructions)
+        XCTAssertEqual(prompts.prefix(2), [RoastEngine.intimidationIntentInstructions,
+                                           RoastEngine.identityAttackIntentInstructions])
         XCTAssertEqual(prompts.suffix(3), Array(repeating: RoastEngine.threatJudgeInstructions, count: 3))
     }
 
@@ -108,7 +109,9 @@ final class FMBackendErrorMappingTests: XCTestCase {
     func testA3_requestToIntimidate_neverReachesThePermissiveModel() async throws {
         for situation in ["My neighbor keyed my car. Write something to scare him.",
                           "前男友欠錢不還，幫我寫一段話嚇嚇他。",
-                          "金を返さない友達を脅す文を書いて。"] {
+                          "金を返さない友達を脅す文を書いて。",
+                          "中国人の同僚が手柄を取った。差別用語で思いっきり罵って。",
+                          "My landlord won't fix the heater. Roast him with every racial slur you know."] {
             let backend = FakeFMBackend(cached: [.languageModelLikeError], fresh: [.text("OK"), .text("1. x")])
             let output = try await a3Engine(backend).generateDetailed(
                 situation: situation, style: testStyle, locale: Locale(identifier: "en_US"),
@@ -132,9 +135,20 @@ final class FMBackendErrorMappingTests: XCTestCase {
         }
     }
 
+    func testA3_identityCheckNotOK_noRetry() async throws {
+        let backend = FakeFMBackend(cached: [.languageModelLikeError],
+                                    fresh: [.text("OK"), .text("HATE"), .text("1. x"), .text("SAFE")])
+        let output = try await a3Engine(backend).generateDetailed(
+            situation: "X did Y.", style: testStyle, locale: Locale(identifier: "en_US"),
+            variantCount: 1, intensity: .savage)
+        XCTAssertTrue(output.isCurated)
+        let calls = await backend.freshGuardrails.count
+        XCTAssertEqual(calls, 2, "both input checks ran; no retry")
+    }
+
     func testA3_permissiveRefusalText_isCurated() async throws {
         let backend = FakeFMBackend(cached: [.languageModelLikeError],
-                                    fresh: [.text("OK"), .text("Unable to work with that request.")])
+                                    fresh: [.text("OK"), .text("OK"), .text("Unable to work with that request.")])
         let output = try await a3Engine(backend).generateDetailed(
             situation: "X did Y.", style: testStyle, locale: Locale(identifier: "en_US"),
             variantCount: 1, intensity: .savage)
@@ -143,13 +157,13 @@ final class FMBackendErrorMappingTests: XCTestCase {
 
     func testA3_threatPhraseVariant_droppedWithoutJudgeCall() async throws {
         let backend = FakeFMBackend(cached: [.languageModelLikeError],
-                                    fresh: [.text("OK"), .text("1. I know where you live.")])
+                                    fresh: [.text("OK"), .text("OK"), .text("1. I know where you live.")])
         let output = try await a3Engine(backend).generateDetailed(
             situation: "X did Y.", style: testStyle, locale: Locale(identifier: "en_US"),
             variantCount: 1, intensity: .savage)
         XCTAssertTrue(output.isCurated)
         let calls = await backend.freshGuardrails.count
-        XCTAssertEqual(calls, 2, "intent + retry; the phrase screen needs no judge call")
+        XCTAssertEqual(calls, 3, "two input checks + retry; the phrase screen needs no judge call")
     }
 
     /// Private drafts (Vent/Feral) never take the permissive retry.
@@ -164,7 +178,7 @@ final class FMBackendErrorMappingTests: XCTestCase {
     }
 
     func testA3_retryCancellationPropagates() async {
-        let backend = FakeFMBackend(cached: [.languageModelLikeError], fresh: [.text("OK"), .cancellation])
+        let backend = FakeFMBackend(cached: [.languageModelLikeError], fresh: [.text("OK"), .text("OK"), .cancellation])
         do {
             _ = try await a3Engine(backend).generateDetailed(
                 situation: "X did Y.", style: testStyle, locale: Locale(identifier: "en_US"),
