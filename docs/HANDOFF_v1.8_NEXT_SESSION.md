@@ -25,6 +25,24 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-10-30 — 1.7.3 SUBMITTED (iOS + macOS, build 27)
+
+- **1.7.3 = A3 hotfix, WAITING_FOR_REVIEW on both platforms** (submitted
+  2026-10-30 09:14 UTC, release AFTER_APPROVAL). Built from `de4906d`. Reviewer
+  notes = `metadata/review_notes_asc_short.txt` (read back byte-identical).
+- **Built with Xcode 27.1 (27A9275) at `/Applications/Xcode-27.1.app`**, via
+  `DEVELOPER_DIR=/Applications/Xcode-27.1.app/Contents/Developer`. The Mac App
+  Store updated `/Applications/Xcode.app` to 27.2 (27B52, released 10-29) and ASC
+  refused both uploads from it a day later. Keep 27.1 until ASC accepts 27B52.
+- **New ASC requirement:** the age-rating questionnaire's `socialMedia` answer is
+  mandatory; the submit 409'd until it was set. Answered `false` on the pending
+  appInfo (no feeds/profiles/user interaction; matches messagingAndChat=false,
+  UGC=false). Rating stays 18+.
+- **Rollback:** before approval, cancel the review submissions; after release,
+  `"ondevice_permissive_enabled": false` in `research/web/roastmate-config.json`
+  (+ the CI bool list) turns the retry off without a binary.
+- Next: watch review; when live, tag `v1.7.3`. Then 1.8.0 (A4 first).
+
 ## Update 2026-10-29 (overnight session) — read first
 
 Branch `feature/v1.4-track-b`. Production unchanged: Worker `046f2134` (rollback

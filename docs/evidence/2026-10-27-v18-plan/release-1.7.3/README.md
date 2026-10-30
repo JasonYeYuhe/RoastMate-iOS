@@ -57,3 +57,20 @@ Unblock = build with an accepted Xcode (Jason installs it) or wait until ASC
 accepts 27B52; then rerun the two upload commands, `asc_bind_version.py` (iOS
 and `--platform MAC_OS`, notes `build/v1.7.3-release-notes{,-mac}.md`), set
 reviewer notes from `metadata/review_notes_asc_short.txt`, `asc_submit_review.py`.
+
+## Unblocked and submitted (2026-10-30, 18:00–18:15 JST)
+
+- Retry of the 27B52 archives at 17:56: refused again (same two errors).
+  developer.apple.com/download lists Xcode 27.2 as released 10-29; ASC had not
+  started accepting it. Apple's releases page still ends at 27.2 RC (27B48).
+- Downloaded `Xcode_27.1.xip` (2,027,369,056 B, download.developer.apple.com,
+  signed Apple Software; Gatekeeper accepted), installed as
+  `/Applications/Xcode-27.1.app` (27A9275, the toolchain 1.7.2 shipped with and A3
+  was developed on). Re-archived both platforms with `DEVELOPER_DIR` pointing at
+  it: `DTXcodeBuild=27A9275`, 1.7.3 (27). Both uploads succeeded; both VALID.
+- `asc_bind_version.py` iOS + MAC_OS (4-locale What's New), reviewer notes via
+  `PATCH /v1/appStoreReviewDetails/{id}` (read back identical on both).
+- iOS submit 409: `ageRatingDeclarations … socialMedia` required (Apple's new
+  mandatory social-media question). Set `socialMedia=false` on appInfo
+  `438ee902…` (PREPARE_FOR_SUBMISSION). Resubmitted.
+- **Both WAITING_FOR_REVIEW**, AFTER_APPROVAL, build 27 VALID (read back).
