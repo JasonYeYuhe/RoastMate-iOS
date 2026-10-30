@@ -1,14 +1,14 @@
-Reviewer notes — RoastMate v1.7.2
+Reviewer notes — RoastMate v1.7.3
 
-1. WHAT'S NEW IN 1.7.2 (icon and copy only).
-No new feature, data collection or permission; nothing new leaves the
-device. The app icon's speech bubble now reads 幫你罵 (Traditional Chinese)
-instead of 帮你骂. The paywall's subscription rows show the app's own
-description of Pro (Feral, Savage, all 24 styles, no credits) instead of the
-product description text. 1.7.1's fixes are unchanged: an on-device model
-refusal on iOS/macOS 27 shows the labelled curated example; "Make it
-sendable" uses Apple's permissiveContentTransformations guardrails for the
-rewrite only, then a refusal check, a threat screen and our strict filter.
+1. WHAT'S NEW IN 1.7.3. No new data collection or permission; nothing new
+leaves the device. On iOS/macOS 27, Apple's default guardrails refuse most
+on-device Composed/Sharp/Savage requests. After such a refusal the app now
+retries ONCE, on-device, with Apple's permissiveContentTransformations
+guardrails. Before the retry, requests to threaten someone or to attack their
+identity are declined (labelled curated example). Every retried draft must pass
+a refusal check, our strict filter, a threat-phrase screen and an on-device
+threat check, or it is dropped. The Argument Simulator now shows the same
+crisis resources as the generator when a user writes about self-harm.
 
 2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
 Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via

@@ -177,6 +177,18 @@ final class FMBackendErrorMappingTests: XCTestCase {
         XCTAssertEqual(calls, 0)
     }
 
+    /// The simulator keeps context in the cached session; a fresh retry would
+    /// answer a lone line with no setup, so it stays curated until A4.
+    func testA3_argumentMode_noRetry() async throws {
+        let backend = FakeFMBackend(cached: [.languageModelLikeError], fresh: [.text("OK"), .text("OK"), .text("x")])
+        let output = try await a3Engine(backend).generateDetailed(
+            situation: "X did Y.", style: testStyle, locale: Locale(identifier: "en_US"),
+            variantCount: 1, mode: .argument, intensity: .sharp)
+        XCTAssertTrue(output.isCurated)
+        let calls = await backend.freshGuardrails.count
+        XCTAssertEqual(calls, 0)
+    }
+
     func testA3_retryCancellationPropagates() async {
         let backend = FakeFMBackend(cached: [.languageModelLikeError], fresh: [.text("OK"), .text("OK"), .cancellation])
         do {

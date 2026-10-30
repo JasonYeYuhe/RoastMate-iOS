@@ -368,7 +368,10 @@ actor RoastEngine {
             EventLedger.shared.recordFailure(category)  // α3
             // A3: a sendable refusal gets one more try under permissive
             // guardrails, on a fresh session, with every variant screened.
-            if category == .guardrail, !intensity.isPrivateDraft,
+            // Not the Argument Simulator yet: its turns lean on the cached
+            // session for context, which a fresh retry would not have, until
+            // A4 makes its prompt carry the transcript.
+            if category == .guardrail, !intensity.isPrivateDraft, mode != .argument,
                let retried = try await permissiveRetry(
                    fm: fm, situation: situation, instructions: instructions, user: user,
                    temperature: temperature, count: effectiveVariantCount) {
