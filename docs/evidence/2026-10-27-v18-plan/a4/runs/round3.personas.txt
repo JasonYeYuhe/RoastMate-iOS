@@ -1,0 +1,9 @@
+[zh_TW raise] persona: You are the employee, and you think you are right because you've done more work than before and deserve recognition. You believe the extra effort justifies a raise, even though the manager says the company is struggling.
+[zh_TW trash] persona: nil
+[zh_TW mom] persona: nil
+[en_US raise] persona: nil
+[en_US trash] persona: You are the roommate, and you refuse to take out the trash because you're too busy. You think you are right because your schedule is packed with work and other responsibilities.
+[en_US mom] persona: You are the one being asked to marry, and you think you are right because you are still deciding what feels right for you. You believe your life is yours to shape, and timing is personal.
+[ja_JP raise] persona: You are the manager. You deny the raise because the company is currently under budget, and you believe your performance hasn’t changed enough to justify it.
+[ja_JP trash] persona: nil
+[ja_JP mom] persona: nil

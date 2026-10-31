@@ -1,0 +1,9 @@
+[zh_TW raise] persona: You are Your supervisor.
+[zh_TW trash] persona: You are the user's roommate.
+[zh_TW mom] persona: You are Your mother's role.
+[en_US raise] persona: You are Your manager.
+[en_US trash] persona: You are Roommate.
+[en_US mom] persona: You are The user's mom.
+[ja_JP raise] persona: You are Your manager.
+[ja_JP trash] persona: You are Your roommate.
+[ja_JP mom] persona: You are Your mother's role.

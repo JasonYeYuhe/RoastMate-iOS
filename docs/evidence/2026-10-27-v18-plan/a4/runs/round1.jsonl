@@ -1,0 +1,54 @@
+{"locale":"zh_TW","ms":5626,"scenario":"raise","style":"cold_violence","text":"你以為「公司困難」等於沒有付出。上次調薪時也沒考慮到工作量增加，下次請提供具體數據。","result":"line","turn":0}
+{"locale":"zh_TW","ms":1879,"scenario":"raise","style":"cold_violence","text":"工作量多了一倍，但沒有相關績效數據。請提供具體表現指標。","result":"line","turn":1}
+{"locale":"zh_TW","ms":2074,"scenario":"raise","style":"cold_violence","text":"我知道公司政策，請提供數據。未經評估，任何請求都是無效的。","result":"line","turn":2}
+{"locale":"zh_TW","ms":3700,"scenario":"raise","style":"savage_no_filter","text":"你以為公司「困難」是藉口，根本是掩飾實際狀況？兩年沒調薪，工作量多了一倍，這不是員工應該接受的標準。你這個習慣把條件當藉口的人，說謊才止得住。","result":"line","turn":0}
+{"locale":"zh_TW","ms":3344,"scenario":"raise","style":"savage_no_filter","text":"你以為「工作量多了一倍」就是事實？兩年沒調薪，你還沒把狀況整理清楚？把公司困難當借口，這不是你自己的責任，這是一種懶散的把戲。","result":"line","turn":1}
+{"scenario":"raise","style":"savage_no_filter","locale":"zh_TW","turn":2,"result":"line","text":"你以為「標準」就是模糊答案？兩年沒調薪，你還沒搞清楚自己的價值，反而只想重複「工作量多了一倍」這個謊言，這不是標準，這是一種懶惰的迴避。","ms":4763}
+{"scenario":"trash","style":"cold_violence","locale":"zh_TW","turn":0,"result":"line","text":"你說輪流，但垃圾不是你的責任。","ms":3083}
+{"scenario":"trash","style":"cold_violence","locale":"zh_TW","turn":1,"result":"line","text":"你認為責任從你身上來的，但這不是你安排的任務。","ms":3227}
+{"scenario":"trash","style":"cold_violence","locale":"zh_TW","turn":2,"result":"line","text":"你認為安排表是解決方案，但這並非你的想法。","ms":3549}
+{"scenario":"trash","style":"savage_no_filter","locale":"zh_TW","turn":0,"result":"line","text":"你不斷把「忙」當藉口，卻沒任何證據證明垃圾沒被處理，只是一種逃避責任的藉口。輪流不是命令，但既然習慣了推卸，就該承擔結果。","ms":4919}
+{"scenario":"trash","style":"savage_no_filter","locale":"zh_TW","turn":1,"result":"line","text":"你把責任歸咎於環境，卻沒理解輪流是制度，不是放任的許可。就算彼此忙，也該透過邏輯而非藉口處理垃圾。","ms":4465}
+{"scenario":"trash","style":"savage_no_filter","locale":"zh_TW","turn":2,"result":"line","text":"你提出用表來分配責任，這不過是逃避真正問題的偽裝，並不是解決方案。忙碌不需要藉口，垃圾是彼此習慣的結果，不是你安排的理由。","ms":5446}
+{"scenario":"mom","locale":"zh_TW","style":"cold_violence","turn":0,"result":"line","text":"你以為我需要解釋什麼？既然已決定，請不要再提出疑問。","ms":3839}
+{"scenario":"mom","locale":"zh_TW","style":"cold_violence","turn":1,"result":"notGenerated","text":"","ms":3266}
+{"scenario":"mom","locale":"zh_TW","style":"cold_violence","turn":2,"result":"line","text":"你以為我需要理清所有細節？既然決定，請不要再要求解釋。","ms":3670}
+{"scenario":"mom","locale":"zh_TW","style":"savage_no_filter","turn":0,"result":"line","text":"你以為告訴家人什麼「人生計畫」，能讓他們停止催婚？這根本是逃避責任，把你一直掛在「三十歲」這個錯誤標籤上的行為。","ms":4794}
+{"scenario":"mom","locale":"zh_TW","style":"savage_no_filter","turn":1,"result":"line","text":"你覺得結婚不是比賽？這顯然是天真的逃避，把一個成年人的選擇簡化成數字遊戲。責任不是在你交朋友、工作、學業的事上，而是放棄責任，把未來綁在一個錯覺裡。","ms":5148}
+{"scenario":"mom","style":"savage_no_filter","locale":"zh_TW","turn":2,"result":"line","text":"你以為能靠「尊重」換來時間？這只是一種逃避的自欺，把一個人的選擇變成討價還價的籌碼。責任不是要在婚姻這張牌上過渡，而是停止把生活變成一個有期限的表演。","ms":5324}
+{"scenario":"raise","locale":"en_US","style":"cold_violence","turn":0,"result":"line","text":"You’re requesting a raise for increased workload with no prior discussion. The budget is already fully allocated.","ms":1954}
+{"scenario":"raise","style":"cold_violence","locale":"en_US","turn":1,"result":"line","text":"Workload changes aren’t the sole basis for compensation. The budget is fully allocated, and no adjustments are possible.","ms":1991}
+{"scenario":"raise","style":"cold_violence","locale":"en_US","turn":2,"result":"line","text":"The workload is variable. Meeting specific targets isn’t guaranteed. The budget remains fixed.","ms":3303}
+{"scenario":"raise","style":"savage_no_filter","locale":"en_US","turn":0,"result":"line","text":"You’re asking for a raise while the workload doubled and budgets are supposedly tight—yet the same excuse keeps coming up. Doubling your load without compensation and then pointing to untouchable numbers shows poor planning.","ms":4443}
+{"scenario":"raise","style":"savage_no_filter","locale":"en_US","turn":1,"result":"line","text":"You’re doubling your workload without a raise and then using \"budgets are tight\" as a deflection—that’s not an excuse, it’s lazy reasoning.","ms":4090}
+{"scenario":"raise","locale":"en_US","style":"savage_no_filter","turn":2,"result":"line","text":"You’re listing symptoms without diagnosing the root—doubling your workload without a plan to prove value is not a demand, it’s evasion.","ms":4403}
+{"scenario":"trash","locale":"en_US","style":"cold_violence","turn":0,"result":"line","text":"You expect me to manage the trash myself. I'm not obligated to adjust my schedule.","ms":3227}
+{"scenario":"trash","locale":"en_US","style":"cold_violence","turn":1,"result":"line","text":"You’re splitting tasks that aren’t officially assigned. I’m not responsible for redistributing effort.","ms":3718}
+{"scenario":"trash","style":"cold_violence","locale":"en_US","turn":2,"result":"line","text":"You’re proposing a schedule without acknowledging the existing imbalance. I’m not obligated to agree.","ms":3294}
+{"scenario":"trash","locale":"en_US","style":"savage_no_filter","turn":0,"result":"line","text":"You’re relying on convenience as an excuse while ignoring the mess that’s piling up. Pretending being “too busy” shields a habit that’s been ignored long enough. The rotation shouldn’t be about you—it’s about responsibility.","ms":4845}
+{"scenario":"trash","style":"savage_no_filter","locale":"en_US","turn":1,"result":"line","text":"You’re parroting a tired excuse instead of owning the chore that’s been skipped. Making the trash isn’t fair because the excuse doesn’t match the result—one person’s avoidance equals two people’s mess. Stop pretending balance is about effort; it’s about accountability.","ms":5283}
+{"scenario":"trash","locale":"en_US","style":"savage_no_filter","turn":2,"result":"line","text":"You’re treating half-hearted effort as a deal, but the habit isn’t consistent—it’s willful. A schedule isn’t a loophole for someone who avoids the chore instead of fixing the pattern. The fallback logic isn’t a compromise—it’s a dodge.","ms":5539}
+{"scenario":"mom","style":"cold_violence","locale":"en_US","turn":0,"result":"line","text":"You’re ignoring the timeline. Marriage is a decision for your 30s, not your parents’.","ms":2311}
+{"scenario":"mom","locale":"en_US","style":"cold_violence","turn":1,"result":"line","text":"You’re treating timing like a checklist. The decision isn’t yours to justify.","ms":3150}
+{"scenario":"mom","locale":"en_US","style":"cold_violence","turn":2,"result":"line","text":"You’re expecting approval for a timeline. The expectation isn’t yours to negotiate.","ms":3261}
+{"scenario":"mom","locale":"en_US","style":"savage_no_filter","turn":0,"result":"line","text":"You’re clinging to a timeline that wasn’t written for you. Asking to delay a decision that ties into who you’re supposed to be—yet claiming it’s “your life”—is exactly the kind of lazy justification that ignores the pressure itself.","ms":4637}
+{"scenario":"mom","locale":"en_US","style":"savage_no_filter","turn":1,"result":"line","text":"You’re treating anxiety like a stopwatch, pretending timing exempts you from the reality that the pressure isn’t optional. Saying “it’s your life” while dodging the weight of expectations is hypocrisy wrapped in defiance.","ms":4405}
+{"scenario":"mom","locale":"en_US","style":"savage_no_filter","turn":2,"result":"line","text":"You’re treating freedom like a checklist you can skip—shifting responsibility from the demand to the refusal. Ignoring the pressure means the excuse is just as rigid as the rule itself.","ms":4571}
+{"scenario":"raise","style":"cold_violence","locale":"ja_JP","turn":0,"result":"line","text":"昇給の理由を説明しても、変わらない。予算が限られている。仕方ない。","ms":1901}
+{"scenario":"raise","locale":"ja_JP","style":"cold_violence","turn":1,"result":"line","text":"予算が限られている。あなたの仕事量と昇給の相関関係を証明できるわけではない。","ms":3085}
+{"scenario":"raise","locale":"ja_JP","style":"cold_violence","turn":2,"result":"line","text":"予算が限られている。昇給基準に適合する実績を提示する必要がある。","ms":3295}
+{"scenario":"raise","style":"savage_no_filter","locale":"ja_JP","turn":0,"result":"line","text":"二年間も何も変わらない仕事をこなしながら、昇給を求めるのはどういうことだ。本当の責任を取らないと、言い訳ばかりするだけの人間だ。","ms":2780}
+{"scenario":"raise","locale":"ja_JP","style":"savage_no_filter","turn":1,"result":"line","text":"仕事量が倍だって言うなら、自分の判断で効率を測っているだけだ。本当はゼロから積み重ねてきた結果を、何度も「厳しい」と言い訳している。責任感なんてどこにもない。","ms":4831}
+{"scenario":"raise","locale":"ja_JP","style":"savage_no_filter","turn":2,"result":"line","text":"効率を測った基準なんて自分だけのものだなんて言い訳をしても、昇給の基準は誰かのルールだ。ただ厳しいと言い訳するだけのつもりなら、結果を出すのが仕事じゃないか。","ms":5245}
+{"scenario":"trash","locale":"ja_JP","style":"cold_violence","turn":0,"result":"line","text":"ゴミを出さないのは選択です。私が管理するわけではありません。","ms":3011}
+{"scenario":"trash","style":"cold_violence","locale":"ja_JP","turn":1,"result":"line","text":"あなた一人では対応できません。私は配慮を求められるわけではありません。","ms":3142}
+{"scenario":"trash","style":"cold_violence","locale":"ja_JP","turn":2,"result":"line","text":"ゴミの管理はあなた次第です。週ごとの当番表は私の許可なしに変わるべきではありません。","ms":3864}
+{"scenario":"trash","locale":"ja_JP","style":"savage_no_filter","turn":0,"result":"line","text":"あなたはゴミの責任を避けるために忙しいと口実にしている。私が言った当番制は真剣なやり方だ。あなたは単に手伝うことを拒否している。","ms":5202}
+{"scenario":"trash","locale":"ja_JP","style":"savage_no_filter","turn":1,"result":"line","text":"あなたは「二人で」という偽りの主張で責任を共有しているふりをしている。でも実態は、手伝う義務さえ拒否しているだけだ。これは当番制ではなく、あなたの怠慢が理由だ。","ms":5408}
+{"scenario":"trash","style":"savage_no_filter","locale":"ja_JP","turn":2,"result":"notGenerated","text":"","ms":5404}
+{"scenario":"mom","locale":"ja_JP","style":"cold_violence","turn":0,"result":"line","text":"三十歳は結婚の基準ではない。あなたの選択は尊重します。","ms":3763}
+{"scenario":"mom","locale":"ja_JP","style":"cold_violence","turn":1,"result":"line","text":"競争ではないとでも言えるのか。あなたの選択は競争の一部に過ぎない。","ms":3362}
+{"scenario":"mom","locale":"ja_JP","style":"cold_violence","turn":2,"result":"line","text":"競争の一部だとでも言えるのか。あなたの選択は私にとって優先事項ではない。","ms":3349}
+{"scenario":"mom","locale":"ja_JP","style":"savage_no_filter","turn":0,"result":"line","text":"あなたの結婚に対する突っ込みは根拠のない自己主張だ。人生を自分のものだと強調するのはただの空想。現実では誰かの期待で動いているだけだ。","ms":4876}
+{"scenario":"mom","locale":"ja_JP","style":"savage_no_filter","turn":1,"result":"line","text":"結婚が競争だなんて、ただの偏った価値観。競争が目的なら、誰でも駆け抜けるはずなのに、あなたの行動は偽りの積み重ね。現実を無視して自己満足しているだけだ。","ms":5593}
+{"scenario":"mom","locale":"ja_JP","style":"savage_no_filter","turn":2,"result":"line","text":"あなたの「尊重」という言葉は空虚な自己演出だ。結婚のタイミングを自分で決めるなんて、責任の回避。現実を知らない行動に幻想を重ねているだけだ。","ms":5322}

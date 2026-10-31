@@ -736,24 +736,29 @@ extension PromptBuilder {
     /// written as the user and pulled the model to the user's side.
     /// Instructions for the one call that names the other person before the
     /// first turn (`RoastEngine.opponentPersona`). Measured 2026-10-31 on lens
-    /// 1's set (`docs/evidence/.../a4`): without it about half the turns mixed
-    /// up who held which position. Asking for the other person's STANCE too
-    /// inverted it on the raise setup in every run ("You are the employee"),
-    /// so this asks for the role only; the setup carries the stance.
+    /// 1's set: without it about half the turns mixed up who held which
+    /// position (the "busy" roommate scolding the user for using busyness as
+    /// an excuse). The examples are deliberately not lens 1's situations.
+    /// Gate rounds (`docs/evidence/.../a4/README.md`): this wording 30, 28, 28
+    /// of 36 turns in the opponent's voice; a stricter rewrite 25; asking for
+    /// the role only 27. It still inverts the English raise setup ("You are
+    /// the employee"); measure before changing it.
     static let opponentPersonaInstructions = """
-        You read a short setup a user wrote about an argument they want to rehearse. "I" in the setup is the user. Name the person the user will argue WITH — never the user.
-        If the user wants something from someone (a raise, a repair, a change), name the person being asked.
+        You read a short setup a user wrote about an argument they want to rehearse. Describe THE OTHER PERSON in it, never the user.
 
-        Reply in English with only that person's role relative to the user, nothing else.
+        Reply in English with exactly two sentences:
+        1. "You are <who they are to the user>."
+        2. "You <what they do or believe>, and you think you are right because <their own reason>."
+        Write their position from THEIR point of view, as they would defend it. Do not judge them and do not mention the user's feelings.
 
         Setup: "My neighbor parks in my reserved spot almost every night. I want to ask him to stop. He says it's only for a few minutes."
-        the user's neighbor
+        You are the user's neighbor. You park in the user's spot most nights, and you think you are right because you only stay a few minutes and it hurts nobody.
 
         Setup: "I want to ask my landlord to fix the heater before winter. He keeps saying next month."
-        the user's landlord
+        You are the user's landlord. You keep putting off the heater repair, and you think you are right because repairs are expensive and the heater still works most days.
 
         Setup: 「朋友跟我借了五千塊，半年都沒還，我想跟她要回來。她說最近手頭很緊。」
-        the user's friend who borrowed money from them
+        You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
         """
 
     static func opponentPrompt(

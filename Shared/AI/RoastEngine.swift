@@ -511,11 +511,11 @@ actor RoastEngine {
         return .line(safe)
     }
 
-    /// Who the other person is ("You are the user's manager."), from one
-    /// short call (`PromptBuilder.opponentPersonaInstructions`). Asked once per
-    /// argument; the simulator passes it to every turn. Never shown, so it
-    /// needs no output screen; nil when it can't be had, and the turn prompt
-    /// falls back to "the other person described in the setup".
+    /// Who the other person is and what they stand for, from their side, in
+    /// two English sentences (`PromptBuilder.opponentPersonaInstructions`).
+    /// Asked once per argument; the simulator passes it to every turn. Never
+    /// shown, so it needs no output screen; nil when it can't be had, and the
+    /// turn prompt falls back to "the other person described in the setup".
     func opponentPersona(setup: String) async -> String? {
         guard let fm, fm.isAvailable, SafetyFilter.crisisSignal(setup) == .none else { return nil }
         let input = PromptBuilder.clipTurn(setup, maxWords: 200, maxCharacters: 600)
@@ -523,25 +523,12 @@ actor RoastEngine {
             guard guardrails == .standard || permissiveRetryAllowed() else { return nil }
             if let reply = try? await fm.respondFresh(
                 instructions: PromptBuilder.opponentPersonaInstructions, to: input,
-                temperature: 0, maxTokens: 30, guardrails: guardrails),
-               let role = Self.personaRole(reply) {
-                return "You are \(role)."
+                temperature: 0, maxTokens: 120, guardrails: guardrails),
+               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) {
+                return reply.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
         return nil
-    }
-
-    /// The role line from the persona call, or nil for anything that isn't
-    /// a short role (a refusal, a sentence about the user, an empty reply).
-    static func personaRole(_ reply: String) -> String? {
-        var role = reply.trimmingCharacters(in: .whitespacesAndNewlines)
-            .components(separatedBy: .newlines).first ?? ""
-        role = role.trimmingCharacters(in: CharacterSet(charactersIn: " .\"'“”「」"))
-        if role.lowercased().hasPrefix("you are ") { role = String(role.dropFirst(8)) }
-        let words = role.split(separator: " ").count
-        guard (1...12).contains(words), !ModelRefusal.looksLikeRefusal(role),
-              role.lowercased() != "the user" else { return nil }
-        return role
     }
 
     private func recordModelOutput() {
