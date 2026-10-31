@@ -1,0 +1,131 @@
+--- privacy.live.html	2026-10-31 18:16:20
++++ pages/privacy.html	2026-10-31 18:16:20
+@@ -21,48 +21,66 @@
+ <main class="page">
+   <div class="container">
+     <h1>Privacy Policy</h1>
+-    <p class="last-updated">Last updated: October 20, 2026</p>
++    <p class="last-updated">Last updated: November 2026</p>
+ 
+     <h2>The short version</h2>
+     <ul>
+-      <li><strong>Calm, Sharp, Savage, and the "Make it sendable" rewrite</strong> run entirely on your device using Apple's Foundation Models framework. That text never leaves your iPhone, iPad, Mac, or Apple Watch.</li>
+-      <li><strong>Vent and Feral private drafts route through a developer-owned cloud proxy by default</strong>, because Apple's on-device model is too gentle to produce real venting. The situation text you type, the chosen intensity, the locale, and an opaque per-install device UUID are sent to our Cloudflare Worker, which forwards them to a third-party LLM provider for inference. You can turn this off in <em>Settings → AI &amp; Privacy → Stronger Vent / Feral (Cloud AI)</em> to keep everything local.</li>
+-      <li>Our proxy does not store a copy of your text. Upstream LLM providers may temporarily retain requests under their own policies.</li>
++      <li>On a device with Apple Intelligence, <strong>Calm, Sharp, Savage, the "Make it sendable" rewrite and the Argument Simulator</strong> run on your device using Apple's Foundation Models framework. That text never leaves your iPhone, iPad, or Mac. On a device without Apple Intelligence, these modes show labelled examples and send nothing.</li>
++      <li><strong>Vent and Feral drafts use our cloud proxy only after you allow it.</strong> Then the situation text you type, the intensity, the style (its name and id), your UI locale, and an opaque per-install UUID go to our Cloudflare Worker, which builds a prompt and forwards it to a third-party LLM provider (OpenRouter). You can turn this off at any time in <em>Settings → AI &amp; Privacy → Vent / Feral via Cloud AI</em>; Vent and Feral then show labelled examples, because Apple's on-device model does not write them.</li>
++      <li>In the Simplified Chinese app, the <strong>Roommate group</strong> works the same way, under its own permission (<em>Settings → AI &amp; Privacy → Roommate group on the cloud</em>).</li>
++      <li>Our proxy does not store your text. It keeps short-lived counters to enforce daily limits (see 1a). Upstream LLM providers may retain requests temporarily under their own policies.</li>
+       <li>Sign in with Apple is <strong>optional</strong>. If you choose to sign in, your Apple User ID is stored in your device's Keychain.</li>
+-      <li>No analytics, no tracking, no advertising identifiers, no device fingerprinting.</li>
++      <li>No analytics, no tracking, no advertising identifiers, no device fingerprinting. The optional usage summary in Settings is off by default and leaves your device only if you share it yourself.</li>
+     </ul>
+ 
+-    <h2>1. On-device generation (Calm / Sharp / Savage / Rewrite)</h2>
++    <h2>1. On-device generation (Calm / Sharp / Savage / Rewrite / Argument Simulator)</h2>
+     <p>
+-      For these intensities, the text you write is sent to Apple's
++      On a device with Apple Intelligence, the text you write for these modes is sent to Apple's
+       Foundation Models framework, which runs the AI model on your device's CPU/GPU/Neural Engine.
+       No part of that text is transmitted to RoastMate AI or to any third party. These paths work in Airplane Mode.
++      On a device without Apple Intelligence, or with it turned off, these modes show examples written
++      in advance and labelled as such; nothing you type is sent anywhere.
+     </p>
+     <p>
+       Generated responses are stored on your device in a SwiftData store, and — if you are signed in
+-      to iCloud — mirrored to your own private iCloud database (see section 3). You can clear this
+-      history at any time from <em>Settings → Clear sample data</em> or by deleting individual entries.
++      to iCloud — mirrored to your own private iCloud database (see section 3). You can delete
++      entries from History at any time.
+     </p>
+ 
+-    <h2>1a. Cloud generation (Vent / Feral)</h2>
++    <h2>1a. Cloud generation (Vent / Feral, Roommate group)</h2>
+     <p>
+-      By default, when you choose the Vent or Feral intensity, the app sends the following to a
+-      Cloudflare Worker we operate: the situation text you typed, the chosen intensity
+-      (<code>vent</code> or <code>feral</code>), the style name, your UI locale, and an opaque
+-      per-install UUID used only to enforce a per-device daily rate limit. The Worker builds the
+-      prompt server-side and forwards the request to a third-party LLM provider (currently OpenRouter,
+-      which passes it to a hosting provider for the selected model; we may change providers in the
+-      future without further notice).
++      Only after you allow it — the app asks the first time you choose Vent or Feral — the app sends
++      the following to a Cloudflare Worker we operate: the situation text you typed, the chosen
++      intensity (<code>vent</code> or <code>feral</code>), the style's name and id, your UI locale, and
++      an opaque per-install UUID. If you subscribe to Pro, the request also carries a session token
++      from our Worker showing that the subscription is active (see section 4, Purchases). The Worker
++      builds the prompt server-side and forwards it to a third-party LLM provider (currently
++      OpenRouter, which passes it to a hosting provider for the selected model; we may change
++      providers in the future).
+     </p>
+     <p>
+-      Our Worker does not retain a copy of your request text or the generated response — it stores
+-      only a per-device daily counter that expires automatically. The upstream LLM providers each
+-      have their own privacy policies; in summary they do not retain customer prompts long-term but
+-      may retain them temporarily (typically up to 30 days) for reliability, abuse-prevention, or
+-      compliance purposes. If this is unacceptable to you, disable cloud routing in
+-      <em>Settings → AI &amp; Privacy → Stronger Vent / Feral (Cloud AI)</em>; the app will then
+-      generate Vent / Feral locally on Apple's on-device model (with gentler output).
++      In the Simplified Chinese app, the Roommate group (虚拟舍友群) sends the same fields under a
++      separate permission, which it asks for first. Both of its tones are generated in the cloud;
++      without that permission it does not run.
+     </p>
++    <p>
++      Our Worker does not retain a copy of your request text or the generated response. To enforce
++      daily limits it keeps short-lived counters: one per install UUID; one per IP address, stored
++      only as a keyed hash (the address itself is not stored); and, for Pro, one per subscription,
++      stored as a hash of the App Store transaction id. It also remembers for a few minutes whether a
++      subscription is active, under a hash of that id. These counters expire within about 48 hours.
++      The Worker sends operational logs to Datadog: the outcome, status code, latency, intensity,
++      locale, mode, the model that answered, and whether the request was on the Pro lane — never your
++      text, your device UUID, your IP address, or any account identifier.
++    </p>
++    <p>
++      The upstream LLM providers each have their own privacy policies; in summary they do not retain
++      customer prompts long-term but may retain them temporarily (typically up to 30 days) for
++      reliability, abuse-prevention, or compliance purposes. If this is unacceptable to you, turn off
++      <em>Settings → AI &amp; Privacy → Vent / Feral via Cloud AI</em> (and, in the Simplified Chinese
++      app, <em>Roommate group on the cloud</em>). Vent and Feral then show labelled examples instead,
++      and the Roommate group does not run.
++    </p>
+ 
+     <h2>2. Sign in with Apple (optional)</h2>
+     <p>
+@@ -94,22 +112,22 @@
+     <h2>4. App Store Connect "Privacy Nutrition Label"</h2>
+     <p>The data types we collect, as defined by Apple's framework:</p>
+     <ul>
+-      <li><strong>Other User Content</strong> — the situation text you type, when you use the Vent or Feral cloud path. Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
+-      <li><strong>Device ID</strong> — an opaque per-install UUID sent with Vent / Feral cloud requests for rate limiting. Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
++      <li><strong>Other User Content</strong> — the situation text you type, when you use a cloud path you allowed (Vent / Feral, or the Roommate group). Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
++      <li><strong>Device ID</strong> — an opaque per-install UUID sent with cloud requests for rate limiting. Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
+       <li><strong>User ID</strong> — when you sign in with Apple. Purpose: App Functionality. Linked to user: Yes. Used for tracking: <strong>No</strong>.</li>
+       <li><strong>Name</strong> — only if you choose to share it during Sign in with Apple. Purpose: App Functionality. Linked to user: Yes. Used for tracking: <strong>No</strong>.</li>
+-      <li><strong>Purchases</strong> — if you subscribe to Pro, the app sends the Apple-signed StoreKit transaction receipt to our Cloudflare Worker so it can confirm the subscription is genuine and grant the higher cloud quota. It identifies the transaction only; it carries no name, email, or payment details. Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
++      <li><strong>Purchases</strong> — if you subscribe to Pro, the app sends the Apple-signed StoreKit transaction receipt to our Cloudflare Worker so it can confirm the subscription is genuine, issue the session token described in 1a, and grant the higher cloud quota. It identifies the transaction only; it carries no name, email, or payment details. Purpose: App Functionality. Linked to user: <strong>No</strong>. Used for tracking: <strong>No</strong>.</li>
+     </ul>
+-    <p>We do <strong>not</strong> collect: location, financial info, health &amp; fitness, sensitive info, contacts, search history, browsing history, identifiers beyond those listed above, usage analytics, advertising IDs, or any content beyond the Vent / Feral request you explicitly send to the cloud (which you can disable).</p>
++    <p>We do <strong>not</strong> collect: location, financial info, health &amp; fitness, sensitive info, contacts, search history, browsing history, identifiers beyond those listed above, usage analytics, advertising IDs, or any content beyond the cloud requests you explicitly allow (which you can turn off).</p>
+ 
+     <h2>5. Third parties</h2>
+-    <p>RoastMate AI integrates no analytics SDK and no advertising SDK. For the Vent / Feral cloud path, the request is proxied through Cloudflare (our Worker host) and forwarded to a third-party LLM inference provider (currently OpenRouter, which passes it to a hosting provider for the selected model). Apple's iCloud (CloudKit) is used automatically whenever you are signed in to iCloud, to sync your data to your own private iCloud database (see section 3). No other third parties are involved.</p>
++    <p>RoastMate AI integrates no analytics SDK and no advertising SDK. For the cloud paths (Vent / Feral and, in the Simplified Chinese app, the Roommate group), the request is proxied through Cloudflare (our Worker host) and forwarded to a third-party LLM inference provider (currently OpenRouter, which passes it to a hosting provider for the selected model). The Worker's operational logs, which contain no text and no identifiers (see 1a), go to Datadog. Apple's iCloud (CloudKit) is used automatically whenever you are signed in to iCloud, to sync your data to your own private iCloud database (see section 3). No other third parties are involved.</p>
+ 
+     <h2>6. Children</h2>
+     <p>RoastMate AI is rated 17+/18+ (IARC) for mature humor and sarcasm. It is not intended for children under 17.</p>
+ 
+     <h2>7. Your rights</h2>
+-    <p>Our cloud proxy does not retain a copy of Vent / Feral request text, so there is no historical content stored at us to access, export, or delete; the per-device rate-limit counter expires automatically within about 48 hours. All in-app data can be deleted by clearing the app's history or uninstalling the app. To stop all cloud routing, disable <em>Settings → AI &amp; Privacy → Stronger Vent / Feral (Cloud AI)</em>.</p>
++    <p>Our cloud proxy does not retain a copy of your request text, so there is no historical content stored at us to access, export, or delete; the rate-limit counters expire automatically within about 48 hours. In-app data can be deleted entry by entry in History or by uninstalling the app (for the iCloud copy, see section 3). To stop all cloud routing, turn off <em>Settings → AI &amp; Privacy → Vent / Feral via Cloud AI</em> and, in the Simplified Chinese app, <em>Roommate group on the cloud</em>.</p>
+ 
+     <h2>8. Changes</h2>
+     <p>If we change this policy, we'll update the "Last updated" date above and revise the in-app About screen accordingly.</p>
+@@ -121,7 +139,7 @@
+ 
+ <footer>
+   <div class="container">
+-    <p>© 2026 Yuhe Ye. On-device by default; Vent / Feral can use an optional cloud proxy.</p>
++    <p>© 2026 Yuhe Ye. On-device by default; the cloud only after you allow it.</p>
+     <p>
+       <a href="./">Home</a> ·
+       <a href="support.html">Support</a> ·
