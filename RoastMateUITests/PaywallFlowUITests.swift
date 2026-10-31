@@ -21,6 +21,11 @@ final class PaywallFlowUITests: XCTestCase {
         continueAfterFailure = false
         session = try SKTestSession(configurationFileNamed: "Configuration")
         session.resetToDefaultState()
+        // clearTransactions() alone leaves an active auto-renewing purchase
+        // from an earlier test as a current entitlement (the next launch was
+        // Pro); expire first, then clear, so every test starts never-subscribed.
+        try? session.expireSubscription(productIdentifier: yearly)
+        try? session.expireSubscription(productIdentifier: monthly)
         session.clearTransactions()
         session.disableDialogs = true
     }
@@ -47,7 +52,8 @@ final class PaywallFlowUITests: XCTestCase {
 
     /// A free user loads the Pro-style sample (MBA, sample_02) and taps
     /// Generate. Until 1.8.0 that showed the orange "quota exhausted" error.
-    private func openPaywallFromProSample(_ app: XCUIApplication) throws {
+    @discardableResult
+    private func tapProSampleAndGenerate(_ app: XCUIApplication) -> Bool {
         let sample = element(app, "sample.sample_02")
         scrollTo(sample, in: app)
         XCTAssertTrue(sample.waitForExistence(timeout: 10), "the Pro-style sample must be among the five shown")
@@ -55,15 +61,23 @@ final class PaywallFlowUITests: XCTestCase {
         let generate = element(app, "generate_button")
         scrollTo(generate, in: app)
         generate.tap()
-        let plan = element(app, "paywall.plan.\(yearly)")
-        if !plan.waitForExistence(timeout: 15) {
-            throw XCTSkip("No paywall: this is a Debug build (always Pro). Run with -configuration Release.")
-        }
+        return element(app, "paywall.plan.\(yearly)").waitForExistence(timeout: 15)
+    }
+
+    /// Returns the app with the paywall open. A purchase in an earlier run
+    /// leaves the optimistic-Pro mirror set; the `-uitest` launch clears it,
+    /// but only after the store has read it, so one relaunch is allowed.
+    private func launchToPaywall() throws -> XCUIApplication {
+        var app = launchEnglish()
+        if tapProSampleAndGenerate(app) { return app }
+        app.terminate()
+        app = launchEnglish()
+        if tapProSampleAndGenerate(app) { return app }
+        throw XCTSkip("No paywall: this is a Debug build (always Pro). Run with -configuration Release.")
     }
 
     func test_proSample_opensPaywall_yearlyFirst_trialShown_purchaseHandsOff() throws {
-        let app = launchEnglish()
-        try openPaywallFromProSample(app)
+        let app = try launchToPaywall()
 
         let yearlyRow = element(app, "paywall.plan.\(yearly)")
         let monthlyRow = element(app, "paywall.plan.\(monthly)")
@@ -84,21 +98,26 @@ final class PaywallFlowUITests: XCTestCase {
         let chip = element(app, "style.mba_boss")
         XCTAssertTrue(chip.waitForExistence(timeout: 10))
         XCTAssertTrue(chip.isSelected, "the Pro style from the sample is selected after purchase")
+        // The Generate the user tapped runs once. Without an on-device model
+        // (every simulator) the sample's intensity is Vent, whose first run
+        // stops at the cloud-consent sheet; that sheet is raised only from
+        // inside generate(), so it proves the hand-off ran. Nothing is sent.
         let generate = element(app, "generate_button")
+        let consent = app.buttons["Allow Cloud AI"]
         var tries = 0
-        while !generate.label.contains("Generate again") && tries < 20 {
+        while !generate.label.contains("Generate again") && !consent.exists && tries < 20 {
             sleep(1)
             tries += 1
         }
-        XCTAssertTrue(generate.label.contains("Generate again"), "the generation the user asked for ran after the purchase: \(generate.label)")
+        XCTAssertTrue(generate.label.contains("Generate again") || consent.exists,
+                      "the generation the user asked for ran after the purchase: \(generate.label)")
     }
 
     func test_trialLine_hiddenOnceTheIntroIsUsed() throws {
         try session.buyProduct(productIdentifier: yearly)
         try session.expireSubscription(productIdentifier: yearly)
 
-        let app = launchEnglish()
-        try openPaywallFromProSample(app)
+        let app = try launchToPaywall()
         XCTAssertTrue(element(app, "paywall.plan.\(yearly)").exists)
         sleep(2)  // eligibility resolves before the row renders; give it time to (wrongly) appear
         XCTAssertFalse(element(app, "paywall.trial").exists, "no trial line once the intro offer was used")

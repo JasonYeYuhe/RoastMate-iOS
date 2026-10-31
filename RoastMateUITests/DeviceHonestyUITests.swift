@@ -61,6 +61,13 @@ final class DeviceHonestyUITests: XCTestCase {
         let app = launch("en", "en_US")
         let feral = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "Feral")).firstMatch
         XCTAssertTrue(feral.waitForExistence(timeout: 15))
+        // The intensity row scrolls sideways; on a narrow layout Feral starts off-screen.
+        let sharp = app.buttons.containing(NSPredicate(format: "label BEGINSWITH %@", "Sharp")).firstMatch
+        var tries = 0
+        while !feral.isHittable && tries < 4 && sharp.exists {
+            sharp.swipeLeft()
+            tries += 1
+        }
         feral.tap()
         let plan = element(app, "paywall.plan.yyh.roastmate.app.pro.yearly")
         guard plan.waitForExistence(timeout: 10) else {

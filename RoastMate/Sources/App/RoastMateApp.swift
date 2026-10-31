@@ -105,6 +105,10 @@ struct RoastMateApp: App {
             // `-uitest`, so the real consent persistence is untouched.
             settings.echoesFeralConsent = .notAsked
             settings.cloudConsent = .notAsked
+            // PaywallFlowUITests: a purchase in one test must not leave the
+            // optimistic-Pro mirror set for the next (it would hide the paywall).
+            settings.proLastVerifiedAt = nil
+            settings.proPreviewOfferedAt = nil
             try? context.save()
         }
         HistoryService.seedSamplesIfNeeded(context: context)
