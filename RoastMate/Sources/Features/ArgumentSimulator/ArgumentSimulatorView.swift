@@ -55,6 +55,7 @@ struct ArgumentSimulatorView: View {
                     .font(.largeTitle)
                     .foregroundStyle(.orange)
                 Text("argument.needs_ai.title").font(.headline)
+                    .accessibilityIdentifier("argument.needs_ai")
                 Text("argument.needs_ai.body")
                     .font(.callout)
                     .foregroundStyle(.secondary)

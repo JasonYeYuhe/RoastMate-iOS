@@ -366,6 +366,7 @@ struct RoastGeneratorView: View {
             .padding(.vertical, 6)
         }
         .buttonStyle(.borderedProminent)
+        .accessibilityIdentifier("generate_button")
         .disabled(viewModel.situation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                   || viewModel.state == .loading)
     }
@@ -602,6 +603,7 @@ struct RoastGeneratorView: View {
                     )
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("sample.\(sample.id)")
             }
         }
     }

@@ -175,6 +175,7 @@
 "paywall.monthly" = "月度订阅";
 "paywall.yearly" = "年度订阅";
 "paywall.plan.monthly.detail" = "痛骂、狠和全部 24 种风格，不耗点数。";
+"paywall.plan.monthly.detail.curated" = "痛骂用你选的 Pro 风格开口，外加 Pro 的其他功能，不耗点数。";
 "paywall.plan.yearly.detail" = "Pro 全部功能，每年付一次。";
 "paywall.yearly.trial" = "7 天免费试用 · 之后 %@";
 "paywall.trial.line" = "%1$@免费试用 · 之后每年 %2$@";

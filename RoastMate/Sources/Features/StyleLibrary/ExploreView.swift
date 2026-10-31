@@ -49,6 +49,7 @@ struct ExploreView: View {
                         config: FeatureGeneratorConfigs.argumentSimulator,
                         destination: AnyView(ArgumentSimulatorView())
                     )
+                    .accessibilityIdentifier("argument.tile")
                     // Classic Echoes (替你出气) was retired in 1.8.0 (B3): on
                     // macOS/iOS 27 Apple's model refused it 22/22 and it showed
                     // an unlabelled canned transcript. Saved transcripts still

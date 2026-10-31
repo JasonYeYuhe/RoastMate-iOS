@@ -175,6 +175,7 @@
 "paywall.monthly" = "Monthly";
 "paywall.yearly" = "Yearly";
 "paywall.plan.monthly.detail" = "Feral, Savage and all 24 styles. No credits needed.";
+"paywall.plan.monthly.detail.curated" = "Feral in the Pro style you pick, plus everything else in Pro. No credits needed.";
 "paywall.plan.yearly.detail" = "Everything in Pro, billed once a year.";
 "paywall.yearly.trial" = "7-day free trial · then %@";
 "paywall.trial.line" = "%1$@ free trial · then %2$@ a year";

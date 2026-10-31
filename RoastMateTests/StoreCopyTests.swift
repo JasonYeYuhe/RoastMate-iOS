@@ -362,13 +362,19 @@ final class StoreCopyTests: XCTestCase {
     /// on-device model.
     func test_curatedCopy_claimsTheStyleVoice_andNoStyleCount() {
         let proStyle = ["en": "Pro style", "zh-Hans": "Pro 风格", "zh-Hant": "Pro 風格", "ja": "Pro スタイル"]
-        for key in ["paywall.body.curated", "paywall.success.body.curated"] {
+        for key in ["paywall.body.curated", "paywall.success.body.curated", "paywall.plan.monthly.detail.curated"] {
             for locale in locales {
                 let s = string(key, locale) ?? ""
                 XCTAssertTrue(s.contains(proStyle[locale]!), "\(locale) \(key) must say the Pro style sets the voice: \(s)")
                 XCTAssertFalse(s.contains("24"), "\(locale) \(key) must not say the 24 styles need Apple Intelligence: \(s)")
             }
         }
+    }
+
+    func test_planRow_isDeviceAware() {
+        XCTAssertEqual(PlanCopy.keys(forProductID: StoreService.monthlyProductId)?.detail, "paywall.plan.monthly.detail")
+        XCTAssertEqual(PlanCopy.keys(forProductID: StoreService.monthlyProductId, onDeviceModelAvailable: false)?.detail,
+                       "paywall.plan.monthly.detail.curated")
     }
 
     @MainActor

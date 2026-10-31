@@ -25,6 +25,34 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-10-31 (afternoon) — 1.8.0 built, not yet submitted
+
+Branch `feature/v1.4-track-b`. Production unchanged (Worker `046f2134`, remote
+config untouched). 1.7.3 is live. Everything below is committed and pushed.
+
+| item | state | evidence |
+|---|---|---|
+| A4 simulator | done: stateless opponent prompt + one persona call + A3 retry/screens per turn + repeat retry; no canned turns; C/E explains it needs Apple Intelligence | `evidence/.../a4/README.md`: 30, 28, 28 of 36 in the opponent's voice (gate 29 met once); 0 numbered; ≤1/18 refused |
+| A5 styles | done: per-script examples for every Pro style, per-language preambles, Savage calibration, wrapper strip, near-dup drop | `a5/README.md`: vs a v1.7.3 control on this Mac, CJK in en 15 → 0, "I'd have said" 6 → 0, 0 Simplified |
+| A7 + B3 | done: classic Echoes tile gone; roommate consent text true in 4 locales and re-asked (`echoesCloudConsentV2Raw`); Settings toggle only where the tile shows | `StoreCopyTests`; `EchoesFlowUITests` rewritten |
+| A2 copy | done in the app; **ASC subscription descriptions still say "Unlimited generations"** — the API refuses edits to ACTIVE localizations; do it in the ASC web UI before submitting | `StoreCopyTests` |
+| A6 purchase | done: yearly first, eligibility-gated trial line, hand-off, Pro-style sample → paywall | `PurchaseHandoffTests`; Release UI test `PaywallFlowUITests` |
+| B4 | label alignment only (文青日記體, 對焦、綜效、落地); Worker name map updated in source, not deployed | — |
+| B5 | done: one labelled Feral preview after a free user's first cloud Vent | `ProPreviewTests` |
+| A8 | done: 幫你罵 / 帮你骂 home-screen name (app + Share + Controls; Mac LSHasLocalizedDisplayName), zh-Hant shortcut phrases, 5 zh-Hant samples first | built bundles checked |
+| A9 | **draft only, needs Jason's approval** (legal page in his name) | `a9/README.md`, `a9/privacy.diff` |
+
+Release material: `build/v1.8.0-release-notes{,-mac}.md` (gitignored),
+`metadata/review_notes_asc_short.txt` rewritten for 1.8.0 (3980/4000).
+Temporary device `RoastMate-iOS18` (iOS 18.5, clone of Soundpost-iOS18) for the
+class-C UI run; delete it after: `xcrun simctl delete 79415AE4-D1AA-4C77-93BA-54C4CA2B17E2`.
+
+Still to do before submit: version bump to 1.8.0 (build 28); Release UI runs
+(`PaywallFlowUITests` on RoastMate-UITests, `DeviceHonestyUITests` on
+RoastMate-iOS18); Jason approves A9 and checks the OpenRouter privacy setting;
+ASC web: subscription descriptions; product-page lines + promo text
+(`asc_product_page.py`, dry run first, `--app-id 6769317103`).
+
 ## Update 2026-10-31 — 1.7.3 LIVE; B3/B4/B5 decided (delegated)
 
 - **1.7.3 is READY_FOR_SALE on iOS and macOS** (approved within a day); tag

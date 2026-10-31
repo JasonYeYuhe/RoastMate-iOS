@@ -17,8 +17,8 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "1.7.3"
-    CURRENT_PROJECT_VERSION: 27
+    MARKETING_VERSION: "1.8.0"
+    CURRENT_PROJECT_VERSION: 28
     DEVELOPMENT_TEAM: KHMK6Q3L3K
     CODE_SIGN_STYLE: Automatic
     SWIFT_STRICT_CONCURRENCY: complete
@@ -261,6 +261,10 @@ targets:
     platform: iOS
     sources:
       - RoastMateUITests
+      # A6 (1.8.0): PaywallFlowUITests drives StoreKit through SKTestSession,
+      # which loads this file from the test bundle.
+      - path: RoastMate/Configuration.storekit
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.uitests

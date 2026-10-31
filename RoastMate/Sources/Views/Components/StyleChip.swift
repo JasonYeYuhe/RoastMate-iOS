@@ -30,6 +30,8 @@ struct StyleChip: View {
             .foregroundStyle(isSelected ? Color.orange : Color.primary)
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("style.\(style.id)")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

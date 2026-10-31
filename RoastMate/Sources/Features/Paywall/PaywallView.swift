@@ -316,7 +316,8 @@ struct PaywallView: View {
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    if let copy = PlanCopy.keys(forProductID: product.id) {
+                    if let copy = PlanCopy.keys(forProductID: product.id,
+                                               onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable) {
                         Text(LocalizedStringKey(copy.name))
                             .font(.headline)
                         Text(LocalizedStringKey(copy.detail))
@@ -340,6 +341,7 @@ struct PaywallView: View {
                         Text(trial)
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.orange)
+                            .accessibilityIdentifier("paywall.trial")
                     }
                     if let monthly = perMonthLine(product) {
                         Text(monthly)
@@ -359,6 +361,7 @@ struct PaywallView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("paywall.plan.\(product.id)")
     }
 
     /// Runs a purchase and reports anything except success or the buyer

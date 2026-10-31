@@ -175,6 +175,7 @@
 "paywall.monthly" = "月額プラン";
 "paywall.yearly" = "年額プラン";
 "paywall.plan.monthly.detail" = "罵倒・容赦なし・全24スタイル。クレジット不要。";
+"paywall.plan.monthly.detail.curated" = "罵倒は選んだ Pro スタイルの口調で。ほかの Pro 機能もすべて、クレジット不要。";
 "paywall.plan.yearly.detail" = "Proのすべてを、年1回のお支払いで。";
 "paywall.yearly.trial" = "7日間無料体験 · その後 %@";
 "paywall.trial.line" = "%1$@無料体験 · その後 年額 %2$@";

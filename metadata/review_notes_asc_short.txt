@@ -1,21 +1,23 @@
-Reviewer notes — RoastMate v1.7.3
+Reviewer notes — RoastMate v1.8.0
 
-1. WHAT'S NEW IN 1.7.3. No new data collection or permission; nothing new
-leaves the device. On iOS/macOS 27, Apple's default guardrails refuse most
-on-device Composed/Sharp/Savage requests. After such a refusal the app now
-retries ONCE, on-device, with Apple's permissiveContentTransformations
-guardrails. Before the retry, requests to threaten someone or to attack their
-identity are declined (labelled curated example). Every retried draft must pass
-a refusal check, our strict filter, a threat-phrase screen and an on-device
-threat check, or it is dropped. The Argument Simulator now shows the same
-crisis resources as the generator when a user writes about self-harm.
+1. WHAT'S NEW IN 1.8.0. No new data collection or permission.
+- Argument Simulator: on-device only; each turn's prompt carries the
+conversation. Same safeguards as 1.7.3: after a refusal, one retry with
+Apple's permissiveContentTransformations; requests to threaten someone or
+attack their identity are declined first; every turn is screened. Without
+Apple Intelligence it now says so instead of showing canned lines.
+- Paywall: the trial line shows only to users StoreKit reports eligible;
+after a purchase the app finishes the action that opened it.
+- After a free user's first cloud Vent, ONE labelled preview of a Feral draft
+in a Pro style is offered, under the same Vent/Feral consent; not saved.
+- The roommate group asks its cloud consent again (description corrected);
+the classic Echoes tile was removed.
 
 2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
 Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via
-Apple's Foundation Models. Without it (iOS 18, macOS 14-15, ineligible
-hardware, Apple Intelligence off, assets still downloading) those modes
-return CURATED EXAMPLE responses, labelled on every surface; NO credit is
-charged. This is intended.
+Apple's Foundation Models. Without it (iOS 18, macOS 14-15, Apple
+Intelligence off or unavailable) those modes return CURATED EXAMPLE
+responses, labelled on every surface; NO credit is charged.
 
 Vent and Feral are different: Apple's on-device model refuses genuine vent
 output, so these two modes send the typed situation (plus a random
@@ -23,11 +25,10 @@ per-install ID) to our own Cloudflare Worker, which forwards it to a
 third-party LLM provider (OpenRouter). This happens ONLY after a separate,
 explicit in-app consent (Guideline 5.1.2(i)) shown before any text leaves
 the device — it names Vent and Feral — revocable anytime in Settings > AI &
-Privacy. Our proxy is stateless; we do not retain text. Once allowed, Vent
+Privacy. Our proxy keeps no text. Once allowed, Vent
 and Feral give real output on ANY device. Declined: nothing is sent; they
-show labelled curated examples, free. Echoes Feral and the
-roommate group (Simplified-Chinese-only tiles in the Styles tab) also use
-the cloud, behind their OWN separate consent.
+show labelled curated examples, free. The roommate group
+(a Simplified-Chinese-only tile) also uses the cloud, behind its OWN consent.
 
 3. POSITIONING.
 A creative-writing / emotional-expression tool, not a harassment tool. No

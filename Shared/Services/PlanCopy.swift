@@ -14,10 +14,15 @@ enum PlanCopy {
         let detail: String
     }
 
-    static func keys(forProductID id: String) -> Keys? {
+    /// A2 (1.8.0): without the on-device model "Feral, Savage and all 24
+    /// styles" oversold Savage (curated there) and the styles outside Feral /
+    /// Vent; that device gets the row that says what works there.
+    static func keys(forProductID id: String, onDeviceModelAvailable: Bool = true) -> Keys? {
         switch id {
         case StoreService.monthlyProductId:
-            return Keys(name: "paywall.monthly", detail: "paywall.plan.monthly.detail")
+            return Keys(name: "paywall.monthly",
+                        detail: onDeviceModelAvailable ? "paywall.plan.monthly.detail"
+                                                       : "paywall.plan.monthly.detail.curated")
         case StoreService.yearlyProductId:
             return Keys(name: "paywall.yearly", detail: "paywall.plan.yearly.detail")
         default:

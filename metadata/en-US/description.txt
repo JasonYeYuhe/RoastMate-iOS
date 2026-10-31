@@ -2,11 +2,11 @@ Vent first. Then send the version that actually wins.
 
 RoastMate is the emotional-expression tool you wish you'd had after the last argument. Describe what happened in your own words, choose your tone — Composed, Sharp, Savage, Feral, or Vent — and get a response that helps you say what you actually mean. Feral and Vent create private drafts just for releasing the feeling — then, where Apple's on-device model is available, a single tap rewrites them into sharp, safe-to-send replies that hold your ground without crossing any lines.
 
-Pick from 24 writing styles — High EQ, Passive Aggressive, Japanese Keigo, Literary, Stand-up Bit, Shakespearean, Corporate Passive Violence, Argument Killshot, and more — to match the register of who you're talking to.
+Pick from 24 writing styles — High EQ, Passive Aggressive, Japanese Keigo, Shakespearean, Corporate Passive Violence, Argument Killshot, and more — to match who you're talking to.
 
 Composed, Sharp, Savage and the rewrite run 100% on your device, on Apple's Foundation Models where available. Vent and Feral use a cloud model, and only after you give permission: Apple's on-device model is too gentle for real venting, so the cloud lets them write real drafts on any device. Switch Cloud AI off in Settings → AI & Privacy and Vent and Feral show curated examples instead.
 
-Without Apple's on-device model (iOS 18, macOS 14–15, or Apple Intelligence off or unsupported), Composed, Sharp and Savage (in every tool), the Argument Simulator and the one-tap rewrite show curated examples — always labeled, and never charged a credit.
+Without Apple's on-device model (iOS 18, macOS 14–15, or Apple Intelligence off or unsupported), Composed, Sharp and Savage (in every tool) and the one-tap rewrite show curated examples — always labeled, and never charged a credit. The Argument Simulator says so instead. Feral, written in the cloud, speaks in the Pro style you pick.
 
 RoastMate is a creative writing and emotional expression tool. It is not designed to target or harass any individual — the AI is told to replace real names with roles and never to use slurs or threats, and a built-in safety filter blocks threats and self-harm language.
 
@@ -19,7 +19,7 @@ FEATURES
 • Emotion Translator: turn raw frustration into the polished language you need
 • Social Roast: paste a tweet or post, get a reaction ready to share
 • Situation Threads: pick up where you left off when the other person replies again
-• Sample Gallery: 17 sample situations — see RoastMate at work without typing
+• Sample Gallery: 22 sample situations — see RoastMate at work without typing
 • macOS menu bar quick roast — one click away from any app
 • Siri & Shortcuts integration via App Intents
 • iOS Share Extension — roast text from Mail, Messages, Safari, anywhere
@@ -43,7 +43,7 @@ Payment is charged to your Apple Account at confirmation of purchase. Subscripti
 
 PRIVACY
 
-With your permission, what you type for Vent and Feral goes through a developer-owned Cloudflare Worker to third-party LLM providers; the Worker keeps none of your text and rate-limits each device. Sign in with Apple is optional; if you sign in, your Apple-issued User ID (plus name and email, if you share them) is stored only on your device. No tracking, no advertising IDs, no fingerprinting, no third-party SDKs. Anonymized usage counters are off by default; turned on, they stay on your device until you export them.
+With your permission, what you type for Vent and Feral goes through a developer-owned Cloudflare Worker to third-party LLM providers; the Worker keeps none of your text and rate-limits each device. Sign in with Apple is optional; if you sign in, your Apple-issued User ID (plus name and email, if you share them) is stored only on your device. No tracking, no advertising IDs, no fingerprinting, no third-party SDKs. Optional usage counters stay on your device unless you export them.
 
 TERMS OF USE (EULA) & PRIVACY POLICY
 
