@@ -102,6 +102,7 @@ export const STYLE_NAME_TO_ID = {
   "東京上班族": "tokyo_office_lady",
   "Reddit 解釋": "reddit_eli5",
   "脫口秀段子": "stand_up_comedy",
+  "文青日記體": "douban_essay",
   "台劇腔": "taiwanese_drama",
   "冷處理": "cold_violence",
   "京片兒": "bjing_taunt",

@@ -141,4 +141,34 @@ final class StyleScriptTests: XCTestCase {
     private func containsCJK(_ s: String) -> Bool {
         s.unicodeScalars.contains { (0x3040...0x30FF).contains($0.value) || (0x4E00...0x9FFF).contains($0.value) }
     }
+
+    // MARK: - A8 (1.8.0): Taiwan items
+
+    func testZhHantSamples_inTraditional_withoutMainlandTerms_andShownFirst() {
+        let mainland = ["老子", "傻逼", "特麼", "服了", "臥槽", "尼瑪", "你妹", "牛逼", "絕了",
+                        "視頻", "信息", "軟件", "屏幕", "質量", "打印", "領導", "朋友圈"]
+        let hant = SampleRoastsCatalog.shared.all.filter { $0.responseLocale == "zh-Hant" }
+        XCTAssertGreaterThanOrEqual(hant.count, 4)
+        for s in hant {
+            let situation = s.situation["zh-Hant"] ?? ""
+            for text in [s.response, situation] {
+                XCTAssertEqual(simplifiedOnly(text), [], "\(s.id): \(text)")
+                for term in mainland { XCTAssertFalse(text.contains(term), "\(s.id) uses \(term)") }
+            }
+            XCTAssertNotNil(StyleCatalog.shared.style(id: s.styleId), s.id)
+        }
+        let shown = SampleRoastsCatalog.shared.ordered(for: Locale(identifier: "zh_TW")).prefix(5)
+        XCTAssertTrue(shown.allSatisfy { $0.responseLocale == "zh-Hant" }, "the five shown to zh-Hant are zh-Hant")
+        let en = SampleRoastsCatalog.shared.ordered(for: Locale(identifier: "en_US"))
+        XCTAssertEqual(en.count, SampleRoastsCatalog.shared.all.count)
+    }
+
+    func testHomeScreenNames() throws {
+        for (loc, name) in [("zh-Hant", "幫你罵"), ("zh-Hans", "帮你骂")] {
+            let path = try XCTUnwrap(Bundle(for: type(of: self)).path(
+                forResource: "InfoPlist", ofType: "strings", inDirectory: nil, forLocalization: loc), loc)
+            let dict = NSDictionary(contentsOfFile: path) as? [String: String]
+            XCTAssertEqual(dict?["CFBundleDisplayName"], name)
+        }
+    }
 }

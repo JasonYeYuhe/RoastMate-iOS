@@ -250,6 +250,8 @@ struct FeatureGeneratorView: View {
     @Environment(\.locale) private var locale
     @State private var viewModel: FeatureGeneratorViewModel
     @State private var showPaywall = false
+    /// A6: what opened the paywall; applied when it closes with Pro active.
+    @State private var paywallIntent: PaywallIntent?
     @Query private var settingsQuery: [UserSettings]
 
     private var settings: UserSettings? { settingsQuery.first }
@@ -279,7 +281,7 @@ struct FeatureGeneratorView: View {
             .padding()
         }
         .navigationTitle(AppLocalization.string(viewModel.config.titleKey.key))
-        .sheet(isPresented: $showPaywall) {
+        .sheet(isPresented: $showPaywall, onDismiss: finishPaywallHandoff) {
             PaywallView(isPresented: $showPaywall)
         }
         .sheet(isPresented: $viewModel.pendingCloudConsent) {
@@ -356,6 +358,7 @@ struct FeatureGeneratorView: View {
                         ) {
                             if !isPro && style.tier == .pro {
                                 EventLedger.shared.recordPaywallImpression(source: .styleLocked)
+                                paywallIntent = .style(style.id)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedStyleId = style.id
@@ -367,10 +370,27 @@ struct FeatureGeneratorView: View {
         }
     }
 
+    /// A6: same hand-off as the main generator (`RoastGeneratorView`).
+    private func finishPaywallHandoff() {
+        defer { paywallIntent = nil }
+        guard StoreService.shared.isPro, let intent = paywallIntent else { return }
+        if let id = intent.styleId { viewModel.selectedStyleId = id }
+        if let intensity = intent.intensity { viewModel.selectedIntensity = intensity }
+        if intent.runAfterPurchase,
+           !viewModel.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            Task { await viewModel.generate(context: context, locale: locale) }
+        }
+    }
+
     private var generateButton: some View {
         Button {
-            if !isPro && viewModel.selectedIntensity.requiresPro {
-                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
+            let hasInput = !viewModel.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            if let locked = PaywallGate.lockedSelection(
+                isPro: isPro, style: StyleCatalog.shared.style(id: viewModel.selectedStyleId),
+                intensity: viewModel.selectedIntensity, hasInput: hasInput) {
+                EventLedger.shared.recordPaywallImpression(
+                    source: locked.intensity != nil ? .intensityLocked : .styleLocked)
+                paywallIntent = locked
                 showPaywall = true
             } else if !isPro && settings?.canSpendNow() == false
                         && !CloudPermission.resolve(
@@ -383,6 +403,7 @@ struct FeatureGeneratorView: View {
                 // Decision as the view model; see
                 // CloudPermission.Decision.skipsPaywall.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
+                paywallIntent = PaywallIntent(runAfterPurchase: hasInput)
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }
@@ -418,6 +439,7 @@ struct FeatureGeneratorView: View {
                         ) {
                             if !isPro && intensity.requiresPro {
                                 EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
+                                paywallIntent = .intensity(intensity)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedIntensity = intensity

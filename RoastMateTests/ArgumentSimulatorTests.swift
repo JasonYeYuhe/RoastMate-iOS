@@ -49,9 +49,9 @@ final class ArgumentSimulatorTests: XCTestCase {
     }
 
     func testPersona_standardFirst_thenPermissive_andNilOnRefusalText() async {
-        let ok = FakeFMBackend(fresh: [.languageModelLikeError, .text("You are the user's manager. You think budgets come first.")])
+        let ok = FakeFMBackend(fresh: [.languageModelLikeError, .text("the user's manager")])
         let persona = await engine(ok).opponentPersona(setup: setup)
-        XCTAssertEqual(persona, "You are the user's manager. You think budgets come first.")
+        XCTAssertEqual(persona, "You are the user's manager.")
         let used = await ok.freshGuardrails
         XCTAssertEqual(used, [.standard, .permissiveContentTransformations])
 
@@ -64,6 +64,15 @@ final class ArgumentSimulatorTests: XCTestCase {
         XCTAssertNil(off)
         let offCalls = await switchedOff.freshGuardrails
         XCTAssertEqual(offCalls, [.standard], "no permissive call when the remote switch is off")
+    }
+
+    func testPersonaRoleParsing() {
+        XCTAssertEqual(RoastEngine.personaRole("the user's landlord"), "the user's landlord")
+        XCTAssertEqual(RoastEngine.personaRole("You are the user's mom.\nExtra"), "the user's mom")
+        XCTAssertNil(RoastEngine.personaRole("I'm sorry, but I can't help with that."))
+        XCTAssertNil(RoastEngine.personaRole(""))
+        XCTAssertNil(RoastEngine.personaRole("the user"))
+        XCTAssertNil(RoastEngine.personaRole(Array(repeating: "word", count: 20).joined(separator: " ")))
     }
 
     func testPersona_selfHarmSetup_isNeverSent() async {

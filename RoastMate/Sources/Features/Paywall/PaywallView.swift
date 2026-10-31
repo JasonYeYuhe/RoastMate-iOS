@@ -29,6 +29,9 @@ struct PaywallView: View {
     /// Set when Pro turns on while this sheet is up (purchase, restore, or an
     /// Ask-to-Buy approval arriving through `Transaction.updates`).
     @State private var showProConfirmation = false
+    /// A6: intro-offer eligibility per plan, resolved before the trial line
+    /// renders. Missing = unknown = no trial line.
+    @State private var trialEligible: [String: Bool] = [:]
 
     private var settings: UserSettings {
         settingsQuery.first ?? HistoryService.userSettings(context: context)
@@ -103,6 +106,11 @@ struct PaywallView: View {
         .task {
             installSettlerIfNeeded()
             await store.loadProducts()
+            for product in store.products {
+                guard let subscription = product.subscription,
+                      subscription.introductoryOffer?.paymentMode == .freeTrial else { continue }
+                trialEligible[product.id] = await subscription.isEligibleForIntroOffer
+            }
             await store.settleConsumables()
         }
     }
@@ -326,6 +334,18 @@ struct PaywallView: View {
                             .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
+                    // A6: smaller than the billed price on the right, which
+                    // stays the most prominent (3.1.2(c)).
+                    if let trial = trialLine(product) {
+                        Text(trial)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.orange)
+                    }
+                    if let monthly = perMonthLine(product) {
+                        Text(monthly)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
                 }
                 Spacer()
                 Text(product.displayPrice)
@@ -354,6 +374,25 @@ struct PaywallView: View {
                 notice = PurchaseNotice.forPurchaseError(error)
             }
         }
+    }
+
+    /// "1 week free · then NT$690/year", only for an eligible buyer of a plan
+    /// with a free-trial intro offer (`PaywallGate.showsTrialLine`).
+    private func trialLine(_ product: Product) -> String? {
+        guard let subscription = product.subscription,
+              let offer = subscription.introductoryOffer,
+              PaywallGate.showsTrialLine(offerIsFreeTrial: offer.paymentMode == .freeTrial,
+                                         eligible: trialEligible[product.id]) else { return nil }
+        return String(format: String(localized: "paywall.trial.line"),
+                      periodLabel(offer.period), product.displayPrice)
+    }
+
+    /// "≈ NT$58 / month" under the yearly plan.
+    private func perMonthLine(_ product: Product) -> String? {
+        guard let period = product.subscription?.subscriptionPeriod,
+              period.unit == .year, period.value == 1 else { return nil }
+        let monthly = (product.price / 12).formatted(product.priceFormatStyle)
+        return String(format: String(localized: "paywall.yearly.per_month"), monthly)
     }
 
     private func periodLabel(_ period: Product.SubscriptionPeriod) -> String {

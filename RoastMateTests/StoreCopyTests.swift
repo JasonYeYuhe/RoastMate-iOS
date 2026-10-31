@@ -353,4 +353,66 @@ final class StoreCopyTests: XCTestCase {
         XCTAssertEqual(settings.echoesCloudConsentV2Raw, CloudConsent.granted.rawValue)
         XCTAssertEqual(settings.echoesFeralConsent, .granted)
     }
+
+    // MARK: - A2 (1.8.0): copy true in both directions
+
+    /// Without Apple Intelligence the copy used to say the 24 styles need it,
+    /// while a Pro style does set the voice of 痛罵/發洩 there (cloud). The
+    /// curated copy now claims that, and lists only what really needs the
+    /// on-device model.
+    func test_curatedCopy_claimsTheStyleVoice_andNoStyleCount() {
+        let proStyle = ["en": "Pro style", "zh-Hans": "Pro 风格", "zh-Hant": "Pro 風格", "ja": "Pro スタイル"]
+        for key in ["paywall.body.curated", "paywall.success.body.curated"] {
+            for locale in locales {
+                let s = string(key, locale) ?? ""
+                XCTAssertTrue(s.contains(proStyle[locale]!), "\(locale) \(key) must say the Pro style sets the voice: \(s)")
+                XCTAssertFalse(s.contains("24"), "\(locale) \(key) must not say the 24 styles need Apple Intelligence: \(s)")
+            }
+        }
+    }
+
+    @MainActor
+    func test_everyStyleCountMatchesTheCatalog() throws {
+        let count = StyleCatalog.shared.all.count
+        let re = try NSRegularExpression(pattern: "(\\d+)\\s*(?:種風格|种风格|styles|スタイル)")
+        for locale in locales {
+            guard let path = Bundle(for: type(of: self)).path(forResource: "Localizable", ofType: "strings",
+                                                              inDirectory: nil, forLocalization: locale),
+                  let dict = NSDictionary(contentsOfFile: path) as? [String: String] else {
+                XCTFail("no strings for \(locale)"); continue
+            }
+            for (key, value) in dict {
+                for m in re.matches(in: value, range: NSRange(value.startIndex..., in: value)) {
+                    let n = Int((value as NSString).substring(with: m.range(at: 1)))
+                    XCTAssertEqual(n, count, "\(locale) \(key): \(value)")
+                }
+            }
+        }
+    }
+
+    /// `StyleVoice` mirrors the Worker's STYLE_VOICES, so the style hint never
+    /// claims a voice the Worker doesn't have.
+    @MainActor
+    func test_styleVoiceMirrorsTheWorker() throws {
+        let js = try String(contentsOf: URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("cloud-worker/src/style_voice.js"), encoding: .utf8)
+        let start = try XCTUnwrap(js.range(of: "export const STYLE_VOICES = {"))
+        let body = String(js[start.upperBound...])
+        let entry = try NSRegularExpression(pattern: "\\n  (\\w+): \\{([^}]*)\\}")
+        var workerVoices: [String: Set<String>] = [:]
+        for m in entry.matches(in: body, range: NSRange(body.startIndex..., in: body)) {
+            let id = (body as NSString).substring(with: m.range(at: 1))
+            let inner = (body as NSString).substring(with: m.range(at: 2))
+            workerVoices[id] = Set(["en", "hans", "hant", "ja"].filter { inner.contains("\n    \($0):") })
+        }
+        let bucket = ["en": "en_US", "hans": "zh_CN", "hant": "zh_TW", "ja": "ja_JP"]
+        for style in StyleCatalog.shared.all {
+            for (key, id) in bucket {
+                let worker = workerVoices[style.id]?.contains(key) ?? false
+                XCTAssertEqual(StyleVoice.hasCloudVoice(style, locale: Locale(identifier: id)), worker,
+                               "\(style.id) \(key)")
+            }
+        }
+    }
 }

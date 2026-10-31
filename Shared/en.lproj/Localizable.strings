@@ -32,6 +32,12 @@
 "generator.title" = "Roast Generator";
 "generator.placeholder" = "Describe what happened…";
 "generator.style_label" = "Style";
+"generator.style_voice_hint" = "When written in the cloud (with your OK), Feral and Vent use this style's voice.";
+"generator.pro_preview.offer" = "Curious what Pro sounds like? One free preview: the same thing as a Feral draft in “%@”.";
+"generator.pro_preview.button" = "Preview once";
+"generator.pro_preview.label" = "Pro preview · this once · not saved to history";
+"generator.pro_preview.unlock" = "Unlock Pro";
+"generator.pro_preview.failed" = "The preview couldn't be written this time.";
 "generator.intensity_label" = "Intensity";
 "generator.generate" = "Generate";
 "generator.regenerate" = "Try again";
@@ -155,11 +161,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "Feral · Savage · All 24 styles · 3 versions per comeback · Argument simulator · Unlimited history · No credits needed";
-"paywall.body.curated" = "Feral (via cloud, once you allow it) · No credits needed · Unlimited history. Savage, the 24 styles, 3 versions per comeback and the argument simulator need Apple Intelligence.";
+"paywall.body.curated" = "Feral in the Pro style you pick (via cloud, once you allow it) · No credits needed · Unlimited history. Savage, 3 versions per comeback, the argument simulator and styles in sendable comebacks need Apple Intelligence.";
 "paywall.feature.savage" = "Savage intensity";
 "paywall.feature.savage.detail" = "The sharpest sendable comebacks, in any style.";
 "paywall.feature.savage.detail.curated" = "On this device Savage shows curated examples — writing from what you type needs Apple Intelligence.";
-"paywall.feature.feral.detail" = "Vent with the gloves off — profanity unlocked, written in the cloud once you allow it. A private draft, just for you.";
+"paywall.feature.feral.detail" = "One tap turns your anger into a private draft in the Pro style you pick — just for you. Profanity optional; written in the cloud once you allow it.";
 "paywall.feature.feral" = "Feral Mode";
 "paywall.feature.unlimited" = "No credits needed";
 "paywall.feature.unlimited.detail" = "Pro never spends credits — no wallet to watch.";
@@ -171,12 +177,14 @@
 "paywall.plan.monthly.detail" = "Feral, Savage and all 24 styles. No credits needed.";
 "paywall.plan.yearly.detail" = "Everything in Pro, billed once a year.";
 "paywall.yearly.trial" = "7-day free trial · then %@";
+"paywall.trial.line" = "%1$@ free trial · then %2$@ a year";
+"paywall.yearly.per_month" = "≈ %@ a month";
 "paywall.restore" = "Restore Purchases";
 "paywall.subscribe" = "Subscribe";
 "paywall.continue_free" = "Continue with free";
 "paywall.success.title" = "You're Pro";
 "paywall.success.body" = "On this device: Feral (via cloud, once you allow it), Savage, all 24 styles with 3 versions per comeback, the argument simulator and unlimited history — with no credits.";
-"paywall.success.body.curated" = "On this device: Feral (via cloud, once you allow it) and unlimited history — with no credits. Savage, the styles, 3 versions and the argument simulator need Apple Intelligence; here they show curated examples.";
+"paywall.success.body.curated" = "On this device: Feral (via cloud, once you allow it), Feral and Vent drafts in the Pro style you pick, and unlimited history — with no credits. Savage, 3 versions, the argument simulator and styles in sendable comebacks need Apple Intelligence; here they show curated examples.";
 "paywall.success.done" = "Got it";
 "paywall.error.title" = "Purchase didn't go through";
 "paywall.pending.title" = "Waiting for approval";
@@ -200,7 +208,7 @@
 "paywall.credits.balance" = "You have %d credits";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "Recommended";
-"paywall.pro.subtitle" = "The only way to unlock Feral · Savage — plus every style, with no credits needed.";
+"paywall.pro.subtitle" = "The only way to unlock Feral and Savage: private Feral drafts in one tap, plus every style, with no credits needed.";
 "settings.credits.balance" = "Credits";
 "settings.credits.buy" = "Get more credits";
 "paywall.loading" = "Loading…";

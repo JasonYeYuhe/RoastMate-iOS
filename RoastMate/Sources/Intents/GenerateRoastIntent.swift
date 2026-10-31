@@ -119,6 +119,7 @@ struct RoastMateShortcutsProvider: AppShortcutsProvider {
                 "Generate a roast with \(.applicationName)",
                 "Roast this with \(.applicationName)",
                 "用\(.applicationName)写一句",
+                "用\(.applicationName)寫一句",  // zh-Hant (A8, 1.8.0)
                 "\(.applicationName)で返しを作って"
             ],
             shortTitle: "intent.shortcut.short_title",
@@ -130,6 +131,7 @@ struct RoastMateShortcutsProvider: AppShortcutsProvider {
                 "Vent with \(.applicationName)",
                 "Vent about this with \(.applicationName)",
                 "用\(.applicationName)发泄一下",
+                "用\(.applicationName)發洩一下",  // zh-Hant (A8, 1.8.0)
                 "\(.applicationName)で吐き出す"
             ],
             shortTitle: "intent.quick_vent.short_title",

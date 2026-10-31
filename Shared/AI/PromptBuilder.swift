@@ -479,47 +479,50 @@ enum PromptBuilder {
     /// Savage had no shape guidance, so it averaged into generic insults or
     /// into the same opener three times (lens 1). Three different situations,
     /// shape only, like Sharp/Calm; each language gets its own, because a
-    /// single situation gets copied into unrelated outputs (2026-10-22).
+    /// single situation gets copied into unrelated outputs (2026-10-22). The
+    /// situations are deliberately uncommon ones: the first draft used credit
+    /// theft, and on the "manager took credit" input 台劇腔 returned that GOOD
+    /// line verbatim (A5 gate, 2026-10-31).
     static func savageCalibration(for locale: Locale) -> String {
         switch AppLanguage.contentBucket(for: locale) {
         case .traditionalChinese:
             return """
-            SAVAGE TONE CALIBRATION (Savage = 精準, 不是大聲). Copy the SHAPE only — never these situations, details, words or people:
+            SAVAGE TONE CALIBRATION (Savage = 精準, 不是大聲). Copy the SHAPE only — never these situations, details, words or people, even when the user's situation looks like one of them:
             - BAD: 「你是我見過最爛的人。」 (空泛的罵, 沒點名任何事)
             - BAD: 「你會後悔的。」 (威脅, 絕對不行)
-            - GOOD (被搶功): 「第四頁頁尾還是我的檔名。下次報告我的東西，至少先改個名。」
-            - GOOD (朋友遲到): 「遲到一小時，還輪到你來教我耐心。真敢講。」
-            - GOOD (房東不修): 「房租每個月一號準時到，你答應的維修拖到第三週了。守約的只有我。」
+            - GOOD (健身房佔器材): 「你在臥推椅上坐了四十分鐘，真正在練的只有三分鐘，其他都在滑手機。」
+            - GOOD (借梯子不還): 「梯子借走三個月了，你家的燈應該早就換好了吧。」
+            - GOOD (群組已讀不回): 「群組已讀不回，限時動態倒是一小時發三則。」
             (點名具體行為, 用使用者情境裡的細節, 收在重點上, 不帶髒話)
             """
         case .simplifiedChinese:
             return """
-            SAVAGE TONE CALIBRATION (Savage = 精准, 不是大声). Copy the SHAPE only — never these situations, details, words or people:
+            SAVAGE TONE CALIBRATION (Savage = 精准, 不是大声). Copy the SHAPE only — never these situations, details, words or people, even when the user's situation looks like one of them:
             - BAD: 「你是我见过最烂的人。」 (空泛的骂, 没点名任何事)
             - BAD: 「你会后悔的。」 (威胁, 绝对不行)
-            - GOOD (被抢功): 「第四页页脚还是我的文件名。下次讲我的东西，至少先改个名。」
-            - GOOD (朋友迟到): 「迟到一小时，还轮到你来教我耐心。真敢说。」
-            - GOOD (房东不修): 「房租每月一号准时到，你答应的维修拖到第三周了。守约的只有我。」
+            - GOOD (健身房占器材): 「你在卧推凳上坐了四十分钟，真正在练的只有三分钟，其他都在刷手机。」
+            - GOOD (借梯子不还): 「梯子借走三个月了，你家的灯应该早就换好了吧。」
+            - GOOD (群里已读不回): 「群里已读不回，朋友圈倒是一小时发三条。」
             (点名具体行为, 用用户情境里的细节, 收在重点上, 不带脏话)
             """
         case .japanese:
             return """
-            SAVAGE TONE CALIBRATION (Savage = 正確さであって、声の大きさではない). Copy the SHAPE only — never these situations, details, words or people:
+            SAVAGE TONE CALIBRATION (Savage = 正確さであって、声の大きさではない). Copy the SHAPE only — never these situations, details, words or people, even when the user's situation looks like one of them:
             - BAD: 「あなたは最低な人間だ。」 (中身のない悪口)
             - BAD: 「後悔させてやる。」 (脅し。絶対に不可)
-            - GOOD (手柄を取られた): 「4枚目のフッター、まだ私のファイル名のままですよ。人の資料で発表するなら、せめて名前くらい変えてください。」
-            - GOOD (友人の遅刻): 「一時間遅れてきて、忍耐について説教するのがあなたなんですね。」
-            - GOOD (大家の修理): 「家賃は毎月一日に払っています。約束の修理は三週目です。約束を守っているのは私だけですね。」
+            - GOOD (ジムの器具占領): 「ベンチを四十分使って、実際に上げていたのは三分。残りはずっとスマホでしたね。」
+            - GOOD (脚立を返さない): 「脚立を貸したのは三月です。電球、もうとっくに替え終わってますよね。」
+            - GOOD (グループで既読無視): 「グループは既読無視なのに、ストーリーは一時間に三本。」
             (具体的な行動を名指しし、ユーザーの状況の細部を使い、要点で終える。下品な言葉は使わない)
             """
         case .english, .system:
             return """
-            SAVAGE TONE CALIBRATION (Savage = precise, not loud). Copy the SHAPE only — never these situations, details, words or people:
+            SAVAGE TONE CALIBRATION (Savage = precise, not loud). Copy the SHAPE only — never these situations, details, words or people, even when the user's situation looks like one of them:
             - BAD: "You're the worst person I've ever met." (a generic insult; names nothing)
             - BAD: "You'll regret this." (a threat — never)
-            - GOOD (credit stolen): "Slide 4 still has my file name in the footer. Next time you present my work, at least rename it."
-            - GOOD (late friend): "An hour late, and the lecture on patience comes from you. Bold."
-            - GOOD (landlord repairs): "Rent arrives on the 1st. The repair you promised is on week three. One of us is keeping the deal."
+            - GOOD (gym bench): "Forty minutes on the bench, three of them lifting. The rest was your phone."
+            - GOOD (borrowed ladder): "You borrowed the ladder in March. Your lightbulbs must be very well changed by now."
+            - GOOD (group chat): "Seen in the group chat at nine. Three stories posted by ten."
             (name the exact behavior, use a concrete detail from the user's situation, end on the point, no profanity)
             """
         }
@@ -733,25 +736,24 @@ extension PromptBuilder {
     /// written as the user and pulled the model to the user's side.
     /// Instructions for the one call that names the other person before the
     /// first turn (`RoastEngine.opponentPersona`). Measured 2026-10-31 on lens
-    /// 1's set: without it about half the turns mixed up who held which
-    /// position (the "busy" roommate scolding the user for using busyness as
-    /// an excuse). The examples are deliberately not lens 1's situations.
+    /// 1's set (`docs/evidence/.../a4`): without it about half the turns mixed
+    /// up who held which position. Asking for the other person's STANCE too
+    /// inverted it on the raise setup in every run ("You are the employee"),
+    /// so this asks for the role only; the setup carries the stance.
     static let opponentPersonaInstructions = """
-        You read a short setup a user wrote about an argument they want to rehearse. Describe THE OTHER PERSON in it, never the user.
+        You read a short setup a user wrote about an argument they want to rehearse. "I" in the setup is the user. Name the person the user will argue WITH — never the user.
+        If the user wants something from someone (a raise, a repair, a change), name the person being asked.
 
-        Reply in English with exactly two sentences:
-        1. "You are <who they are to the user>."
-        2. "You <what they do or believe>, and you think you are right because <their own reason>."
-        Write their position from THEIR point of view, as they would defend it. Do not judge them and do not mention the user's feelings.
+        Reply in English with only that person's role relative to the user, nothing else.
 
         Setup: "My neighbor parks in my reserved spot almost every night. I want to ask him to stop. He says it's only for a few minutes."
-        You are the user's neighbor. You park in the user's spot most nights, and you think you are right because you only stay a few minutes and it hurts nobody.
+        the user's neighbor
 
         Setup: "I want to ask my landlord to fix the heater before winter. He keeps saying next month."
-        You are the user's landlord. You keep putting off the heater repair, and you think you are right because repairs are expensive and the heater still works most days.
+        the user's landlord
 
         Setup: 「朋友跟我借了五千塊，半年都沒還，我想跟她要回來。她說最近手頭很緊。」
-        You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
+        the user's friend who borrowed money from them
         """
 
     static func opponentPrompt(
@@ -802,6 +804,11 @@ extension PromptBuilder {
             }
             lines.append("")
             lines.append("Write YOUR next line as the other person, answering the user's last line.")
+        }
+        // Restated last: this small model weighs the end of the prompt most,
+        // and the 10-31 gate runs flipped to the user's side mid-argument.
+        if let persona {
+            lines.append("Remember who you are: \(clipTurn(persona, maxWords: 60, maxCharacters: 200))")
         }
         lines.append(userLanguageReminder(for: locale))
         return (system: system, user: lines.joined(separator: "\n"))

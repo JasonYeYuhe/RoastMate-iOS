@@ -32,6 +32,12 @@
 "generator.title" = "返し生成";
 "generator.placeholder" = "何があったか書いてください…";
 "generator.style_label" = "スタイル";
+"generator.style_voice_hint" = "許可してクラウドで生成するとき、罵倒と吐き出しはこのスタイルの口調になります。";
+"generator.pro_preview.offer" = "Pro の口調を見てみる？一度だけ無料プレビュー：同じ内容を「%@」で罵倒の下書きに。";
+"generator.pro_preview.button" = "一度だけ見る";
+"generator.pro_preview.label" = "Pro プレビュー · 今回だけ · 履歴には残りません";
+"generator.pro_preview.unlock" = "Pro を解除";
+"generator.pro_preview.failed" = "今回はプレビューを生成できませんでした。";
 "generator.intensity_label" = "強さ";
 "generator.generate" = "生成する";
 "generator.regenerate" = "もう一度";
@@ -155,11 +161,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "罵倒 · 容赦なし · 全24スタイル · 返しは毎回3パターン · 口論シミュレーター · 履歴無制限 · クレジット不要";
-"paywall.body.curated" = "罵倒（許可するとクラウドで生成）· クレジット不要 · 履歴無制限。容赦なし・24スタイル・3パターン・口論シミュレーターには Apple Intelligence が必要です。";
+"paywall.body.curated" = "罵倒は選んだ Pro スタイルの口調で（許可するとクラウドで生成）· クレジット不要 · 履歴無制限。容赦なし・3パターン・口論シミュレーター、送れる返しでのスタイルには Apple Intelligence が必要です。";
 "paywall.feature.savage" = "容赦なしモード";
 "paywall.feature.savage.detail" = "遠慮なしの切れ味。どのスタイルでも使えます。";
 "paywall.feature.savage.detail.curated" = "この端末では「容赦なし」はあらかじめ用意した例を表示します。入力内容から生成するには Apple Intelligence が必要です。";
-"paywall.feature.feral.detail" = "遠慮なしの吐き出し —— 強い言葉も解禁、許可するとクラウドで生成。自分だけのプライベートな下書き。";
+"paywall.feature.feral.detail" = "ワンタップで怒りを、選んだ Pro スタイルの口調の非公開の下書きに。自分だけが読めます。強い言葉もあり。許可するとクラウドで生成します。";
 "paywall.feature.feral" = "罵倒モード";
 "paywall.feature.unlimited" = "クレジット不要";
 "paywall.feature.unlimited.detail" = "Proはクレジットを消費しません。残高を気にする必要はありません。";
@@ -171,12 +177,14 @@
 "paywall.plan.monthly.detail" = "罵倒・容赦なし・全24スタイル。クレジット不要。";
 "paywall.plan.yearly.detail" = "Proのすべてを、年1回のお支払いで。";
 "paywall.yearly.trial" = "7日間無料体験 · その後 %@";
+"paywall.trial.line" = "%1$@無料体験 · その後 年額 %2$@";
+"paywall.yearly.per_month" = "月あたり約 %@";
 "paywall.restore" = "購入を復元";
 "paywall.subscribe" = "登録する";
 "paywall.continue_free" = "無料のまま続ける";
 "paywall.success.title" = "Proになりました";
 "paywall.success.body" = "この端末で使えるもの：罵倒（許可するとクラウドで生成）、容赦なし、全24スタイル（返しは毎回3パターン）、口論シミュレーター、履歴無制限。クレジットは不要です。";
-"paywall.success.body.curated" = "この端末で使えるもの：罵倒（許可するとクラウドで生成）と履歴無制限。クレジットは不要です。容赦なし・スタイル・3パターン・口論シミュレーターには Apple Intelligence が必要で、この端末ではあらかじめ用意した例を表示します。";
+"paywall.success.body.curated" = "この端末で使えるもの：罵倒（許可するとクラウドで生成）、選んだ Pro スタイルの口調での罵倒と吐き出し、履歴無制限。クレジットは不要です。容赦なし・3パターン・口論シミュレーター、送れる返しでのスタイルには Apple Intelligence が必要で、この端末ではあらかじめ用意した例を表示します。";
 "paywall.success.done" = "OK";
 "paywall.error.title" = "購入が完了しませんでした";
 "paywall.pending.title" = "承認待ち";
@@ -200,7 +208,7 @@
 "paywall.credits.balance" = "残り %d クレジット";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "おすすめ";
-"paywall.pro.subtitle" = "罵倒・容赦なしを解除する唯一の方法 —— さらに全スタイル、クレジット不要。";
+"paywall.pro.subtitle" = "罵倒と容赦なしを解除する唯一の方法：ワンタップで非公開の罵倒下書き、さらに全スタイル、クレジット不要。";
 "settings.credits.balance" = "クレジット";
 "settings.credits.buy" = "クレジットを追加";
 "paywall.loading" = "読み込み中…";

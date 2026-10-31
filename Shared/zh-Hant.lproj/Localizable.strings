@@ -32,6 +32,12 @@
 "generator.title" = "回擊生成器";
 "generator.placeholder" = "說說發生了什麼……";
 "generator.style_label" = "風格";
+"generator.style_voice_hint" = "經你同意走雲端時，痛罵和發洩會用這個風格的口吻。";
+"generator.pro_preview.offer" = "想看看 Pro 怎麼罵？免費預覽一次：用「%@」把同一件事痛罵一遍。";
+"generator.pro_preview.button" = "預覽一次";
+"generator.pro_preview.label" = "Pro 預覽 · 只有這一次 · 不會存進紀錄";
+"generator.pro_preview.unlock" = "解鎖 Pro";
+"generator.pro_preview.failed" = "這次預覽沒能產生。";
 "generator.intensity_label" = "強度";
 "generator.generate" = "開始生成";
 "generator.regenerate" = "再來一次";
@@ -155,11 +161,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "痛罵 · 狠 · 全部 24 種風格 · 每則回擊 3 個版本 · 吵架模擬器 · 無限歷史 · 不扣點數";
-"paywall.body.curated" = "痛罵（經你同意後走雲端）· 不扣點數 · 無限歷史。狠、24 種風格、每則 3 個版本和吵架模擬器需要 Apple Intelligence。";
+"paywall.body.curated" = "痛罵用你選的 Pro 風格開口（經你同意後走雲端）· 不扣點數 · 無限歷史。狠、每則 3 個版本、吵架模擬器，以及風格用在可直接傳送的回擊，需要 Apple Intelligence。";
 "paywall.feature.savage" = "狠話強度";
 "paywall.feature.savage.detail" = "最不留情面的回擊,任何風格都能用。";
 "paywall.feature.savage.detail.curated" = "這台裝置上「狠」顯示的是預設範例 —— 需要 Apple Intelligence 才能根據你輸入的內容生成。";
-"paywall.feature.feral.detail" = "尺度全開的發洩 —— 粗口解鎖,經你同意後在雲端生成。只給你自己看的私密草稿。";
+"paywall.feature.feral.detail" = "一鍵把火氣寫成一段台灣口吻的私密草稿，用你選的 Pro 風格開口，只給你自己看。可以帶髒話；經你同意後在雲端生成。";
 "paywall.feature.feral" = "痛罵模式";
 "paywall.feature.unlimited" = "不扣點數";
 "paywall.feature.unlimited.detail" = "Pro 從不扣點數,不用再盯著餘額。";
@@ -171,12 +177,14 @@
 "paywall.plan.monthly.detail" = "痛罵、狠和全部 24 種風格，不扣點數。";
 "paywall.plan.yearly.detail" = "Pro 全部功能，一年付一次。";
 "paywall.yearly.trial" = "7 天免費試用 · 之後 %@";
+"paywall.trial.line" = "%1$@免費試用 · 之後每年 %2$@";
+"paywall.yearly.per_month" = "約 %@／月";
 "paywall.restore" = "恢復購買";
 "paywall.subscribe" = "立即訂閱";
 "paywall.continue_free" = "繼續免費使用";
 "paywall.success.title" = "你已是 Pro";
 "paywall.success.body" = "這台裝置上可以用：痛罵（經你同意後走雲端）、狠、全部 24 種風格且每則 3 個版本、吵架模擬器、無限歷史，而且不扣點數。";
-"paywall.success.body.curated" = "這台裝置上可以用：痛罵（經你同意後走雲端）和無限歷史，而且不扣點數。狠、各種風格、3 個版本和吵架模擬器需要 Apple Intelligence，這台裝置上會顯示預設範例。";
+"paywall.success.body.curated" = "這台裝置上可以用：痛罵（經你同意後走雲端）、用你選的 Pro 風格寫痛罵和發洩、無限歷史，而且不扣點數。狠、3 個版本、吵架模擬器，以及風格用在可直接傳送的回擊，需要 Apple Intelligence，這台裝置上會顯示預設範例。";
 "paywall.success.done" = "知道了";
 "paywall.error.title" = "購買沒有完成";
 "paywall.pending.title" = "等待核准";
@@ -200,7 +208,7 @@
 "paywall.credits.balance" = "你還有 %d 點";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "推薦";
-"paywall.pro.subtitle" = "解鎖痛罵 · 狠的唯一方式 —— 外加全部風格,而且不扣點數。";
+"paywall.pro.subtitle" = "解鎖痛罵和狠的唯一方式：一鍵寫出台灣口吻的私密痛罵草稿，外加全部風格，不扣點數。";
 "settings.credits.balance" = "點數";
 "settings.credits.buy" = "取得更多點數";
 "paywall.loading" = "載入中…";
@@ -379,7 +387,7 @@
 "style.shakespeare.blurb" = "Thou hast erred.";
 
 "style.mba_boss.name" = "MBA 黑話";
-"style.mba_boss.blurb" = "對齊、閉環、拉通。";
+"style.mba_boss.blurb" = "對焦、綜效、落地。";
 
 "style.ancient.name" = "文言文";
 "style.ancient.blurb" = "言簡、意遠、對仗。";
@@ -393,7 +401,7 @@
 "style.tokyo_ol.name" = "東京上班族";
 "style.tokyo_ol.blurb" = "居酒屋級別的吐槽。";
 
-"style.douban.name" = "豆瓣短文";
+"style.douban.name" = "文青日記體";
 "style.douban.blurb" = "週六下午的日記體。";
 
 "style.reddit_eli5.name" = "Reddit 解釋";

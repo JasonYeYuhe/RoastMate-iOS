@@ -208,6 +208,66 @@
       "response": "I want to talk about today, but not while we're both heated. The date matters to me — I'd like for it to matter to us.",
       "ventResponse": "Five years. FIVE. You can't put one single date in a calendar app that lives in your pocket? And now I'm the bad guy for being upset about it? Don't you DARE tell me I'm 'making it a big deal' — it IS a big deal, and the only reason you get to call it small is because I'm the one who has to remember everything for both of us. I am exhausted. I am NOT crazy for caring. Stop making me apologize for being the only person in this relationship who pays attention.",
       "sendableResponse": "Hey — can we talk later tonight, after we've both cooled off? I don't want to fight. I want you to know that the date hurt more than I let on, partly because it's not the first time, and partly because being told I'm 'making it a big deal' made me feel small for caring. I'm not trying to score points. I'd just like for us to figure out together how we mark the dates that matter, so I'm not the only one carrying that piece."
+    },
+    {
+      "id": "sample_hant_01",
+      "styleId": "taiwanese_drama",
+      "responseLocale": "zh-Hant",
+      "situation": {
+        "zh-Hant": "我做的專案，主管在整個團隊面前說成是他的功勞。",
+        "zh-Hans": "我做的项目，领导在全组面前说成是他的功劳。",
+        "en": "My manager presented my project as his own work in front of the whole team.",
+        "ja": "私が作った企画を、上司がチーム全員の前で自分の手柄みたいに発表した。"
+      },
+      "response": "當所有鏡頭聚焦在你，而我的名字被當成副產品，真的好累。"
+    },
+    {
+      "id": "sample_hant_02",
+      "styleId": "taiwanese_drama",
+      "responseLocale": "zh-Hant",
+      "situation": {
+        "zh-Hant": "慣老闆半夜十一點在LINE群組@我，要我明天早上八點前改好簡報，還說『年輕人多學一點不吃虧』。",
+        "zh-Hans": "老板半夜十一点在群里@我，要我明早八点前改好PPT，还说『年轻人多学一点不吃亏』。",
+        "en": "My boss pinged me at 11pm to redo the deck by 8am and said 'young people should learn more'.",
+        "ja": "上司が夜11時にグループで私をメンションして、明朝8時までに資料を直せと言い、「若いうちは学んでおいて損はない」と付け加えた。"
+      },
+      "response": "『年輕人多學一點不吃虧』？這句話像一把鈍刀，戳進我整個夜晚的計畫裡啦。"
+    },
+    {
+      "id": "sample_hant_03",
+      "styleId": "savage_no_filter",
+      "responseLocale": "zh-Hant",
+      "situation": {
+        "zh-Hant": "室友的碗可以放好幾天，還說我『太計較』。",
+        "zh-Hans": "室友的碗能放好几天，还说我『太计较』。",
+        "en": "My roommate leaves dishes in the sink for days and says I'm 'too uptight'.",
+        "ja": "ルームメイトが洗い物を何日も放置して、注意したら「細かすぎ」って言われた。"
+      },
+      "response": "碗滿七天了，你跟垃圾區訂了約。"
+    },
+    {
+      "id": "sample_hant_04",
+      "styleId": "cold_violence",
+      "responseLocale": "zh-Hant",
+      "situation": {
+        "zh-Hant": "朋友借了我五千塊說下個月還，已經半年了，每次問都說最近手頭緊，結果IG天天在吃大餐。",
+        "zh-Hans": "朋友借了我五千块说下个月还，已经半年了，每次问都说最近手头紧，结果朋友圈天天在吃大餐。",
+        "en": "A friend borrowed $200 saying he'd pay me back next month. It's been six months, he says he's broke, but posts fancy dinners on Instagram every day.",
+        "ja": "友達に5万円貸して「来月返す」と言われてから半年。催促するたび金欠だと言うのに、インスタでは毎日豪華な食事を載せている。"
+      },
+      "response": "說手頭緊，卻在IG上享受生活。"
+    },
+    {
+      "id": "sample_hant_05",
+      "styleId": "cold_violence",
+      "responseLocale": "zh-Hant",
+      "situation": {
+        "zh-Hant": "室友的碗可以放好幾天，還說我『太計較』。",
+        "zh-Hans": "室友的碗能放好几天，还说我『太计较』。",
+        "en": "My roommate leaves dishes in the sink for days and says I'm 'too uptight'.",
+        "ja": "ルームメイトが洗い物を何日も放置して、注意したら「細かすぎ」って言われた。"
+      },
+      "response": "『太計較』？那是我對秩序的堅持。"
     }
   ]
 }

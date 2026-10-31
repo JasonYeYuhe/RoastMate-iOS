@@ -74,8 +74,9 @@ final class StoreService {
             let all = try await Product.products(
                 for: [Self.monthlyProductId, Self.yearlyProductId] + CreditCatalog.allProductIDs
             )
-            products = all
-                .filter { $0.id == Self.monthlyProductId || $0.id == Self.yearlyProductId }
+            let plans = all.filter { $0.id == Self.monthlyProductId || $0.id == Self.yearlyProductId }
+            let order = PaywallGate.sortedPlanIDs(plans.map(\.id), yearlyID: Self.yearlyProductId)
+            products = plans.sorted { order.firstIndex(of: $0.id)! < order.firstIndex(of: $1.id)! }
             creditProducts = all
                 .filter { CreditCatalog.credits(forProductID: $0.id) != nil }
                 .sorted { (CreditCatalog.credits(forProductID: $0.id) ?? 0)

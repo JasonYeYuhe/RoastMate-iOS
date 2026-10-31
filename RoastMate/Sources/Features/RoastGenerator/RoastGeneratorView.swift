@@ -11,6 +11,8 @@ struct RoastGeneratorView: View {
         initialIntensity: .firstSessionDefault(onDeviceModelAvailable: RoastEngine.isOnDeviceModelAvailable)
     )
     @State private var showPaywall = false
+    /// A6: what opened the paywall; applied when it closes with Pro active.
+    @State private var paywallIntent: PaywallIntent?
     @State private var threadContinuationBanner: String? = nil
     #if os(iOS)
     @State private var voiceGate: VoiceVentGate? = nil
@@ -20,7 +22,7 @@ struct RoastGeneratorView: View {
     @Query private var threads: [SituationThread]
 
     private var styles: [StylePreset] { StyleCatalog.shared.all }
-    private var samples: [SampleRoast] { SampleRoastsCatalog.shared.all }
+    private var samples: [SampleRoast] { SampleRoastsCatalog.shared.ordered(for: locale) }
 
     private var settings: UserSettings? { settingsQuery.first }
     private var isPro: Bool { StoreService.shared.isPro }
@@ -110,7 +112,7 @@ struct RoastGeneratorView: View {
                 }
             }
         }
-        .sheet(isPresented: $showPaywall) {
+        .sheet(isPresented: $showPaywall, onDismiss: finishPaywallHandoff) {
             PaywallView(isPresented: $showPaywall)
         }
         .sheet(isPresented: $viewModel.pendingCloudConsent) {
@@ -268,6 +270,7 @@ struct RoastGeneratorView: View {
                         ) {
                             if !isPro && style.tier == .pro {
                                 EventLedger.shared.recordPaywallImpression(source: .styleLocked)
+                                paywallIntent = .style(style.id)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedStyleId = style.id
@@ -277,6 +280,31 @@ struct RoastGeneratorView: View {
                 }
                 .padding(.vertical, 2)
             }
+            // A2: in 痛罵/發洩 a Pro style sets the cloud draft's voice on
+            // every device — the one style benefit that works without Apple
+            // Intelligence. Shown only where the Worker has that voice.
+            if viewModel.selectedIntensity.isPrivateDraft,
+               let style = StyleCatalog.shared.style(id: viewModel.selectedStyleId),
+               StyleVoice.hasCloudVoice(style, locale: locale) {
+                Text("generator.style_voice_hint")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    /// A6: when the paywall closes with Pro active, select what the user
+    /// reached for and, if they had tapped Generate with text typed, run it
+    /// once. On dismiss rather than on purchase, so a cloud-consent sheet the
+    /// generation may raise never stacks on the paywall.
+    private func finishPaywallHandoff() {
+        defer { paywallIntent = nil }
+        guard StoreService.shared.isPro, let intent = paywallIntent else { return }
+        if let id = intent.styleId { viewModel.selectedStyleId = id }
+        if let intensity = intent.intensity { viewModel.selectedIntensity = intensity }
+        if intent.runAfterPurchase,
+           !viewModel.situation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            Task { await viewModel.generate(context: context, locale: locale) }
         }
     }
 
@@ -287,8 +315,16 @@ struct RoastGeneratorView: View {
             // means the user sees the keyboard slide down the moment
             // they hit Generate, not after the model warms up.
             situationFocused = false
-            if !isPro && viewModel.selectedIntensity.requiresPro {
-                EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
+            let hasInput = !viewModel.situation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            if let locked = PaywallGate.lockedSelection(
+                isPro: isPro, style: StyleCatalog.shared.style(id: viewModel.selectedStyleId),
+                intensity: viewModel.selectedIntensity, hasInput: hasInput) {
+                // A Pro intensity, or (new in 1.8.0) a Pro style — e.g. from
+                // a sample — opens the paywall instead of the view model's
+                // orange "quota exhausted" error.
+                EventLedger.shared.recordPaywallImpression(
+                    source: locked.intensity != nil ? .intensityLocked : .styleLocked)
+                paywallIntent = locked
                 showPaywall = true
             } else if !isPro && settings?.canSpendNow() == false
                         && !CloudPermission.resolve(
@@ -308,6 +344,7 @@ struct RoastGeneratorView: View {
                 // `skipsPaywall` differs from `willBeCurated` only while consent
                 // is unasked — see its doc comment.
                 EventLedger.shared.recordPaywallImpression(source: .lowCredits)
+                paywallIntent = PaywallIntent(runAfterPurchase: hasInput)
                 showPaywall = true
             } else {
                 Task { await viewModel.generate(context: context, locale: locale) }
@@ -347,6 +384,7 @@ struct RoastGeneratorView: View {
                         ) {
                             if !isPro && intensity.requiresPro {
                                 EventLedger.shared.recordPaywallImpression(source: .intensityLocked)
+                                paywallIntent = .intensity(intensity)
                                 showPaywall = true
                             } else {
                                 viewModel.selectedIntensity = intensity
@@ -406,6 +444,7 @@ struct RoastGeneratorView: View {
                         }
                     }
                 }
+                proPreviewCard
             }
         case .error(let message):
             HStack(alignment: .top, spacing: 8) {
@@ -423,6 +462,53 @@ struct RoastGeneratorView: View {
             CrisisSupportView(onDismiss: { viewModel.state = .idle })
         case .idle, .loading:
             EmptyView()
+        }
+    }
+
+    /// B5: the one-time, labelled 痛罵 preview under a free user's Vent.
+    @ViewBuilder
+    private var proPreviewCard: some View {
+        switch viewModel.proPreview {
+        case .none:
+            EmptyView()
+        case .offered(let styleId), .loading(let styleId):
+            let name = StyleCatalog.shared.style(id: styleId)?.displayName ?? styleId
+            VStack(alignment: .leading, spacing: 8) {
+                Text(String(format: String(localized: "generator.pro_preview.offer"), name))
+                    .font(.callout)
+                Button {
+                    Task { await viewModel.runProPreview(context: context, locale: locale) }
+                } label: {
+                    HStack {
+                        if case .loading = viewModel.proPreview { ProgressView().controlSize(.small) }
+                        Text("generator.pro_preview.button")
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled({ if case .loading = viewModel.proPreview { return true }; return false }())
+            }
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.orange.opacity(0.08)))
+        case .shown(let styleId, let text):
+            VStack(alignment: .leading, spacing: 8) {
+                Text("generator.pro_preview.label")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.orange)
+                Text(text)
+                    .textSelection(.enabled)
+                Button("generator.pro_preview.unlock") {
+                    EventLedger.shared.recordPaywallImpression(source: .proTap)
+                    paywallIntent = PaywallIntent(styleId: styleId, intensity: .feral)
+                    showPaywall = true
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding(12)
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.orange.opacity(0.08)))
+        case .failed:
+            Text("generator.pro_preview.failed")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

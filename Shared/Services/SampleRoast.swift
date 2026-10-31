@@ -59,6 +59,14 @@ final class SampleRoastsCatalog {
         load()
     }
 
+    /// The samples with the ones written in the user's language first, in
+    /// catalog order otherwise. A8 (1.8.0): zh-Hant users had 0 samples in
+    /// their own script among the five shown.
+    func ordered(for locale: Locale) -> [SampleRoast] {
+        let bucket = AppLanguage.contentBucket(for: locale).rawValue
+        return all.filter { $0.responseLocale == bucket } + all.filter { $0.responseLocale != bucket }
+    }
+
     private func load() {
         guard let url = ResourceBundle.url(forResource: "SampleRoasts", withExtension: "json") else {
             logger.error("SampleRoasts.json not found in bundle.")

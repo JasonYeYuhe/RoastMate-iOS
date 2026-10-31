@@ -32,6 +32,12 @@
 "generator.title" = "怼人生成器";
 "generator.placeholder" = "讲讲发生了什么……";
 "generator.style_label" = "风格";
+"generator.style_voice_hint" = "经你同意走云端时，痛骂和发泄会用这个风格的口吻。";
+"generator.pro_preview.offer" = "想看看 Pro 怎么骂？免费预览一次：用「%@」把同一件事痛骂一遍。";
+"generator.pro_preview.button" = "预览一次";
+"generator.pro_preview.label" = "Pro 预览 · 只有这一次 · 不会存进记录";
+"generator.pro_preview.unlock" = "解锁 Pro";
+"generator.pro_preview.failed" = "这次预览没能生成。";
 "generator.intensity_label" = "强度";
 "generator.generate" = "开始生成";
 "generator.regenerate" = "再来一次";
@@ -155,11 +161,11 @@
 
 "paywall.title" = "RoastMate Pro";
 "paywall.body" = "痛骂 · 狠 · 全部 24 种风格 · 每条回击 3 个版本 · 吵架模拟器 · 无限历史 · 不耗点数";
-"paywall.body.curated" = "痛骂（经你同意后走云端）· 不耗点数 · 无限历史。狠、24 种风格、每条 3 个版本和吵架模拟器需要 Apple 智能。";
+"paywall.body.curated" = "痛骂用你选的 Pro 风格开口（经你同意后走云端）· 不耗点数 · 无限历史。狠、每条 3 个版本、吵架模拟器，以及风格用在可直接发送的回击，需要 Apple 智能。";
 "paywall.feature.savage" = "狠话强度";
 "paywall.feature.savage.detail" = "最不留情面的回击,任何风格都能用。";
 "paywall.feature.savage.detail.curated" = "这台设备上「狠」显示的是预设示例 —— 需要 Apple 智能才能根据你输入的内容生成。";
-"paywall.feature.feral.detail" = "尺度全开的发泄 —— 粗口解锁,经你同意后在云端生成。只给你自己看的私密草稿。";
+"paywall.feature.feral.detail" = "一键把火气写成一段私密草稿，用你选的 Pro 风格开口，只给你自己看。可以带脏话；经你同意后在云端生成。";
 "paywall.feature.feral" = "痛骂模式";
 "paywall.feature.unlimited" = "不耗点数";
 "paywall.feature.unlimited.detail" = "Pro 从不扣点数,不用再看余额。";
@@ -171,12 +177,14 @@
 "paywall.plan.monthly.detail" = "痛骂、狠和全部 24 种风格，不耗点数。";
 "paywall.plan.yearly.detail" = "Pro 全部功能，每年付一次。";
 "paywall.yearly.trial" = "7 天免费试用 · 之后 %@";
+"paywall.trial.line" = "%1$@免费试用 · 之后每年 %2$@";
+"paywall.yearly.per_month" = "约 %@／月";
 "paywall.restore" = "恢复购买";
 "paywall.subscribe" = "立即订阅";
 "paywall.continue_free" = "继续免费使用";
 "paywall.success.title" = "你已是 Pro";
 "paywall.success.body" = "这台设备上可以用：痛骂（经你同意后走云端）、狠、全部 24 种风格且每条 3 个版本、吵架模拟器、无限历史，而且不耗点数。";
-"paywall.success.body.curated" = "这台设备上可以用：痛骂（经你同意后走云端）和无限历史，而且不耗点数。狠、各种风格、3 个版本和吵架模拟器需要 Apple 智能，这台设备上会显示预设示例。";
+"paywall.success.body.curated" = "这台设备上可以用：痛骂（经你同意后走云端）、用你选的 Pro 风格写痛骂和发泄、无限历史，而且不耗点数。狠、3 个版本、吵架模拟器，以及风格用在可直接发送的回击，需要 Apple 智能，这台设备上会显示预设示例。";
 "paywall.success.done" = "知道了";
 "paywall.error.title" = "购买没有完成";
 "paywall.pending.title" = "等待批准";
@@ -200,7 +208,7 @@
 "paywall.credits.balance" = "你还有 %d 点";
 "paywall.pro.title" = "RoastMate Pro";
 "paywall.pro.recommended" = "推荐";
-"paywall.pro.subtitle" = "解锁痛骂 · 狠的唯一方式 —— 外加全部风格,而且不耗点数。";
+"paywall.pro.subtitle" = "解锁痛骂和狠的唯一方式：一键写出私密痛骂草稿，外加全部风格，不耗点数。";
 "settings.credits.balance" = "点数";
 "settings.credits.buy" = "获取更多点数";
 "paywall.loading" = "加载中…";

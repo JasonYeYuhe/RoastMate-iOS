@@ -17,6 +17,10 @@
 
 	     Must stay equal to HandoffActivity.typeRoastSession (Shared/Services).
 	     Verify against the BUILT Info.plist; the project file cannot tell you. -->
+	<!-- A8 (1.8.0): lets Finder / Launchpad show the localized name from
+	     zh-Hant.lproj / zh-Hans.lproj InfoPlist.strings (幫你罵 / 帮你骂). -->
+	<key>LSHasLocalizedDisplayName</key>
+	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>yyh.roastmate.app.handoff.session</string>

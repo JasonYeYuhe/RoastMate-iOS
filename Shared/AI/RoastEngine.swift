@@ -47,6 +47,10 @@ enum GenerationProvenance: Sendable, Equatable {
 struct GeneratedOutput: Sendable, Equatable {
     var texts: [String]
     var provenance: GenerationProvenance
+    /// The Worker wrote it (not the on-device model after a cloud failure).
+    /// B5's Pro preview is offered and shown only for cloud output: only the
+    /// cloud draft carries the Pro style's voice.
+    var servedByCloud: Bool = false
 
     var isCurated: Bool { provenance == .curated }
 }
@@ -251,7 +255,7 @@ actor RoastEngine {
                     EventLedger.shared.recordFirstGenerationOfSession()  // α3
                     EventLedger.shared.markSuccessfulOutput()  // P5 Tier-1 — pay-timing flag
                     RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
-                    return GeneratedOutput(texts: [safe], provenance: .model)
+                    return GeneratedOutput(texts: [safe], provenance: .model, servedByCloud: true)
                 } catch let err as CloudVentError {
                     logger.notice("Cloud vent failed (\(String(describing: err), privacy: .public)) — falling back to local model.")
                     // continue to local path below
@@ -290,7 +294,8 @@ actor RoastEngine {
                         RatingPromptService.shared.notifySuccessfulGeneration()  // ε1
                         return GeneratedOutput(
                             texts: Array(sanitized.prefix(effectiveVariantCount)),
-                            provenance: .model
+                            provenance: .model,
+                            servedByCloud: true
                         )
                     }
                     logger.notice("Cloud roast output all filtered — falling back to local model.")
@@ -493,8 +498,8 @@ actor RoastEngine {
         if !earlier.isEmpty, !PromptBuilder.nearDuplicateIndexes(earlier + [line]).isEmpty,
            let again = try? await fm.respondFresh(
                instructions: prompt.system,
-               to: prompt.user + "\nYou already said that. Make a different point this time.",
-               temperature: min(style.temperature + 0.1, 1.0), maxTokens: 300) {
+               to: prompt.user + "\nYou already said: \"\(line)\" Do not say it again. Make a different point, in different words.",
+               temperature: 1.0, maxTokens: 300) {
             line = PromptBuilder.cleanOpponentLine(again)
         }
         guard !line.isEmpty, !ModelRefusal.looksLikeRefusal(line),
@@ -506,11 +511,11 @@ actor RoastEngine {
         return .line(safe)
     }
 
-    /// Who the other person is and what they stand for, from their side, in
-    /// two English sentences (`PromptBuilder.opponentPersonaInstructions`).
-    /// Asked once per argument; the simulator passes it to every turn. Never
-    /// shown, so it needs no output screen; nil when it can't be had, and the
-    /// turn prompt falls back to "the other person described in the setup".
+    /// Who the other person is ("You are the user's manager."), from one
+    /// short call (`PromptBuilder.opponentPersonaInstructions`). Asked once per
+    /// argument; the simulator passes it to every turn. Never shown, so it
+    /// needs no output screen; nil when it can't be had, and the turn prompt
+    /// falls back to "the other person described in the setup".
     func opponentPersona(setup: String) async -> String? {
         guard let fm, fm.isAvailable, SafetyFilter.crisisSignal(setup) == .none else { return nil }
         let input = PromptBuilder.clipTurn(setup, maxWords: 200, maxCharacters: 600)
@@ -518,12 +523,25 @@ actor RoastEngine {
             guard guardrails == .standard || permissiveRetryAllowed() else { return nil }
             if let reply = try? await fm.respondFresh(
                 instructions: PromptBuilder.opponentPersonaInstructions, to: input,
-                temperature: 0, maxTokens: 120, guardrails: guardrails),
-               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) {
-                return reply.trimmingCharacters(in: .whitespacesAndNewlines)
+                temperature: 0, maxTokens: 30, guardrails: guardrails),
+               let role = Self.personaRole(reply) {
+                return "You are \(role)."
             }
         }
         return nil
+    }
+
+    /// The role line from the persona call, or nil for anything that isn't
+    /// a short role (a refusal, a sentence about the user, an empty reply).
+    static func personaRole(_ reply: String) -> String? {
+        var role = reply.trimmingCharacters(in: .whitespacesAndNewlines)
+            .components(separatedBy: .newlines).first ?? ""
+        role = role.trimmingCharacters(in: CharacterSet(charactersIn: " .\"'“”「」"))
+        if role.lowercased().hasPrefix("you are ") { role = String(role.dropFirst(8)) }
+        let words = role.split(separator: " ").count
+        guard (1...12).contains(words), !ModelRefusal.looksLikeRefusal(role),
+              role.lowercased() != "the user" else { return nil }
+        return role
     }
 
     private func recordModelOutput() {

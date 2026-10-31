@@ -154,6 +154,11 @@ final class UserSettings {
     /// longer read; nil = not asked under the current text.
     var echoesCloudConsentV2Raw: String?
 
+    /// B5 (1.8.0): when the one-time 痛罵 preview was offered. Synced with the
+    /// rest of UserSettings, so a reinstall on the same iCloud account is not
+    /// offered it again. nil = never offered.
+    var proPreviewOfferedAt: Date?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -179,6 +184,7 @@ final class UserSettings {
         self.legacyBalanceBaselineRaw = nil
         self.echoesFeralCloudConsentRaw = nil
         self.echoesCloudConsentV2Raw = nil
+        self.proPreviewOfferedAt = nil
     }
 
     /// 5.1.2(i) explicit consent for the Echoes cloud path — since 1.8.0

@@ -53,6 +53,17 @@ final class RoastGeneratorViewModel {
     /// resumes generation.
     var pendingCloudConsent: Bool = false
 
+    /// B5: the one-time 痛罵 preview for free users (`ProPreview`).
+    enum ProPreviewState: Equatable {
+        case none
+        /// Offered under this Vent's results, not yet tapped.
+        case offered(styleId: String)
+        case loading(styleId: String)
+        case shown(styleId: String, text: String)
+        case failed
+    }
+    var proPreview: ProPreviewState = .none
+
     /// When non-nil, the next `generate()` call attaches the new session to
     /// this thread and feeds the prior-context summary into the engine.
     /// Cleared after one generation.
@@ -158,6 +169,7 @@ final class RoastGeneratorViewModel {
         state = .loading
         currentSession = nil
         rewriteError = nil
+        proPreview = .none
         curatedNotice = false
         rewriteCurated = false
         curatedReason = nil
@@ -216,6 +228,16 @@ final class RoastGeneratorViewModel {
             )
             pendingThread = nil
             pendingPriorContext = nil
+            // B5: after a free user's first Vent the Worker wrote, offer the
+            // 痛罵 preview once. Recorded as offered now (synced), so it never
+            // comes back, tapped or not.
+            if ProPreview.shouldOffer(isPro: isPro, intensity: requestedIntensity,
+                                      servedByCloud: output.servedByCloud,
+                                      offeredAt: settings.proPreviewOfferedAt) {
+                settings.proPreviewOfferedAt = Date()
+                try? context.save()
+                proPreview = .offered(styleId: ProPreview.styleId(for: locale))
+            }
             state = .results
             Haptics.play(.generated)
         } catch let err as RoastError {
@@ -327,6 +349,35 @@ final class RoastGeneratorViewModel {
         crisisBanner = false
         curatedNotice = false
         state = .idle
+    }
+
+    /// B5: the same situation as a Feral draft in a Pro voice, once. Cloud
+    /// only (the voice lives in the Worker) and only with the cloud consent
+    /// the Vent just used; through `generateDetailed`, so `SafetyFilter`
+    /// screens it like any cloud draft. No credit, no saved session.
+    func runProPreview(context: ModelContext, locale: Locale) async {
+        guard case .offered(let styleId) = proPreview,
+              let style = StyleCatalog.shared.style(id: styleId) else { return }
+        let text = situation.trimmingCharacters(in: .whitespacesAndNewlines)
+        let settings = HistoryService.userSettings(context: context)
+        let cloud = CloudPermission.resolve(intensity: .feral, consent: settings.cloudConsent, locale: locale)
+        guard !text.isEmpty, cloud.cloudAllowed else {
+            proPreview = .failed
+            return
+        }
+        proPreview = .loading(styleId: styleId)
+        do {
+            let output = try await RoastEngine.shared.generateDetailed(
+                situation: text, style: style, locale: locale, variantCount: 1,
+                intensity: .feral, safeMode: settings.safeModeEnabled, cloudVentEnabled: true)
+            if output.servedByCloud, let draft = output.texts.first {
+                proPreview = .shown(styleId: styleId, text: draft)
+            } else {
+                proPreview = .failed
+            }
+        } catch {
+            proPreview = .failed
+        }
     }
 
     func loadSample(_ sample: SampleRoast, locale: Locale) {
