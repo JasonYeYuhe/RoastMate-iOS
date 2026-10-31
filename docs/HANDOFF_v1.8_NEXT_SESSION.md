@@ -25,6 +25,26 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-10-31 — 1.7.3 LIVE; B3/B4/B5 decided (delegated)
+
+- **1.7.3 is READY_FOR_SALE on iOS and macOS** (approved within a day); tag
+  `v1.7.3` → `de4906d`. Now add `ondevice_permissive_enabled` to the CI bool
+  list + `research/web/roastmate-config.json` only if a kill is needed (absent =
+  on, so nothing is required).
+- Jason delegated every decision to the agent on 10-31 ("你全权负责做决定吧").
+  Still his: anything sent in his name, the privacy-policy diff (legal page in his
+  name), the native reader, the iOS 27 iPhone check.
+- **B3 = retire the Classic Echoes tile in 1.8.0** (both reviewers; refused 22/22
+  on macOS 27, unlabelled canned transcript). Roommate group stays.
+- **B4 = label alignment only** (豆瓣短文 → 文青日記體, MBA blurb → 對焦、綜效、
+  落地; string-only, no Worker deploy). 京片兒 → 台式長輩文 needs a native reader;
+  none is arranged, so it is not built (the plan's own no-reader branch).
+- **B5 = yes:** one labelled 痛罵 preview after a free user's first cloud 發洩,
+  once per iCloud account, recorded as a preview exception, not credits.
+- Free disk 24 GB (DerivedData 29 GB, mostly other projects): no simulator boots
+  until it is above 30 GB. Tests run in the standalone macOS runner meanwhile.
+- Order: A4 → A5 → A7+B3 → A2 → A6 → B5 → B4 → A8; A9 diff for Jason's approval.
+
 ## Update 2026-10-30 — 1.7.3 SUBMITTED (iOS + macOS, build 27)
 
 - **1.7.3 = A3 hotfix, WAITING_FOR_REVIEW on both platforms** (submitted

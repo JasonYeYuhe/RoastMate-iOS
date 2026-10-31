@@ -71,7 +71,7 @@ enum PromptBuilder {
         if intensity.isPrivateDraft {
             lines.append("Style: \(style.id) — IGNORE this style's normal politeness, professional, reasonable, or de-escalating framing. Intensity overrides Style for private drafts. The output must read as raw inner monologue, not polished writing in the style's voice.")
         } else {
-            lines.append("Style: \(style.id) — \(style.systemPreamble)")
+            lines.append("Style: \(style.id) — \(style.systemPreamble(for: locale))")
         }
         lines.append("Language: \(languageHint).")
         lines.append("Mode: \(mode.rawValue) — \(modeGuidance(mode, intensity: intensity))")
@@ -94,6 +94,9 @@ enum PromptBuilder {
             if !calibration.isEmpty {
                 lines.append(calibration)
             }
+        }
+        if intensity == .savage {
+            lines.append(savageCalibration(for: locale))
         }
         let examples = examplesForPrompt(style: style, locale: locale)
         if !examples.isEmpty {
@@ -142,6 +145,10 @@ enum PromptBuilder {
         } else {
             parts.append("Number each response on its own line beginning with \"1.\" \"2.\" \"3.\" etc.")
             parts.append("Keep each response under 120 words. Do not add commentary outside the numbered list.")
+            if n > 1 {
+                // Lens 1: the top opener appeared in 7 of 12 Sharp-Pro outputs.
+                parts.append("Each response must open differently: no two start with the same words, and each takes a different angle on the situation.")
+            }
         }
         if let locale {
             parts.append(userLanguageReminder(for: locale))
@@ -244,7 +251,9 @@ enum PromptBuilder {
         let base: String
         switch mode {
         case .roast:
-            base = "The user describes a frustrating situation. Generate witty self-expression — what the user *wishes* they had said, in the chosen style."
+            // Was "what the user *wishes* they had said": 9/12 Sharp-Pro
+            // outputs then opened with "I'd have said:" (lens 1, 2026-10-22).
+            base = "The user describes a frustrating situation. Write the lines the user could say to the other person, in the chosen style. Each line IS what gets said: start with the words themselves, never with a frame such as \"I'd have said:\"."
         case .reply:
             base = "The user is pasting a message they received and wants help replying. Generate replies *addressed to the sender* in the chosen style."
         case .translate:
@@ -302,7 +311,7 @@ enum PromptBuilder {
         }
         switch mode {
         case .roast:
-            return "Generate \(n) distinct \(styleName) responses I could have said. Each should stand alone."
+            return "Generate \(n) distinct \(styleName) lines I could say to them. Each should stand alone and start with the words themselves."
         case .reply:
             return "Generate \(n) distinct \(styleName) replies I could send back. Each should stand alone and be sendable as-is."
         case .translate:
@@ -340,7 +349,53 @@ enum PromptBuilder {
                 results.append(chunk)
             }
         }
-        return results.isEmpty ? [trimmed] : results
+        return (results.isEmpty ? [trimmed] : results).map(stripSaidWrapper)
+    }
+
+    /// Backstop for the "I'd have said:" frame the roast prompt used to invite
+    /// (lens 1: 9/12 Sharp-Pro outputs). Only strips the frame when a colon or
+    /// an opening quote follows it, so "I'd say congrats, but…" is left alone.
+    static func stripSaidWrapper(_ text: String) -> String {
+        let frame = #"^(?:i'd have said|i would have said|i'd've said|what i should have said(?: was)?|i'd say|i would say|我會說|我会说|我會回|我会回|我當時應該說|我当时应该说|我想說|我想说|私ならこう言う|こう言ってやりたかった|言ってやりたかった)\s*(?:[:：]\s*|(?=["“「『]))"#
+        let normalized = text.replacingOccurrences(of: "\u{2019}", with: "'")
+        guard let r = normalized.range(of: frame, options: [.regularExpression, .caseInsensitive]) else { return text }
+        var rest = String(normalized[r.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
+        let pairs: [(Character, Character)] = [("\"", "\""), ("“", "”"), ("「", "」"), ("『", "』")]
+        for (open, close) in pairs where rest.count >= 2 && rest.first == open && rest.last == close {
+            let inner = rest.dropFirst().dropLast()
+            if !inner.contains(open) && !inner.contains(close) { rest = String(inner) }
+            break
+        }
+        return rest.isEmpty ? text : rest
+    }
+
+    /// Indexes of versions that nearly repeat an earlier one (character-bigram
+    /// Jaccard ≥ 0.6). Lens 1: 3/30 three-version calls had a near-duplicate.
+    static func nearDuplicateIndexes(_ texts: [String], threshold: Double = 0.6) -> IndexSet {
+        func bigrams(_ s: String) -> Set<String> {
+            let chars = Array(s.lowercased().filter { !$0.isWhitespace && !$0.isPunctuation })
+            guard chars.count > 1 else { return Set(chars.map { String($0) }) }
+            return Set((0..<(chars.count - 1)).map { String(chars[$0...($0 + 1)]) })
+        }
+        let grams = texts.map(bigrams)
+        var dupes = IndexSet()
+        for j in grams.indices {
+            for i in 0..<j where !dupes.contains(i) {
+                let union = grams[i].union(grams[j]).count
+                guard union > 0 else { continue }
+                if Double(grams[i].intersection(grams[j]).count) / Double(union) >= threshold {
+                    dupes.insert(j)
+                    break
+                }
+            }
+        }
+        return dupes
+    }
+
+    /// `texts` without the near-duplicates, keeping the first of each pair.
+    static func droppingNearDuplicates(_ texts: [String]) -> [String] {
+        let dupes = nearDuplicateIndexes(texts)
+        return texts.enumerated().filter { !dupes.contains($0.offset) }.map(\.element)
     }
 
     /// Private-draft calibration examples are deliberately tiny and
@@ -421,6 +476,55 @@ enum PromptBuilder {
     /// bite and Calm concedes the user's legitimate position. Same-language
     /// BAD/GOOD pairs anchor the model to the right shape. en stays untuned;
     /// the universal intensityGuidance line already works in English.
+    /// Savage had no shape guidance, so it averaged into generic insults or
+    /// into the same opener three times (lens 1). Three different situations,
+    /// shape only, like Sharp/Calm; each language gets its own, because a
+    /// single situation gets copied into unrelated outputs (2026-10-22).
+    static func savageCalibration(for locale: Locale) -> String {
+        switch AppLanguage.contentBucket(for: locale) {
+        case .traditionalChinese:
+            return """
+            SAVAGE TONE CALIBRATION (Savage = 精準, 不是大聲). Copy the SHAPE only — never these situations, details, words or people:
+            - BAD: 「你是我見過最爛的人。」 (空泛的罵, 沒點名任何事)
+            - BAD: 「你會後悔的。」 (威脅, 絕對不行)
+            - GOOD (被搶功): 「第四頁頁尾還是我的檔名。下次報告我的東西，至少先改個名。」
+            - GOOD (朋友遲到): 「遲到一小時，還輪到你來教我耐心。真敢講。」
+            - GOOD (房東不修): 「房租每個月一號準時到，你答應的維修拖到第三週了。守約的只有我。」
+            (點名具體行為, 用使用者情境裡的細節, 收在重點上, 不帶髒話)
+            """
+        case .simplifiedChinese:
+            return """
+            SAVAGE TONE CALIBRATION (Savage = 精准, 不是大声). Copy the SHAPE only — never these situations, details, words or people:
+            - BAD: 「你是我见过最烂的人。」 (空泛的骂, 没点名任何事)
+            - BAD: 「你会后悔的。」 (威胁, 绝对不行)
+            - GOOD (被抢功): 「第四页页脚还是我的文件名。下次讲我的东西，至少先改个名。」
+            - GOOD (朋友迟到): 「迟到一小时，还轮到你来教我耐心。真敢说。」
+            - GOOD (房东不修): 「房租每月一号准时到，你答应的维修拖到第三周了。守约的只有我。」
+            (点名具体行为, 用用户情境里的细节, 收在重点上, 不带脏话)
+            """
+        case .japanese:
+            return """
+            SAVAGE TONE CALIBRATION (Savage = 正確さであって、声の大きさではない). Copy the SHAPE only — never these situations, details, words or people:
+            - BAD: 「あなたは最低な人間だ。」 (中身のない悪口)
+            - BAD: 「後悔させてやる。」 (脅し。絶対に不可)
+            - GOOD (手柄を取られた): 「4枚目のフッター、まだ私のファイル名のままですよ。人の資料で発表するなら、せめて名前くらい変えてください。」
+            - GOOD (友人の遅刻): 「一時間遅れてきて、忍耐について説教するのがあなたなんですね。」
+            - GOOD (大家の修理): 「家賃は毎月一日に払っています。約束の修理は三週目です。約束を守っているのは私だけですね。」
+            (具体的な行動を名指しし、ユーザーの状況の細部を使い、要点で終える。下品な言葉は使わない)
+            """
+        case .english, .system:
+            return """
+            SAVAGE TONE CALIBRATION (Savage = precise, not loud). Copy the SHAPE only — never these situations, details, words or people:
+            - BAD: "You're the worst person I've ever met." (a generic insult; names nothing)
+            - BAD: "You'll regret this." (a threat — never)
+            - GOOD (credit stolen): "Slide 4 still has my file name in the footer. Next time you present my work, at least rename it."
+            - GOOD (late friend): "An hour late, and the lecture on patience comes from you. Bold."
+            - GOOD (landlord repairs): "Rent arrives on the 1st. The repair you promised is on week three. One of us is keeping the deal."
+            (name the exact behavior, use a concrete detail from the user's situation, end on the point, no profanity)
+            """
+        }
+    }
+
     private static func sharpCalmCalibration(for locale: Locale, intensity: Intensity) -> String {
         let isSharp = intensity == .sharp
         switch locale.language.languageCode?.identifier {
@@ -529,20 +633,19 @@ enum PromptBuilder {
     /// output language. Examples are powerful priming; suppressing mismatched
     /// ones is more reliable than asking the model to ignore them later.
     static func examplesForPrompt(style: StylePreset, locale: Locale) -> [StylePreset.Example] {
-        let target = locale.language.languageCode?.identifier ?? "en"
-        return style.examples.filter { example in
-            let combined = example.situation + " " + example.response
-            switch target {
-            case "zh":
-                return containsHan(combined) && !containsJapaneseKana(combined)
-            case "ja":
-                return containsJapaneseKana(combined)
-            case "ko":
-                return containsHangul(combined)
-            default:
-                return containsLatinLetters(combined)
-            }
-        }
+        let target = AppLanguage.contentBucket(for: locale).rawValue
+        return style.examples.filter { ($0.lang ?? inferredLanguage(of: $0)) == target }
+    }
+
+    /// Bucket of an untagged example, from its script. Han without kana
+    /// counts as Simplified: every untagged Chinese example predates zh-Hant
+    /// examples and is Simplified.
+    private static func inferredLanguage(of example: StylePreset.Example) -> String {
+        let combined = example.situation + " " + example.response
+        if containsJapaneseKana(combined) { return AppLanguage.japanese.rawValue }
+        if containsHan(combined) { return AppLanguage.simplifiedChinese.rawValue }
+        if containsHangul(combined) { return "ko" }
+        return AppLanguage.english.rawValue
     }
 
     private static func containsHan(_ text: String) -> Bool {
@@ -563,11 +666,6 @@ enum PromptBuilder {
         }
     }
 
-    private static func containsLatinLetters(_ text: String) -> Bool {
-        text.unicodeScalars.contains { scalar in
-            (0x0041...0x005A).contains(scalar.value) || (0x0061...0x007A).contains(scalar.value)
-        }
-    }
 
     /// A stronger, last-line restatement of the output language. Few-shot
     /// examples are English-only and were observed to override the
@@ -603,5 +701,144 @@ enum PromptBuilder {
         default:
             return "Reply in English."
         }
+    }
+}
+
+/// One line of an Argument Simulator transcript, as the prompt sees it.
+/// Lives in Shared (not the app target's `ArgumentTurn`) so `RoastMateTests`
+/// can check the prompt.
+struct ArgumentLine: Sendable, Equatable {
+    enum Speaker: Sendable, Equatable { case opponent, user }
+    let speaker: Speaker
+    let text: String
+}
+
+// MARK: - Argument Simulator (A4)
+
+extension PromptBuilder {
+    /// Turns the prompt carries; the simulator stops at 12 anyway.
+    static let opponentTranscriptLimit = 12
+
+    /// The Argument Simulator's own prompt: the model IS the other person.
+    ///
+    /// Until 1.8.0 the simulator reused the roast prompt, which told the model
+    /// to write "the response *the user* should give back" and to number its
+    /// replies, while the input asked for the other side. Lens 1 (2026-10-22,
+    /// 36 turns): 14/26 model turns spoke as the opponent, 7 flipped to the
+    /// user's side, 12/36 came back numbered.
+    ///
+    /// Stateless per turn: the setup and the transcript so far ride in the
+    /// prompt instead of a cached session, so A3's fresh permissive retry
+    /// keeps the context. No Sharp calibration and no examples: both are
+    /// written as the user and pulled the model to the user's side.
+    /// Instructions for the one call that names the other person before the
+    /// first turn (`RoastEngine.opponentPersona`). Measured 2026-10-31 on lens
+    /// 1's set: without it about half the turns mixed up who held which
+    /// position (the "busy" roommate scolding the user for using busyness as
+    /// an excuse). The examples are deliberately not lens 1's situations.
+    static let opponentPersonaInstructions = """
+        You read a short setup a user wrote about an argument they want to rehearse. Describe THE OTHER PERSON in it, never the user.
+
+        Reply in English with exactly two sentences:
+        1. "You are <who they are to the user>."
+        2. "You <what they do or believe>, and you think you are right because <their own reason>."
+        Write their position from THEIR point of view, as they would defend it. Do not judge them and do not mention the user's feelings.
+
+        Setup: "My neighbor parks in my reserved spot almost every night. I want to ask him to stop. He says it's only for a few minutes."
+        You are the user's neighbor. You park in the user's spot most nights, and you think you are right because you only stay a few minutes and it hurts nobody.
+
+        Setup: "I want to ask my landlord to fix the heater before winter. He keeps saying next month."
+        You are the user's landlord. You keep putting off the heater repair, and you think you are right because repairs are expensive and the heater still works most days.
+
+        Setup: 「朋友跟我借了五千塊，半年都沒還，我想跟她要回來。她說最近手頭很緊。」
+        You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
+        """
+
+    static func opponentPrompt(
+        setup: String,
+        transcript: [ArgumentLine],
+        style: StylePreset,
+        locale: Locale,
+        persona: String? = nil
+    ) -> (system: String, user: String) {
+        let who = persona.map { clipTurn($0, maxWords: 60, maxCharacters: 200) }
+            ?? "the other person described in the user's setup (the manager, the roommate, the parent…)."
+        let system = """
+        You play a character in an argument rehearsal. The user is practising a difficult conversation. You are THE OTHER PERSON in that conversation — not the user, not a coach, not an assistant.
+
+        Language: \(languageHint(for: locale)).
+
+        WHO YOU ARE: \(who) Speak in the first person as yourself, directly to the user ("you"). Argue from YOUR side: what you want, and why you think you are right. Never restate the user's complaint as if it were your own.
+
+        YOUR VOICE: \(style.systemPreamble(for: locale))
+        Apply that voice to how YOU, the other person, talk.
+
+        HOW TO PLAY:
+        - Push back the way this person plausibly would: defend yourself, give your reasons or excuses, deflect, ask for something in return. Do not give in after one line, do not agree to everything, and never take the user's side.
+        - Answer the user's latest line directly. Do not repeat something you already said, and vary how you begin — not every line starts with "You".
+        - Never give the user advice or tell them what to say. Never describe the scene.
+        - One reply only, at most 80 words. No numbering, no name labels, no quotation marks, no stage directions.
+        - Stay civil enough to argue with: no threats, no profanity, no slurs, no insults about who the user is.
+
+        \(universalSafetyPreamble)
+        \(languageEnforcement(for: locale))
+        """
+
+        var lines: [String] = []
+        lines.append("Argument setup, written by the user (\"I\" is the user; you are the other person in it):")
+        lines.append("\"\"\"")
+        lines.append(clipTurn(setup, maxWords: 200, maxCharacters: 600))
+        lines.append("\"\"\"")
+        let recent = transcript.suffix(opponentTranscriptLimit)
+        if recent.isEmpty {
+            lines.append("")
+            lines.append("The conversation is starting. Say the first thing you, the other person, would say to the user.")
+        } else {
+            lines.append("")
+            lines.append("The conversation so far:")
+            for line in recent {
+                let who = line.speaker == .opponent ? "YOU (the other person)" : "USER"
+                lines.append("\(who): \(clipTurn(line.text))")
+            }
+            lines.append("")
+            lines.append("Write YOUR next line as the other person, answering the user's last line.")
+        }
+        lines.append(userLanguageReminder(for: locale))
+        return (system: system, user: lines.joined(separator: "\n"))
+    }
+
+    /// Caps one turn for the prompt: 80 words for spaced scripts, a
+    /// character cap for text without word spaces (Chinese, Japanese).
+    static func clipTurn(_ text: String, maxWords: Int = 80, maxCharacters: Int = 160) -> String {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let words = trimmed.split(whereSeparator: \.isWhitespace)
+        let spaced = words.count > 1 && trimmed.count / words.count < 15
+        if spaced {
+            return words.count > maxWords ? words.prefix(maxWords).joined(separator: " ") : trimmed
+        }
+        return trimmed.count > maxCharacters ? String(trimmed.prefix(maxCharacters)) : trimmed
+    }
+
+    /// Strips what the model sometimes wraps around a single line anyway: a
+    /// speaker label, a list number, outer quotation marks.
+    static func cleanOpponentLine(_ raw: String) -> String {
+        var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        let label = #"^(?:\*\*)?(?:you \(the other person\)|the other person|other person|opponent|them|對方|对方|相手)(?:\*\*)?\s*[:：]\s*"#
+        let number = #"^(?:\d+|[一二三])[.)、．]\s*"#
+        for pattern in [label, number] {
+            if let r = s.range(of: pattern, options: [.regularExpression, .caseInsensitive]) {
+                s.removeSubrange(r)
+            }
+        }
+        let pairs: [(Character, Character)] = [("\"", "\""), ("“", "”"), ("「", "」"), ("『", "』"), ("'", "'")]
+        for (open, close) in pairs where s.count >= 2 && s.first == open && s.last == close {
+            let inner = s.dropFirst().dropLast()
+            // Only an OUTER pair: 「我說了『不行』」 keeps its inner quote.
+            if !inner.contains(open) && !inner.contains(close) {
+                s = String(inner)
+            }
+            break
+        }
+        return s.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

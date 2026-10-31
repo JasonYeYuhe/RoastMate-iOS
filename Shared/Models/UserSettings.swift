@@ -147,6 +147,13 @@ final class UserSettings {
     /// migration; nil = never asked.
     var echoesFeralCloudConsentRaw: String?
 
+    /// 1.8.0 (A7): the Echoes cloud consent, asked again. Grants recorded in
+    /// `echoesFeralCloudConsentRaw` were given under text that named Groq and
+    /// said Casual stays on-device, which was false for the roommate group
+    /// (both tones go to the cloud, through OpenRouter). Those grants are no
+    /// longer read; nil = not asked under the current text.
+    var echoesCloudConsentV2Raw: String?
+
     init() {
         self.id = UUID()
         self.dailyFreeUsed = 0
@@ -171,19 +178,20 @@ final class UserSettings {
         self.proLastVerifiedAt = nil
         self.legacyBalanceBaselineRaw = nil
         self.echoesFeralCloudConsentRaw = nil
+        self.echoesCloudConsentV2Raw = nil
     }
 
-    /// 5.1.2(i) explicit consent for the Echoes Feral cloud path.
-    /// Independent of `cloudConsent` — the user MUST grant separately
-    /// (or it stays `.notAsked` and the Echoes Feral tone falls back
-    /// to on-device, which still works but produces tamer output).
+    /// 5.1.2(i) explicit consent for the Echoes cloud path — since 1.8.0
+    /// retired Classic Echoes (B3), that is the roommate group, both tones.
+    /// Independent of `cloudConsent`. Reads the 1.8.0 key only, so every
+    /// earlier grant is asked again (`echoesCloudConsentV2Raw`).
     var echoesFeralConsent: CloudConsent {
         get {
-            if let raw = echoesFeralCloudConsentRaw,
+            if let raw = echoesCloudConsentV2Raw,
                let c = CloudConsent(rawValue: raw) { return c }
             return .notAsked
         }
-        set { echoesFeralCloudConsentRaw = newValue.rawValue }
+        set { echoesCloudConsentV2Raw = newValue.rawValue }
     }
 
     /// 5.1.2(i) explicit consent for the cloud (third-party-AI) path.

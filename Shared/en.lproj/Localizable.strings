@@ -338,6 +338,9 @@
 "argument.role.you" = "You";
 "argument.input_placeholder" = "Your reply…";
 "argument.turn_limit_reached" = "(Argument limit reached. Tap End to start a new one.)";
+"argument.turn_unavailable" = "The other side couldn't answer that on this device. Try putting it another way.";
+"argument.needs_ai.title" = "Needs Apple Intelligence";
+"argument.needs_ai.body" = "The other side of the argument is played by Apple's on-device model, which this device doesn't have or has turned off. This tool never sends your conversation to the cloud, so it can't run here. Feral and Vent still work.";
 
 // MARK: - Social Roast
 
@@ -548,26 +551,26 @@
 "echoes.setup.privacy_banner" = "Echoes are synthetic. RoastMate doesn't have other users.";
 "echoes.tone.casual" = "Casual";
 "echoes.tone.feral" = "Feral";
-"echoes.tone.casual.blurb" = "Sharp register, light snark. On-device only.";
-"echoes.tone.feral.blurb" = "Fully open register, cursing OK. Cloud routing requires separate consent.";
+"echoes.tone.casual.blurb" = "Light snark, just enough to let it out. Generated in the cloud, like Feral.";
+"echoes.tone.feral.blurb" = "Fully open register, cursing OK. Generated in the cloud.";
 "echoes.voice_count.1" = "1";
 "echoes.voice_count.2" = "2";
-"echoes.transcript.banner" = "Echoes are synthetic voices · not real people · on-device";
+"echoes.transcript.banner" = "Echoes are synthetic voices · not real people";
 "echoes.action.generate" = "Let it out →";
 "echoes.action.regenerate" = "Try another angle";
 "echoes.action.new" = "New session";
 "echoes.action.back" = "Back";
 "echoes.error.generic" = "Echoes couldn't be generated right now. Try again in a moment.";
 
-"echoes.consent.title" = "Send your grievance to the cloud for the Feral squad?";
-"echoes.consent.body" = "Feral tone optionally routes to RoastMate's cloud model (Cloudflare proxy → Groq / OpenRouter) for a stronger register. Casual stays on-device.";
-"echoes.consent.notice" = "Separate from the Vent cloud consent — your prior Vent grant does NOT auto-apply here. Change anytime in Settings → Echoes Feral Cloud.";
-"echoes.consent.allow" = "Allow Feral on the cloud";
-"echoes.consent.deny" = "Stay on-device";
+"echoes.consent.title" = "Send this to the cloud to generate the roommate chat?";
+"echoes.consent.body" = "Both roommate tones, Casual and Feral, are generated in the cloud: what you write goes through RoastMate's server (Cloudflare) to an AI model on OpenRouter. If you don't allow it, the roommate group can't run; everything else works as before.";
+"echoes.consent.notice" = "Separate from the Vent cloud consent. Asked again in 1.8.0 because this description was corrected. Change it anytime in Settings → Roommate group on the cloud.";
+"echoes.consent.allow" = "Allow cloud generation";
+"echoes.consent.deny" = "Don't allow";
 "echoes.consent.cancel" = "Cancel";
 
-"settings.echoes_feral_cloud" = "Echoes Feral on the cloud";
-"settings.echoes_feral_cloud.footer" = "Whether Feral-tone Echoes can route the grievance text to RoastMate's cloud for stronger output. Casual always stays on this device. Separate consent from the Vent cloud setting.";
+"settings.echoes_feral_cloud" = "Roommate group on the cloud";
+"settings.echoes_feral_cloud.footer" = "Both tones of the roommate group are generated in the cloud and need this permission. Separate from the Vent cloud setting.";
 
 /* Roommate group (Echoes vNext) */
 "feature.roommate.title" = "Roommate Group";

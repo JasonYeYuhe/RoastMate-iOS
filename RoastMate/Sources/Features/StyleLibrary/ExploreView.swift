@@ -49,32 +49,17 @@ struct ExploreView: View {
                         config: FeatureGeneratorConfigs.argumentSimulator,
                         destination: AnyView(ArgumentSimulatorView())
                     )
-                    // Echoes / 替你出气 — v1 zh-Hans only per v2 plan §8.
-                    // Other locales don't see the tile; v0.2 adds en /
-                    // zh-Hant / ja persona catalogs and removes this gate.
-                    // Also gated by the remote kill-switch: a fetched
-                    // `echoes_enabled:false` hides the tile (the primary
-                    // gate; EchoesEngine is guarded too). Reading the
-                    // @Observable singleton's `current` in body registers a
-                    // dependency, so a kill applied by the launch refresh
-                    // takes effect immediately (the tile disappears that
-                    // session) and persists across relaunch via the cached
-                    // config. Immediate effect is the goal for a disaster
-                    // kill-switch. (Health audit 2026-05-29 §4.)
-                    if isZhHansLocale() && RemoteConfig.shared.current.echoesEnabled {
-                        toolCard(
-                            config: FeatureGeneratorConfigs.echoes,
-                            destination: AnyView(EchoesView(onBridgeTap: { onContinueGenerator?() }))
-                        )
-                        .accessibilityIdentifier("echoes.tile")
-                    }
+                    // Classic Echoes (替你出气) was retired in 1.8.0 (B3): on
+                    // macOS/iOS 27 Apple's model refused it 22/22 and it showed
+                    // an unlabelled canned transcript. Saved transcripts still
+                    // open from History.
                     // 虚拟舍友群 (Echoes vNext) — cloud-generated 3-roommate group
                     // chat (Apple's on-device FM blocks the harsh roast). LIVE by
                     // default (roommate_group_enabled baked default is TRUE since
                     // c37d393): the tile shows unless the flag is remotely killed,
                     // and echoes must also be on (roommateGroupAllowed).
                     // zh-Hans v1, like classic Echoes.
-                    if isZhHansLocale() && RemoteConfig.shared.current.roommateGroupAllowed {
+                    if EchoesAvailability.roommateTileVisible(remote: RemoteConfig.shared.current) {
                         toolCard(
                             config: FeatureGeneratorConfigs.roommateGroup,
                             destination: AnyView(EchoesView(scene: .roommateGroup, onBridgeTap: { onContinueGenerator?() }))
@@ -135,18 +120,6 @@ struct ExploreView: View {
     /// Echoes v1 is zh-Hans-only — tile only shows when the resolved
     /// locale resolves to zh-Hans. Mirrors how the app picks the
     /// underlying generation locale.
-    private func isZhHansLocale() -> Bool {
-        // If user explicitly picked a language, honor it; otherwise fall
-        // back to the system locale.
-        let id: String
-        if let l = LanguageManager.shared.locale {
-            id = l.identifier.lowercased()
-        } else {
-            id = Locale.current.identifier.lowercased()
-        }
-        return id.contains("hans") || id.hasPrefix("zh-cn") || id == "zh"
-    }
-
     private func toolCard(config: FeatureGeneratorConfig, destination: AnyView) -> some View {
         NavigationLink(destination: destination) {
             VStack(alignment: .leading, spacing: 10) {

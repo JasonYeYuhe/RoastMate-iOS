@@ -289,4 +289,68 @@ final class StoreCopyTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - A7 (1.8.0): Echoes / roommate copy and consent
+
+    private let roommateReachable = [
+        "echoes.consent.title", "echoes.consent.body", "echoes.consent.notice",
+        "echoes.consent.allow", "echoes.consent.deny",
+        "echoes.tone.casual.blurb", "echoes.tone.feral.blurb",
+        "settings.echoes_feral_cloud", "settings.echoes_feral_cloud.footer",
+        "roommate.setup.intro", "roommate.setup.privacy_banner", "roommate.transcript.banner",
+    ]
+
+    /// The roommate group is cloud-only (both tones, OpenRouter). Until 1.8.0
+    /// its consent named Groq (dead since v1.6), said Casual stays on-device,
+    /// and offered "Stay on-device" for a scene that generates nothing without
+    /// the grant.
+    func test_roommateCopy_namesNoGroq_andClaimsNothingOnDevice() throws {
+        let onDevice = try NSRegularExpression(
+            pattern: "(?i)groq|on-device|on this device|stays? on|本机|本機|本设备|本裝置|裝置上|设备上|端末")
+        for key in roommateReachable {
+            for locale in locales {
+                guard let s = string(key, locale) else {
+                    XCTFail("\(locale) is missing \(key)"); continue
+                }
+                XCTAssertNil(onDevice.firstMatch(in: s, range: NSRange(s.startIndex..., in: s)),
+                             "\(locale) \(key): \(s)")
+            }
+        }
+    }
+
+    func test_roommateConsent_namesTheCloudRoute() {
+        for locale in locales {
+            let body = string("echoes.consent.body", locale) ?? ""
+            XCTAssertTrue(body.contains("OpenRouter"), "\(locale) consent body must name OpenRouter")
+            XCTAssertTrue(body.contains("Cloudflare"), "\(locale) consent body must name Cloudflare")
+        }
+    }
+
+    /// The Settings toggle shows only where the roommate tile can (zh-Hans,
+    /// not remotely killed).
+    func test_echoesSurfaces_onlyInSimplifiedChinese_andNotWhenKilled() {
+        let live = RemoteConfigValues.safeDefault
+        XCTAssertTrue(EchoesAvailability.roommateTileVisible(localeIdentifier: "zh-Hans", remote: live))
+        XCTAssertTrue(EchoesAvailability.roommateTileVisible(localeIdentifier: "zh_Hans_CN", remote: live))
+        for id in ["zh-Hant", "zh_TW", "zh-Hant-TW", "en_US", "ja_JP"] {
+            XCTAssertFalse(EchoesAvailability.roommateTileVisible(localeIdentifier: id, remote: live), id)
+        }
+        var killed = live
+        killed.roommateGroupEnabled = false
+        XCTAssertFalse(EchoesAvailability.roommateTileVisible(localeIdentifier: "zh-Hans", remote: killed))
+        var echoesOff = live
+        echoesOff.echoesEnabled = false
+        XCTAssertFalse(EchoesAvailability.roommateTileVisible(localeIdentifier: "zh-Hans", remote: echoesOff))
+    }
+
+    /// Grants recorded before 1.8.0 were given under the false text: they are
+    /// not read, so the consent is asked again.
+    func test_echoesConsent_isVersioned_oldGrantIsAskedAgain() {
+        let settings = UserSettings()
+        settings.echoesFeralCloudConsentRaw = CloudConsent.granted.rawValue
+        XCTAssertEqual(settings.echoesFeralConsent, .notAsked)
+        settings.echoesFeralConsent = .granted
+        XCTAssertEqual(settings.echoesCloudConsentV2Raw, CloudConsent.granted.rawValue)
+        XCTAssertEqual(settings.echoesFeralConsent, .granted)
+    }
 }

@@ -20,6 +20,8 @@ struct ArgumentSimulatorView: View {
                     CrisisSupportView(onDismiss: { viewModel.crisis = false })
                         .padding()
                 }
+            } else if viewModel.needsOnDeviceModel {
+                needsOnDeviceModelView
             } else {
                 switch viewModel.phase {
                 case .setup:
@@ -36,10 +38,29 @@ struct ArgumentSimulatorView: View {
         }
         .onAppear {
             EventLedger.shared.recordFeatureUsageArgumentSimulator()
-            if !isPro {
+            // No paywall for a tool this device can't run.
+            if !isPro, !viewModel.needsOnDeviceModel {
                 EventLedger.shared.recordPaywallImpression(source: .proTap)
                 showPaywall = true
             }
+        }
+    }
+
+    /// C/E (no on-device model): the other side can only be played on-device,
+    /// so say so instead of starting a conversation.
+    private var needsOnDeviceModelView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Image(systemName: "sparkles")
+                    .font(.largeTitle)
+                    .foregroundStyle(.orange)
+                Text("argument.needs_ai.title").font(.headline)
+                Text("argument.needs_ai.body")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
         }
     }
 
@@ -131,17 +152,21 @@ struct ArgumentSimulatorView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
-                    // Pro-gated surface: an unlabelled canned "opponent" is a
-                    // paying user being handed one of five hardcoded lines.
                     if viewModel.crisisBanner {
                         CrisisBanner()
-                    }
-                    if viewModel.curatedNotice {
-                        CuratedNoticeBanner()
                     }
                     ForEach(viewModel.turns) { turn in
                         turnBubble(turn)
                             .id(turn.id)
+                    }
+                    if let error = viewModel.error {
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle").foregroundStyle(.orange)
+                            Text(error).font(.callout)
+                        }
+                        .padding(12)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.orange.opacity(0.12)))
+                        .id("error")
                     }
                     if viewModel.isThinking {
                         HStack {

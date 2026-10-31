@@ -338,6 +338,9 @@
 "argument.role.you" = "あなた";
 "argument.input_placeholder" = "返答…";
 "argument.turn_limit_reached" = "(ターン上限に達しました。終了して新しいリハーサルを始めてください。)";
+"argument.turn_unavailable" = "このデバイスでは相手がその一言に返せませんでした。言い方を変えてもう一度どうぞ。";
+"argument.needs_ai.title" = "Apple Intelligence が必要です";
+"argument.needs_ai.body" = "口論シミュレーターの相手役は Apple のオンデバイスモデルが演じます。このデバイスにはそのモデルがないか、Apple Intelligence がオフになっています。このツールは会話をクラウドに送らないため、ここでは使えません。罵倒と吐き出しは使えます。";
 
 // MARK: - Social Roast
 
@@ -563,5 +566,13 @@
 "sharecard.scenario.marriage_pressure" = "また結婚の話";
 "sharecard.setup_picker_title" = "状況を一言(任意・選択式)";
 "sharecard.setup_none" = "なし";
-"settings.echoes_feral_cloud" = "Echoes 罵倒をクラウドで";
-"settings.echoes_feral_cloud.footer" = "罵倒トーンの Echoes で、入力した内容を RoastMate のクラウドに送ってより強い出力を生成するかどうか。カジュアルは常にこの端末内で処理されます。「吐き出し」のクラウド設定とは別の同意です。";
+"settings.echoes_feral_cloud" = "ルームメイト集合をクラウドで";
+"settings.echoes_feral_cloud.footer" = "ルームメイト集合はどちらのトーンもクラウドで生成するため、この同意が必要です。「吐き出し」のクラウド設定とは別です。";
+"echoes.tone.casual.blurb" = "軽い毒舌で、少し吐き出せば十分。罵倒と同じくクラウドで生成します。";
+"echoes.tone.feral.blurb" = "下品な言葉もありの全開モード。クラウドで生成します。";
+"echoes.consent.title" = "この内容をクラウドに送って、ルームメイトのグループチャットを生成しますか？";
+"echoes.consent.body" = "ルームメイト集合は、カジュアルも罵倒もクラウドで生成します。入力した内容は RoastMate のサーバー（Cloudflare）を経由して、OpenRouter 上の AI モデルに送られます。許可しない場合、ルームメイト集合は使えませんが、ほかの機能はそのまま使えます。";
+"echoes.consent.notice" = "「吐き出し」のクラウド設定とは別の同意です。1.8.0 でこの説明を訂正したため、もう一度確認しています。「設定 → ルームメイト集合をクラウドで」でいつでも変更できます。";
+"echoes.consent.allow" = "許可してクラウドで生成";
+"echoes.consent.deny" = "許可しない";
+"echoes.consent.cancel" = "キャンセル";

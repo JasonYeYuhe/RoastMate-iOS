@@ -338,6 +338,9 @@
 "argument.role.you" = "你";
 "argument.input_placeholder" = "你的回覆……";
 "argument.turn_limit_reached" = "(回合數已滿,點「結束」開新的一場。)";
+"argument.turn_unavailable" = "對方在這台裝置上回不了這句，換個說法再試一次。";
+"argument.needs_ai.title" = "需要 Apple Intelligence";
+"argument.needs_ai.body" = "吵架模擬器的對方由 Apple 的裝置端模型扮演，這台裝置沒有這個模型，或是 Apple Intelligence 沒有開啟。這個工具不會把對話傳到雲端，所以在這裡無法使用。痛罵和發洩一樣可以用。";
 
 // MARK: - Social Roast
 
@@ -562,5 +565,13 @@
 "sharecard.scenario.marriage_pressure" = "又開始催婚";
 "sharecard.setup_picker_title" = "加一句前情(可選,只從下面選)";
 "sharecard.setup_none" = "不加";
-"settings.echoes_feral_cloud" = "Echoes 痛罵檔走雲端";
-"settings.echoes_feral_cloud.footer" = "痛罵語氣的 Echoes 是否可以把你寫的內容送到 RoastMate 的雲端，產生更衝的輸出。日常語氣一律只在這台裝置上處理。和「發洩」的雲端授權是分開的。";
+"settings.echoes_feral_cloud" = "室友群走雲端";
+"settings.echoes_feral_cloud.footer" = "虛擬室友群的兩種語氣都在雲端生成，需要這項授權。和「發洩」的雲端授權是分開的。";
+"echoes.tone.casual.blurb" = "微微毒舌，吐槽一下就夠。和狂怒一樣在雲端生成。";
+"echoes.tone.feral.blurb" = "髒話開放、火力全開。在雲端生成。";
+"echoes.consent.title" = "把這件事傳到雲端，生成室友群聊？";
+"echoes.consent.body" = "室友群的兩種語氣（日常、狂怒）都在雲端生成：你寫的內容會經過 RoastMate 的伺服器（Cloudflare）傳給 OpenRouter 上的 AI 模型。不同意的話，室友群無法使用，其他功能不受影響。";
+"echoes.consent.notice" = "和「發洩」的雲端授權是分開的。1.8.0 更正了這段說明，所以會再問你一次。可以在「設定 → 室友群走雲端」隨時更改。";
+"echoes.consent.allow" = "同意，傳到雲端生成";
+"echoes.consent.deny" = "不同意";
+"echoes.consent.cancel" = "取消";

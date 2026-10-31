@@ -368,9 +368,9 @@ actor RoastEngine {
             EventLedger.shared.recordFailure(category)  // α3
             // A3: a sendable refusal gets one more try under permissive
             // guardrails, on a fresh session, with every variant screened.
-            // Not the Argument Simulator yet: its turns lean on the cached
-            // session for context, which a fresh retry would not have, until
-            // A4 makes its prompt carry the transcript.
+            // `.argument` is excluded: the Argument Simulator no longer comes
+            // through here (`opponentTurn`), and a legacy `.argument` call
+            // leans on the cached session, which a fresh retry would not have.
             if category == .guardrail, !intensity.isPrivateDraft, mode != .argument,
                let retried = try await permissiveRetry(
                    fm: fm, situation: situation, instructions: instructions, user: user,
@@ -420,9 +420,110 @@ actor RoastEngine {
         }
         recordModelOutput()
         return GeneratedOutput(
-            texts: Array(sanitized.prefix(effectiveVariantCount)),
+            texts: Array(PromptBuilder.droppingNearDuplicates(sanitized).prefix(effectiveVariantCount)),
             provenance: .model
         )
+    }
+
+    /// What the Argument Simulator gets for one opponent turn.
+    enum OpponentTurn: Sendable, Equatable {
+        case line(String)
+        /// No on-device model here: the simulator has no other way to play
+        /// the other side (a cloud simulator is cut, plan §5).
+        case unavailable
+        /// Refused, or nothing passed the screens. Never a canned line: a
+        /// curated roast shown as the other person's turn is a fake turn.
+        case notGenerated
+    }
+
+    /// One turn of the Argument Simulator (A4). Stateless: `opponentPrompt`
+    /// carries the setup and the transcript, so every call is a fresh session
+    /// and the roast session is left alone.
+    ///
+    /// Same order as `generateDetailed`'s sendable path: default guardrails
+    /// first; only on a refusal, A3's permissive retry with its input checks
+    /// (on everything the user wrote) and per-turn screens.
+    func opponentTurn(
+        setup: String,
+        transcript: [ArgumentLine],
+        style: StylePreset,
+        locale: Locale,
+        persona: String? = nil
+    ) async throws -> OpponentTurn {
+        let userLines = transcript.filter { $0.speaker == .user }.map(\.text)
+        do {
+            try SafetyFilter.validateInput(setup)
+            if let last = userLines.last { try SafetyFilter.validateInput(last) }
+        } catch let err as SafetyError {
+            throw RoastError.safety(err)
+        }
+        guard let fm, fm.isAvailable else { return .unavailable }
+
+        let prompt = PromptBuilder.opponentPrompt(
+            setup: setup, transcript: transcript, style: style, locale: locale, persona: persona)
+        let content: String
+        do {
+            content = try await fm.respondFresh(
+                instructions: prompt.system, to: prompt.user,
+                temperature: style.temperature, maxTokens: 300)
+        } catch FMBackendError.unavailable {
+            return .unavailable
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            let category: EventLedger.FailureCategory
+            if case FMBackendError.generation(let c) = error { category = c } else { category = .guardrail }
+            EventLedger.shared.recordFailure(category)  // α3
+            let everythingTheUserWrote = ([setup] + userLines).joined(separator: "\n")
+            if category == .guardrail,
+               let retried = try await permissiveRetry(
+                   fm: fm, situation: everythingTheUserWrote, instructions: prompt.system,
+                   user: prompt.user, temperature: style.temperature, count: 1),
+               let first = retried.first {
+                let line = PromptBuilder.cleanOpponentLine(first)
+                return line.isEmpty ? .notGenerated : .line(line)
+            }
+            return .notGenerated
+        }
+
+        var line = PromptBuilder.cleanOpponentLine(content)
+        // A turn that nearly repeats an earlier one gets one more try: the
+        // 10-31 gate run had the same cold_violence line three turns running.
+        let earlier = transcript.filter { $0.speaker == .opponent }.map(\.text)
+        if !earlier.isEmpty, !PromptBuilder.nearDuplicateIndexes(earlier + [line]).isEmpty,
+           let again = try? await fm.respondFresh(
+               instructions: prompt.system,
+               to: prompt.user + "\nYou already said that. Make a different point this time.",
+               temperature: min(style.temperature + 0.1, 1.0), maxTokens: 300) {
+            line = PromptBuilder.cleanOpponentLine(again)
+        }
+        guard !line.isEmpty, !ModelRefusal.looksLikeRefusal(line),
+              let safe = try? SafetyFilter.validateOutput(line) else {
+            EventLedger.shared.recordFailure(.safetyFilter)  // α3
+            return .notGenerated
+        }
+        recordModelOutput()
+        return .line(safe)
+    }
+
+    /// Who the other person is and what they stand for, from their side, in
+    /// two English sentences (`PromptBuilder.opponentPersonaInstructions`).
+    /// Asked once per argument; the simulator passes it to every turn. Never
+    /// shown, so it needs no output screen; nil when it can't be had, and the
+    /// turn prompt falls back to "the other person described in the setup".
+    func opponentPersona(setup: String) async -> String? {
+        guard let fm, fm.isAvailable, SafetyFilter.crisisSignal(setup) == .none else { return nil }
+        let input = PromptBuilder.clipTurn(setup, maxWords: 200, maxCharacters: 600)
+        for guardrails in [FMGuardrails.standard, .permissiveContentTransformations] {
+            guard guardrails == .standard || permissiveRetryAllowed() else { return nil }
+            if let reply = try? await fm.respondFresh(
+                instructions: PromptBuilder.opponentPersonaInstructions, to: input,
+                temperature: 0, maxTokens: 120, guardrails: guardrails),
+               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) {
+                return reply.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+        }
+        return nil
     }
 
     private func recordModelOutput() {
@@ -513,7 +614,7 @@ actor RoastEngine {
         }
         logger.notice("Permissive retry produced \(shown.count, privacy: .public) screened variant(s).")
         recordModelOutput()
-        return shown
+        return PromptBuilder.droppingNearDuplicates(shown)
     }
 
     /// One-word check on the user's INPUT before A3's permissive retry.

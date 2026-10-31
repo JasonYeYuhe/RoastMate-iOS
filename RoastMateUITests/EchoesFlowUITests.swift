@@ -1,17 +1,14 @@
 import XCTest
 
-/// Runtime verification of the Echoes (替你出气) feature wiring. Exercises
-/// the real SwiftUI views in the simulator — complements the pure-logic
-/// unit tests (EchoesParserTests, EchoesFeralConsentGateTests).
+/// Runtime verification of the Echoes wiring after 1.8.0 (B3 + A7): the
+/// Classic Echoes (替你出气) tile is retired, and the roommate group asks the
+/// corrected cloud consent again. Until 1.8.0 these tests drove the classic
+/// tile's canned on-device transcript and its "只用本机生成" button — the
+/// copy A7 found false. The roommate group is cloud-only, so no transcript
+/// is generated here (that needs the Worker); these tests stop at the sheet.
 ///
-/// In the simulator Foundation Models is unavailable, so EchoesEngine
-/// takes the curated-fallback path and renders a deterministic canned
-/// transcript. That's expected — this test verifies UI + navigation +
-/// the Bridge-to-Action deep link, NOT model output quality (which is
-/// covered by the eval harness against the cloud model).
-///
-/// Launches in zh-Hans because the Echoes tile is locale-gated to
-/// Simplified Chinese in v1.
+/// Launches in zh-Hans because the roommate tile is locale-gated to
+/// Simplified Chinese.
 final class EchoesFlowUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
@@ -45,116 +42,34 @@ final class EchoesFlowUITests: XCTestCase {
         libraryTab.tap()
     }
 
-    // MARK: - Test 1: the critical Bridge-to-Action path
+    // MARK: - Test 1: classic retired, roommate group still there
 
-    func test_echoes_setup_generate_bridge_deeplink() {
+    func test_classicEchoesRetired_roommateTileShows() {
         let app = launchZhHans()
         goToLibraryTab(app)
 
-        // 1. Echoes tile is visible (locale-gated zh-Hans).
-        let tile = element(app, "echoes.tile")
-        XCTAssertTrue(tile.waitForExistence(timeout: 10),
-                      "Echoes tile must be visible in zh-Hans Explore.")
-        tile.tap()
-
-        // 2. Setup screen renders with the situation editor + generate button.
-        let situation = element(app, "echoes.situation")
-        XCTAssertTrue(situation.waitForExistence(timeout: 10),
-                      "Echoes setup situation editor must render.")
-        situation.tap()
-        situation.typeText("室友半夜三点还在打游戏开外放")
-
-        let generate = element(app, "echoes.generate")
-        XCTAssertTrue(generate.waitForExistence(timeout: 5),
-                      "Generate button must render.")
-        // Dismiss the keyboard by tapping the nav bar (safe — won't hit
-        // the tone/voice pickers and accidentally flip to Feral).
-        app.navigationBars.firstMatch.tap()
-        // Scroll the button into a hittable position if the keyboard /
-        // layout left it off-screen.
-        var scrollTries = 0
-        while !generate.isHittable && scrollTries < 4 {
-            app.swipeUp()
-            scrollTries += 1
-        }
-        generate.tap()
-
-        // 3. Transcript reveals — the bridge bubble appears after the
-        //    message-by-message reveal (curated fallback = ~5 msgs ×
-        //    600ms). Generous timeout covers generation + reveal.
-        let bridge = element(app, "echoes.bridge")
-        // The message-by-message reveal animation keeps the app from
-        // reporting "idle", so waitForExistence stalls mid-reveal. Poll
-        // bridge.exists once a second (re-queries each tick) up to 30s.
-        var revealTries = 0
-        while !bridge.exists && revealTries < 30 {
-            sleep(1)
-            revealTries += 1
-        }
-        XCTAssertTrue(bridge.exists,
-                      "Bridge-to-Action bubble must appear at the end of the transcript reveal.")
-
-        // 4. Tap the bridge → app switches to Generator tab + pre-fills.
-        bridge.tap()
-
-        // The Generator's situation editor has identifier
-        // "situation_editor" (verified in RoastGeneratorView.swift). After
-        // the bridge deep-link, the tab switches and EchoBridgeStore
-        // pre-fills the original grievance. Poll for the editor + its
-        // pre-filled content (the tab transition isn't instant).
-        let generatorSituation = app.textViews["situation_editor"]
-        XCTAssertTrue(generatorSituation.waitForExistence(timeout: 10),
-                      "Tapping the bridge must land on the Generator tab (its situation editor must exist).")
-        var prefillTries = 0
-        var value = (generatorSituation.value as? String) ?? ""
-        while !(value.contains("室友") || value.contains("外放")) && prefillTries < 10 {
-            sleep(1)
-            value = (generatorSituation.value as? String) ?? ""
-            prefillTries += 1
-        }
-        XCTAssertTrue(value.contains("室友") || value.contains("外放"),
-                      "Bridge deep-link must pre-fill the Generator situation with the original grievance. Got: \(value)")
+        let roommate = element(app, "roommate.tile")
+        XCTAssertTrue(roommate.waitForExistence(timeout: 10),
+                      "The roommate group tile must still show in zh-Hans Explore.")
+        XCTAssertFalse(element(app, "echoes.tile").exists,
+                       "Classic Echoes (替你出气) is retired in 1.8.0.")
     }
 
-    // MARK: - Test 2: Feral tone triggers the dedicated consent sheet
+    // MARK: - Test 2: the roommate group asks the corrected consent
 
-    func test_echoes_feral_triggers_consent_sheet() {
-        let app = launchZhHans()
+    func test_roommate_asksTheCorrectedCloudConsent() {
+        let app = launchZhHans()  // -uitest resets the consent to notAsked
         goToLibraryTab(app)
 
-        let tile = element(app, "echoes.tile")
+        let tile = element(app, "roommate.tile")
         XCTAssertTrue(tile.waitForExistence(timeout: 10))
         tile.tap()
 
-        let situation = app.textViews.firstMatch
+        let situation = element(app, "echoes.situation")
         XCTAssertTrue(situation.waitForExistence(timeout: 10))
         situation.tap()
         situation.typeText("同事又把我的方案抢去邀功")
-
-        // CRITICAL ORDERING: dismiss the keyboard BEFORE tapping the tone
-        // segment. The tone picker sits just below the text editor; with
-        // the keyboard up, a tap on 狂怒 lands on the keyboard instead,
-        // tone stays Casual, no consent is needed, and the sheet never
-        // shows — which is the bug that made this test fail repeatedly.
         app.navigationBars.firstMatch.tap()
-
-        // Switch tone to Feral (狂怒). Segmented-control segments can
-        // surface as plain buttons or under the segmentedControls query
-        // depending on iOS version; prefer the segmented query.
-        let feralInSeg = app.segmentedControls.buttons["狂怒"]
-        let feralPlain = app.buttons["狂怒"]
-        if feralInSeg.waitForExistence(timeout: 3) {
-            feralInSeg.tap()
-        } else if feralPlain.waitForExistence(timeout: 2) {
-            feralPlain.tap()
-        }
-        XCTAssertTrue(feralInSeg.exists || feralPlain.exists,
-                      "Feral (狂怒) tone segment must be present to select.")
-        // Confirm the tone actually flipped: the setup blurb switches to
-        // the feral copy. If this is missing, the tap missed and the rest
-        // of the test would fail confusingly downstream.
-        XCTAssertTrue((feralInSeg.isSelected || feralPlain.isSelected),
-                      "狂怒 segment must read as selected after the tap.")
 
         let generate = element(app, "echoes.generate")
         XCTAssertTrue(generate.waitForExistence(timeout: 5))
@@ -165,32 +80,22 @@ final class EchoesFlowUITests: XCTestCase {
         }
         generate.tap()
 
-        // The first Feral generation presents the dedicated consent
-        // sheet (5.1.2(i) — separate from the Vent cloud consent). The
-        // sheet presents during the generation kick-off which keeps the
-        // app non-"idle", so waitForExistence stalls — poll .exists
-        // instead (same fix as the bridge bubble in test 1).
-        let denyButton = app.buttons["只用本机生成"]
-        let allowButton = app.buttons["允许 Feral 走云端"]
+        // Poll .exists: the sheet presents while the app is not idle.
+        let allow = app.buttons["同意，发到云端生成"]
+        let deny = app.buttons["不同意"]
         var sheetTries = 0
-        while !(denyButton.exists || allowButton.exists) && sheetTries < 15 {
+        while !(allow.exists || deny.exists) && sheetTries < 15 {
             sleep(1)
             sheetTries += 1
         }
-        XCTAssertTrue(denyButton.exists || allowButton.exists,
-                      "First Feral selection must present the dedicated Echoes Feral cloud-consent sheet.")
+        XCTAssertTrue(allow.exists && deny.exists,
+                      "The roommate group must present the corrected cloud-consent sheet.")
+        XCTAssertFalse(app.buttons["只用本机生成"].exists,
+                       "The old deny button promised on-device generation the roommate group never does.")
+        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "OpenRouter")).firstMatch.exists,
+                      "The consent body must name OpenRouter.")
 
-        // Deny → should still generate on-device without crashing.
-        if denyButton.exists { denyButton.tap() }
-
-        // After denying, a Casual/on-device transcript should still
-        // eventually produce a bridge bubble (or stay usable).
-        let bridge = element(app, "echoes.bridge")
-        // Not strictly required to appear on deny path in v1 (deny returns
-        // to setup), so we only assert the app didn't crash — the tile/
-        // setup is still reachable.
-        _ = bridge.waitForExistence(timeout: 8)
-        XCTAssertTrue(app.state == .runningForeground,
-                      "App must remain alive after denying Feral cloud consent.")
+        deny.tap()
+        XCTAssertTrue(app.state == .runningForeground, "Denying must leave the app usable.")
     }
 }

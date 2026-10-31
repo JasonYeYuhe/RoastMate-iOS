@@ -29,16 +29,21 @@ final class ArgumentSimulatorViewModel {
     var turns: [ArgumentTurn] = []
     var isThinking: Bool = false
     var error: String? = nil
-    /// True when the opponent's turns are curated fallback text rather than
-    /// model output. This surface is Pro-gated, so an unlabelled canned
-    /// "opponent" is a paying user being handed one of five hardcoded lines.
-    var curatedNotice: Bool = false
     /// The user's setup or reply signalled self-harm (`SafetyFilter.crisisSignal`
     /// `.hard`): the view shows crisis support instead of continuing the
     /// argument, as the generators do. Nothing is generated for that text.
     var crisis: Bool = false
     /// `.soft` signal: the argument continues, with the supportive banner.
     var crisisBanner: Bool = false
+    /// The other side is played by the on-device model only. Without it (no
+    /// Apple Intelligence, or an iOS 18 device) the view explains that
+    /// instead of starting; until 1.8.0 it played canned roast lines as the
+    /// "opponent" there.
+    var needsOnDeviceModel: Bool = !RoastEngine.isOnDeviceModelAvailable
+
+    /// Who the other person is, from their side (`RoastEngine.opponentPersona`),
+    /// asked once when the argument starts and passed to every turn.
+    private var persona: String?
 
     private let logger = Logger(subsystem: "yyh.roastmate.app", category: "ArgumentSim")
     private let maxTurns = 12
@@ -55,10 +60,8 @@ final class ArgumentSimulatorViewModel {
         isThinking = true
         defer { isThinking = false }
 
-        await RoastEngine.shared.resetConversation()
-        let consent = HistoryService.userSettings(context: context).cloudConsent
-        let opening = await generateAIOpening(setup: setupText, style: style, locale: locale, consent: consent)
-        guard let opening else { return }
+        persona = await RoastEngine.shared.opponentPersona(setup: setupText)
+        guard let opening = await nextOpponentLine(setup: setupText, transcript: [], style: style, locale: locale) else { return }
         turns = [ArgumentTurn(role: .ai, text: opening)]
         phase = .running
 
@@ -86,6 +89,7 @@ final class ArgumentSimulatorViewModel {
             self.error = error.localizedDescription
             return
         }
+        error = nil
         turns.append(ArgumentTurn(role: .user, text: trimmed))
         guard turns.count < maxTurns else {
             turns.append(ArgumentTurn(
@@ -99,9 +103,11 @@ final class ArgumentSimulatorViewModel {
         isThinking = true
         defer { isThinking = false }
 
-        let consent = HistoryService.userSettings(context: context).cloudConsent
-        let response = await generateAIResponse(style: style, locale: locale, consent: consent)
-        if let response {
+        let transcript = turns.map {
+            ArgumentLine(speaker: $0.role == .ai ? .opponent : .user, text: $0.text)
+        }
+        let setupText = setup.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let response = await nextOpponentLine(setup: setupText, transcript: transcript, style: style, locale: locale) {
             turns.append(ArgumentTurn(role: .ai, text: response))
         }
     }
@@ -109,8 +115,9 @@ final class ArgumentSimulatorViewModel {
     func endArgument() {
         phase = .setup
         turns = []
+        persona = nil
+        error = nil
         crisisBanner = false
-        Task { await RoastEngine.shared.resetConversation() }
     }
 
     /// Same two-tier self-harm handoff as `RoastGeneratorViewModel`: `.hard`
@@ -133,57 +140,22 @@ final class ArgumentSimulatorViewModel {
 
     // MARK: - Generation
 
-    private func generateAIOpening(setup: String, style: StylePreset, locale: Locale,
-                                   consent: CloudConsent) async -> String? {
-        let opener = """
-        I want to rehearse the following argument:
-
-        \(setup)
-
-        Play the OTHER side. Give the first thing the other person would say to me in this argument. Keep it under 80 words. Stay in character. One reply only — no commentary, no quotation marks.
-        """
-        return await runEngine(input: opener, style: style, locale: locale, consent: consent)
-    }
-
-    private func generateAIResponse(style: StylePreset, locale: Locale,
-                                    consent: CloudConsent) async -> String? {
-        let myLast = turns.last { $0.role == .user }?.text ?? ""
-        let input = """
-        The other person (me) just said: "\(myLast)"
-
-        Continue playing the OTHER side. Reply to my last line, in character, in the same style. Keep it under 80 words. One reply only — no commentary, no quotation marks.
-        """
-        return await runEngine(input: input, style: style, locale: locale, consent: consent)
-    }
-
-    private func runEngine(input: String, style: StylePreset, locale: Locale,
-                           consent: CloudConsent) async -> String? {
+    /// On-device only, stateless per turn (`RoastEngine.opponentTurn`). A turn
+    /// that can't be written shows a message, never a canned line.
+    private func nextOpponentLine(setup: String, transcript: [ArgumentLine],
+                                  style: StylePreset, locale: Locale) async -> String? {
         do {
-            // Track 0.2 fix: this surface never resolved cloud permission, so
-            // on an iOS-18 device with no on-device model it failed rather than
-            // falling back to cloud. `.argument` uses the default sendable
-            // intensity, so the sendable-cloud flag governs. No consent PROMPT
-            // here (that UI lives in the generator tab) — without a prior grant
-            // this resolves false and stays on-device, as before.
-            let cloud = CloudPermission.resolve(intensity: .sharp, consent: consent, locale: locale)
-            let output = try await RoastEngine.shared.generateDetailed(
-                situation: input,
-                style: style,
-                locale: locale,
-                variantCount: 1,
-                mode: .argument,
-                keepSession: true,
-                cloudVentEnabled: cloud.cloudAllowed
-            )
-            curatedNotice = output.isCurated
-            let first = output.texts.first?
-                .trimmingCharacters(in: CharacterSet(charactersIn: "\"'"))
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            if first == nil || first?.isEmpty == true {
-                error = String(localized: "roast.error.no_variants")
+            switch try await RoastEngine.shared.opponentTurn(
+                setup: setup, transcript: transcript, style: style, locale: locale, persona: persona) {
+            case .line(let text):
+                return text
+            case .unavailable:
+                needsOnDeviceModel = true
+                return nil
+            case .notGenerated:
+                error = String(localized: "argument.turn_unavailable")
                 return nil
             }
-            return first
         } catch let err as RoastError {
             error = err.errorDescription
             return nil

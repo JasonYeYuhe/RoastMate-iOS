@@ -306,7 +306,7 @@ final class ScreenshotTests: XCTestCase {
         // not yet granted (fresh install via the runner script). Accept it.
         // If state carried over and it's already granted, the sheet just
         // never shows — poll briefly, then move on either way.
-        let allow = app.buttons["允许 Feral 走云端"]
+        let allow = app.buttons["同意，发到云端生成"]  // 1.8.0 consent text (A7)
         var consentTries = 0
         while !allow.exists && consentTries < 10 {
             sleep(1)
@@ -338,6 +338,8 @@ final class ScreenshotTests: XCTestCase {
         }
 
         // ── Scene 6: classic 替你出气 transcript ──
+        // Retired in 1.8.0 (B3): the tile no longer exists, so the guard
+        // below ends the run here.
         let back = app.navigationBars.buttons.firstMatch
         if back.exists { back.tap() }
         let echoesTile = anyElement(app, "echoes.tile")
@@ -505,7 +507,7 @@ final class ScreenshotTests: XCTestCase {
         }
         generate.tap()
 
-        let allow = app.buttons["允许 Feral 走云端"]
+        let allow = app.buttons["同意，发到云端生成"]  // 1.8.0 consent text (A7)
         var consentTries = 0
         while !allow.exists && consentTries < 10 {
             sleep(1)
@@ -577,7 +579,7 @@ final class ScreenshotTests: XCTestCase {
 
         // Roommate is cloud-only -> consent sheet first; accept it, then the
         // fixture renders instantly (no network).
-        let allow = app.buttons["允许 Feral 走云端"]
+        let allow = app.buttons["同意，发到云端生成"]  // 1.8.0 consent text (A7)
         var c = 0
         while !allow.exists && c < 8 { sleep(1); c += 1 }
         if allow.exists { allow.tap() }
