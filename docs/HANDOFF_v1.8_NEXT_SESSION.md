@@ -47,9 +47,10 @@ Release material: `build/v1.8.0-release-notes{,-mac}.md` (gitignored),
 Temporary device `RoastMate-iOS18` (iOS 18.5, clone of Soundpost-iOS18) for the
 class-C UI run; delete it after: `xcrun simctl delete 79415AE4-D1AA-4C77-93BA-54C4CA2B17E2`.
 
-Still to do before submit: version bump to 1.8.0 (build 28); Release UI runs
-(`PaywallFlowUITests` on RoastMate-UITests, `DeviceHonestyUITests` on
-RoastMate-iOS18); Jason approves A9 and checks the OpenRouter privacy setting;
+Done since: version 1.8.0 (28); Release UI runs pass (`release-1.8.0/README.md`);
+**build 28 uploaded for iOS and macOS** (Xcode 27.1, 10-31 18:57), so it is in
+TestFlight for Jason's iOS 27 iPhone check. No version record, nothing submitted.
+Still to do before submit: Jason approves A9 and checks the OpenRouter privacy setting;
 ASC web: subscription descriptions; product-page lines + promo text
 (`asc_product_page.py`, dry run first, `--app-id 6769317103`).
 
