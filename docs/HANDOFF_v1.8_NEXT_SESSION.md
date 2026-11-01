@@ -35,11 +35,13 @@ production is not true until you measure it.
   November 1, 2026"; live, checked). Jason approved by delegation 11-01.
 - Product page text (description + promotional text, 4 locales) written on both
   1.8.0 versions; reviewer notes set (3980/4000).
-- **Still Jason's:** OpenRouter → Settings → Privacy → turn OFF "Allow free
-  endpoints that train on request data" (it is ON; production only uses paid
-  Qwen models, so nothing breaks; the agent's click was blocked as an account
-  setting change). Real-iPhone iOS 27 check via TestFlight build 28; a zh-Hant
+- OpenRouter "Allow free endpoints that train on request data" is OFF (Jason,
+  11-01). Keep it off: the published privacy policy says vent text is not used
+  for training, so any `:free` model that needs this switch is ruled out.
+- **Still Jason's:** real-iPhone iOS 27 check via TestFlight build 28; a zh-Hant
   native read of the new copy.
+- Review watch: scheduled task `roastmate-180-review-watch` (every 3h, read-only
+  ASC API) reports state changes and disables itself once both are live.
 - When live: tag `v1.8.0`. 11-15: read the v1.7 stop rule and write the one-page
   brief (plan §2.1) — no code for a slot item before Jason picks.
 - Delete the temporary device: `xcrun simctl delete 79415AE4-D1AA-4C77-93BA-54C4CA2B17E2`.
