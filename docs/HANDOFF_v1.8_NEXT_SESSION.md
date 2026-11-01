@@ -38,6 +38,7 @@ production is not true until you measure it.
 - OpenRouter "Allow free endpoints that train on request data" is OFF (Jason,
   11-01). Keep it off: the published privacy policy says vent text is not used
   for training, so any `:free` model that needs this switch is ruled out.
+  **Jason confirmed 11-02: stay on the paid Qwen models** (no `:free` switch).
 - **Still Jason's:** real-iPhone iOS 27 check via TestFlight build 28; a zh-Hant
   native read of the new copy.
 - Review watch: scheduled task `roastmate-180-review-watch` (every 3h, read-only
