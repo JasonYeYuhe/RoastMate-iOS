@@ -25,6 +25,29 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-02 — still in review; tag target and post-launch check ready
+
+Checked 11-01 17:00 UTC: both 1.8.0 rows WAITING_FOR_REVIEW (build 28); Worker
+`046f2134`; remote config unchanged; `roastmate-180-review-watch` ran OK at 15:05Z.
+
+- **Build 28 = `cd1667d`.** Checked against the shipped iOS dSYM, not taken from
+  the commit log. `cd1667d` added 4 lines to `RoastMateApp.swift` (168 → 172),
+  and `build/RoastMate.xcarchive`'s line table has entries at 169–171, so the
+  archive contains them. The commits after it are docs only. Previous tags are
+  lightweight. When both platforms are live:
+  `git tag v1.8.0 cd1667d && git push origin v1.8.0`.
+- **Store text:** the 1.8.0 description and promotional text match
+  `metadata/<locale>/` in all 8 places (2 platforms × 4 locales).
+- **Subscription descriptions:** the new text (8 rows) is PREPARE_FOR_SUBMISSION.
+  The old "Unlimited generations" rows are still APPROVED, and the StoreKit sheet
+  keeps showing them until approval. The iOS review submission has 3 items: the
+  version plus two items the API doesn't label, which fits the two subscriptions.
+  **After launch**, run
+  `python3 docs/evidence/2026-10-27-v18-plan/release-1.8.0/check_live_text.py`
+  (read-only). It should show only the new text as APPROVED, with no
+  `<- old text` rows. If old rows are still there, the subscription edits weren't
+  reviewed with the version, and the fix is in the ASC web UI (Jason).
+
 ## Update 2026-11-01 — 1.8.0 SUBMITTED (iOS + macOS, build 28)
 
 - **WAITING_FOR_REVIEW on both platforms**, submitted 2026-11-01 08:03 UTC,
