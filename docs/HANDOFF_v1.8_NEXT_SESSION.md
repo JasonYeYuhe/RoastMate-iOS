@@ -25,6 +25,25 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-01 — 1.8.0 SUBMITTED (iOS + macOS, build 28)
+
+- **WAITING_FOR_REVIEW on both platforms**, submitted 2026-11-01 08:03 UTC,
+  release AFTER_APPROVAL. Built from `de2fbc6`+ (build 28, Xcode 27.1).
+- The iOS submission also carries both Pro subscriptions' new descriptions
+  (4 locales each, "Unlimited generations" gone), entered in the ASC web UI.
+- **A9 privacy policy published** (Pages repo `f92765b`, "Last updated:
+  November 1, 2026"; live, checked). Jason approved by delegation 11-01.
+- Product page text (description + promotional text, 4 locales) written on both
+  1.8.0 versions; reviewer notes set (3980/4000).
+- **Still Jason's:** OpenRouter → Settings → Privacy → turn OFF "Allow free
+  endpoints that train on request data" (it is ON; production only uses paid
+  Qwen models, so nothing breaks; the agent's click was blocked as an account
+  setting change). Real-iPhone iOS 27 check via TestFlight build 28; a zh-Hant
+  native read of the new copy.
+- When live: tag `v1.8.0`. 11-15: read the v1.7 stop rule and write the one-page
+  brief (plan §2.1) — no code for a slot item before Jason picks.
+- Delete the temporary device: `xcrun simctl delete 79415AE4-D1AA-4C77-93BA-54C4CA2B17E2`.
+
 ## Update 2026-10-31 (afternoon) — 1.8.0 built, not yet submitted
 
 Branch `feature/v1.4-track-b`. Production unchanged (Worker `046f2134`, remote
