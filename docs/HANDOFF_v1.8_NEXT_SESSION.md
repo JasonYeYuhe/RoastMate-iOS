@@ -25,6 +25,32 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-03 — iOS 1.8.0 (28) REJECTED 2.1(b); macOS 1.8.0 (28) LIVE; build 29 uploaded
+
+- **macOS 1.8.0 (28) is READY_FOR_SALE** (approved 11-02). **iOS 1.8.0 (28) REJECTED**,
+  submission `da992ccb…` UNRESOLVED_ISSUES: "when we tried to purchase the
+  subscriptions the app showed an error message" (iPhone 17 Pro Max, iOS 27.2,
+  sandbox; no screenshot mentioned). Full record, what was ruled out, and a draft
+  Resolution Center reply: `docs/evidence/2026-10-27-v18-plan/release-1.8.0/rejection-2026-11-02.md`.
+- **Suspected cause (not proven):** `product.purchase()` with no UI context.
+  **Fix `f29e666`:** the paywall passes SwiftUI's `@Environment(\.purchase)` into
+  `StoreService.purchase(_:using:)` / `purchaseCredits(_:using:)`; failures are
+  logged in full. Release `PaywallFlowUITests` (SKTestSession, iOS 27.0) 2/2 pass.
+  SKTestSession runs with dialogs disabled, so the window/scene path is checked
+  only by a real sandbox purchase.
+- **Build 29 uploaded** 11-03 16:58 JST (iOS only, Xcode 27.1; symbols for the new
+  path verified in the archive). Build 28's iOS archive kept at
+  `build/RoastMate-v180-b28.xcarchive`.
+- **Tag:** `v1.8.0` still goes on `cd1667d` (macOS 28 is the live 1.8.0 binary).
+  If iOS 29 ships, also tag `v1.8.0-ios29` on `f29e666`.
+- **Before resubmitting (gate):** Jason's TestFlight purchase on his iPhone —
+  build 28 (does it reproduce?) and build 29 (must succeed); Jason confirms the
+  Paid Apps Agreement is Active (ASC → Business; no API). Resubmit = attach build
+  29 to iOS 1.8.0 and re-submit the same submission `da992ccb…`, which keeps the two
+  subscription-description items (the API can't re-add them). Rollback before
+  review starts: cancel that submission.
+- The Resolution Center reply is in Jason's name: only with his OK of the text.
+
 ## Update 2026-11-02 — still in review; tag target and post-launch check ready
 
 Checked 11-01 17:00 UTC: both 1.8.0 rows WAITING_FOR_REVIEW (build 28); Worker
