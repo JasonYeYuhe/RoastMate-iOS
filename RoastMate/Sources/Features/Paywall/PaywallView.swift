@@ -32,6 +32,8 @@ struct PaywallView: View {
     /// A6: intro-offer eligibility per plan, resolved before the trial line
     /// renders. Missing = unknown = no trial line.
     @State private var trialEligible: [String: Bool] = [:]
+    /// Confirms purchases in this sheet's scene (see `StoreService.Purchaser`).
+    @Environment(\.purchase) private var purchaseAction
 
     private var settings: UserSettings {
         settingsQuery.first ?? HistoryService.userSettings(context: context)
@@ -194,7 +196,7 @@ struct PaywallView: View {
         let credits = CreditCatalog.credits(forProductID: product.id) ?? 0
         let isBest = CreditCatalog.Pack(rawValue: product.id)?.isBestValue ?? false
         return Button {
-            buy { try await store.purchaseCredits(product) }
+            buy { try await store.purchaseCredits(product, using: { try await purchaseAction($0) }) }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
@@ -312,7 +314,7 @@ struct PaywallView: View {
 
     private func productRow(_ product: Product) -> some View {
         Button {
-            buy { try await store.purchase(product) }
+            buy { try await store.purchase(product, using: { try await purchaseAction($0) }) }
         } label: {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {

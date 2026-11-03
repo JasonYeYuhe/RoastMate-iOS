@@ -86,13 +86,23 @@ final class StoreService {
         }
     }
 
+    /// Starts the App Store purchase. The paywall passes SwiftUI's
+    /// `@Environment(\.purchase)`, which confirms the purchase in the
+    /// paywall's own scene — Apple's purchase API for SwiftUI apps. Until
+    /// 1.8.0 (build 28) this was `product.purchase()` with no UI context,
+    /// which leaves StoreKit to pick a window. App Review's sandbox purchase
+    /// on iOS 27.2 (iPhone 17 Pro Max) failed with an error on 2026-11-02
+    /// (2.1(b)); the cause was not disclosed, and the scene-less call is the
+    /// suspect, not a proven one.
+    typealias Purchaser = @MainActor (Product) async throws -> Product.PurchaseResult
+
     /// Subscription purchase (Pro). Entitlement handling is unchanged; 1.7.1
     /// returns what happened so the paywall can say so instead of going
     /// silent on Ask to Buy (`.pending`) or a failed verification.
     @discardableResult
-    func purchase(_ product: Product) async throws -> PurchaseOutcome {
+    func purchase(_ product: Product, using purchaser: Purchaser) async throws -> PurchaseOutcome {
         EventLedger.shared.recordPurchaseAttempt()  // A′
-        let result = try await product.purchase()
+        let result = try await run(purchaser, product)
         switch result {
         case .success(let verification):
             switch verification {
@@ -121,10 +131,10 @@ final class StoreService {
     /// the write, StoreKit keeps the transaction in `Transaction
     /// .unfinished` and it is recovered on the next settle.
     @discardableResult
-    func purchaseCredits(_ product: Product) async throws -> PurchaseOutcome {
+    func purchaseCredits(_ product: Product, using purchaser: Purchaser) async throws -> PurchaseOutcome {
         guard CreditCatalog.credits(forProductID: product.id) != nil else { return .cancelled }
         EventLedger.shared.recordPurchaseAttempt()  // A′
-        let result = try await product.purchase()
+        let result = try await run(purchaser, product)
         switch result {
         case .success(.verified):
             EventLedger.shared.recordPurchaseCompleted()  // A′
@@ -139,6 +149,20 @@ final class StoreService {
             return .pending
         @unknown default:
             return .cancelled
+        }
+    }
+
+    /// Runs the purchase and logs a failure in full before rethrowing. The
+    /// paywall shows only `localizedDescription`, which for several StoreKit
+    /// errors is a generic sentence; the log keeps the case for a sysdiagnose.
+    private func run(_ purchaser: Purchaser, _ product: Product) async throws -> Product.PurchaseResult {
+        do {
+            return try await purchaser(product)
+        } catch {
+            if !Self.isUserCancellation(error) {
+                logger.error("Purchase of \(product.id, privacy: .public) failed: \(String(describing: error), privacy: .public)")
+            }
+            throw error
         }
     }
 
