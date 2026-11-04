@@ -6,6 +6,46 @@ subscriptions the app showed an error message". The message mentions no
 screenshot. macOS 1.8.0 (28), with the same paywall and `StoreService`, was
 approved the same day and is READY_FOR_SALE.
 
+## Update 11-04 — the reviewer's screenshot settles it
+
+The submission carried two screenshots (missed at first: ASC was signed out in
+Chrome). `review-Screenshot-1102-165859.png` (in this dir) shows the App Store's
+own system alert over our paywall: **"Your account is temporarily unavailable.
+Try again later. [Environment: Sandbox]"**. That is the review device's sandbox
+account, not RoastMate: StoreKit presented its UI in our window fine, so the
+scene-less-call suspicion below is **wrong**. Other developers report the same
+alert in review with purchases working elsewhere (developer.apple.com/forums/thread/111038,
+/723256). The second screenshot (`…165902`) would not download (Chrome blocked a
+second automatic download); it was taken 3 s later, so it most likely shows our
+"Purchase didn't go through" alert after OK.
+
+- Paid Apps Agreement: **Active**, Oct 14, 2026 – Mar 19, 2027 (ASC → Business).
+- Build 29 (`f29e666`) kept anyway: `PurchaseAction` is the documented SwiftUI API,
+  passes the Release paywall UI tests, and logs a failed purchase in full.
+- 11-04: build 29 attached to iOS 1.8.0 (API, 204). The reply below was typed into
+  Resolution Center, checked exact, but **sending it was blocked by the session's
+  permission classifier** — Jason presses Reply. Resubmit: see the handoff.
+
+Reply as typed (replaces the draft at the bottom):
+
+> Hello, and thank you for the review and the screenshots.
+>
+> The screenshot shows the App Store's own sandbox alert: "Your account is
+> temporarily unavailable. Try again later. [Environment: Sandbox]". This message
+> is shown by the App Store and refers to the sandbox account on the review
+> device; RoastMate does not produce it.
+>
+> We checked our side: both subscriptions (RoastMate Pro Monthly and RoastMate Pro
+> Yearly) are approved and included in this submission, the Paid Applications
+> Agreement is active, and the purchase flow completes in StoreKit testing on
+> iOS 27. In build 29 the paywall also starts purchases with StoreKit's SwiftUI
+> purchase action and records the full error if a purchase fails.
+>
+> Could you please try the purchase again, with a different sandbox account if
+> this one is still unavailable?
+>
+> Thank you.
+
 ## Checked (read-only, 11-02)
 
 | question | answer | how |

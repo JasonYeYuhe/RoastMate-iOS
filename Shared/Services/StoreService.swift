@@ -90,10 +90,12 @@ final class StoreService {
     /// `@Environment(\.purchase)`, which confirms the purchase in the
     /// paywall's own scene — Apple's purchase API for SwiftUI apps. Until
     /// 1.8.0 (build 28) this was `product.purchase()` with no UI context,
-    /// which leaves StoreKit to pick a window. App Review's sandbox purchase
-    /// on iOS 27.2 (iPhone 17 Pro Max) failed with an error on 2026-11-02
-    /// (2.1(b)); the cause was not disclosed, and the scene-less call is the
-    /// suspect, not a proven one.
+    /// which leaves StoreKit to pick a window. It was changed after App
+    /// Review's sandbox purchase on iOS 27.2 failed on 2026-11-02 (2.1(b)),
+    /// but the reviewer's screenshot then showed the App Store's own alert
+    /// ("Your account is temporarily unavailable. [Environment: Sandbox]")
+    /// presented over the paywall, so the old call was not the cause; this
+    /// stays because it is the documented API.
     typealias Purchaser = @MainActor (Product) async throws -> Product.PurchaseResult
 
     /// Subscription purchase (Pro). Entitlement handling is unchanged; 1.7.1

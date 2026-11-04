@@ -25,6 +25,27 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-04 — iOS 1.8.0 (29) RESUBMITTED, WAITING_FOR_REVIEW
+
+- **Cause, from the reviewer's screenshot** (`release-1.8.0/review-Screenshot-1102-165859.png`):
+  the App Store's own alert "Your account is temporarily unavailable. Try again
+  later. [Environment: Sandbox]" — the review device's sandbox account, not our
+  code. The 11-03 "scene-less purchase call" suspicion below is wrong (StoreKit
+  presented its UI in our window). Build 29's `PurchaseAction` stays as the
+  documented API; the comment in `StoreService.swift` now says so.
+- Paid Apps Agreement **Active** (Oct 14, 2026 – Mar 19, 2027), checked in ASC.
+- **Resubmitted 11-04 02:21 UTC** (Jason: "直接做"): build 29 attached to iOS 1.8.0,
+  the rejected item marked `resolved: true` (PATCH `/v1/reviewSubmissionItems/{id}`
+  — without it the submit 409s "Version is not ready to be submitted yet"), then
+  `submitted: true` on the same submission `da992ccb…`. All 3 items (version +
+  both subscriptions) READY_FOR_REVIEW. Rollback before review: Cancel Submission.
+- **Resolution Center reply NOT sent:** typed and checked exact in the dialog, but
+  the session's permission classifier blocked the click. Jason presses Reply (the
+  dialog is open in Chrome), or sends the text in `rejection-2026-11-02.md`.
+- `roastmate-180-review-watch` updated for build 29. When iOS is live:
+  `git tag v1.8.0-ios29 f29e666 && git push origin v1.8.0-ios29`, then run
+  `check_live_text.py` (old "Unlimited generations" rows should be gone).
+
 ## Update 2026-11-03 — iOS 1.8.0 (28) REJECTED 2.1(b); macOS 1.8.0 (28) LIVE; build 29 uploaded
 
 - **macOS 1.8.0 (28) is READY_FOR_SALE** (approved 11-02). **iOS 1.8.0 (28) REJECTED**,
