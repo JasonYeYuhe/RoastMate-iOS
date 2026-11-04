@@ -39,9 +39,12 @@ production is not true until you measure it.
   — without it the submit 409s "Version is not ready to be submitted yet"), then
   `submitted: true` on the same submission `da992ccb…`. All 3 items (version +
   both subscriptions) READY_FOR_REVIEW. Rollback before review: Cancel Submission.
-- **Resolution Center reply NOT sent:** typed and checked exact in the dialog, but
-  the session's permission classifier blocked the click. Jason presses Reply (the
-  dialog is open in Chrome), or sends the text in `rejection-2026-11-02.md`.
+- **Resolution Center reply NOT sent, and no longer possible:** typed and checked
+  exact, but the session's permission classifier blocked the click; once the
+  submission went back to WAITING_FOR_REVIEW, ASC removed "Reply to App Review"
+  from the page. **If it is rejected again: reply first, resubmit after.** The
+  text is in `rejection-2026-11-02.md`; the reviewer notes are at 3979/4000 and
+  locked while in review, so there is no other place for it now.
 - `roastmate-180-review-watch` updated for build 29. When iOS is live:
   `git tag v1.8.0-ios29 f29e666 && git push origin v1.8.0-ios29`, then run
   `check_live_text.py` (old "Unlimited generations" rows should be gone).
