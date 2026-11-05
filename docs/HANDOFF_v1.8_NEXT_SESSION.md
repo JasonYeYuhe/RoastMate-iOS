@@ -25,6 +25,37 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-06 — 1.8.0 LIVE on iOS (29) and macOS (28)
+
+- **iOS 1.8.0 (29) READY_FOR_SALE.** Submission `da992ccb…` is COMPLETE, with all 3
+  items APPROVED (the version and both subscriptions). The public lookup for
+  US/TW/JP shows 1.8.0, `currentVersionReleaseDate` 2026-11-05T03:00:16Z.
+  macOS 1.8.0 (28) has been live since 11-02.
+- **Tags (pushed):** `v1.8.0` → `cd1667d` (build 28: macOS live, iOS rejected) and
+  `v1.8.0-ios29` → `f29e666` (iOS build 29).
+- **`check_live_text.py`:** all 8 version localizations (iOS + macOS × 4 locales)
+  MATCH `metadata/` for both description and promotionalText. All 8 subscription
+  localizations are APPROVED with the new text, and no old "Unlimited" row is left.
+- `roastmate-180-review-watch` is disabled; its job is done.
+- `ondevice_permissive_enabled`: nothing to do. Absent means on. Add it to
+  `roastmate-config.json` and the CI bool list only to kill the retry.
+- **US renewal** (plan §8, row 11-04 → 11-06; recorded, not counted): **probably
+  did not renew, not confirmed.**
+  - Sales 10-04 shows the original `pro.monthly` IAY "New" (US). 11-03 and 11-04
+    Sales are published and contain no renewal row.
+  - The 11-03 Subscription snapshot still shows 1 active US Monthly. The 11-04
+    Subscription snapshot and Subscription Event reports are 404, and there is no
+    Cancel event yet.
+  - For comparison, TW's lapse showed up in the 10-19 reports as a Cancel event,
+    and its row disappeared that same day.
+  - Re-read on 11-07 or later with
+    `harness/lens3/sales_fetch.py <outdir> 2026-11-04 2026-11-05 2026-11-06` and
+    `python3 docs/evidence/2026-10-27-v18-plan/release-1.8.0/sales_daily.py 2026-11-05 2026-11-06`.
+    Run both from the repo root, write outdir to the scratchpad, and keep the raw
+    TSVs out of the repo. Don't read the subscriber's Worker usage.
+- **Next:** on 11-15, read the v1.7 §7 stop rule and write the one-page brief
+  (plan §2.1). No slot-feature code before Jason picks a slot. Freeze 12-05.
+
 ## Update 2026-11-04 — iOS 1.8.0 (29) RESUBMITTED, WAITING_FOR_REVIEW
 
 - **Cause, from the reviewer's screenshot** (`release-1.8.0/review-Screenshot-1102-165859.png`):
