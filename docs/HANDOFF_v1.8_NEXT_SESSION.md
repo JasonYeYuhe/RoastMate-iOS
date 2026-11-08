@@ -77,6 +77,14 @@ production is not true until you measure it.
     it, so A4 still reads Standard reports by date and Source Type.
 - Still Jason's: post, then send each post's URL and Taiwan time. The agent logs
   the rows; the third row's date is T.
+- **The agent cannot post (tried 11-08 20:30 JST, after Jason handed it over).**
+  Don't try again.
+  - Chrome is not signed in to Threads. instagram.com opens straight to a
+    reCAPTCHA gate, and agents never solve CAPTCHAs.
+  - PTT needs Jason's PTT ID and password typed into a terminal. Agents don't
+    type passwords.
+  - This Mac has no Threads, Instagram or PTT client app.
+  - So posting stays Jason's. Without 3 posts by 11-22, path D.
 
 ## Update 2026-11-08 — next phase CHOSEN: path A (reach push, no feature binary), D from 11-22
 
