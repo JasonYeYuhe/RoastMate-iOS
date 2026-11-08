@@ -64,8 +64,19 @@ production is not true until you measure it.
   `~/Documents/RoastMate-research/creator-outreach-log.tsv`, laid out as
   `YYYY-MM-DD HH:MM (TW)<TAB>post:ptt-ios|post:threads-1|post:threads-2<TAB><post URL><TAB>-<TAB>-<TAB>link=plain|ct=th1…`.
   The third row's date is T.
-- Still Jason's: confirm each text and destination, post, then send the URLs and
-  times. Give `pt=`, or allow a read of it in Chrome.
+- **Later 11-08: Jason confirmed all three texts and destinations** (PTT iOS
+  `[廣宣]` on Monday 11-09 or 11-16; Threads #1; Threads #2 two to four days
+  later), and allowed a Chrome read of `pt=`.
+  - `pt=128677340`, read in ASC → Campaigns → "Generate a Campaign Link"
+    (builds a URL only, saves nothing).
+  - Threads links are now `…/tw/app/id6769317103?pt=128677340&ct=th1&mt=8`
+    (`th2` for #2). curl: 301 keeps `pt`/`ct`, then 200.
+  - Length with the link: #1 488, #2 484 (limit 500).
+  - PTT stays on the plain full URL.
+  - ASC shows a campaign only after at least 5 Apple Accounts installed through
+    it, so A4 still reads Standard reports by date and Source Type.
+- Still Jason's: post, then send each post's URL and Taiwan time. The agent logs
+  the rows; the third row's date is T.
 
 ## Update 2026-11-08 — next phase CHOSEN: path A (reach push, no feature binary), D from 11-22
 
