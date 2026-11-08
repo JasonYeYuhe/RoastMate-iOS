@@ -27,6 +27,46 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-08 (evening) — A1 post kit final, A5 readout scheduled
+
+- **A1 done; waiting on Jason.** `docs/distribution/2026-10-23-p21-posts.md` is
+  re-checked against 1.8.0 and final. Its top section lists every claim and how it
+  was checked.
+  - All claims hold.
+  - Added: the yearly 7-day trial (ASC: `FREE_TRIAL`/`ONE_WEEK` in TWN, eligible
+    new subscribers only) and the one free 痛罵 preview (`ProPreview.swift`).
+  - The stale icon note is resolved: the live TW artwork shows 幫你罵.
+  - PTT: the template now starts on line 1, and the disclosure moved into 程式簡介.
+    The link is the full App Store URL, because rule 5-A⑴ bans shortened or
+    altered links (re-read 11-08; the short `id…` URL is a 301 to the full one).
+    No campaign link on PTT.
+  - Threads: a campaign link (`ct=th1` / `th2`) only if Jason gives the `pt=`
+    token. Otherwise the plain link. Campaign rows will probably stay empty at
+    this volume (Detailed reports are thresholded), so A4 reads TW page views by
+    date and Source Type.
+- **Rewrite re-run on macOS 27.2 with 1.8.0 code** (two post examples × 5,
+  `docs/evidence/2026-11-08-next-phase/a1-rewrite-recheck/`):
+  - Both quoted rewrites pass every 1.8.0 screen.
+  - 8/10 runs produced a rewrite.
+  - **2/10 harmless rewrites were blocked by the new threat judge**, so the user
+    sees the labelled example. The PTT post now says it 「偶爾也會改不出來」.
+  - Parked in NEXT_PHASE_PLAN §9, not built.
+- **A5 done:** `scripts/weekly_readout.py`, read-only.
+  - Weekly table of downloads, page views and TW by source; subscription events;
+    the latest SUBSCRIPTION snapshot; posts logged; a FINGERPRINT line.
+  - Scheduled task `roastmate-weekly-readout` runs Mondays at about 10:30 JST,
+    first run 11-09. It reports only on change, flags A4 at T + 7, says it on the
+    first run after 11-22 if there are fewer than 3 posts, and then disables itself.
+  - History: `~/Documents/RoastMate-research/weekly-readout-log.tsv`, seeded with
+    the 11-08 baseline: 9 downloads, 46 page views (TW 20), 3 subscription events,
+    billing retry 1, 0 posts.
+- **How to log a post** (the readout counts these rows): one row per post in
+  `~/Documents/RoastMate-research/creator-outreach-log.tsv`, laid out as
+  `YYYY-MM-DD HH:MM (TW)<TAB>post:ptt-ios|post:threads-1|post:threads-2<TAB><post URL><TAB>-<TAB>-<TAB>link=plain|ct=th1…`.
+  The third row's date is T.
+- Still Jason's: confirm each text and destination, post, then send the URLs and
+  times. Give `pt=`, or allow a read of it in Chrome.
+
 ## Update 2026-11-08 — next phase CHOSEN: path A (reach push, no feature binary), D from 11-22
 
 **Read `docs/NEXT_PHASE_PLAN_2026-11.md` first.** It is now the plan being executed.

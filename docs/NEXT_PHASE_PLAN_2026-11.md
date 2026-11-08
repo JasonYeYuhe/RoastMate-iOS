@@ -207,3 +207,9 @@ DEV_PLAN_v1.8 §6 applies to every path. In particular:
 - Debug is always Pro, so verify paid flows only in Release.
 - Every Worker deploy records its version id and the rollback.
 - No third-party SDK.
+
+## 9. Parked (found while executing A; not built under A)
+
+| found | what | evidence | for |
+|---|---|---|---|
+| 11-08 | The 1.8.0 rewrite threat judge blocks harmless rewrites. 2 of 10 re-runs of the post examples on macOS 27.2 were judged THREAT (「…我今天已經很忙了。」, 「…好像大家都聽不見。」), so the user got the labelled example instead. This fits the 10-29 blind number (8/40 legitimate messages blocked). 2 of 5 roommate rewrites also said 「我的碗盤」 (wrong owner). | `docs/evidence/2026-11-08-next-phase/a1-rewrite-recheck/` | the next plan, only if one exists (§2 exits) |
