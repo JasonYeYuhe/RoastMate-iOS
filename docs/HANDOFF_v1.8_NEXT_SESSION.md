@@ -39,21 +39,26 @@ production is not true until you measure it.
 - `roastmate-180-review-watch` is disabled; its job is done.
 - `ondevice_permissive_enabled`: nothing to do. Absent means on. Add it to
   `roastmate-config.json` and the CI bool list only to kill the retry.
-- **US renewal** (plan §8, row 11-04 → 11-06; recorded, not counted): **probably
-  did not renew, not confirmed.**
-  - Sales 10-04 shows the original `pro.monthly` IAY "New" (US). 11-03 and 11-04
-    Sales are published and contain no renewal row.
-  - The 11-03 Subscription snapshot still shows 1 active US Monthly. The 11-04
-    Subscription snapshot and Subscription Event reports are 404, and there is no
-    Cancel event yet.
-  - For comparison, TW's lapse showed up in the 10-19 reports as a Cancel event,
-    and its row disappeared that same day.
-  - Re-read on 11-07 or later with
-    `harness/lens3/sales_fetch.py <outdir> 2026-11-04 2026-11-05 2026-11-06` and
-    `python3 docs/evidence/2026-10-27-v18-plan/release-1.8.0/sales_daily.py 2026-11-05 2026-11-06`.
-    Run both from the repo root, write outdir to the scratchpad, and keep the raw
-    TSVs out of the repo. Don't read the subscriber's Worker usage.
-- **Next:** on 11-15, read the v1.7 §7 stop rule and write the one-page brief
+- **US renewal** (plan §8, row 11-04 → 11-06; recorded, not counted), re-read
+  11-08: **the renewal charge failed; the subscriber did not cancel.**
+  - The 11-04 Subscription Event report has "Billing Retry from Paid
+    Subscription" (US, RoastMate Pro Monthly).
+  - The 11-04, 11-05 and 11-06 snapshots show active 0, Billing Retry 1, Grace
+    Period 0. No renewal appears in Sales 11-03 to 11-06.
+  - So nobody is paying right now. Apple keeps retrying for up to 60 days, and
+    auto-renew is still on.
+  - Billing Grace Period is not enabled (Grace Period 0), so they have no Pro
+    while the retries run. Turning it on is an ASC setting and Jason's call; it is
+    listed as an option in the 11-15 brief, not done.
+  - How the reports read: on 11-06 (JST) the 11-04 snapshot and event reports
+    were 404 even though 11-04 Sales was already published. Subscription reports
+    lag Sales by about a day, so a 404 there does not mean "nothing happened".
+- **Jason, 11-08:** the zh-Hant native read of the new copy is done, with no
+  problems. `RoastMate-iOS18` (79415AE4…) is deleted (checked).
+- **Next:** the 11-15 brief is drafted with 11-08 numbers in
+  `docs/evidence/2026-10-27-v18-plan/brief-2026-11-15.md`; refresh it on 11-14.
+  On 11-15, record the v1.7 §7 stop rule's result word for word here. As of 11-08,
+  0 P2.1 posts are logged, so the first branch fires unless three go up first
   (plan §2.1). No slot-feature code before Jason picks a slot. Freeze 12-05.
 
 ## Update 2026-11-04 — iOS 1.8.0 (29) RESUBMITTED, WAITING_FOR_REVIEW
