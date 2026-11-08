@@ -8,8 +8,9 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 
 **Read in this order:**
 1. this file
-2. `docs/NEXT_PHASE_PLAN_2026-11.md` — **since 11-08 the plan you are executing**
-   (path A, chosen by Jason). Then `docs/DEV_PLAN_v1.8_2026-11.md`, which still
+2. `docs/NEXT_PHASE_PLAN_2026-11.md` — **path D (maintenance mode) since 11-08
+   late**; §5 is what you are executing, and the section "Update 2026-11-08
+   (late) — PATH D" below says what D keeps. Path A ended the same day (no posts). Then `docs/DEV_PLAN_v1.8_2026-11.md`, which still
    governs the 11-15 rule read, the 01-31 read and the freeze. Read §2.1 (how it
    relates to the stop rule), §3 (scope), §6 (guardrails) and §9 (what the two
    reviews changed) before writing code.
@@ -26,6 +27,153 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
+
+## Update 2026-11-08 (late) — PATH D (maintenance mode) from today; path A ended
+
+**Why.** Jason confirmed all three post texts, then handed posting to the agent
+("你全权负责… 做不了就跳过"). The agent cannot post (Instagram reCAPTCHA; PTT needs
+his password). Jason then dropped Threads ("不发thread了吧"). Only PTT is left, and
+`[廣宣]` is one post per Monday, so 3 posts by 11-22 can't happen. Jason's rule
+(fewer than 3 by 11-22 → D) was therefore already decided. The plan's own §6 says
+the honest choice is D once it is known he won't post. Switching now changes
+nothing but two idle weeks.
+
+**Undo:** none needed. Maintenance mode still allows "distribution experiments that
+need no code" (v1.7 §7). If Jason posts anyway (the PTT text is final in
+`docs/distribution/2026-10-23-p21-posts.md`), log the link and time as a `post:`
+row in the outreach log. Nothing else changes.
+
+**What D keeps** (NEXT_PHASE_PLAN §5; "stop" in DEV_PLAN_v1.7 §7):
+- **Kill switches.** `research/web/roastmate-config.json` is mirrored to Pages.
+  The repo file and the live file were identical on 11-08:
+  - `echoes_enabled`, `roommate_group_enabled` and `vent_cloud_enabled` are true;
+  - `force_local_only` is false;
+  - `share_card_*` as set;
+  - `cloud_sendable_enabled` is false, forever.
+  - `ondevice_permissive_enabled` (1.8.0's A3 refusal retry) is **absent, which
+    means on**. v1.8 §2.4: if a threat, self-harm content or slur reaches a user,
+    add `"ondevice_permissive_enabled": false` the same day, then investigate.
+- **OpenRouter balance:** the weekly task `roastmate-openrouter-balance` (Mondays).
+  Topping up below $2 is Jason's.
+- **App Review responses:** reply in the Resolution Center first, then resubmit.
+- **One OS-compatibility binary a year.** When an iOS or macOS 27.x point release
+  ships, rerun the refusal probe. The weekly readout notices macOS releases on
+  this Mac; iOS releases usually ship the same day
+  (`docs/evidence/2026-10-27-v18-plan/baseline-macos272/README.md`). A broken
+  rewrite or a refusal cliff is what triggers that binary.
+- **Billing Grace Period stays on.** Rollback:
+  `PATCH /v1/subscriptionGracePeriods/6769317103` with `optIn: false`.
+- **The reads that close the v1.8 plan,** all scheduled, read-only toward ASC:
+  - `roastmate-weekly-readout` (Mondays) reports only on change. It has two jobs:
+    - the v1.8 §2.3 weekly leading signals for starts from 11-05 to 01-31;
+    - **D's maintenance watch, for as long as D lasts:** reviews, macOS releases
+      and subscription state.
+
+    A5's "disable at D" is overridden on purpose. It stays on after the final
+    read, and Jason can turn it off. Its sources:
+    - Sales reports, which Apple keeps for a year, through
+      `scripts/payer_read.py`: first-time units since 11-05, new starts with
+      their 3-day-cancel and second-period flags, and the interim verdict.
+    - The Retention Messaging report (r320, cancel-sheet events). Apple keeps it
+      for only about 35 days, so each run appends new rows to
+      `~/Documents/RoastMate-research/retention-messaging-log.tsv`.
+    - New App Store customer reviews. Under D this is the only user-report
+      channel, and the §2.4 same-day kill switch depends on noticing a report.
+    - This Mac's macOS version. A point release means the refusal probe is due.
+    - If any Sales day fails, the run records FAILED rather than a partial
+      count. A snapshot that can't be read is "unknown", never "0 subscribers".
+    - Analytics' weekly download and page-view table is printed for context only.
+      Apple keeps those DAILY instances for about 35 days, so its totals shrink
+      and are not compared.
+  - `roastmate-stop-rule-1115` (11-15 10:20 JST): records the v1.7 rule's result
+    word for word in this file (expected: the first branch fires) and marks the
+    11-15 brief. Commits and pushes those two docs only.
+  - `roastmate-final-read-0131` (first run 2027-02-04 10:20 JST, so that Apple's
+    reports surely cover 01-31): runs `scripts/payer_read.py --from 2026-11-05 --to
+    2027-01-31` and records the §2.3 verdict and its §2.1 consequence here.
+    - Data not reaching 02-02, or a failed run: it re-arms for the next day (a
+      week later for credential errors).
+    - UNDETERMINED (a start whose first period hadn't ended): it records an
+      interim result and re-arms for the "resolves by" date + 1. The script reads
+      later Cancel and Renew rows up to the run day, so this does resolve. The
+      final record replaces the interim one.
+    - Cap 2027-03-31: still unresolved then, the verdict is recorded both ways
+      as "unresolved; final as of" that day, and Jason decides. Past the cap it
+      gives him the command to run by hand.
+  - **Git guards.** The two one-time tasks commit only if all of these hold:
+    - the checkout is on `feature/v1.4-track-b`;
+    - the target docs and the index are clean;
+    - the branch is neither ahead of nor behind origin.
+    Commits use a pathspec. Otherwise the record goes only into the report to
+    Jason.
+  - **Privacy.** The remote repo is public, so these records hold only counts,
+    dates and countries: no device, no sub-national location, nothing that
+    narrows a count to a person. Older evidence docs did name a device.
+    Offer-code redemptions go only into the report to Jason, because the repo
+    names the creators who got codes.
+  - All three were created without a saved permission mode, so a run may pause on
+    a permission prompt until Jason approves it ("Run now" in the app, or set the
+    mode on the task).
+
+**What D drops:**
+- the posts, the 11-22 count, A4 (no T), A6 (In-App Event) and A7 (creator
+  batch 2);
+- the v1.8 §4 "12-15 Read 1" product-gate rerun. D keeps only the 11-15 and 01-31
+  reads, and the weekly task covers its ASC-events half.
+- the 11-14 refresh of the 11-15 brief. The brief now opens with a status note,
+  and the 11-15 task records the rule's result here.
+- A8's monthly 5-call Worker smoke test. D §5 doesn't list it, and no script for
+  it exists. Nothing unattended would notice the Worker quietly falling back to
+  curated output, except a user review or the OpenRouter spend going flat. Any
+  session that touches RoastMate should spend one call on it.
+- The 12-05 code freeze is moot: no code is planned. After it, v1.8 §2.1(3) still
+  allows "fixes for regressions this plan introduced and App Review responses only".
+
+**Open, Jason's call:** whether the 1.8.0 threat judge's false positives (2 of 10
+harmless rewrites blocked, NEXT_PHASE_PLAN §9) count as a regression 1.8.0
+introduced, and so qualify for that fix lane. It stays parked until he says so.
+
+**New tool:** `scripts/payer_read.py` (read-only). It applies §2.3 to Sales
+SUBSCRIPTION_EVENT and SALES reports, which Apple keeps for a year (Analytics
+DAILY instances last only about 35 days). A three-reviewer check on 11-08 fixed
+the first draft; a two-reviewer second round and a third round fixed what the
+fixes missed. These are the facts it rests on:
+- **Apple writes the Cancel row when the period ends**, but `Days Before
+  Canceling` counts from the start to the tap on cancel. The TW 09-20 subscriber's
+  Cancel row is dated 10-20 with Days Before Canceling 0: they cancelled on day 0.
+  r320 showed the cancel sheet that day
+  (`docs/evidence/2026-10-22-churn-and-fixes/synthesis.md`).
+- A start whose first period hasn't ended has no Cancel row yet. Unless r320
+  shows a cancel, it is "unknown", and the verdict is computed both ways
+  (UNDETERMINED if the two differ).
+- **r320** has rows with Event "Cancels" and a Counts column, plus Territory and
+  Current Subscription.
+  - Its dates use a different day boundary from Sales: the TW cancel is dated
+    09-19 in r320, while the Sales start is 09-20. So a match allows −1..+3 days.
+  - Each r320 cancel is credited once, to the earliest matching start.
+  - It never overrides a Cancel row that has Days Before Canceling.
+  - It counts as **provisional**: r320 can't say which subscriber cancelled.
+    So the verdict stays UNDETERMINED until that start's own Cancel row or
+    period end settles it.
+- A Cancel row after a renewal (CPP ≥ 2) counts as kept. A refund and a
+  Cancel row on one key count as one subscriber. A second paid period also
+  counts a trial converting through billing retry, and a crossgrade.
+- **Everything is counted in subscribers (Quantity), not rows.** Apple folds
+  identical events into one row. Later events are read up to the run day,
+  because a start's Cancel or Renew row arrives when its period ends.
+- **Tested with fake data, 14 scenarios**, including each failure the round-2
+  and round-3 reviewers built. All pass. The test file was in the session
+  scratchpad.
+- **New starts** are counted from "Subscribe" and "Start Introductory Offer".
+  Offer codes, promotional offers, opt-ins and reactivations are listed but not
+  counted.
+  If one appears, whether it counts is Jason's call.
+- **The denominator** is Sales first-time units (product types 1/1F/1T/F1). They
+  matched Analytics first-time downloads day for day on 10-11..10-28.
+- **Checked on 09-15..11-07:** TW 09-20 cancelled within 3 days (yes), US 10-04
+  (no), no second paid period. Verdict IN BETWEEN, traffic-limited, with 19
+  first-time units.
+- **Interim result for 11-05 →:** 0 events, 0 starts, 0 units.
 
 ## Update 2026-11-08 (evening) — A1 post kit final, A5 readout scheduled
 

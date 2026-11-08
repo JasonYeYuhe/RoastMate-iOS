@@ -22,6 +22,7 @@ import gzip
 import io
 import json
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -52,11 +53,25 @@ def token() -> str:
     )
 
 
+def _open(req, tries: int = 3):
+    """urlopen with retries on timeouts, network errors, 429 and 5xx (one slow call shouldn't kill a run)."""
+    for attempt in range(tries):
+        try:
+            return urllib.request.urlopen(req, timeout=60).read()
+        except urllib.error.HTTPError as e:
+            if e.code != 429 and e.code < 500 or attempt == tries - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError, OSError):
+            if attempt == tries - 1:
+                raise
+        time.sleep(3 * (attempt + 1))
+
+
 def get(url: str, tok: str):
     if not url.startswith("http"):
         url = BASE + url
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {tok}"})
-    return json.load(urllib.request.urlopen(req, timeout=60))
+    return json.loads(_open(req))
 
 
 def fetch(name: str, report_ids: dict, since: str, tok: str) -> list[dict]:
@@ -67,7 +82,7 @@ def fetch(name: str, report_ids: dict, since: str, tok: str) -> list[dict]:
         if inst["attributes"]["processingDate"] < since:
             continue
         for seg in get(f"/v1/analyticsReportInstances/{inst['id']}/segments", tok)["data"]:
-            raw = urllib.request.urlopen(seg["attributes"]["url"], timeout=60).read()
+            raw = _open(urllib.request.Request(seg["attributes"]["url"]))
             table = list(csv.reader(io.StringIO(gzip.decompress(raw).decode()), delimiter="\t"))
             header = table[0]
             rows.update(tuple(r) for r in table[1:])

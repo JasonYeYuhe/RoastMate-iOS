@@ -1,6 +1,11 @@
 # RoastMate — the next phase (2026-11-08 → 2027-01-31): four paths, one to pick
 
-**Status: CHOSEN — path A, with the hard pivot to D on 11-22 (Jason, 2026-11-08).**
+**Status: PATH D (maintenance mode) since 2026-11-08 (late).** Path A was chosen
+earlier the same day (about 17:50 JST), with a hard pivot to D on 11-22. It ended early: Jason dropped the
+Threads posts and the agent cannot post, so 3 posts by 11-22 could not happen. What
+D keeps, and the scheduled reads, are in the section "Update 2026-11-08 (late) —
+PATH D" of `docs/HANDOFF_v1.8_NEXT_SESSION.md`. (Original status line: "CHOSEN — path A, with
+the hard pivot to D on 11-22 (Jason, 2026-11-08).")
 A2 is done: Billing Grace Period has been on since 11-08 (16 days, all renewals,
 production and sandbox; set through the ASC API and read back). To undo it,
 `PATCH /v1/subscriptionGracePeriods/6769317103` with `optIn: false`. Apple only
