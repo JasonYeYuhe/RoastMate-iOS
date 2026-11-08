@@ -8,7 +8,9 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 
 **Read in this order:**
 1. this file
-2. `docs/DEV_PLAN_v1.8_2026-11.md` — the plan you are executing. Read §2.1 (how it
+2. `docs/NEXT_PHASE_PLAN_2026-11.md` — **since 11-08 the plan you are executing**
+   (path A, chosen by Jason). Then `docs/DEV_PLAN_v1.8_2026-11.md`, which still
+   governs the 11-15 rule read, the 01-31 read and the freeze. Read §2.1 (how it
    relates to the stop rule), §3 (scope), §6 (guardrails) and §9 (what the two
    reviews changed) before writing code.
 3. project `CLAUDE.md` and the global `~/.claude/CLAUDE.md` (signing, simulators,
@@ -24,6 +26,39 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
+
+## Update 2026-11-08 — next phase CHOSEN: path A (reach push, no feature binary), D from 11-22
+
+**Read `docs/NEXT_PHASE_PLAN_2026-11.md` first.** It is now the plan being executed.
+The v1.8 plan still governs the 11-15 rule read, the 01-31 §2.3 read and the
+12-05 freeze. Under path A there is **no 1.8.1 and no Worker deploy**.
+
+- **Jason chose path A on 11-08**, with the hard pivot: fewer than 3 posts live by
+  **11-22** → path D (maintenance mode). Both reviewers proposed the same, each
+  on their own. Their answers are in `docs/evidence/2026-11-08-next-phase/`; the
+  plan's §7 lists what was accepted and rejected after checking.
+- **A2 done:** Billing Grace Period is ON (16 days, ALL_RENEWALS, production +
+  sandbox; ASC API, read back). To undo: `PATCH /v1/subscriptionGracePeriods/6769317103`
+  with `optIn: false`. The side effect is in the plan's header.
+- **Next, in order:**
+  1. **A1, now:** finalise the post kit for Monday PTT 11-09 / 11-16 (details below).
+  2. **A5:** a weekly read-only readout task.
+  3. **A3:** refresh the brief on 11-14; record the rule on 11-15.
+  4. **A4:** the funnel check at T + 7.
+  5. **11-22:** check the posts — 3 live → continue A; fewer → switch to D.
+- **A1 in detail.** Re-check every claim in
+  `docs/distribution/2026-10-23-p21-posts.md` against the 1.8.0 code and copy, and
+  add the 7-day yearly trial and the one free 痛罵 preview.
+  - Argon says the drafts have "zero false claims"; that is unverified here.
+  - Fix the stale §4.5 note about the Simplified icon: the icon has been
+    Traditional since 1.7.2 (`64c4867`).
+  - Campaign links: the `pt=` provider token is Jason's (ASC → App Analytics →
+    Campaigns), or the agent reads it in Chrome if he says so. Check PTT rule 5-A
+    ("original, unshortened URL; no affiliate links") before putting `ct=`/`pt=`
+    in the PTT post; if in doubt, PTT gets the plain URL.
+  - Jason posts and confirms each text and place. The agent logs each URL and
+    time (Taiwan time) in `~/Documents/RoastMate-research/creator-outreach-log.tsv`.
+    The third post sets T.
 
 ## Update 2026-11-06 — 1.8.0 LIVE on iOS (29) and macOS (28)
 

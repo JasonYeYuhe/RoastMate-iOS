@@ -1,7 +1,19 @@
 # RoastMate — the next phase (2026-11-08 → 2027-01-31): four paths, one to pick
 
-**Status: for Jason's choice.** Written 2026-11-08, after 1.8.0 went live on both
-platforms. It was reviewed separately by Gemini 4 Argon (High) and Gemini 3.8
+**Status: CHOSEN — path A, with the hard pivot to D on 11-22 (Jason, 2026-11-08).**
+A2 is done: Billing Grace Period has been on since 11-08 (16 days, all renewals,
+production and sandbox; set through the ASC API and read back). To undo it,
+`PATCH /v1/subscriptionGracePeriods/6769317103` with `optIn: false`. Apple only
+accepts production on together with sandbox on.
+
+Known side effect of the grace period: during it, StoreKit should still count the
+subscriber as entitled (Apple's described behaviour; not tested here), so the app
+shows Pro. The Worker's `/v1/auth` checks
+`expiresDate` (`auth.js:79-82`), so it answers 403. The client then falls back to
+the free lane's 30-a-day quota. That is acceptable at this volume, and not a
+reason to deploy.
+
+Written 2026-11-08, after 1.8.0 went live on both platforms. It was reviewed separately by Gemini 4 Argon (High) and Gemini 3.8
 Flash (High). §7 has their verdicts, what changed because of them, and what was
 rejected after checking.
 
