@@ -129,9 +129,24 @@ row in the outreach log. Nothing else changes.
 - The 12-05 code freeze is moot: no code is planned. After it, v1.8 §2.1(3) still
   allows "fixes for regressions this plan introduced and App Review responses only".
 
-**Open, Jason's call:** whether the 1.8.0 threat judge's false positives (2 of 10
-harmless rewrites blocked, NEXT_PHASE_PLAN §9) count as a regression 1.8.0
-introduced, and so qualify for that fix lane. It stays parked until he says so.
+**Decided 11-11 (Jason delegated both calls: 「都听你的 按你的建议来做」):**
+- **The threat judge's false positives are not a 1.8.0 regression**, so they do not
+  qualify for that fix lane. 1.8.0 lowered them. On the blind set, the 1.7.x judge
+  blocked 10/40 harmless messages; the one shipped in 1.8.0 blocks 8/40. On 297
+  real outputs it is 39 vs 20 (`docs/evidence/2026-10-27-v18-plan/harness/safety/judgetune/README.md`).
+  The 2/10 in the 11-08 re-run matches 8/40. The failure is safe: the user gets the
+  labelled example, never a threat. Loosening the judge would let more veiled
+  threats through, and about 1 in 4 already passes. The item stays parked in
+  NEXT_PHASE_PLAN §9 for a next plan, if one ever exists.
+- **Offer-code starts do not count as §2.3 new starts.** The final read counts
+  only "Subscribe" and "Start Introductory Offer", as `payer_read.py` already does.
+  Reasons:
+  - The §2.3 question is whether strangers pay.
+  - The only codes ever sent went to three creators, who redeemed none and are never
+    contacted again.
+  - D sends no new codes.
+
+  Redemptions are still listed in the report to Jason, never in this public doc.
 
 **New tool:** `scripts/payer_read.py` (read-only). It applies §2.3 to Sales
 SUBSCRIPTION_EVENT and SALES reports, which Apple keeps for a year (Analytics
