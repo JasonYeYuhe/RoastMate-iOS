@@ -31,6 +31,43 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-12 (evening) — D+ done; maintenance continues
+
+- **D+1 promotional text: LIVE** on iOS and macOS 1.8.0, all four locales. Jason
+  approved the exact text in chat on 11-12; an independent API read-back matched
+  it word for word on both platforms.
+  - Claims checked first. App code at HEAD equals iOS 1.8.0 (29), apart from one
+    comment; macOS 1.8.0 (28) builds the same sources.
+    - **Vent needs no Pro, but it is not unlimited-free.** A free user pays 1 credit
+      per model-written draft. New users get 10 credits plus 2 free a day for the
+      first 7 days (`CreditCatalog`, `UserSettings.spendOneCredit`). So the text
+      says "no Pro + free credits", never "free".
+    - Cloud consent is asked before the first cloud call (`CloudPermission`).
+    - **The 7-day trial is on the yearly product only**:
+      `introductoryOffers` = FREE_TRIAL ONE_WEEK in 175 territories, TWN/USA/JPN
+      included. The monthly product has none.
+    - The 痛罵 preview is offered once per iCloud account, to free users, after
+      the first Vent the cloud wrote (`ProPreview.shouldOffer`).
+    - 改成能發的 rewrites the draft only with Apple Intelligence. Elsewhere it
+      returns a labelled default example.
+  - If a later binary changes credits, the trial or the preview, re-check this
+    text. New versions don't inherit it (Hazards).
+  - Rollback: `git show 00e47d9:metadata/<locale>/promotional_text.txt` back into
+    the files, then `text --version 1.8.0 --live-promo --apply` per platform.
+- **D+2 ASO queue: committed in `00e47d9`**, "ride the next binary".
+  - zh-Hant subtitle 23/30; keywords for zh-Hant (88), en-US (100) and ja (77).
+  - Nothing was submitted. Jason approves those exact words before any binary
+    carries them.
+- **D+3 In-App Event: Jason said no** (11-12). Skipped.
+- **Worker smoke, one call (11-12, zh_TW Vent):** 200 in 2.4 s from OpenRouter
+  `qwen/qwen3-30b-a3b-instruct-2507`. The draft was model-written Traditional
+  Chinese, in a Taiwan register, not the curated fallback. The draft had no
+  strong word; at n=1 that is not a finding.
+- **Still Jason's:** the OpenRouter free-model training toggle ("還沒有 / 不確定",
+  11-12). It stays on his list.
+- **Next for any session:** nothing to build. The scheduled tasks own the 11-15
+  record, the Monday reads and the 02-04 final read.
+
 ## Update 2026-11-12 — D+ chosen (`docs/DEV_PLAN_v1.9_2026-11.md`)
 
 On 11-12 Jason asked for the next phase of development. The plan

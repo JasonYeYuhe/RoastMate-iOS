@@ -1,6 +1,8 @@
 # RoastMate — next phase plan (2026-11-12 → 2027-01-31)
 
 **Status: CHOSEN — D+ (Jason, 2026-11-12, AskUserQuestion).** Draft 2, below unchanged.
+**Progress 11-12:** D+1 live (iOS + macOS, read back), D+2 queued (`00e47d9`),
+D+3 declined by Jason, Worker smoke OK. Details: handoff "Update 2026-11-12 (evening)".
 - Draft 1 recommended a paid Apple Ads sample (path E).
 - Gemini 4 Argon (High) and Gemini 3.8 Flash (High) reviewed it separately. Both
   chose maintenance mode (D) and found real errors.
