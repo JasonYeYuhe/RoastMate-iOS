@@ -8,8 +8,11 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 
 **Read in this order:**
 1. this file
-2. `docs/NEXT_PHASE_PLAN_2026-11.md` — **path D (maintenance mode) since 11-08
-   late**; §5 is what you are executing, and the section "Update 2026-11-08
+2. `docs/DEV_PLAN_v1.9_2026-11.md` — **D+ (maintenance mode plus three $0
+   store-page items), chosen by Jason on 11-12.** §2 is what you are executing;
+   the section "Update 2026-11-12" below gives the order. Background:
+   `docs/NEXT_PHASE_PLAN_2026-11.md` — path D (maintenance mode) since 11-08
+   late; §5 is what you are executing, and the section "Update 2026-11-08
    (late) — PATH D" below says what D keeps. Path A ended the same day (no posts). Then `docs/DEV_PLAN_v1.8_2026-11.md`, which still
    governs the 11-15 rule read, the 01-31 read and the freeze. Read §2.1 (how it
    relates to the stop rule), §3 (scope), §6 (guardrails) and §9 (what the two
@@ -27,6 +30,48 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
+
+## Update 2026-11-12 — D+ chosen (`docs/DEV_PLAN_v1.9_2026-11.md`)
+
+On 11-12 Jason asked for the next phase of development. The plan
+(`docs/DEV_PLAN_v1.9_2026-11.md`) went through two drafts.
+- Draft 1 recommended a paid Apple Ads sample in Taiwan (path E).
+- Gemini 4 Argon (High) and Gemini 3.8 Flash (High) reviewed it separately, read-only.
+  Both chose maintenance mode, and they found real errors (plan §9). Their raw answers
+  are in `docs/evidence/2026-11-12-next-phase/`.
+- Draft 2 recommends **D+**, and **Jason chose D+** (AskUserQuestion, 11-12).
+
+**D+ = path D, unchanged, plus three $0 store-page items. No app code, no binary, no
+Worker deploy:**
+1. **D+1 Promotional text, live (no review).** It is 1.6.0-era today and does not
+   mention the yearly 7-day trial or the one free 痛罵 preview, both live in 1.8.0
+   (`Shared/zh-Hant.lproj/Localizable.strings:36-38, 180`).
+   - Verify every claim against the code and the live ASC intro offer.
+   - Jason approves the exact text in all four locales.
+   - Apply with `python3 scripts/asc_product_page.py text --version 1.8.0 --live-promo --apply`,
+     once with `--platform IOS` and once with `--platform MAC_OS` (dry-run first),
+     then read it back.
+   - Rollback: the old text is in `metadata/*/promotional_text.txt` (git).
+2. **D+2 ASO queue.** Prepare keyword and subtitle edits in `metadata/*`, committed
+   and marked "ride the next binary". Nothing is submitted: keywords and subtitle
+   change only with a new version.
+3. **D+3, optional:** one Taiwan In-App Event for the year-end season. Jason
+   approves its text and images.
+
+Also, once: one production Worker smoke call (zh_TW Vent).
+
+**Not chosen (kept in the plan, corrected):** E, Apple Ads; S, 1.8.1 = B8 Lifetime
+Pro. On 11-15 the default stays "1.8.1 = none". Jason may still re-approve an item
+in chat with the record in front of him. If he does, plan §4 has the corrected
+scope, including the `payer_read.py` change that lifetime purchases need.
+
+**Avoid colliding with the 11-15 scheduled task.**
+- At 10:20 JST on 11-15 it edits this file and the 11-15 brief, but only if both
+  are clean, nothing is unpushed and nothing is behind.
+- So any session working that weekend pushes every commit at once, and never
+  leaves this file or the brief modified.
+- If the task's report says a check failed, write the record it gives into this
+  file by hand, word for word.
 
 ## Update 2026-11-08 (late) — PATH D (maintenance mode) from today; path A ended
 

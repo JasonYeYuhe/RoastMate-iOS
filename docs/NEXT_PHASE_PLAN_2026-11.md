@@ -1,6 +1,6 @@
 # RoastMate — the next phase (2026-11-08 → 2027-01-31): four paths, one to pick
 
-**Status: PATH D (maintenance mode) since 2026-11-08 (late).** Path A was chosen
+**Status: PATH D (maintenance mode) since 2026-11-08 (late); since 11-12 run as D+, see `docs/DEV_PLAN_v1.9_2026-11.md`.** Path A was chosen
 earlier the same day (about 17:50 JST), with a hard pivot to D on 11-22. It ended early: Jason dropped the
 Threads posts and the agent cannot post, so 3 posts by 11-22 could not happen. What
 D keeps, and the scheduled reads, are in the section "Update 2026-11-08 (late) —
