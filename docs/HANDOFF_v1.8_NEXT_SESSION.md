@@ -63,8 +63,11 @@ production is not true until you measure it.
   `qwen/qwen3-30b-a3b-instruct-2507`. The draft was model-written Traditional
   Chinese, in a Taiwan register, not the curated fallback. The draft had no
   strong word; at n=1 that is not a finding.
-- **Still Jason's:** the OpenRouter free-model training toggle ("還沒有 / 不確定",
-  11-12). It stays on his list.
+- **OpenRouter free-model training toggle: OFF.** Jason said in chat on 11-14
+  that he turned it off (「关掉了我已经」). That is his word, not a measurement:
+  the setting lives in his account and no API here reads it. Don't ask him again.
+  This closes the old v1.8 owner task ("check the OpenRouter account privacy
+  setting").
 - **Next for any session:** nothing to build. The scheduled tasks own the 11-15
   record, the Monday reads and the 02-04 final read.
 
