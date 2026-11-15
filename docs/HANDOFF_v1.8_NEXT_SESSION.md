@@ -31,6 +31,45 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-15 — v1.7 stop rule read (recorded on the day)
+
+**The rule, word for word (`DEV_PLAN_v1.7_2026-10.md` §7):**
+
+> Let **T** = the later of (1.7.0's product page live) and (the third P2.1 post
+> published). On **11-15**, or 4 weeks after T if that is later:
+> - **If T never happened by 11-15** (posts not published), distribution
+>   isn't happening → **stop feature work**.
+> - **Otherwise stop** if, over the 4 weeks after T, first-time downloads
+>   (all territories) average **< 5 / week** (baseline 2 / week) **and** there is
+>   **no new paying subscriber** beyond the two that exist today.
+
+**Result: the first branch fires.** P2.1 posts logged: **0** (`post:` rows in the
+outreach log). So T never happened by 11-15. "Distribution isn't happening →
+stop feature work." The thresholds do not apply.
+
+For reference only (ASC, read 11-15; Apple data reaches 11-13; counts are lower
+bounds):
+- First-time downloads, last 4 full weeks of the readout's trailing table:
+  10-12: 4, 10-19: 2, 10-26: 1, 11-02: 1. That is 2.0 a week. The week of 11-09
+  is incomplete (0 so far).
+- v1.8 window since 2026-11-05 (Sales): first-time units 1, new starts 0.
+- New paying subscribers after 10-04: **0**. Free-trial starts: 0.
+  (`payer_read.py --from 2026-10-05 --to 2026-11-15`: 9 first-time units, 0 starts.)
+- Subscription snapshot 11-13: active paid 0, billing retry 0, grace period 1
+  (the US monthly subscription that entered billing retry on 11-04).
+- Retention Messaging (r320): 0 rows. App Store reviews: 0.
+
+**Consequence (`DEV_PLAN_v1.8_2026-11.md` §2.1, "fires" rows):**
+- **1.8.1 = none.** That is the default when the rule fires. Jason's 11-08 path
+  choice had no 1.8.1, and the D+ plan he chose on 11-12
+  (`docs/DEV_PLAN_v1.9_2026-11.md`) has none either.
+- Jason can still re-approve one slot item, explicitly in chat, with this record
+  in front of him.
+- The 2027-01-31 read (§2.3) then decides. KILL → maintenance mode, no further
+  plans. SUCCESS → one more plan is allowed, and it starts with distribution. In
+  between → no new feature plan.
+- Path D, as D+ (DEV_PLAN_v1.9), stays in force until then.
+
 ## Update 2026-11-12 (evening) — D+ done; maintenance continues
 
 - **D+1 promotional text: LIVE** on iOS and macOS 1.8.0, all four locales. Jason
