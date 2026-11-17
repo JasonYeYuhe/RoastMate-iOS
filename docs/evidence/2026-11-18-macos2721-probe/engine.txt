@@ -1,0 +1,37 @@
+onDeviceAvailable: true
+
+[zh_TW high_eq sharp] provenance=model 8252ms
+  • 「封面？這應該是你的責任。」
+  • 「週會上誇大，這不應該成為習慣。」
+  • 「簡報是團隊成果，不能單方面歸功。」
+
+[en_US high_eq calm] provenance=model 4009ms
+  • "Sleepwalking?"
+  • "Recipe planning?"
+  • "Emergency cleanup?"
+
+[zh_TW savage_no_filter savage] provenance=model 6267ms
+  • LINE已讀不回，又在催租。
+  • 修冷氣拖三個月，房租還要準時？邏輯能更簡單一點嗎？
+  • 這個月修冷氣，是怎麼變成「之後再說」？
+
+[ja_JP savage_no_filter savage] provenance=model 7382ms
+  • 返金期限を逃している。
+  • 「細かい」と言えるだけの余裕がない。
+  • 借金の理由を考える余裕もない。
+
+[en_US taiwanese_drama savage] provenance=model 11525ms
+  • Do you know what hurts? My timeline was carved for vacation, yet you carved out your own review like a no-show in disguise.
+  • Thirty-six hours of solitude, no meeting, only the cruel spreadsheet titled "Still On Hold."
+  • Your excuse is lighter than a stapler; my absence felt heavier than the weight of corporate silence.
+
+[en_US savage_no_filter savage] provenance=curated 1748ms
+  • I admire your commitment to making my life slightly more interesting. Truly unmatched.
+  • I'm not upset, I'm just gathering material for a future memoir.
+  • If consistency were a sport, you'd be Olympic-grade at this particular hobby.
+
+[rewrite zh_TW high_eq] provenance=model 5548ms
+  • 你下班前五分鐘給我報告，還說明天早上就要，我連吃飯時間都被你佔用了。現在要求我明天早上交，我無法配合。
+
+[rewrite en_US high_eq] provenance=model 1947ms
+  • You used my slides in the team meeting and took credit for the praise. Please credit me for my work.

@@ -31,6 +31,30 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-18 — 11-15 record checked; macOS 27.2.1 probe: no binary needed
+
+- **The 11-15 record below is correct.** The task ran at 10:40 JST and pushed
+  `73e26f1`, which touched only this file and the brief.
+  - Its quote matches `DEV_PLAN_v1.7_2026-10.md` §7 word for word.
+  - The outreach log has 0 `post:` rows, so the first branch fired.
+  - Its push notification did not go out (Remote Control was not connected), so
+    nobody was told on the day. This session checked it on 11-18.
+- **macOS 27.2.1 (26B131) reached this Mac by 11-16.** The weekly readout caught
+  it, and D says a point release makes the refusal probe due. It was rerun on
+  11-18, all on-device, $0, in `docs/evidence/2026-11-18-macos2721-probe/`.
+  Everything matches the 27.2 baseline:
+  - default guardrails still refuse almost everything;
+  - the permissive retry passes 8/8;
+  - the shipped threat judge gives identical verdicts, item by item, on the
+    blind set and on 297 real outputs;
+  - the production `RoastEngine` writes all 5 sendable cases and both
+    改成能發的 rewrites, and still returns curated text for the threat request.
+
+  **No OS-compatibility binary.** The next trigger is the next 27.x point
+  release, or an iOS one if Jason reports it.
+- Weekly reads on 11-16: still 0 starts and 0 reviews; 1 first-time unit since
+  11-05. OpenRouter balance $9.86.
+
 ## Update 2026-11-15 — v1.7 stop rule read (recorded on the day)
 
 **The rule, word for word (`DEV_PLAN_v1.7_2026-10.md` §7):**
