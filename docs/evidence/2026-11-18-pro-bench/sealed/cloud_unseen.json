@@ -1,0 +1,132 @@
+{
+  "cloud": {
+    "styles_rotation": [
+      "high_eq",
+      "savage_no_filter",
+      "taiwanese_drama",
+      "cold_violence",
+      "corporate_passive_violence",
+      "passive_aggressive"
+    ],
+    "situations": {
+      "zh_TW": [
+        {
+          "id": "cu1",
+          "text": "鄰居每天都把機車直接橫停在我家鐵捲門正中間，早上趕著開車出門打卡差點遲到。按電鈴請他們移車，居然還臉臭嫌我小題大作，真的把別人的方便當隨便！"
+        },
+        {
+          "id": "cu2",
+          "text": "雅婷上週跟我借那件昂貴的羊毛大衣去約會，今天還回來口袋竟然整片沾滿乾掉的紅酒漬。她不但沒主動道歉，還裝沒事說大衣本來就舊了，到底憑什麼這麼厚顏無恥？"
+        },
+        {
+          "id": "cu3",
+          "text": "我上週明明照規定請病假動小手術，隔天回公司居然發現整個部門都在傳我去做醫美抽脂。私底下跑去跟主管嚼舌根的人到底有多閒，連別人的隱私都要這樣惡意造謠！"
+        },
+        {
+          "id": "cu4",
+          "text": "冠宇未經同意就讓他女友整個月搬進我們分租的公寓，水電費暴增就算了，每天客廳還被佔用得像他們家一樣。我反應過兩次要求分攤房租，他居然回嗆說大家朋友一場何必那麼愛計較！"
+        },
+        {
+          "id": "cu5",
+          "text": "我哥趁我回老家前，把我珍藏多年的童年玩具和絕版漫畫全部打包送給鄰居小孩。被我發現後他居然輕浮地說那堆破爛丟了剛好，完全不尊重那是我的私人物品，氣到想跟他斷絕關係！"
+        },
+        {
+          "id": "cu6",
+          "text": "修車廠師傅明明答應只做基本的五千公里保養，牽車時帳單突然多出兩萬多元非必要的零件更換。我質疑為什麼沒先電話通知確認，對方還擺臉色硬拗說這是為了我的安全著想，根本是強迫中獎！"
+        }
+      ],
+      "en_US": [
+        {
+          "id": "cu1",
+          "text": "Derek deliberately CC'd our executive director on an email reply just to point out a single formatting typo in my draft. Instead of messaging me directly like a normal professional, he chose to humiliate me in front of the entire leadership team. I am completely sick of his manipulative corporate games."
+        },
+        {
+          "id": "cu2",
+          "text": "I just checked our joint savings account and discovered my partner spent nearly two thousand dollars on a gaming PC without even asking me. That money was strictly reserved for our dental bills and emergency rent. When I confronted them about it, they acted like I was overreacting over pocket change."
+        },
+        {
+          "id": "cu3",
+          "text": "The emergency clinic kept my injured dog waiting in the lobby for four agonizing hours while staff pushed expensive genetic tests on me. When I demanded pain relief for my dog, the receptionist rolled her eyes and threatened to refuse treatment. They care far more about predatory upselling than actual animal care."
+        },
+        {
+          "id": "cu4",
+          "text": "Megan found out about my quiet solo beach getaway, invited herself along, and now expects me to drive her everywhere and split luxury dinners she chose. She literally threw a tantrum because I wanted a single afternoon by myself to read. She completely hijacked my vacation and ruined any chance of relaxation."
+        },
+        {
+          "id": "cu5",
+          "text": "My neighbor lets his massive unleashed dog run across my front lawn every single morning and never picks up the mess. When I showed him clear security camera footage, he laughed in my face and told me to get a hobby. I am sick of stepping in filth on my own property."
+        },
+        {
+          "id": "cu6",
+          "text": "My roommate used up my entire bottle of high-end salon shampoo, filled the rest with tap water to hide it, and put it back in the shower. When I asked why it was watery and ruined, they claimed someone else must have broken in. Stop treating my personal belongings like your free department store."
+        }
+      ],
+      "ja_JP": [
+        {
+          "id": "cu1",
+          "text": "直樹が自分の進捗遅れをごまかすために、私が提出した資料に不備があったと上司に嘘の報告をしていて本当に許せない。裏でコソコソ根回しして責任逃れする暇があるなら、自分の仕事を最後までやりきれよ！"
+        },
+        {
+          "id": "cu2",
+          "text": "何年も前の私の恥ずかしい失敗談を、頼んでもいないのに合コンの席で面白おかしく暴露されてマジで鳥肌が立った。本人は場を盛り上げた気でいるけど、人のプライバシーを安易に切り売りして笑いを取るなよ！"
+        },
+        {
+          "id": "cu3",
+          "text": "洗面所に置いていた私のお気に入りの高級美容液、勝手に全身に使われてほぼ空っぽにされていた。注意したら『ちょっと借りただけじゃんケチくさい』って逆ギレされて、本当に頭がおかしくなりそう。"
+        },
+        {
+          "id": "cu4",
+          "text": "美咲がお風呂に入っている隙に私のスマホのロックを勝手に解除して、大学の友人たちの連絡先を勝手に削除していた。問い詰めたら『浮気防止のためだから悪くない』と平然と言い放ってきて、完全にドン引きした。"
+        },
+        {
+          "id": "cu5",
+          "text": "美容院で毛先を整えるだけと伝えたのに、勝手にバッサリ短く切られたうえ頼んでもいない派手なカラーを入れられた。失敗を指摘したら私の髪質のせいにされて正規料金を全額請求され、悔しくて涙が止まらない。"
+        },
+        {
+          "id": "cu6",
+          "text": "義母が合鍵を勝手に使って不在中の部屋に上がり込み、寝室のクローゼットまで勝手に整理整頓していた。親切の押し売りのつもりかもしれないけど、明らかなプライバシー侵害だし気味が悪くて耐えられない！"
+        }
+      ]
+    },
+    "names": {
+      "zh_TW": [
+        "雅婷",
+        "冠宇"
+      ],
+      "en_US": [
+        "Derek",
+        "Megan"
+      ],
+      "ja_JP": [
+        "直樹",
+        "美咲"
+      ]
+    },
+    "ui_style_names": {
+      "zh_TW": {
+        "high_eq": "高 EQ",
+        "savage_no_filter": "硬核回擊",
+        "taiwanese_drama": "台劇腔",
+        "cold_violence": "冷處理",
+        "corporate_passive_violence": "職場冷暴力",
+        "passive_aggressive": "陰陽怪氣"
+      },
+      "en_US": {
+        "high_eq": "High EQ",
+        "savage_no_filter": "Savage",
+        "taiwanese_drama": "Taiwanese Drama",
+        "cold_violence": "Cold Reply",
+        "corporate_passive_violence": "Corporate Passive Violence",
+        "passive_aggressive": "Passive Aggressive"
+      },
+      "ja_JP": {
+        "high_eq": "高EQ",
+        "savage_no_filter": "容赦なし",
+        "taiwanese_drama": "台湾ドラマ口調",
+        "cold_violence": "冷たい返し",
+        "corporate_passive_violence": "ビジネス冷たい暴力",
+        "passive_aggressive": "パッシブ・アグレッシブ"
+      }
+    }
+  }
+}

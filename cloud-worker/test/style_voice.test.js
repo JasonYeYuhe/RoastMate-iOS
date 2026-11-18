@@ -224,7 +224,7 @@ test("every Pro style shapes the vent and feral prompt, by styleId and by every 
           // unknown style (or the same display name before styles) gets.
           assert.doesNotMatch(sys, /STYLE VOICE/, where);
           assert.equal(sys, buildVentSystemPrompt(intensity, locale, s.styleName || "", SITUATION[voice]), where);
-          assert.equal(user, buildVentUserPrompt(SITUATION[voice], locale), where);
+          assert.equal(user, buildVentUserPrompt(SITUATION[voice], locale, "", { intensity }), where);
           continue;
         }
         assert.ok(sys.includes(`- Voice: ${instruction}`), `${where}: instruction missing`);
@@ -275,7 +275,7 @@ test("a styled prompt keeps every other line of the unstyled one; only the defau
       assert.ok(block.has(line) || /STYLE VOICE|the style|^- Stay under /i.test(line) || line.includes(STYLED_LENGTH[voice]),
                 `${where}: added an unexpected line: ${line}`);
     }
-    const plainUser = buildVentUserPrompt(SITUATION[voice], locale).split("\n");
+    const plainUser = buildVentUserPrompt(SITUATION[voice], locale, "", { intensity }).split("\n");
     const styledUser = buildVentUserPrompt(SITUATION[voice], locale, "", { styleId: p.id, intensity }).split("\n");
     const extra = styledUser.filter((l) => !plainUser.includes(l));
     const gone = plainUser.filter((l) => !styledUser.includes(l));
@@ -450,6 +450,8 @@ async function post(body, env = makeEnv(), n = 0) {
 test("roommate, roast, and vent with no, an unknown or a free style: prompts byte-identical to HEAD (312 requests)", async () => {
   const fixture = JSON.parse(readFileSync(join(HERE, "fixtures/head_prompts.json"), "utf8"));
   assert.match(fixture.generated_from, /HEAD 4ed652f/);
+  // 1.9.0 Q2b changed exactly the 52 zh-Hant/ja Vent system prompts (one strong word); every other case is unchanged.
+  assert.match(fixture.generated_from, /Q2b .*52 zh-Hant\/ja Vent system prompts only/);
   const kinds = new Set(fixture.cases.map((c) => c.id.split("/")[0]));
   assert.deepEqual([...kinds].sort(), ["roast", "roommate", "vent"]);
   // The fixture's roommate / roast cases include styled requests (台劇腔 by id

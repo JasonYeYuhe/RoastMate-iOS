@@ -1,5 +1,5 @@
 {
- "generated_from": "HEAD 4ed652f (production 7846ac95)",
+ "generated_from": "HEAD 4ed652f (production 7846ac95); 1.9.0 Q2b (2026-11-18) re-pinned the 52 zh-Hant/ja Vent system prompts only (system and user prompt)",
  "cases": [
   {
    "id": "roommate/vent/zh-Hans/tw_drama",
@@ -920,8 +920,8 @@
     "locale": "zh_TW",
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/empty",
@@ -931,8 +931,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": ""
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/unknown_name",
@@ -942,8 +942,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "Some Unknown Style"
    },
-   "system_sha256": "309142b906c29f93e9e9b3a6f6a69b9c5ea7172f2c58614641882b52bdd49602",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "a31d2c07cc61672ce07f8a4cddcb83c618d8f46a4940b3b104e138f29746f7cb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/near_miss_name",
@@ -953,8 +953,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "高情商"
    },
-   "system_sha256": "a23ce72feed241b0c497edeb993b4a753d26d0e878b3b788f849eca03855fb40",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "a6eb1548f1c10a4e932874a994f4f46f05dec4eac6a67e68593cae11f409ebe6",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/unknown_id",
@@ -964,8 +964,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "made_up_id"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/unknown_both",
@@ -976,8 +976,8 @@
     "styleId": "made_up_id",
     "styleName": "Nope"
    },
-   "system_sha256": "d9a69665fc9041dbbd300f9d748d2d4dde4703a2cf03bce9624b86e27697b595",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "5259467ad83428e9b4a4b22763f31aee2c49d581716a596afc9a371deee5feb3",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_HK/absent",
@@ -986,8 +986,8 @@
     "locale": "zh_HK",
     "situation": "室友的碗可以放好幾天,還說我『太計較』。"
    },
-   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "22d4c22d67cce4ca6312068a08a6576114a7c4ed7f2c89f145f438ef8c3c5270",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh_HK/empty",
@@ -997,8 +997,8 @@
     "situation": "室友的碗可以放好幾天,還說我『太計較』。",
     "styleName": ""
    },
-   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "22d4c22d67cce4ca6312068a08a6576114a7c4ed7f2c89f145f438ef8c3c5270",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh_HK/unknown_name",
@@ -1008,8 +1008,8 @@
     "situation": "室友的碗可以放好幾天,還說我『太計較』。",
     "styleName": "Some Unknown Style"
    },
-   "system_sha256": "5cc87e6553494a66daf202e622cf71efead6b503869e990370d9fb337f9fe5a8",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "0ce173b0effe9effd293722df5cd05b80638a6d2bbf931157e19736da234c0fb",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh_HK/near_miss_name",
@@ -1019,8 +1019,8 @@
     "situation": "室友的碗可以放好幾天,還說我『太計較』。",
     "styleName": "高情商"
    },
-   "system_sha256": "7ecfd00b6ea31a05a1279a4b09d4725ac299bfe049a48a70aa7ff58328c3a83e",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "94cc19ff5e3a1556980dfd82dd8054157c9b9fd22aef2e9421b8cdd0b91b0f91",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh_HK/unknown_id",
@@ -1030,8 +1030,8 @@
     "situation": "室友的碗可以放好幾天,還說我『太計較』。",
     "styleId": "made_up_id"
    },
-   "system_sha256": "b1ec8b2ed5dba965c4db43447ff23574a8b0b2195c26a13c2c6324822cc6dd6a",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "22d4c22d67cce4ca6312068a08a6576114a7c4ed7f2c89f145f438ef8c3c5270",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh_HK/unknown_both",
@@ -1042,8 +1042,8 @@
     "styleId": "made_up_id",
     "styleName": "Nope"
    },
-   "system_sha256": "81bb1c9173ffa2d5e569b555933bb6b486c30496f16626cc0211a0be47c90adb",
-   "user_sha256": "1f3d006278b61ba0ada8e430dd731df727208a07c0cac33307a986f4c93fcdf8"
+   "system_sha256": "3b9fd3cba0b8c91e60dcfb537ba868e4458ce6c0e28e60c966e7cd36af2fe739",
+   "user_sha256": "35577c3ede25fb8835d8fe9d598bba58a97a9abd9df961c517695c300c348cfc"
   },
   {
    "id": "vent/vent/zh-Hans/absent",
@@ -1184,8 +1184,8 @@
     "locale": "ja_JP",
     "situation": "彼氏が私の誕生日をまた忘れてた。"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/empty",
@@ -1195,8 +1195,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": ""
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/unknown_name",
@@ -1206,8 +1206,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "Some Unknown Style"
    },
-   "system_sha256": "2de5781b08c396ecdc2af19fa7a9ebbfa9810ba18c080031565b2983e08bdd5d",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "027fc4a1cb4c7e927941a275f1ac8579a19e1578179a2bfbdaf011f010e791c1",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/near_miss_name",
@@ -1217,8 +1217,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "高情商"
    },
-   "system_sha256": "e1ed4c5480b24e81df96bf6fc85f90706a4e54fe8834e537ec9b34d77874891b",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9199b6da2f33d88f3c757a5e7b521f0ec786be79162faa7896f841799ab2ea0c",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/unknown_id",
@@ -1228,8 +1228,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "made_up_id"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/unknown_both",
@@ -1240,8 +1240,8 @@
     "styleId": "made_up_id",
     "styleName": "Nope"
    },
-   "system_sha256": "a6065c37b75e0e8ede1b7dad715174fae37d111f1f8b63c0c20cfff7770b0bb1",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "79cf9287bd38e3e512b833069b05e8b640d4c2bdfdb34b9d3bb70246f89039d6",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ko_KR/absent",
@@ -1713,8 +1713,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "high_eq"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_high_eq",
@@ -1724,8 +1724,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "高 EQ"
    },
-   "system_sha256": "86a077f7596201d2f5958a429f4d376e3318568562e585a6e094df06844ab7cb",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "e306153ae94fa89a003580ef4f494e3f8c873cb9237c8e89f3e6b3b0301554b5",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_passive_aggressive",
@@ -1735,8 +1735,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "passive_aggressive"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_passive_aggressive",
@@ -1746,8 +1746,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "陰陽怪氣"
    },
-   "system_sha256": "636a6c06030eeae6a6f47ae6a2a8b3c552f62e0a5da5231cc7d41c8abb165510",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "6341e04a38b13d6136bd9c12eab196f594356a6177f5d760908811b957a0a7e4",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_jp_workplace_keigo",
@@ -1757,8 +1757,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "jp_workplace_keigo"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_jp_workplace_keigo",
@@ -1768,8 +1768,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "日式敬語"
    },
-   "system_sha256": "10c93fdcd9a2e1cfc2dab435ed6cd3639efe054a062220e6ac2d2a4c1abd119e",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "f5e681f0b10a3ccf04e7e43b20fd6cff95be242237e9974d1a5882f9cc00b36f",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_literary_lu_xun",
@@ -1779,8 +1779,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "literary_lu_xun"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_literary_lu_xun",
@@ -1790,8 +1790,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "文學體"
    },
-   "system_sha256": "7e596f245ec9bc4db21f46a393daba23a022a915d53b8d5c0ee09cbf035133fd",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "1d5bae687d279dc524a50023e76a3b4fd3ab3bc72f6d08cc6568d12a9a0f825c",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_philosopher",
@@ -1801,8 +1801,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "philosopher"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_philosopher",
@@ -1812,8 +1812,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "哲學家"
    },
-   "system_sha256": "7dd943985472862aef0b1f943e82963770091ccb5db0c2f5947e379f559c2f78",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "2788cc0375da30e101145f71a04e678e98eed574709d67c4599aff34e95589d7",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_grandma_wisdom",
@@ -1823,8 +1823,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "grandma_wisdom"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_grandma_wisdom",
@@ -1834,8 +1834,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "奶奶智慧"
    },
-   "system_sha256": "6e34be1cbd9765cac69c650843b55f596abc600e2d412ee25aebcd4b9129f690",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "67e782e0057a0f73111d135f489a812642078b27c029dbadc677eb6fe7355dfd",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_tweet_short",
@@ -1845,8 +1845,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "tweet_short"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_tweet_short",
@@ -1856,8 +1856,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "一句話"
    },
-   "system_sha256": "6fa9e8fb55ad706290cfbf6c373e7faa3f3178f2e956f1fd669bdfb36229dd65",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "04829d194638611ef03dc5dcd0899e8f50073efedccd47be9fd1abe0d5d5f63d",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_id_xiaohongshu",
@@ -1867,8 +1867,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleId": "xiaohongshu"
    },
-   "system_sha256": "a1f6dca95c92e7e350572164121e6396790ed8bd0c3ab91b960a5c62dfb112e5",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "48fd39b9f127f65612588c7e18beaff90cba65e1a0a32e964d11bc66695a70bb",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/free_name_xiaohongshu",
@@ -1878,8 +1878,8 @@
     "situation": "慣老闆陳志明又在下班前十分鐘丟一個案子給我，說明天早上就要。",
     "styleName": "小紅書吐槽"
    },
-   "system_sha256": "7ceacac9dd167f98f884b49bca668a5489675015f1117985f1da7ebb3e3df967",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "ffd1ba7fe972ad833c1af0def98976bde52b11e36660be75eaabdac1473c03ca",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh_TW/pro_no_form_bjing",
@@ -1890,8 +1890,8 @@
     "styleId": "bjing_taunt",
     "styleName": "京片兒"
    },
-   "system_sha256": "96004731c24c80f7b66819b04cd1dce54146b69a7c39a37e93bef16c1e29d2e9",
-   "user_sha256": "6460f09333025be53cbe142a070eb8073548618a27429b2ddd3670e2dfb6739b"
+   "system_sha256": "ca8f51a77930756fd235c6bc1b8b62429da931ebab358f3537a007cb0cbbbda4",
+   "user_sha256": "06d1106386fb2bbb5f269fec470f1ade508549ec20a20fe9c05ca21a887ec2a2"
   },
   {
    "id": "vent/vent/zh-Hans/free_id_high_eq",
@@ -2265,8 +2265,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "high_eq"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_high_eq",
@@ -2276,8 +2276,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "高EQ"
    },
-   "system_sha256": "1ef8ee1a11bc26761240e7765661c8f131eb12d7f9e89f0054a158d3c9c7afaf",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "f95bc3ef99b530c9e2b73ef4cff5f4511f2dbdedb8b81b55833577d4f24e0b25",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_passive_aggressive",
@@ -2287,8 +2287,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "passive_aggressive"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_passive_aggressive",
@@ -2298,8 +2298,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "パッシブ・アグレッシブ"
    },
-   "system_sha256": "1dcc4fe9dcecc0ae6229962d62de010178df2603d94724828635040f88d0cdd7",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "94c9d37a8512220c313ecfe4514740975eea174e538949f5665872f06288119c",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_jp_workplace_keigo",
@@ -2309,8 +2309,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "jp_workplace_keigo"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_jp_workplace_keigo",
@@ -2320,8 +2320,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "敬語"
    },
-   "system_sha256": "a2eeec1956b18d671cdc2440bd4a41a8f36c70f9359ae5a315e8a5a1774101b6",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "2525d8a73c67a0b4630e53a4a41f40f261ac367d4dfc14949ece45a35a85f172",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_literary_lu_xun",
@@ -2331,8 +2331,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "literary_lu_xun"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_literary_lu_xun",
@@ -2342,8 +2342,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "文学風"
    },
-   "system_sha256": "3fcf4be81db98b3f8f371c0377f0e2df1d85290fd537eda528b080c912f8dd02",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9c1dafa2b2b1e99bf53d8a1e31400c1234229479c54e6b48bf7c04225f4055dd",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_philosopher",
@@ -2353,8 +2353,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "philosopher"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_philosopher",
@@ -2364,8 +2364,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "哲学者"
    },
-   "system_sha256": "10023b7fe08172dbbcdd6ab34c7fda3a5ed4429bdf775a2eab27cba0167956f5",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "d6d5a7a996b8114566387f992810ff752e962a596f9c87b4ce0a1bfd95f14f01",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_grandma_wisdom",
@@ -2375,8 +2375,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "grandma_wisdom"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_grandma_wisdom",
@@ -2386,8 +2386,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "おばあちゃんの知恵"
    },
-   "system_sha256": "5303b9d2ff774ae22babf2df7a52ac976ba1b6f3a1d6fbb773f8cb941c1abc0a",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "12fcc95fff9f33936efefc8bf190b01a0051b7f00d51f0d4b1dcd5543dc95dc3",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_tweet_short",
@@ -2397,8 +2397,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "tweet_short"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_tweet_short",
@@ -2408,8 +2408,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "ワンライナー"
    },
-   "system_sha256": "5703a226a856f6df3a0576ab502a98d984f7e2689fa9e1812f3903f0100ccb94",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "8f63cb9826c59d0b4a44ab31b792625444a4b1d59e02929256a0a7842dc8b834",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_id_xiaohongshu",
@@ -2419,8 +2419,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleId": "xiaohongshu"
    },
-   "system_sha256": "55d440f2b84dbbffd044302bc765e687bcf5655c9752ad287fd90a9ce262bd5c",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "9e86f34e4dfcecbd1261b9bfe12774bc44c784ccf42a8125ca44969c0737f605",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/free_name_xiaohongshu",
@@ -2430,8 +2430,8 @@
     "situation": "彼氏が私の誕生日をまた忘れてた。",
     "styleName": "SNS愚痴投稿"
    },
-   "system_sha256": "40a282b84dbccb25a57684a41b8b3ae4fbfa3163eb23f47dbfad8f187a089760",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "c69361a18a1b75e2eae7301ddf4afcc2b7a8e7fc29fb1ad7b00d28e178153d63",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ja_JP/pro_no_form_bjing",
@@ -2442,8 +2442,8 @@
     "styleId": "bjing_taunt",
     "styleName": "北京なまり"
    },
-   "system_sha256": "00dc1d43fc50120fe5b16b3a4b81b9256a9a1c09d78708f8c8acc95181a82f69",
-   "user_sha256": "eb4c831af26b4e6e20ed4d37a96f4b3bd1ba0d6757157b87d7746bb7c72fe12f"
+   "system_sha256": "5de605e870c1aaaf1662baa8b77e4478003aff99063be1cd7385a842aec3667a",
+   "user_sha256": "c6948debad75fa57f7083a665840d59be11908488ca129af9725733013d90e24"
   },
   {
    "id": "vent/vent/ko_KR/free_id_high_eq",

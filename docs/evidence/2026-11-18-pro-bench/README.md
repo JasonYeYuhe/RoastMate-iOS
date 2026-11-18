@@ -98,3 +98,43 @@ python3 $B/cloud.py $B/runs/<tag>_cloud.jsonl            # preview Worker on :87
 ## 1.8.0 baseline (control180, 2026-11-18, macOS 27.2.1)
 
 (filled in below as each part finishes)
+
+## Q2b — one strong word in zh-Hant / ja Vent (cloud), 11-18: **PASSED on attempt 2**
+
+Baseline (`control180_cloud.jsonl`): Vent drafts with a strong word zh_TW 1/6, ja 0/6, en
+1/6; Feral swear zh_TW 6/6, ja 6/6, en 4/6. The 10-22 rewrite had made strong words
+optional in zh-Hant Vent ("挑一個,或一個都不用") and ja Vent named none, against the
+05-23 intent the plan cites ("1–2 strong words"). en and zh-Hans were left alone (no
+documented intent for en; zh-Hans is not in the bench).
+
+Change (`cloud-worker/src/vent_prompt.js`, `calibration.js`):
+- zh-Hant and ja Vent ask for **one** word that shows real anger, inside or at the end of
+  a sentence, never as the opener, never a second one, never a list; the styled voices
+  (冷處理, 職場冷暴力, 台劇腔) are told it still applies;
+- the example words rotate with the situation (`rotatePick`, at most 4 shown): with a
+  fixed order the first word, 很扯, turned up in 7/12 drafts (10-22: 靠北 9/14);
+- the same instruction, with the same rotated words, is restated last in the user
+  prompt, where this model weighs the prompt most;
+- only the 52 zh-Hant/ja Vent prompts of the 312 pinned ones changed
+  (`test/fixtures/head_prompts.json` re-pinned and checked case by case); Feral, roast,
+  roommate, en and zh-Hans prompts are byte-identical. Worker tests 165/165.
+
+| run (preview Worker) | zh_TW strong | ja strong | names | over length | Simplified |
+|---|---|---|---|---|---|
+| dev 1 (system line only) | 10/12 | 5/12 | 4/24 | 0 | 0 |
+| dev 2 (+ rotation, + user line) | 12/12 | 11/12 | 4/24 | 0 | 0 |
+| gate 1, fixed / **unseen 1** | 6/6 / 5/6 | 6/6 / **3/6 ✗** | 5/24 (control 6/24) | 0 | 0 |
+| gate 2, fixed / unseen 2 | 6/6 / 8/8 | 6/6 / 8/8 | 2/28 (control: the same 2 fixed ja items; 0/16 unseen) | 0 | 0 |
+| control (same preview, committed prompt), unseen 2 | 3/8 | 0/8 | 0/16 | 0 | 0 |
+
+- Gate 1 failed on unseen ja: the misses were in the formal styles and used strong
+  phrases outside the fixed lexicon (何様のつもり, 許されません), which was not widened
+  after the fact. Attempt 2 named the rotated example words in the user line and asks
+  for one of them; it was scored on a second sealed set (`sealed/cloud_unseen2.json`),
+  because set 1's outputs had been read.
+- Template check: the most frequent word is in 5/16 drafts (ふざけんな) and 4/12
+  (ありえねえ); no shape repeats like 10-22's 「…喔？」.
+- Veto read (agent, zh read non-natively): nothing worse than control. One forced word
+  in dev 2 (「把人當機車使」) did not recur. ja names remain a pre-existing defect at
+  the control's rate.
+- Not deployed. It goes to production once, with Q2a (plan §3 Q2).

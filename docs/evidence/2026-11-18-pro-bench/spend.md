@@ -6,4 +6,6 @@ OpenRouter balance read with `scripts/openrouter-balance.sh` (`used` is cumulati
 |---|---|---|---|---|
 | 11-18 | Q0 cloud baseline (preview Worker, Vent + Feral, 3 locales) | 36 | $0.1404 → $0.1463 | $0.0059 |
 
-Running total: **$0.0059** of $2.
+| 11-18 | Q2b: 2 dev rounds + gate attempts 1 and 2 (control and candidate), preview Worker | 140 | $0.1463 → $0.1735 | $0.0272 |
+
+Running total: **$0.0331** of $2.

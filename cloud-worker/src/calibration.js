@@ -45,6 +45,16 @@ function hash(text) {
   return h >>> 0;
 }
 
+/// `n` entries of `pool` in order, starting at a position chosen by `seed`, so
+/// no word leads every request's list (1.9.0 Q2b: with a fixed order the first
+/// word, 很扯, turned up in 7 of 12 zh-Hant Vent drafts; 靠北 did the same on
+/// 10-22).
+export function rotatePick(pool, seed, n) {
+  if (!pool.length) return [];
+  const start = hash(seed) % pool.length;
+  return Array.from({ length: Math.min(n, pool.length) }, (_, k) => pool[(start + k) % pool.length]);
+}
+
 /// Two different entries of `pool`, chosen by `seed`.
 export function pickTwo(pool, seed) {
   const h = hash(seed);

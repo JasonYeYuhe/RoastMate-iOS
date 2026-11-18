@@ -104,9 +104,21 @@ test("ja gets Japanese examples only, no word list for vent, and the first-perso
     assert.match(p, /単語を並べたり、最後に括弧で付け足したりしない/);
   }
   // The old vent list (うるせえ、マジで、ふざけんな、いい加減にしろ、ありえねえ) was
-  // printed verbatim into a reply; vent now names no words at all.
-  const vent = buildVentSystemPrompt("vent", "ja_JP", "");
-  for (const w of ["うるせえ", "ふざけんな", "いい加減にしろ", "ありえねえ"]) assert.ok(!vent.includes(w), w);
+  // printed verbatim into a reply under a "must use N words" quota (10-22), so
+  // vent named no words at all. 1.9.0 Q2b (bench 11-18: 0/6 ja Vent drafts had
+  // a strong word): one word, named as up to four examples (rotated by the
+  // situation) inside a sentence, never a quota and never a list — the same
+  // shape as Feral's line.
+  for (const styleName of ["", "冷たい返し"]) {
+    const vent = buildVentSystemPrompt("vent", "ja_JP", styleName);
+    const line = vent.split("\n").find((l) => l.includes("強い言葉") && l.includes("例えば"));
+    assert.ok(line, `ja vent (${styleName || "unstyled"}) names example words`);
+    assert.match(line, /例えば/);
+    assert.match(line, /一つ/);
+    assert.match(line, /書き出しには使わない/);
+    assert.match(line, /単語を並べない/);
+    for (const w of ["うるせえ", "マジで"]) assert.ok(!vent.includes(w), w);
+  }
 });
 
 test("zh-Hant recommends Taiwan register and names mainland markers only as things to avoid", () => {
@@ -207,7 +219,10 @@ test("the situation only picks examples: it never appears in the system prompt, 
   for (const l of ALL) for (const i of INTENSITIES) {
     const p = buildVentSystemPrompt(i, l, "", "UNIQUE-SITUATION-陳志明");
     assert.ok(!p.includes("UNIQUE-SITUATION") && !p.includes("陳志明"), `${l}/${i}`);
-    if (ventVoice(l) !== "hant") assert.equal(p, buildVentSystemPrompt(i, l, "", "something else"), `${l}/${i}`);
+    // zh-Hant picks calibration lines by situation; since 1.9.0 Q2b the zh-Hant and
+    // ja Vent example words rotate with it too. Everything else ignores it.
+    const rotates = ventVoice(l) === "hant" || (ventVoice(l) === "ja" && i === "vent");
+    if (!rotates) assert.equal(p, buildVentSystemPrompt(i, l, "", "something else"), `${l}/${i}`);
   }
 });
 
@@ -270,4 +285,37 @@ test("ja asks for a short single paragraph and no invented details", () => {
     assert.match(p, /ユーザーが書いていないこと/);
     assert.doesNotMatch(p, /200字以内/);
   }
+});
+
+// --- 1.9.0 Q2b: one strong word in zh-Hant / ja Vent ---------------------------
+
+test("Q2b: zh-Hant and ja Vent ask for one strong word in the system and the user prompt; Feral, en and zh-Hans do not get the new line", async () => {
+  const { strongWordUserLine } = await import("../src/vent_prompt.js");
+  for (const [loc, needle] of [["zh_TW", "火大的詞"], ["zh_HK", "火大的詞"], ["ja_JP", "強い言葉を一つ"]]) {
+    for (const styleId of ["", "cold_violence", "corporate_passive_violence"]) {
+      const user = buildVentUserPrompt("室友偷吃我的便當。", loc, "", { styleId, intensity: "vent" });
+      assert.ok(user.includes(needle), `${loc}/${styleId || "unstyled"} vent user prompt`);
+      const feral = buildVentUserPrompt("室友偷吃我的便當。", loc, "", { styleId, intensity: "feral" });
+      assert.ok(!feral.includes(needle), `${loc}/${styleId || "unstyled"} feral user prompt`);
+    }
+  }
+  for (const loc of ["en_US", "zh_CN"]) assert.equal(strongWordUserLine(loc, "vent"), "");
+  assert.equal(strongWordUserLine("ja_JP", "feral"), "");
+});
+
+test("Q2b: the Vent example words rotate with the situation, so no word leads every list", async () => {
+  const { rotatePick } = await import("../src/calibration.js");
+  const pool = ["很扯", "傻眼", "白目", "機車", "很盤", "是怎樣", "夠了喔", "火大", "三小", "靠北"];
+  const firsts = new Set();
+  for (const sit of ["室友偷吃便當", "主管搶功勞", "房東不修冷氣", "朋友借錢不還", "前任亂講話", "我媽一直比較", "同事丟報表", "樓上很吵"]) {
+    const picked = rotatePick(pool, sit, 4);
+    assert.equal(picked.length, 4);
+    assert.equal(new Set(picked).size, 4);
+    for (const w of picked) assert.ok(pool.includes(w));
+    firsts.add(picked[0]);
+    // deterministic for the same situation
+    assert.deepEqual(rotatePick(pool, sit, 4), picked);
+  }
+  assert.ok(firsts.size >= 4, `only ${[...firsts]} lead`);
+  assert.deepEqual(rotatePick([], "x", 3), []);
 });

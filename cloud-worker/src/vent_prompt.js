@@ -33,7 +33,7 @@
 //     swear word goes inside a sentence.
 
 import { isTraditionalChinese } from "./locale.js";
-import { privateDraftCalibration } from "./calibration.js";
+import { privateDraftCalibration, rotatePick } from "./calibration.js";
 import { languageDirective, userLanguageReminder } from "./language.js";
 import { resolveStyleId, styleVoiceInstruction, styleVoiceBlock, styleUserLine, STYLED_LENGTH, STYLED_MAX } from "./style_voice.js";
 
@@ -126,14 +126,14 @@ export const VOICES = {
       vent: "很扯、傻眼、白目、機車、很盤、是怎樣、夠了喔、火大、三小、靠北",
       feral: "幹、北七、爛人、王八蛋、去你的、白目、機車、三小、靠北、滾"
     },
-    block: (intensity, v, styled = false) => [
+    block: (intensity, v, styled = false, situation = "") => [
       "繁體中文(台灣)口氣:",
       styled
-        ? "- 口吻照使用者選的風格(見下面的 STYLE VOICE)來寫,用詞是台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。"
+        ? "- 口吻照使用者選的風格(見下面的 STYLE VOICE)來寫,用詞是台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。" + (intensity === "vent" ? "就算風格的口吻很冷靜或很正式,也要有下面說的那個火大的詞。" : "")
         : "- 寫成台灣人氣到在 LINE 上打字的口氣:台灣用語、台灣說法。語尾助詞(啦、欸、齁、耶)偶爾自然帶到就好,不用每句都加。",
       intensity === "feral"
         ? `- 暴走模式:一定要有真的髒話,一兩個就夠,放在最狠的地方,不要每句都塞。台灣常用的罵法(配合這個情境挑;不是清單,更不要把詞列出來):${v.vocab.feral}。`
-        : `- 台灣常用的罵法(配合這個情境挑一個,或一個都不用;不是指標,不要硬塞,更不要把詞列出來):${v.vocab.vent}。`,
+        : `- 要有一個看得出真的火大的詞(台灣常用的說法,配合這個情境挑一個,例如:${ventExamples(v.vocab.vent, situation)})。一個就夠:放在句子中間或句尾,不要拿來開頭,不要硬塞第二個,更不要把詞列出來。`,
       "- 不要套固定句型:不要預設用「靠北」,也不要用「你當我…喔？」「你是把…當…喔？」這種反問句。大部分句子用直述句,直接講對方做了什麼;問句最多一個,而且不要用「你當我…」開頭、不要用「…喔？」結尾。",
       "- 不要用大陸用語:老子、傻逼、特麼、服了(真服了)、裝什麼裝、臥槽、尼瑪、你妹、牛逼、絕了。也不要用大陸詞彙:視頻(→影片)、信息(→訊息)、質量(→品質)、網吧(→網咖)、微信(→LINE)、朋友圈(→限動、貼文)、微博(→IG、FB)。",
       "- 自稱用「我」,不要用「老子」。",
@@ -155,16 +155,16 @@ export const VOICES = {
     softOpeners: "「あらまあ…」/「やれやれ…」",
     specific: "「金を借りる時だけ優しくて、返せと言ったら既読無視」は「最低」より刺さる",
     reflective: "「その情熱を自分に向ければ…」/「あなたはもっと大切にされるべき…」",
-    vocab: { vent: "", feral: "クソ、ふざけんな" },
-    block: (intensity, v, styled = false) => [
+    vocab: { vent: "ムカつく、ふざけんな、いい加減にしろ、最低、なめんな、ありえねえ", feral: "クソ、ふざけんな" },
+    block: (intensity, v, styled = false, situation = "") => [
       "日本語の口調:",
       intensity === "feral"
         ? (styled
           ? `- 口調はユーザーが選んだスタイル(下の STYLE VOICE)に合わせ、本気でキレていることが伝わるように書く。本気の罵倒(例えば${v.vocab.feral})を少なくとも一つ、一番効くところで使う。数を稼ぐために並べない。`
           : `- 本気でキレている人の話し言葉(タメ口)で書く。本気の罵倒(例えば${v.vocab.feral})を少なくとも一つ、一番効くところで使う。数を稼ぐために並べない。`)
         : (styled
-          ? "- 口調はユーザーが選んだスタイル(下の STYLE VOICE)に合わせ、本気の苛立ちをにじませる。強めの言葉は効くところで自然に使ってよいが、ノルマではない。"
-          : "- 本気でイラついている人の話し言葉(タメ口)で書く。強めの言葉は効くところで自然に使ってよいが、ノルマではない。"),
+          ? `- 口調はユーザーが選んだスタイル(下の STYLE VOICE)に合わせ、本気の苛立ちをにじませる。スタイルが冷静でも丁寧でも、本気で腹を立てていると分かる強い言葉(例えば${ventExamples(v.vocab.vent, situation)})を一つ、文の途中か文末に入れる。書き出しには使わない。二つ目は足さない。単語を並べない。`
+          : `- 本気でイラついている人の話し言葉(タメ口)で書く。本気で腹を立てていると分かる強い言葉(例えば${ventExamples(v.vocab.vent, situation)})を一つ、文の途中か文末に入れる。書き出しには使わない。二つ目は足さない。単語を並べない。`),
       "- 単語を並べたり、最後に括弧で付け足したりしない。",
       "- 一人称はユーザーの文に出てくる一人称(私・あたし・僕・俺など)に合わせる。書かれていなければ「私」を使うか、一人称を省く。「俺」「お前」口調をデフォルトにしない。",
       "- 書き出しを毎回罵り言葉にしない。相手がしたこと・言ったことから始める。",
@@ -183,6 +183,28 @@ export const VOICES = {
     ].join("\n")
   }
 };
+
+/// The Vent example words for this request: the script's list, rotated by the
+/// situation so the same word does not lead (and get picked) every time; at
+/// most 4 shown.
+function ventExamples(list, situation) {
+  return rotatePick(String(list).split("、").filter(Boolean), situation, 4).join("、");
+}
+
+/// 1.9.0 Q2b: Vent in zh-Hant and ja promises one strong word (bench 11-18:
+/// zh_TW 1/6, ja 0/6 had one). Restated last, where this model weighs the
+/// prompt most; the styled voices (冷處理, 職場冷暴力, 台劇腔) otherwise
+/// dropped it (ja 5/12 with the system line alone). Feral has its own swear
+/// rule; other scripts are unchanged.
+export function strongWordUserLine(locale, intensity, situation = "") {
+  if (intensity !== "vent") return "";
+  const voice = ventVoice(locale);
+  switch (voice) {
+    case "hant": return `裡面要有一個看得出真的火大的詞,從這幾個挑一個最貼切的:${ventExamples(VOICES.hant.vocab.vent, situation)}。放在句子中間或句尾,不要拿來開頭;就算風格的口吻很冷靜或很正式也一樣。`;
+    case "ja": return `本気で腹を立てていると分かる強い言葉を一つ、次の中から一番合うものを選んで入れる:${ventExamples(VOICES.ja.vocab.vent, situation)}。文の途中か文末に置き、書き出しには使わない。スタイルが冷静でも丁寧でも同じ。`;
+    default: return "";
+  }
+}
 
 function universalRules(v) {
   return [
@@ -288,7 +310,7 @@ export function buildVentSystemPrompt(intensity, locale, styleName, situation = 
       universalRules(sv),
       intensity === "feral" ? feralRules(sv, true) : ventRules(sv, true),
       styledCalibration(locale, intensity, situation),
-      v.block(intensity, v, true),
+      v.block(intensity, v, true, situation),
       styleVoiceBlock(instruction, intensity, voice),
       languageDirective(locale)
     ].join("\n\n");
@@ -302,7 +324,7 @@ export function buildVentSystemPrompt(intensity, locale, styleName, situation = 
     universalRules(v),
     intensity === "feral" ? feralRules(v) : ventRules(v),
     privateDraftCalibration(locale, intensity, situation),
-    v.block(intensity, v),
+    v.block(intensity, v, false, situation),
     languageDirective(locale)
   ].join("\n\n");
 }
@@ -404,6 +426,7 @@ export function buildVentUserPrompt(situation, locale, extra = "", style = {}) {
     instruction ? styleUserLine(instruction, ventVoice(locale), style && style.intensity) : "",
     instruction ? styledVoiceUserLine(locale, situation) : voiceUserLine(locale, situation),
     ownFamilyLine(locale, situation),
+    strongWordUserLine(locale, style && style.intensity, situation),
     extra,
     userLanguageReminder(locale)
   ].filter(Boolean);
