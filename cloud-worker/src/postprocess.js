@@ -199,7 +199,9 @@ const SURNAMES = new Set([..."陳陈林黃黄張张李王吳吴劉刘蔡楊杨�
 // 「陳志明又在…」「王强把…」. Generic followers (是 / 的 / 在 / 都 / punctuation)
 // are left out on purpose: with them 「紀念日，」「高鐵的…」 would look like
 // names.
-const NAME_FOLLOWERS = new Set([..."又把說说講讲跟竟居每還还就也被給给叫問问突老總总再已"]);
+// 在 added in 1.9.0 (Q2a): 「同事陳志明在週會上…」 was missed and 陳志明 reached
+// 2 of 24 zh_TW drafts on the bench.
+const NAME_FOLLOWERS = new Set([..."又把說说講讲跟竟居每還还就也被給给叫問问突老總总再已在"]);
 // What comes right before a name: the end of a role word (老闆 / 同事 / 主管 /
 // 室友 / 學長 …), a preposition, or the start of a sentence. Without this,
 // 「在周会上说」「让我周末把」 read as names.
@@ -223,9 +225,48 @@ export function situationNames(situation, locale) {
   const code = String(locale || "").toLowerCase();
   const s = String(situation || "");
   if (code.startsWith("zh")) return chineseNames(s);
-  if (code.startsWith("ja") || code.startsWith("ko")) return [];
+  if (code.startsWith("ja")) return japaneseNames(s);
+  if (code.startsWith("ko")) return [];
   return [...new Set([...s.matchAll(EN_ROLE_NAME)].map((m) => m[1])
     .filter((n) => /^[A-Z]/.test(n) && !EN_NOT_NAMES.has(n) && !LATIN_OK.has(n.toLowerCase())))];
+}
+
+// 1.9.0 Q2a: Japanese had no name detection, so 「同僚の田中が…」 and
+// 「元カレの健太が…」 came back as 田中 / 健太 in 5 of 17 Pro 痛罵 takes and
+// at the same rate in single drafts (bench 11-18). Deliberately narrow, like
+// chineseNames: a common surname followed by an honorific or a particle, or a
+// person word + の + a 1–4 character kanji/katakana word + an honorific or a
+// particle that is not a common noun (「同僚の資料を」 is not a name).
+const JA_SURNAMES = ["佐藤", "鈴木", "高橋", "田中", "伊藤", "渡辺", "渡部", "山本", "中村", "小林", "加藤", "吉田",
+  "山田", "佐々木", "松本", "井上", "木村", "斎藤", "斉藤", "清水", "山崎", "池田", "橋本", "阿部", "山下", "中島", "石井", "小川", "前田", "岡田", "長谷川", "藤田", "後藤", "近藤", "村上", "遠藤", "青木", "坂本",
+  "福田", "太田", "西村", "藤井", "金子", "岡本", "藤原", "中野", "三浦", "原田", "中川", "松田", "竹内", "小野",
+  "田村", "中山", "和田", "石田", "森田", "上田", "柴田", "酒井", "工藤", "横山", "宮本", "内田",
+  "高木", "安藤", "谷口", "大野", "丸山", "今井", "高田", "藤本", "武田", "村田", "上野", "杉山", "増田", "小島",
+  "平野", "大塚", "久保", "松井", "岩崎", "桜井", "野口", "松尾", "菊地", "木下", "野村", "新井", "渡邊"];
+const JA_PERSON_WORDS = ["同僚", "上司", "部長", "課長", "係長", "先輩", "後輩", "同期", "友達", "友人", "親友", "元カレ",
+  "元カノ", "元彼", "元夫", "元妻", "彼氏", "彼女", "夫", "妻", "旦那", "嫁", "兄", "姉", "弟", "妹", "いとこ",
+  "ルームメイト", "店長", "大家", "隣人", "義母", "義父", "義姉", "義妹", "クラスメイト", "担任", "部下", "社長",
+  "知り合い", "幼なじみ", "幼馴染", "ママ友", "パート"];
+const JA_HONORIFIC = "(?:さん|くん|君|ちゃん|氏|様)";
+const JA_PARTICLE = "(?:が|は|に|を|と|って|から|も|、)";
+const JA_NOT_NAMES = new Set(["資料", "仕事", "発言", "態度", "言葉", "都合", "部屋", "家", "車", "荷物", "手柄", "成果",
+  "企画", "提案", "話", "顔", "気持ち", "機嫌", "物", "皿", "服", "弁当", "財布", "お金", "金", "誕生日", "予定", "約束",
+  "浮気", "指示", "命令", "報告", "連絡", "返事", "せい", "ため", "方", "人", "子", "家族", "友達", "彼氏", "彼女",
+  "会社", "職場", "机", "席", "分", "件", "こと", "もの", "ところ", "前", "後", "中", "ミス", "メール", "LINE", "ライン",
+  "奥", "娘", "息子", "母", "父", "子供", "親", "旦那", "奥様", "お子", "家族"]);
+// Surnames that are also place names (千葉, 宮崎, 石川, 山口) and the one-character 原 are left out on purpose.
+
+function japaneseNames(s) {
+  const found = new Set();
+  for (const name of JA_SURNAMES) {
+    if (new RegExp(`${name}${JA_HONORIFIC}|${name}${JA_PARTICLE}`).test(s)) found.add(name);
+  }
+  const person = JA_PERSON_WORDS.join("|");
+  const re = new RegExp(`(?:${person})の([\u4E00-\u9FFF\u30A0-\u30FF]{1,4}?)(?=${JA_HONORIFIC}|${JA_PARTICLE})`, "g");
+  for (const m of s.matchAll(re)) {
+    if (!JA_NOT_NAMES.has(m[1]) && !JA_PERSON_WORDS.includes(m[1])) found.add(m[1]);
+  }
+  return [...found];
 }
 
 function chineseNames(s) {
@@ -401,8 +442,56 @@ export function retryNudge(defects, locale) {
   } else if (code.startsWith("ja")) {
     if (latin) parts.push("今回は英単語を混ぜず、すべて日本語で書くこと。");
     if (rep) parts.push("同じ言葉を続けて繰り返さないこと。");
+    if (names) parts.push("人の名前は一切書かないこと(呼びかけも不可)。「あいつ」「あんた」や「上司」「元カレ」のような呼び方にする。");
   } else if (names) {
     parts.push("Do not use anyone's name anywhere, not even to address them; say \"you\" or their role.");
   }
   return parts.join("");
+}
+
+
+// --- 1.9.0 Q2a: takes of a Pro 痛罵 draft ---------------------------------------
+
+function charBigrams(text) {
+  const chars = [...String(text || "").toLowerCase()].filter((c) => !/[\s\p{P}\p{S}]/u.test(c));
+  if (chars.length < 2) return new Set(chars);
+  const out = new Set();
+  for (let i = 0; i < chars.length - 1; i++) out.add(chars[i] + chars[i + 1]);
+  return out;
+}
+
+function wordBigrams(text) {
+  const w = (String(text || "").toLowerCase().match(/[a-z0-9]+(?:['’][a-z]+)?/g) || []);
+  const out = new Set();
+  for (let i = 0; i < w.length - 1; i++) out.add(`${w[i]} ${w[i + 1]}`);
+  return out;
+}
+
+function jaccard(a, b) {
+  const union = new Set([...a, ...b]).size;
+  if (!union) return 0;
+  let inter = 0;
+  for (const x of a) if (b.has(x)) inter++;
+  return inter / union;
+}
+
+/// The 1.9.0 bench's near-duplicate rule (docs/evidence/2026-11-18-pro-bench/
+/// score.py): character-bigram Jaccard >= 0.35 in zh / ja, word-bigram
+/// Jaccard >= 0.40 otherwise.
+export function nearDuplicate(a, b, locale) {
+  const code = String(locale || "").toLowerCase();
+  if (code.startsWith("zh") || code.startsWith("ja")) return jaccard(charBigrams(a), charBigrams(b)) >= 0.35;
+  return jaccard(wordBigrams(a), wordBigrams(b)) >= 0.40;
+}
+
+/// The extra line for take 2 or 3 of a Pro 痛罵: a different angle on the same
+/// situation, so the takes do not read as one draft three times. English
+/// lines, like the rest of the user prompt; the language reminder stays last.
+export function takeNudge(take, _locale) {
+  // Gate 1 (11-18): take 3's "what it cost" angle turned hurt instead of
+  // furious and swore less in English (8/14). Both extra takes now restate
+  // that the fury and the swearing stay.
+  if (take === 2) return "This is a second, separate take: open with what they SAID (or how they excused it), not with what they did, and use different words. Same fury, and the same real swear word the rules ask for.";
+  if (take === 3) return "This is a third, separate take: open with what it cost the user (time, money, sleep, face) — furious, not sad — still aimed at them and still about what they did, in different words. Same real swear word the rules ask for.";
+  return "";
 }

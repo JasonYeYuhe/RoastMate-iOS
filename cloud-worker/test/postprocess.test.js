@@ -183,7 +183,10 @@ test("situationNames finds the person a Chinese situation names, and no ordinary
     "我媽每次過年都在親戚面前拿我跟表姊比，說人家在竹科年薪兩百萬。",
     "高鐵又誤點，我又遲到了", "室友的碗可以放好幾天,還說我『太計較』。"
   ]) assert.deepEqual(situationNames(sit, "zh_TW"), [], sit);
-  assert.deepEqual(situationNames("上司の田中がまた丸投げしてきた", "ja_JP"), [], "Japanese is left to the prompt");
+  // Until 1.9.0 Japanese was "left to the prompt"; the prompt did not hold
+  // (田中 / 健太 in 5 of 17 Pro 痛罵 takes, bench 11-18), so ja has its own
+  // narrow detector now (test/ja_names.test.js).
+  assert.deepEqual(situationNames("上司の田中がまた丸投げしてきた", "ja_JP"), ["田中"]);
 });
 
 test("situationNames (English): a capitalised name right after a role word, never a place or product", () => {

@@ -8,4 +8,6 @@ OpenRouter balance read with `scripts/openrouter-balance.sh` (`used` is cumulati
 
 | 11-18 | Q2b: 2 dev rounds + gate attempts 1 and 2 (control and candidate), preview Worker | 140 | $0.1463 → $0.1735 | $0.0272 |
 
-Running total: **$0.0331** of $2.
+| 11-18 | Q2a: smoke, 2 dev runs, gate 1, void gate 2, gate 2 (takes + single arms) | ≈ 600 upstream | $0.1735 → $0.3183 | $0.1448 |
+
+Running total: **$0.1779** of $2.

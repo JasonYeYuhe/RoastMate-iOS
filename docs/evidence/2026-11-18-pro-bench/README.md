@@ -95,9 +95,19 @@ python3 $B/cloud.py $B/runs/<tag>_cloud.jsonl            # preview Worker on :87
   ForbiddenTerms, PII) and every shown text from the bait categories, for a hand read.
   A flag counts only after it is read.
 
-## 1.8.0 baseline (control180, 2026-11-18, macOS 27.2.1)
+## 1.8.0 baseline (control180, 2026-11-18 22:35–23:53, macOS 27.2.1)
 
-(filled in below as each part finishes)
+| part | 1.8.0 on 27.2.1 |
+|---|---|
+| sendable, 648 calls / 1,888 shown versions | **non-answers 22.6 %** (short 354, question-only 116, no verb en 133), **one-word 164**, **grounded 53.1 %**, curated 0/648, calls showing < 3 versions 52, near-dup calls 8/648, Simplified 0, CJK in en 0, stray Latin 0, median 5.9 s / p90 7.5 s |
+| by intensity | Composed: non-answers 29.7 %, grounded 45.6 %; Sharp 21.3 % / 45.3 %; Savage 16.5 % / 68.8 % |
+| by locale | en 31.6 % / 37.2 %; zh_TW 26.5 % / 59.6 %; ja 9.9 % / 62.3 % |
+| simulator, 54 turns | generated 54/54, numbered 0, persona role check 8/9 (en raise: "You are the employee." again), median 4.0 s |
+| rewrites, 30 | curated 3/30 (en 2/8, zh_TW 1/16, ja 0/6); owner errors on r01/r02 0/10 (model-written 9) |
+| judge, blind set | threats 32/40 (veiled 20/28), legit blocked 8/40 — identical to 11-18 |
+| judge, 297 real outputs | 20 blocked — identical to 11-18 |
+| safety e2e (2 runs) | threat bait 10/10 curated, slur bait 8/8 curated, self-harm hard 6/6 crisis, directed 4 rejected + 2 shown without self-harm content, PII 0 echoed, legit heavy 16/16 generated; 4 automatic flags, all ja simulator turns quoting the user's own threat back (read: not threats) |
+| cloud (preview), 36 | Vent strong word zh_TW 1/6, ja 0/6, en 1/6; Feral swear 6/6, 6/6, 4/6; names 3 (all ja) |
 
 ## Q2b — one strong word in zh-Hant / ja Vent (cloud), 11-18: **PASSED on attempt 2**
 
@@ -138,3 +148,30 @@ Change (`cloud-worker/src/vent_prompt.js`, `calibration.js`):
   in dev 2 (「把人當機車使」) did not recur. ja names remain a pre-existing defect at
   the control's rate.
 - Not deployed. It goes to production once, with Q2a (plan §3 Q2).
+
+## Q2a — 3 takes of Pro 痛罵 (cloud): **CUT** (gate failed twice)
+
+Design measured: 3 parallel calls at the Worker's T 0.95, the extra two with an angle
+line each (what they said; what it cost), started with the first call so latency stays
+one call's. Only a Pro-lane Feral request with `variantCount` got takes; each extra take
+went through `cleanVentText` → `stripNameAddress` → `draftDefects` and was dropped on
+any defect or a near-duplicate. Tested on the preview with a throwaway signing key
+(`wrangler dev --var`), never production's.
+
+| run | distinct calls | swear per take vs single draft (pooled) | names | Simplified | p90 |
+|---|---|---|---|---|---|
+| dev 1 (fixed) | 18/18 | — | **5/52** (ja: no Japanese name detection existed) | 0 | 2.8 s |
+| dev 2 (+ ja name detector, zh 「…在」) | 18/18 | — | 0/53 | 0 | 3.7 s |
+| **gate 1** (fixed + sealed set 3) | 42/42 | **110/125 = 88.0 % < 39/42 = 92.9 % ✗** (en 30/42 vs 13/14) | 0/125 | 0 | 4.4 s |
+| gate 2, first try | void: the throwaway account hit its own 200/day cap mid-run (`runs/void/`) | | | | |
+| **gate 2** (fixed + sealed set 4, 2 rounds) | 84/84 | 236/249 = 94.8 % ≥ 78/84 = 92.9 % | **4/249 ✗** | 0 | 3.7 s |
+
+- Gate 2's names are all ones the Worker cannot detect (bare given names: 宗翰, 直樹,
+  "Brenda" opening a sentence); 3 of the 4 are in the first take, which is the shipped
+  single-draft path, and the single-draft arm leaked 4/84 in the same run. The gate says
+  0, so by the plan's cut rule Q2a leaves 1.9.0 and Pro keeps one draft (pre-mortem 3).
+- Kept from the work: Japanese name detection (`japaneseNames`) and 在 as a name
+  follower in Chinese (`postprocess.js`, `test/ja_names.test.js`). They reduce names in
+  every Vent/Feral draft (fixed-set ja names 5/17 → 0/53 in takes; 0 in 24 single ja
+  drafts on the fixed set). They ride Q2b's single production deploy.
+- The takes code is in history (commit after this README) and removed from the Worker.

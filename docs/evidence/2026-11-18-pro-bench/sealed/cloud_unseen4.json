@@ -1,0 +1,159 @@
+{
+  "cloud": {
+    "styles_rotation": [
+      "high_eq",
+      "savage_no_filter",
+      "taiwanese_drama",
+      "cold_violence",
+      "corporate_passive_violence",
+      "passive_aggressive"
+    ],
+    "situations": {
+      "zh_TW": [
+        {
+          "id": "cx1",
+          "text": "搬家工人在搬運時把我整台六十五吋電視螢幕撞到全碎，現場居然還恐嚇我說樓梯太窄要臨時加收三倍費用才肯卸貨。我站在門口氣到全身發抖，天底下怎麼會有這麼惡劣的流氓店家？"
+        },
+        {
+          "id": "cx2",
+          "text": "冠宇在羽球場上打球動作危險又愛搶拍，剛才反手拍直接狠砸在我的眉骨上害我當場破皮流血。他竟然連一句道歉都沒有，還嘻皮笑臉跟旁人說是我自己站位太靠前，真的沒看過水準這麼差的人。"
+        },
+        {
+          "id": "cx3",
+          "text": "雅婷答應要當我婚禮的總召，結果彩排當天全程坐在新娘休息室狂發自拍修圖，完全把現場接待和流程丟給我妹一人收爛攤。敬酒時她還大聲喧嘩把香檳潑到我租的高級白紗上，連擦都不擦就轉身去吃甜點，簡直自私到了極點！"
+        },
+        {
+          "id": "cx4",
+          "text": "計程車司機開車全程不看導航一直低頭打手遊，好幾次差點在快車道直接追撞前車。我好心提醒他注意路況，他竟然當場急煞並把車停在高架橋路肩，轉頭咆哮威脅要我立刻滾下車，我真是差點嚇到心臟停掉。"
+        },
+        {
+          "id": "cx5",
+          "text": "臨櫃專員宗翰在幫我辦理掛失印鑑時，竟然大聲覆誦我的身分證字號和存款餘額，搞得全營業廳的客人都聽得一清二楚。我當場向他抗議侵犯個資，他還翻白眼譏諷說是我自己耳朵太敏感，這種專業水準到底怎麼考上行員的？"
+        },
+        {
+          "id": "cx6",
+          "text": "打排位賽時遇到隊友一開場送了首殺就直接心態崩壞，把全身裝備賣光買滿偵查守衛插在自家溫泉洗溫泉。我們四個人苦撐半小時，他還在全體聊天室打字給對面報我們的位置，這種垃圾玩家到底為什麼還沒被永久封號？"
+        },
+        {
+          "id": "cx7",
+          "text": "到府保母說好專心照顧六個月大的寶寶，我提早回家竟然發現她把嬰兒單獨反鎖在臥室哭到滿臉通紅，自己卻戴著降噪耳機在客廳沙發上呼呼大睡。奶瓶裡的水甚至早就涼透發酸，我真的氣到整個人手都在抖！"
+        },
+        {
+          "id": "cx8",
+          "text": "去骨科診所照 X 光，檢驗師不僅態度極其粗魯地硬扳我的骨折手腕，照完還把別人的胸腔片子塞進我的病歷夾發給主治醫師。要不是我自己眼尖發現名字對不上，差點就被誤診開錯消炎藥物，這種嚴重疏失簡直草菅人命！"
+        }
+      ],
+      "en_US": [
+        {
+          "id": "cx1",
+          "text": "The emergency vet performed three unapproved diagnostic tests on my dog without calling me, then held my dog hostage behind the desk until I swiped my credit card for fifteen hundred dollars. They knew I was terrified and completely took advantage of the situation."
+        },
+        {
+          "id": "cx2",
+          "text": "Marcus benched my son for the entire championship tournament just because we didn't buy private lessons from his personal training business. Watching my ten-year-old cry on the sidelines while this guy smirked with his clipboard made my blood boil. It is sickening how youth sports are run by petty bullies."
+        },
+        {
+          "id": "cx3",
+          "text": "The grocery delivery driver dumped four bags of leaking raw poultry right against my front screen door, completely trapping me inside my apartment. When I cracked the door to call after him, he literally flipped me off from his car and sped through the complex. Now my entryway smells like rotten chicken juice."
+        },
+        {
+          "id": "cx4",
+          "text": "Brenda showed up to my grandmother's memorial service in a bright neon sundress and spent the entire eulogy loudly live-streaming herself crying on TikTok. When my uncle gently asked her to put her phone away, she threw a massive tantrum in the foyer and made the whole afternoon about her own drama."
+        },
+        {
+          "id": "cx5",
+          "text": "The bank teller accidentally deposited my payroll check into a total stranger's account and then shrugged when I pointed out the incorrect account number on the receipt. She told me it would take ten business days to reverse their own clerical mistake while my rent is due tomorrow. I have never experienced such utter incompetence."
+        },
+        {
+          "id": "cx6",
+          "text": "Chloe brought two random guys into our home while babysitting our toddler and let them drink beer in our living room while our daughter was asleep upstairs. We caught the whole thing on the nursery cam, and she actually had the nerve to claim they were just helping her study."
+        },
+        {
+          "id": "cx7",
+          "text": "I ordered an authentic signed vinyl record on the collector forum, but the seller sent an obvious photocopied reproduction folded in half inside a soggy manila envelope. When I confronted him with comparison photos of the real signature, he immediately deleted his listing and scrubbed his account."
+        },
+        {
+          "id": "cx8",
+          "text": "Another parent from the elementary school PTA went behind my back to the principal and claimed my daughter was creating a hostile environment just because she won the science fair. Instead of talking to me like an adult, this woman filed a formal complaint to get my kid disqualified."
+        }
+      ],
+      "ja_JP": [
+        {
+          "id": "cx1",
+          "text": "佐々木からフリマで買った陶器のマグカップ、新聞紙一枚の雑な梱包のせいで粉々に割れて届いた。取引メッセージで伝えたら「郵便局の過失だから私は関係ない」と逆ギレされて呆れ果てた。"
+        },
+        {
+          "id": "cx2",
+          "text": "定期検診で行った歯科医院で、歯科衛生士に麻酔が完全に効いていないと何度も伝えたのに無視されてそのまま歯を削られた。痛みのあまり涙が出ているのに「大人が動かないで」と嘲笑されて信じられない。"
+        },
+        {
+          "id": "cx3",
+          "text": "審判の高橋、相手チームの悪質な後ろからのスライディングを全部見逃してこっちの抗議だけ一発退場にした。後から相手のキャプテンと仲良さそうに肩組んで笑っているのを見て本気で怒りが収まらない。"
+        },
+        {
+          "id": "cx4",
+          "text": "父の通夜の席で、直樹が親族控室の香典袋を勝手に全部開けて金額を品定めしていた。注意したら「遺産の管理を手伝ってやっているだけだ」と開き直ってポケットに現金をねじ込もうとして鳥肌が立った。"
+        },
+        {
+          "id": "cx5",
+          "text": "市民合唱団のピアノ伴奏者が本番直前のリハーサルで楽譜を自宅に忘れてきて、逆ギレして舞台上で鍵盤を叩きつけて帰ってしまった。団員全員が半年間練習してきた記念公演を台無しにされて本当に許せない。"
+        },
+        {
+          "id": "cx6",
+          "text": "置き配指定していないのに高額な一眼レフカメラの荷物を雨の降る玄関前の地面に直置きして行かれた。外箱は完全に水浸しで泥だらけになっていて、伝票を見たら勝手に受領印まで偽造されていて震える。"
+        },
+        {
+          "id": "cx7",
+          "text": "園のバザーの係で、他のママが仕入れ予算の現金を全額私用のランチや買い物に使っていたことが発覚した。問い詰めたら「後で補填するつもりだったのにケチくさい」と開き直られ、責任を丸投げされた。"
+        },
+        {
+          "id": "cx8",
+          "text": "個別指導のパーソナルトレーナーが、私が重いバーベルを持ち上げている最中に補助もせずずっとスマホで私用電話をしていた。危うく首にバーを落としかけて抗議したのに、「自立心が足りない」と説教されて呆れた。"
+        }
+      ]
+    },
+    "names": {
+      "zh_TW": [
+        "冠宇",
+        "雅婷",
+        "宗翰"
+      ],
+      "en_US": [
+        "Marcus",
+        "Brenda",
+        "Chloe"
+      ],
+      "ja_JP": [
+        "佐々木",
+        "高橋",
+        "直樹"
+      ]
+    },
+    "ui_style_names": {
+      "zh_TW": {
+        "high_eq": "高 EQ",
+        "savage_no_filter": "硬核回擊",
+        "taiwanese_drama": "台劇腔",
+        "cold_violence": "冷處理",
+        "corporate_passive_violence": "職場冷暴力",
+        "passive_aggressive": "陰陽怪氣"
+      },
+      "en_US": {
+        "high_eq": "High EQ",
+        "savage_no_filter": "Savage",
+        "taiwanese_drama": "Taiwanese Drama",
+        "cold_violence": "Cold Reply",
+        "corporate_passive_violence": "Corporate Passive Violence",
+        "passive_aggressive": "Passive Aggressive"
+      },
+      "ja_JP": {
+        "high_eq": "高EQ",
+        "savage_no_filter": "容赦なし",
+        "taiwanese_drama": "台湾ドラマ口調",
+        "cold_violence": "冷たい返し",
+        "corporate_passive_violence": "ビジネス冷たい暴力",
+        "passive_aggressive": "パッシブ・アグレッシブ"
+      }
+    }
+  }
+}

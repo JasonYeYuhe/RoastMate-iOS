@@ -1,0 +1,159 @@
+{
+  "cloud": {
+    "styles_rotation": [
+      "high_eq",
+      "savage_no_filter",
+      "taiwanese_drama",
+      "cold_violence",
+      "corporate_passive_violence",
+      "passive_aggressive"
+    ],
+    "situations": {
+      "zh_TW": [
+        {
+          "id": "cw1",
+          "text": "同事志豪明明自己把共用資料夾整批刪掉，居然還敢在全體大群組怪系統當機。害我加班重做四個小時，他本人拍拍屁股準時打卡下班，真的快把我氣瘋！"
+        },
+        {
+          "id": "cw2",
+          "text": "姑姑美惠今天跑來我家，竟然擅自把我整箱珍藏多年的簽名漫畫當成垃圾丟掉。被我質問還一臉理所當然地說擺著生灰塵很礙眼，我氣到整個人手都在發抖！"
+        },
+        {
+          "id": "cw3",
+          "text": "室友在完全沒打招呼的情況下，平日深夜帶了一大票陌生朋友回租屋處喝酒開趴。我明天早上有極其重要的證照考試，敲門提醒還被他們嘲諷開不起玩笑，到底憑什麼這樣欺負人？"
+        },
+        {
+          "id": "cw4",
+          "text": "明明早就講好租屋處禁止養寵物，男友竟然先斬後奏直接把一隻大狗牽回來。現在每天拉屎拉尿都要我收拾，他只顧著拍照發限動炫耀，到底有沒有把我的感受放在眼裡？"
+        },
+        {
+          "id": "cw5",
+          "text": "高中同學雅婷約我喝咖啡敘舊，結果一坐下就掏出一堆直銷保健食品瘋狂推銷。我委婉拒絕她還當場酸我安於現狀沒出息，多年的同學情誼根本被她當成業績工具！"
+        },
+        {
+          "id": "cw6",
+          "text": "高鐵託運把我全新的行李箱摔到外殼整片裂開，裡面的紀念品全部碎成粉末。客服人員態度極其傲慢，只丟一句外觀磨損不在賠償範圍內就想卸責，真讓人火冒三丈！"
+        },
+        {
+          "id": "cw7",
+          "text": "隔壁鄰居天天躲在公共樓梯間抽菸，濃烈的二手煙味直接順著大門縫隙灌進我家客廳。貼了管委會公告他還變本加厲，把菸蒂直接丟在我家門口踏墊上，超級沒水準！"
+        },
+        {
+          "id": "cw8",
+          "text": "搭捷運遇到一個大叔把手機影片音量開到最大放出來，整節車廂都是刺耳的罐頭笑聲。我好聲好氣請他戴耳機，他居然拍桌破口大罵我多管閒事，公共道德到底在哪裡？"
+        }
+      ],
+      "en_US": [
+        {
+          "id": "cw1",
+          "text": "I confided in my coworker Derek about an HR payroll discrepancy in confidence, and the idiot forwarded my entire confidential email chain to the department group. Now everyone is gossiping about my private compensation, and he just laughed it off as an honest mistake. I am shaking with pure rage right now."
+        },
+        {
+          "id": "cw2",
+          "text": "I explicitly told my sister-in-law Brittany that our pregnancy was strictly confidential until the first trimester ultrasound. She immediately went behind my back and posted the news on Instagram for random clout before I even got to tell my own mother. I have never felt so betrayed and furious in my entire life."
+        },
+        {
+          "id": "cw3",
+          "text": "My roommate decided to completely switch off the central heating before leaving for a weeklong ski trip just to save ten bucks on utilities. I came home from a twelve-hour shift to a freezing apartment with iced pipes, and when I confronted him, he told me to just wear a parka indoors. I am completely losing my mind."
+        },
+        {
+          "id": "cw4",
+          "text": "My boyfriend gave away the floor-seat concert tickets I spent three months saving up for to his buddy without even asking me first. He claims they needed a guys' night more than we needed a date, and he expects me to just brush it off. I have never been this disgusted with someone's selfishness."
+        },
+        {
+          "id": "cw5",
+          "text": "My supposed best friend bailed on my destination wedding forty-eight hours before our flight because she decided she didn't feel like travelling. I spent hundreds of dollars non-refundable reserving her room and dress, and she didn't even apologize for the financial hit or the heartbreak. Consider this friendship permanently dead and buried."
+        },
+        {
+          "id": "cw6",
+          "text": "Our contractor Greg demolished our only guest bathroom, demanded an upfront cash deposit for materials, and hasn't shown up for two straight weeks. Our hallway is covered in toxic dust and exposed wiring, and every time I call him, his phone goes straight to voicemail. I am beyond furious at this blatant scam."
+        },
+        {
+          "id": "cw7",
+          "text": "The guy next door lets his massive unleashed dog run across my front lawn every single morning to dig up my freshly planted flowerbeds. When I caught him watching his dog drop feces right on my front steps, he literally smirked and told me dogs will be dogs. I am sick of dealing with entitled neighbours who treat everyone else's property like a public toilet."
+        },
+        {
+          "id": "cw8",
+          "text": "A guy at the gym sat on the only squat rack for forty straight minutes scrolling on his phone without doing a single rep. When I politely asked how many sets he had left, he rolled his eyes and snapped that he pays a membership fee too. The sheer arrogance of people in public spaces makes my blood boil."
+        }
+      ],
+      "ja_JP": [
+        {
+          "id": "cw1",
+          "text": "先輩の山本さんが私のデスクでコーヒーをこぼし、大切なノートパソコンと手帳を水浸しにした。謝りもせず『ペーパーで拭けば乾くでしょ』と笑って済ませて、怒りで手が震える。"
+        },
+        {
+          "id": "cw2",
+          "text": "義妹の美咲が無断で私のブランドバッグを結婚式に持ち出し、ワインのシミをつけて返してきた。弁償を求めたら『家族なのにケチくさい』と逆ギレされ、呆れて言葉も出ない。"
+        },
+        {
+          "id": "cw3",
+          "text": "シェアハウスの同居人が夜中に帰宅した際、玄関の鍵どころかドアを全開にしたまま寝落ちしていた。不用心すぎて防犯上あり得ないし、注意しても『日本は安全だから平気』とヘラヘラ笑っていて本当に腹が立つ。"
+        },
+        {
+          "id": "cw4",
+          "text": "長年集めていた限定フィギュアを、彼氏に勝手にフリマアプリで売られていた。問い詰めたら『どうせ部屋の邪魔だし生活費の足しにした』と開き直られて、絶対に許せない。"
+        },
+        {
+          "id": "cw5",
+          "text": "ランチ会を断っただけで、ママ友の佐藤さんが保育園の保護者仲間に『あそこはお金に困っている』と嘘の噂を流していた。善意の顔をして陰湿な嘘をばらまく神経が本当に信じられない。"
+        },
+        {
+          "id": "cw6",
+          "text": "クール便の生鮮食品を、配達員が宅配ボックスにも入れず真夏の炎天下の玄関先に放置していった。中身は完全に腐敗して異臭を放っているのに、業者は『置き配完了済み』の一点張りで話にならない。"
+        },
+        {
+          "id": "cw7",
+          "text": "ベランダに干していた洗濯物に、上の階の住人が泥混じりの植木鉢の水を大量に浴びせて台無しにした。洗い直しの手間も謝罪もなく『ベランダだから水が垂れるのは当然』と開き直られて我慢の限界だ。"
+        },
+        {
+          "id": "cw8",
+          "text": "映画館で後ろの席の客が上映中ずっと私の座席の背もたれを蹴り続けてきた。小声でやめてほしいと頼んだらわざと強く蹴り返してきて、せっかくの映画が完全に台無しになった。"
+        }
+      ]
+    },
+    "names": {
+      "zh_TW": [
+        "同事志豪",
+        "姑姑美惠",
+        "高中同學雅婷"
+      ],
+      "en_US": [
+        "my coworker Derek",
+        "my sister-in-law Brittany",
+        "our contractor Greg"
+      ],
+      "ja_JP": [
+        "先輩の山本さん",
+        "義妹の美咲",
+        "ママ友の佐藤さん"
+      ]
+    },
+    "ui_style_names": {
+      "zh_TW": {
+        "high_eq": "高 EQ",
+        "savage_no_filter": "硬核回擊",
+        "taiwanese_drama": "台劇腔",
+        "cold_violence": "冷處理",
+        "corporate_passive_violence": "職場冷暴力",
+        "passive_aggressive": "陰陽怪氣"
+      },
+      "en_US": {
+        "high_eq": "High EQ",
+        "savage_no_filter": "Savage",
+        "taiwanese_drama": "Taiwanese Drama",
+        "cold_violence": "Cold Reply",
+        "corporate_passive_violence": "Corporate Passive Violence",
+        "passive_aggressive": "Passive Aggressive"
+      },
+      "ja_JP": {
+        "high_eq": "高EQ",
+        "savage_no_filter": "容赦なし",
+        "taiwanese_drama": "台湾ドラマ口調",
+        "cold_violence": "冷たい返し",
+        "corporate_passive_violence": "ビジネス冷たい暴力",
+        "passive_aggressive": "パッシブ・アグレッシブ"
+      }
+    }
+  }
+}
