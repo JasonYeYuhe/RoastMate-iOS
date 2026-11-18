@@ -81,6 +81,13 @@ enum RewriteThreatScreen {
     /// family, place or schedule with knowing, watching or a hint of harm, so
     /// "you skipped my dad's surgery" or "drive safe, the roads are icy" pass.
     static let veiledPatterns: [String] = [
+        // 1.9.0 (11-19): waiting for the reader at the end of their day, the
+        // shape production Vent drafts kept writing ("I'll be waiting right
+        // outside the door when you clock out", "I'll be there after your
+        // shift"). 0 hits on the 297 real outputs and the legit sets.
+        #"\bi('ll| will) be (waiting|there|outside)\b[^.!?]{0,40}\b(when you (clock out|get off|leave|get home|finish)|after your (shift|work|class|practice)|outside your (door|house|home|building|office|work|car))\b"#,
+        #"(下班|下課|下课|放學|放学|回家)(的時候|的时候|時|时|後|后)?[^，。！？,.!?]{0,6}(我會|我会|我就|我)[^，。！？,.!?]{0,4}(等你|在門口等|在门口等)"#,
+        #"(仕事終わり|仕事帰り|帰り道|帰り)[^。！？!?]{0,10}(待って(る|いる|ます)|待ち伏せ)"#,
         // English
         #"\byour (kids?|children|son|daughter|wife|husband|mom|mum|mother|dad|father|parents|family)\b[^.!?]{0,50}\b(school|bus stop|walks?|alone|still lives?|lives? on|street|say(s)? hi|i said hi)\b"#,
         #"\b(i saw|i've seen|i've been watching|i watched|i know) your (kids?|children|son|daughter|wife|husband|mom|mum|mother|dad|father|parents|family)\b"#,

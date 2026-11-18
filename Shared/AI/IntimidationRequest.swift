@@ -34,7 +34,7 @@ enum IntimidationRequest {
         #"\b(threatening|menacing|intimidating|scary) (message|text|note|reply|letter)\b"#,
         #"\b(know|knows) where (he|she|they) (lives?|works?|parks?|sleeps?)\b"#,
         #"\b(watch|watches) (his|her|their) back\b"#,
-        #"\bi'll be waiting (for (him|her|them)|outside|after)\b"#,
+        #"\bi('ll| will) be waiting (for (him|her|them)|outside|after)\b"#,
         #"\b(pay (him|her|them) a visit|teach (him|her|them) a lesson)\b"#,
         // Chinese (Traditional and Simplified in each pattern)
         #"(嚇|吓)(嚇|吓|唬)?(他|她|對方|对方|那個|那个)"#,

@@ -41,10 +41,12 @@ test("requests to intimidate or for slurs are found; ordinary vents are not", ()
 test("threat phrases in a draft are found; angry drafts without one are not", () => {
   for (const t of ["I know where you live, so think twice.", "我知道你住哪，走著瞧。", "夜道には気をつけろよ。",
                    "Nice house. Be a shame if something happened to it.",
-                   "Go the fuck die for all I care, you parasite.", "你這種人怎麼不去死。"]) assert.ok(threatInDraft(t), t);
+                   "Go the fuck die for all I care, you parasite.", "你這種人怎麼不去死。",
+                   "I'll be waiting right outside the door when you clock out—don't think I won't show up.",
+                   "I'll be there after your shift — not to talk, just to collect."]) assert.ok(threatInDraft(t), t);
   for (const t of ["You took credit for my slides, you spineless prick.", "幹，你又把報告丟給我，北七。",
                    "ふざけんな、借りた金くらい返せよ。", "This job is killing me and you don't even care.",
-                   "Go do your own dishes."]) assert.ok(!threatInDraft(t), t);
+                   "Go do your own dishes.", "I'll be waiting for you to apologize, which will be never."]) assert.ok(!threatInDraft(t), t);
 });
 
 test("the safety line is in the output language and empty when not needed", () => {
