@@ -452,6 +452,8 @@ test("roommate, roast, and vent with no, an unknown or a free style: prompts byt
   assert.match(fixture.generated_from, /HEAD 4ed652f/);
   // 1.9.0 Q2b changed exactly the 52 zh-Hant/ja Vent system prompts (one strong word); every other case is unchanged.
   assert.match(fixture.generated_from, /Q2b .*52 zh-Hant\/ja Vent system prompts only/);
+  // 1.9.0 safety changed every vent-mode system prompt (one rule line); roommate and roast stay byte-identical.
+  assert.match(fixture.generated_from, /safety .*every vent-mode system prompt.*roommate and roast unchanged/);
   const kinds = new Set(fixture.cases.map((c) => c.id.split("/")[0]));
   assert.deepEqual([...kinds].sort(), ["roast", "roommate", "vent"]);
   // The fixture's roommate / roast cases include styled requests (台劇腔 by id

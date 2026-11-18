@@ -34,6 +34,7 @@ import { languageDirective, userLanguageReminder } from "./language.js";
 import { buildVentSystemPrompt, buildVentUserPrompt, ventStyleInstruction } from "./vent_prompt.js";
 import { cleanVentText, stripNameAddress, draftDefects, fewerDefects, defectKinds, retryModels, retryNudge } from "./postprocess.js";
 import { budgetFor, attemptTimeout, qualityRetryTimeout } from "./budget.js";
+import { asksToIntimidate, asksForSlurs, threatInDraft, safetyUserLine } from "./vent_safety.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
   // === All 24 :free models from OpenRouter as of 2026-05-23. ===
@@ -179,6 +180,18 @@ export default {
     // server explicitly enables it. (vent / roommate are unaffected.)
     if (mode === "roast" && (env.ROAST_MODE_ENABLED || "false").toLowerCase() !== "true") {
       return json({ error: "mode_unavailable" }, 403);
+    }
+
+    // 1.9.0: a Vent / Feral request that asks to scare or threaten someone,
+    // or for slurs, is refused before any model call or quota unit — the same
+    // rule the app applies before its on-device permissive retry
+    // (IntimidationRequest / SlurRequest, src/safety_patterns.js). Measured
+    // 11-19 on the safety set: the production prompt wrote veiled threats for
+    // these inputs, and an explicit "don't" line did not stop it in English.
+    // The app treats the error like any cloud failure: its labelled fallback.
+    if (mode === "vent" && (asksToIntimidate(situation) || asksForSlurs(situation))) {
+      ddLog(env, ctx, { outcome: "unsafe_request", status: 422, intensity, locale, latency_ms: Date.now() - t0 });
+      return json({ error: "unsafe_request" }, 422);
     }
 
     // Track M M.1 v2: resolve the lane. An Authorization: Bearer <session token>
@@ -460,9 +473,12 @@ export default {
       const cleaned = cleanVentText(text);
       text = stripNameAddress(cleaned, locale, situation, nameCheck);
       const defects = draftDefects(text, locale, situation, nameCheck);
+      // 1.9.0: a threat phrase in the draft also triggers the one retry, with
+      // the safety line; a draft that still threatens is never returned.
+      const threat = threatInDraft(text);
       qualityDefects = defectKinds(defects);
       if (text !== cleaned) qualityDefects.push("name_address_removed");
-      if (defects.count > 0) {
+      if (defects.count > 0 || threat) {
         const timeoutMs = qualityRetryTimeout(deadline, Date.now());
         if (modelOverride || providerUsed !== "openrouter" || !env.OPENROUTER_API_KEY) {
           qualityRetry = "not_applicable";
@@ -475,7 +491,9 @@ export default {
             apiKey: env.OPENROUTER_API_KEY,
             model: targets,
             systemPrompt,
-            userPrompt: buildVentUserPrompt(situation, locale, retryNudge(defects, locale), { styleName, styleId, intensity }),
+            userPrompt: buildVentUserPrompt(situation, locale,
+              retryNudge(defects, locale) + safetyUserLine(locale, { draft: threat }),
+              { styleName, styleId, intensity }),
             timeoutMs,
             extraHeaders: {
               "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
@@ -486,7 +504,9 @@ export default {
             qualityRetry = `failed:${retry.status || "?"}`;  // status only (privacy)
           } else {
             const second = stripNameAddress(cleanVentText(retry.text), locale, situation, nameCheck);
-            if (fewerDefects(draftDefects(second, locale, situation, nameCheck), defects)) {
+            const secondThreat = threatInDraft(second);
+            if ((threat && !secondThreat) ||
+                (threat === secondThreat && fewerDefects(draftDefects(second, locale, situation, nameCheck), defects))) {
               text = second;
               modelUsed = retry.model || targets[0];
               qualityRetry = "used";
@@ -496,6 +516,14 @@ export default {
           }
         }
       }
+    }
+
+    if (mode === "vent" && threatInDraft(text)) {
+      // Still a threat after the retry (or no retry was possible): never
+      // returned. The unit goes back, and the app shows its labelled fallback.
+      await refundQuota({ env, ctx, key: rlKey, backend: quota.backend, label: "vent_quota" }, ddLog);
+      ddLog(env, ctx, { outcome: "unsafe_output", status: 502, intensity, locale, latency_ms: Date.now() - t0 });
+      return json({ error: "upstream_error", detail: "unsafe_output" }, 502);
     }
 
     ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,

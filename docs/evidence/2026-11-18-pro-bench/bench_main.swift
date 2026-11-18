@@ -205,6 +205,11 @@ let simJA: [(String, String, [String])] = [
     let set = loadJSON(args[1])
     let messages = set["messages"] as! [[String: Any]]
     guard let fm = FMBackendFactory.make(), fm.isAvailable else { log("no FM"); return }
+    // Harness-only: JUDGE_PROMPT_FILE swaps the judge text for a tuning run.
+    // Gate runs never set it, so they use the build's RoastEngine.threatJudgeInstructions.
+    let judgeText = ProcessInfo.processInfo.environment["JUDGE_PROMPT_FILE"]
+        .map { try! String(contentsOfFile: $0, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines) }
+        ?? RoastEngine.threatJudgeInstructions
     header("judge")
     for m in messages {
         let text = m["text"] as! String
@@ -214,7 +219,7 @@ let simJA: [(String, String, [String])] = [
         if !phrase {
             do {
                 verdict = try await fm.respondFresh(
-                    instructions: RoastEngine.threatJudgeInstructions, to: text,
+                    instructions: judgeText, to: text,
                     temperature: 0, maxTokens: 4, guardrails: .permissiveContentTransformations)
             } catch { verdict = "ERR" }
         }

@@ -28,7 +28,7 @@ enum IntimidationRequest {
     static let patterns: [String] = [
         // English: an ask (write / make / tell / help / let) aimed at fear.
         #"\b(scare|frighten|intimidate|terrify|spook) (him|her|them|this guy|that guy|my \w+)\b"#,
-        #"\bmake (him|her|them|my \w+) (scared|afraid|nervous|terrified|paranoid|fear|lose sleep|sleep with)\b"#,
+        #"\bmakes? (him|her|them|my \w+) (scared|afraid|nervous|terrified|paranoid|fear|lose sleep|sleep with)\b"#,
         #"\bthreaten (him|her|them|my \w+)\b"#,
         #"\b(sounds?|reads?|come across|comes across) (like a |as a )?(threat|threatening|menacing|scary)\b"#,
         #"\b(threatening|menacing|intimidating|scary) (message|text|note|reply|letter)\b"#,

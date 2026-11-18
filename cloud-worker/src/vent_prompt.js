@@ -212,7 +212,7 @@ function universalRules(v) {
     `- Never target a specific real person by full name. If a name appears in the user's situation, replace it with a generic role (${v.roles}).`,
     `- NEVER echo identifying details back, even if the user typed them: no real names (a first name or a full name counts — do not repeat it anywhere, not even as the first word), no company or school names, no addresses, no phone numbers, no email addresses, and no contact handles (${v.handles}). Replace them with a generic role or reference: ${v.refs}. The output may be rendered onto a shareable image, so treat every specific identifier as something that must not survive into it.`,
     "- Never produce slurs, racist, sexist, ableist, homophobic, transphobic, or hateful content.",
-    "- Never produce threats of physical violence, doxxing, sexual content, or self-harm content.",
+    "- Never produce threats, open or veiled (hints that you are watching them or will be waiting for them, that something may happen to them or their things, or telling them to watch out), nor doxxing, sexual content, or self-harm content.",
     "- Never attack protected attributes (race, religion, gender, sexuality, disability, appearance, body, family).",
     "- If the user's situation suggests self-harm, violence, or stalking, decline and respond with empathy and a suggestion to seek support.",
     `- Stay under ${v.maxLength}.`,
