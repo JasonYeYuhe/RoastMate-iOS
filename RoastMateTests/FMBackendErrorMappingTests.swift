@@ -79,7 +79,7 @@ final class FMBackendErrorMappingTests: XCTestCase {
         let backend = FakeFMBackend(
             cached: [.languageModelLikeError],
             fresh: [.text("OK"), .text("OK"),
-                    .text("1. You took my report and my weekend.\n2. Credit isn't a group chat, it's mine.\n3. Next time, put your own name on your own work."),
+                    .text("1. You took my report and my weekend.\n2. Credit for my report isn't a group chat, it's mine.\n3. Next time, present a report you actually wrote."),
                     .text("SAFE"), .text("THREAT"), .text("SAFE")])
         let output = try await a3Engine(backend).generateDetailed(
             situation: "My manager presented my report as his.", style: testStyle,
@@ -372,6 +372,7 @@ actor FakeFMBackend: FMBackend {
     private var freshSteps: [Step]
     private(set) var freshGuardrails: [FMGuardrails] = []
     private(set) var freshInstructions: [String] = []
+    private(set) var freshPrompts: [String] = []
 
     init(available: Bool = true, cached: [Step] = [], fresh: [Step] = []) {
         self.isAvailable = available
@@ -394,6 +395,7 @@ actor FakeFMBackend: FMBackend {
     ) async throws -> String {
         freshGuardrails.append(guardrails)
         freshInstructions.append(instructions)
+        freshPrompts.append(prompt)
         return try play(freshSteps.isEmpty ? .text("scripted") : freshSteps.removeFirst())
     }
 

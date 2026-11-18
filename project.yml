@@ -34,7 +34,8 @@ targets:
       - RoastMate/PrivacyInfo.xcprivacy
       - path: RoastMate/Configuration.storekit
         buildPhase: none
-      - Shared
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app
@@ -115,7 +116,8 @@ targets:
       - RoastMateMac/Sources
       - RoastMateMac/Assets.xcassets
       - RoastMate/PrivacyInfo.xcprivacy
-      - Shared
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app
@@ -146,7 +148,8 @@ targets:
     sources:
       - RoastMateWatch/Sources
       - RoastMateWatch/Assets.xcassets
-      - Shared
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: yyh.roastmate.app.watchkitapp
@@ -177,7 +180,8 @@ targets:
       - RoastMateShare/Sources
       - path: RoastMateShare/Info.plist
         buildPhase: none
-      - Shared
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
       - path: Shared/Resources
         buildPhase: resources
     settings:
@@ -203,7 +207,8 @@ targets:
       - RoastMateControls/Sources
       - path: RoastMateControls/Info.plist
         buildPhase: none
-      - Shared
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
       - path: Shared/Resources
         buildPhase: resources
     settings:
@@ -226,8 +231,10 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - RoastMateTests
-      - Shared
+      - path: RoastMateTests
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
+      - path: Shared
+        excludes: ["**/* 2.swift", "**/* 2.*"]  # iCloud sync duplicates (`Foo 2.swift`) in ~/Documents
       - path: Shared/Resources
         buildPhase: resources
     # Hostless bundle (TEST_HOST/BUNDLE_LOADER empty): logic under test

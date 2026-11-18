@@ -1,0 +1,578 @@
+{
+ "14a507": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "276ea5": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "54431e": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "189255": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "c4d72f": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "1473e6": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "5311dc": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "6a6045": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "b5d1ca": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "73db02": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "d0b4e7": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "dbec18": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "fa02d9": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "4646a2": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "e88f3e": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "0ebd96": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "91532a": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "6f7658": {
+  "run": "control180_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "a75bda": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "a4662f": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "b3c24d": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "dc24f8": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "0146d5": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "a17eb6": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "c3d59d": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "9f8ac0": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "5cd739": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "60a112": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "cdcdac": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "57b335": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "67cb7f": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "c48994": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "027dc9": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "2d2406": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "393547": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "0f6072": {
+  "run": "control180_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "6dc68b": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "74396a": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "b4d2d4": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "e302af": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "0ae803": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "364c53": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "ea0a2b": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "571591": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "4161a5": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "d704e9": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "c73b9f": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "6806b6": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "fc8de6": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "66e9cd": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "f1f652": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "81e141": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "149295": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "22c2e2": {
+  "run": "cand1_sim",
+  "locale": "zh_TW",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "dd68ad": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "9f284e": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "794f33": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "28b7ed": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "744f49": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "d381ea": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "raise",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "1945d4": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "741db2": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "bb1fc5": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "68f523": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "5f88eb": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "line"
+ },
+ "543982": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "trash",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ },
+ "39792d": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 0,
+  "result": "line"
+ },
+ "ccd1f8": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 1,
+  "result": "line"
+ },
+ "c40cdf": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "cold_violence",
+  "turn": 2,
+  "result": "line"
+ },
+ "47bdf6": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 0,
+  "result": "line"
+ },
+ "ecb15c": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 1,
+  "result": "notGenerated"
+ },
+ "8f252e": {
+  "run": "cand1_sim",
+  "locale": "en_US",
+  "scenario": "mom",
+  "style": "savage_no_filter",
+  "turn": 2,
+  "result": "line"
+ }
+}

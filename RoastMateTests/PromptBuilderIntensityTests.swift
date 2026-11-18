@@ -295,18 +295,43 @@ final class PromptBuilderIntensityTests: XCTestCase {
         }
     }
 
-    func testSharpEnglishStaysUntuned() {
-        // The universal intensityGuidance already lands Sharp cleanly in
-        // English — adding a calibration block risks overfitting. en stays
-        // explicitly empty in sharpCalmCalibration().
-        let prompt = PromptBuilder.systemPrompt(
-            style: emptyStyle,
-            locale: Locale(identifier: "en_US"),
-            intensity: .sharp
-        )
-        XCTAssertFalse(prompt.contains("SHARP TONE CALIBRATION"),
-                       "en should not receive the new calibration block.")
-        XCTAssertFalse(prompt.contains("CALM TONE CALIBRATION"))
+    /// 1.9.0 Q1 reverses "en stays untuned": on macOS 27.2.1 en 高情商
+    /// Composed answered "Sleepwalking?" / "Recipe planning?" (11-18), and the
+    /// bench measured 26.7 % non-answers overall. Several situations, shape
+    /// only, none of them the bench's own situations, no CJK.
+    func testEnglishSharpAndCalmCalibration_1_9() {
+        for intensity in [Intensity.sharp, .calm] {
+            let prompt = PromptBuilder.systemPrompt(
+                style: emptyStyle, locale: Locale(identifier: "en_US"), intensity: intensity)
+            XCTAssertTrue(prompt.contains(intensity == .sharp ? "SHARP TONE CALIBRATION" : "CALM TONE CALIBRATION"))
+            XCTAssertTrue(prompt.contains("Copy the SHAPE only"))
+            XCTAssertGreaterThanOrEqual(prompt.components(separatedBy: "- GOOD (").count - 1, 3)
+            XCTAssertNil(prompt.range(of: "[\\u3040-\\u30ff\\u4e00-\\u9fff]", options: .regularExpression),
+                         "no CJK in an English prompt")
+            for benchWord in ["slides", "dishes", "landlord", "hair dryer", "anniversary", "upstairs"] {
+                XCTAssertFalse(prompt.contains("GOOD (\(benchWord)"), benchWord)
+            }
+        }
+    }
+
+    func testSendableModesAskForAConcreteCompleteSentence_privateDraftsDoNot() {
+        for intensity in [Intensity.calm, .sharp, .savage] {
+            let sys = PromptBuilder.systemPrompt(style: emptyStyle, locale: Locale(identifier: "zh_TW"), intensity: intensity)
+            XCTAssertTrue(sys.contains(PromptBuilder.answerRule), intensity.rawValue)
+            let user = PromptBuilder.userPrompt(situation: "x", styleName: "高 EQ", variants: 3, intensity: intensity)
+            XCTAssertTrue(user.contains("complete sentence about something specific"), intensity.rawValue)
+        }
+        for intensity in [Intensity.vent, .feral] {
+            let sys = PromptBuilder.systemPrompt(style: emptyStyle, locale: Locale(identifier: "zh_TW"), intensity: intensity)
+            XCTAssertFalse(sys.contains(PromptBuilder.answerRule), intensity.rawValue)
+        }
+    }
+
+    func testJapaneseCalibrationsSayTheUserIsTheWrongedSide() {
+        for intensity in [Intensity.calm, .sharp, .savage] {
+            let sys = PromptBuilder.systemPrompt(style: emptyStyle, locale: Locale(identifier: "ja_JP"), intensity: intensity)
+            XCTAssertTrue(sys.contains("被害を受けたのはユーザー"), intensity.rawValue)
+        }
     }
 
     func testCalmZhHansIncludesNoApologyAnchor() {

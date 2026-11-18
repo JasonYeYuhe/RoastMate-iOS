@@ -247,6 +247,12 @@ enum PromptBuilder {
 
     // MARK: - Mode guidance
 
+    /// 1.9.0 Q1: on macOS 27.2.1 the 1.8.0 prompts gave 26.7 % non-answers
+    /// ("Sleepwalking?", 「明天八點前。」) and only 58 % of versions mentioned
+    /// anything from the situation (bench control180). `AnswerScreen` drops what
+    /// still fails; this asks for the right shape first.
+    static let answerRule = "Every line must be at least one complete sentence that states something (a question may follow it, never replace it), and it must name one concrete thing from what happened: what the other person did or said, or a time, a place or an object the user mentioned."
+
     private static func modeGuidance(_ mode: RoastMode, intensity: Intensity) -> String {
         let base: String
         switch mode {
@@ -263,6 +269,9 @@ enum PromptBuilder {
         case .social:
             base = "The user is pasting a social media post (tweet, Xiaohongshu, Reddit). Generate witty reactions or comeback replies, in the chosen style, suitable to post as a reply."
         }
+        if !intensity.isPrivateDraft, mode == .roast || mode == .reply {
+            return base + " " + answerRule
+        }
         if intensity.isPrivateDraft {
             return base + " IMPORTANT: This run is a PRIVATE DRAFT — the output will be marked private and NOT addressed to anyone yet. Keep it raw, immediate, and emotional; imagined direct address is allowed inside the user's head if it makes the anger sharper. A separate rewrite step will turn this into a sendable version later."
         }
@@ -272,9 +281,9 @@ enum PromptBuilder {
     private static func intensityGuidance(_ intensity: Intensity, safeMode: Bool) -> String {
         switch intensity {
         case .calm:
-            return "Composed, professional, almost generous in framing. The reply *de-escalates* without conceding. Think emotionally intelligent senior manager."
+            return "Composed, professional, almost generous in framing. The reply *de-escalates* without conceding. Think emotionally intelligent senior manager. Shape: one or two full sentences — say what happened, then what you need from them."
         case .sharp:
-            return "Pointed but polished. Names the behavior. No melodrama, no profanity. The kind of line that ends an exchange."
+            return "Pointed but polished. Names the behavior. No melodrama, no profanity. The kind of line that ends an exchange. Shape: one or two full sentences built on a detail from the situation, not a slogan or a bare question."
         case .savage:
             let extra = safeMode
                 ? " Safe Mode is ON — keep edges in language but still no slurs, no profanity, no attacks on identity."
@@ -311,9 +320,9 @@ enum PromptBuilder {
         }
         switch mode {
         case .roast:
-            return "Generate \(n) distinct \(styleName) lines I could say to them. Each should stand alone and start with the words themselves."
+            return "Generate \(n) distinct \(styleName) lines I could say to them. Each should stand alone, start with the words themselves, and be a complete sentence about something specific in my situation."
         case .reply:
-            return "Generate \(n) distinct \(styleName) replies I could send back. Each should stand alone and be sendable as-is."
+            return "Generate \(n) distinct \(styleName) replies I could send back. Each should stand alone, be sendable as-is, and answer something specific in the message."
         case .translate:
             return "Rewrite the phrase in \(n) different \(styleName) ways. Same meaning, different register."
         case .argument:
@@ -514,6 +523,7 @@ enum PromptBuilder {
             - GOOD (脚立を返さない): 「脚立を貸したのは三月です。電球、もうとっくに替え終わってますよね。」
             - GOOD (グループで既読無視): 「グループは既読無視なのに、ストーリーは一時間に三本。」
             (具体的な行動を名指しし、ユーザーの状況の細部を使い、要点で終える。下品な言葉は使わない)
+            被害を受けたのはユーザー(「私」)で、悪いのは相手。相手のしたことを指摘し、ユーザー自身を責めたり、ユーザーの失敗のように書いたりしない。
             """
         case .english, .system:
             return """
@@ -597,6 +607,7 @@ enum PromptBuilder {
                 - GOOD (同僚の丸投げ): 「この仕事は私の担当ではありません。先週も同じように回してきましたよね。手伝うなら、まず上司に話を通してください。」
                 - GOOD (上の階の騒音): 「椅子を引きずる音が建物中に響いています。11時以降は控えてください。続くなら管理会社に相談します。」
                 (相手の行為を名指し, 線を引く, 罵倒なし, ユーザーが書いた件だけを扱う)
+                被害を受けたのはユーザー(「私」)で、悪いのは相手。相手のしたことを指摘し、ユーザー自身を責めたり、ユーザーの失敗のように書いたりしない。
                 """
             }
             // .calm
@@ -608,12 +619,34 @@ enum PromptBuilder {
             - GOOD (同僚の丸投げ): 「この仕事は私の担当範囲外です。手伝いが必要なら、まず上司と分担を確認してから時間を調整しましょう。」
             - GOOD (上の階の騒音): 「椅子を引きずる音で、こちらは休めていません。11時以降は少し静かにしていただけますか。必要なら直接お話しします。」
             (落ち着き, 行為を名指し, 謝らない, 譲歩しない, ユーザーが書いた件だけを扱う)
+            被害を受けたのはユーザー(「私」)で、悪いのは相手。相手のしたことを指摘し、ユーザー自身を責めたり、ユーザーの失敗のように書いたりしない。
+            """
+        case "en":
+            // 1.9.0 Q1: English had no calibration, and en 高情商 Composed
+            // answered "Sleepwalking?" / "Recipe planning?" (11-18). Three
+            // situations, shape only, none of them in the bench's input set.
+            if isSharp {
+                return """
+                SHARP TONE CALIBRATION (Sharp ≠ rude, Sharp ≠ vent, Sharp = the line that ends the exchange). Copy the SHAPE only — never these situations, details or people:
+                - BAD: "Sorry to bother you, but if it's not too much trouble, could you maybe…?" (hedging, asking permission)
+                - BAD: "Wow. Really?" (a reaction, not a reply)
+                - GOOD (borrowed car): "You returned my car with the tank on empty for the third time. Fill it up before you hand back the keys, or stop borrowing it."
+                - GOOD (moved meeting): "You've moved our one-on-one five times this month. Pick a time you'll keep, or I'll take it to our manager."
+                - GOOD (cancelled subscription): "I cancelled in March and you've charged me twice since. Refund both charges this week."
+                (name their behaviour, use a detail from the user's situation, draw a line, no profanity)
+                """
+            }
+            return """
+            CALM TONE CALIBRATION (Calm ≠ apologising, Calm ≠ giving in, Calm = steady and clear about where you stand). Copy the SHAPE only — never these situations, details or people:
+            - BAD: "Sorry, I hate to ask, but whenever you get a chance…" (the wronged side should not apologise)
+            - BAD: "Interesting choice." (says nothing about what happened)
+            - GOOD (borrowed car): "The car came back with an empty tank again. Next time, please fill it before you return the keys."
+            - GOOD (moved meeting): "Our one-on-one has moved five times this month. Can we fix a time that works and keep it?"
+            - GOOD (cancelled subscription): "I cancelled in March, but I've been charged twice since. Please refund both charges."
+            (steady, name what happened, no apology, no giving in, only the user's situation)
             """
         default:
-            // en/ko/other: untuned. The universal intensityGuidance line
-            // already produces clean Sharp/Calm output in English (verified
-            // in baseline). ko has too few real-traffic samples to tune
-            // confidently — defer until Phase 4 if A′ shows demand.
+            // ko/other: untuned (too few real-traffic samples).
             return ""
         }
     }
@@ -761,6 +794,29 @@ extension PromptBuilder {
         You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
         """
 
+    /// True when a persona casts the model as the USER instead of the other
+    /// person ("You are the employee." for "I want to ask my manager for a
+    /// raise" — every A4 run and the 1.9.0 Q0 control). A persona like that
+    /// makes every turn argue the user's case, so `opponentPersona` asks once
+    /// more and otherwise drops it.
+    static func personaNamesTheUser(_ persona: String) -> Bool {
+        let role = #"(?i)\byou are\s*<?\s*(?:the |an? )?(?:user(?!['’]s)|employee|worker|staff member|subordinate|me|myself)\b"#
+        // The right role with the user's position: "You are the user's
+        // supervisor. You believe you deserve a raise … because the user has
+        // taken on more responsibility" (zh_TW raise, every Q0/Q4 run). The
+        // reason it gives is the user's merit, so every turn argues for it.
+        let position = #"(?i)\bbecause\s*<?\s*the user\s+(?:has|have|had|is|was|did|does|works|worked|deserves|took)\b"#
+        return persona.range(of: role, options: .regularExpression) != nil
+            || persona.range(of: position, options: .regularExpression) != nil
+    }
+
+    /// Appended to the setup for the one corrective persona call.
+    static let personaCorrection = """
+
+
+        Note: "I", "me" and "my" in this setup are the user, who is asking for help. Describe the OTHER person — the one the user wants to talk to — never the user.
+        """
+
     static func opponentPrompt(
         setup: String,
         transcript: [ArgumentLine],
@@ -776,6 +832,7 @@ extension PromptBuilder {
         Language: \(languageHint(for: locale)).
 
         WHO YOU ARE: \(who) Speak in the first person as yourself, directly to the user ("you"). Argue from YOUR side: what you want, and why you think you are right. Never restate the user's complaint as if it were your own.
+        \(opponentPointOfView(for: locale))
 
         YOUR VOICE: \(style.systemPreamble(for: locale))
         Apply that voice to how YOU, the other person, talk.
@@ -817,6 +874,22 @@ extension PromptBuilder {
         }
         lines.append(userLanguageReminder(for: locale))
         return (system: system, user: lines.joined(separator: "\n"))
+    }
+
+    /// The pronoun pair for the other person's lines, in the output language
+    /// (1.9.0 Q4). zh_TW turns wrote 「垃圾不是你的責任」 for "not MY job" in 4
+    /// of 6 trash turns (dev 1 and 2): the model kept the user's 你 for itself.
+    static func opponentPointOfView(for locale: Locale) -> String {
+        switch AppLanguage.contentBucket(for: locale) {
+        case .traditionalChinese:
+            return "POINT OF VIEW: 用「我」說你自己(你的時間、你的理由、你的責任)，用「你」稱呼使用者。例:「那不是我的責任」= 你自己不想做。"
+        case .simplifiedChinese:
+            return "POINT OF VIEW: 用「我」说你自己(你的时间、你的理由、你的责任)，用「你」称呼用户。例:「那不是我的责任」= 你自己不想做。"
+        case .japanese:
+            return "POINT OF VIEW: 自分のこと(自分の時間・理由・責任)は「私」、ユーザーは「あなた」と書く。例:「それは私の仕事じゃない」= 自分はやりたくない。"
+        case .english, .system:
+            return "POINT OF VIEW: \"I / my\" is you, the other person (your time, your reasons, your duties); \"you\" is the user."
+        }
     }
 
     /// Caps one turn for the prompt: 80 words for spaced scripts, a

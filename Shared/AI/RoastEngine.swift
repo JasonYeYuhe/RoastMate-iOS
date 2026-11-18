@@ -379,7 +379,8 @@ actor RoastEngine {
             if category == .guardrail, !intensity.isPrivateDraft, mode != .argument,
                let retried = try await permissiveRetry(
                    fm: fm, situation: situation, instructions: instructions, user: user,
-                   temperature: temperature, count: effectiveVariantCount) {
+                   temperature: temperature, count: effectiveVariantCount,
+                   answerScreen: AnswerTarget(situation: situation, locale: locale)) {
                 return GeneratedOutput(texts: retried, provenance: .model)
             }
             return GeneratedOutput(
@@ -422,6 +423,32 @@ actor RoastEngine {
                 texts: curatedFallback(style: style, locale: locale, count: effectiveVariantCount),
                 provenance: .curated
             )
+        }
+        // 1.9.0 Q1: the answer screen on the default-guardrail path. One retry
+        // on a fresh default session when fewer than 2 versions answer; a
+        // refusal or error there just keeps what the first call gave.
+        if !intensity.isPrivateDraft, mode != .argument {
+            let target = AnswerTarget(situation: situation, locale: locale)
+            var pool = target.sort(sanitized)
+            if pool.answered.count < min(2, effectiveVariantCount) {
+                let retryPrompt = target.retryPrompt(user, reasons: pool.reasons)
+                do {
+                    let again = try await fm.respondFresh(
+                        instructions: instructions, to: retryPrompt, temperature: temperature,
+                        maxTokens: 600, guardrails: .standard)
+                    if !ModelRefusal.looksLikeRefusal(again) {
+                        let safeAgain = PromptBuilder.splitVariants(again).compactMap {
+                            ModelRefusal.looksLikeRefusal($0) ? nil : try? SafetyFilter.validateOutput($0)
+                        }
+                        pool.merge(target.sort(safeAgain))
+                    }
+                } catch let cancellation as CancellationError {
+                    throw cancellation
+                } catch {
+                    logger.notice("Answer-screen retry failed; keeping the first versions.")
+                }
+            }
+            sanitized = pool.shown(count: effectiveVariantCount, fallback: sanitized)
         }
         recordModelOutput()
         return GeneratedOutput(
@@ -521,14 +548,29 @@ actor RoastEngine {
         let input = PromptBuilder.clipTurn(setup, maxWords: 200, maxCharacters: 600)
         for guardrails in [FMGuardrails.standard, .permissiveContentTransformations] {
             guard guardrails == .standard || permissiveRetryAllowed() else { return nil }
-            if let reply = try? await fm.respondFresh(
-                instructions: PromptBuilder.opponentPersonaInstructions, to: input,
-                temperature: 0, maxTokens: 120, guardrails: guardrails),
-               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) {
-                return reply.trimmingCharacters(in: .whitespacesAndNewlines)
+            if let reply = await personaCall(fm: fm, input: input, guardrails: guardrails) {
+                guard PromptBuilder.personaNamesTheUser(reply) else { return reply }
+                // 1.9.0 Q4: a persona that is the user ("You are the employee.")
+                // makes every turn argue the user's case. One corrective call;
+                // otherwise nil, so the turn prompt falls back to "the other
+                // person described in the user's setup".
+                if let again = await personaCall(
+                    fm: fm, input: input + PromptBuilder.personaCorrection, guardrails: guardrails),
+                   !PromptBuilder.personaNamesTheUser(again) {
+                    return again
+                }
+                return nil
             }
         }
         return nil
+    }
+
+    private func personaCall(fm: any FMBackend, input: String, guardrails: FMGuardrails) async -> String? {
+        guard let reply = try? await fm.respondFresh(
+            instructions: PromptBuilder.opponentPersonaInstructions, to: input,
+            temperature: 0, maxTokens: 120, guardrails: guardrails),
+              reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) else { return nil }
+        return reply.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func recordModelOutput() {
@@ -559,7 +601,7 @@ actor RoastEngine {
     ///   RewriteThreatScreen → the threat judge, one call per variant.
     private func permissiveRetry(
         fm: any FMBackend, situation: String, instructions: String, user: String,
-        temperature: Double, count: Int
+        temperature: Double, count: Int, answerScreen: AnswerTarget? = nil
     ) async throws -> [String]? {
         guard permissiveRetryAllowed() else { return nil }
         if IntimidationRequest.matches(situation) || SlurRequest.matches(situation) {
@@ -582,36 +624,31 @@ actor RoastEngine {
             }
         }
 
-        let content: String
-        do {
-            content = try await fm.respondFresh(
-                instructions: instructions, to: user, temperature: temperature,
-                maxTokens: 600, guardrails: .permissiveContentTransformations)
-        } catch let cancellation as CancellationError {
-            throw cancellation
-        } catch {
-            logger.notice("Permissive retry failed too — curated fallback.")
-            return nil
-        }
-        if ModelRefusal.looksLikeRefusal(content) { return nil }
+        guard let content = try await permissiveCall(fm: fm, instructions: instructions, prompt: user,
+                                                     temperature: temperature) else { return nil }
 
+        // Every shown version passes ModelRefusal → validateOutput →
+        // RewriteThreatScreen → (1.9.0 Q1) the answer screen → the threat
+        // judge. The answer screen runs before the judge so a dropped version
+        // costs no judge call.
         var shown: [String] = []
-        for candidate in PromptBuilder.splitVariants(content) {
-            guard shown.count < count else { break }
-            if ModelRefusal.looksLikeRefusal(candidate) { continue }
-            guard let safe = try? SafetyFilter.validateOutput(candidate) else { continue }
-            if RewriteThreatScreen.containsThreat(safe) { continue }
-            let verdict: String
-            do {
-                verdict = try await fm.respondFresh(
-                    instructions: Self.threatJudgeInstructions, to: safe,
-                    temperature: 0, maxTokens: 4, guardrails: .permissiveContentTransformations)
-            } catch let cancellation as CancellationError {
-                throw cancellation
-            } catch {
-                continue
+        var pool = AnswerTarget.Pool()
+        try await screenPermissive(content, fm: fm, count: count, answerScreen: answerScreen,
+                                   shown: &shown, pool: &pool)
+        if let target = answerScreen, shown.count < min(2, count), !pool.reasons.isEmpty,
+           let again = try await permissiveCall(
+               fm: fm, instructions: instructions, prompt: target.retryPrompt(user, reasons: pool.reasons),
+               temperature: temperature) {
+            try await screenPermissive(again, fm: fm, count: count, answerScreen: target,
+                                       shown: &shown, pool: &pool)
+        }
+        if shown.isEmpty, answerScreen != nil {
+            // Nothing answered even after the retry: full statements first,
+            // then the rest, each still judged — never curated text for a
+            // generation the model did write (see AnswerTarget.Pool.shown).
+            for safe in pool.statements + pool.rest where shown.count < count {
+                if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
             }
-            if Self.threatJudgeSaysSafe(verdict) { shown.append(safe) }
         }
         guard !shown.isEmpty else {
             EventLedger.shared.recordFailure(.safetyFilter)
@@ -620,6 +657,57 @@ actor RoastEngine {
         logger.notice("Permissive retry produced \(shown.count, privacy: .public) screened variant(s).")
         recordModelOutput()
         return PromptBuilder.droppingNearDuplicates(shown)
+    }
+
+    /// One permissive generation; nil on an error or a refusal.
+    private func permissiveCall(
+        fm: any FMBackend, instructions: String, prompt: String, temperature: Double
+    ) async throws -> String? {
+        let content: String
+        do {
+            content = try await fm.respondFresh(
+                instructions: instructions, to: prompt, temperature: temperature,
+                maxTokens: 600, guardrails: .permissiveContentTransformations)
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            logger.notice("Permissive retry failed too — curated fallback.")
+            return nil
+        }
+        return ModelRefusal.looksLikeRefusal(content) ? nil : content
+    }
+
+    /// Screens one permissive generation into `shown` (passed everything) and
+    /// `pool` (safe so far, but did not answer; not yet judged).
+    private func screenPermissive(
+        _ content: String, fm: any FMBackend, count: Int, answerScreen: AnswerTarget?,
+        shown: inout [String], pool: inout AnswerTarget.Pool
+    ) async throws {
+        for candidate in PromptBuilder.splitVariants(content) {
+            guard shown.count < count else { break }
+            if ModelRefusal.looksLikeRefusal(candidate) { continue }
+            guard let safe = try? SafetyFilter.validateOutput(candidate) else { continue }
+            if RewriteThreatScreen.containsThreat(safe) { continue }
+            if let target = answerScreen {
+                let sorted = target.sort([safe])
+                if sorted.answered.isEmpty { pool.merge(sorted); continue }
+            }
+            if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
+        }
+    }
+
+    /// The one-word threat judge; an error is "not safe".
+    private func judgeSaysSafe(fm: any FMBackend, _ text: String) async throws -> Bool {
+        do {
+            let verdict = try await fm.respondFresh(
+                instructions: Self.threatJudgeInstructions, to: text,
+                temperature: 0, maxTokens: 4, guardrails: .permissiveContentTransformations)
+            return Self.threatJudgeSaysSafe(verdict)
+        } catch let cancellation as CancellationError {
+            throw cancellation
+        } catch {
+            return false
+        }
     }
 
     /// One-word check on the user's INPUT before A3's permissive retry.
