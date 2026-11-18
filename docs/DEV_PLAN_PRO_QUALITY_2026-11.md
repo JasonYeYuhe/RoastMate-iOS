@@ -1,10 +1,15 @@
 # RoastMate — Pro quality plan, binary 1.9.0 (2026-11-18 → ~12-14)
 
-**Status: DRAFT 2 (2026-11-18).**
+**Status: CHOSEN (Jason, 2026-11-18, AskUserQuestion), draft 2 below unchanged.**
+- Jason's three decisions:
+  - **Override confirmed:** build 1.9.0 under this plan.
+  - **Q3 = none:** no cloud lane for C/E. The on-device promise in
+    `settings.about_ai.body` stays true.
+  - **Q2a = yes:** Pro gets 3 takes of 痛罵.
+- Scope: **Q0 → Q4 → Q1 → Q5 → Q2b → Q2a.** Cutoff **12-04**, submit **12-07**.
 - Draft 1 (`99c68d7`) was reviewed by Gemini 3.8 Flash (High), read-only. The raw
   answer is `docs/evidence/2026-11-18-pro-quality-plan/review-gemini38flash.md`.
-- Each of its claims was checked. §10 lists what changed and what was rejected.
-- **Jason picks the open scope items in §3 before any code.**
+  Each of its claims was checked; §10 lists what changed and what was rejected.
 
 ## 0. Why this plan exists, and which rules it overrides
 
@@ -232,7 +237,7 @@ recommendation is none (§3 Q3).**
   and before the binary. It is backward compatible. Rollback = `npx wrangler
   rollback <id>`.
 
-### Q3 — a cloud lane for Pro on devices without Apple's model (C/E). **Jason decides: none (recommended), Q3a, or Q3a+Q3b.**
+### Q3 — a cloud lane for Pro on devices without Apple's model (C/E). **NOT CHOSEN (Jason, 11-18: none).** Kept for a future plan.
 
 On C/E, 4 of the 7 paywall lines are canned, and Q3 is the only way to make them
 real there. But it costs:
@@ -336,10 +341,9 @@ Scope, if chosen:
 
 ## 6. Jason's part
 
-1. **Now:** confirm the §0 override; pick Q3 (none / Q3a / Q3a+Q3b) and whether
-   Q2a stays.
-2. If Q3: the privacy-policy diff and the App Privacy answers. The token check's
-   second half only if needed.
+1. ~~Confirm the §0 override; pick Q3 and Q2a.~~ Done 11-18: override
+   confirmed, Q3 none, Q2a yes.
+2. (Q3 not chosen: no privacy-policy or App Privacy change in 1.9.0.)
 3. Optional: one native zh-Hant reader for about an hour. The agent prepares
    blind sheets and never messages anyone.
 4. The exact words of the 1.9.0 promo text and of the ASO keywords/subtitle.

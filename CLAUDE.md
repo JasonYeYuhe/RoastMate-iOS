@@ -1,11 +1,17 @@
 # RoastMate — project rules for Claude sessions
 
-Start with `docs/HANDOFF_v1.8_NEXT_SESSION.md` (current state, the plan being
-executed, what is Jason's), then `docs/DEV_PLAN_v1.9_2026-11.md` (D+: maintenance mode plus
-$0 store-page items, chosen 2026-11-12; no app code), then `docs/NEXT_PHASE_PLAN_2026-11.md`
-(path D since 2026-11-08), then `docs/DEV_PLAN_v1.8_2026-11.md`. Verify their
-claims before acting on them. The v1.7 handoff/plan are history except the
-sections the v1.8 handoff names (the v1.7 §7 stop rule is still read on 11-15).
+Read these first, in order:
+1. `docs/HANDOFF_v1.8_NEXT_SESSION.md`: current state, the plan being executed,
+   what is Jason's.
+2. `docs/DEV_PLAN_PRO_QUALITY_2026-11.md`: binary 1.9.0, "make the paid features
+   better". Chosen 2026-11-18; Jason overrode the 11-15 stop rule on purpose.
+   Scope Q0 → Q4 → Q1 → Q5 → Q2b → Q2a; no C/E cloud lane; submit 12-07.
+3. `docs/DEV_PLAN_v1.9_2026-11.md`: D+ maintenance. Its maintenance duties still
+   apply.
+4. `docs/DEV_PLAN_v1.8_2026-11.md`: it still governs the 01-31 payer read.
+
+Verify their claims before acting on them. The v1.7 handoff and plan are history,
+except the sections the v1.8 handoff names.
 
 ## Keep / never clean up
 

@@ -31,6 +31,28 @@ own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
 
+## Update 2026-11-18 (late) — 1.9.0 Pro quality plan CHOSEN (Jason overrode the stop rule)
+
+- **Read `docs/DEV_PLAN_PRO_QUALITY_2026-11.md` next.** The fresh-session prompt
+  is `docs/evidence/2026-11-18-pro-quality-plan/next-session-prompt.md`.
+- **Jason asked on 11-18** for a plan "to make every paid feature a little better".
+  Gemini 3.8 Flash reviewed draft 1 (raw answer in the same evidence folder).
+- **He chose, in AskUserQuestion:**
+  - the override: build 1.9.0 despite the 11-15 stop rule and the v1.8 12-05
+    freeze;
+  - **Q3 = none:** no cloud lane for devices without Apple's model, so the
+    on-device promise stays;
+  - **Q2a = yes:** 3 takes of 痛罵 for Pro.
+- **Scope:** Q0 bench → Q4 simulator → Q1 on-device sendable quality → Q5 judge
+  false positives → Q2b strong words → Q2a 3 takes. Cutoff 12-04, submit 12-07.
+- **Unchanged:**
+  - the 01-31 read (v1.8 §2.3) and its consequences;
+  - D's maintenance duties;
+  - the scheduled tasks;
+  - every guardrail.
+
+  D+ (DEV_PLAN_v1.9) is otherwise superseded by this plan.
+
 ## Update 2026-11-18 — 11-15 record checked; macOS 27.2.1 probe: no binary needed
 
 - **The 11-15 record below is correct.** The task ran at 10:40 JST and pushed
