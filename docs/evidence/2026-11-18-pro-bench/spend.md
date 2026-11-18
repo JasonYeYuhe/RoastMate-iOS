@@ -10,4 +10,6 @@ OpenRouter balance read with `scripts/openrouter-balance.sh` (`used` is cumulati
 
 | 11-18 | Q2a: smoke, 2 dev runs, gate 1, void gate 2, gate 2 (takes + single arms) | ≈ 600 upstream | $0.1735 → $0.3183 | $0.1448 |
 
-Running total: **$0.1779** of $2.
+| 11-19 | cloud safety sets (candidate + production prompt, 4 rounds), Q2b final check, 2 production smoke tests | ≈ 400 | $0.3183 → $0.3900 | $0.0717 |
+
+Running total: **$0.2496** of $2 (OpenRouter balance $9.61).

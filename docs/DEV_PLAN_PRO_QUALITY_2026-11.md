@@ -19,8 +19,8 @@
 | Q2b strong word, zh-Hant/ja Vent | **passed** (attempt 2) and **in production** |
 | Q2a 3 takes of 痛罵 | **cut** — gate failed twice (swears per take, then names 4/249); takes code removed |
 | Q5 judge false positives | **cut** — no candidate reached the gate on dev data; no gate attempt |
-| Q4 simulator | gate 1 failed (30/28/30 fixed, 23 unseen; control 28/16); attempt 2 pending |
-| Q1 on-device quality | in development; gate pending |
+| Q4 simulator | **cut** — gate failed twice (fixed 30/28/30 then 32/28/31; unseen 23 then 31); better than control every run; code back to 1.8.0, kept in history |
+| Q1 on-device quality | built and unit-tested; **gate not yet run** (11-19 attempt void: Mac at load ~580, swap 26.7 GB) |
 | Cloud Vent/Feral safety (found 11-19, pre-existing) | fixed in the Worker and **in production** |
 
 **Production Worker deploys (2 of 2 used):** `c1253b1c-6fec-4627-9f6c-fcc73f48c430` (Q2b,

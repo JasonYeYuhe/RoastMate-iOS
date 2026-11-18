@@ -320,3 +320,30 @@ simulator parts of `PromptBuilder`, `RoastEngine`, `StylePreset`, `StylePresets.
 Jason wants to override: it was better than 1.8.0 on every run, by 2–7 turns on the fixed
 set and 2–7 on unseen setups, and the persona fix ends the "You are the employee." inversion.
 Labels and keys: `labels/q4_gate1`, `labels/q4_gate2` (read before the key was opened).
+
+## Q1 gate attempt 1: **void** (machine overload), not a gate result
+
+Started 11-19 02:45 with `gate_final.sh` (candidate = cand6's build; the sendable path is
+identical to HEAD after the Q4 revert). Within minutes the Mac's load average reached ~580
+with 26.7 GB of swap in use and 13 GB of free disk (other sessions' simulators and builds;
+nothing from this session was growing), and the on-device model slowed to ~2 calls a
+minute: the ~2,000-call run would have taken more than 16 hours and its latency numbers
+would mean nothing. Stopped after 14 calls; those rows are discarded. **Q1 has not used a
+gate attempt.**
+
+Rerun when the Mac is healthy (load average under ~10, swap back to normal — a reboot
+does it), from the current HEAD:
+
+```bash
+S=<scratchpad>; B=~/Documents/RoastMate/docs/evidence/2026-11-18-pro-bench
+mkdir -p $S/control && git -C ~/Documents/RoastMate archive v1.8.0-ios29 Shared | tar -x -C $S/control
+$B/build.sh $S/control/Shared $S/control.app && $B/build.sh ~/Documents/RoastMate/Shared $S/cand.app
+$B/gate_final.sh $S/cand.app $S/control.app q1g1 24      # ~5–6 h, interleaved
+python3 $B/score.py sendable $B/runs/q1g1_cand_fixed.jsonl  # vs q1g1_control_fixed.jsonl, and *_unseen
+```
+
+What is known from development (95 zh_TW calls, dev 1 design): non-answers 0 % vs 26.6 %,
+grounded 100 % vs 62.8 %, curated 0 vs 0, one Simplified character (霉, in 「霉味」, which
+the Worker's list counts as Simplified though Taiwan writes it) vs 0; latency was the risk
+(+2.8 s), which dev 2's top-up and narrower retry address but have not been measured
+cleanly.

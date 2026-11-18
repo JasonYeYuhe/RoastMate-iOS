@@ -7,7 +7,7 @@ Taiwan is the target market. Solo developer (Jason). Branch
 in May and is far behind — don't merge or rebase onto it as a side quest).
 
 **Read in this order:**
-1. this file
+1. this file — start at "Update 2026-11-19"
 2. `docs/DEV_PLAN_v1.9_2026-11.md` — **D+ (maintenance mode plus three $0
    store-page items), chosen by Jason on 11-12.** §2 is what you are executing;
    the section "Update 2026-11-12" below gives the order. Background:
@@ -30,6 +30,45 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
+
+## Update 2026-11-19 — 1.9.0 first execution session: Q0 done, Q2b live, Q2a/Q4/Q5 cut, Q1 gate pending
+
+Evidence and every number: `docs/evidence/2026-11-18-pro-bench/README.md`. Plan status table:
+`docs/DEV_PLAN_PRO_QUALITY_2026-11.md` (top).
+
+- **Q0 bench** built (production `RoastEngine` in a minimal `.app`, `score.py` + 25 tests,
+  sealed unseen sets Gemini wrote). 1.8.0 on macOS 27.2.1: 22.6 % non-answers, 53.1 %
+  grounded across 648 sendable calls.
+- **Q2b passed** (attempt 2): zh_TW/ja Vent drafts with a strong word 1/6 and 0/6 →
+  14/14 and 14/14. **Live in production.**
+- **Cloud Vent/Feral safety fix, live** (found while rerunning safety for Q2b;
+  pre-existing): threat-bait and slur-bait requests are refused (422) before any model
+  call; drafts with a threat or "go die"-type line are retried or withheld. The app's
+  `IntimidationRequest` / `RewriteThreatScreen` lists gained the "I will be waiting / when
+  you clock out" forms (app + Worker, parity-tested).
+- **Production Worker: `eb7b671c-56a7-48a0-a22d-ffbcb43e43fc`** (deploy 2 of 2; the first
+  was `c1253b1c-…`). Rollback: `npx wrangler rollback c1253b1c-6fec-4627-9f6c-fcc73f48c430`,
+  or `046f2134-5424-4069-b6f3-28b053ccd594` for 1.8.0's Worker. **No production deploys
+  left** in this plan (rollbacks and flag flips only).
+- **Cut:** Q2a (3 takes of 痛罵; failed twice — swears per take, then 4/249 names), Q4
+  (simulator; failed twice by one turn in one run each time, though better than control
+  every run; code back to 1.8.0, kept in history `ff55a76..7ec997e`), Q5 (judge; no
+  candidate on dev data).
+- **Q1 is built and unit-tested but has no gate result.** The 11-19 attempt was voided:
+  the Mac hit load ~580 with 26.7 GB swap and 13 GB free disk (other sessions; a reboot
+  fixes it). Next step: on a healthy Mac, rerun `gate_final.sh` exactly as the README's
+  "Q1 gate attempt 1" section says (criteria already declared). Then the release
+  checks of plan §4 (preflight and Release UI tests need a simulator: free disk must be
+  ≥ 30 GB first).
+- **Unit tests this session ran on macOS** through a throwaway SwiftPM package in the
+  scratchpad (the iOS `RoastMate-UITests` run waits for disk). `StyleScriptTests` needs
+  the app bundle's resources and fails only in that package. Run the real
+  `scripts/preflight.sh` before any archive.
+- **If Q1 passes:** 1.9.0's binary = the answer screen + prompt rework + the widened
+  on-device threat/intimidation patterns. **If Q1 is cut:** the binary would carry only
+  those safety patterns; whether that is worth a 1.9.0 submission is Jason's call.
+- What's New (4 locales), promo text, keywords and subtitle are not drafted: they depend
+  on what 1.9.0 contains, and Jason approves every word.
 
 ## Update 2026-11-18 (late) — 1.9.0 Pro quality plan CHOSEN (Jason overrode the stop rule)
 
