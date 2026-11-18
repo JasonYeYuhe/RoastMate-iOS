@@ -1,0 +1,445 @@
+{
+ "version": 1,
+ "written": "2026-11-18, before any 1.9.0 tuning. Fixed: never edited after the 1.8.0 baseline ran. The unseen set (plan §2) lives in a separate file that Gemini writes and nobody reads before the final run.",
+ "styles": {
+  "free": [
+   "high_eq",
+   "passive_aggressive"
+  ],
+  "pro": [
+   "savage_no_filter",
+   "taiwanese_drama",
+   "cold_violence",
+   "corporate_passive_violence"
+  ]
+ },
+ "intensities": [
+  "calm",
+  "sharp",
+  "savage"
+ ],
+ "sendable": {
+  "zh_TW": [
+   {
+    "id": "credit",
+    "text": "我做了兩個禮拜的簡報，同事陳志明在週會上說是他做的，主管還當場誇他。"
+   },
+   {
+    "id": "latenight",
+    "text": "主管晚上十一點在LINE群組@我，要我明天早上八點前把簡報改好，還說年輕人多做一點不吃虧。"
+   },
+   {
+    "id": "dishes",
+    "text": "室友的碗盤可以在水槽放三四天，都發臭了，我請他洗，他說我太計較。"
+   },
+   {
+    "id": "loan",
+    "text": "朋友小美跟我借了五千塊說下個月還，已經半年了，每次問都說手頭緊，IG卻天天在吃大餐。"
+   },
+   {
+    "id": "landlord",
+    "text": "房東說好這個月修冷氣，拖了三個禮拜，LINE已讀不回，倒是記得提醒我房租要準時。"
+   },
+   {
+    "id": "late",
+    "text": "朋友約七點吃飯，又遲到一個小時才到，一句抱歉都沒有，還怪我訂的餐廳太遠。"
+   },
+   {
+    "id": "dumping",
+    "text": "同事每天五點半準時下班，走之前把他做不完的報表丟到我桌上，說反正我比較快。"
+   },
+   {
+    "id": "noise",
+    "text": "樓上鄰居每天半夜一點還在拖椅子、跳來跳去，我留紙條請他小聲一點，他當沒看到。"
+   },
+   {
+    "id": "groupproj",
+    "text": "分組報告有個組員什麼都沒做，開會都說在忙，最後還要我們把他的名字放上去。"
+   },
+   {
+    "id": "mom",
+    "text": "過年吃飯我媽又在親戚面前拿我跟表姊比，說人家年薪兩百萬，我只會領死薪水。"
+   },
+   {
+    "id": "refund",
+    "text": "網購的吹風機壞了，客服一直回罐頭訊息，叫我自己找原廠，就是不肯退貨。"
+   },
+   {
+    "id": "plans",
+    "text": "男朋友前一個小時才取消我們的週年晚餐，說要跟朋友打電動，訂位還是我訂的。"
+   }
+  ],
+  "en_US": [
+   {
+    "id": "credit",
+    "text": "I spent two weeks on the slides, and my coworker Kevin presented them in the team meeting as his own work. Our manager praised him on the spot."
+   },
+   {
+    "id": "latenight",
+    "text": "My boss pinged me on Slack at 11pm to redo the deck by 8am and said young people should learn to work harder."
+   },
+   {
+    "id": "dishes",
+    "text": "My roommate leaves dishes in the sink for three or four days until they stink, and when I asked him to wash them he said I'm too uptight."
+   },
+   {
+    "id": "loan",
+    "text": "My friend Jess borrowed $200 saying she'd pay me back next month. It's been six months, she says she's broke, but she posts fancy dinners on Instagram every day."
+   },
+   {
+    "id": "landlord",
+    "text": "My landlord promised to fix the AC this month. Three weeks later he leaves my texts on read, but he never forgets to remind me rent is due."
+   },
+   {
+    "id": "late",
+    "text": "My friend showed up an hour late to our 7pm dinner again, didn't apologize once, and complained that I picked a restaurant too far away."
+   },
+   {
+    "id": "dumping",
+    "text": "My coworker leaves at 5:30 sharp every day and drops the reports he didn't finish on my desk because I'm faster anyway."
+   },
+   {
+    "id": "noise",
+    "text": "My upstairs neighbor drags furniture and jumps around at 1am every night. I left a polite note and he ignored it."
+   },
+   {
+    "id": "groupproj",
+    "text": "One guy in my group project did nothing, said he was busy at every meeting, and now wants his name on the final report."
+   },
+   {
+    "id": "mom",
+    "text": "At the holiday dinner my mom compared me to my cousin in front of the whole family again, saying she makes six figures while I'm stuck in a dead-end job."
+   },
+   {
+    "id": "refund",
+    "text": "The hair dryer I bought online broke, and customer service keeps sending me copy-paste replies telling me to contact the manufacturer instead of giving me a refund."
+   },
+   {
+    "id": "plans",
+    "text": "My boyfriend canceled our anniversary dinner an hour before, to play video games with his friends. I'm the one who made the reservation."
+   }
+  ],
+  "ja_JP": [
+   {
+    "id": "credit",
+    "text": "二週間かけて作った資料を、同僚の田中が会議で自分が作ったみたいに発表して、上司もその場で褒めていた。"
+   },
+   {
+    "id": "latenight",
+    "text": "上司が夜十一時にLINEで「明日朝八時までに資料を直しといて」と送ってきて、「若いうちは苦労しとけ」とまで言われた。"
+   },
+   {
+    "id": "dishes",
+    "text": "ルームメイトが洗い物を三、四日シンクに放置して臭くなっている。洗ってと頼んだら「細かすぎ」と言われた。"
+   },
+   {
+    "id": "loan",
+    "text": "友達の佐藤に三万円貸して「来月返す」と言われたのに半年経った。催促すると金欠と言うのに、インスタには毎日高いディナーを上げている。"
+   },
+   {
+    "id": "landlord",
+    "text": "大家が今月中にエアコンを直すと言ったのに三週間放置。LINEは既読無視なのに、家賃の催促だけは忘れない。"
+   },
+   {
+    "id": "late",
+    "text": "友達が七時の約束にまた一時間遅れてきて、謝りもせず、私が選んだ店が遠すぎると文句を言った。"
+   },
+   {
+    "id": "dumping",
+    "text": "同僚が毎日五時半ぴったりに帰り、終わらなかった報告書を「そっちの方が早いから」と私の机に置いていく。"
+   },
+   {
+    "id": "noise",
+    "text": "上の階の住人が毎晩深夜一時に椅子を引きずって跳ね回っている。丁寧に手紙を入れたのに無視された。"
+   },
+   {
+    "id": "groupproj",
+    "text": "グループ課題で何もしなかったメンバーが、毎回「忙しい」と会議を休んだのに、最後の報告書には名前を入れてほしいと言ってきた。"
+   },
+   {
+    "id": "mom",
+    "text": "正月の食事会で、母がまた親戚の前で私をいとこと比べて、「あの子は年収一千万なのにあんたは安月給」と言った。"
+   },
+   {
+    "id": "refund",
+    "text": "ネットで買ったドライヤーが壊れたのに、カスタマーサポートは定型文ばかりで「メーカーに問い合わせて」と返品に応じない。"
+   },
+   {
+    "id": "plans",
+    "text": "彼氏が記念日のディナーを一時間前にドタキャンして、友達とゲームをすると言った。予約したのは私なのに。"
+   }
+  ]
+ },
+ "names_in_situations": {
+  "zh_TW": [
+   "陳志明",
+   "小美"
+  ],
+  "en_US": [
+   "Kevin",
+   "Jess"
+  ],
+  "ja_JP": [
+   "田中",
+   "佐藤"
+  ]
+ },
+ "simulator_note": "A4's set, unchanged (a4/main.swift): zh_TW + en are lens 1's 36 turns; ja is A4's refusal set. Styles cold_violence and savage_no_filter, 3 turns each.",
+ "rewrite": {
+  "note": "Vent drafts for 改成能發的 (rewriteAsSendableDetailed, style 高 EQ). r01/r02 are the 11-08 recheck's two cases verbatim (Q5's owner gate, 5 runs each). wrong_owner lists phrases that would give the user's or the other party's thing to the wrong person.",
+  "items": [
+   {
+    "id": "r01",
+    "locale": "zh_TW",
+    "situation": "下班前五分鐘，主管把一份報告丟給我，說明天早上開會要用，要我今天弄完再走，還補一句「年輕人多做一點不吃虧」。",
+    "draft": "下班前五分鐘丟報告給我，說明天早上開會要用，要我今天弄完再走，還補一句「年輕人多做一點不吃虧」。你當我閒閒沒事做喔？今天一整天都快累死了，你還好意思說這種話？靠北，誰規定我年輕就得當免費勞工啊。",
+    "wrong_owner": [
+     "你的報告給我",
+     "我丟報告",
+     "我把報告丟給你"
+    ]
+   },
+   {
+    "id": "r02",
+    "locale": "zh_TW",
+    "situation": "室友的碗盤可以在水槽放三四天，都發臭了，我請他洗一下，他說我「很計較」，然後半夜一點還在客廳開擴音講電話。",
+    "draft": "碗盤在水槽泡三天都發臭了，我叫他洗一下，他說我「很計較」？你有聽見那股酸味嗎，還是你聞不見？半夜一點還在客廳開擴音講電話，以為大家都是啞巴喔？你耳朵沒問題，是心聽不見吧。",
+    "wrong_owner": [
+     "我的碗盤",
+     "我的碗",
+     "我放的碗"
+    ]
+   },
+   {
+    "id": "r03",
+    "locale": "zh_TW",
+    "situation": "朋友小美跟我借了五千塊說下個月還，已經半年了，每次問都說手頭緊，IG卻天天在吃大餐。",
+    "draft": "五千塊借了半年，每次問都說手頭緊，結果IG天天在吃大餐？幹，你當我提款機喔，錢不用還是吧，臉皮是有多厚。",
+    "wrong_owner": [
+     "我借你的錢還沒還",
+     "我欠你"
+    ]
+   },
+   {
+    "id": "r04",
+    "locale": "zh_TW",
+    "situation": "同事每天五點半準時下班，走之前把他做不完的報表丟到我桌上，說反正我比較快。",
+    "draft": "你自己的報表做不完就往我桌上丟，還說我比較快？我快是我的事，不是讓你準時下班的理由，北七喔。",
+    "wrong_owner": [
+     "我的報表丟給你",
+     "我做不完的報表"
+    ]
+   },
+   {
+    "id": "r05",
+    "locale": "en_US",
+    "situation": "My coworker took credit for my slides in the team meeting.",
+    "draft": "Unbelievable. Two weeks of my work, and you slap your name on it and soak up the praise like you built it. Absolute fraud.",
+    "wrong_owner": [
+     "your slides",
+     "your work"
+    ]
+   },
+   {
+    "id": "r06",
+    "locale": "en_US",
+    "situation": "My roommate leaves dishes in the sink for days and says I'm too uptight.",
+    "draft": "Your crusty dishes have been rotting in the sink for four days and I'm the uptight one? Wash your shit. It's not my job to live in your mess.",
+    "wrong_owner": [
+     "my dishes",
+     "my mess"
+    ]
+   },
+   {
+    "id": "r07",
+    "locale": "en_US",
+    "situation": "My landlord promised to fix the AC three weeks ago and ignores my texts, but reminds me about rent on time.",
+    "draft": "Three weeks of sweating in this oven while you leave me on read, but somehow you never miss a rent reminder. Fix the damn AC.",
+    "wrong_owner": [
+     "fix my own",
+     "my landlord duties"
+    ]
+   },
+   {
+    "id": "r08",
+    "locale": "en_US",
+    "situation": "My friend borrowed $200 six months ago and keeps saying she's broke while posting fancy dinners.",
+    "draft": "Broke? You posted a steak dinner last night. You owe me $200 and you've been dodging me for six months. Pay me back.",
+    "wrong_owner": [
+     "I owe you",
+     "I borrowed"
+    ]
+   },
+   {
+    "id": "r09",
+    "locale": "ja_JP",
+    "situation": "上司が夜十一時にLINEで明日朝八時までに資料を直せと言ってきた。",
+    "draft": "夜十一時に資料直せとか、ふざけんな。こっちにも生活があるんだよ。自分の段取りの悪さを部下に押し付けるな。",
+    "wrong_owner": [
+     "私の段取りの悪さ"
+    ]
+   },
+   {
+    "id": "r10",
+    "locale": "ja_JP",
+    "situation": "ルームメイトが洗い物を何日も放置して、注意したら「細かすぎ」と言われた。",
+    "draft": "何日もシンクに皿放置しといて細かすぎって何様だよ。臭いんだよ、クソが。自分の皿くらい自分で洗え。",
+    "wrong_owner": [
+     "私の皿",
+     "私の洗い物"
+    ]
+   },
+   {
+    "id": "r11",
+    "locale": "ja_JP",
+    "situation": "友達に貸した三万円が半年返ってこない。催促したら「細かいね」と言われた。",
+    "draft": "三万円貸して半年だぞ。返せって言ったら細かいねって、ふざけんな。借りたもんは返せよ。",
+    "wrong_owner": [
+     "私が借りた",
+     "私が返す"
+    ]
+   },
+   {
+    "id": "r12",
+    "locale": "zh_TW",
+    "situation": "男朋友前一個小時才取消我們的週年晚餐，說要跟朋友打電動，訂位還是我訂的。",
+    "draft": "週年晚餐前一個小時才說不來，要跟朋友打電動？位子是我訂的欸，你到底把我當什麼，很扯。",
+    "wrong_owner": [
+     "你訂的位",
+     "你訂的"
+    ]
+   }
+  ]
+ },
+ "cloud": {
+  "note": "Q2 (痛罵 / styled 發洩), preview Worker. 6 situations per locale, Vent and Feral each, styles rotate so every locale sees 2 free and 4 Pro styles. Names appear on purpose (the Worker must strip them).",
+  "styles_rotation": [
+   "high_eq",
+   "savage_no_filter",
+   "taiwanese_drama",
+   "cold_violence",
+   "corporate_passive_violence",
+   "passive_aggressive"
+  ],
+  "situations": {
+   "zh_TW": [
+    {
+     "id": "c_credit",
+     "text": "我做了兩個禮拜的簡報，同事陳志明在週會上說是他做的，主管還當場誇他，我整個人氣到發抖。"
+    },
+    {
+     "id": "c_boss",
+     "text": "慣老闆又在下班前十分鐘丟一個案子給我，說明天早上就要。上禮拜加班三天一毛加班費都沒有，還在LINE群組說年輕人要有責任感。"
+    },
+    {
+     "id": "c_family",
+     "text": "我媽每次過年都在親戚面前拿我跟表姊比，說人家在竹科年薪兩百萬，我只會領死薪水，還一直問我什麼時候要結婚。"
+    },
+    {
+     "id": "c_roommate",
+     "text": "室友一直偷吃我冰箱裡寫了名字的東西，今天連我的便當都吃掉，空盒還放回去，問他就說以為我不要了。"
+    },
+    {
+     "id": "c_landlord",
+     "text": "房東說好這個月修冷氣，拖了三個禮拜，LINE已讀不回，倒是記得提醒我房租要準時，熱到我整晚睡不著。"
+    },
+    {
+     "id": "c_ex",
+     "text": "前男友阿哲分手後到處跟共同朋友說是我劈腿，明明是他自己先搞曖昧被我抓到。"
+    }
+   ],
+   "en_US": [
+    {
+     "id": "c_credit",
+     "text": "My manager Kevin took credit for the report I spent my whole weekend on. In the team meeting he presented it like it was his idea and didn't mention me once."
+    },
+    {
+     "id": "c_boss",
+     "text": "My boss dumped a new project on me ten minutes before I was leaving and wants it by tomorrow morning. I worked three unpaid overtime nights last week and he lectured the team chat about 'ownership'."
+    },
+    {
+     "id": "c_family",
+     "text": "Every holiday my mom compares me to my cousin in front of everyone, says she makes six figures while I'm wasting my life, and asks when I'm getting married."
+    },
+    {
+     "id": "c_roommate",
+     "text": "My roommate keeps eating the groceries I label with my name. Today she finished my leftover pad thai and put the empty container back in the fridge."
+    },
+    {
+     "id": "c_landlord",
+     "text": "My landlord promised to fix the AC this month. Three weeks later he leaves me on read but never forgets to remind me rent is due. I can't sleep in this heat."
+    },
+    {
+     "id": "c_ex",
+     "text": "After we broke up my ex Ryan told all our mutual friends that I cheated, when he was the one I caught flirting with someone else."
+    }
+   ],
+   "ja_JP": [
+    {
+     "id": "c_credit",
+     "text": "二週間かけて作った資料を、同僚の田中が会議で自分の手柄みたいに発表した。上司もその場で褒めていて、腹が立って仕方ない。"
+    },
+    {
+     "id": "c_boss",
+     "text": "上司が金曜の定時直前に「月曜の朝までに資料作っといて」と丸投げしてきた。先週は三日もサービス残業したのに。"
+    },
+    {
+     "id": "c_family",
+     "text": "正月のたびに母が親戚の前で私をいとこと比べて、「あの子は年収一千万なのにあんたは安月給」と言い、結婚はまだかと聞いてくる。"
+    },
+    {
+     "id": "c_roommate",
+     "text": "ルームメイトが共用のシンクに洗い物を一週間放置して、コバエが湧いた。注意したら「気になる人が洗えばいいじゃん」と言われた。"
+    },
+    {
+     "id": "c_landlord",
+     "text": "大家が今月中にエアコンを直すと言ったのに三週間放置。LINEは既読無視なのに家賃の催促だけは忘れない。暑くて眠れない。"
+    },
+    {
+     "id": "c_ex",
+     "text": "元カレの健太が別れた後、共通の友達に私が浮気したと言いふらしている。浮気してたのは向こうなのに。"
+    }
+   ]
+  },
+  "names": {
+   "zh_TW": [
+    "陳志明",
+    "阿哲"
+   ],
+   "en_US": [
+    "Kevin",
+    "Ryan"
+   ],
+   "ja_JP": [
+    "田中",
+    "健太"
+   ]
+  },
+  "ui_style_names": {
+   "zh_TW": {
+    "high_eq": "高 EQ",
+    "savage_no_filter": "硬核回擊",
+    "taiwanese_drama": "台劇腔",
+    "cold_violence": "冷處理",
+    "corporate_passive_violence": "職場冷暴力",
+    "passive_aggressive": "陰陽怪氣"
+   },
+   "en_US": {
+    "high_eq": "High EQ",
+    "savage_no_filter": "Savage",
+    "taiwanese_drama": "Taiwanese Drama",
+    "cold_violence": "Cold Reply",
+    "corporate_passive_violence": "Corporate Passive Violence",
+    "passive_aggressive": "Passive Aggressive"
+   },
+   "ja_JP": {
+    "high_eq": "高EQ",
+    "savage_no_filter": "容赦なし",
+    "taiwanese_drama": "台湾ドラマ口調",
+    "cold_violence": "冷たい返し",
+    "corporate_passive_violence": "ビジネス冷たい暴力",
+    "passive_aggressive": "パッシブ・アグレッシブ"
+   }
+  }
+ }
+}

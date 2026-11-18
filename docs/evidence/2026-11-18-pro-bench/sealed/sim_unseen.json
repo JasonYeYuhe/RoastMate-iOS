@@ -1,0 +1,80 @@
+{
+  "zh_TW": [
+    {
+      "id": "s1",
+      "setup": "我想跟主管拒絕週末臨時無薪加班。他每次都說團隊需要大家共體時艱，不配合就是沒有責任感。",
+      "replies": [
+        "主管，我理解專案進度緊湊，但我週末已經有既定家庭安排，無法臨時出勤。",
+        "如果週末確實有緊急業務需求，請依勞基法規定正式申請加班費與補休，我們再來討論人力調配。"
+      ]
+    },
+    {
+      "id": "s2",
+      "setup": "我想請姑姑不要再未經同意就把我家鑰匙借給其他親戚來借住。她每次都說大家都是一家人不用分這麼細。",
+      "replies": [
+        "姑姑，這是我自己租的住處，隨意讓其他人進出會嚴重影響我的生活與隱私。",
+        "親戚如果需要北上借住，請他們提前自己跟我聯絡，鑰匙請您先歸還給我。"
+      ]
+    },
+    {
+      "id": "s3",
+      "setup": "我想請隔壁鄰居不要再把鞋櫃跟雜物堆在逃生梯通道。他每次都藉口說家裡太小放不下，一下子就會搬走。",
+      "replies": [
+        "鄰居你好，逃生梯通道是全棟大樓的避難動線，依法規本來就不能堆放私人雜物。",
+        "請你在這週末前將鞋櫃移回自己室內，否則為了全體住戶的安全，我會請管委會依規定處理。"
+      ]
+    }
+  ],
+  "en_US": [
+    {
+      "id": "s1",
+      "setup": "I want to tell my boss that I will not be answering emails or taking calls during my approved PTO next week. He always says emergencies come up and leaders need to be reachable.",
+      "replies": [
+        "I understand unexpected issues happen, but I have set up comprehensive handoff notes and coverage so the team is supported while I am away.",
+        "To recharge and return at full capacity, I will be completely disconnected from work communications until my return date."
+      ]
+    },
+    {
+      "id": "s2",
+      "setup": "I want to tell my brother that I will not co-sign a car loan for him. He keeps guilt-tripping me, saying family is supposed to help each other out when times are tough.",
+      "replies": [
+        "I love you and want to see you get back on your feet, but my personal financial boundary is that I never co-sign loans for anyone.",
+        "I am happy to help you review your monthly budget or look for affordable options, but my answer on co-signing remains no."
+      ]
+    },
+    {
+      "id": "s3",
+      "setup": "I want to ask my neighbor to stop letting his dog off-leash in our shared apartment courtyard. He always waves it off and says the dog is friendly and won't hurt anyone.",
+      "replies": [
+        "I know your dog is friendly, but the building policy requires all pets to be leashed in shared common areas.",
+        "My safety and peace of mind matter too, so please put the leash on whenever you bring him into the courtyard."
+      ]
+    }
+  ],
+  "ja_JP": [
+    {
+      "id": "s1",
+      "setup": "定時後の急な飲み会への参加を断りたい。上司はいつも「若手とのコミュニケーション不足」や「チームの結束」を理由に断るのを許してくれません。",
+      "replies": [
+        "お誘いありがとうございます。ただ本日は私用があり、事前に予定を入れておりますので失礼いたします。",
+        "チームの連携業務については、日中の業務時間内にしっかりとコミュニケーションを取らせていただきます。"
+      ]
+    },
+    {
+      "id": "s2",
+      "setup": "義母に合鍵で勝手に我が家に上がり込むのをやめてほしい。いつも「掃除を手伝いに来てあげた」「家族なんだから遠慮はいらない」と言われます。",
+      "replies": [
+        "お気遣いには感謝していますが、事前の連絡なしに来られると私たちのプライベートの時間が保てません。",
+        "お互いに気持ちよく過ごすために、訪問される際は事前に連絡をいただき、合鍵は一度お返しいただけますか。"
+      ]
+    },
+    {
+      "id": "s3",
+      "setup": "車を出して送迎するのが当たり前になっている友人に、今後は断りたい。毎回「ついでだからいいでしょ」とガソリン代や高速代も払おうとしません。",
+      "replies": [
+        "毎回送り迎えをするのは私の時間的にも体力的にも負担になっているので、今後はできません。",
+        "ガソリン代や運転の手間もかかるので、一緒に出かけるなら今後は電車を利用するかレンタカーを折半しましょう。"
+      ]
+    }
+  ]
+}

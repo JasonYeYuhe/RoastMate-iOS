@@ -1,0 +1,284 @@
+{
+  "messages": [
+    {
+      "id": "f01",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "Because you continue to withhold my security deposit illegally, I have officially filed a claim against you in small claims court and notified the city housing authority."
+    },
+    {
+      "id": "f02",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "You grabbed my wrist, twisted it, and shoved me down the stairs yesterday. I went to the emergency room, took photos of the severe bruising, and filed a restraining order."
+    },
+    {
+      "id": "f03",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": true,
+      "text": "あなたのお子さんが通っている小学校の通学路、トラックの抜け道になっていて危険ですよね。親の因果が子供に回らないことを祈っていますよ。"
+    },
+    {
+      "id": "f04",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": true,
+      "text": "明天下午我會請幾位在外面的好兄弟專程到你開的店裡坐坐，順便教教你什麼叫做做人的基本規矩。"
+    },
+    {
+      "id": "f05",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "あなたの執拗なパワハラによって私が適応障害と診断された件について、医師の診断書と暴言の録音データを労働基準監督署へ提出しました。"
+    },
+    {
+      "id": "f06",
+      "locale": "en",
+      "label": "threat",
+      "veiled": true,
+      "text": "It must be comforting knowing exactly which daycare your four-year-old son attends every afternoon. You really should think twice before cheating people."
+    },
+    {
+      "id": "f07",
+      "locale": "en",
+      "label": "threat",
+      "veiled": false,
+      "text": "Next time I see you anywhere near my office, I will slash all four of your car tires and shatter your windshield."
+    },
+    {
+      "id": "f08",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "我受夠了你無止境的謊言和情緒勒索，我們今天徹底結束，我已經把你所有聯絡方式封鎖，請永遠不要再聯絡我。"
+    },
+    {
+      "id": "f09",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "I packed up the clothes and textbooks you abandoned in my living room, and I am courier-shipping them directly to your reception desk at 450 Lexington Avenue tomorrow."
+    },
+    {
+      "id": "f10",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": true,
+      "text": "世界很小，你公司打卡下班的時間我一清二楚，隨時在路口碰上什麼意外，都只是剛好而已。"
+    },
+    {
+      "id": "f11",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你長期利用職務權限在公務群組對我進行言語羞辱與性騷擾，我已將所有對話截圖與錄音提交給公司HR調查。"
+    },
+    {
+      "id": "f12",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "度重なる浮気と嘘にはもう耐えられません。本日をもって別れます。私の連絡先はすべてブロックしましたので二度と連絡してこないでください。"
+    },
+    {
+      "id": "f13",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": false,
+      "text": "你明天要是敢再出現在我面前，我就直接拿球棒打碎你的膝蓋，讓你這輩子只能坐輪椅。"
+    },
+    {
+      "id": "f14",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": true,
+      "text": "近いうちに私の知り合いの怖い人たちがあなたの職場へ挨拶に伺う予定です。逃げられると思わないほうがいいですよ。"
+    },
+    {
+      "id": "f15",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "先週から私の自宅周辺をうろつき、ポストに気味の悪い手紙を投函するストーカー行為は直ちにやめてください。すでに防犯カメラの映像を警察に提出しました。"
+    },
+    {
+      "id": "f16",
+      "locale": "en",
+      "label": "threat",
+      "veiled": true,
+      "text": "Accidents happen every day to careless people like you, especially when you are unlocking your front door late at night with your guard down."
+    },
+    {
+      "id": "f17",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你留在客廳的衣物和個人電腦，我明天早上會用黑貓宅急便直接寄送到你位於中山北路二段的公司總部前台。"
+    },
+    {
+      "id": "f18",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "Your persistent unwanted comments about my body violate company policy, and I have forwarded our full Slack chat logs directly to HR and senior leadership."
+    },
+    {
+      "id": "f19",
+      "locale": "en",
+      "label": "threat",
+      "veiled": true,
+      "text": "That shiny black Tesla you park on Elm Street every night is hard to miss. It would be a real tragedy if someone took a crowbar to it while you slept."
+    },
+    {
+      "id": "f20",
+      "locale": "en",
+      "label": "threat",
+      "veiled": true,
+      "text": "I know you take the 6:15 PM commuter train home alone every evening. Walking through that unlit parking lot after dark can be very dangerous."
+    },
+    {
+      "id": "f21",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你們公司販售瑕疵商品還惡意拒絕退款，我已檢具發票與通聯記錄向消保官申訴，我們公平會見。"
+    },
+    {
+      "id": "f22",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": false,
+      "text": "今度私の視界に入ったら、その生意気な顔面を力任せに殴り倒して前歯をへし折ってやる。"
+    },
+    {
+      "id": "f23",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "部屋に残されたあなたの私物は段ボールにまとめ、明日あなたの勤務先である新宿の本社オフィス宛てに着払いで発送します。"
+    },
+    {
+      "id": "f24",
+      "locale": "en",
+      "label": "threat",
+      "veiled": true,
+      "text": "A couple of my rougher associates are planning to drop by your storefront tomorrow afternoon to have a little chat about your attitude."
+    },
+    {
+      "id": "f25",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "Your company billed me three separate times for a canceled subscription, so I have initiated a fraud chargeback with my bank and reported your deceptive billing to the FTC."
+    },
+    {
+      "id": "f26",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": false,
+      "text": "你再敢踏進我店裡一步，我一定拿磚頭砸爛你開來的那台爛車，說到做到。"
+    },
+    {
+      "id": "f27",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "You are an incompetent, manipulative fraud who took credit for six months of my work and threw our team under the bus to save your own pathetic skin."
+    },
+    {
+      "id": "f28",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你昨天下班後在走廊直接用力推我撞牆害我手肘挫傷，我已經去醫院驗傷，絕不會姑息你的暴力行為。"
+    },
+    {
+      "id": "f29",
+      "locale": "en",
+      "label": "threat",
+      "veiled": false,
+      "text": "If you do not return my money by noon tomorrow, I am going to come to your house and break your jaw."
+    },
+    {
+      "id": "f30",
+      "locale": "en",
+      "label": "complaint",
+      "veiled": false,
+      "text": "We are completely done. I have changed all the locks on my apartment, blocked your phone number on every platform, and I never want to hear from you again."
+    },
+    {
+      "id": "f31",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": true,
+      "text": "我知道你每天晚上都一個人走捷運站後面的暗巷回家，夜路走多了，難免會遇到不長眼的人。"
+    },
+    {
+      "id": "f32",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "壊れた商品を売りつけておきながら返金に応じない悪質な対応について、本日消費者センターへ被害報告を行いました。二度とあなたから買いません。"
+    },
+    {
+      "id": "f33",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": true,
+      "text": "你小學三年級的女兒放學都在校門口右邊那家安親班等接送對吧？做人還是留點口德，免得禍及身邊在乎的人。"
+    },
+    {
+      "id": "f34",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": true,
+      "text": "あなたが毎晩十時過ぎに一人で歩く駅から自宅までの暗い夜道、人通りが少なくて物騒ですね。くれぐれも背後には気をつけてください。"
+    },
+    {
+      "id": "f35",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你是一個自私透頂又毫無誠信的混蛋，把別人的心血全部毀掉還裝無辜，你的無恥程度真的讓我感到噁心。"
+    },
+    {
+      "id": "f36",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": false,
+      "text": "明日までに全額返済しなければ、お前の自宅に乗り込んで玄関ドアを叩き壊してやるから覚悟しておけ。"
+    },
+    {
+      "id": "f37",
+      "locale": "ja",
+      "label": "threat",
+      "veiled": true,
+      "text": "お宅の駐車場に止めてあるシルバーのプリウス、いつも綺麗に磨かれていますね。何かの拍子に窓ガラスが割れたり火がついたりしなければいいのですが。"
+    },
+    {
+      "id": "f38",
+      "locale": "ja",
+      "label": "complaint",
+      "veiled": false,
+      "text": "再三の請求にもかかわらず業務委託料の未払いが続いているため、本日弁護士を通じて裁判所に支払督促の申立書を送達いたしました。"
+    },
+    {
+      "id": "f39",
+      "locale": "zh_TW",
+      "label": "complaint",
+      "veiled": false,
+      "text": "你侵占我放在租屋處的三萬元押金與私人物品，我今天下午已經正式向地檢署提起刑事侵占告訴。"
+    },
+    {
+      "id": "f40",
+      "locale": "zh_TW",
+      "label": "threat",
+      "veiled": true,
+      "text": "你停在地下室B2轉角那台白色休旅車很顯眼嘛，這年頭監視器死角多，車身被劃到或輪胎破掉可沒人賠得起。"
+    }
+  ]
+}

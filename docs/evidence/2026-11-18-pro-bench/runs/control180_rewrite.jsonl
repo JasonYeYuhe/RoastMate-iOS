@@ -1,0 +1,31 @@
+{"header":"rewrite","onDevice":true,"os":"Version 27.2.1 (Build 26B131)","started":"2026-11-18T13:42:16Z"}
+{"id":"r01","locale":"zh_TW","mode":"rewrite","ms":2804,"provenance":"model","run":0,"text":"你下班前五分鐘就把報告丟給我，說明天早上開會要用，要我今天弄完再走，還說「年輕人多做一點不吃虧」。我今天不想因為這份報告而加班。","wrong_owner":["你的報告給我","我丟報告","我把報告丟給你"]}
+{"id":"r01","locale":"zh_TW","mode":"rewrite","ms":3160,"provenance":"model","run":1,"text":"你下班前五分鐘給我一份報告，說明天早上開會要用，要我今天弄完再走，還說「年輕人多做一點不吃虧」。我今天要完成作業就忙碌到沒空思考這句話。請調整期望。","wrong_owner":["你的報告給我","我丟報告","我把報告丟給你"]}
+{"id":"r01","locale":"zh_TW","mode":"rewrite","ms":2974,"provenance":"model","run":2,"text":"你下班前五分鐘就把報告交給我，說明天早上開會要用，要我今天弄完再走，還說要我多做一點不吃虧。我今天沒空，請不要再給我這樣的要求。","wrong_owner":["你的報告給我","我丟報告","我把報告丟給你"]}
+{"id":"r01","locale":"zh_TW","mode":"rewrite","ms":2804,"provenance":"model","run":3,"text":"你下班前五分鐘就把報告交給我，說明天早上開會要用，要我今天弄完再走，還說我年輕多做一點不吃虧。我今天需要完成這份作業。","wrong_owner":["你的報告給我","我丟報告","我把報告丟給你"]}
+{"id":"r01","locale":"zh_TW","mode":"rewrite","ms":2588,"provenance":"curated","run":4,"text":"如果你這份用心放在自己身上,可能現在已經飛黃騰達了。","wrong_owner":["你的報告給我","我丟報告","我把報告丟給你"]}
+{"id":"r02","locale":"zh_TW","mode":"rewrite","ms":2711,"provenance":"model","run":0,"text":"你把碗盤放在水槽裡三天又發臭，我請你洗一下，你說我「很計較」。半夜一點你還在客廳開擴音講電話，好像大家都聽不到。","wrong_owner":["我的碗盤","我的碗","我放的碗"]}
+{"id":"r02","locale":"zh_TW","mode":"rewrite","ms":2883,"provenance":"model","run":1,"text":"你讓碗盤在水槽泡三天又發臭，還說我「很計較」。半夜一點你還在客廳開擴音講電話，好像沒注意到環境有多不舒服。","wrong_owner":["我的碗盤","我的碗","我放的碗"]}
+{"id":"r02","locale":"zh_TW","mode":"rewrite","ms":2730,"provenance":"model","run":2,"text":"你把碗盤放在水槽裡三四天都發臭了，我請你洗一下，你卻說我「很計較」。半夜一點還在客廳開擴音講電話，大家難以聽到。","wrong_owner":["我的碗盤","我的碗","我放的碗"]}
+{"id":"r02","locale":"zh_TW","mode":"rewrite","ms":2873,"provenance":"model","run":3,"text":"你把碗盤放了三天又三天，還發臭。我請你洗一下，你說我「很計較」。半夜一點你還在客廳開擴音講電話，好像沒注意到環境有多嘈雜。","wrong_owner":["我的碗盤","我的碗","我放的碗"]}
+{"id":"r02","locale":"zh_TW","mode":"rewrite","ms":2701,"provenance":"model","run":4,"text":"你把碗盤放在水槽裡三天都發臭，我請你洗一下，你說我「很計較」。半夜一點還在客廳開擴音講電話，大家都在努力睡覺。","wrong_owner":["我的碗盤","我的碗","我放的碗"]}
+{"id":"r03","locale":"zh_TW","mode":"rewrite","ms":2719,"provenance":"model","run":0,"text":"我借給你五千塊，已經半年了，但你每次都說手頭緊，卻在 IG 上不斷消費。請盡快處理。","wrong_owner":["我借你的錢還沒還","我欠你"]}
+{"id":"r03","locale":"zh_TW","mode":"rewrite","ms":2532,"provenance":"model","run":1,"text":"我借了五千塊，已經半年了，每次問都說手頭緊，但你卻在 IG 上花錢。請立刻處理。","wrong_owner":["我借你的錢還沒還","我欠你"]}
+{"id":"r04","locale":"zh_TW","mode":"rewrite","ms":2031,"provenance":"model","run":0,"text":"你做不完的報表往我的桌上丟，還說我比較快？這不是你的下班理由。","wrong_owner":["我的報表丟給你","我做不完的報表"]}
+{"id":"r04","locale":"zh_TW","mode":"rewrite","ms":2123,"provenance":"model","run":1,"text":"你把做不完的報表放到我桌上，說反正我比較快？這不是你準時下班的藉口。","wrong_owner":["我的報表丟給你","我做不完的報表"]}
+{"id":"r05","locale":"en_US","mode":"rewrite","ms":1599,"provenance":"model","run":0,"text":"You took credit for two weeks of my work in the team meeting.","wrong_owner":["your slides","your work"]}
+{"id":"r05","locale":"en_US","mode":"rewrite","ms":1796,"provenance":"model","run":1,"text":"You took credit for my slides in the team meeting. I need my contributions recognized.","wrong_owner":["your slides","your work"]}
+{"id":"r06","locale":"en_US","mode":"rewrite","ms":2437,"provenance":"model","run":0,"text":"Your dishes have been piling up in the sink for days, and I need them cleaned. I’m not asking you to change — just to take responsibility for your space.","wrong_owner":["my dishes","my mess"]}
+{"id":"r06","locale":"en_US","mode":"rewrite","ms":2386,"provenance":"model","run":1,"text":"Your dishes have been piling up in the sink for days, and I need clarity on when they’ll be cleaned.","wrong_owner":["my dishes","my mess"]}
+{"id":"r07","locale":"en_US","mode":"rewrite","ms":2181,"provenance":"model","run":0,"text":"I texted you three weeks ago about the AC, and you haven’t responded. I need the issue fixed.","wrong_owner":["fix my own","my landlord duties"]}
+{"id":"r07","locale":"en_US","mode":"rewrite","ms":2220,"provenance":"model","run":1,"text":"I asked for the AC to be fixed three weeks ago, but you keep ignoring my messages while reminding me about rent. Fix the AC.","wrong_owner":["fix my own","my landlord duties"]}
+{"id":"r08","locale":"en_US","mode":"rewrite","ms":2213,"provenance":"curated","run":0,"text":"Thanks for the daily reminder that patience is, in fact, a finite resource.","wrong_owner":["I owe you","I borrowed"]}
+{"id":"r08","locale":"en_US","mode":"rewrite","ms":2196,"provenance":"curated","run":1,"text":"If consistency were a sport, you'd be Olympic-grade at this particular hobby.","wrong_owner":["I owe you","I borrowed"]}
+{"id":"r09","locale":"ja_JP","mode":"rewrite","ms":2105,"provenance":"model","run":0,"text":"あなたは夜十一時に資料を朝八時までに直すと言いました。私には他の時間も必要です。","wrong_owner":["私の段取りの悪さ"]}
+{"id":"r09","locale":"ja_JP","mode":"rewrite","ms":2477,"provenance":"model","run":1,"text":"あなたは夜十一時に資料を朝八時までに直すと言いました。私には他の時間も必要です。あなたのスケジュールを私に押し付けないでください。","wrong_owner":["私の段取りの悪さ"]}
+{"id":"r10","locale":"ja_JP","mode":"rewrite","ms":2613,"provenance":"model","run":0,"text":"あなたはお皿を何日も洗い場に残し、それが「細かすぎ」だと指摘すると言いました。それを見過ごすことはできません。","wrong_owner":["私の皿","私の洗い物"]}
+{"id":"r10","locale":"ja_JP","mode":"rewrite","ms":2443,"provenance":"model","run":1,"text":"あなたはシンクに皿を何日も置いているのに、「細かすぎ」と言っています。私の掃除を無視しています。","wrong_owner":["私の皿","私の洗い物"]}
+{"id":"r11","locale":"ja_JP","mode":"rewrite","ms":2138,"provenance":"model","run":0,"text":"あなたから三万円を借りた分を返してください。催促したら「細かいね」と言われたことは受け入れられません。","wrong_owner":["私が借りた","私が返す"]}
+{"id":"r11","locale":"ja_JP","mode":"rewrite","ms":2188,"provenance":"model","run":1,"text":"あなたから半年も返してもらえない三万円を要求します。細かいことばかり言わないでください。","wrong_owner":["私が借りた","私が返す"]}
+{"id":"r12","locale":"zh_TW","mode":"rewrite","ms":1992,"provenance":"model","run":0,"text":"我前一個小時才收到你取消週年晚餐，說要跟朋友打電動，訂位還是我訂的。","wrong_owner":["你訂的位","你訂的"]}
+{"id":"r12","locale":"zh_TW","mode":"rewrite","ms":1833,"provenance":"model","run":1,"text":"你前一個小時才取消週年晚餐，說要跟朋友打電動，訂位還是我訂的。","wrong_owner":["你訂的位","你訂的"]}

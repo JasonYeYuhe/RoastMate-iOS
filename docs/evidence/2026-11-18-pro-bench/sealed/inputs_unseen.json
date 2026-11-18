@@ -1,0 +1,99 @@
+{
+  "sendable": {
+    "zh_TW": [
+      {
+        "id": "u01",
+        "text": "我放在公司茶水間冰箱的星巴克，貼了名字還被同事偷喝掉半杯，去問是誰喝的大家都裝死。"
+      },
+      {
+        "id": "u02",
+        "text": "隔壁鄰居停機車每次都硬擠進我的停車格，今天把我的新車側殼刮了一大條，跟他講還回我說車位本來就很擠。"
+      },
+      {
+        "id": "u03",
+        "text": "我妹沒跟我說一聲就擅自把我剛買的專櫃洋裝穿去跟朋友聚會，領口還沾了一大塊粉底液，連句道歉都沒有。"
+      },
+      {
+        "id": "u04",
+        "text": "我休假去日本玩，同事一直在LINE上叫我幫忙代購三盒保養品跟點心，我婉拒之後她竟然在辦公室酸我出國很小氣。"
+      },
+      {
+        "id": "u05",
+        "text": "社區保全把我的急用包裹隨便交給陌生住戶簽收，害我找了三天才找到，管委會居然說他們不負責保管。"
+      },
+      {
+        "id": "u06",
+        "text": "跟一群朋友去吃熱炒，結帳時有人點了高粱跟生蠔卻提議要大家平分，我只吃一碗炒飯也被強迫出八百塊。"
+      }
+    ],
+    "en_US": [
+      {
+        "id": "u01",
+        "text": "I have my lunch break blocked off on my calendar every single day, but my coworker keeps scheduling mandatory meetings right in the middle of it. When I decline, she messages me asking why I am not being a team player."
+      },
+      {
+        "id": "u02",
+        "text": "My close friend booked a ten-day vacation to Cabo and just assumed I would dog-sit her two golden retrievers for free without even asking first. When I told her I was busy, she acted like I was abandoning her."
+      },
+      {
+        "id": "u03",
+        "text": "My partner invited his brother to crash on our living room couch for two weeks without checking with me beforehand. Our apartment is tiny, and now I have zero privacy in my own home while I work remotely."
+      },
+      {
+        "id": "u04",
+        "text": "The technician gave me an eight-hour arrival window between 9 AM and 5 PM, so I stayed home all day waiting. At 5:15 PM, I received an automated text saying they missed me because nobody was home."
+      },
+      {
+        "id": "u05",
+        "text": "I have been giving my coworker a ride to and from the office every day for the past two months to help him out. He has never once offered to chip in for gas, and yesterday he complained that my AC was too cold."
+      },
+      {
+        "id": "u06",
+        "text": "I went to the front desk in person last month to cancel my gym membership and got a signed receipt from the manager. Today I woke up to another ninety-dollar monthly charge on my debit card, and customer support refused to reverse it."
+      }
+    ],
+    "ja_JP": [
+      {
+        "id": "u01",
+        "text": "金曜の夜は私用があると言って断ったのに、先輩から「付き合いも仕事のうち」と執拗にLINEで飲み会に誘われ、断ると露骨に無視されます。"
+      },
+      {
+        "id": "u02",
+        "text": "隣の部屋の住人がマンションの共用廊下に私物や段ボールを山積みに放置していて、私の部屋のドア前まで塞がれて本当に迷惑しています。"
+      },
+      {
+        "id": "u03",
+        "text": "私の名前で予約したコース料理を友達二人が直前にドタキャンし、キャンセル料が全額私に請求されたのに二人とも連絡がつかなくなりました。"
+      },
+      {
+        "id": "u04",
+        "text": "私が出したお気に入りのウールコートがクリーニング店で縮んで戻ってきたのに、店長に「元からこういう素材」と言い張られて補償も謝罪もありません。"
+      },
+      {
+        "id": "u05",
+        "text": "実家に置いてあった私の漫画本全巻セットを、親が私の許可なく勝手に親戚の子供にあげてしまい、文句を言ったら「邪魔だった」と逆ギレされました。"
+      },
+      {
+        "id": "u06",
+        "text": "同じシフトの同僚が「タバコ休憩」と言って毎回三十分以上戻ってこず、私が一人でレジと電話対応に追われて自分の休憩も取れません。"
+      }
+    ]
+  },
+  "styles": {
+    "free": [
+      "high_eq",
+      "passive_aggressive"
+    ],
+    "pro": [
+      "savage_no_filter",
+      "taiwanese_drama",
+      "cold_violence",
+      "corporate_passive_violence"
+    ]
+  },
+  "intensities": [
+    "calm",
+    "sharp",
+    "savage"
+  ]
+}
