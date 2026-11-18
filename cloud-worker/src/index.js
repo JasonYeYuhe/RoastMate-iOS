@@ -32,7 +32,7 @@ import { isTraditionalChinese, baseLocale } from "./locale.js";
 import { groqEnabled, openRouterModels, openRouterAttempts, modelSelection } from "./routing.js";
 import { languageDirective, userLanguageReminder } from "./language.js";
 import { buildVentSystemPrompt, buildVentUserPrompt, ventStyleInstruction } from "./vent_prompt.js";
-import { cleanVentText, stripNameAddress, draftDefects, fewerDefects, defectKinds, retryModels, retryNudge, nearDuplicate, takeNudge, situationNames } from "./postprocess.js";
+import { cleanVentText, stripNameAddress, draftDefects, fewerDefects, defectKinds, retryModels, retryNudge } from "./postprocess.js";
 import { budgetFor, attemptTimeout, qualityRetryTimeout } from "./budget.js";
 
 const MODEL_OVERRIDE_ALLOWLIST = new Set([
@@ -196,9 +196,6 @@ export default {
       return json({ error: lane.error, reason: lane.reason }, lane.status);
     }
     const { rlKey, limit } = lane;
-    // 1.9.0 Q2a: takes of a private draft. Only a Pro-lane Feral request gets
-    // more than one; one request still costs one unit of the daily quota.
-    const takes = (mode === "vent" && intensity === "feral" && lane.lane === "pro") ? variantCount : 1;
     // D2: RESERVE the unit here rather than charging after the upstream call.
     // The old shape checked here and charged ~2-3s later, which put the whole
     // model call inside the check->charge window — the reason a concurrent
@@ -264,29 +261,6 @@ export default {
     // politeness-RLHF on zh than Llama), Llama 3.3 70B Versatile for
     // everything else. OpenRouter stays as fallback when Groq is over
     // quota / having a bad day.
-    // 1.9.0 Q2a: the extra takes start now, in parallel with the first draft,
-    // so three takes cost about the latency of one. Each asks for a different
-    // angle (src/postprocess.js takeNudge) on the same prompts. OpenRouter
-    // only, never for an eval-harness model override.
-    // A take that names the person is dropped, so the extra takes are told up
-    // front (the same localized line the quality retry uses).
-    const takeNames = takes > 1 ? situationNames(situation, locale) : [];
-    const takeExtra = (k) => takeNudge(k, locale) + (takeNames.length ? retryNudge({ names: takeNames }, locale) : "");
-    const extraTakes = (takes > 1 && env.OPENROUTER_API_KEY && !modelOverride)
-      ? Array.from({ length: takes - 1 }, (_, k) => callOpenAICompatible({
-          endpoint: "https://openrouter.ai/api/v1/chat/completions",
-          apiKey: env.OPENROUTER_API_KEY,
-          model: openRouterModels(env),
-          systemPrompt,
-          userPrompt: buildVentUserPrompt(situation, locale, takeExtra(k + 2), { styleName, styleId, intensity }),
-          timeoutMs: attemptTimeout(deadline, Date.now(), firstAttemptMs),
-          extraHeaders: {
-            "HTTP-Referer": env.OPENROUTER_REFERER || "https://roastmate.app",
-            "X-Title": env.OPENROUTER_TITLE || "RoastMate"
-          }
-        }))
-      : [];
-
     const attempts = [];
     let text = "";
     let modelUsed = "";
@@ -524,31 +498,12 @@ export default {
       }
     }
 
-    // 1.9.0 Q2a: the extra takes, each through the same clean-up as the first
-    // draft. A take that still has a defect (a name, Simplified in zh-Hant,
-    // stray Latin, a word on repeat) or nearly repeats an earlier take is
-    // dropped, never retried: the first draft already used the retry budget.
-    const texts = [text];
-    if (extraTakes.length) {
-      const nameCheck = { titles: true };
-      for (const r of await Promise.all(extraTakes)) {
-        if (!r.ok) continue;
-        const take = stripNameAddress(cleanVentText(r.text), locale, situation, nameCheck);
-        if (!take || draftDefects(take, locale, situation, nameCheck).count > 0) continue;
-        if (texts.some((t) => nearDuplicate(t, take, locale))) continue;
-        texts.push(take);
-      }
-    }
-
     ddLog(env, ctx, { outcome: "ok", status: 200, intensity, locale, mode, variantCount, lane: lane.lane,
       quota_backend: quota.backend, quota_do_enabled: quotaBackendIsDO(env),
       provider: providerUsed, model: modelUsed, quality_retry: qualityRetry, quality_defects: qualityDefects,
       attempts: attempts.map((a) => a.split(":").slice(0, 2).join(":")), latency_ms: Date.now() - t0 });
     return json({
       text,
-      // Only when more than one take was asked for (Pro 痛罵): old clients
-      // never send variantCount and read `text` as before.
-      ...(takes > 1 ? { texts } : {}),
       model: modelUsed,
       provider: providerUsed,
       remaining: Math.max(0, limit - used - 1)
@@ -755,12 +710,6 @@ function validate(body) {
   if (mode === "roast") {
     const n = parseInt(variantCount, 10);
     vc = Number.isFinite(n) ? Math.max(1, Math.min(5, n)) : 3;
-  } else if (mode === "vent") {
-    // 1.9.0 Q2a: a Pro 痛罵 (Feral) may ask for up to 3 takes. Honoured only
-    // on the authenticated Pro lane (see `takes` in the handler); everything
-    // else — the free lane, Vent, old binaries that never send it — gets 1.
-    const n = parseInt(variantCount, 10);
-    vc = Number.isFinite(n) ? Math.max(1, Math.min(3, n)) : 1;
   }
   return {
     value: {
