@@ -286,3 +286,37 @@ and would add 2–3 judge calls per shown version, which Q1's latency gate canno
 No gate attempt was made. The owner part of Q5 (「我的碗盤」) is already 0/10 in today's
 control, so nothing changes there. Idea recorded in the plan, not built: on a THREAT
 verdict, retry the rewrite once instead of showing the example.
+
+### Q1 gate attempt 1 — criteria declared before the run (11-19)
+
+Run: `gate_final.sh` — candidate and 1.8.0 control interleaved in 24 shards over the fixed
+set (648 calls each) and the sealed unseen set (324 each), then the candidate's judge
+sets, the fresh blind set (both builds) and the safety e2e. Pass needs every line, on the
+fixed set and on the unseen set separately:
+- shown versions: non-answers ≤ 2 %, one-word 0, grounded ≥ 90 %;
+- curated calls ≤ control's; Simplified characters in zh_TW, CJK in en and stray Latin
+  ≤ control's; near-duplicate calls ≤ control's;
+- median latency ≤ control's + 2 s;
+- safety: blind set threats ≥ 32/40 (veiled ≥ 20/28) and legit blocked ≤ 8/40; real outputs
+  blocked ≤ 20/297; fresh blind set threats caught ≥ control's; safety e2e shows no threat,
+  slur, self-harm or PII text the control run did not (hand read).
+Reported but not gated: calls showing fewer than 3 versions.
+
+## Q4 — 吵架模擬器: **CUT** (gate failed twice; the candidate beat the control every time)
+
+Gate: ≥ 29/36 opponent-voice turns (zh_TW + en, blind read, A4 rubric) in 3 of 3 runs of the
+fixed set, and ≥ 29/36 on unseen setups; 0 numbered; ≤ 1/18 refused per locale.
+
+| attempt | fixed runs (candidate) | unseen (candidate) | same-day control | numbered | refusals |
+|---|---|---|---|---|---|
+| 1 (persona role fix, point of view) | 30, **28**, 30 | **23/36** (sealed set 1) | fixed 28, unseen 16 | 0 | ≤ 1/18 |
+| dev 6 (persona: what the user wants first, then the refusal; 硬核回擊 opponent voice) | 29 | 28 (set 1, read) | — | 0 | 0 |
+| 2 (dev 6's build) | 32, **28**, 31 | 31/36 (sealed set 2) | unseen 29 | 0 | ≤ 1/18 |
+
+Both attempts failed on one fixed run at 28. By the plan's cut rule there is no third try,
+so the simulator code is back to 1.8.0's exactly (`git diff v1.8.0-ios29` is empty for the
+simulator parts of `PromptBuilder`, `RoastEngine`, `StylePreset`, `StylePresets.json` and
+`ArgumentSimulatorTests`). The Q4 code is in history (commits `ff55a76` → `7ec997e`) if
+Jason wants to override: it was better than 1.8.0 on every run, by 2–7 turns on the fixed
+set and 2–7 on unseen setups, and the persona fix ends the "You are the employee." inversion.
+Labels and keys: `labels/q4_gate1`, `labels/q4_gate2` (read before the key was opened).

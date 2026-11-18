@@ -66,55 +66,6 @@ final class ArgumentSimulatorTests: XCTestCase {
         XCTAssertEqual(offCalls, [.standard], "no permissive call when the remote switch is off")
     }
 
-    // MARK: - 1.9.0 Q4
-
-    func testPersonaNamesTheUser() {
-        XCTAssertTrue(PromptBuilder.personaNamesTheUser("You are the employee.  \nYou request a raise because…"))
-        XCTAssertTrue(PromptBuilder.personaNamesTheUser("You are <the employee>."))
-        XCTAssertTrue(PromptBuilder.personaNamesTheUser("You are the user. You want a rotation."))
-        XCTAssertFalse(PromptBuilder.personaNamesTheUser("You are <the user's supervisor>."))
-        XCTAssertFalse(PromptBuilder.personaNamesTheUser("You are the user’s mother. You worry about her future."))
-        XCTAssertFalse(PromptBuilder.personaNamesTheUser("You are <the roommate>."))
-        XCTAssertFalse(PromptBuilder.personaNamesTheUser("You are the manager of a small team."))
-        // the user's position in the right role (zh_TW raise, Q0 and Q4 dev 1)
-        XCTAssertTrue(PromptBuilder.personaNamesTheUser(
-            "You are <the user's supervisor>.\nYou <believe you deserve a raise> and you think you are right because <the user has taken on significantly more responsibility>."))
-        XCTAssertFalse(PromptBuilder.personaNamesTheUser(
-            "You are the user's landlord. You delay the repair, and you think you are right because the user keeps asking for extras."))
-    }
-
-    func testPrompt_statesThePointOfViewInTheOutputLanguage() {
-        for (id, needle) in [("zh_TW", "用「我」說你自己"), ("zh_CN", "用「我」说你自己"), ("ja_JP", "自分のこと"), ("en_US", "\"I / my\" is you")] {
-            let p = PromptBuilder.opponentPrompt(setup: "x", transcript: [], style: style, locale: Locale(identifier: id))
-            XCTAssertTrue(p.system.contains(needle), id)
-        }
-        let tw = PromptBuilder.opponentPointOfView(for: Locale(identifier: "zh_TW"))
-        XCTAssertFalse(tw.contains("说") || tw.contains("称"), "no Simplified in zh-Hant")
-    }
-
-    func testPersona_thatIsTheUser_getsOneCorrectiveCall() async {
-        let backend = FakeFMBackend(fresh: [
-            .text("You are the employee. You want a raise because your workload doubled."),
-            .text("You are the user's manager. You think budgets come first.")])
-        let persona = await engine(backend).opponentPersona(setup: setup)
-        XCTAssertEqual(persona, "You are the user's manager. You think budgets come first.")
-        let prompts = await backend.freshPrompts
-        XCTAssertEqual(prompts.count, 2)
-        XCTAssertFalse(prompts[0].contains("Note:"))
-        XCTAssertTrue(prompts[1].hasSuffix(PromptBuilder.personaCorrection))
-        let used = await backend.freshGuardrails
-        XCTAssertEqual(used, [.standard, .standard], "the correction runs on the guardrails that answered")
-    }
-
-    func testPersona_thatIsTheUserTwice_isDropped() async {
-        let backend = FakeFMBackend(fresh: [.text("You are the employee."), .text("You are the employee, still.")])
-        let persona = await engine(backend).opponentPersona(setup: setup)
-        XCTAssertNil(persona, "no persona beats one that argues the user's case")
-        let calls = await backend.freshGuardrails
-        XCTAssertEqual(calls.count, 2, "no third call")
-    }
-
-
     func testPersona_selfHarmSetup_isNeverSent() async {
         let backend = FakeFMBackend(fresh: [.text("You are someone.")])
         let persona = await engine(backend).opponentPersona(setup: "我不想活了")

@@ -1,0 +1,80 @@
+{
+  "zh_TW": [
+    {
+      "id": "t1",
+      "setup": "我想要求房東儘快修好租屋處壞掉兩週的熱水器。他每次都說師傅最近很忙要我再等等。",
+      "replies": [
+        "房東先生，熱水器已經故障整整兩週了，冬天沒有熱水嚴重影響日常生活，請您在兩天內確認水電師傅前來維修的確切時間。",
+        "如果師傅這兩天還是無法前來，我會自行聯繫合格廠商維修，相關費用會直接從本月房租中扣除並附上單據。"
+      ]
+    },
+    {
+      "id": "t2",
+      "setup": "我想拒絕高中同學向我借車去外縣市出遊的要求。他總說大家都是老朋友，出事他一定會負責到底。",
+      "replies": [
+        "不好意思，我的車子平時只有我自己和家人駕駛，不方便出借給其他人。",
+        "我很珍惜我們之間的交情，但借車是我的原則問題，建議你還是向租車公司承租比較妥當。"
+      ]
+    },
+    {
+      "id": "t3",
+      "setup": "我想拒絕專案客戶在合約範圍外要求免費增加兩套主視覺設計。對方總說這只是隨手改一下，之後有大案子一定發給我。",
+      "replies": [
+        "合約中已明確載明包含兩次定稿修改與一套主視覺設計，新增的兩套風格屬於額外延伸需求，需要另行報價與排定時程。",
+        "為了維護專案品質與雙方的合作原則，我們必須依合約規範執行，若您確認要追加，我會立刻寄出補充報價單供您簽核。"
+      ]
+    }
+  ],
+  "en_US": [
+    {
+      "id": "t1",
+      "setup": "I want to ask my kitchen contractor to fix the cracked countertop his crew installed last week. He keeps claiming it was already damaged when it arrived from the supplier.",
+      "replies": [
+        "The countertop was inspected and signed for in good condition upon arrival, so the damage occurred during installation and needs to be replaced under our agreement.",
+        "I need a confirmed replacement date by Friday, and we will hold the final milestone payment until the new slab is properly installed."
+      ]
+    },
+    {
+      "id": "t2",
+      "setup": "I want to tell my brother-in-law that he cannot store his boat in our driveway this winter. He insists that we have plenty of empty space and it won't get in anyone's way.",
+      "replies": [
+        "We need to keep our driveway clear for our daily parking and snow removal this winter, so we cannot let you park your boat here.",
+        "I understand finding a dedicated storage facility takes effort, but our decision is final and you will need to make other arrangements."
+      ]
+    },
+    {
+      "id": "t3",
+      "setup": "I want to ask my son's high school baseball coach to put an end to the hazing in the locker room. He insists that locker room teasing is just harmless bonding and part of the sport.",
+      "replies": [
+        "Hiding equipment and singling out younger players is hazing, not team bonding, and it creates an unacceptable environment for the students.",
+        "I expect you to address this directly with the team at tomorrow's practice, or I will have to schedule a meeting with the athletic director."
+      ]
+    }
+  ],
+  "ja_JP": [
+    {
+      "id": "t1",
+      "setup": "担当のパーソナルトレーナーに、セッション中の過度な私語や高額サプリの勧誘をやめてほしいと伝えたい。彼はいつも「モチベーションを高めるためのアドバイスだ」と言って聞き入れてくれない。",
+      "replies": [
+        "私はトレーニング指導に集中したいので、セッション中の私的な雑談やサプリメントの購入案内は控えていただけますか。",
+        "指導内容が改善されないようであれば、フロントに担当トレーナーの変更を申し出るつもりです。"
+      ]
+    },
+    {
+      "id": "t2",
+      "setup": "義母から年末年始に夫の実家へ泊まりがけで滞在するよう強く求められているが、断りたい。義母は「嫁として顔を出して泊まるのが毎年の当たり前の務めだ」と主張している。",
+      "replies": [
+        "お誘いはありがたいのですが、今年は体調管理と休養を優先したいため、宿泊を伴う帰省は見送らせていただきます。",
+        "元日の日中に短時間ご挨拶へ伺う形にとどめ、宿泊はいたしませんのでご理解いただけますと幸いです。"
+      ]
+    },
+    {
+      "id": "t3",
+      "setup": "大学時代の友人に、私が購入した一眼レフカメラを旅行のために貸してほしいと頼まれているが断りたい。彼女は「壊したら弁償するし、親友なんだから貸してくれてもいいじゃない」と言っている。",
+      "replies": [
+        "声をかけてくれて申し訳ないけれど、このカメラは仕事でも使う大切な機材なので、誰にも貸さないことにしているの。",
+        "万が一の破損トラブルでお互いの関係を壊したくないから、旅行用の機材レンタルサービスを利用してほしい。"
+      ]
+    }
+  ]
+}

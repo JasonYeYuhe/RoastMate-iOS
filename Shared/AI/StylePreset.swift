@@ -32,12 +32,6 @@ struct StylePreset: Codable, Hashable, Sendable, Identifiable {
     /// leaks one language into another — 台劇腔's 啦/喔/欸 showed up in 18/18
     /// English outputs (lens 1). Falls back to `systemPreamble`.
     var systemPreambleByLanguage: [String: String]? = nil
-    /// How this style sounds when the Argument Simulator plays the OTHER
-    /// person (1.9.0 Q4), for a style whose preamble is written as the user's
-    /// comeback. 硬核回擊's "call out specific behavior, lazy thinking…" made
-    /// the opponent attack its own behaviour (A4; Q4 gate 1: most failing
-    /// turns were in this style). nil = `systemPreamble(for:)`.
-    var opponentPreamble: String? = nil
 
     /// The preamble for the output language.
     func systemPreamble(for locale: Locale) -> String {

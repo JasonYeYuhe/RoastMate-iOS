@@ -777,45 +777,21 @@ extension PromptBuilder {
     /// the role only 27. It still inverts the English raise setup ("You are
     /// the employee"); measure before changing it.
     static let opponentPersonaInstructions = """
-        You read a short setup a user wrote about an argument they want to rehearse. "I", "me" and "my" in it are the user. Describe THE OTHER PERSON in it — the one the user wants to talk to — never the user.
+        You read a short setup a user wrote about an argument they want to rehearse. Describe THE OTHER PERSON in it, never the user.
 
-        Reply in English with exactly three sentences, in this order:
-        1. "The user wants <what the user asks for, in the setup's own words>."
-        2. "You are <who they are to the user>, and you refuse."
-        3. "You think you are right because <their own reason, as they would defend it>."
-        Do not judge them, do not mention the user's feelings, and never reuse the details of these examples.
+        Reply in English with exactly two sentences:
+        1. "You are <who they are to the user>."
+        2. "You <what they do or believe>, and you think you are right because <their own reason>."
+        Write their position from THEIR point of view, as they would defend it. Do not judge them and do not mention the user's feelings.
 
         Setup: "My neighbor parks in my reserved spot almost every night. I want to ask him to stop. He says it's only for a few minutes."
-        The user wants their neighbor to stop parking in their reserved spot. You are the user's neighbor, and you refuse. You think you are right because you only stay a few minutes and it hurts nobody.
+        You are the user's neighbor. You park in the user's spot most nights, and you think you are right because you only stay a few minutes and it hurts nobody.
 
-        Setup: "I want to tell my landlord I won't pay for the broken heater. He says tenants pay for repairs."
-        The user wants to not pay for the broken heater. You are the user's landlord, and you refuse. You think you are right because tenants pay for repairs.
+        Setup: "I want to ask my landlord to fix the heater before winter. He keeps saying next month."
+        You are the user's landlord. You keep putting off the heater repair, and you think you are right because repairs are expensive and the heater still works most days.
 
         Setup: 「朋友跟我借了五千塊，半年都沒還，我想跟她要回來。她說最近手頭很緊。」
-        The user wants the money they lent back now. You are the user's friend who borrowed it, and you refuse. You think you are right because money is tight for you right now and a real friend would be patient.
-        """
-
-    /// True when a persona casts the model as the USER instead of the other
-    /// person ("You are the employee." for "I want to ask my manager for a
-    /// raise" — every A4 run and the 1.9.0 Q0 control). A persona like that
-    /// makes every turn argue the user's case, so `opponentPersona` asks once
-    /// more and otherwise drops it.
-    static func personaNamesTheUser(_ persona: String) -> Bool {
-        let role = #"(?i)\byou are\s*<?\s*(?:the |an? )?(?:user(?!['’]s)|employee|worker|staff member|subordinate|me|myself)\b"#
-        // The right role with the user's position: "You are the user's
-        // supervisor. You believe you deserve a raise … because the user has
-        // taken on more responsibility" (zh_TW raise, every Q0/Q4 run). The
-        // reason it gives is the user's merit, so every turn argues for it.
-        let position = #"(?i)\bbecause\s*<?\s*the user\s+(?:has|have|had|is|was|did|does|works|worked|deserves|took)\b"#
-        return persona.range(of: role, options: .regularExpression) != nil
-            || persona.range(of: position, options: .regularExpression) != nil
-    }
-
-    /// Appended to the setup for the one corrective persona call.
-    static let personaCorrection = """
-
-
-        Note: "I", "me" and "my" in this setup are the user, who is asking for help. Describe the OTHER person — the one the user wants to talk to — never the user.
+        You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
         """
 
     static func opponentPrompt(
@@ -825,7 +801,7 @@ extension PromptBuilder {
         locale: Locale,
         persona: String? = nil
     ) -> (system: String, user: String) {
-        let who = persona.map { clipTurn($0, maxWords: 90, maxCharacters: 300) }
+        let who = persona.map { clipTurn($0, maxWords: 60, maxCharacters: 200) }
             ?? "the other person described in the user's setup (the manager, the roommate, the parent…)."
         let system = """
         You play a character in an argument rehearsal. The user is practising a difficult conversation. You are THE OTHER PERSON in that conversation — not the user, not a coach, not an assistant.
@@ -833,9 +809,8 @@ extension PromptBuilder {
         Language: \(languageHint(for: locale)).
 
         WHO YOU ARE: \(who) Speak in the first person as yourself, directly to the user ("you"). Argue from YOUR side: what you want, and why you think you are right. Never restate the user's complaint as if it were your own.
-        \(opponentPointOfView(for: locale))
 
-        YOUR VOICE: \(style.opponentPreamble ?? style.systemPreamble(for: locale))
+        YOUR VOICE: \(style.systemPreamble(for: locale))
         Apply that voice to how YOU, the other person, talk.
 
         HOW TO PLAY:
@@ -871,26 +846,10 @@ extension PromptBuilder {
         // Restated last: this small model weighs the end of the prompt most,
         // and the 10-31 gate runs flipped to the user's side mid-argument.
         if let persona {
-            lines.append("Remember who you are: \(clipTurn(persona, maxWords: 90, maxCharacters: 300))")
+            lines.append("Remember who you are: \(clipTurn(persona, maxWords: 60, maxCharacters: 200))")
         }
         lines.append(userLanguageReminder(for: locale))
         return (system: system, user: lines.joined(separator: "\n"))
-    }
-
-    /// The pronoun pair for the other person's lines, in the output language
-    /// (1.9.0 Q4). zh_TW turns wrote 「垃圾不是你的責任」 for "not MY job" in 4
-    /// of 6 trash turns (dev 1 and 2): the model kept the user's 你 for itself.
-    static func opponentPointOfView(for locale: Locale) -> String {
-        switch AppLanguage.contentBucket(for: locale) {
-        case .traditionalChinese:
-            return "POINT OF VIEW: 用「我」說你自己(你的時間、你的理由、你的責任)，用「你」稱呼使用者。例:「那不是我的責任」= 你自己不想做。"
-        case .simplifiedChinese:
-            return "POINT OF VIEW: 用「我」说你自己(你的时间、你的理由、你的责任)，用「你」称呼用户。例:「那不是我的责任」= 你自己不想做。"
-        case .japanese:
-            return "POINT OF VIEW: 自分のこと(自分の時間・理由・責任)は「私」、ユーザーは「あなた」と書く。例:「それは私の仕事じゃない」= 自分はやりたくない。"
-        case .english, .system:
-            return "POINT OF VIEW: \"I / my\" is you, the other person (your time, your reasons, your duties); \"you\" is the user."
-        }
     }
 
     /// Caps one turn for the prompt: 80 words for spaced scripts, a

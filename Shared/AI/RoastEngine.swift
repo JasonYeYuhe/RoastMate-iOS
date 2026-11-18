@@ -548,29 +548,14 @@ actor RoastEngine {
         let input = PromptBuilder.clipTurn(setup, maxWords: 200, maxCharacters: 600)
         for guardrails in [FMGuardrails.standard, .permissiveContentTransformations] {
             guard guardrails == .standard || permissiveRetryAllowed() else { return nil }
-            if let reply = await personaCall(fm: fm, input: input, guardrails: guardrails) {
-                guard PromptBuilder.personaNamesTheUser(reply) else { return reply }
-                // 1.9.0 Q4: a persona that is the user ("You are the employee.")
-                // makes every turn argue the user's case. One corrective call;
-                // otherwise nil, so the turn prompt falls back to "the other
-                // person described in the user's setup".
-                if let again = await personaCall(
-                    fm: fm, input: input + PromptBuilder.personaCorrection, guardrails: guardrails),
-                   !PromptBuilder.personaNamesTheUser(again) {
-                    return again
-                }
-                return nil
+            if let reply = try? await fm.respondFresh(
+                instructions: PromptBuilder.opponentPersonaInstructions, to: input,
+                temperature: 0, maxTokens: 120, guardrails: guardrails),
+               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) {
+                return reply.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
         return nil
-    }
-
-    private func personaCall(fm: any FMBackend, input: String, guardrails: FMGuardrails) async -> String? {
-        guard let reply = try? await fm.respondFresh(
-            instructions: PromptBuilder.opponentPersonaInstructions, to: input,
-            temperature: 0, maxTokens: 180, guardrails: guardrails),
-              reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) else { return nil }
-        return reply.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func recordModelOutput() {
