@@ -11,6 +11,30 @@
   answer is `docs/evidence/2026-11-18-pro-quality-plan/review-gemini38flash.md`.
   Each of its claims was checked; §10 lists what changed and what was rejected.
 
+## Status 2026-11-19 (first execution session) — evidence: `docs/evidence/2026-11-18-pro-bench/README.md`
+
+| item | state |
+|---|---|
+| Q0 bench | done: harness, `score.py` (25 tests), fixed inputs, sealed unseen sets (Gemini, unread), 1.8.0 baseline |
+| Q2b strong word, zh-Hant/ja Vent | **passed** (attempt 2) and **in production** |
+| Q2a 3 takes of 痛罵 | **cut** — gate failed twice (swears per take, then names 4/249); takes code removed |
+| Q5 judge false positives | **cut** — no candidate reached the gate on dev data; no gate attempt |
+| Q4 simulator | gate 1 failed (30/28/30 fixed, 23 unseen; control 28/16); attempt 2 pending |
+| Q1 on-device quality | in development; gate pending |
+| Cloud Vent/Feral safety (found 11-19, pre-existing) | fixed in the Worker and **in production** |
+
+**Production Worker deploys (2 of 2 used):** `c1253b1c-6fec-4627-9f6c-fcc73f48c430` (Q2b,
+names, safety) then `eb7b671c-56a7-48a0-a22d-ffbcb43e43fc` (widened threat patterns after
+the smoke test caught "I will be waiting"). Rollback: `npx wrangler rollback
+c1253b1c-6fec-4627-9f6c-fcc73f48c430`, or `046f2134-5424-4069-b6f3-28b053ccd594` for
+1.8.0's Worker.
+
+**Ideas noted, not built (plan rule: no new work):**
+- Q5 follow-up: on a THREAT verdict for 改成能發的, retry the rewrite once instead of
+  showing the labelled example. It lowers the user-facing harm without loosening the judge.
+- The Worker's name detector misses bare given names (宗翰, 直樹, "Brenda" opening a
+  sentence); they leak at about 1 in 20 Feral drafts in production.
+
 ## 0. Why this plan exists, and which rules it overrides
 
 On 11-18 Jason asked for a plan to make every paid feature a little better

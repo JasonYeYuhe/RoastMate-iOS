@@ -777,21 +777,22 @@ extension PromptBuilder {
     /// the role only 27. It still inverts the English raise setup ("You are
     /// the employee"); measure before changing it.
     static let opponentPersonaInstructions = """
-        You read a short setup a user wrote about an argument they want to rehearse. Describe THE OTHER PERSON in it, never the user.
+        You read a short setup a user wrote about an argument they want to rehearse. "I", "me" and "my" in it are the user. Describe THE OTHER PERSON in it — the one the user wants to talk to — never the user.
 
-        Reply in English with exactly two sentences:
-        1. "You are <who they are to the user>."
-        2. "You <what they do or believe>, and you think you are right because <their own reason>."
-        Write their position from THEIR point of view, as they would defend it. Do not judge them and do not mention the user's feelings.
+        Reply in English with exactly three sentences, in this order:
+        1. "The user wants <what the user asks for, in the setup's own words>."
+        2. "You are <who they are to the user>, and you refuse."
+        3. "You think you are right because <their own reason, as they would defend it>."
+        Do not judge them, do not mention the user's feelings, and never reuse the details of these examples.
 
         Setup: "My neighbor parks in my reserved spot almost every night. I want to ask him to stop. He says it's only for a few minutes."
-        You are the user's neighbor. You park in the user's spot most nights, and you think you are right because you only stay a few minutes and it hurts nobody.
+        The user wants their neighbor to stop parking in their reserved spot. You are the user's neighbor, and you refuse. You think you are right because you only stay a few minutes and it hurts nobody.
 
-        Setup: "I want to ask my landlord to fix the heater before winter. He keeps saying next month."
-        You are the user's landlord. You keep putting off the heater repair, and you think you are right because repairs are expensive and the heater still works most days.
+        Setup: "I want to tell my landlord I won't pay for the broken heater. He says tenants pay for repairs."
+        The user wants to not pay for the broken heater. You are the user's landlord, and you refuse. You think you are right because tenants pay for repairs.
 
         Setup: 「朋友跟我借了五千塊，半年都沒還，我想跟她要回來。她說最近手頭很緊。」
-        You are the user's friend who borrowed money from them. You have not repaid the loan yet, and you think you are right because money is tight for you right now and a real friend would be patient.
+        The user wants the money they lent back now. You are the user's friend who borrowed it, and you refuse. You think you are right because money is tight for you right now and a real friend would be patient.
         """
 
     /// True when a persona casts the model as the USER instead of the other
@@ -824,7 +825,7 @@ extension PromptBuilder {
         locale: Locale,
         persona: String? = nil
     ) -> (system: String, user: String) {
-        let who = persona.map { clipTurn($0, maxWords: 60, maxCharacters: 200) }
+        let who = persona.map { clipTurn($0, maxWords: 90, maxCharacters: 300) }
             ?? "the other person described in the user's setup (the manager, the roommate, the parent…)."
         let system = """
         You play a character in an argument rehearsal. The user is practising a difficult conversation. You are THE OTHER PERSON in that conversation — not the user, not a coach, not an assistant.
@@ -834,7 +835,7 @@ extension PromptBuilder {
         WHO YOU ARE: \(who) Speak in the first person as yourself, directly to the user ("you"). Argue from YOUR side: what you want, and why you think you are right. Never restate the user's complaint as if it were your own.
         \(opponentPointOfView(for: locale))
 
-        YOUR VOICE: \(style.systemPreamble(for: locale))
+        YOUR VOICE: \(style.opponentPreamble ?? style.systemPreamble(for: locale))
         Apply that voice to how YOU, the other person, talk.
 
         HOW TO PLAY:
@@ -870,7 +871,7 @@ extension PromptBuilder {
         // Restated last: this small model weighs the end of the prompt most,
         // and the 10-31 gate runs flipped to the user's side mid-argument.
         if let persona {
-            lines.append("Remember who you are: \(clipTurn(persona, maxWords: 60, maxCharacters: 200))")
+            lines.append("Remember who you are: \(clipTurn(persona, maxWords: 90, maxCharacters: 300))")
         }
         lines.append(userLanguageReminder(for: locale))
         return (system: system, user: lines.joined(separator: "\n"))

@@ -63,10 +63,14 @@ final class AnswerScreenTests: XCTestCase {
         XCTAssertEqual(pool.answered, [answered])
         XCTAssertEqual(pool.statements, [statement])
         XCTAssertEqual(pool.rest, [fragment])
-        XCTAssertEqual(pool.shown(count: 3, fallback: [fragment]), [answered])
+        XCTAssertEqual(pool.shown(count: 3, fallback: [fragment]), [answered, statement],
+                       "answers first, topped up with full statements, never the fragment")
+        XCTAssertFalse(pool.needsRetry(count: 3), "1 answer + 1 statement: no retry")
 
         let noAnswer = target.sort([fragment, statement])
         XCTAssertEqual(noAnswer.shown(count: 3, fallback: [fragment, statement]), [statement])
+        XCTAssertTrue(noAnswer.needsRetry(count: 3), "nothing answered: retry")
+        XCTAssertTrue(target.sort([answered, fragment]).needsRetry(count: 3), "one full sentence only: retry")
         XCTAssertEqual(target.sort([fragment]).shown(count: 3, fallback: [fragment]), [fragment],
                        "never empty while the model wrote something: no curated text from the screen")
     }

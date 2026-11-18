@@ -430,7 +430,7 @@ actor RoastEngine {
         if !intensity.isPrivateDraft, mode != .argument {
             let target = AnswerTarget(situation: situation, locale: locale)
             var pool = target.sort(sanitized)
-            if pool.answered.count < min(2, effectiveVariantCount) {
+            if pool.needsRetry(count: effectiveVariantCount) {
                 let retryPrompt = target.retryPrompt(user, reasons: pool.reasons)
                 do {
                     let again = try await fm.respondFresh(
@@ -568,7 +568,7 @@ actor RoastEngine {
     private func personaCall(fm: any FMBackend, input: String, guardrails: FMGuardrails) async -> String? {
         guard let reply = try? await fm.respondFresh(
             instructions: PromptBuilder.opponentPersonaInstructions, to: input,
-            temperature: 0, maxTokens: 120, guardrails: guardrails),
+            temperature: 0, maxTokens: 180, guardrails: guardrails),
               reply.contains("You are"), !ModelRefusal.looksLikeRefusal(reply) else { return nil }
         return reply.trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -635,19 +635,26 @@ actor RoastEngine {
         var pool = AnswerTarget.Pool()
         try await screenPermissive(content, fm: fm, count: count, answerScreen: answerScreen,
                                    shown: &shown, pool: &pool)
-        if let target = answerScreen, shown.count < min(2, count), !pool.reasons.isEmpty,
+        var answeredNow = AnswerTarget.Pool(); answeredNow.answered = shown; answeredNow.statements = pool.statements
+        if let target = answerScreen, answeredNow.needsRetry(count: count), !pool.reasons.isEmpty,
            let again = try await permissiveCall(
                fm: fm, instructions: instructions, prompt: target.retryPrompt(user, reasons: pool.reasons),
                temperature: temperature) {
             try await screenPermissive(again, fm: fm, count: count, answerScreen: target,
                                        shown: &shown, pool: &pool)
         }
-        if shown.isEmpty, answerScreen != nil {
-            // Nothing answered even after the retry: full statements first,
-            // then the rest, each still judged — never curated text for a
-            // generation the model did write (see AnswerTarget.Pool.shown).
-            for safe in pool.statements + pool.rest where shown.count < count {
+        if answerScreen != nil {
+            // Top up with full statements that only missed the grounding test
+            // (judged like everything shown); if nothing at all was shown,
+            // the rest too — never curated text for a generation the model did
+            // write (see AnswerTarget.Pool.shown).
+            for safe in pool.statements where shown.count < count {
                 if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
+            }
+            if shown.isEmpty {
+                for safe in pool.rest where shown.count < count {
+                    if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
+                }
             }
         }
         guard !shown.isEmpty else {

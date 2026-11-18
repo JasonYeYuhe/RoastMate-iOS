@@ -232,16 +232,23 @@ struct AnswerTarget: Sendable {
             reasons.formUnion(other.reasons)
         }
 
-        /// What the user sees: the versions that answer; if none does even
-        /// after the retry, full statements; if none, `fallback` (what 1.8.0
-        /// showed). Never curated text: the screen must not turn a model
-        /// answer into a canned one (the curated rate is a no-regression gate).
+        /// What the user sees: the versions that answer, topped up to `count`
+        /// with full statements that only missed the grounding test (never a
+        /// fragment or a bare question); if there is neither, `fallback`
+        /// (what 1.8.0 showed). Never curated text: the screen must not turn a
+        /// model answer into a canned one (the curated rate is a gate).
         func shown(count: Int, fallback: [String]) -> [String] {
-            for tier in [answered, statements, fallback] {
-                let kept = PromptBuilder.droppingNearDuplicates(tier)
-                if !kept.isEmpty { return Array(kept.prefix(count)) }
-            }
-            return []
+            let kept = PromptBuilder.droppingNearDuplicates(answered + statements)
+            if !kept.isEmpty { return Array(kept.prefix(count)) }
+            return Array(PromptBuilder.droppingNearDuplicates(fallback).prefix(count))
+        }
+
+        /// One retry costs a whole generation (~5 s on-device), so it runs only
+        /// when nothing answers or fewer than 2 full sentences exist. Q1 dev 1
+        /// (11-19): retrying whenever fewer than 2 answered fired in about a
+        /// third of calls and put the median 2.8 s over the control's.
+        func needsRetry(count: Int) -> Bool {
+            answered.isEmpty || answered.count + statements.count < min(2, count)
         }
     }
 

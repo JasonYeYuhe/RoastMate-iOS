@@ -637,6 +637,7 @@
     },
     {
       "id": "savage_no_filter",
+      "opponentPreamble": "You speak hard and unsentimental: short, blunt sentences, no softening and no apologies. Every line defends your own position and picks holes in what the user just said. Never slurs, profanity, threats, or insults about who the user is.",
       "displayKey": "style.savage.name",
       "blurbKey": "style.savage.blurb",
       "icon": "flame",
