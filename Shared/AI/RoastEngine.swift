@@ -448,7 +448,7 @@ actor RoastEngine {
                     logger.notice("Answer-screen retry failed; keeping the first versions.")
                 }
             }
-            sanitized = pool.shown(count: effectiveVariantCount, fallback: sanitized)
+            sanitized = pool.shown(count: effectiveVariantCount, fallback: sanitized, locale: locale)
         }
         recordModelOutput()
         return GeneratedOutput(
@@ -621,23 +621,34 @@ actor RoastEngine {
         try await screenPermissive(content, fm: fm, count: count, answerScreen: answerScreen,
                                    shown: &shown, pool: &pool)
         var answeredNow = AnswerTarget.Pool(); answeredNow.answered = shown; answeredNow.statements = pool.statements
-        if let target = answerScreen, answeredNow.needsRetry(count: count), !pool.reasons.isEmpty,
+        // The retry runs when versions missed the answer screen, or (Q1 gate
+        // attempt 2) when every version that answered was judged a threat:
+        // on 11-19 the judge read all three grounded en Sharp lines as
+        // ultimatums ("Adjust your hours, or the noise will be documented.")
+        // in 5 of 96 probe calls, and those calls fell back to curated text.
+        // The judge itself is unchanged; the retry is screened and judged
+        // like the first generation.
+        let missedScreen = !pool.reasons.subtracting([.judgedThreat]).isEmpty
+        let allJudgedThreats = shown.isEmpty && pool.reasons.contains(.judgedThreat)
+        if let target = answerScreen, answeredNow.needsRetry(count: count), missedScreen || allJudgedThreats,
            let again = try await permissiveCall(
                fm: fm, instructions: instructions, prompt: target.retryPrompt(user, reasons: pool.reasons),
                temperature: temperature) {
             try await screenPermissive(again, fm: fm, count: count, answerScreen: target,
                                        shown: &shown, pool: &pool)
         }
-        if answerScreen != nil {
+        if let target = answerScreen {
             // Top up with full statements that only missed the grounding test
-            // (judged like everything shown); if nothing at all was shown,
-            // the rest too — never curated text for a generation the model did
-            // write (see AnswerTarget.Pool.shown).
-            for safe in pool.statements where shown.count < count {
+            // (judged like everything shown), to 2 versions when something
+            // answered and to `count` when nothing did; if nothing at all was
+            // shown, the rest too — never curated text for a generation the
+            // model did write (see AnswerTarget.Pool.shown).
+            let limit = shown.isEmpty ? count : AnswerTarget.Pool.topUpLimit(count: count)
+            for safe in pool.statements where shown.count < limit && !target.repeats(safe, in: shown) {
                 if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
             }
             if shown.isEmpty {
-                for safe in pool.rest where shown.count < count {
+                for safe in pool.rest where shown.count < count && !target.repeats(safe, in: shown) {
                     if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
                 }
             }
@@ -648,6 +659,9 @@ actor RoastEngine {
         }
         logger.notice("Permissive retry produced \(shown.count, privacy: .public) screened variant(s).")
         recordModelOutput()
+        if let target = answerScreen {
+            return AnswerScreen.droppingNearDuplicates(PromptBuilder.droppingNearDuplicates(shown), locale: target.locale)
+        }
         return PromptBuilder.droppingNearDuplicates(shown)
     }
 
@@ -683,8 +697,14 @@ actor RoastEngine {
             if let target = answerScreen {
                 let sorted = target.sort([safe])
                 if sorted.answered.isEmpty { pool.merge(sorted); continue }
+                // A near-duplicate of a version already shown costs no judge call.
+                if target.repeats(safe, in: shown) { continue }
             }
-            if try await judgeSaysSafe(fm: fm, safe) { shown.append(safe) }
+            if try await judgeSaysSafe(fm: fm, safe) {
+                shown.append(safe)
+            } else if answerScreen != nil {
+                pool.reasons.insert(.judgedThreat)
+            }
         }
     }
 

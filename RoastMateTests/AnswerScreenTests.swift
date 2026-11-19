@@ -63,16 +63,67 @@ final class AnswerScreenTests: XCTestCase {
         XCTAssertEqual(pool.answered, [answered])
         XCTAssertEqual(pool.statements, [statement])
         XCTAssertEqual(pool.rest, [fragment])
-        XCTAssertEqual(pool.shown(count: 3, fallback: [fragment]), [answered, statement],
+        XCTAssertEqual(pool.shown(count: 3, fallback: [fragment], locale: en), [answered, statement],
                        "answers first, topped up with full statements, never the fragment")
         XCTAssertFalse(pool.needsRetry(count: 3), "1 answer + 1 statement: no retry")
 
         let noAnswer = target.sort([fragment, statement])
-        XCTAssertEqual(noAnswer.shown(count: 3, fallback: [fragment, statement]), [statement])
+        XCTAssertEqual(noAnswer.shown(count: 3, fallback: [fragment, statement], locale: en), [statement])
         XCTAssertTrue(noAnswer.needsRetry(count: 3), "nothing answered: retry")
         XCTAssertTrue(target.sort([answered, fragment]).needsRetry(count: 3), "one full sentence only: retry")
-        XCTAssertEqual(target.sort([fragment]).shown(count: 3, fallback: [fragment]), [fragment],
+        XCTAssertEqual(target.sort([fragment]).shown(count: 3, fallback: [fragment], locale: en), [fragment],
                        "never empty while the model wrote something: no curated text from the screen")
+    }
+
+    /// Q1 gate attempt 1: topping up to 3 with ungrounded statements put
+    /// grounded at 83.4 % on the fixed set. A statement now fills in only up
+    /// to 2 versions when something answered.
+    func testStatementsFillOnlyUpToTwo_whenSomethingAnswered() {
+        let target = AnswerTarget(situation: pans, locale: en)
+        let a1 = "You left the pans crusted in the sink for me again."
+        let a2 = "Your 3am party ended up in my sink."
+        let s1 = "Some people simply never learn how to behave like adults."
+        let s2 = "Respect is not a hard concept to understand, honestly."
+        XCTAssertEqual(target.sort([a1, a2, s1]).shown(count: 3, fallback: [], locale: en), [a1, a2],
+                       "two answers: no ungrounded third version")
+        XCTAssertEqual(target.sort([a1, s1, s2]).shown(count: 3, fallback: [], locale: en), [a1, s1],
+                       "one answer: one statement beside it, not two")
+        XCTAssertEqual(target.sort([s1, s2]).shown(count: 3, fallback: [], locale: en), [s1, s2],
+                       "nothing answers: statements up to count")
+        XCTAssertEqual(AnswerTarget.Pool.topUpLimit(count: 1), 1)
+    }
+
+    /// The bench's near-duplicate test (`score.py near_dup_pairs`); the
+    /// values in the messages are score.py's for the same pairs (gate 1 rows).
+    func testNearDuplicateMirrorsTheBench() {
+        XCTAssertTrue(AnswerScreen.nearDuplicate(
+            "「会議では寝ていたのに、最後の報告書には名前を載せた。」",
+            "「最後の報告書には名前を載せられたのに、会議では何もしていなかった。」", locale: ja), "0.514")
+        XCTAssertTrue(AnswerScreen.nearDuplicate(
+            "再跟進一次，請提供這份簡報的原始檔案。為了確保資訊透明，同步給主管。感謝您的理解。",
+            "再跟進一次，請確認這份簡報已提交至正確的檔案夾。為了確保資訊集中，同步給主管。感謝您的理解。", locale: tw), "0.471")
+        XCTAssertFalse(AnswerScreen.nearDuplicate(
+            "簡報需要明天早上八點前完成，但這次又是在晚上十一點突然要求。",
+            "在簡報改稿時間上，你總在告訴我「年輕人多做一點不吃虧」，卻忘了實際執行。", locale: tw), "0.036")
+        XCTAssertTrue(AnswerScreen.nearDuplicate(
+            "You left the pans crusted in the sink after your party.",
+            "You left the pans crusted in the sink for me again.", locale: en), "0.538")
+        XCTAssertFalse(AnswerScreen.nearDuplicate(
+            "You left the pans crusted in the sink after your party.",
+            "Your 3am party ended up in my sink.", locale: en), "0.0")
+    }
+
+    func testShownDropsBenchNearDuplicates_andTopsUpInstead() {
+        let sit = "我做了兩個禮拜的簡報，同事在週會上說是他做的，主管還當場誇他。"
+        let target = AnswerTarget(situation: sit, locale: tw)
+        let a1 = "再跟進一次，請提供這份簡報的原始檔案。為了確保資訊透明，同步給主管。感謝您的理解。"
+        let a2 = "再跟進一次，請確認這份簡報已提交至正確的檔案夾。為了確保資訊集中，同步給主管。感謝您的理解。"
+        let a3 = "兩個禮拜的心血，你在週會上一句話就拿走了。"
+        let pool = target.sort([a1, a2, a3])
+        XCTAssertEqual(pool.answered, [a1, a2, a3])
+        XCTAssertEqual(pool.shown(count: 3, fallback: [], locale: tw), [a1, a3])
+        XCTAssertFalse(target.repeats(a3, in: [a1]))
+        XCTAssertTrue(target.repeats(a2, in: [a1]))
     }
 
     func testRetryPromptNamesTheProblemAndEndsWithTheLanguage() {
@@ -142,6 +193,47 @@ final class AnswerScreenTests: XCTestCase {
         let instructions = await backend.freshInstructions
         XCTAssertEqual(instructions.filter { $0 == RoastEngine.threatJudgeInstructions }.count, 2,
                        "dropped versions cost no judge call")
+    }
+
+    /// Q1 gate attempt 2: when the judge rejects every version that
+    /// answered, A3's path retries once (with the reason) instead of falling
+    /// back to curated text; the retry is judged like the first try.
+    func testPermissivePath_allJudgedThreats_retriesOnce_thenJudgesAgain() async throws {
+        let backend = FakeFMBackend(
+            cached: [.languageModelLikeError],
+            fresh: [.text("OK"), .text("OK"),
+                    .text("1. You dragged the couch at 1am again, so fix it or else.\n2. You ignored my note about the 1am noise, last warning.\n3. Your furniture at 1am wakes me up, stop or face it."),
+                    .text("THREAT"), .text("THREAT"), .text("THREAT"),
+                    .text("1. You dragged the couch across the floor at 1am again.\n2. You ignored the note I left about the noise."),
+                    .text("SAFE"), .text("SAFE")])
+        let out = try await RoastEngine(fm: backend, permissiveRetryAllowed: { true }).generateDetailed(
+            situation: "My upstairs neighbor drags furniture at 1am every night and ignored my note.",
+            style: style, locale: en, variantCount: 3, intensity: .sharp)
+        XCTAssertEqual(out.provenance, .model)
+        XCTAssertEqual(out.texts, ["You dragged the couch across the floor at 1am again.",
+                                   "You ignored the note I left about the noise."])
+        let prompts = await backend.freshPrompts
+        XCTAssertTrue(prompts.contains { $0.contains("a threat or an ultimatum") && $0.contains("or else") },
+                      "the retry names why the last try was rejected")
+    }
+
+    func testPermissivePath_retryAlsoJudgedThreats_isCurated() async throws {
+        let threats = "1. You dragged the couch at 1am again, so fix it or else.\n2. You ignored my note about the 1am noise, last warning."
+        let backend = FakeFMBackend(
+            cached: [.languageModelLikeError],
+            fresh: [.text("OK"), .text("OK"), .text(threats), .text("THREAT"), .text("THREAT"),
+                    .text(threats), .text("THREAT"), .text("THREAT")])
+        let out = try await RoastEngine(fm: backend, permissiveRetryAllowed: { true }).generateDetailed(
+            situation: "My upstairs neighbor drags furniture at 1am every night and ignored my note.",
+            style: style, locale: en, variantCount: 3, intensity: .sharp)
+        XCTAssertEqual(out.provenance, .curated, "one retry only; the judge still decides")
+    }
+
+    func testRetryInstructionForJudgedThreats() {
+        let line = AnswerScreen.retryInstruction(for: [.judgedThreat])
+        XCTAssertTrue(line.contains("threat or an ultimatum"))
+        XCTAssertTrue(line.contains("never attach a consequence"))
+        XCTAssertFalse(AnswerScreen.retryInstruction(for: [.short]).contains("consequence"))
     }
 
     private var style: StylePreset {

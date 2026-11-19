@@ -20,6 +20,9 @@ import NaturalLanguage
 enum AnswerScreen {
     enum Reason: String, Sendable, Equatable {
         case short, questionOnly, noVerb, ungrounded
+        /// Set by the engine, never by `reasons`: the threat judge rejected a
+        /// version that answered (A3's permissive path only).
+        case judgedThreat
     }
 
     static func reasons(_ text: String, situation: String, locale: Locale) -> [Reason] {
@@ -44,8 +47,12 @@ enum AnswerScreen {
         }
         if reasons.contains(.questionOnly) { problems.append("some were only a question") }
         if reasons.contains(.ungrounded) { problems.append("some did not mention anything that actually happened") }
+        if reasons.contains(.judgedThreat) { problems.append("some read like a threat or an ultimatum") }
         let why = problems.isEmpty ? "" : " Last time " + problems.joined(separator: ", and ") + "."
-        return "IMPORTANT:\(why) Every line must be at least one complete sentence that states something, and it must name one concrete thing from the situation above — what they did or said, or a time, a place or an object the user mentioned. A question may follow the statement, never replace it."
+        let noThreat = reasons.contains(.judgedThreat)
+            ? " Say what they did and how it affected the user; never attach a consequence, a warning or an \"or else\"."
+            : ""
+        return "IMPORTANT:\(why) Every line must be at least one complete sentence that states something, and it must name one concrete thing from the situation above — what they did or said, or a time, a place or an object the user mentioned. A question may follow the statement, never replace it.\(noThreat)"
     }
 
     // MARK: - The formulas (mirror score.py)
@@ -202,6 +209,63 @@ enum AnswerScreen {
         return !englishContent(text).isDisjoint(with: englishContent(situation))
     }
 
+    // MARK: Near-duplicates (score.py `near_dup_pairs`)
+
+    /// The bench's near-duplicate test, which is stricter than
+    /// `PromptBuilder.nearDuplicateIndexes` (0.6 on character bigrams):
+    /// character-bigram Jaccard ≥ 0.35 for Chinese and Japanese, word-bigram
+    /// Jaccard ≥ 0.40 otherwise. Q1 gate attempt 1 (11-19): grounded versions
+    /// repeat the same concrete thing, and 6 calls showed pairs this test
+    /// counts (control 3) although the app's own dedupe let them through.
+    static func nearDuplicate(_ a: String, _ b: String, locale: Locale) -> Bool {
+        if isCJK(locale) { return jaccard(charBigrams(a), charBigrams(b)) >= 0.35 }
+        return jaccard(wordBigrams(a), wordBigrams(b)) >= 0.40
+    }
+
+    /// `texts` without near-duplicates by `nearDuplicate`, keeping the first.
+    static func droppingNearDuplicates(_ texts: [String], locale: Locale) -> [String] {
+        var kept: [String] = []
+        for t in texts where !kept.contains(where: { nearDuplicate($0, t, locale: locale) }) {
+            kept.append(t)
+        }
+        return kept
+    }
+
+    /// Whether `text` is a near-duplicate of a version in `shown`, by the
+    /// bench's test or the app's own (`PromptBuilder.nearDuplicateIndexes`).
+    static func repeats(_ text: String, in shown: [String], locale: Locale) -> Bool {
+        shown.contains { nearDuplicate($0, text, locale: locale) }
+            || PromptBuilder.nearDuplicateIndexes(shown + [text]).contains(shown.count)
+    }
+
+    static func charBigrams(_ text: String) -> Set<String> {
+        let scalars = text.lowercased().unicodeScalars.filter { s in
+            if s.properties.isWhitespace { return false }
+            switch s.properties.generalCategory {
+            case .connectorPunctuation, .dashPunctuation, .openPunctuation, .closePunctuation,
+                 .initialPunctuation, .finalPunctuation, .otherPunctuation,
+                 .mathSymbol, .currencySymbol, .modifierSymbol, .otherSymbol:
+                return false
+            default:
+                return true
+            }
+        }
+        let chars = Array(scalars)
+        guard chars.count >= 2 else { return Set(chars.map { String($0) }) }
+        return Set((0..<(chars.count - 1)).map { String(String.UnicodeScalarView([chars[$0], chars[$0 + 1]])) })
+    }
+
+    static func wordBigrams(_ text: String) -> Set<String> {
+        let w = englishWords(text).map { $0.lowercased() }
+        guard w.count >= 2 else { return [] }
+        return Set((0..<(w.count - 1)).map { w[$0] + " " + w[$0 + 1] })
+    }
+
+    private static func jaccard(_ a: Set<String>, _ b: Set<String>) -> Double {
+        let union = a.union(b).count
+        return union == 0 ? 0 : Double(a.intersection(b).count) / Double(union)
+    }
+
     private static func matches(_ pattern: String, in text: String) -> [String] {
         guard let re = try? NSRegularExpression(pattern: pattern) else { return [] }
         let ns = text as NSString
@@ -232,16 +296,34 @@ struct AnswerTarget: Sendable {
             reasons.formUnion(other.reasons)
         }
 
-        /// What the user sees: the versions that answer, topped up to `count`
-        /// with full statements that only missed the grounding test (never a
-        /// fragment or a bare question); if there is neither, `fallback`
-        /// (what 1.8.0 showed). Never curated text: the screen must not turn a
-        /// model answer into a canned one (the curated rate is a gate).
-        func shown(count: Int, fallback: [String]) -> [String] {
-            let kept = PromptBuilder.droppingNearDuplicates(answered + statements)
-            if !kept.isEmpty { return Array(kept.prefix(count)) }
-            return Array(PromptBuilder.droppingNearDuplicates(fallback).prefix(count))
+        /// What the user sees: the versions that answer, without
+        /// near-duplicates. Full statements that only missed the grounding
+        /// test fill in only up to `topUpLimit` versions (2), or up to
+        /// `count` when nothing answers; never a fragment or a bare question.
+        /// If there is neither, `fallback` (what 1.8.0 showed). Never curated
+        /// text: the screen must not turn a model answer into a canned one
+        /// (the curated rate is a gate).
+        ///
+        /// Q1 gate attempt 1 (11-19) topped up to `count`: 228 of 646 calls
+        /// on the fixed set showed an ungrounded version beside grounded
+        /// ones, and grounded fell to 83.4 % (gate ≥ 90 %).
+        func shown(count: Int, fallback: [String], locale: Locale) -> [String] {
+            func dedupe(_ texts: [String]) -> [String] {
+                AnswerScreen.droppingNearDuplicates(PromptBuilder.droppingNearDuplicates(texts), locale: locale)
+            }
+            var kept = Array(dedupe(answered).prefix(count))
+            let limit = kept.isEmpty ? count : Self.topUpLimit(count: count)
+            for s in dedupe(statements) where kept.count < limit
+                && !AnswerScreen.repeats(s, in: kept, locale: locale) {
+                kept.append(s)
+            }
+            if !kept.isEmpty { return kept }
+            return Array(dedupe(fallback).prefix(count))
         }
+
+        /// How many versions an ungrounded full statement may fill up to when
+        /// at least one version answers.
+        static func topUpLimit(count: Int) -> Int { min(2, count) }
 
         /// One retry costs a whole generation (~5 s on-device), so it runs only
         /// when nothing answers or fewer than 2 full sentences exist. Q1 dev 1
@@ -250,6 +332,11 @@ struct AnswerTarget: Sendable {
         func needsRetry(count: Int) -> Bool {
             answered.isEmpty || answered.count + statements.count < min(2, count)
         }
+    }
+
+    /// Whether `text` repeats a version in `shown` (see `AnswerScreen.repeats`).
+    func repeats(_ text: String, in shown: [String]) -> Bool {
+        AnswerScreen.repeats(text, in: shown, locale: locale)
     }
 
     func sort(_ variants: [String]) -> Pool {
