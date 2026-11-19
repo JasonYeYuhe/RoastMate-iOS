@@ -419,8 +419,8 @@ Q1 is cut and the code goes back to 1.8.0.
 
 Checks before spending the attempt (all on fixed-set cells, i.e. development data):
 - Swift vs `score.py` on every attempt-1 row: near-duplicate verdicts 5,255 pairs, 0
-  mismatches; grounded verdicts 5,528 texts, 0 mismatches. 18 new/updated unit tests in
-  `AnswerScreenTests`; the macOS package run is 89/89.
+  mismatches; grounded verdicts 5,528 texts, 0 mismatches. `AnswerScreenTests` has 18 tests (6 new, 1 updated);
+  the macOS package run is 89/89.
 - Simulated on attempt-1 rows (top-up rule only): grounded 93.8 % fixed, 97.5 % unseen.
 - Probe of the two curated cells (en groupproj/noise × 台劇腔/冷處理 × 3 intensities, 8
   passes, 96 calls): attempt-1 build **5/96 curated** (logged: all three answers judged
