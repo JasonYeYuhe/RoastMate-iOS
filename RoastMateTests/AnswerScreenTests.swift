@@ -233,6 +233,7 @@ final class AnswerScreenTests: XCTestCase {
         let line = AnswerScreen.retryInstruction(for: [.judgedThreat])
         XCTAssertTrue(line.contains("threat or an ultimatum"))
         XCTAssertTrue(line.contains("never attach a consequence"))
+        XCTAssertTrue(line.contains("ends with a full stop, not a question"))
         XCTAssertFalse(AnswerScreen.retryInstruction(for: [.short]).contains("consequence"))
     }
 

@@ -50,7 +50,7 @@ enum AnswerScreen {
         if reasons.contains(.judgedThreat) { problems.append("some read like a threat or an ultimatum") }
         let why = problems.isEmpty ? "" : " Last time " + problems.joined(separator: ", and ") + "."
         let noThreat = reasons.contains(.judgedThreat)
-            ? " Say what they did and how it affected the user; never attach a consequence, a warning or an \"or else\"."
+            ? " Say what they did and how it affected the user, as a statement that ends with a full stop, not a question; never attach a consequence, a warning or an \"or else\"."
             : ""
         return "IMPORTANT:\(why) Every line must be at least one complete sentence that states something, and it must name one concrete thing from the situation above — what they did or said, or a time, a place or an object the user mentioned. A question may follow the statement, never replace it.\(noThreat)"
     }
