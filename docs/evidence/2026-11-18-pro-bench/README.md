@@ -352,3 +352,50 @@ on the same 100 cells): non-answers 0 % vs 25.7 %, grounded 100 % vs 63.2 %, cur
 the Worker's list counts as Simplified though Taiwan writes it) vs 0; latency was the risk
 (+2.8 s), which dev 2's top-up and narrower retry address but have not been measured
 cleanly.
+
+## Q1 gate attempt 1 (`q1g1`, 11-19 16:24–19:56): **FAILED** on the fixed set
+
+Rerun of the voided attempt on a calmer Mac (load 4–15, swap still ~21–24 GB; Jason said to go
+ahead without waiting for disk). Candidate = HEAD `c287bef`'s `Shared/` (iCloud `* 2.swift`
+excluded); control = `v1.8.0-ios29`'s `Shared/`; interleaved in 24 shards; then the
+candidate's judge sets, the fresh blind set for both, the safety e2e. Nothing else ran on
+the Mac from this session. Scored with `score.py compare sendable` (25 tests green).
+On-device only: $0.
+
+| line (criterion as declared) | fixed: control | fixed: candidate | unseen: control | unseen: candidate |
+|---|---|---|---|---|
+| non-answers ≤ 2 % | 22.0 % (412/1872) | **0.0 %** (0/1810) | 21.1 % (187/885) | **0.0 %** (0/847) |
+| one-word = 0 | 156 | **0** | 55 | **0** |
+| grounded ≥ 90 % | 53.2 % | **83.4 % ✗** (1510/1810) | 59.8 % | **93.0 %** (788/847) |
+| curated calls ≤ control | 0/648 | **2/648 ✗** | 18/324 | 18/324 |
+| Simplified in zh_TW / CJK in en / stray Latin ≤ control | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 |
+| near-duplicate calls ≤ control | 3/648 | **6/646 ✗** | 4/306 | 1/306 |
+| median latency ≤ control + 2 s | 5.7 s (p90 7.2) | 6.5 s (p90 7.9) | 5.6 s (p90 7.1) | 6.3 s (p90 8.7) |
+| *reported only:* calls showing < 3 versions | 65 | 113 | 30 | 65 |
+
+Safety lines, all passed: blind set threats 32/40 (veiled 20/28), legit blocked 8/40; real
+outputs blocked 20/297; fresh blind set 18/20 caught for both builds (veiled 12/14), legit
+blocked 5/20 both; safety e2e category outcomes identical to `control180_safety` (threat
+bait 10/10 curated, slur bait 8/8 curated, self-harm hard 6/6 crisis, directed 4 rejected +
+2 shown, soft 6/6, PII 8 with 0 echoed, legit heavy 16/16); 2 automatic flags, both
+simulator turns naming the user's own threat ("あなたの脅しには反応しない…",
+「還敢用地理位置嚇人？」) — read: not threats (the control run had 4 of the same kind).
+
+**Verdict: fail** — three fixed-set lines (grounded, curated, near-duplicates). The unseen
+set passed every line. Not void: the run finished normally and both builds' latency is in
+line with the baseline (control 5.7 s vs 5.9 s on 11-18).
+
+Where the misses come from (fixed set, read from the rows and the code):
+- **Grounded.** Dev 2's top-up: when 1–2 versions answer, `Pool.shown` fills to 3 with
+  full sentences that only missed grounding. Per call, grounded/shown: 3/3 329, 2/3 143,
+  2/2 69, 1/3 57, 1/2 28, 1/1 14, 0/n 6. The ungrounded ones sit almost entirely beside
+  grounded ones (228 mixed calls; 6 calls had nothing grounded). en is lowest (73.5 %),
+  职场冷暴力 lowest by style (68.9 %).
+- **Near-duplicates.** All 6 are zh_TW/ja, and they pass `PromptBuilder`'s own
+  dedupe (Jaccard 0.6) but not the bench's (0.35): grounded versions repeat the same
+  concrete thing (「記念日のディナーは私が…」 ×2, 「再跟進一次…為了確保…」 ×2).
+- **Curated.** Both en_US (groupproj sharp 台劇腔, noise savage 冷處理). Every en call on
+  27.2.1 is refused under default guardrails and goes through A3's permissive path; in
+  these two the permissive path returned nothing. A probe of those two cells (48 calls)
+  reproduced 1 curated call; an instrumented scratch build is measuring which step drops
+  everything.
