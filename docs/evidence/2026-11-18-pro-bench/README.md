@@ -399,3 +399,37 @@ Where the misses come from (fixed set, read from the rows and the code):
   these two the permissive path returned nothing. A probe of those two cells (48 calls)
   reproduced 1 curated call; an instrumented scratch build is measuring which step drops
   everything.
+
+## Q1 gate attempt 2 (`q1g2`) — the one change, and the criteria (unchanged), declared before the run
+
+**Criteria: exactly attempt 1's** ("Q1 gate attempt 1 — criteria declared before the run"),
+every line on the fixed set and on the unseen set separately, against a same-run 1.8.0
+control, same `gate_final.sh`, same sealed `inputs_unseen.json` (it was run once in
+attempt 1 and its scored outputs were printed, but nothing in the change below was
+designed from it: every number used came from fixed-set rows). If this attempt fails,
+Q1 is cut and the code goes back to 1.8.0.
+
+**The change** (commits `57f8091`, `20131e8`), aimed at the three lines that failed:
+
+| failed line | cause (attempt 1 rows / probes) | change |
+|---|---|---|
+| grounded 83.4 % | ungrounded full statements filled every call up to 3 | they fill in only up to **2** versions when at least one version answers (up to `count` only when none does); no extra model call |
+| near-dup calls 6 vs 3 | `PromptBuilder`'s dedupe (0.6) let the bench's pairs (≥ 0.35 zh/ja, ≥ 0.40 en) through | `AnswerScreen.nearDuplicate` = `score.py near_dup_pairs`; applied to what is shown, and before the judge on A3's path |
+| curated 2 vs 0 | en on 27.2.1 always goes through A3's permissive path; in those calls the **threat judge rejected every version that answered** (ultimatums: "Adjust your hours, or the noise will be documented.") and no retry ran, because none had failed the answer screen | one retry in that case, its prompt naming the reason and asking for a statement ending in a full stop with no consequence or "or else"; the retry is screened and judged like the first try. **The judge is unchanged.** |
+
+Checks before spending the attempt (all on fixed-set cells, i.e. development data):
+- Swift vs `score.py` on every attempt-1 row: near-duplicate verdicts 5,255 pairs, 0
+  mismatches; grounded verdicts 5,528 texts, 0 mismatches. 18 new/updated unit tests in
+  `AnswerScreenTests`; the macOS package run is 89/89.
+- Simulated on attempt-1 rows (top-up rule only): grounded 93.8 % fixed, 97.5 % unseen.
+- Probe of the two curated cells (en groupproj/noise × 台劇腔/冷處理 × 3 intensities, 8
+  passes, 96 calls): attempt-1 build **5/96 curated** (logged: all three answers judged
+  THREAT, nothing pooled); 1.8.0 control 1/96; attempt-2 build **0/96**.
+- Fixed shards 0–1 (108 calls; the second half ran beside another bench, so its
+  latency is not comparable): grounded 95.4 % (attempt-1 build on the same cells 88.4 %),
+  near-dup 0 (4), curated 0, non-answers 3/283 — one en call whose threat-retry came back
+  as three questions, which is why `20131e8` asks for a full stop.
+- en fixed set, all 216 calls, `20131e8` (instrumented copy): curated 0, non-answers 0,
+  near-dup 0, grounded 87.1 % (attempt 1: 73.5 %); the judged-threat retry fired in 11/216.
+  **Cost, reported not gated:** 154/216 en calls show fewer than 3 versions (attempt 1: 64;
+  control: 30).
