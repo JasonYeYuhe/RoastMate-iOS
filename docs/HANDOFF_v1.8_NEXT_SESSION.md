@@ -34,7 +34,9 @@ production is not true until you measure it.
 ## Update 2026-11-19 — 1.9.0 first execution session: Q0 done, Q2b live, Q2a/Q4/Q5 cut, Q1 gate pending
 
 Evidence and every number: `docs/evidence/2026-11-18-pro-bench/README.md`. Plan status table:
-`docs/DEV_PLAN_PRO_QUALITY_2026-11.md` (top).
+`docs/DEV_PLAN_PRO_QUALITY_2026-11.md` (top). **Next session's prompt:
+`docs/evidence/2026-11-18-pro-quality-plan/next-session-prompt-2026-11-19.md`** (machine
+check first, then Q1's gate, release checks, 12-07 submit).
 
 - **Q0 bench** built (production `RoastEngine` in a minimal `.app`, `score.py` + 25 tests,
   sealed unseen sets Gemini wrote). 1.8.0 on macOS 27.2.1: 22.6 % non-answers, 53.1 %

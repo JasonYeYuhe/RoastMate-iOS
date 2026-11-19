@@ -9,6 +9,11 @@ set -uo pipefail
 CAND=${1:?cand app}; CTRL=${2:?control app}; TAG=${3:?tag}; N=${4:-24}
 HERE=${0:A:h}; R=$HERE/../../..; H=$R/docs/evidence/2026-10-27-v18-plan/harness
 mkdir -p $HERE/runs
+# The shards append (>>), so leftover rows from a stopped run would be scored as part of
+# this one. Refuse to start over them: move them to runs/void/ first.
+if ls $HERE/runs/${TAG}_* >/dev/null 2>&1; then
+  echo "runs/${TAG}_* already exists; move it to runs/void/ (or pick a new tag) first" >&2; exit 1
+fi
 for set in fixed unseen; do
   in=$HERE/inputs.json; [[ $set == unseen ]] && in=$HERE/sealed/inputs_unseen.json
   for i in $(seq 0 $((N - 1))); do

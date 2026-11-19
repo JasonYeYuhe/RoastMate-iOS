@@ -214,10 +214,13 @@ read mixes a same-day control.
   situation no better than the model's weak one. So when nothing answers even after the
   retry, the screen shows full statements that only missed the grounding test, else what
   1.8.0 would have shown — never curated text it would not have shown.
-- Retry: dev 1 retried whenever fewer than 2 versions answered. On 95 zh_TW calls
-  (concurrent with simulator runs, so latency was inflated): non-answers 0 % (control
-  26.6 %), grounded 100 % (62.8 %), but median 8.8 s vs 6.0 s and 29 calls with < 3
-  versions vs 11. Dev 2: answers are topped up with full statements that only missed
+- Retry: dev 1 retried whenever fewer than 2 versions answered. On the first shard of
+  the fixed set, 100 calls (72 zh_TW, 28 en; `runs/cand1_sendable_shard0.jsonl`, run
+  concurrently with simulator runs, so latency was inflated), against 1.8.0's results for
+  the same 100 cells: non-answers 0 % (control 25.7 %), grounded 100 % (63.2 %), but
+  median 8.9 s vs 6.0 s and 29 calls with < 3 versions vs 12. (An earlier note here said
+  "95 zh_TW calls, 26.6 % / 62.8 %": it was read while the run was still going and the
+  locales were misnamed; corrected 11-19 from the file.) Dev 2: answers are topped up with full statements that only missed
   grounding, and the retry runs only when nothing answers or fewer than 2 full sentences
   exist.
 - Prompts: every sendable line must be a complete statement naming one concrete thing
@@ -328,8 +331,9 @@ identical to HEAD after the Q4 revert). Within minutes the Mac's load average re
 with 26.7 GB of swap in use and 13 GB of free disk (other sessions' simulators and builds;
 nothing from this session was growing), and the on-device model slowed to ~2 calls a
 minute: the ~2,000-call run would have taken more than 16 hours and its latency numbers
-would mean nothing. Stopped after 14 calls; those rows are discarded. **Q1 has not used a
-gate attempt.**
+would mean nothing. Stopped after 15 calls; those rows are discarded (moved to
+`runs/void/q1g1_cand_fixed_void_overload.jsonl`, so the rerun does not append to them).
+**Q1 has not used a gate attempt.**
 
 Rerun when the Mac is healthy (load average under ~10, swap back to normal — a reboot
 does it), from the current HEAD:
@@ -342,8 +346,9 @@ $B/gate_final.sh $S/cand.app $S/control.app q1g1 24      # ~5–6 h, interleaved
 python3 $B/score.py sendable $B/runs/q1g1_cand_fixed.jsonl  # vs q1g1_control_fixed.jsonl, and *_unseen
 ```
 
-What is known from development (95 zh_TW calls, dev 1 design): non-answers 0 % vs 26.6 %,
-grounded 100 % vs 62.8 %, curated 0 vs 0, one Simplified character (霉, in 「霉味」, which
+What is known from development (dev 1 design, 100 calls: 72 zh_TW, 28 en, against 1.8.0
+on the same 100 cells): non-answers 0 % vs 25.7 %, grounded 100 % vs 63.2 %, curated 0 vs
+0, one Simplified character (霉, in 「霉味」, which
 the Worker's list counts as Simplified though Taiwan writes it) vs 0; latency was the risk
 (+2.8 s), which dev 2's top-up and narrower retry address but have not been measured
 cleanly.
