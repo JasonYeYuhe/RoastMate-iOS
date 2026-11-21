@@ -70,20 +70,30 @@ final class DeviceHonestyUITests: XCTestCase {
         let feral = app.buttons.containing(NSPredicate(format: "label CONTAINS %@", "Feral")).firstMatch
         XCTAssertTrue(feral.waitForExistence(timeout: 15))
         // The intensity row scrolls sideways; on a narrow layout Feral starts off-screen.
+        // Compare frames, not `isHittable`: on iOS 18.5 that throws for an
+        // off-screen element ("Activation point invalid") instead of returning false.
         let sharp = app.buttons.containing(NSPredicate(format: "label BEGINSWITH %@", "Sharp")).firstMatch
+        let window = app.windows.firstMatch.frame
+        func onScreen() -> Bool { window.contains(CGPoint(x: feral.frame.midX, y: feral.frame.midY)) }
         var tries = 0
-        while !feral.isHittable && tries < 4 && sharp.exists {
+        while !onScreen() && tries < 4 && sharp.exists {
             sharp.swipeLeft()
             tries += 1
         }
         feral.tap()
-        let plan = element(app, "paywall.plan.yyh.roastmate.app.pro.yearly")
-        guard plan.waitForExistence(timeout: 10) else {
+        // The paywall is told apart by its header, not a plan row: on a fresh
+        // iOS 18.5 clone (11-21) StoreKit's products stayed "Loading…", which
+        // says nothing about the header this test is about. "Pro style you
+        // pick" alone also matches the Feral feature row, so match the start
+        // of `paywall.body.curated`.
+        let curated = app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", "Feral in the Pro style you pick")).firstMatch
+        let full = app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "24 styles")).firstMatch
+        guard curated.waitForExistence(timeout: 10) || full.exists else {
+            attach(app, "A2-no-paywall-en")
             throw XCTSkip("No paywall: Debug build (always Pro). Run with -configuration Release.")
         }
-        let header = app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "Pro style you pick")).firstMatch
-        XCTAssertTrue(header.exists, "the curated header claims the style voice in Feral")
-        XCTAssertFalse(app.staticTexts.containing(NSPredicate(format: "label CONTAINS %@", "24 styles")).firstMatch.exists)
+        XCTAssertTrue(curated.exists, "the curated header claims the style voice in Feral")
+        XCTAssertFalse(full.exists, "no \"24 styles\" on a device without the on-device model")
         attach(app, "A2-paywall-curated-en")
     }
 }
