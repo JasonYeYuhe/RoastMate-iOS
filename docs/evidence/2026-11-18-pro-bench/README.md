@@ -504,3 +504,32 @@ Reported, not gated:
   (324 en calls) no call ended this way.
 - Latency: +0.6 s (fixed) and +0.7 s (unseen) median vs control, from the extra screening
   and the occasional retry.
+
+## After the gate (11-21): two changes to the screen, outside what the gate ran
+
+Found while running preflight for 1.9.0. Neither changes what the gate measured: the gate
+ran on macOS 27.2.1 with English, Chinese and Japanese, where the screen behaves exactly
+as before.
+
+1. **The English tagger can be missing on iOS.** NLTagger's English lexical-class and
+   lemma models are on-demand assets on iOS. In the iOS 27.0 simulator's app process they
+   never loaded: every word was tagged `OtherWord`, so every English version looked
+   verbless and ungrounded (20 unit tests failed in preflight), and `requestAssets` gave
+   no answer within 120 s. A plain binary spawned in the same simulator got lexical
+   classes within a second of asking and lemmas after several minutes. macOS had both
+   from the start. Whether a real iPhone ever lacks them is unknown. Without a fix, such a
+   device would also pay for a retry on every English card (nothing "answers"). The screen
+   now tags one known sentence to see which models work (`AnswerScreen.probeEnglishModels`;
+   `availableTagSchemes` left out models that were on disk and worked), asks for missing
+   ones once per process, and skips any rule whose model is missing: no verb needs lexical
+   classes; English grounding needs both. On such a device it applies a subset of the
+   gated rules, never drops a version for a model it lacks, and never retries for those
+   rules.
+   Tests: the cases that need English tagging skip in the iOS simulator and run in a
+   throwaway macOS package of `Shared/` plus `AnswerScreenTests`, `FMBackendErrorMappingTests`
+   and `CloudVentEngineTests`: 64/64 passed with both models, nothing skipped (11-21).
+   The no-model and lexical-classes-only cases are unit tests that run everywhere.
+2. **Korean keeps 1.8.0's behaviour.** The model writes Korean for `ko` locales
+   (`PromptBuilder.userLanguageReminder`), and the screen would have judged that text by
+   the English rules (5 words, an English verb, English lemmas). The gate measured en, ja
+   and zh_TW only, so `AnswerScreen.covers` leaves `ko` out of the screen and its retry.

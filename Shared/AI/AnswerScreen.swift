@@ -1,5 +1,6 @@
 import Foundation
 import NaturalLanguage
+import os
 
 /// 1.9.0 Q1: drops sendable versions that do not answer the situation.
 ///
@@ -25,13 +26,29 @@ enum AnswerScreen {
         case judgedThreat
     }
 
-    static func reasons(_ text: String, situation: String, locale: Locale) -> [Reason] {
+    /// Whether the screen has rules for the language the versions are written
+    /// in. The model writes Chinese, Japanese or Korean for those locales and
+    /// English for every other (`PromptBuilder.userLanguageReminder`); the
+    /// gate measured English, Chinese and Japanese. Korean text would fail the
+    /// English word count every time, so Korean keeps 1.8.0's behaviour.
+    static func covers(_ locale: Locale) -> Bool {
+        locale.language.languageCode?.identifier != "ko"
+    }
+
+    /// `english`: which English tagger models work here (nil: probe them).
+    /// A rule whose model is missing is skipped, never failed: no verb needs
+    /// lexical classes, English grounding needs lexical classes and lemmas.
+    /// So the screen only ever applies a subset of the rules the gate
+    /// measured, and never drops a version for a model it could not load.
+    static func reasons(_ text: String, situation: String, locale: Locale,
+                        english: EnglishModels? = nil) -> [Reason] {
         var out: [Reason] = []
         let cjk = isCJK(locale)
+        let models = cjk ? EnglishModels.all : (english ?? englishModels())
         if cjk ? hanKanaCount(text) < 8 : englishWords(text).count < 5 { out.append(.short) }
         if questionOnly(text) { out.append(.questionOnly) }
-        if !cjk, !hasVerb(text) { out.append(.noVerb) }
-        if !grounded(text, situation: situation, locale: locale) { out.append(.ungrounded) }
+        if !cjk, models.lexicalClass, !hasVerb(text) { out.append(.noVerb) }
+        if models == .all, !grounded(text, situation: situation, locale: locale) { out.append(.ungrounded) }
         return out
     }
 
@@ -131,6 +148,79 @@ enum AnswerScreen {
         "come", "look", "tell", "thing", "time", "way", "lot", "one", "people", "something",
         "anything", "nothing", "everything", "someone", "anyone", "everyone", "day", "keep",
     ]
+
+    /// Which English NLTagger models this process can use.
+    struct EnglishModels: Equatable, Sendable {
+        var lexicalClass: Bool
+        var lemma: Bool
+        static let all = EnglishModels(lexicalClass: true, lemma: true)
+        static let none = EnglishModels(lexicalClass: false, lemma: false)
+    }
+
+    /// On iOS the English lexical-class and lemma models are on-demand assets.
+    /// On a fresh iOS 27.0 simulator (11-21) both were missing: every word came
+    /// back `OtherWord`, so every English version looked verbless and
+    /// ungrounded, until `NLTagger.requestAssets` fetched them (lexical
+    /// classes in under a second, lemmas after several minutes). macOS, where
+    /// the gate ran, had both. `availableTagSchemes` is no guide: in a new
+    /// process it left out lexical classes that were on disk and tagged fine.
+    /// So this tags one known sentence; while a model is missing it asks for
+    /// both once per process, and the rules that need it are skipped.
+    static func englishModels() -> EnglishModels {
+        if englishModelsReady.withLock({ $0 }) { return .all }
+        let found = probeEnglishModels()
+        if found == .all {
+            englishModelsReady.withLock { $0 = true }
+            return found
+        }
+        let first = englishAssetsRequested.withLock { asked in
+            defer { asked = true }
+            return !asked
+        }
+        if first { Task.detached(priority: .utility) { await requestEnglishTaggerAssets(timeout: 600) } }
+        return found
+    }
+
+    private static let englishModelsReady = OSAllocatedUnfairLock(initialState: false)
+    private static let englishAssetsRequested = OSAllocatedUnfairLock(initialState: false)
+
+    /// Tags "You left the pans in the sink.": lexical classes work if "left"
+    /// is a verb, lemmas if it becomes "leave".
+    static func probeEnglishModels() -> EnglishModels {
+        let text = "You left the pans in the sink."
+        let tagger = NLTagger(tagSchemes: [.lexicalClass, .lemma])
+        tagger.string = text
+        tagger.setLanguage(.english, range: text.startIndex..<text.endIndex)
+        guard let range = text.range(of: "left") else { return .none }
+        let lexical = tagger.tag(at: range.lowerBound, unit: .word, scheme: .lexicalClass).0 == .verb
+        let lemma = tagger.tag(at: range.lowerBound, unit: .word, scheme: .lemma).0?.rawValue.lowercased() == "leave"
+        return EnglishModels(lexicalClass: lexical, lemma: lemma)
+    }
+
+    /// Asks for both English models at once and returns what works after
+    /// both requests answer or `timeout` seconds pass, whichever is first.
+    @discardableResult
+    static func requestEnglishTaggerAssets(timeout: TimeInterval) async -> EnglishModels {
+        async let lexical: Void = requestAsset(.lexicalClass, timeout: timeout)
+        async let lemma: Void = requestAsset(.lemma, timeout: timeout)
+        _ = await (lexical, lemma)
+        return probeEnglishModels()
+    }
+
+    private static func requestAsset(_ scheme: NLTagScheme, timeout: TimeInterval) async {
+        await withCheckedContinuation { (done: CheckedContinuation<Void, Never>) in
+            let resumed = OSAllocatedUnfairLock(initialState: false)
+            let finish: @Sendable () -> Void = {
+                let first = resumed.withLock { r in
+                    defer { r = true }
+                    return !r
+                }
+                if first { done.resume() }
+            }
+            NLTagger.requestAssets(for: .english, tagScheme: scheme) { _, _ in finish() }
+            DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeout) { finish() }
+        }
+    }
 
     /// (lexical class, lowercased lemma) per word.
     static func englishTags(_ text: String) -> [(NLTag?, String)] {

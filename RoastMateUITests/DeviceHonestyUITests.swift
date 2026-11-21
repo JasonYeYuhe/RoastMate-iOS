@@ -1,8 +1,11 @@
 import XCTest
 
-/// 1.8.0 on a device WITHOUT Apple's on-device model (every simulator, and
-/// class C/E devices: iOS 18, or Apple Intelligence off). Run it on an iOS 18.5
-/// simulator in a RELEASE build for the plan's class-C check (A2, A4):
+/// 1.8.0 on a device WITHOUT Apple's on-device model (class C/E devices:
+/// iOS 18, or Apple Intelligence off). An iOS 26+ simulator usually has no
+/// model either, but on 11-21 the iOS 27.0 simulator on this Mac reported it
+/// available (the host's Apple Intelligence), so A4 skips itself when the
+/// simulator opens the working tool. Run it on an iOS 18.5 simulator, which
+/// never has the model, in a RELEASE build for the plan's class-C check (A2, A4):
 ///
 ///     xcodebuild test -scheme RoastMate -configuration Release \
 ///       -destination id=<iOS 18.5 UDID> -only-testing:RoastMateUITests/DeviceHonestyUITests
@@ -35,7 +38,7 @@ final class DeviceHonestyUITests: XCTestCase {
 
     /// A4: no conversation of canned roast lines; an honest explanation and
     /// no paywall for a tool this device can't run.
-    func test_argumentSimulator_explainsItNeedsAppleIntelligence() {
+    func test_argumentSimulator_explainsItNeedsAppleIntelligence() throws {
         for (lang, locale) in [("en", "en_US"), ("zh-Hant", "zh_TW")] {
             let app = launch(lang, locale)
             let tabBar = app.tabBars.firstMatch
@@ -45,7 +48,12 @@ final class DeviceHonestyUITests: XCTestCase {
             var tries = 0
             while !(tile.exists && tile.isHittable) && tries < 6 { app.swipeUp(); tries += 1 }
             tile.tap()
-            XCTAssertTrue(element(app, "argument.needs_ai").waitForExistence(timeout: 10),
+            if !element(app, "argument.needs_ai").waitForExistence(timeout: 10),
+               app.textViews.firstMatch.exists || element(app, "paywall.plan.yyh.roastmate.app.pro.yearly").exists {
+                attach(app, "A4-model-available-\(lang)")
+                throw XCTSkip("this simulator has Apple's on-device model, so A4 does not apply; run it on iOS 18.5")
+            }
+            XCTAssertTrue(element(app, "argument.needs_ai").exists,
                           "\(lang): the simulator must explain it needs Apple Intelligence")
             XCTAssertFalse(element(app, "paywall.plan.yyh.roastmate.app.pro.yearly").exists,
                            "\(lang): no paywall for a tool this device can't run")

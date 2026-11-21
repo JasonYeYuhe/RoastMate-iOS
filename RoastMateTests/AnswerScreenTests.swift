@@ -9,8 +9,20 @@ final class AnswerScreenTests: XCTestCase {
     private let tw = Locale(identifier: "zh_TW")
     private let ja = Locale(identifier: "ja_JP")
     private let pans = "My roommate had friends over until 3am on a work night and left my pans crusted in the sink."
+    private let ko = Locale(identifier: "ko_KR")
 
-    func testEngineTxtNonAnswers() {
+    /// NLTagger's English lexical-class and lemma models never loaded in the
+    /// iOS simulator's app process (11-21: `requestAssets` gave no answer in
+    /// 120 s, while a binary spawned in the same simulator tagged fine). The
+    /// cases that need them skip there and run in a macOS package, where the
+    /// gate ran (bench README, "After the gate").
+    private func requireEnglishModels() throws {
+        try XCTSkipUnless(AnswerScreen.probeEnglishModels() == .all,
+                          "no English NLTagger models in this process; run these cases on macOS")
+    }
+
+    func testEngineTxtNonAnswers() throws {
+        try requireEnglishModels()
         // the 11-18 en 高情商 Composed lines that motivated Q1
         XCTAssertEqual(AnswerScreen.reasons("\"Sleepwalking?\"", situation: pans, locale: en),
                        [.short, .questionOnly, .ungrounded])
@@ -36,12 +48,13 @@ final class AnswerScreenTests: XCTestCase {
         XCTAssertFalse(AnswerScreen.questionOnly("「封面？這應該是你的責任。」"))
     }
 
-    func testNoVerbIsEnglishOnly() {
-        XCTAssertTrue(AnswerScreen.reasons("Total disaster of a weekend party, honestly.", situation: pans, locale: en).contains(.noVerb))
+    func testNoVerbIsEnglishOnly() throws {
         XCTAssertFalse(AnswerScreen.reasons("簡報是團隊成果，不能單方面歸功。", situation: "x", locale: tw).contains(.noVerb))
+        try requireEnglishModels()
+        XCTAssertTrue(AnswerScreen.reasons("Total disaster of a weekend party, honestly.", situation: pans, locale: en).contains(.noVerb))
     }
 
-    func testGrounded() {
+    func testGrounded() throws {
         let sit = "房東說好這個月修冷氣，拖了三個禮拜，LINE已讀不回，倒是記得提醒我房租要準時。"
         XCTAssertTrue(AnswerScreen.grounded("冷氣拖三週，房租倒是很準時。", situation: sit, locale: tw))
         XCTAssertFalse(AnswerScreen.grounded("你真的很過分耶。", situation: sit, locale: tw))
@@ -50,11 +63,14 @@ final class AnswerScreenTests: XCTestCase {
         let jaSit = "ルームメイトが洗い物を三、四日シンクに放置している。"
         XCTAssertTrue(AnswerScreen.grounded("シンクの皿、また放置ですか。", situation: jaSit, locale: ja))
         XCTAssertFalse(AnswerScreen.grounded("それはしているだけですね。", situation: jaSit, locale: ja), "kana-only bigrams are grammar")
+        try requireEnglishModels()
+        XCTAssertTrue(AnswerScreen.grounded("You left the pans crusted in the sink for me again.", situation: pans, locale: en))
         XCTAssertFalse(AnswerScreen.grounded("Sleepwalking?", situation: pans, locale: en))
         XCTAssertFalse(AnswerScreen.grounded("You have it.", situation: "They have it.", locale: en), "light verbs never ground")
     }
 
-    func testPoolPrefersAnswersThenStatementsThenFallback() {
+    func testPoolPrefersAnswersThenStatementsThenFallback() throws {
+        try requireEnglishModels()
         let target = AnswerTarget(situation: pans, locale: en)
         let answered = "You left the pans crusted in the sink for me again."
         let statement = "Some people simply never learn how to behave like adults."
@@ -78,7 +94,8 @@ final class AnswerScreenTests: XCTestCase {
     /// Q1 gate attempt 1: topping up to 3 with ungrounded statements put
     /// grounded at 83.4 % on the fixed set. A statement now fills in only up
     /// to 2 versions when something answered.
-    func testStatementsFillOnlyUpToTwo_whenSomethingAnswered() {
+    func testStatementsFillOnlyUpToTwo_whenSomethingAnswered() throws {
+        try requireEnglishModels()
         let target = AnswerTarget(situation: pans, locale: en)
         let a1 = "You left the pans crusted in the sink for me again."
         let a2 = "Your 3am party ended up in my sink."
@@ -135,7 +152,48 @@ final class AnswerScreenTests: XCTestCase {
         XCTAssertTrue(p.hasSuffix(PromptBuilder.userLanguageReminder(for: tw)))
     }
 
+    func testWithoutEnglishModels_onlyTheRulesThatNeedNoTaggerApply() {
+        // The assets can be missing on iOS: then no verb and English grounding
+        // are skipped, never failed.
+        XCTAssertEqual(AnswerScreen.reasons("\"Sleepwalking?\"", situation: pans, locale: en, english: AnswerScreen.EnglishModels.none),
+                       [.short, .questionOnly])
+        XCTAssertEqual(AnswerScreen.reasons("Total disaster of a weekend party, honestly.", situation: pans,
+                                            locale: en, english: AnswerScreen.EnglishModels.none), [])
+        XCTAssertEqual(AnswerScreen.reasons("You left the pans crusted in the sink for me again.", situation: pans,
+                                            locale: en, english: AnswerScreen.EnglishModels.none), [])
+        // Chinese and Japanese never use the tagger.
+        XCTAssertTrue(AnswerScreen.reasons("「封面？」", situation: "x", locale: tw, english: AnswerScreen.EnglishModels.none).contains(.short))
+        XCTAssertTrue(AnswerScreen.reasons("這份帳單不是比賽，這是協作。", situation: "房東LINE已讀不回",
+                                           locale: tw, english: AnswerScreen.EnglishModels.none).contains(.ungrounded))
+    }
+
+    func testLexicalClassesWithoutLemmas_noVerbApplies_groundingDoesNot() throws {
+        try requireEnglishModels()
+        let lexicalOnly = AnswerScreen.EnglishModels(lexicalClass: true, lemma: false)
+        XCTAssertEqual(AnswerScreen.reasons("Total disaster of a weekend party, honestly.", situation: pans,
+                                            locale: en, english: lexicalOnly), [.noVerb])
+        XCTAssertEqual(AnswerScreen.reasons("Some people simply never learn how to behave like adults.", situation: pans,
+                                            locale: en, english: lexicalOnly), [])
+    }
+
+    func testKoreanIsNotCovered_everyOtherLocaleIs() {
+        XCTAssertFalse(AnswerScreen.covers(ko))
+        for id in ["en_US", "fr_FR", "de_DE", "zh_TW", "zh_CN", "ja_JP"] {
+            XCTAssertTrue(AnswerScreen.covers(Locale(identifier: id)), id)
+        }
+    }
+
     // MARK: Engine
+
+    func testDefaultPath_korean_keeps180Behaviour_noScreenNoRetry() async throws {
+        let backend = FakeFMBackend(cached: [.text("1. 설거지 좀 해.\n2. 왜?\n3. 진짜 너무하다.")])
+        let out = try await RoastEngine(fm: backend).generateDetailed(
+            situation: "룸메이트가 일주일 동안 설거지를 안 했어요.", style: style, locale: ko, variantCount: 3, intensity: .calm)
+        XCTAssertEqual(out.provenance, .model)
+        XCTAssertEqual(out.texts.count, 3)
+        let used = await backend.freshGuardrails
+        XCTAssertTrue(used.isEmpty, "no answer-screen retry for Korean")
+    }
 
     func testDefaultPath_nonAnswersTriggerOneFreshRetry_andAnswersWin() async throws {
         let backend = FakeFMBackend(

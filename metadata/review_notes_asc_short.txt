@@ -1,17 +1,15 @@
-Reviewer notes — RoastMate v1.8.0
+Reviewer notes — RoastMate v1.9.0
 
-1. WHAT'S NEW IN 1.8.0. No new data collection or permission.
-- Argument Simulator: on-device only; each turn's prompt carries the
-conversation. Same safeguards as 1.7.3: after a refusal, one retry with
-Apple's permissiveContentTransformations; requests to threaten someone or
-attack their identity are declined first; every turn is screened. Without
-Apple Intelligence it now says so instead of showing canned lines.
-- Paywall: the trial line shows only to users StoreKit reports eligible;
-after a purchase the app finishes the action that opened it.
-- After a free user's first cloud Vent, ONE labelled preview of a Feral draft
-in a Pro style is offered, under the same Vent/Feral consent; not saved.
-- The roommate group asks its cloud consent again (description corrected);
-the classic Echoes tile was removed.
+1. WHAT'S NEW IN 1.9.0. No new data collection, permission, screen or SDK.
+- On-device versions (Composed / Sharp / Savage, Apple Intelligence only):
+the prompts ask for full sentences about the user's own situation, and
+versions that are one word or only a question are dropped, so a card may
+show 2 versions instead of 3.
+- Wider threat screening on-device: more veiled phrasings (e.g. "I'll be
+waiting when you clock out") are caught in generated versions and in "Make
+it sendable". If no version passes, the app shows a labelled curated
+example. Requests to threaten someone are still declined before any
+generation.
 
 2. WHERE GENERATION RUNS; NO-APPLE-INTELLIGENCE DEVICES.
 Composed / Sharp / Savage and the "Make it sendable" rewrite run ON-DEVICE via

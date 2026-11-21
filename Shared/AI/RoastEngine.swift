@@ -380,7 +380,8 @@ actor RoastEngine {
                let retried = try await permissiveRetry(
                    fm: fm, situation: situation, instructions: instructions, user: user,
                    temperature: temperature, count: effectiveVariantCount,
-                   answerScreen: AnswerTarget(situation: situation, locale: locale)) {
+                   answerScreen: AnswerScreen.covers(locale)
+                       ? AnswerTarget(situation: situation, locale: locale) : nil) {
                 return GeneratedOutput(texts: retried, provenance: .model)
             }
             return GeneratedOutput(
@@ -427,7 +428,7 @@ actor RoastEngine {
         // 1.9.0 Q1: the answer screen on the default-guardrail path. One retry
         // on a fresh default session when fewer than 2 versions answer; a
         // refusal or error there just keeps what the first call gave.
-        if !intensity.isPrivateDraft, mode != .argument {
+        if !intensity.isPrivateDraft, mode != .argument, AnswerScreen.covers(locale) {
             let target = AnswerTarget(situation: situation, locale: locale)
             var pool = target.sort(sanitized)
             if pool.needsRetry(count: effectiveVariantCount) {

@@ -20,7 +20,7 @@
 | Q2a 3 takes of 痛罵 | **cut** — gate failed twice (swears per take, then names 4/249); takes code removed |
 | Q5 judge false positives | **cut** — no candidate reached the gate on dev data; no gate attempt |
 | Q4 simulator | **cut** — gate failed twice (fixed 30/28/30 then 32/28/31; unseen 23 then 31); better than control every run; code back to 1.8.0, kept in history |
-| Q1 on-device quality | **passed** gate attempt 2 (`q1g2`, 11-21; attempt 1 failed 3 fixed-set lines on 11-19) and **goes into 1.9.0**; cost: fewer versions shown (fixed set 343/648 calls show 3, control 589) |
+| Q1 on-device quality | **passed** gate attempt 2 (`q1g2`, 11-21; attempt 1 failed 3 fixed-set lines on 11-19) and **goes into 1.9.0**; cost: fewer versions shown (fixed set 343/648 calls show 3, control 589). After the gate: a rule whose English tagger model is missing (iOS on-demand asset) is skipped, not failed; Korean keeps 1.8.0's behaviour (README "After the gate") |
 | Cloud Vent/Feral safety (found 11-19, pre-existing) | fixed in the Worker and **in production** |
 
 **Production Worker deploys (2 of 2 used):** `c1253b1c-6fec-4627-9f6c-fcc73f48c430` (Q2b,
