@@ -44,7 +44,7 @@ production is not true until you measure it.
   2026-12-07 00:00 JST. Jason approved the exact store words on 11-21. 1.8.0 stays live
   until then.
 - Next: on a rejection, reply in Resolution Center before resubmitting. Once live,
-  `git tag v1.9.0` on `cb659f4`, then delete the `RoastMate-iOS18` simulator.
+  `git tag v1.9.0` on `cb659f4`. (The temporary `RoastMate-iOS18` clone was deleted on 11-21; for another iOS 18.5 check, clone `Soundpost-iOS18` again.)
 - macOS build 30 was archived with Xcode 27.2 (27B52) and accepted: Xcode 27.1 is no
   longer needed for macOS uploads (Jason's call to remove it).
 - This Mac's iOS 27.0 simulator now has Apple's on-device model (host Apple
