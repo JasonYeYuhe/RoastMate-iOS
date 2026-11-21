@@ -436,8 +436,8 @@ Checks before spending the attempt (all on fixed-set cells, i.e. development dat
 
 ### Q1 gate attempt 2, first start (11-19 21:43): **void** (session ended, Mac rebooted), not a gate result
 
-Started 21:43 from `056e9ff`. The last rows were written at 22:27 (8 of 24 fixed-set shards
-per side: 230 candidate and 216 control calls; nothing from the unseen set, judge sets or
+Started 21:43 from `056e9ff`. The last rows were written at 22:27 (8 full fixed-set shards per side out of 24,
+plus 14 calls of a 9th on the candidate side: 230 and 216 calls; nothing from the unseen set, judge sets or
 safety e2e). The Claude Code session that ran it ended then, and the Mac rebooted at
 23:03, which also cleared the scratchpad holding both `.app` builds and the log. A run cut
 at a third of the fixed set cannot be scored against the declared criteria. The rows were
