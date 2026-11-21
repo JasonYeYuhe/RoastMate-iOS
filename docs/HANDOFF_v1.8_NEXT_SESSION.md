@@ -7,7 +7,7 @@ Taiwan is the target market. Solo developer (Jason). Branch
 in May and is far behind — don't merge or rebase onto it as a side quest).
 
 **Read in this order:**
-1. this file — start at "Update 2026-11-19"
+1. this file — start at "Update 2026-11-21"
 2. `docs/DEV_PLAN_v1.9_2026-11.md` — **D+ (maintenance mode plus three $0
    store-page items), chosen by Jason on 11-12.** §2 is what you are executing;
    the section "Update 2026-11-12" below gives the order. Background:
@@ -30,6 +30,25 @@ in May and is far behind — don't merge or rebase onto it as a side quest).
 own docs that were false when checked; the 10-27 review of this plan found more
 (plan §9). A claim about code is not true until you open the file; a claim about
 production is not true until you measure it.
+
+## Update 2026-11-21 — 1.9.0 build 30 submitted (iOS + macOS), scheduled release 12-07
+
+- **Q1 passed** gate attempt 2 (`q1g2`, every declared line, fixed and unseen;
+  `docs/evidence/2026-11-18-pro-bench/README.md`) and is in 1.9.0. Q2a/Q4/Q5 stay cut.
+- After the gate, the answer screen skips a rule whose English NLTagger model is missing
+  (it never loads in the iOS simulator's app process) and leaves Korean on 1.8.0's
+  behaviour; bench README "After the gate".
+- Release checks: `docs/evidence/2026-11-18-pro-quality-plan/release-1.9.0/README.md`
+  (preflight 80/0; Release paywall 1.9.0 and the 1.8.0 control both 2/2; iOS 18.5 A4 + A2 pass).
+- **Both 1.9.0 versions are WAITING_FOR_REVIEW**, build 30, releaseType SCHEDULED for
+  2026-12-07 00:00 JST. Jason approved the exact store words on 11-21. 1.8.0 stays live
+  until then.
+- Next: on a rejection, reply in Resolution Center before resubmitting. Once live,
+  `git tag v1.9.0` on `cb659f4`, then delete the `RoastMate-iOS18` simulator.
+- macOS build 30 was archived with Xcode 27.2 (27B52) and accepted: Xcode 27.1 is no
+  longer needed for macOS uploads (Jason's call to remove it).
+- This Mac's iOS 27.0 simulator now has Apple's on-device model (host Apple
+  Intelligence), so no-model checks need the iOS 18.5 runtime.
 
 ## Update 2026-11-19 — 1.9.0 first execution session: Q0 done, Q2b live, Q2a/Q4/Q5 cut, Q1 gate pending
 
