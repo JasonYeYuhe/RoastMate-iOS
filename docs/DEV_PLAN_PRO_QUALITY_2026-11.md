@@ -11,7 +11,7 @@
   answer is `docs/evidence/2026-11-18-pro-quality-plan/review-gemini38flash.md`.
   Each of its claims was checked; §10 lists what changed and what was rejected.
 
-## Status 2026-11-19 (first execution session) — evidence: `docs/evidence/2026-11-18-pro-bench/README.md`
+## Status 2026-11-21 (Q1 gate passed; release checks next) — evidence: `docs/evidence/2026-11-18-pro-bench/README.md`
 
 | item | state |
 |---|---|
@@ -20,7 +20,7 @@
 | Q2a 3 takes of 痛罵 | **cut** — gate failed twice (swears per take, then names 4/249); takes code removed |
 | Q5 judge false positives | **cut** — no candidate reached the gate on dev data; no gate attempt |
 | Q4 simulator | **cut** — gate failed twice (fixed 30/28/30 then 32/28/31; unseen 23 then 31); better than control every run; code back to 1.8.0, kept in history |
-| Q1 on-device quality | built and unit-tested; **gate not yet run** (11-19 attempt void: Mac at load ~580, swap 26.7 GB) |
+| Q1 on-device quality | **passed** gate attempt 2 (`q1g2`, 11-21; attempt 1 failed 3 fixed-set lines on 11-19) and **goes into 1.9.0**; cost: fewer versions shown (fixed set 343/648 calls show 3, control 589) |
 | Cloud Vent/Feral safety (found 11-19, pre-existing) | fixed in the Worker and **in production** |
 
 **Production Worker deploys (2 of 2 used):** `c1253b1c-6fec-4627-9f6c-fcc73f48c430` (Q2b,
