@@ -11,7 +11,7 @@
   answer is `docs/evidence/2026-11-18-pro-quality-plan/review-gemini38flash.md`.
   Each of its claims was checked; §10 lists what changed and what was rejected.
 
-## Status 2026-11-21 (Q1 gate passed; release checks next) — evidence: `docs/evidence/2026-11-18-pro-bench/README.md`
+## Status 2026-11-21 (1.9.0 build 30 submitted, iOS + macOS, scheduled release 12-07 00:00 JST) — evidence: `docs/evidence/2026-11-18-pro-bench/README.md`, release checks `docs/evidence/2026-11-18-pro-quality-plan/release-1.9.0/README.md`
 
 | item | state |
 |---|---|

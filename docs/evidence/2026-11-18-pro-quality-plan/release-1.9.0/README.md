@@ -1,6 +1,6 @@
 # 1.9.0 release checks (2026-11-21)
 
-Build 30, `MARKETING_VERSION` 1.9.0, commit `58ae640`. Q1 passed its gate (`q1g2`, bench
+Build 30, `MARKETING_VERSION` 1.9.0, app code as of `58ae640` (archived from `cb659f4`, which only changed UI tests). Q1 passed its gate (`q1g2`, bench
 README); Q2a, Q4 and Q5 were cut. The server half (Q2b, Vent/Feral safety) is already in
 production (Worker `eb7b671c`).
 
@@ -38,3 +38,26 @@ Screenshots: `ios18_5-A4-simulator-{en,zh-Hant}.png`, `ios18_5-A2-paywall-curate
 Not checked here: a real iPhone on iOS 27 (owner task, via TestFlight; the one thing it
 would show that nothing here can is whether a real iPhone's app process has the English
 tagger models), a real iOS 18 device, and the macOS Release paywall.
+
+## Upload and submission (11-21)
+
+- Signing probes before archiving: console locked, login keychain `no-timeout`, a test
+  `codesign` with Apple Distribution succeeded.
+- `scripts/build-upload-asc.sh`, Xcode 27.2 (27B52) for both: iOS build 30 and macOS
+  build 30 both `VALID` in the ASC builds API. **macOS 27B52 was accepted**, so per plan §5
+  Xcode 27.1 is no longer needed for macOS uploads. The live 1.8.0 archives were kept as
+  `build/RoastMate-v180-b29.xcarchive` and `build/RoastMateMac-v180-b28.xcarchive` (the
+  script deletes `build/<scheme>.xcarchive` before archiving).
+- Jason approved the exact words on 11-21: What's New ×4 (`build/v1.9.0-release-notes{,-mac}.md`,
+  identical), the queued keywords (en-US, zh-Hant, ja) and zh-Hant subtitle, promo text and
+  descriptions unchanged from 1.8.0, and "submit now, release 12-07".
+- `asc_bind_version.py` (IOS, MAC_OS), `asc_product_page.py text` (dry run, then `--apply`;
+  read-back OK: 4 changes on iOS incl. the subtitle, 3 keyword changes on macOS), reviewer
+  notes from `metadata/review_notes_asc_short.txt` (3785/4000, read-back matches),
+  `releaseType` SCHEDULED with `earliestReleaseDate` 2026-12-07 00:00 JST
+  (2026-12-06T07:00:00-08:00).
+- `asc_submit_review.py`: iOS submitted 13:55:10Z, macOS 13:55:25Z. Read-back: both 1.9.0
+  `WAITING_FOR_REVIEW`, SCHEDULED, build 30; both 1.8.0 still `READY_FOR_SALE`.
+
+Still to do: on a rejection, reply in Resolution Center before resubmitting; once 1.9.0
+is live, `git tag v1.9.0` on `cb659f4`.
