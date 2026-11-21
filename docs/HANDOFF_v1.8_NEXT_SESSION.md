@@ -45,8 +45,10 @@ production is not true until you measure it.
   until then.
 - Next: on a rejection, reply in Resolution Center before resubmitting. Once live,
   `git tag v1.9.0` on `cb659f4`. (The temporary `RoastMate-iOS18` clone was deleted on 11-21; for another iOS 18.5 check, clone `Soundpost-iOS18` again.)
-- macOS build 30 was archived with Xcode 27.2 (27B52) and accepted: Xcode 27.1 is no
-  longer needed for macOS uploads (Jason's call to remove it).
+- macOS build 30 was archived with Xcode 27.2 (27B52) and accepted: RoastMate no longer
+  needs Xcode 27.1. **Keep `/Applications/Xcode-27.1.app` anyway** (Jason, 11-21):
+  NihongoRide's release builds still use it (its `docs/HANDOFF-V1.38-PROMPT.md`), so it
+  goes only after a NihongoRide release built with 27.2 comes back VALID.
 - This Mac's iOS 27.0 simulator now has Apple's on-device model (host Apple
   Intelligence), so no-model checks need the iOS 18.5 runtime.
 
