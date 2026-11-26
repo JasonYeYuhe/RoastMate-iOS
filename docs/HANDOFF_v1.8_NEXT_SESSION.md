@@ -40,9 +40,10 @@ production is not true until you measure it.
   behaviour; bench README "After the gate".
 - Release checks: `docs/evidence/2026-11-18-pro-quality-plan/release-1.9.0/README.md`
   (preflight 80/0; Release paywall 1.9.0 and the 1.8.0 control both 2/2; iOS 18.5 A4 + A2 pass).
-- **Both 1.9.0 versions are WAITING_FOR_REVIEW**, build 30, releaseType SCHEDULED for
-  2026-12-07 00:00 JST. Jason approved the exact store words on 11-21. 1.8.0 stays live
-  until then.
+- **Both 1.9.0 versions are APPROVED** (checked 11-26 via the API: iOS and macOS
+  `PENDING_DEVELOPER_RELEASE`), build 30, releaseType SCHEDULED, `earliestReleaseDate`
+  2026-12-06T07:00-08:00 = 2026-12-07 00:00 JST; Apple releases them then, nothing to
+  press. Jason approved the exact store words on 11-21. 1.8.0 stays live until then.
 - Next: on a rejection, reply in Resolution Center before resubmitting. Once live,
   `git tag v1.9.0` on `cb659f4`. (The temporary `RoastMate-iOS18` clone was deleted on 11-21; for another iOS 18.5 check, clone `Soundpost-iOS18` again.)
 - macOS build 30 was archived with Xcode 27.2 (27B52) and accepted: RoastMate no longer
